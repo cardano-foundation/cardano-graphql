@@ -1,0 +1,5 @@
+resolver: ./snapshot.yaml
+
+packages:
+  - .
+  - test
