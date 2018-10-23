@@ -12,8 +12,6 @@ module Test.Cardano.Prelude.Orphans
        (
        ) where
 
-import           Cardano.Prelude
-
 import qualified Crypto.Random as Rand
 
 import           Test.QuickCheck (Gen)

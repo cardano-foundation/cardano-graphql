@@ -13,8 +13,6 @@ module Test.Cardano.Prelude.Base16
     , encodeWithIndex
     ) where
 
-import           Cardano.Prelude
-
 import qualified Data.Attoparsec.ByteString.Char8 as PBC
 import qualified Data.Attoparsec.ByteString.Lazy as PLB
 import qualified Data.ByteString.Base16.Lazy as B16

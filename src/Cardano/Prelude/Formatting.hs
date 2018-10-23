@@ -7,7 +7,7 @@
 --   might have:
 --
 --   > myFormat :: Format r (Text -> Int -> r)
---   > myFormat = "Person's name is " % text % ", age is " % hex
+--   > myFormat = "Person's name is " . text . ", age is " . hex
 --
 --   The type parameter @r@ is the polymorphic return type. `formatting`
 --   provides a number of functions to run the format. For example, we could use
@@ -33,17 +33,17 @@ module Cardano.Prelude.Formatting
        , mapJson
        ) where
 
-import           Prelude
+import           Cardano.Prelude.Base
 
 import           Data.ByteString (ByteString)
 import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text.Lazy as LT
 import           Data.Text.Lazy.Builder (Builder, fromLazyText, fromString)
-import           Formatting (Format, bprint, later, (%))
+import           Formatting (Format, bprint, later)
 import qualified Formatting as F (build)
 import           Formatting.Buildable (Buildable (build))
-import           GHC.Exts (IsList (toList), Item)
+import qualified GHC.Exts as Exts
 
 
 --------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ base16F = later base16Builder
 
 -- | A @Builder@ for a pair of @Buildable@ values @(a, b)@
 pairBuilder :: (Buildable a, Buildable b) => (a, b) -> Builder
-pairBuilder (a, b) = bprint ("(" % F.build % ", " % F.build % ")") a b
+pairBuilder (a, b) = bprint ("(" . F.build . ", " . F.build . ")") a b
 
 -- | A @Format@ for a pair of @Buildable@ values @(a, b)@
 pairF :: (Buildable a, Buildable b) => Format r ((a, b) -> r)
@@ -112,17 +112,20 @@ listBuilderJsonIndent indent as
 listJsonIndent :: (Foldable t, Buildable a) => Word -> Format r (t a -> r)
 listJsonIndent = later . listBuilderJsonIndent
 
--- | A @Builder@ for @IsList@ containers of @Buildable@ key-value pairs that
---   outputs a JSON-style colon-separated map
+-- | A @Builder@ for @Exts.IsList@ containers of @Buildable@ key-value pairs
+--   that outputs a JSON-style colon-separated map
 mapBuilderJson
-  :: (IsList t, Item t ~ (k, v), Buildable k, Buildable v) => t -> Builder
+  :: (Exts.IsList t, Exts.Item t ~ (k, v), Buildable k, Buildable v)
+  => t
+  -> Builder
 mapBuilderJson =
   foldableBuilder "{" ", " "}"
-    . map (uncurry $ bprint (F.build % ": " % F.build))
-    . toList
+    . map (uncurry $ bprint (F.build . ": " . F.build))
+    . Exts.toList
 
--- | A @Format@ for @IsList@ containers of @Buildable@ key-value pairs that
+-- | A @Format@ for @Exts.IsList@ containers of @Buildable@ key-value pairs that
 --   outputs a JSON-style colon-separated map
 mapJson
-  :: (IsList t, Item t ~ (k, v), Buildable k, Buildable v) => Format r (t -> r)
+  :: (Exts.IsList t, Exts.Item t ~ (k, v), Buildable k, Buildable v)
+  => Format r (t -> r)
 mapJson = later mapBuilderJson

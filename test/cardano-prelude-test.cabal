@@ -29,7 +29,7 @@ library
                        Test.Cardano.Prelude.QuickCheck.Property
                        Test.Cardano.Prelude.Tripping
 
-  build-depends:       base
+  build-depends:       base-noprelude
                      , aeson
                      , attoparsec
                      , base16-bytestring
@@ -46,9 +46,9 @@ library
                      , time
 
   default-language:    Haskell2010
-  default-extensions:  NoImplicitPrelude
 
   ghc-options:         -Weverything
+                       -fno-warn-implicit-prelude
                        -fno-warn-missing-import-lists
                        -fno-warn-unsafe
                        -fno-warn-safe

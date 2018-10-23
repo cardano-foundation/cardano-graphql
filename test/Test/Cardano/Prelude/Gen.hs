@@ -10,8 +10,6 @@ module Test.Cardano.Prelude.Gen
        , genNominalDiffTime
        ) where
 
-import           Cardano.Prelude
-
 import           Data.Time (NominalDiffTime)
 
 import           Hedgehog (Gen)

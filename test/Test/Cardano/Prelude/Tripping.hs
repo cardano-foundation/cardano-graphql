@@ -14,18 +14,17 @@ module Test.Cardano.Prelude.Tripping
        , trippingBuildable
        ) where
 
-import           Cardano.Prelude
-
 import           Data.Aeson (FromJSON, ToJSON, decode, encode)
+import           Data.String (unlines)
 import           Data.Text.Internal.Builder (toLazyText)
 import           Formatting.Buildable (Buildable (..))
+import           System.IO (hSetEncoding, stderr, stdout, utf8)
+import           Text.Show.Pretty (Value (..), parseValue)
+
 import           Hedgehog (Group, MonadTest, discoverPrefix, success, tripping)
 import           Hedgehog.Internal.Property (Diff (..), failWith)
 import           Hedgehog.Internal.Show (valueDiff)
 import           Hedgehog.Internal.TH (TExpQ)
-import qualified Prelude
-import           System.IO (hSetEncoding, stderr, stdout, utf8)
-import           Text.Show.Pretty (Value (..), parseValue)
 
 
 discoverRoundTrip :: TExpQ Group
@@ -73,7 +72,7 @@ trippingBuildable x enc dec =
   in if mx == my
     then success
     else case valueDiff <$> buildValue mx <*> buildValue my of
-      Nothing -> withFrozenCallStack $ failWith Nothing $ Prelude.unlines
+      Nothing -> withFrozenCallStack $ failWith Nothing $ unlines
         [ "━━━ Original ━━━"
         , show $ buildValue mx
         , "━━━ Intermediate ━━━"
@@ -86,7 +85,7 @@ trippingBuildable x enc dec =
         withFrozenCallStack
           $ failWith
               (Just $ Diff "━━━ " "- Original" "/" "+ Roundtrip" " ━━━" dif)
-          $ Prelude.unlines ["━━━ Intermediate ━━━", show i]
+          $ unlines ["━━━ Intermediate ━━━", show i]
 
 instance (Buildable e, Buildable a) => Buildable (Either e a) where
     build (Left e)  = build e

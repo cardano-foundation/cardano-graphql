@@ -9,8 +9,6 @@ module Test.Cardano.Prelude.Golden
        , getText
        ) where
 
-import           Cardano.Prelude
-
 import           Data.Aeson (FromJSON, ToJSON, eitherDecode, encode)
 import qualified Data.ByteString.Lazy as LB
 import qualified Data.Text as T
