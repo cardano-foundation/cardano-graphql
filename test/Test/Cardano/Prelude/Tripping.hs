@@ -14,6 +14,8 @@ module Test.Cardano.Prelude.Tripping
        , trippingBuildable
        ) where
 
+import           Cardano.Prelude
+
 import           Data.Aeson (FromJSON, ToJSON, decode, encode)
 import           Data.String (unlines)
 import           Data.Text.Internal.Builder (toLazyText)

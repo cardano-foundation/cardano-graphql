@@ -16,9 +16,5 @@ A project-local prelude gives us a number of benefits:
 
 To use `cardano-prelude` in a package:
 
-  1. Replace dependency on `base` with `base-no-prelude`
-  2. Add dependency on `cardano-prelude`
-
-GHC finds the `Prelude` module exported by `cardano-prelude` and uses it as the
-implicit prelude. This method means we don't need `NoImplicitPrelude` enabled on
-all projects and we don't need to explicitly import the main prelude module.
+  1. Add `NoImplicitPrelude` to `default-extensions:` in your cabal file
+  2. Import `Cardano.Prelude` in all modules that need it

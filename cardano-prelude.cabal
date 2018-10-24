@@ -21,7 +21,7 @@ library
   hs-source-dirs:      src
 
   exposed-modules:
-                       Prelude
+                       Cardano.Prelude
 
   other-modules:
                        Cardano.Prelude.Base

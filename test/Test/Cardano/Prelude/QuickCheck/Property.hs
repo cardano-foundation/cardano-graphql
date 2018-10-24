@@ -43,6 +43,8 @@ module Test.Cardano.Prelude.QuickCheck.Property
        , formsCommutativeMonoid
        ) where
 
+import           Cardano.Prelude
+
 import           Control.Monad (fail)
 import qualified Data.Semigroup as Semigroup
 

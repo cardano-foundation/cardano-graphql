@@ -1,4 +1,4 @@
-module Prelude
+module Cardano.Prelude
        ( module X
        ) where
 
