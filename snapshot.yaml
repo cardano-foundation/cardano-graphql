@@ -1,4 +1,5 @@
 resolver: lts-12.10
+compiler: ghc-8.4.4
 
 name: cardano-snapshot
 
