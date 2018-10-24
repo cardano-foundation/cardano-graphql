@@ -3,9 +3,6 @@ resolver: lts-12.10
 name: cardano-snapshot
 
 packages:
-  # We use base-noprelude to get implicit import of `cardano-prelude`
-  - base-noprelude-4.11.1.0
-
   # Has support for canonical cbor. This commit is pulled into `master`. I've
   # posted a GitHub issue requesting a Hackage release:
   # https://github.com/well-typed/cborg/issues/171
