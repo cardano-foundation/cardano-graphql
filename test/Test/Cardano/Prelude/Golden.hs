@@ -22,7 +22,7 @@ import           Hedgehog.Internal.TH (TExpQ)
 
 
 discoverGolden :: TExpQ Group
-discoverGolden = discoverPrefix "golden_"
+discoverGolden = discoverPrefix "golden"
 
 -- | Check that @eachOf@ @testLimit@ generated @things@ @hasProperty@
 eachOf
