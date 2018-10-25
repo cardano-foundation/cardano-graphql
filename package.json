@@ -11,6 +11,7 @@
   "dependencies": {
     "@rhyslbw/swagger-to-graphql": "^0.1.1",
     "apollo-server-express": "^2.1.0",
+    "death": "^1.1.0",
     "express": "^4.16.4",
     "getenv": "^0.7.0",
     "graphql": "^0.13.2",

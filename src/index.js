@@ -1,4 +1,5 @@
 import fs from 'fs';
+import ON_DEATH from 'death';
 import request from 'request-promise-native';
 import cardanoSLGraphQLServer from './cardanoSLGraphQLServer';
 import config from './config'
@@ -13,14 +14,32 @@ const {
   isProduction
 } = config;
 
+let server;
+
+const exit = () => {
+  server.shutdown(process.exit);
+};
+
+ON_DEATH((signal) => {
+  switch (signal) {
+    case 'SIGINT':
+    case 'SIGQUIT':
+    case 'SIGTERM':
+      exit();
+      break;
+    default: exit();
+  }
+});
+
+
 const startServer = async (options) => {
   const swaggerSchema = JSON.parse(await request({
     uri: SWAGGER_SCHEMA_URI.href,
     agentOptions: options.agentOptions
   }));
-  const apiServer = await cardanoSLGraphQLServer(swaggerSchema, REST_ENDPOINT, options);
-  apiServer.listen({ port: PORT }, () => {
-    console.log(`🚀 Server ready at ${apiServer.endpoint(PORT)}`);
+  server = await cardanoSLGraphQLServer(swaggerSchema, REST_ENDPOINT, options);
+  server.listen({ port: PORT }, () => {
+    console.log(`🚀 Server ready at ${server.endpoint(PORT)}`);
   });
 };
 

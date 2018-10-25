@@ -44,8 +44,8 @@ export default class GraphQLServer {
     return this.apolloServer.graphqlPath;
   }
 
-  shutdown() {
-    this.httpServer.close();
+  shutdown(callback) {
+    this.httpServer.close(callback);
   }
 
 }
