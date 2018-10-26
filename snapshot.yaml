@@ -12,10 +12,6 @@ packages:
     subdirs:
       - cborg
 
-  # Library has never been released on Hackage yet
-  - git: https://github.com/input-output-hk/canonical-json.git
-    commit: f66762e4c4fe484ed109d28ad541fc55cc841c2c
-
   - git: https://github.com/input-output-hk/cardano-crypto
     commit: e87fcd3fea18f664d6e4f39c11abb8cafbd25785
 
@@ -35,6 +31,7 @@ packages:
 
   - aeson-options-0.0.0 # This is a Serokell package that should be removed
   - base58-bytestring-0.1.0
+  - canonical-json-0.5.0.1
   - half-0.2.2.3
   - micro-recursion-schemes-5.0.2.2
   - streaming-binary-0.3.0.1
