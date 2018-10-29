@@ -6,12 +6,15 @@ module Test.Cardano.Prelude.Golden
        ( discoverGolden
        , eachOf
        , goldenTestJSON
+       , goldenTestJSONPretty
        , getText
        ) where
 
 import           Cardano.Prelude
 
 import           Data.Aeson (FromJSON, ToJSON, eitherDecode, encode)
+import           Data.Aeson.Encode.Pretty (Config (..), Indent (..),
+                     NumberFormat (..), encodePretty', keyOrder)
 import qualified Data.ByteString.Lazy as LB
 import qualified Data.Text as T
 
@@ -49,6 +52,26 @@ goldenTestJSON x path = withFrozenCallStack $ withTests 1 . property $ do
   case eitherDecode bs of
     Left  err -> failWith Nothing $ "could not decode: " <> show err
     Right x'  -> x === x'
+
+goldenTestJSONPretty
+  :: (Eq a, FromJSON a, HasCallStack, Show a, ToJSON a)
+  => a
+  -> FilePath
+  -> Property
+goldenTestJSONPretty x path = withFrozenCallStack $
+    withTests 1 . property $ do
+        bs <- liftIO (LB.readFile path)
+        -- Sort keys by their order of appearance in the argument list
+        -- of `keyOrder`. Keys not in the argument list are moved to the
+        -- end, while their order is preserved.
+        let defConfig' = Config { confIndent = Spaces 4
+                                , confCompare = keyOrder ["file", "hash"]
+                                , confNumFormat = Generic
+                                , confTrailingNewline = False }
+        encodePretty' defConfig' x === bs
+        case eitherDecode bs of
+            Left err -> failWith Nothing $ "could not decode: " <> show err
+            Right x' -> x === x'
 
 -- | Text used for example values in a number of golden tests
 --
