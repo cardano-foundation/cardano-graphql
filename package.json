@@ -15,12 +15,15 @@
     "express": "^4.16.4",
     "getenv": "^0.7.0",
     "graphql": "^0.13.2",
+    "request": "^2.88.0",
     "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/preset-env": "^7.1.0"
+    "@babel/preset-env": "^7.1.0",
+    "eslint": "^5.8.0",
+    "eslint-plugin-import": "^2.14.0"
   }
 }
