@@ -1,5 +1,6 @@
 import fs from 'fs';
 import ON_DEATH from 'death';
+import delay from 'delay';
 import request from 'request-promise-native';
 import cardanoSLGraphQLServer from './cardanoSLGraphQLServer';
 import config from './config'
@@ -11,6 +12,9 @@ const {
   TLS_PATH_KEY,
   TLS_PATH_CERT,
   PORT,
+  CONNECTION_ATTEMPT_INTERVAL,
+  MAX_CONNECTION_ATTEMPTS,
+  AUTH_DISABLED,
   isProduction
 } = config;
 
@@ -33,14 +37,16 @@ ON_DEATH((signal) => {
 
 
 const startServer = async (options) => {
-  const swaggerSchema = JSON.parse(await request({
-    uri: SWAGGER_SCHEMA_URI.href,
-    agentOptions: options.agentOptions
-  }));
+  const requestOptions = {
+    uri: SWAGGER_SCHEMA_URI.href
+  };
+  if (options.agentOptions) requestOptions.agentOptions = options.agentOptions;
+  const swaggerSchema = JSON.parse(await request(requestOptions));
   server = await cardanoSLGraphQLServer(swaggerSchema, REST_ENDPOINT, options);
   server.listen({ port: PORT }, () => {
     console.log(`🚀 Server ready at ${server.endpoint(PORT)}`);
   });
+  return server;
 };
 
 const hasTlsAuth = () => new Promise((resolve, reject) => {
@@ -54,41 +60,42 @@ const hasTlsAuth = () => new Promise((resolve, reject) => {
   });
 });
 
-const apiAvailable = (agentOptions) => new Promise((resolve, reject) => {
-  request({
+const apiAvailable = (options) => new Promise((resolve, reject) => {
+  const requestOptions = {
     uri: SWAGGER_SCHEMA_URI,
-    resolveWithFullResponse: true,
-    agentOptions
-  }).then(({ statusCode }) => resolve(statusCode === 200)).catch((error) => {
+    resolveWithFullResponse: true
+  };
+  if (options.agentOptions) requestOptions.agentOptions = options.agentOptions;
+  request(requestOptions).then(({ statusCode }) => resolve(statusCode === 200)).catch((error) => {
     if (error.cause.code === 'ECONNREFUSED') return resolve(false);
     reject(error);
   });
 });
 
 let attemptCount = 0;
-const retry = () => {
-  const DELAY_BETWEEN_CHECKS = 2000;
-  const MAX_RETRIES = 20;
-  if (attemptCount >= MAX_RETRIES) throw new Error(`Can not connect to Wallet API after ${attemptCount} attempts`);
-  setTimeout(initialize, DELAY_BETWEEN_CHECKS);
-};
-
-const initialize = async () => {
-  attemptCount++;
+export const initialize = async () => {
   // Wait until Wallet REST API certificate is provisioned
+  if (attemptCount >= MAX_CONNECTION_ATTEMPTS) {
+    throw new Error(`Can not connect to Wallet API after ${attemptCount} attempts`);
+  }
+  attemptCount++;
   try {
-    if (await hasTlsAuth()) {
-      const options = {
-        agentOptions: {
-          ca: fs.readFileSync(TLS_PATH_CA),
-          key: fs.readFileSync(TLS_PATH_KEY),
-          cert: fs.readFileSync(TLS_PATH_CERT),
-          rejectUnauthorized: isProduction
-        }
+    const options = {};
+    if (!AUTH_DISABLED && await hasTlsAuth()) {
+      options.agentOptions = {
+        ca: fs.readFileSync(TLS_PATH_CA),
+        key: fs.readFileSync(TLS_PATH_KEY),
+        cert: fs.readFileSync(TLS_PATH_CERT),
+        rejectUnauthorized: isProduction
       };
-      if (await apiAvailable(options.agentOptions)) return startServer(options);
+    } else if (AUTH_DISABLED) {
+      options.agentOptions = {
+        rejectUnauthorized: isProduction
+      };
     }
-    retry();
+    if (await apiAvailable(options)) return startServer(options);
+    await delay(CONNECTION_ATTEMPT_INTERVAL);
+    return initialize();
   } catch (error) {
     console.error(error.message);
     throw error;
