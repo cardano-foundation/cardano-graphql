@@ -6,7 +6,7 @@ services:
       - 9090:8090 # REST API
       - 9091:8091 # Docs
     volumes:
-      - wallet-state-1:/state
+      - wallet-state:/state
   cardano-sl-graphql:
     build: ./
     environment:
@@ -19,6 +19,6 @@ services:
     ports:
       - 4000:3000 # GraphQL server
     volumes:
-      - wallet-state-1:/data/wallet-state:ro
+      - wallet-state:/data/wallet-state:ro
 volumes:
-  wallet-state-1:
+  wallet-state:
