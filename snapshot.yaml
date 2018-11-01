@@ -25,7 +25,7 @@ packages:
   # Exposes a custom discovery function so you can specify the prefix.
   # https://github.com/hedgehogqa/haskell-hedgehog/compare/master...input-output-hk:master
   - git: https://github.com/input-output-hk/haskell-hedgehog.git
-    commit: 2c9e51804e8217dff89f5c32cbe0d79ce20bc508
+    commit: 2e741bb53afb085741807018948ae17d956c53af
     subdirs:
       - hedgehog
 
