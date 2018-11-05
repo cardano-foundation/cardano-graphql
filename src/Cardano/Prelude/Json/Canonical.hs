@@ -19,9 +19,11 @@ import           Cardano.Prelude.Base
 import           Control.Monad.Except (MonadError (throwError))
 import           Data.Fixed (E12, resolution)
 import qualified Data.Text.Lazy.Builder as Builder (fromText)
-import           Data.Time (NominalDiffTime)
+import           Data.Time (NominalDiffTime, UTCTime)
+import           Data.Time.Clock.POSIX (posixSecondsToUTCTime,
+                     utcTimeToPOSIXSeconds)
 import           Formatting.Buildable (Buildable (build))
-import           Text.JSON.Canonical (FromJSON (fromJSON),
+import           Text.JSON.Canonical (FromJSON (fromJSON), Int54,
                      JSValue (JSNum, JSString), ReportSchemaErrors (expected),
                      ToJSON (toJSON), expectedButGotValue)
 
@@ -68,6 +70,10 @@ instance Monad m => ToJSON m Integer where
 instance Monad m => ToJSON m Natural where
   toJSON = pure . JSString . show
 
+-- | For backwards compatibility we convert this to seconds
+instance Monad m => ToJSON m UTCTime where
+  toJSON = pure . JSNum . round . utcTimeToPOSIXSeconds
+
 -- | For backwards compatibility we convert this to microseconds
 instance Monad m => ToJSON m NominalDiffTime where
   toJSON = toJSON . (`div` 1e6) . toPicoseconds
@@ -96,6 +102,9 @@ instance ReportSchemaErrors m => FromJSON m Integer where
 
 instance MonadError SchemaError m => FromJSON m Natural where
   fromJSON = parseJSString (readEither . toS)
+
+instance MonadError SchemaError m => FromJSON m UTCTime where
+  fromJSON = fmap (posixSecondsToUTCTime . fromIntegral) . fromJSON @_ @Int54
 
 instance MonadError SchemaError m => FromJSON m NominalDiffTime where
   fromJSON = fmap (fromRational . (% 1e6)) . fromJSON
