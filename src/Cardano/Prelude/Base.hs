@@ -7,9 +7,9 @@ module Cardano.Prelude.Base
        , length
        ) where
 
-import qualified Protolude as Y
 import           Protolude as X hiding (Hashable, hash, hashUsing, hashWithSalt,
-                     identity, (.), length)
+                     identity, length, witness, (.))
+import qualified Protolude as Y
 
 import           Data.Foldable (Foldable)
 import qualified Data.Text as T
@@ -40,4 +40,3 @@ instance Foldable t => HasLength (t a) where
 -- | We can pass several things here, as long as they have length.
 length :: HasLength a => a -> Int
 length = length'
-
