@@ -9,64 +9,69 @@
 --   TODO: Decide whether or not to remove this module
 
 module Test.Cardano.Prelude.QuickCheck.Arbitrary
-       ( Nonrepeating (..)
-       , ArbitraryUnsafe (..)
-       , SmallGenerator (..)
-       , makeSmall
-       , sublistN
-       , arbitrarySizedS
-       , arbitrarySizedSL
-       , runGen
-       ) where
+  ( Nonrepeating(..)
+  , ArbitraryUnsafe(..)
+  , SmallGenerator(..)
+  , makeSmall
+  , sublistN
+  , arbitrarySizedS
+  , arbitrarySizedSL
+  , runGen
+  )
+where
 
-import           Cardano.Prelude
+import Cardano.Prelude
 
-import           Data.ByteString (pack)
+import Data.ByteString (pack)
 import qualified Data.ByteString.Lazy as BL (ByteString, pack)
-import           Data.List.NonEmpty (NonEmpty ((:|)))
-import           Formatting (build, sformat)
-import           Test.QuickCheck (Arbitrary (..), Gen, listOf, scale, shuffle,
-                     vector)
-import           Test.QuickCheck.Gen (unGen)
-import           Test.QuickCheck.Instances.ByteString ()
-import           Test.QuickCheck.Random (mkQCGen)
+import Data.List.NonEmpty (NonEmpty((:|)))
+import Formatting (build, sformat)
+import Test.QuickCheck (Arbitrary(..), Gen, listOf, scale, shuffle, vector)
+import Test.QuickCheck.Gen (unGen)
+import Test.QuickCheck.Instances.ByteString ()
+import Test.QuickCheck.Random (mkQCGen)
 
 
 makeSmall :: Gen a -> Gen a
 makeSmall = scale f
-  where
+ where
     -- This function is the Golden Function of Testing. It is perfect
     -- for making tested values small. There was profound research
     -- in this area. `f 4` is 3, yes.
-    f :: Int -> Int
-    f 0 = 0
-    f 1 = 1
-    f 2 = 2
-    f 3 = 3
-    f 4 = 3
-    f n
-      | n < 0 = n
-      | otherwise =
-          (round . sqrt @Double . realToFrac . (`div` 3)) n
+  f :: Int -> Int
+  f 0 = 0
+  f 1 = 1
+  f 2 = 2
+  f 3 = 3
+  f 4 = 3
+  f n
+    | n < 0     = n
+    | otherwise = (round . sqrt @Double . realToFrac . (`div` 3)) n
 
 newtype SmallGenerator a = SmallGenerator
     { getSmallGenerator :: a
     } deriving (Eq, Show)
 
 instance Arbitrary a => Arbitrary (SmallGenerator a) where
-    arbitrary = SmallGenerator <$> makeSmall arbitrary
-    shrink = fmap SmallGenerator . shrink . getSmallGenerator
+  arbitrary = SmallGenerator <$> makeSmall arbitrary
+  shrink    = fmap SmallGenerator . shrink . getSmallGenerator
 
 -- | Choose a random (shuffled) subset of length n. Throws an error if
 -- there's not enough elements.
 sublistN :: Int -> [a] -> Gen [a]
 sublistN n xs = do
-    let len = length xs
-    if len < n then
-        panic $ sformat ("sublistN: requested ".build." elements, ".
-            "but list only contains ".build) n len
-    else
-        take n <$> shuffle xs
+  let len = length xs
+  if len < n
+    then panic $ sformat
+      ( "sublistN: requested "
+      . build
+      . " elements, "
+      . "but list only contains "
+      . build
+      )
+      n
+      len
+    else take n <$> shuffle xs
 
 -- | Type for generating list of unique (nonrepeating) elemets.
 class Nonrepeating a where
@@ -110,10 +115,10 @@ instance ArbitraryUnsafe Word64
 instance ArbitraryUnsafe ByteString
 
 instance ArbitraryUnsafe a => ArbitraryUnsafe [a] where
-    arbitraryUnsafe = listOf arbitraryUnsafe
+  arbitraryUnsafe = listOf arbitraryUnsafe
 
 instance ArbitraryUnsafe a => ArbitraryUnsafe (NonEmpty a) where
-    arbitraryUnsafe = (:|) <$> arbitraryUnsafe <*> listOf arbitraryUnsafe
+  arbitraryUnsafe = (:|) <$> arbitraryUnsafe <*> listOf arbitraryUnsafe
 
 instance (ArbitraryUnsafe a, ArbitraryUnsafe b) => ArbitraryUnsafe (a, b) where
-    arbitraryUnsafe = (,) <$> arbitraryUnsafe <*> arbitraryUnsafe
+  arbitraryUnsafe = (,) <$> arbitraryUnsafe <*> arbitraryUnsafe

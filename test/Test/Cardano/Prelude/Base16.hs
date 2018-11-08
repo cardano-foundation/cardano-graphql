@@ -8,19 +8,20 @@
 --   errors may have occurred.
 
 module Test.Cardano.Prelude.Base16
-    ( decodeBase16
-    , encodeBase16
-    , encodeWithIndex
-    ) where
+  ( decodeBase16
+  , encodeBase16
+  , encodeWithIndex
+  )
+where
 
-import           Cardano.Prelude
+import Cardano.Prelude
 
 import qualified Data.Attoparsec.ByteString.Char8 as PBC
 import qualified Data.Attoparsec.ByteString.Lazy as PLB
 import qualified Data.ByteString.Base16.Lazy as B16
 import qualified Data.ByteString.Char8 as BC
 import qualified Data.ByteString.Lazy.Char8 as LB
-import           Text.Printf (printf)
+import Text.Printf (printf)
 
 
 --------------------------------------------------------------------------------

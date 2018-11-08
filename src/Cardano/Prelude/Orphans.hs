@@ -7,15 +7,15 @@
 -- | Orphan instances for external types/classes.
 
 module Cardano.Prelude.Orphans
-       (
-       ) where
+  ()
+where
 
-import           Cardano.Prelude.Base
+import Cardano.Prelude.Base
 
-import           Data.Tagged (Tagged (Tagged))
-import           Data.Typeable (typeRep)
+import Data.Tagged (Tagged(Tagged))
+import Data.Typeable (typeRep)
 import qualified Formatting as F
-import           Formatting.Buildable (Buildable (..))
+import Formatting.Buildable (Buildable(..))
 
 
 --------------------------------------------------------------------------------
@@ -27,8 +27,10 @@ instance Buildable () where
   build _ = "()"
 
 instance (Typeable s, Buildable a) => Buildable (Tagged s a) where
-  build tt@(Tagged v) =
-    F.bprint ("Tagged " F.% F.shown F.% " " F.% F.build) ts v
+  build tt@(Tagged v) = F.bprint
+    ("Tagged " F.% F.shown F.% " " F.% F.build)
+    ts
+    v
    where
     ts    = typeRep proxy
     proxy = (const Proxy :: Tagged s a -> Proxy s) tt

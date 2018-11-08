@@ -3,15 +3,16 @@
 -- | Helper functions for parsing
 
 module Cardano.Prelude.Base16
-       ( parseBase16
-       ) where
+  ( parseBase16
+  )
+where
 
-import           Cardano.Prelude.Base
+import Cardano.Prelude.Base
 
 import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8 as BS
-import           Formatting (bprint, shown)
-import           Formatting.Buildable (Buildable (build))
+import Formatting (bprint, shown)
+import Formatting.Buildable (Buildable(build))
 
 
 newtype Base16ParseError =

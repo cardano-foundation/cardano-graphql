@@ -3,25 +3,36 @@
 -- | Helper functions for use in golden testing of datatypes
 
 module Test.Cardano.Prelude.Golden
-       ( discoverGolden
-       , eachOf
-       , goldenTestJSON
-       , goldenTestJSONPretty
-       , getText
-       ) where
+  ( discoverGolden
+  , eachOf
+  , goldenTestJSON
+  , goldenTestJSONPretty
+  , getText
+  )
+where
 
-import           Cardano.Prelude
+import Cardano.Prelude
 
-import           Data.Aeson (FromJSON, ToJSON, eitherDecode, encode)
-import           Data.Aeson.Encode.Pretty (Config (..), Indent (..),
-                     NumberFormat (..), encodePretty', keyOrder)
+import Data.Aeson (FromJSON, ToJSON, eitherDecode, encode)
+import Data.Aeson.Encode.Pretty
+  (Config(..), Indent(..), NumberFormat(..), encodePretty', keyOrder)
 import qualified Data.ByteString.Lazy as LB
 import qualified Data.Text as T
 
-import           Hedgehog (Gen, Group, Property, PropertyT, TestLimit,
-                     discoverPrefix, forAll, property, withTests, (===))
-import           Hedgehog.Internal.Property (failWith)
-import           Hedgehog.Internal.TH (TExpQ)
+import Hedgehog
+  ( Gen
+  , Group
+  , Property
+  , PropertyT
+  , TestLimit
+  , discoverPrefix
+  , forAll
+  , property
+  , withTests
+  , (===)
+  )
+import Hedgehog.Internal.Property (failWith)
+import Hedgehog.Internal.TH (TExpQ)
 
 
 discoverGolden :: TExpQ Group
@@ -58,28 +69,30 @@ goldenTestJSONPretty
   => a
   -> FilePath
   -> Property
-goldenTestJSONPretty x path = withFrozenCallStack $
-    withTests 1 . property $ do
-        bs <- liftIO (LB.readFile path)
-        -- Sort keys by their order of appearance in the argument list
-        -- of `keyOrder`. Keys not in the argument list are moved to the
-        -- end, while their order is preserved.
-        let defConfig' = Config { confIndent = Spaces 4
-                                , confCompare = keyOrder ["file", "hash"]
-                                , confNumFormat = Generic
-                                , confTrailingNewline = False }
-        encodePretty' defConfig' x === bs
-        case eitherDecode bs of
-            Left err -> failWith Nothing $ "could not decode: " <> show err
-            Right x' -> x === x'
+goldenTestJSONPretty x path = withFrozenCallStack $ withTests 1 . property $ do
+  bs <- liftIO (LB.readFile path)
+  -- Sort keys by their order of appearance in the argument list
+  -- of `keyOrder`. Keys not in the argument list are moved to the
+  -- end, while their order is preserved.
+  let
+    defConfig' = Config
+      { confIndent          = Spaces 4
+      , confCompare         = keyOrder ["file", "hash"]
+      , confNumFormat       = Generic
+      , confTrailingNewline = False
+      }
+  encodePretty' defConfig' x === bs
+  case eitherDecode bs of
+    Left  err -> failWith Nothing $ "could not decode: " <> show err
+    Right x'  -> x === x'
 
 -- | Text used for example values in a number of golden tests
 --
 --   Changing existing values in this string will break existing golden
 --   tests, but it us OK to append more data to the end.
 staticText :: Text
-staticText
-  = "Kmyw4lDSE5S4fSH6etNouiXezCyEjKc3tG4ja0kFjO8qzai26ZMPUEJfEy15ox5kJ0uKD\
+staticText =
+  "Kmyw4lDSE5S4fSH6etNouiXezCyEjKc3tG4ja0kFjO8qzai26ZMPUEJfEy15ox5kJ0uKD\
     \bi7i6dLXkuesVZ9JfHgjrctsLFt2NvovXnchsOvX05Y6LohlTNt5mkPFhUoXu1EZSJTIy\
     \3fTU53b412r4AEusD7tcdRgH47yTr5hMO63bJnYBbmNperLHfiT1lP0MLQLh1J1DfoYBs\
     \auoJOzvtAgvjHo6UFttnK6vZ3Cknpuob6uMS2MkJKmuoQsqsAYcRDWbJ2Rgw4bm2ndTM4\
