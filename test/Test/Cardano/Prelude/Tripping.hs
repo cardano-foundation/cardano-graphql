@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleInstances   #-}
+{-# LANGUAGE FlexibleContexts    #-}
 {-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
@@ -7,27 +7,60 @@
 -- | Helpers for round-trip testing datatypes
 
 module Test.Cardano.Prelude.Tripping
-  ( runTests
-  , discoverRoundTrip
-  , roundTripsAesonShow
-  , roundTripsAesonBuildable
-  , trippingBuildable
-  )
-where
+       ( runTests
+       , discoverRoundTrip
+       , roundTripsAesonShow
+       , roundTripsAesonBuildable
+       , roundTripsCanonicalJsonPretty
+       , trippingBuildable
+       ) where
 
 import Cardano.Prelude
 
-import Data.Aeson (FromJSON, ToJSON, decode, encode)
-import Data.String (unlines)
-import Data.Text.Internal.Builder (toLazyText)
-import Formatting.Buildable (Buildable(..))
-import System.IO (hSetEncoding, stderr, stdout, utf8)
-import Text.Show.Pretty (Value(..), parseValue)
+import           Data.Aeson
+  ( FromJSON
+  , ToJSON
+  , decode
+  , encode
+  )
+import           Data.String
+  (unlines)
+import qualified Data.ByteString.Lazy as LB
+import           Data.Functor.Identity
+  (Identity (..))
+import           Data.Text.Encoding
+  (encodeUtf8)
+import           Data.Text.Internal.Builder
+  (toLazyText)
+import           Formatting.Buildable
+  (Buildable (..))
+import           System.IO
+  ( hSetEncoding
+  , stderr
+  , stdout
+  , utf8
+  )
+import           Text.Show.Pretty
+  ( Value(..)
+  , parseValue
+  )
+import qualified Text.JSON.Canonical as CanonicalJSON
 
-import Hedgehog (Group, MonadTest, discoverPrefix, success, tripping)
-import Hedgehog.Internal.Property (Diff(..), failWith)
-import Hedgehog.Internal.Show (valueDiff)
-import Hedgehog.Internal.TH (TExpQ)
+import           Hedgehog
+  ( Group
+  , MonadTest
+  , discoverPrefix
+  , success
+  , tripping
+  )
+import           Hedgehog.Internal.Property
+  ( Diff(..)
+  , failWith
+  )
+import           Hedgehog.Internal.Show
+  (valueDiff)
+import           Hedgehog.Internal.TH
+  (TExpQ)
 
 
 discoverRoundTrip :: TExpQ Group
@@ -37,10 +70,41 @@ roundTripsAesonShow
   :: (Eq a, MonadTest m, ToJSON a, FromJSON a, Show a) => a -> m ()
 roundTripsAesonShow a = tripping a encode decode
 
--- | Round trip any `a` with both `ToJSON` and `FromJSON` instances
+-- | Round trip any `a` with both `ToJSON` and `FromJSON` instances.
 roundTripsAesonBuildable
   :: (Eq a, MonadTest m, ToJSON a, FromJSON a, Buildable a) => a -> m ()
 roundTripsAesonBuildable a = trippingBuildable a encode decode
+
+-- | Pretty round trip any `a` with both `ToJSON` and `FromJSON` canonical instances.
+roundTripsCanonicalJsonPretty
+  :: ( Eq a
+     , Show a
+     , MonadTest m
+     , CanonicalJSON.ToJSON Identity a
+     , CanonicalJSON.FromJSON (Either SchemaError) a
+     )
+  => a
+  -> m ()
+roundTripsCanonicalJsonPretty a = tripping a canonicalEncPre canonicalDecPre
+ where
+  canonicalEncPre
+    :: forall a . CanonicalJSON.ToJSON Identity a => a -> LB.ByteString
+  canonicalEncPre x =
+    LB.fromStrict
+      . encodeUtf8
+      . toS
+      $ CanonicalJSON.prettyCanonicalJSON
+      $ runIdentity
+      $ CanonicalJSON.toJSON x
+  canonicalDecPre
+    :: forall a
+     . CanonicalJSON.FromJSON (Either SchemaError) a
+    => LB.ByteString
+    -> Either SchemaError a
+  canonicalDecPre y =
+    CanonicalJSON.fromJSON
+      $ either (panic . toS) identity
+      $ CanonicalJSON.parseCanonicalJSON y
 
 runTests :: [IO Bool] -> IO ()
 runTests tests' = do
