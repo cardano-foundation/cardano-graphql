@@ -35,6 +35,7 @@ library
                      , attoparsec
                      , base16-bytestring
                      , bytestring
+                     , canonical-json
                      , cardano-prelude
                      , cryptonite
                      , formatting

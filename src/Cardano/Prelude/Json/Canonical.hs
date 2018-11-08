@@ -38,7 +38,7 @@ import Cardano.Prelude.Json.Parse (parseJSString)
 data SchemaError = SchemaError
   { seExpected :: !Text
   , seActual   :: !(Maybe Text)
-  } deriving (Show)
+  } deriving (Show, Eq)
 
 instance Buildable SchemaError where
   build se = mconcat
