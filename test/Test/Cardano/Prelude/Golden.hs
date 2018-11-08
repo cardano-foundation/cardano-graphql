@@ -69,30 +69,34 @@ goldenTestJSONPretty
   => a
   -> FilePath
   -> Property
-goldenTestJSONPretty x path = withFrozenCallStack $ withTests 1 . property $ do
-  bs <- liftIO (LB.readFile path)
-  -- Sort keys by their order of appearance in the argument list
-  -- of `keyOrder`. Keys not in the argument list are moved to the
-  -- end, while their order is preserved.
-  let
-    defConfig' = Config
-      { confIndent          = Spaces 4
-      , confCompare         = keyOrder ["file", "hash"]
-      , confNumFormat       = Generic
-      , confTrailingNewline = False
-      }
-  encodePretty' defConfig' x === bs
-  case eitherDecode bs of
-    Left  err -> failWith Nothing $ "could not decode: " <> show err
-    Right x'  -> x === x'
+goldenTestJSONPretty x path =
+  withFrozenCallStack
+    $ withTests 1
+    . property
+    $ do
+        bs <- liftIO (LB.readFile path)
+        -- Sort keys by their order of appearance in the argument list
+        -- of `keyOrder`. Keys not in the argument list are moved to the
+        -- end, while their order is preserved.
+        let
+          defConfig' = Config
+            { confIndent          = Spaces 4
+            , confCompare         = keyOrder ["file", "hash"]
+            , confNumFormat       = Generic
+            , confTrailingNewline = False
+            }
+        encodePretty' defConfig' x === bs
+        case eitherDecode bs of
+          Left  err -> failWith Nothing $ "could not decode: " <> show err
+          Right x'  -> x === x'
 
 -- | Text used for example values in a number of golden tests
 --
 --   Changing existing values in this string will break existing golden
 --   tests, but it us OK to append more data to the end.
 staticText :: Text
-staticText =
-  "Kmyw4lDSE5S4fSH6etNouiXezCyEjKc3tG4ja0kFjO8qzai26ZMPUEJfEy15ox5kJ0uKD\
+staticText
+  = "Kmyw4lDSE5S4fSH6etNouiXezCyEjKc3tG4ja0kFjO8qzai26ZMPUEJfEy15ox5kJ0uKD\
     \bi7i6dLXkuesVZ9JfHgjrctsLFt2NvovXnchsOvX05Y6LohlTNt5mkPFhUoXu1EZSJTIy\
     \3fTU53b412r4AEusD7tcdRgH47yTr5hMO63bJnYBbmNperLHfiT1lP0MLQLh1J1DfoYBs\
     \auoJOzvtAgvjHo6UFttnK6vZ3Cknpuob6uMS2MkJKmuoQsqsAYcRDWbJ2Rgw4bm2ndTM4\

@@ -7,60 +7,32 @@
 -- | Helpers for round-trip testing datatypes
 
 module Test.Cardano.Prelude.Tripping
-       ( runTests
-       , discoverRoundTrip
-       , roundTripsAesonShow
-       , roundTripsAesonBuildable
-       , roundTripsCanonicalJsonPretty
-       , trippingBuildable
-       ) where
+  ( runTests
+  , discoverRoundTrip
+  , roundTripsAesonShow
+  , roundTripsAesonBuildable
+  , roundTripsCanonicalJsonPretty
+  , trippingBuildable
+  )
+where
 
 import Cardano.Prelude
 
-import           Data.Aeson
-  ( FromJSON
-  , ToJSON
-  , decode
-  , encode
-  )
-import           Data.String
-  (unlines)
+import Data.Aeson (FromJSON, ToJSON, decode, encode)
+import Data.String (unlines)
 import qualified Data.ByteString.Lazy as LB
-import           Data.Functor.Identity
-  (Identity (..))
-import           Data.Text.Encoding
-  (encodeUtf8)
-import           Data.Text.Internal.Builder
-  (toLazyText)
-import           Formatting.Buildable
-  (Buildable (..))
-import           System.IO
-  ( hSetEncoding
-  , stderr
-  , stdout
-  , utf8
-  )
-import           Text.Show.Pretty
-  ( Value(..)
-  , parseValue
-  )
+import Data.Functor.Identity (Identity(..))
+import Data.Text.Encoding (encodeUtf8)
+import Data.Text.Internal.Builder (toLazyText)
+import Formatting.Buildable (Buildable(..))
+import System.IO (hSetEncoding, stderr, stdout, utf8)
+import Text.Show.Pretty (Value(..), parseValue)
 import qualified Text.JSON.Canonical as CanonicalJSON
 
-import           Hedgehog
-  ( Group
-  , MonadTest
-  , discoverPrefix
-  , success
-  , tripping
-  )
-import           Hedgehog.Internal.Property
-  ( Diff(..)
-  , failWith
-  )
-import           Hedgehog.Internal.Show
-  (valueDiff)
-import           Hedgehog.Internal.TH
-  (TExpQ)
+import Hedgehog (Group, MonadTest, discoverPrefix, success, tripping)
+import Hedgehog.Internal.Property (Diff(..), failWith)
+import Hedgehog.Internal.Show (valueDiff)
+import Hedgehog.Internal.TH (TExpQ)
 
 
 discoverRoundTrip :: TExpQ Group

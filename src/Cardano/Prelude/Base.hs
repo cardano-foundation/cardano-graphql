@@ -9,8 +9,15 @@ module Cardano.Prelude.Base
 where
 
 import Protolude as X
-  hiding
-    (Hashable, hash, hashUsing, hashWithSalt, identity, length, witness, (.))
+  hiding ( Hashable
+  , hash
+  , hashUsing
+  , hashWithSalt
+  , identity
+  , length
+  , witness
+  , (.)
+  )
 import qualified Protolude as Y
 
 import Data.Foldable (Foldable)
