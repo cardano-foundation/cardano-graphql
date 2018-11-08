@@ -24,25 +24,26 @@
 --   @sformat build value@, and we can compose this @build@ in larger @Format@s.
 
 module Cardano.Prelude.Formatting
-       ( base16Builder
-       , base16F
-       , pairF
-       , pairBuilder
-       , listJson
-       , listJsonIndent
-       , mapJson
-       ) where
+  ( base16Builder
+  , base16F
+  , pairF
+  , pairBuilder
+  , listJson
+  , listJsonIndent
+  , mapJson
+  )
+where
 
-import           Cardano.Prelude.Base
+import Cardano.Prelude.Base
 
-import           Data.ByteString (ByteString)
+import Data.ByteString (ByteString)
 import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text.Lazy as LT
-import           Data.Text.Lazy.Builder (Builder, fromLazyText, fromString)
-import           Formatting (Format, bprint, later)
+import Data.Text.Lazy.Builder (Builder, fromLazyText, fromString)
+import Formatting (Format, bprint, later)
 import qualified Formatting as F (build)
-import           Formatting.Buildable (Buildable (build))
+import Formatting.Buildable (Buildable(build))
 import qualified GHC.Exts as Exts
 
 

@@ -7,26 +7,27 @@
 -- | Helpers for round-trip testing datatypes
 
 module Test.Cardano.Prelude.Tripping
-       ( runTests
-       , discoverRoundTrip
-       , roundTripsAesonShow
-       , roundTripsAesonBuildable
-       , trippingBuildable
-       ) where
+  ( runTests
+  , discoverRoundTrip
+  , roundTripsAesonShow
+  , roundTripsAesonBuildable
+  , trippingBuildable
+  )
+where
 
-import           Cardano.Prelude
+import Cardano.Prelude
 
-import           Data.Aeson (FromJSON, ToJSON, decode, encode)
-import           Data.String (unlines)
-import           Data.Text.Internal.Builder (toLazyText)
-import           Formatting.Buildable (Buildable (..))
-import           System.IO (hSetEncoding, stderr, stdout, utf8)
-import           Text.Show.Pretty (Value (..), parseValue)
+import Data.Aeson (FromJSON, ToJSON, decode, encode)
+import Data.String (unlines)
+import Data.Text.Internal.Builder (toLazyText)
+import Formatting.Buildable (Buildable(..))
+import System.IO (hSetEncoding, stderr, stdout, utf8)
+import Text.Show.Pretty (Value(..), parseValue)
 
-import           Hedgehog (Group, MonadTest, discoverPrefix, success, tripping)
-import           Hedgehog.Internal.Property (Diff (..), failWith)
-import           Hedgehog.Internal.Show (valueDiff)
-import           Hedgehog.Internal.TH (TExpQ)
+import Hedgehog (Group, MonadTest, discoverPrefix, success, tripping)
+import Hedgehog.Internal.Property (Diff(..), failWith)
+import Hedgehog.Internal.Show (valueDiff)
+import Hedgehog.Internal.TH (TExpQ)
 
 
 discoverRoundTrip :: TExpQ Group
@@ -90,8 +91,8 @@ trippingBuildable x enc dec =
           $ unlines ["━━━ Intermediate ━━━", show i]
 
 instance (Buildable e, Buildable a) => Buildable (Either e a) where
-    build (Left e)  = build e
-    build (Right a) = build a
+  build (Left  e) = build e
+  build (Right a) = build a
 
 buildValue :: Buildable a => a -> Maybe Value
 buildValue = parseValue . toS . toLazyText . build

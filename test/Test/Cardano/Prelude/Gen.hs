@@ -1,20 +1,21 @@
 -- | Hedgehog generators for commonly used types
 
 module Test.Cardano.Prelude.Gen
-       ( genBytes
-       , genUTF8Byte
-       , gen32Bytes
-       , genWord32
-       , genWord16
-       , genNatural
-       , genNominalDiffTime
-       ) where
+  ( genBytes
+  , genUTF8Byte
+  , gen32Bytes
+  , genWord32
+  , genWord16
+  , genNatural
+  , genNominalDiffTime
+  )
+where
 
-import           Cardano.Prelude
+import Cardano.Prelude
 
-import           Data.Time (NominalDiffTime)
+import Data.Time (NominalDiffTime)
 
-import           Hedgehog (Gen)
+import Hedgehog (Gen)
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 

@@ -1,19 +1,20 @@
 -- | Passing through errors to external libraries that use @MonadFail@
 
 module Cardano.Prelude.Error
-       ( toAesonError
-       , aesonError
-       , toCborError
-       , cborError
-       ) where
+  ( toAesonError
+  , aesonError
+  , toCborError
+  , cborError
+  )
+where
 
-import           Cardano.Prelude.Base
+import Cardano.Prelude.Base
 
 import qualified Codec.CBOR.Decoding as CBOR
-import           Control.Monad (fail)
+import Control.Monad (fail)
 import qualified Data.Aeson.Types as A
-import           Formatting (build, formatToString)
-import           Formatting.Buildable (Buildable)
+import Formatting (build, formatToString)
+import Formatting.Buildable (Buildable)
 
 
 -- | Convert an 'Either'-encoded error to an 'aeson' parser error

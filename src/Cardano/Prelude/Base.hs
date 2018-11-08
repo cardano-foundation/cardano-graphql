@@ -1,22 +1,24 @@
 {-# LANGUAGE FlexibleInstances #-}
 
 module Cardano.Prelude.Base
-       ( module X
-       , identity
-       , putTextLn
-       , length
-       ) where
+  ( module X
+  , identity
+  , putTextLn
+  , length
+  )
+where
 
-import           Protolude as X hiding (Hashable, hash, hashUsing, hashWithSalt,
-                     identity, length, witness, (.))
+import Protolude as X
+  hiding
+    (Hashable, hash, hashUsing, hashWithSalt, identity, length, witness, (.))
 import qualified Protolude as Y
 
-import           Data.Foldable (Foldable)
+import Data.Foldable (Foldable)
 import qualified Data.Text as T
 
-import           Control.Category (id)
-import           Control.Category as X hiding (id)
-import           Numeric.Natural as X
+import Control.Category (id)
+import Control.Category as X hiding (id)
+import Numeric.Natural as X
 
 -- | Rename `id` to `identity` to allow `id` as a variable name
 identity :: Category cat => cat a a
@@ -32,10 +34,10 @@ class HasLength a where
     length' :: a -> Int
 
 instance HasLength Text where
-    length' = T.length
+  length' = T.length
 
 instance Foldable t => HasLength (t a) where
-    length' = Y.length
+  length' = Y.length
 
 -- | We can pass several things here, as long as they have length.
 length :: HasLength a => a -> Int

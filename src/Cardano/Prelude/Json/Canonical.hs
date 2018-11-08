@@ -11,23 +11,28 @@
 -- | Instances used in the canonical JSON encoding of `GenesisData`
 
 module Cardano.Prelude.Json.Canonical
-       ( SchemaError(..)
-       ) where
+  ( SchemaError(..)
+  )
+where
 
-import           Cardano.Prelude.Base
+import Cardano.Prelude.Base
 
-import           Control.Monad.Except (MonadError (throwError))
-import           Data.Fixed (E12, resolution)
+import Control.Monad.Except (MonadError(throwError))
+import Data.Fixed (E12, resolution)
 import qualified Data.Text.Lazy.Builder as Builder (fromText)
-import           Data.Time (NominalDiffTime, UTCTime)
-import           Data.Time.Clock.POSIX (posixSecondsToUTCTime,
-                     utcTimeToPOSIXSeconds)
-import           Formatting.Buildable (Buildable (build))
-import           Text.JSON.Canonical (FromJSON (fromJSON), Int54,
-                     JSValue (JSNum, JSString), ReportSchemaErrors (expected),
-                     ToJSON (toJSON), expectedButGotValue)
+import Data.Time (NominalDiffTime, UTCTime)
+import Data.Time.Clock.POSIX (posixSecondsToUTCTime, utcTimeToPOSIXSeconds)
+import Formatting.Buildable (Buildable(build))
+import Text.JSON.Canonical
+  ( FromJSON(fromJSON)
+  , Int54
+  , JSValue(JSNum, JSString)
+  , ReportSchemaErrors(expected)
+  , ToJSON(toJSON)
+  , expectedButGotValue
+  )
 
-import           Cardano.Prelude.Json.Parse (parseJSString)
+import Cardano.Prelude.Json.Parse (parseJSString)
 
 
 data SchemaError = SchemaError

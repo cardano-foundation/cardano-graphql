@@ -3,3 +3,6 @@ resolver: ./snapshot.yaml
 packages:
   - .
   - test
+
+nix:
+  shell-file: scripts/nix/stack-shell.nix
