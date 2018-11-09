@@ -12,9 +12,7 @@ writeScript "check-brittany" ''
 
   set -xe
 
-  for f in $(find . -not -path "*/.stack-work/*" -name '*.hs'); do
-    brittany --config-file scripts/brittany/config.yaml  --write-mode inplace $f
-  done
+  ${builtins.readFile ./brittany-all-hs.sh}
 
   fail_brittany_check () {
     git diff --text > /tmp/brittany.patch

@@ -1,0 +1,3 @@
+for f in $(find . -not -path "*/.stack-work/*" -name '*.hs'); do
+    brittany --config-file scripts/brittany/config.yaml  --write-mode inplace $f
+done
