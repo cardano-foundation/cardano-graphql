@@ -62,7 +62,7 @@ getBuildkiteEnv = runMaybeT $ do
   bkBuildNum <- MaybeT $ needRead "BUILDKITE_BUILD_NUMBER"
   bkPipeline <- MaybeT $ need "BUILDKITE_PIPELINE_SLUG"
   bkBranch   <- MaybeT $ need "BUILDKITE_BRANCH"
-  pure BuildkiteEnv { .. }
+  pure BuildkiteEnv {..}
 
 needRead :: Read a => Text -> IO (Maybe a)
 needRead v = (>>= readMay) . fmap T.unpack <$> need v
@@ -75,7 +75,7 @@ getCacheConfig (Just BuildkiteEnv {..}) = do
   ccRegion  <- need "AWS_REGION"
   need "S3_BUCKET" >>= \case
     Just ccBucket -> pure
-      (Right CICacheConfig { ccBranch = bkBranch, ccPrefix = bkPipeline, .. })
+      (Right CICacheConfig {ccBranch = bkBranch, ccPrefix = bkPipeline, ..})
     Nothing -> pure (Left "S3_BUCKET environment variable is not set")
 
 cacheDownloadStep :: Either Text CICacheConfig -> IO ()
