@@ -12,7 +12,7 @@ writeScript "check-brittany" ''
 
   set -xe
 
-  ${builtins.readFile ./brittany-all-hs.sh}
+  ${builtins.readFile ./brittany-all-hs}
 
   fail_brittany_check () {
     git diff --text > /tmp/brittany.patch
