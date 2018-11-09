@@ -4,6 +4,7 @@
 
 module Cardano.Prelude.Base16
   ( parseBase16
+  , Base16ParseError (..)
   )
 where
 
@@ -17,7 +18,7 @@ import Formatting.Buildable (Buildable(build))
 
 newtype Base16ParseError =
   Base16IncorrectSuffix ByteString
-  deriving (Show)
+  deriving (Eq, Show)
 
 instance Buildable Base16ParseError where
   build (Base16IncorrectSuffix suffix) =
