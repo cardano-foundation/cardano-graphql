@@ -1,4 +1,6 @@
 # Cardano GraphQL Server
+[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
+
 NodeJS implementation built using [Apollo Server](https://www.apollographql.com/docs/apollo-server/) 🚀, with schema generated from the published Cardano SL [Swagger](https://swagger.io/) spec.
 
 **WARNINGS**
