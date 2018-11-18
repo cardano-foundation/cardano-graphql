@@ -15,25 +15,12 @@ const uri = 'http://localhost:4000/graphql';
 const healthChecks = [
   'http://localhost:4000/.well-known/apollo/server-health'
 ];
+const link = createHttpLink({ uri, fetch });
 
-const executeOperation = (link, operation) => makePromise(execute(link, operation));
+const executeOperation = (operation) => makePromise(execute(link, operation));
 
-const fetchDemoData = async (link) => {
-  const walletResponse = await executeOperation(link, {
-    query: gql`query {
-        get_api_v1_wallets {
-            data {
-                id
-            }
-        }}`
-  });
-  const { data: { get_api_v1_wallets: { data: wallets }}} = walletResponse;
-  if (wallets.length === 0) {
-    // Demo cluster will eventually have demo wallet data, so keep retrying
-    await delay(1000);
-    return fetchDemoData(link);
-  }
-  const addressResponse = await executeOperation(link, {
+async function allAddresses () {
+  const response = await executeOperation({
     query: gql`query {
         get_api_v1_addresses {
             data {
@@ -41,9 +28,71 @@ const fetchDemoData = async (link) => {
             }
         }}`
   });
-  const { data: { get_api_v1_addresses: { data: addresses }}} = addressResponse;
-  return { wallets, addresses };
+  return response.data.get_api_v1_addresses.data.map(a => a.id);
+}
+
+async function accountAddresses (walletId) {
+  const response = await executeOperation({
+    query: gql`query AccountAddressesQuery($walletId: String!) {
+        get_api_v1_wallets_walletId_accounts(walletId: $walletId) {
+            data { addresses { id } }
+        }
+    }`,
+    variables: {
+      walletId
+    }
+  });
+  return response.data.get_api_v1_wallets_walletId_accounts.data
+    .reduce((addresses, account) => [...addresses, ...account.addresses.map(a => a.id)], []);
+}
+
+async function fetchDemoData () {
+  const walletResponse = await executeOperation({
+    query: gql`query {
+        get_api_v1_wallets {
+            data {
+                id,
+                balance
+            }
+        }}`
+  });
+  const { data: { get_api_v1_wallets: { data: wallets }}} = walletResponse;
+  if (wallets.length === 0) {
+    // Demo cluster will eventually have demo wallet data, so keep retrying
+    await delay(1000);
+    return fetchDemoData();
+  }
+  const sendingWallet = wallets[0];
+  const addresses = await allAddresses();
+  const sendingAccountAddresses = await accountAddresses(sendingWallet.id);
+  const recipientAddresses = addresses.filter(a => !sendingAccountAddresses.includes(a));
+  return { sendingWallet, recipientAddresses };
 };
+
+async function getTransaction(id) {
+  const response = await executeOperation({
+    query: gql`query GetTransaction($id: String!) {
+        get_api_v1_transactions(id: $id) {
+            data {
+                status {
+                    tag
+                }
+            }
+        }}`,
+        variables: {
+          id
+        }
+  });
+  return response.data.get_api_v1_transactions.data;
+}
+
+async function transactionPersisted(id) {
+  const transaction = await getTransaction(id);
+  if (transaction[0].status.tag === 'persisted' ) return true;
+  // Keep checking until transaction is persisted in the blockchain
+  await delay(2000);
+  return transactionPersisted(id);
+}
 
 suite('Integration with the REST API as an adaptor', function () {
 
@@ -53,11 +102,7 @@ suite('Integration with the REST API as an adaptor', function () {
     await down(composeConfig);
     await upAll(composeConfig);
     await on({ resources: healthChecks });
-    this.apolloLink = createHttpLink({
-      uri,
-      fetch
-    });
-    this.demoData = await fetchDemoData(this.apolloLink);
+    this.demoData = await fetchDemoData();
   });
 
   suiteTeardown(async function() {
@@ -67,8 +112,8 @@ suite('Integration with the REST API as an adaptor', function () {
   });
 
   test('Queries', async function() {
-    const result = await executeOperation(this.apolloLink, {
-      query: gql`query GetNodeInfo {
+    const result = await executeOperation({
+      query: gql`query {
           get_api_v1_node_info {
               data {
                   syncProgress {
@@ -85,7 +130,8 @@ suite('Integration with the REST API as an adaptor', function () {
   });
 
   test('Mutations', async function() {
-    const accountResponse = await executeOperation(this.apolloLink, {
+    const transactionAmount = 1250000;
+    const accountResponse = await executeOperation({
       query: gql`query GetWalletAccounts($walletId: String!) {
           get_api_v1_wallets_walletId_accounts(walletId: $walletId, page: 1, per_page: 50) {
               data {
@@ -94,11 +140,35 @@ suite('Integration with the REST API as an adaptor', function () {
           }
       }`,
       variables: {
-        walletId: this.demoData.wallets[0].id
+        walletId: this.demoData.sendingWallet.id
       }
     });
     const { data: { get_api_v1_wallets_walletId_accounts: { data: accounts }}} = accountResponse;
-    const result = await executeOperation(this.apolloLink, {
+
+    const estimatedFeesResponse = await executeOperation({
+      query: gql`mutation FeeEstimation($index: Float!, $from: String!, $to: String!, $amount: Float!) {
+          post_api_v1_transactions_fees(body: {
+              source: {
+                  accountIndex: $index,
+                  walletId: $from
+              },
+              destinations: [{
+                  address: $to,
+                  amount: $amount
+              }]
+          }) {
+              data { estimatedAmount }
+          }
+      }`,
+      variables: {
+        index: accounts[0].index,
+        from: this.demoData.sendingWallet.id,
+        to: this.demoData.recipientAddresses[0],
+        amount: transactionAmount
+      }
+    });
+    const { estimatedAmount: fees } = estimatedFeesResponse.data.post_api_v1_transactions_fees.data;
+    const transferResult = await executeOperation({
       query: gql`mutation TransferMutation($index: Float!, $from: String!, $to: String!, $amount: Float!) {
           post_api_v1_transactions(body: {
               source: {
@@ -115,14 +185,33 @@ suite('Integration with the REST API as an adaptor', function () {
       }`,
       variables: {
         index: accounts[0].index,
-        from: this.demoData.wallets[0].id,
-        to: this.demoData.addresses[0].id,
-        amount: 1
+        from: this.demoData.sendingWallet.id,
+        to: this.demoData.recipientAddresses[0],
+        amount: transactionAmount
       }
     });
-    expect(result.data).to.have.property('post_api_v1_transactions');
-    expect(result.data.post_api_v1_transactions.data)
+    const { data } = transferResult;
+    expect(data).to.have.property('post_api_v1_transactions');
+    expect(data.post_api_v1_transactions.data)
       .to.have.property('id').that.is.a('string');
+    const { id } = data.post_api_v1_transactions.data;
+    await transactionPersisted(id);
+    const walletResponse = await executeOperation({
+      query: gql`query GetWalletById($walletId: String!){
+          get_api_v1_wallets_walletId(walletId: $walletId) {
+              data {
+                  id,
+                  balance
+              }
+          }
+      }`,
+      variables: {
+        walletId: this.demoData.sendingWallet.id
+      }
+    });
+    const { data: { get_api_v1_wallets_walletId: { data: wallet }}} = walletResponse;
+    const newBalance = wallet.balance;
+    expect(newBalance).to.equal(this.demoData.sendingWallet.balance - transactionAmount - fees)
   });
 
 });
