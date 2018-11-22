@@ -4,11 +4,13 @@ compiler: ghc-8.4.4
 name: cardano-snapshot
 
 packages:
-  # Has support for canonical cbor. This commit is pulled into `master`. I've
-  # posted a GitHub issue requesting a Hackage release:
-  # https://github.com/well-typed/cborg/issues/171
+  # This adds the capability to extract byte offsets in decoders
+  #
+  # https://github.com/well-typed/cborg/pull/185
+  #
+  # The PR has been merged into master, so we are waiting on a Hackage release
   - git: https://github.com/well-typed/cborg
-    commit: 3d274c14ca3077c3a081ba7ad57c5182da65c8c1
+    commit: 80fbe0ee5e67a5622e2cb9eaa9d8594a2214322d
     subdirs:
       - cborg
 
