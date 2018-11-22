@@ -1,4 +1,4 @@
-import { multi } from 'getenv';
+import { multi } from 'getenv'
 
 export default Object.assign({}, multi({
   SWAGGER_SCHEMA_URI: ['SWAGGER_SCHEMA_URI', undefined, 'url'],
@@ -12,5 +12,5 @@ export default Object.assign({}, multi({
   TLS_PATH_CERT: ['TLS_PATH_CERT', '/data/auth/client.pem', 'string'],
   AUTH_DISABLED: ['AUTH_DISABLED', false, 'bool']
 }), {
-  get isProduction() { return process.env.NODE_ENV !== 'development' }
-});
+  get isProduction () { return process.env.NODE_ENV !== 'development' }
+})
