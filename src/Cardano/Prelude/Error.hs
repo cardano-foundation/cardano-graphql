@@ -5,6 +5,7 @@ module Cardano.Prelude.Error
   , aesonError
   , toCborError
   , cborError
+  , wrapError
   )
 where
 
@@ -32,3 +33,10 @@ toCborError = either cborError pure
 -- | Convert a @Buildable@ error into a 'cborg' decoder error
 cborError :: Buildable e => e -> CBOR.Decoder s a
 cborError = fail . formatToString build
+
+-- | A helper for lifting an 'Either' to a 'MonadError'
+--
+--   By using this function infix we can move the error handling to the end of
+--   an expression, hopefully improving readability.
+wrapError :: MonadError e' m => Either e a -> (e -> e') -> m a
+wrapError m wrapper = liftEither $ first wrapper m
