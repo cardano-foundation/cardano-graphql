@@ -13,6 +13,7 @@ import Cardano.Prelude.Base
 
 import qualified Codec.CBOR.Decoding as CBOR
 import Control.Monad (fail)
+import Control.Monad.Except (liftEither)
 import qualified Data.Aeson.Types as A
 import Formatting (build, formatToString)
 import Formatting.Buildable (Buildable)
