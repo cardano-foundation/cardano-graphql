@@ -1,7 +1,7 @@
 # Cardano GraphQL Server
 [![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
 
-NodeJS implementation built using [Apollo Server](https://www.apollographql.com/docs/apollo-server/) 🚀, with schema generated from the published Cardano SL [Swagger](https://swagger.io/) spec.
+NodeJS implementation built using [Apollo Server](https://www.apollographql.com/docs/apollo-server/) 🚀, with schema generated from the published Cardano SL [Swagger](https://swagger.io/) spec, with selected events available as subscriptions.
 
 **WARNINGS**
 – This is a development release, and therefore the API may change.
@@ -24,8 +24,6 @@ docker-compose up
 ```
 This sets up a stack with a demo Cardano SL cluster. Explore the schema in the [GraphQL Playground](http://localhost:4000/graphql). The Dockerfile copies the compiled source from `/dist`, so for now run `yarn build` before building the image.
 
-### Planned features
-- [ ] Connection status subscription
 
 
 

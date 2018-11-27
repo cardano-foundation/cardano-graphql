@@ -2,7 +2,9 @@ import fs from 'fs'
 import ON_DEATH from 'death'
 import delay from 'delay'
 import request from 'request-promise-native'
+import { PubSub } from 'apollo-server'
 import cardanoSLGraphQLServer from './cardanoSLGraphQLServer'
+import publish from './pub-sub/publications';
 import config from './config'
 
 const {
@@ -19,8 +21,10 @@ const {
 } = config
 
 let server
+let publicationDisposer;
 
 const exit = () => {
+  publicationDisposer()
   server.shutdown(process.exit)
 }
 
@@ -35,15 +39,17 @@ ON_DEATH((signal) => {
   }
 })
 
-const startServer = async (options) => {
+const startServer = async (pubSub, options) => {
   const requestOptions = {
     uri: SWAGGER_SCHEMA_URI.href
   }
   if (options.agentOptions) requestOptions.agentOptions = options.agentOptions
   const swaggerSchema = JSON.parse(await request(requestOptions))
-  server = await cardanoSLGraphQLServer(swaggerSchema, REST_ENDPOINT, options)
+  server = await cardanoSLGraphQLServer(swaggerSchema, REST_ENDPOINT, pubSub, options)
   server.listen({ port: PORT }, () => {
-    console.log(`🚀 Server ready at ${server.endpoint(PORT)}`)
+    const { graphqlPath, subscriptionsPath } = server.endpoint(PORT)
+    console.log(`🚀 Server ready at ${graphqlPath}`)
+    console.log(`🚀 Subscriptions ready at ${subscriptionsPath}`)
   })
   return server
 }
@@ -92,7 +98,12 @@ export const initialize = async () => {
         rejectUnauthorized: isProduction
       }
     }
-    if (await apiAvailable(options)) return startServer(options)
+    if (await apiAvailable(options)) {
+      const pubSub = new PubSub()
+      server = await startServer(pubSub, options)
+      publicationDisposer = publish(server.schema, pubSub)
+      return server
+    }
     await delay(CONNECTION_ATTEMPT_INTERVAL)
     return initialize()
   } catch (error) {

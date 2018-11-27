@@ -4,12 +4,14 @@ import https from 'https'
 import http from 'http'
 
 export default class GraphQLServer {
+  schema = null
   certificateService = null
   tlsEnabled = null
   apolloServer = null
   httpServer = null
 
   constructor(schema, options = { tlsEnabled: false, certificateService: null }) {
+    this.schema = schema
     this.certificateService = options.certificateService
     this.tlsEnabled = options.tlsEnabled
     this.apolloServer = new ApolloServer({
@@ -29,6 +31,7 @@ export default class GraphQLServer {
     } else {
       this.httpServer = http.createServer(app)
     }
+    this.apolloServer.installSubscriptionHandlers(this.httpServer)
   }
 
   listen(...args) {
@@ -37,11 +40,18 @@ export default class GraphQLServer {
 
   endpoint(port) {
     const protocol = this.tlsEnabled ? 'https' : 'http'
-    return `${protocol}://localhost:${port}${this.graphqlPath}`
+    return {
+      graphqlPath: `${protocol}://localhost:${port}${this.graphqlPath}`,
+      subscriptionsPath: `ws://localhost:${port}${this.subscriptionsPath}`
+    }
   }
 
   get graphqlPath() {
     return this.apolloServer.graphqlPath
+  }
+
+  get subscriptionsPath() {
+    return this.apolloServer.subscriptionsPath
   }
 
   shutdown(callback) {

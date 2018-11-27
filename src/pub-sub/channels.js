@@ -1,0 +1,3 @@
+export default {
+  NODE_STATUS_CHANGED: 'NODE_STATUS_CHANGED'
+}
