@@ -4,7 +4,7 @@
 
 module Cardano.Prelude.Base16
   ( parseBase16
-  , Base16ParseError (..)
+  , Base16ParseError(..)
   )
 where
 

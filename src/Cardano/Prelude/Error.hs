@@ -6,6 +6,7 @@ module Cardano.Prelude.Error
   , toCborError
   , cborError
   , wrapError
+  , orThrowError
   )
 where
 
@@ -41,3 +42,10 @@ cborError = fail . formatToString build
 --   an expression, hopefully improving readability.
 wrapError :: MonadError e' m => Either e a -> (e -> e') -> m a
 wrapError m wrapper = liftEither $ first wrapper m
+
+-- | A helper for lifting 'unless' to 'MonadError'
+--
+--   By using this function infix we can move error handling to the end of a
+--   'Bool' expression, hopefully improving readability.
+orThrowError :: MonadError e m => Bool -> e -> m ()
+orThrowError condition = unless condition . throwError
