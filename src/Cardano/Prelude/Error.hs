@@ -36,6 +36,7 @@ toCborError = either cborError pure
 cborError :: Buildable e => e -> CBOR.Decoder s a
 cborError = fail . formatToString build
 
+
 -- | A helper for lifting an 'Either' to a 'MonadError'
 --
 --   By using this function infix we can move the error handling to the end of
@@ -43,9 +44,14 @@ cborError = fail . formatToString build
 wrapError :: MonadError e' m => Either e a -> (e -> e') -> m a
 wrapError m wrapper = liftEither $ first wrapper m
 
+infix 1 `wrapError`
+
+
 -- | A helper for lifting 'unless' to 'MonadError'
 --
 --   By using this function infix we can move error handling to the end of a
 --   'Bool' expression, hopefully improving readability.
 orThrowError :: MonadError e m => Bool -> e -> m ()
 orThrowError condition = unless condition . throwError
+
+infix 1 `orThrowError`
