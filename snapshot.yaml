@@ -14,8 +14,8 @@ packages:
     subdirs:
       - cborg
 
-  - git: https://github.com/nc6/cardano-crypto
-    commit: d46e8a44d85a71f5da03fb6b176e9427c684144b
+  - git: https://github.com/input-output-hk/cardano-crypto
+    commit: 3c707936ba0a665375acf5bd240dc4b6eaa6c0bc
 
   # TODO(parsonsmatt): There have been some breaking changes with Plutus for
   # cardano-sl and it would be nice to have some help from that team to get this
