@@ -1,5 +1,5 @@
-resolver: lts-12.10
-compiler: ghc-8.4.4
+resolver: nightly-2018-12-17
+compiler: ghc-8.6.3
 
 name: cardano-snapshot
 
@@ -31,9 +31,12 @@ packages:
     subdirs:
       - hedgehog
 
+  # Vendor canonical-json to support newer version
+  - git: http://github.com/nc6/canonical-json
+    commit: a9dc9b893649bc2e2a770ab22d278a780f7e3a3c
+
   - aeson-options-0.0.0 # This is a Serokell package that should be removed
   - base58-bytestring-0.1.0
-  - canonical-json-0.5.0.1
   - half-0.2.2.3
   - micro-recursion-schemes-5.0.2.2
   - streaming-binary-0.3.0.1
