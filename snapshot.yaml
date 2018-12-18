@@ -35,7 +35,6 @@ packages:
   - git: http://github.com/nc6/canonical-json
     commit: a9dc9b893649bc2e2a770ab22d278a780f7e3a3c
 
-  - aeson-options-0.0.0 # This is a Serokell package that should be removed
   - base58-bytestring-0.1.0
   - half-0.2.2.3
   - micro-recursion-schemes-5.0.2.2
