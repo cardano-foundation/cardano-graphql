@@ -5,6 +5,7 @@
 module Test.Cardano.Prelude.Golden
   ( discoverGolden
   , eachOf
+  , goldenTestJSONDec
   , goldenTestJSON
   , goldenTestJSONPretty
   , getText
@@ -51,6 +52,15 @@ eachOf testLimit things hasProperty =
     .   property
     $   forAll things
     >>= hasProperty
+
+-- | Only check that the datatype equals the decoding of the file
+goldenTestJSONDec
+  :: (Eq a, FromJSON a, HasCallStack, Show a) => a -> FilePath -> Property
+goldenTestJSONDec x path = withFrozenCallStack $ withTests 1 . property $ do
+  bs <- liftIO (LB.readFile path)
+  case eitherDecode bs of
+    Left  err -> failWith Nothing $ "could not decode: " <> show err
+    Right x'  -> x === x'
 
 goldenTestJSON
   :: (Eq a, FromJSON a, HasCallStack, Show a, ToJSON a)
