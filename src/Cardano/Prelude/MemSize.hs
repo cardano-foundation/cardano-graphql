@@ -352,6 +352,9 @@ instance MemSize Int where
 instance MemSize Word where
   memSize _ = 2
 
+instance MemSize Word8 where
+  memSize _ = 2
+
 instance MemSize Word32 where
   memSize _ = 2
 
