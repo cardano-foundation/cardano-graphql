@@ -358,6 +358,9 @@ instance MemSize Word8 where
 instance MemSize Word32 where
   memSize _ = 2
 
+instance MemSize Word64 where
+  memSize _ = 2
+
 instance MemSize Char where
   memSize _ = 0
 
