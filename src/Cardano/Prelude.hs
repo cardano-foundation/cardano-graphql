@@ -9,4 +9,5 @@ import Cardano.Prelude.Error as X
 import Cardano.Prelude.Formatting as X
 import Cardano.Prelude.Json.Canonical as X
 import Cardano.Prelude.Json.Parse as X
+import Cardano.Prelude.MemSize as X
 import Cardano.Prelude.Orphans ()
