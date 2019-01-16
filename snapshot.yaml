@@ -1,5 +1,5 @@
-resolver: lts-12.10
-compiler: ghc-8.4.4
+resolver: nightly-2018-12-17
+compiler: ghc-8.6.3
 
 name: cardano-snapshot
 
@@ -15,7 +15,7 @@ packages:
       - cborg
 
   - git: https://github.com/input-output-hk/cardano-crypto
-    commit: e87fcd3fea18f664d6e4f39c11abb8cafbd25785
+    commit: 3c707936ba0a665375acf5bd240dc4b6eaa6c0bc
 
   # TODO(parsonsmatt): There have been some breaking changes with Plutus for
   # cardano-sl and it would be nice to have some help from that team to get this
@@ -31,9 +31,11 @@ packages:
     subdirs:
       - hedgehog
 
-  - aeson-options-0.0.0 # This is a Serokell package that should be removed
+  # Vendor canonical-json to support newer version
+  - git: http://github.com/nc6/canonical-json
+    commit: a9dc9b893649bc2e2a770ab22d278a780f7e3a3c
+
   - base58-bytestring-0.1.0
-  - canonical-json-0.5.0.1
   - half-0.2.2.3
   - micro-recursion-schemes-5.0.2.2
   - streaming-binary-0.3.0.1
