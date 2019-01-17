@@ -28,9 +28,9 @@ library
                        Cardano.Prelude.Base16
                        Cardano.Prelude.Error
                        Cardano.Prelude.Formatting
+                       Cardano.Prelude.HeapWords
                        Cardano.Prelude.Json.Canonical
                        Cardano.Prelude.Json.Parse
-                       Cardano.Prelude.MemSize
                        Cardano.Prelude.Orphans
 
   build-depends:       base
