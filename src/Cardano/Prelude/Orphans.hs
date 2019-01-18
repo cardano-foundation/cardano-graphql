@@ -12,10 +12,24 @@ where
 
 import Cardano.Prelude.Base
 
+import Data.Aeson (FromJSON(..), ToJSON(..))
+import Data.Set.NonEmpty (NESet)
+import qualified Data.Set.NonEmpty as NES
 import Data.Tagged (Tagged(Tagged))
 import Data.Typeable (typeRep)
 import qualified Formatting as F
 import Formatting.Buildable (Buildable(..))
+
+
+--------------------------------------------------------------------------------
+-- Aeson
+--------------------------------------------------------------------------------
+
+instance (Ord a, FromJSON a) => FromJSON (NESet a) where
+  parseJSON = fmap NES.fromList . parseJSON
+
+instance (Ord a, ToJSON a) => ToJSON (NESet a) where
+  toJSON = toJSON . toList
 
 
 --------------------------------------------------------------------------------

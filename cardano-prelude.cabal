@@ -44,6 +44,7 @@ library
                      , formatting
                      , hashable
                      , mtl
+                     , nonempty-containers
                      , protolude
                      , tagged
                      , text
