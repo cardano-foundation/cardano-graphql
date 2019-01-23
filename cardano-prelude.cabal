@@ -42,7 +42,9 @@ library
                      , cborg
                      , containers
                      , formatting
+                     , ghc-prim
                      , hashable
+                     , integer-gmp
                      , mtl
                      , nonempty-containers
                      , protolude

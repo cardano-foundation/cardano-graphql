@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MagicHash #-}
 
 module Cardano.Prelude.HeapWords
   ( HeapWords(..)
@@ -20,6 +21,7 @@ module Cardano.Prelude.HeapWords
   , heapWords13
   , heapWordsUArray
   , heapWordsUVector
+  , heapWordsUnpacked
   )
 where
 
@@ -40,7 +42,10 @@ import qualified Data.Set as Set
 import Data.Time (Day, UTCTime)
 import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as V.U
-
+import GHC.Integer.GMP.Internals (BigNat(BN#))
+import GHC.Natural (Natural(NatS#, NatJ#))
+import GHC.Prim (ByteArray#, sizeofByteArray#)
+import GHC.Types (Int(I#))
 
 --------------------------------------------------------------------------------
 -- HeapWords class and instances
@@ -453,3 +458,94 @@ instance HeapWords e => HeapWords (V.Vector e) where
 
 heapWordsUVector :: V.U.Unbox e => Int -> V.U.Vector e -> Int
 heapWordsUVector sz a = 5 + (V.U.length a * sz) `div` wordSize
+
+instance HeapWords Natural where
+  heapWords (NatS# _)
+    -- We have
+    --
+    -- > NatS# GmpLimb#
+    -- > type GmpLimb# = Word#
+    --
+    -- so @(NatS# n)@ requires:
+    --
+    -- - 1 word for the header 'NatS#' object header
+    -- - 1 word for the single 'NatS#' unboxed field, of type 'Word#'
+    --
+    -- ┌─────┬───────┐
+    -- │NatS#│ Word#'│
+    -- └─────┴───────┘
+    --
+    = 1 + 1
+  heapWords (NatJ# bn)
+    -- We have
+    --
+    -- > NatJ# {-# UNPACK #-} !BigNat
+    --
+    -- so @NatJ# bn@ requires:
+    --
+    -- - 1 word for the 'NatJ#' object header
+    -- - 1 word for the pointer to the byte array object
+    -- - the heap words required by the byte array object
+    --
+    -- Note that for the sake of uniformity, we use 'heapWordsUnpacked' to
+    -- account for the level of indirection removed by the @UNPACK@ pragma.
+    --
+    -- ┌─────┬───┐
+    -- │NatJ#│ ◉ │
+    -- └─────┴─╂─┘
+    --         ▼
+    --        ┌───┬───┬───┬─┈   ┈─┬───┐
+    --        │BA#│ sz│   │       │   │   2 + n Words
+    --        └───┴───┴───┴─┈   ┈─┴───┘
+    --
+    = 1 + 1 + heapWordsUnpacked bn
+
+instance HeapWords BigNat where
+  heapWords (BN# arr) =
+    -- We have
+    --
+    -- > data BigNat = BN# ByteArray#
+    --
+    -- so @BN# ByteArray#@ requires:
+    --
+    -- - 1 word for the @BN#@ object header
+    -- - 1 word for the pointer to the byte array
+    -- - the words used by the byte array (see 'heapWordsByteArray#').
+    --
+    -- ┌──────┬───┐
+    -- │BigNat│ ◉ │
+    -- └──────┴─╂─┘
+    --          ▼
+    --        ┌───┬───┬───┬─┈   ┈─┬───┐
+    --        │BA#│ sz│   │       │   │   2 + n Words
+    --        └───┴───┴───┴─┈   ┈─┴───┘
+    1 + 1 + heapWordsByteArray# arr
+
+-- | Calculate the heap words required to store a 'ByteArray#' object.
+--
+heapWordsByteArray# :: ByteArray# -> Int
+heapWordsByteArray# ba# = 2 + n
+  -- We require:
+  --
+  -- - 2 for the 'ByteArray#' heap object (1 for header, and 1 for storing its
+  --   size)
+  -- - @n@ for the variable sized part
+  --
+  -- ┌───┬───┬───┬─┈   ┈─┬───┐
+  -- │BA#│ sz│   │       │   │   2 + n Words
+  -- └───┴───┴───┴─┈   ┈─┴───┘
+ where
+  n      = 1 + ((nbytes - 1) `div` wordSize)
+  nbytes = I# (sizeofByteArray# ba#)
+
+-- | Calculate the number of heap words used by a field unpacked within another
+-- constructor.
+--
+-- This function simply subtracts 2 from the 'heapWords' result of its
+-- parameter, since in the case of an unpacked field we _do not_ have to use:
+--
+-- - a word for the pointer to the inner structure.
+-- - a word for the constructor that is being unpacked.
+--
+heapWordsUnpacked :: HeapWords a => a -> Int
+heapWordsUnpacked x = heapWords x - 2
