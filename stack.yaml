@@ -6,3 +6,6 @@ packages:
 
 nix:
   shell-file: scripts/nix/stack-shell.nix
+
+extra-deps:
+  - pretty-show-1.8.2
