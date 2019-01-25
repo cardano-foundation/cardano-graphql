@@ -39,3 +39,4 @@ packages:
   - half-0.2.2.3
   - micro-recursion-schemes-5.0.2.2
   - streaming-binary-0.3.0.1
+  - pretty-show-1.8.2
