@@ -1,4 +1,4 @@
-resolver: nightly-2018-12-17
+resolver: lts-13.4
 compiler: ghc-8.6.3
 
 name: cardano-snapshot
@@ -39,3 +39,4 @@ packages:
   - half-0.2.2.3
   - micro-recursion-schemes-5.0.2.2
   - streaming-binary-0.3.0.1
+  - pretty-show-1.8.2
