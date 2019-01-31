@@ -22,6 +22,7 @@ import Data.Fixed (E12, resolution)
 import qualified Data.Text.Lazy.Builder as Builder (fromText)
 import Data.Time (NominalDiffTime, UTCTime)
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime, utcTimeToPOSIXSeconds)
+import Formatting (bprint, builder)
 import Formatting.Buildable (Buildable(build))
 import Text.JSON.Canonical
   ( FromJSON(fromJSON)
@@ -42,10 +43,10 @@ data SchemaError = SchemaError
 
 instance Buildable SchemaError where
   build se = mconcat
-    [ "expected " <> Builder.fromText (seExpected se)
+    [ bprint ("expected " . builder) $ Builder.fromText (seExpected se)
     , case seActual se of
       Nothing     -> mempty
-      Just actual -> " but got " <> Builder.fromText actual
+      Just actual -> bprint (" but got " . builder) $ Builder.fromText actual
     ]
 
 instance

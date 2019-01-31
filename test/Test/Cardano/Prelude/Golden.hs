@@ -1,10 +1,13 @@
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 -- | Helper functions for use in golden testing of datatypes
 
 module Test.Cardano.Prelude.Golden
   ( discoverGolden
   , eachOf
+  , goldenTestCanonicalJSONDec
   , goldenTestJSONDec
   , goldenTestJSON
   , goldenTestJSONPretty
@@ -19,6 +22,10 @@ import Data.Aeson.Encode.Pretty
   (Config(..), Indent(..), NumberFormat(..), encodePretty', keyOrder)
 import qualified Data.ByteString.Lazy as LB
 import qualified Data.Text as T
+import qualified Data.Text.Lazy as LT
+import Data.Text.Lazy.Builder (toLazyText)
+import Formatting.Buildable (build)
+import qualified Text.JSON.Canonical as Canonical
 
 import Hedgehog
   ( Gen
@@ -52,6 +59,22 @@ eachOf testLimit things hasProperty =
     .   property
     $   forAll things
     >>= hasProperty
+
+-- | Check that Canonical JSON decodes to the datatype
+goldenTestCanonicalJSONDec
+  :: (Eq a, Canonical.FromJSON (Either SchemaError) a, HasCallStack, Show a)
+  => a
+  -> FilePath
+  -> Property
+goldenTestCanonicalJSONDec x path = withFrozenCallStack $ do
+  withTests 1 . property $ do
+    bs <- liftIO (LB.readFile path)
+    case Canonical.parseCanonicalJSON bs of
+      Left  err -> failWith Nothing $ "could not parse: " <> show err
+      Right jsv -> case Canonical.fromJSON jsv of
+        Left (schErr :: SchemaError) ->
+          failWith Nothing $ LT.unpack $ toLazyText $ build schErr
+        Right x' -> x === x'
 
 -- | Only check that the datatype equals the decoding of the file
 goldenTestJSONDec
