@@ -72,11 +72,10 @@ roundTripsCanonicalJsonPretty a = tripping a canonicalEncPre canonicalDecPre
     :: forall a
      . CanonicalJSON.FromJSON (Either SchemaError) a
     => LB.ByteString
-    -> Either SchemaError a
-  canonicalDecPre y =
-    CanonicalJSON.fromJSON
-      $ either (panic . toS) identity
-      $ CanonicalJSON.parseCanonicalJSON y
+    -> Either Text a
+  canonicalDecPre y = do
+    eVal <- first toS (CanonicalJSON.parseCanonicalJSON y)
+    first show (CanonicalJSON.fromJSON eVal :: Either SchemaError a)
 
 runTests :: [IO Bool] -> IO ()
 runTests tests' = do
