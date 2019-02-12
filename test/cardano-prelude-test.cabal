@@ -24,6 +24,7 @@ library
                        Test.Cardano.Prelude.Base16
                        Test.Cardano.Prelude.Gen
                        Test.Cardano.Prelude.Golden
+                       Test.Cardano.Prelude.Helpers
                        Test.Cardano.Prelude.Orphans
                        Test.Cardano.Prelude.QuickCheck.Arbitrary
                        Test.Cardano.Prelude.QuickCheck.Property
