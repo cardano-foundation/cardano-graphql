@@ -1,6 +1,7 @@
 module Test.Cardano.Prelude.Helpers
   ( assertEitherIsLeft
   , assertEitherIsRight
+  , compareValueRight
   )
 where
 
@@ -8,7 +9,7 @@ import Cardano.Prelude
 
 import Formatting (Buildable, build, sformat)
 
-import Hedgehog (MonadTest, success)
+import Hedgehog (MonadTest, success, (===))
 import Hedgehog.Internal.Property (failWith)
 
 assertEitherIsLeft
@@ -22,3 +23,9 @@ assertEitherIsRight
 assertEitherIsRight func val = case func val of
   Left  err -> failWith Nothing (show $ sformat build err)
   Right _   -> success
+
+compareValueRight
+  :: (Buildable a, Eq b, MonadTest m, Show b) => b -> Either a b -> m ()
+compareValueRight iVal eith = case eith of
+  Left  err  -> failWith Nothing (show $ sformat build err)
+  Right fVal -> iVal === fVal
