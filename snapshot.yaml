@@ -17,17 +17,10 @@ packages:
   - git: https://github.com/input-output-hk/cardano-crypto
     commit: 3c707936ba0a665375acf5bd240dc4b6eaa6c0bc
 
-  # TODO(parsonsmatt): There have been some breaking changes with Plutus for
-  # cardano-sl and it would be nice to have some help from that team to get this
-  # updated and back on IOHK.
-  - git: https://github.com/avieth/plutus-prototype
-    commit: d094be301195fcd8ab864d793f114970426a4478
-
-
   # Exposes a custom discovery function so you can specify the prefix.
   # https://github.com/hedgehogqa/haskell-hedgehog/compare/master...input-output-hk:master
   - git: https://github.com/input-output-hk/haskell-hedgehog.git
-    commit: 2e741bb53afb085741807018948ae17d956c53af
+    commit: e63fb354bfbad07f3befdd43b382c655944218be
     subdirs:
       - hedgehog
 
