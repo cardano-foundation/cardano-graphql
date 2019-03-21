@@ -1,6 +1,8 @@
 module Test.Cardano.Prelude.Helpers
   ( assertEitherIsLeft
   , assertEitherIsRight
+  , assertIsJust
+  , assertIsNothing
   , compareValueRight
   )
 where
@@ -23,6 +25,16 @@ assertEitherIsRight
 assertEitherIsRight func val = case func val of
   Left  err -> failWith Nothing (show $ sformat build err)
   Right _   -> success
+
+assertIsJust :: (HasCallStack, MonadTest m) => Maybe a -> m ()
+assertIsJust val = case val of
+  Nothing -> withFrozenCallStack $ failWith Nothing "Nothing"
+  Just _  -> success
+
+assertIsNothing :: (Buildable a, HasCallStack, MonadTest m) => Maybe a -> m ()
+assertIsNothing val = case val of
+  Nothing  -> success
+  Just res -> withFrozenCallStack $ failWith Nothing (show $ sformat build res)
 
 compareValueRight
   :: (Buildable a, Eq b, MonadTest m, Show b) => b -> Either a b -> m ()
