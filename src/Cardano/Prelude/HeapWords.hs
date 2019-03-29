@@ -42,7 +42,7 @@ import qualified Data.Set as Set
 import Data.Time (Day, UTCTime)
 import qualified Data.Vector as V
 import qualified Data.Vector.Unboxed as V.U
-import GHC.Integer.GMP.Internals (BigNat(BN#))
+import GHC.Integer.GMP.Internals (BigNat(BN#), Integer(S#, Jn#, Jp#))
 import GHC.Natural (Natural(NatS#, NatJ#))
 import GHC.Prim (ByteArray#, sizeofByteArray#)
 import GHC.Types (Int(I#))
@@ -387,7 +387,73 @@ instance HeapWords Bool where
   heapWords _ = 0
 
 instance HeapWords Integer where
-  heapWords _ = 2
+  heapWords (S# _)
+    -- We have
+    --
+    -- > S# !Int#
+    --
+    -- so @(S# !Int)@ requires:
+    --
+    -- - 1 word for the 'S#' object header
+    -- - 1 word for the single 'S#' unboxed field, of type 'Int#'
+    --
+    -- ┌──┬──────┐
+    -- │S#│ Int# │
+    -- └──┴──────┘
+    --
+    = 2
+  heapWords (Jp# bigNat)
+    -- We have
+    --
+    -- > Jp# {-# UNPACK #-} !BigNat
+    -- > data BigNat = BN# ByteArray#
+    --
+    -- so @Jp# {-# UNPACK #-} !BigNat@ requires:
+    --
+    -- - 1 word for the 'Jp#' object header
+    -- - 1 word for the pointer to the byte array object
+    -- - 1 word for the byte array object header
+    -- - 1 word for the size of the byte array payload in bytes
+    -- - the heap words required for the byte array payload
+    --
+    -- Note that for the sake of uniformity, we use 'heapWordsUnpacked' to
+    -- account for the level of indirection removed by the @UNPACK@ pragma.
+    --
+    -- ┌───┬───┐
+    -- │Jp#│ ◉ │
+    -- └───┴─╂─┘
+    --       ▼
+    --      ┌───┬───┬───┬─┈   ┈─┬───┐
+    --      │BA#│ sz│   │       │   │   2 + n Words
+    --      └───┴───┴───┴─┈   ┈─┴───┘
+    --
+    = 2 + heapWordsUnpacked bigNat
+  heapWords (Jn# bigNat)
+    -- We have
+    --
+    -- > Jn# {-# UNPACK #-} !BigNat
+    -- > data BigNat = BN# ByteArray#
+    --
+    -- so @Jn# {-# UNPACK #-} !BigNat@ requires:
+    --
+    -- - 1 word for the 'Jn#' object header
+    -- - 1 word for the pointer to the byte array object
+    -- - 1 word for the byte array object header
+    -- - 1 word for the size of the byte array payload in bytes
+    -- - the heap words required for the byte array payload
+    --
+    -- Note that for the sake of uniformity, we use 'heapWordsUnpacked' to
+    -- account for the level of indirection removed by the @UNPACK@ pragma.
+    --
+    -- ┌───┬───┐
+    -- │Jn#│ ◉ │
+    -- └───┴─╂─┘
+    --       ▼
+    --      ┌───┬───┬───┬─┈   ┈─┬───┐
+    --      │BA#│ sz│   │       │   │   2 + n Words
+    --      └───┴───┴───┴─┈   ┈─┴───┘
+    --
+    = 2 + heapWordsUnpacked bigNat
 
 instance HeapWords Float where
   heapWords _ = 2
