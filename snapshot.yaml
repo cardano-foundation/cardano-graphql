@@ -1,5 +1,5 @@
-resolver: lts-13.6
-compiler: ghc-8.6.3
+resolver: lts-13.15
+compiler: ghc-8.6.4
 
 name: cardano-snapshot
 
