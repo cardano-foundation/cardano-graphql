@@ -32,11 +32,11 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as LBS
 import qualified Data.ByteString.Short as BSS
 import Data.IntMap (IntMap)
-import qualified Data.IntMap as IntMap
+import qualified Data.IntMap.Strict as IntMap
 import Data.IntSet (IntSet)
 import qualified Data.IntSet as IntSet
 import Data.Ix
-import qualified Data.Map as Map
+import qualified Data.Map.Strict as Map
 import Data.Sequence (Seq)
 import qualified Data.Set as Set
 import Data.Time (Day, UTCTime)
