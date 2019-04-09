@@ -1,6 +1,7 @@
 {-# LANGUAGE FlexibleContexts    #-}
 {-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
 
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
@@ -8,7 +9,9 @@
 
 module Test.Cardano.Prelude.Tripping
   ( runTests
+  , discoverPropArg
   , discoverRoundTrip
+  , discoverRoundTripArg
   , roundTripsAesonShow
   , roundTripsAesonBuildable
   , roundTripsCanonicalJsonPretty
@@ -19,9 +22,11 @@ where
 import Cardano.Prelude
 
 import Data.Aeson (FromJSON, ToJSON, decode, encode)
-import Data.String (unlines)
+import Data.String (String, unlines)
 import qualified Data.ByteString.Lazy as LB
 import Data.Functor.Identity (Identity(..))
+import qualified Data.Map as Map
+import Data.Ord (comparing)
 import Data.Text.Encoding (encodeUtf8)
 import Data.Text.Internal.Builder (toLazyText)
 import Formatting.Buildable (Buildable(..))
@@ -29,14 +34,70 @@ import System.IO (hSetEncoding, stderr, stdout, utf8)
 import Text.Show.Pretty (Value(..), parseValue)
 import qualified Text.JSON.Canonical as CanonicalJSON
 
-import Hedgehog (Group, MonadTest, discoverPrefix, success, tripping)
-import Hedgehog.Internal.Property (Diff(..), failWith)
+import Hedgehog (Group(..), MonadTest, discoverPrefix, success, tripping)
+import Hedgehog.Internal.Discovery
+  (PropertySource, posLine, posPostion, propertySource, readProperties)
+import Hedgehog.Internal.Property
+  (Diff(..), GroupName(..), Property, PropertyName(..), failWith)
 import Hedgehog.Internal.Show (valueDiff)
 import Hedgehog.Internal.TH (TExpQ)
+
+import Language.Haskell.TH (Exp(..), Q, location, runIO)
+import Language.Haskell.TH.Syntax (Loc(..), mkName, unTypeQ, unsafeTExpCoerce)
 
 
 discoverRoundTrip :: TExpQ Group
 discoverRoundTrip = discoverPrefix "roundTrip"
+
+discoverRoundTripArg :: TExpQ (a -> Group)
+discoverRoundTripArg = discoverPrefixThreadArg "ts_roundTrip"
+
+discoverPropArg :: TExpQ (a -> Group)
+discoverPropArg = discoverPrefixThreadArg "ts_prop_"
+
+-- | Lifted from `Hedgehog.Internal.TH.discoverPrefix` and tweaked.
+-- This will find top level definitions of type `(a -> Property)` whose
+-- variable names are prefixed with `prefix` . It returns a TH-monad-wrapped
+-- `(a -> Group)` function which passes that `a`-typed argument to all of
+-- the sub-properties, so that they are fully applied `Property`'s and can
+-- be wrapped into a Hedgehog `Group`.
+discoverPrefixThreadArg :: forall a . String -> TExpQ (a -> Group)
+discoverPrefixThreadArg prefix = do
+  file       <- getCurrentFile
+  properties <- Map.toList <$> runIO (readProperties prefix file)
+
+  let
+    startLine :: (c, PropertySource) -> (c, PropertySource) -> Ordering
+    startLine = comparing $ posLine . posPostion . propertySource . snd
+
+    names     = fmap (mkNamedProperty . fst) $ sortBy startLine properties
+
+  [|| \arg -> Group $$(testModuleName) (map ($ arg) $$(listTE names)) ||]
+ where
+
+  mkNamedProperty :: PropertyName -> TExpQ (a -> (PropertyName, Property))
+  mkNamedProperty name = do
+    [|| \arg -> (name, $$(unsafeProperty name) arg) ||]
+
+  unsafeProperty :: PropertyName -> TExpQ (a -> Property)
+  unsafeProperty pn = do
+    let
+      prop :: TExpQ (a -> Property)
+      prop = unsafeTExpCoerce . pure . VarE . mkName $ unPropertyName pn
+    [|| $$prop ||]
+
+  listTE :: [TExpQ b] -> TExpQ [b]
+  listTE xs = do
+    unsafeTExpCoerce . pure . ListE =<< traverse unTypeQ xs
+
+  testModuleName :: TExpQ GroupName
+  testModuleName = do
+    loc <- GroupName . loc_module <$> location
+    [|| loc ||]
+
+  getCurrentFile :: Q FilePath
+  getCurrentFile = loc_filename <$> location
+
 
 roundTripsAesonShow
   :: (Eq a, MonadTest m, ToJSON a, FromJSON a, Show a) => a -> m ()
