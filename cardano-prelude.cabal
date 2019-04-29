@@ -28,6 +28,7 @@ library
                        Cardano.Prelude.Base16
                        Cardano.Prelude.Error
                        Cardano.Prelude.Formatting
+                       Cardano.Prelude.GHC.Heap
                        Cardano.Prelude.HeapWords
                        Cardano.Prelude.Json.Canonical
                        Cardano.Prelude.Json.Parse
@@ -42,6 +43,7 @@ library
                      , cborg
                      , containers
                      , formatting
+                     , ghc-heap
                      , ghc-prim
                      , hashable
                      , integer-gmp
