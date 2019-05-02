@@ -28,6 +28,7 @@ library
                        Cardano.Prelude.Base16
                        Cardano.Prelude.Error
                        Cardano.Prelude.Formatting
+                       Cardano.Prelude.GHC.Heap
                        Cardano.Prelude.HeapWords
                        Cardano.Prelude.Json.Canonical
                        Cardano.Prelude.Json.Parse
@@ -42,6 +43,7 @@ library
                      , cborg
                      , containers
                      , formatting
+                     , ghc-heap
                      , ghc-prim
                      , hashable
                      , integer-gmp
@@ -52,6 +54,55 @@ library
                      , text
                      , time
                      , vector
+
+  default-language:    Haskell2010
+  default-extensions:  NoImplicitPrelude
+
+  ghc-options:         -Weverything
+                       -fno-warn-missing-import-lists
+                       -fno-warn-unsafe
+                       -fno-warn-safe
+
+  if (!flag(development))
+    ghc-options:         -Werror
+
+test-suite cardano-prelude-test
+  hs-source-dirs:      test
+  main-is:             test.hs
+  type:                exitcode-stdio-1.0
+
+  other-modules:
+                       Test.Cardano.Prelude
+                       Test.Cardano.Prelude.Base16
+                       Test.Cardano.Prelude.Gen
+                       Test.Cardano.Prelude.GHC.Heap
+                       Test.Cardano.Prelude.Golden
+                       Test.Cardano.Prelude.Helpers
+                       Test.Cardano.Prelude.Orphans
+                       Test.Cardano.Prelude.QuickCheck.Arbitrary
+                       Test.Cardano.Prelude.QuickCheck.Property
+                       Test.Cardano.Prelude.Tripping
+
+  build-depends:       base
+                     , aeson
+                     , aeson-pretty
+                     , attoparsec
+                     , base16-bytestring
+                     , bytestring
+                     , canonical-json
+                     , cardano-prelude
+                     , containers
+                     , cryptonite
+                     , formatting
+                     , ghc-heap
+                     , hedgehog
+                     , hspec
+                     , pretty-show
+                     , QuickCheck
+                     , quickcheck-instances
+                     , text
+                     , template-haskell
+                     , time
 
   default-language:    Haskell2010
   default-extensions:  NoImplicitPrelude
