@@ -1,7 +1,5 @@
 {-|
 Module      :  Cardano.Prelude.GHC.Heap
-Copyright   :  (c) 2019 IOHK
-License     :  MIT
 
 Functions and data types related to GHC heap internals.
 
@@ -13,3 +11,4 @@ module Cardano.Prelude.GHC.Heap
 where
 
 import Cardano.Prelude.GHC.Heap.NormalForm as X
+import Cardano.Prelude.GHC.Heap.Tree as X
