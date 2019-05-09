@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Test.Cardano.Prelude.GHC.Heap
+module Test.Cardano.Prelude.GHC.Heap.NormalForm
   ( tests
   )
 where

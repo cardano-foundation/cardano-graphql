@@ -29,6 +29,7 @@ library
                        Cardano.Prelude.Error
                        Cardano.Prelude.Formatting
                        Cardano.Prelude.GHC.Heap
+                       Cardano.Prelude.GHC.Heap.NormalForm
                        Cardano.Prelude.HeapWords
                        Cardano.Prelude.Json.Canonical
                        Cardano.Prelude.Json.Parse
@@ -75,7 +76,7 @@ test-suite cardano-prelude-test
                        Test.Cardano.Prelude
                        Test.Cardano.Prelude.Base16
                        Test.Cardano.Prelude.Gen
-                       Test.Cardano.Prelude.GHC.Heap
+                       Test.Cardano.Prelude.GHC.Heap.NormalForm
                        Test.Cardano.Prelude.Golden
                        Test.Cardano.Prelude.Helpers
                        Test.Cardano.Prelude.Orphans
