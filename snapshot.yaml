@@ -17,18 +17,13 @@ packages:
   - git: https://github.com/input-output-hk/cardano-crypto
     commit: 3c707936ba0a665375acf5bd240dc4b6eaa6c0bc
 
-  # Exposes a custom discovery function so you can specify the prefix.
-  - git: https://github.com/hedgehogqa/haskell-hedgehog
-    commit: 2505055760d06ba6343f803783ed023fb0ed6c48
-    subdirs:
-      - hedgehog
-
   # Vendor canonical-json to support newer version
   - git: http://github.com/nc6/canonical-json
     commit: a9dc9b893649bc2e2a770ab22d278a780f7e3a3c
 
   - base58-bytestring-0.1.0
-  - half-0.2.2.3
+  # Waiting on Stackage release
+  - hedgehog-1.0
   - micro-recursion-schemes-5.0.2.2
   - streaming-binary-0.3.0.1
   # Work around http://hackage.haskell.org/package/transformers-0.5.5.0/transformers.cabal
