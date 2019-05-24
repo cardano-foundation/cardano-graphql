@@ -6,7 +6,11 @@ where
 import Cardano.Prelude
 import Test.Cardano.Prelude
 
-import qualified Test.Cardano.Prelude.GHC.Heap
+import qualified Test.Cardano.Prelude.GHC.Heap.NormalForm
+import qualified Test.Cardano.Prelude.GHC.Heap.Tree
 
 main :: IO ()
-main = runTests [Test.Cardano.Prelude.GHC.Heap.tests]
+main = runTests
+  [ Test.Cardano.Prelude.GHC.Heap.NormalForm.tests
+  , Test.Cardano.Prelude.GHC.Heap.Tree.tests
+  ]
