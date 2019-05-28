@@ -32,3 +32,5 @@ packages:
   # ghc-8.6.4 ships with process-1.6.5.0, not 1.6.3.0 as stackage claims. 1.6.3.0 isn't even compatible with
   # base 4.12 that ghc ships.
   - process-1.6.5.0
+  # Resolve dependency issues in cardano-shell
+  - pretty-show-1.8.2
