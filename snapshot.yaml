@@ -1,5 +1,5 @@
-resolver: lts-13.16
-compiler: ghc-8.6.4
+resolver: lts-13.24
+compiler: ghc-8.6.5
 
 name: cardano-snapshot
 
@@ -26,11 +26,5 @@ packages:
   - hedgehog-1.0
   - micro-recursion-schemes-5.0.2.2
   - streaming-binary-0.3.0.1
-  # Work around http://hackage.haskell.org/package/transformers-0.5.5.0/transformers.cabal
-  # This is the version of transformers which ships with GHC-8.6.4
-  - transformers-0.5.6.2
-  # ghc-8.6.4 ships with process-1.6.5.0, not 1.6.3.0 as stackage claims. 1.6.3.0 isn't even compatible with
-  # base 4.12 that ghc ships.
-  - process-1.6.5.0
   # Resolve dependency issues in cardano-shell
   - pretty-show-1.8.2
