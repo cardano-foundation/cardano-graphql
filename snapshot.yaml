@@ -18,8 +18,8 @@ packages:
     commit: 3c707936ba0a665375acf5bd240dc4b6eaa6c0bc
 
   # Vendor canonical-json to support newer version
-  - git: http://github.com/nc6/canonical-json
-    commit: a9dc9b893649bc2e2a770ab22d278a780f7e3a3c
+  - git: http://github.com/well-typed/canonical-json
+    commit: ddfe3593b80b5ceb88842bb7a6f2268df75d2c2f
 
   - base58-bytestring-0.1.0
   # Waiting on Stackage release

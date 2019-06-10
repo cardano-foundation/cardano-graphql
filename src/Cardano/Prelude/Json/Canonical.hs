@@ -31,6 +31,7 @@ import Text.JSON.Canonical
   , ReportSchemaErrors(expected)
   , ToJSON(toJSON)
   , expectedButGotValue
+  , toJSString
   )
 
 import Cardano.Prelude.Json.Parse (parseJSString)
@@ -68,13 +69,13 @@ instance Monad m => ToJSON m Word32 where
   toJSON = pure . JSNum . fromIntegral
 
 instance Monad m => ToJSON m Word64 where
-  toJSON = pure . JSString . show
+  toJSON = pure . JSString . toJSString . show
 
 instance Monad m => ToJSON m Integer where
-  toJSON = pure . JSString . show
+  toJSON = pure . JSString . toJSString . show
 
 instance Monad m => ToJSON m Natural where
-  toJSON = pure . JSString . show
+  toJSON = pure . JSString . toJSString . show
 
 -- | For backwards compatibility we convert this to seconds
 instance Monad m => ToJSON m UTCTime where
