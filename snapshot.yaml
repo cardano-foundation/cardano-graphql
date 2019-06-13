@@ -26,5 +26,3 @@ packages:
   - hedgehog-1.0
   - micro-recursion-schemes-5.0.2.2
   - streaming-binary-0.3.0.1
-  # Resolve dependency issues in cardano-shell
-  - pretty-show-1.8.2
