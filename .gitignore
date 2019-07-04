@@ -1,35 +1,9 @@
-## Ignore LaTeX build products
-**/latex/*.aux
-**/latex/*.lof
-**/latex/*.log
-**/latex/*.lot
-**/latex/*.fls
-**/latex/*.out
-**/latex/*.toc
-**/latex/*.fmt
-**/latex/*.fot
-**/latex/*.cb
-**/latex/*.cb2
-**/latex/*.lb
-**/latex/*.pdf
-**/latex/*.fdb_latexmk
-**/latex/auto
-
-## Bibliography auxiliary files (bibtex/biblatex/biber):
-**/latex/*.bbl
-**/latex/*.bcf
-**/latex/*.blg
-**/latex/*-blx.aux
-**/latex/*-blx.bib
-**/latex/*.run.xml
-/specs/ledger/hs/.ghc.environment.x86_64-linux-8.4.3
-/specs/ledger/hs/.ghc.environment.x86_64-linux-8.6.0.20180810
-**/*~
-**/dist-newstyle
 
 # Cabal & Stack
 .stack-work*/
 */dist
+dist-newstyle/
+cabal.project.local
 
 # Editors
 TAGS
