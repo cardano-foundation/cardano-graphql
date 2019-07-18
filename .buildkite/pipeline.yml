@@ -16,6 +16,16 @@ steps:
     agents:
       system: x86_64-linux
 
+  - label: Check Hydra evaluation of release.nix
+    command: 'nix-build -A check-hydra lib.nix -o check-hydra.sh && ./check-hydra.sh'
+    agents:
+      system: x86_64-linux
+
+  - label: Check auto-generated Nix
+    command: 'nix-build -A check-nix-tools lib.nix -o check-nix-tools.sh && ./check-nix-tools.sh'
+    agents:
+      system: x86_64-linux
+
 #  - label: 'brittany'
 #    command:
 #      - "nix-build scripts/brittany -o check-brittany"
