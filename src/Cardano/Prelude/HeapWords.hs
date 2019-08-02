@@ -59,8 +59,8 @@ heapSizeKb w = wordSize * w `div` 1024
 wordSize :: Int
 wordSize = 8
 
--- | Size in the heap of values, in words (multiply by 4 on a 32-bit machine or
---   8 on a 64-bit machine)
+-- | Size in the heap of values, in words (to get the size in bytes multiply by
+--   4 on a 32-bit machine or 8 on a 64-bit machine)
 class HeapWords a where
   heapWords :: a -> Int
 
@@ -381,9 +381,19 @@ instance HeapWords Word64 where
   heapWords _ = 2
 
 instance HeapWords Char where
+  -- For 'Char' there is a special case, where for chars <= 255 the garbage
+  -- collector will replace them with pointers to statically allocated ones.
+  -- Bigger 'Char's remain as a 2-word heap object. However, if we assume that
+  -- 'Char's are mainly ASCII, then these pointers will be in the pointers
+  -- section of the containing object, and therefore the storage required by
+  -- this will be accounted for elsewhere.
   heapWords _ = 0
 
 instance HeapWords Bool where
+  -- There's a special optimization in GHC for nullary constructors, such that
+  -- they get allocated once and shared. So if we consider the amortized size
+  -- over all occurrences in a program, @heapWords@ for these constructors
+  -- tends to 0.
   heapWords _ = 0
 
 instance HeapWords Integer where
@@ -467,7 +477,6 @@ instance HeapWords Day where
 instance HeapWords a => HeapWords [a] where
   heapWords []     = heapWords0
   heapWords (x:xs) = heapWords2 x xs
---   heapWords xs = 2 + length xs + sum (map heapWords xs)
 
 instance (HeapWords a, HeapWords b) => HeapWords (a,b) where
   heapWords (a,b) = heapWords2 a b
