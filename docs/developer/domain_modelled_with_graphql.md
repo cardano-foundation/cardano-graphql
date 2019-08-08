@@ -1,5 +1,0 @@
-# Domain Modelled with GraphQL
-GraphQL allows the domain to be modelled in an expressive way, agnostic to the programming language that exposes it for consumption. The language can be serialized for network transmission, hashed for assurance checking, and is suited for describing complex graph-based domains. Writing raw _graphql_ is however not a maintainable approach when using a typed programming language such as TypeScript, so we take the approach of [code-first development](https://github.com/prisma/nexus) to provide a powerful maintainable workflow that produces the graphql schema and TypeScript definitions as an artifact of the build process. The TS definitions are then used throughout the project, and [will be made available as a package](https://github.com/input-output-hk/cardano-graphql/issues/8) for client consumption.  
-
-
-https://www.prisma.io/blog/the-problems-of-schema-first-graphql-development-x1mn4cb0tyl3 

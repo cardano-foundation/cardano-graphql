@@ -1,5 +1,6 @@
 # Cardano GraphQL
-Schema & NodeJS server implementation built using [Apollo Server](https://www.apollographql.com/docs/apollo-server/) and [GraphQL Nexus](https://nexus.js.org/)
+
+This project contains the [Schema](./src/schema.graphql), a NodeJS server implementation built using [Apollo Server](https://www.apollographql.com/docs/apollo-server/), and [packages](src/generated_packages/README.md) generated using [GraphQL Code Generator](https://graphql-code-generator.com/)
 
 ## Project State: Alpha
 The project is in rapid active development, so don't use in production yet. Please open an issue to get involved.

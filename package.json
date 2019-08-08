@@ -1,14 +1,18 @@
 {
   "name": "cardano-graphql",
   "version": "0.1.0",
-  "description": "GraphQL API for Cardano",
+  "description": "GraphQL API for Cardano with client-consumable types generated",
   "main": "/dist/index.js",
+  "private": true,
   "scripts": {
     "build": "rm -rf dist && tsc",
+    "dev": "npm run generate-types && ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
+    "generate-types": "graphql-codegen",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint --fix \"src/**/*.ts\"",
-    "test": "npm run lint && npm run build && NODE_ENV=test nyc mocha",
-    "test:watch": "mocha -w",
+    "start": "node dist/index.js",
+    "test": "npm run lint && npm run build && nyc mocha",
+    "test:watch": "npm test -w",
     "test:coverage": "npm test && http-server coverage"
   },
   "contributors": [
@@ -17,34 +21,72 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
+    "@graphql-modules/core": "^0.7.9",
+    "apollo-datasource": "^0.6.1",
     "apollo-server": "^2.8.0",
     "express": "^4.16.4",
     "graphql": "^14.4.2"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.4.0",
+    "@graphql-codegen/typescript": "^1.4.0",
+    "@graphql-codegen/typescript-graphql-files-modules": "^1.4.0",
+    "@graphql-codegen/typescript-resolvers": "^1.4.0",
     "@types/chai": "^4.1.7",
+    "@types/chai-as-promised": "^7.1.1",
+    "@types/detect-node": "^2.0.0",
+    "@types/graphql": "^14.2.3",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.6.8",
+    "@types/sinon": "^7.0.13",
+    "@types/sinon-chai": "^3.2.2",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
+    "apollo-boost": "^0.4.3",
+    "apollo-client": "^2.6.3",
     "apollo-link": "^1.2.3",
+    "apollo-link-error": "^1.1.11",
     "apollo-link-http": "^1.5.5",
+    "apollo-link-ws": "^1.0.18",
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "detect-node": "^2.0.4",
     "dockerode": "^2.5.7",
     "eslint": "^6.1.0",
     "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-chai-friendly": "^0.4.1",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "graphql-tag": "^2.10.0",
+    "graphql-tag": "^2.10.1",
+    "http-server": "^0.11.1",
     "mocha": "^6.2.0",
     "node-fetch": "^2.2.0",
     "nyc": "^14.1.1",
+    "sinon": "^7.4.1",
+    "sinon-chai": "^3.3.0",
     "source-map-support": "^0.5.12",
     "ts-custom-error": "^3.1.1",
+    "ts-loader": "^6.0.4",
     "ts-node": "^8.3.0",
+    "ts-node-dev": "^1.0.0-pre.40",
     "typescript": "^3.5.3",
     "wait-on": "^3.1.0"
+  },
+  "nyc": {
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "src/**/*.spec.ts"
+    ],
+    "reporter": [
+      "html"
+    ],
+    "all": true
   }
 }

@@ -1,0 +1,21 @@
+{
+  "name": "@cardano-graphql/ts",
+  "version": "0.1.0",
+  "description": "TypeScript definitions for Cardano GraphQL",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
+  },
+  "main": "",
+  "scripts": {},
+  "keywords": [
+    "Cardano",
+    "GraphQL",
+    "TypeScript"
+  ],
+  "contributors": [
+    "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
+    "Sam Jeston <sam.jeston@iohk.io> (https://iohk.io)"
+  ],
+  "license": "Apache-2.0"
+}

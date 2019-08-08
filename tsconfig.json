@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2015",
+    "target": "es2016",
     "noEmitOnError": true,
     "noImplicitAny": true,
     "noUnusedParameters": true,
@@ -13,6 +13,7 @@
     "composite": true,
     "rootDir": "src",
     "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
   "include": [

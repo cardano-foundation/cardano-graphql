@@ -1,29 +1,29 @@
 import { MissingConfig } from './errors'
 
-export function getConfig (): { apiPort: number, dbUri: string } {
+export function getConfig (): { apiPort: number, mockResponses: boolean } {
   const {
     apiPort,
-    dbUri,
+    mockResponses
   } = filterAndTypecastEnvs(process.env)
 
   return {
-    apiPort: apiPort || randomPort(),
-    dbUri
+    apiPort: apiPort || getPort(),
+    mockResponses
   }
 }
 
 function filterAndTypecastEnvs (env: any) {
   const {
     API_PORT,
-    DB_URI,
+    MOCK_RESPONSES
   } = env
   return {
     apiPort: Number(API_PORT),
-    dbUri: DB_URI
+    mockResponses: Boolean(MOCK_RESPONSES)
   }
 }
 
-function randomPort() {
+function getPort () {
   // Dev-only
   if (process.env.NODE_ENV === 'production') throw new MissingConfig('API_PORT env not set')
   return 0

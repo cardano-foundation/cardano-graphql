@@ -7,7 +7,8 @@
     "standard"
   ],
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "chai-friendly"
   ],
   "globals": {
     "it": "readonly",
@@ -21,6 +22,8 @@
     "linebreak-style": [
       2,
       "unix"
-    ]
+    ],
+    "no-unused-expressions": 0,
+    "chai-friendly/no-unused-expressions": 1
   }
 }

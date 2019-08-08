@@ -1,0 +1,11 @@
+schema: src/schema.graphql
+generates:
+  ./src/generated_packages/TypeScript/index.ts:
+    plugins:
+      - typescript
+  ./src/graphql_types.ts:
+      config:
+        contextType: ./Server#Context
+      plugins:
+        - typescript
+        - typescript-resolvers

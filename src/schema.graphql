@@ -1,0 +1,26 @@
+type Outpoint {
+  txId: String!,
+  outputIndex: Int!
+}
+
+type TransactionInput {
+  outpoint: Outpoint!
+  address: String!
+}
+
+type TransactionOutput {
+  value: Int!
+  address: String!
+}
+
+type Transaction {
+  id: String!
+  fee: Float!
+  inputs: [TransactionInput!]!
+  outputs: [TransactionOutput!]!
+}
+
+type Query {
+  transaction(id: ID!): Transaction!
+  transactions(ids: [ID!]!): [Transaction!]!
+}

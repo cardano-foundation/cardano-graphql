@@ -1,1 +1,1 @@
-export { MissingConfig } from './MissingConfig'
+export * from './MissingConfig'
