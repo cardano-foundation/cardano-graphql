@@ -10,6 +10,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type Mempool = {
+  __typename?: "Mempool";
+  transactions: Array<Maybe<Transaction>>;
+  transactionCount: Scalars["Int"];
+};
+
 export type Outpoint = {
   __typename?: "Outpoint";
   txId: Scalars["String"];
@@ -18,6 +24,7 @@ export type Outpoint = {
 
 export type Query = {
   __typename?: "Query";
+  mempool?: Maybe<Mempool>;
   transaction: Transaction;
   transactions: Array<Transaction>;
 };
@@ -122,7 +129,7 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
-  ID: ResolverTypeWrapper<Scalars["ID"]>;
+  Mempool: ResolverTypeWrapper<Mempool>;
   Transaction: ResolverTypeWrapper<Transaction>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Float: ResolverTypeWrapper<Scalars["Float"]>;
@@ -130,13 +137,14 @@ export type ResolversTypes = {
   Outpoint: ResolverTypeWrapper<Outpoint>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   TransactionOutput: ResolverTypeWrapper<TransactionOutput>;
+  ID: ResolverTypeWrapper<Scalars["ID"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {};
-  ID: Scalars["ID"];
+  Mempool: Mempool;
   Transaction: Transaction;
   String: Scalars["String"];
   Float: Scalars["Float"];
@@ -144,7 +152,20 @@ export type ResolversParentTypes = {
   Outpoint: Outpoint;
   Int: Scalars["Int"];
   TransactionOutput: TransactionOutput;
+  ID: Scalars["ID"];
   Boolean: Scalars["Boolean"];
+};
+
+export type MempoolResolvers<
+  ContextType = Context,
+  ParentType = ResolversParentTypes["Mempool"]
+> = {
+  transactions?: Resolver<
+    Array<Maybe<ResolversTypes["Transaction"]>>,
+    ParentType,
+    ContextType
+  >;
+  transactionCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
 };
 
 export type OutpointResolvers<
@@ -159,6 +180,7 @@ export type QueryResolvers<
   ContextType = Context,
   ParentType = ResolversParentTypes["Query"]
 > = {
+  mempool?: Resolver<Maybe<ResolversTypes["Mempool"]>, ParentType, ContextType>;
   transaction?: Resolver<
     ResolversTypes["Transaction"],
     ParentType,
@@ -208,6 +230,7 @@ export type TransactionOutputResolvers<
 };
 
 export type Resolvers<ContextType = Context> = {
+  Mempool?: MempoolResolvers<ContextType>;
   Outpoint?: OutpointResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Transaction?: TransactionResolvers<ContextType>;

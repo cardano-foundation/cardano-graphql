@@ -2,7 +2,11 @@ import { Resolvers } from './graphql_types'
 
 export const resolvers: Resolvers = {
   Query: {
-    transaction: (_root, args, { dataSources }) => dataSources.transactions.findById(args.id),
-    transactions: (_root, args, { dataSources }) => dataSources.transactions.findByIds(args.ids)
+    mempool: async (_root, _args, { dataSources: { mempool } }) => ({
+      transactions: await mempool.transactions(),
+      transactionCount: await mempool.transactionCount()
+    }),
+    transaction: (_root, args, { dataSources: { transactions } }) => transactions.findById(args.id),
+    transactions: (_root, args, { dataSources: { transactions } }) => transactions.findByIds(args.ids)
   }
 }

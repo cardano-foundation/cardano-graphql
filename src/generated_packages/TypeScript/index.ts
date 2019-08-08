@@ -8,6 +8,12 @@ export type Scalars = {
   Float: number;
 };
 
+export type Mempool = {
+  __typename?: "Mempool";
+  transactions: Array<Maybe<Transaction>>;
+  transactionCount: Scalars["Int"];
+};
+
 export type Outpoint = {
   __typename?: "Outpoint";
   txId: Scalars["String"];
@@ -16,6 +22,7 @@ export type Outpoint = {
 
 export type Query = {
   __typename?: "Query";
+  mempool?: Maybe<Mempool>;
   transaction: Transaction;
   transactions: Array<Transaction>;
 };

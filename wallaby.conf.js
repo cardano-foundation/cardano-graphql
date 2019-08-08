@@ -8,7 +8,7 @@ module.exports = function () {
 
     tests: [
       'src/**/*.spec.ts',
-      '!src/**/integration.spec.ts'
+      '!src/**/Server.spec.ts'
     ],
     env: {
       type: 'node'

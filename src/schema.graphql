@@ -1,3 +1,8 @@
+type Mempool {
+  transactions: [Transaction]!
+  transactionCount: Int!
+}
+
 type Outpoint {
   txId: String!,
   outputIndex: Int!
@@ -21,6 +26,7 @@ type Transaction {
 }
 
 type Query {
+  mempool: Mempool
   transaction(id: ID!): Transaction!
   transactions(ids: [ID!]!): [Transaction!]!
 }

@@ -6,8 +6,8 @@
   "private": true,
   "scripts": {
     "build": "rm -rf dist && tsc",
-    "dev": "npm run generate-types && ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
-    "generate-types": "graphql-codegen",
+    "dev": "npm run typegen --watch && ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
+    "typegen": "graphql-codegen",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint --fix \"src/**/*.ts\"",
     "start": "node dist/index.js",

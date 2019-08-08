@@ -1,6 +1,5 @@
 import { expect } from 'chai'
-import { InMemoryTransactions } from './InMemoryTransactions'
-import { testTransactions } from './'
+import { InMemoryTransactions, testTransactions } from './'
 const tx2 = testTransactions[0]
 const tx3 = testTransactions[1]
 
