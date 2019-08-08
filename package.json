@@ -11,7 +11,7 @@
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint --fix \"src/**/*.ts\"",
     "start": "node dist/index.js",
-    "test": "npm run lint && npm run build && nyc mocha",
+    "test": "npm run lint && npm run build && NODE_ENV=test nyc mocha",
     "test:watch": "npm test -w",
     "test:coverage": "npm test && http-server coverage"
   },
