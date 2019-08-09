@@ -1,36 +1,38 @@
 import { expect } from 'chai'
-import { InMemoryMempool, MempoolProvider } from './'
-import { testTransactions } from '../'
-const tx2 = testTransactions[0]
-const tx3 = testTransactions[1]
+import { InMemoryMempool as Mempool, MempoolProvider } from './'
+import { transactions } from '../mocks'
+const tx2 = transactions[0]
+const tx3 = transactions[1]
 
 describe('MempoolProvider', () => {
   let mempool: MempoolProvider
-  describe('findById', () => {
-    beforeEach(() => { mempool = InMemoryMempool(testTransactions) })
+  describe('Getting a transaction', () => {
+    beforeEach(() => { mempool = Mempool({ transactions }) })
 
-    it('Can find a transaction ID', async () => {
-      expect(await mempool.transactionById('tx2')).to.eq(tx2)
+    it('Can get a transaction by ID', async () => {
+      expect(await mempool.getTransaction('tx2')).to.eq(tx2)
     })
     it('Is null if not found', async () => {
-      expect(await mempool.transactionById('tx?')).to.be.null
+      expect(await mempool.getTransaction('tx?')).to.be.null
     })
   })
-  describe('findByIds', () => {
-    beforeEach(() => { mempool = InMemoryMempool(testTransactions) })
-
-    it('Can find a batch of transactions by ID', async () => {
-      expect(await mempool.transactionsByIds(['tx2', 'tx3'])).to.deep.eq([tx2, tx3])
+  beforeEach(() => { mempool = Mempool({ transactions }) })
+  describe('Getting a batch of transactions', () => {
+    it('Gets all if no filter passed', async () => {
+      expect(await mempool.getTransactions()).to.deep.eq(transactions)
+    })
+    it('Can get a batch of transactions by ID', async () => {
+      expect(await mempool.getTransactions(['tx2', 'tx3'])).to.deep.eq([tx2, tx3])
     })
     it('Returns partially matching collection', async () => {
-      expect(await mempool.transactionsByIds(['tx2', 'tx?'])).to.deep.eq([tx2])
+      expect(await mempool.getTransactions(['tx2', 'tx?'])).to.deep.eq([tx2])
     })
     it('Is null if none are found', async () => {
-      expect(await mempool.transactionsByIds(['tx?'])).to.be.null
+      expect(await mempool.getTransactions(['tx?'])).to.be.null
     })
   })
   describe('has', () => {
-    beforeEach(() => { mempool = InMemoryMempool(testTransactions) })
+    beforeEach(() => { mempool = Mempool({ transactions }) })
 
     it('can provide a simple boolean response', async () => {
       expect(await mempool.has('tx2')).to.be.true
@@ -39,9 +41,9 @@ describe('MempoolProvider', () => {
   })
   describe('transactionCount', () => {
     it('counts the number of transactions', async () => {
-      mempool = InMemoryMempool(testTransactions)
+      mempool = Mempool({ transactions })
       expect(await mempool.transactionCount()).to.eq(2)
-      mempool = InMemoryMempool([])
+      mempool = Mempool({ transactions: [] })
       expect(await mempool.transactionCount()).to.eq(0)
     })
   })

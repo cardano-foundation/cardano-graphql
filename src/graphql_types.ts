@@ -10,10 +10,46 @@ export type Scalars = {
   Float: number;
 };
 
+export type Block = {
+  __typename?: "Block";
+  id: Scalars["ID"];
+  transactions: Array<Maybe<Transaction>>;
+};
+
+export type Ledger = {
+  __typename?: "Ledger";
+  blocks: Array<Maybe<Block>>;
+  blockHeight: Scalars["Int"];
+  transaction: Transaction;
+  transactions: Array<Maybe<Transaction>>;
+};
+
+export type LedgerBlocksArgs = {
+  id?: Maybe<Scalars["ID"]>;
+};
+
+export type LedgerTransactionArgs = {
+  id: Scalars["ID"];
+};
+
+export type LedgerTransactionsArgs = {
+  id?: Maybe<Scalars["ID"]>;
+  ids?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+};
+
 export type Mempool = {
   __typename?: "Mempool";
+  transaction: Transaction;
   transactions: Array<Maybe<Transaction>>;
   transactionCount: Scalars["Int"];
+};
+
+export type MempoolTransactionArgs = {
+  id: Scalars["ID"];
+};
+
+export type MempoolTransactionsArgs = {
+  id: Scalars["ID"];
 };
 
 export type Outpoint = {
@@ -24,9 +60,8 @@ export type Outpoint = {
 
 export type Query = {
   __typename?: "Query";
-  mempool?: Maybe<Mempool>;
   transaction: Transaction;
-  transactions: Array<Transaction>;
+  transactions: Array<Maybe<Transaction>>;
 };
 
 export type QueryTransactionArgs = {
@@ -34,7 +69,8 @@ export type QueryTransactionArgs = {
 };
 
 export type QueryTransactionsArgs = {
-  ids: Array<Scalars["ID"]>;
+  id?: Maybe<Scalars["ID"]>;
+  ids?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type Transaction = {
@@ -129,7 +165,7 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
-  Mempool: ResolverTypeWrapper<Mempool>;
+  ID: ResolverTypeWrapper<Scalars["ID"]>;
   Transaction: ResolverTypeWrapper<Transaction>;
   String: ResolverTypeWrapper<Scalars["String"]>;
   Float: ResolverTypeWrapper<Scalars["Float"]>;
@@ -137,14 +173,16 @@ export type ResolversTypes = {
   Outpoint: ResolverTypeWrapper<Outpoint>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   TransactionOutput: ResolverTypeWrapper<TransactionOutput>;
-  ID: ResolverTypeWrapper<Scalars["ID"]>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
+  Ledger: ResolverTypeWrapper<Ledger>;
+  Block: ResolverTypeWrapper<Block>;
+  Mempool: ResolverTypeWrapper<Mempool>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {};
-  Mempool: Mempool;
+  ID: Scalars["ID"];
   Transaction: Transaction;
   String: Scalars["String"];
   Float: Scalars["Float"];
@@ -152,18 +190,64 @@ export type ResolversParentTypes = {
   Outpoint: Outpoint;
   Int: Scalars["Int"];
   TransactionOutput: TransactionOutput;
-  ID: Scalars["ID"];
   Boolean: Scalars["Boolean"];
+  Ledger: Ledger;
+  Block: Block;
+  Mempool: Mempool;
+};
+
+export type BlockResolvers<
+  ContextType = Context,
+  ParentType = ResolversParentTypes["Block"]
+> = {
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
+  transactions?: Resolver<
+    Array<Maybe<ResolversTypes["Transaction"]>>,
+    ParentType,
+    ContextType
+  >;
+};
+
+export type LedgerResolvers<
+  ContextType = Context,
+  ParentType = ResolversParentTypes["Ledger"]
+> = {
+  blocks?: Resolver<
+    Array<Maybe<ResolversTypes["Block"]>>,
+    ParentType,
+    ContextType,
+    LedgerBlocksArgs
+  >;
+  blockHeight?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
+  transaction?: Resolver<
+    ResolversTypes["Transaction"],
+    ParentType,
+    ContextType,
+    LedgerTransactionArgs
+  >;
+  transactions?: Resolver<
+    Array<Maybe<ResolversTypes["Transaction"]>>,
+    ParentType,
+    ContextType,
+    LedgerTransactionsArgs
+  >;
 };
 
 export type MempoolResolvers<
   ContextType = Context,
   ParentType = ResolversParentTypes["Mempool"]
 > = {
+  transaction?: Resolver<
+    ResolversTypes["Transaction"],
+    ParentType,
+    ContextType,
+    MempoolTransactionArgs
+  >;
   transactions?: Resolver<
     Array<Maybe<ResolversTypes["Transaction"]>>,
     ParentType,
-    ContextType
+    ContextType,
+    MempoolTransactionsArgs
   >;
   transactionCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
 };
@@ -180,7 +264,6 @@ export type QueryResolvers<
   ContextType = Context,
   ParentType = ResolversParentTypes["Query"]
 > = {
-  mempool?: Resolver<Maybe<ResolversTypes["Mempool"]>, ParentType, ContextType>;
   transaction?: Resolver<
     ResolversTypes["Transaction"],
     ParentType,
@@ -188,7 +271,7 @@ export type QueryResolvers<
     QueryTransactionArgs
   >;
   transactions?: Resolver<
-    Array<ResolversTypes["Transaction"]>,
+    Array<Maybe<ResolversTypes["Transaction"]>>,
     ParentType,
     ContextType,
     QueryTransactionsArgs
@@ -230,6 +313,8 @@ export type TransactionOutputResolvers<
 };
 
 export type Resolvers<ContextType = Context> = {
+  Block?: BlockResolvers<ContextType>;
+  Ledger?: LedgerResolvers<ContextType>;
   Mempool?: MempoolResolvers<ContextType>;
   Outpoint?: OutpointResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

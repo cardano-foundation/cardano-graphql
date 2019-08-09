@@ -8,10 +8,46 @@ export type Scalars = {
   Float: number;
 };
 
+export type Block = {
+  __typename?: "Block";
+  id: Scalars["ID"];
+  transactions: Array<Maybe<Transaction>>;
+};
+
+export type Ledger = {
+  __typename?: "Ledger";
+  blocks: Array<Maybe<Block>>;
+  blockHeight: Scalars["Int"];
+  transaction: Transaction;
+  transactions: Array<Maybe<Transaction>>;
+};
+
+export type LedgerBlocksArgs = {
+  id?: Maybe<Scalars["ID"]>;
+};
+
+export type LedgerTransactionArgs = {
+  id: Scalars["ID"];
+};
+
+export type LedgerTransactionsArgs = {
+  id?: Maybe<Scalars["ID"]>;
+  ids?: Maybe<Array<Maybe<Scalars["ID"]>>>;
+};
+
 export type Mempool = {
   __typename?: "Mempool";
+  transaction: Transaction;
   transactions: Array<Maybe<Transaction>>;
   transactionCount: Scalars["Int"];
+};
+
+export type MempoolTransactionArgs = {
+  id: Scalars["ID"];
+};
+
+export type MempoolTransactionsArgs = {
+  id: Scalars["ID"];
 };
 
 export type Outpoint = {
@@ -22,9 +58,8 @@ export type Outpoint = {
 
 export type Query = {
   __typename?: "Query";
-  mempool?: Maybe<Mempool>;
   transaction: Transaction;
-  transactions: Array<Transaction>;
+  transactions: Array<Maybe<Transaction>>;
 };
 
 export type QueryTransactionArgs = {
@@ -32,7 +67,8 @@ export type QueryTransactionArgs = {
 };
 
 export type QueryTransactionsArgs = {
-  ids: Array<Scalars["ID"]>;
+  id?: Maybe<Scalars["ID"]>;
+  ids?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
 export type Transaction = {

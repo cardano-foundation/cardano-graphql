@@ -1,5 +1,18 @@
-type Mempool {
+type Ledger {
+  blocks(id: ID): [Block]!
+  blockHeight: Int!
+  transaction(id: ID!): Transaction!
+  transactions(id: ID, ids: [ID]): [Transaction]!
+}
+
+type Block {
+  id: ID!
   transactions: [Transaction]!
+}
+
+type Mempool {
+  transaction(id: ID!): Transaction!
+  transactions(id: ID!): [Transaction]!
   transactionCount: Int!
 }
 
@@ -26,7 +39,6 @@ type Transaction {
 }
 
 type Query {
-  mempool: Mempool
   transaction(id: ID!): Transaction!
-  transactions(ids: [ID!]!): [Transaction!]!
+  transactions(id: ID, ids: [ID]): [Transaction]!
 }
