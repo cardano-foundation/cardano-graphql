@@ -2,14 +2,14 @@ import { expect, use } from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import { Server } from './Server'
 import { Client } from './Client'
-import { InMemoryMempool as Mempool, InMemoryLedger as Ledger } from './data'
-import { transactions } from './data/mocks'
+import { InMemoryMempoolDataSource, InMemoryLedgerDataSource } from './data_sources'
+import { transactions } from './lib/mocks'
 
 use(chaiAsPromised)
 
 const dataSources = {
-  ledger: Ledger({ transactions }),
-  mempool: Mempool({ transactions: [] })
+  ledger: InMemoryLedgerDataSource({ transactions }),
+  mempool: InMemoryMempoolDataSource({ transactions: [] })
 }
 
 describe('Server', () => {

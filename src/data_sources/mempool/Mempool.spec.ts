@@ -1,11 +1,11 @@
 import { expect } from 'chai'
-import { InMemoryMempool as Mempool, MempoolProvider } from './'
-import { transactions } from '../mocks'
+import { InMemoryMempoolDataSource as Mempool, MempoolDataSource } from './'
+import { transactions } from '../../lib/mocks'
 const tx2 = transactions[0]
 const tx3 = transactions[1]
 
-describe('MempoolProvider', () => {
-  let mempool: MempoolProvider
+describe('MempoolDataSource', () => {
+  let mempool: MempoolDataSource
   describe('Getting a transaction', () => {
     beforeEach(() => { mempool = Mempool({ transactions }) })
 

@@ -1,13 +1,13 @@
 import { getConfig } from './config'
 import { Server } from './Server'
-import { InMemoryMempool as Mempool, InMemoryLedger as Ledger } from './data'
-import { transactions } from './data/mocks'
+import { InMemoryLedgerDataSource, InMemoryMempoolDataSource } from './data_sources'
+import { transactions } from './lib/mocks'
 
 const config = getConfig()
 const server = Server({
   dataSources: {
-    ledger: Ledger({ transactions }),
-    mempool: Mempool({ transactions: [] })
+    ledger: InMemoryLedgerDataSource({ transactions }),
+    mempool: InMemoryMempoolDataSource({ transactions: [] })
   },
   mocks: config.mockResponses
 })

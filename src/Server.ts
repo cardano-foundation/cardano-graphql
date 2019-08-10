@@ -2,12 +2,12 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { ApolloServer } from 'apollo-server'
 import { resolvers } from './resolvers'
-import { MempoolProvider, LedgerProvider } from './data'
+import { MempoolDataSource, LedgerDataSource } from './data_sources'
 
 export type Context = {
   dataSources: {
-    mempool: MempoolProvider
-    ledger: LedgerProvider
+    mempool: MempoolDataSource
+    ledger: LedgerDataSource
   }
 }
 

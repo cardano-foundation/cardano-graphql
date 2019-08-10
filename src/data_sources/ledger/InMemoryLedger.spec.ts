@@ -1,13 +1,13 @@
 import { expect } from 'chai'
-import { InMemoryLedger as Ledger, LedgerProvider } from './'
-import { transactions } from '../mocks'
+import { InMemoryLedgerDataSource, LedgerDataSource } from '.'
+import { transactions } from '../../lib/mocks'
 const tx2 = transactions[0]
 const tx3 = transactions[1]
 
-describe('LedgerProvider', () => {
-  let ledger: LedgerProvider
+describe('InMemoryLedgerDataSource', () => {
+  let ledger: LedgerDataSource
   beforeEach(() => {
-    ledger = Ledger({ transactions })
+    ledger = InMemoryLedgerDataSource({ transactions })
   })
   describe('finding a single transaction', () => {
     it('Can find a transaction ID', async () => {
