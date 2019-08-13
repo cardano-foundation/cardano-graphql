@@ -1,10 +1,10 @@
 # Architecture
 
-## Domain Modelled with GraphQL
-GraphQL allows the domain to be modelled in an expressive way, agnostic to the programming language that exposes it for consumption. The language can be serialized for network transmission, hashed for assurance checking, and is suited for describing complex graph-based domains. TypeScript definitions are then generated using [GraphQL Code Generator](https://graphql-code-generator.com/) which are used throughout this implementation, and [will be made available as a package](https://github.com/input-output-hk/cardano-graphql/issues/8) for client consumption. [Other targets](https://graphql-code-generator.com/docs/plugins/) can be included in our build process for automated cross-language tooling.
+## Data access 
+The _data loader_ pattern enables optimized retrieval from storage from a granualar field-level query. It works by passing load requests to a batching function at the end of the request, where a minimal set of operations to fulfil the request can be executed. This solves the N+1 problem
 
-## Data access abstracted
-A repository interface is defined for each entity to decouple the data source from query resolution. Data can then be fetched and cached with optimizations specific to the source, and running context. The Postgres implementations will use the DataLoader pattern to optimize sql queries across resolvers, whereas for demonstration and testing, a simple in-memory store is often suited.
+## Application-wide caching
+Caching of the full response from the data store can be implemented within a _data loader_ batch function, applied on a case-by-case basis depending on the known state of data, ttl, or other external trigger. There are currently no cached requests implemented.
 
-## Application-level caching
-If needed this will be implemented as an optimization.
+## Data Source
+A query model that encapsulates loading logic for use within GraphQL resolvers. Each request is assigned a new set of _data source_ instances, containing references to any application-wide caches.
