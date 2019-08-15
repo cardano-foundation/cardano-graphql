@@ -1,50 +1,40 @@
 import { expect } from 'chai'
-import { InMemoryMempoolDataSource as Mempool, MempoolDataSource } from './'
+import { Mempool } from './Mempool'
 import { transactions } from '../../lib/mocks'
+
 const tx2 = transactions[0]
 const tx3 = transactions[1]
 
-describe('MempoolDataSource', () => {
-  let mempool: MempoolDataSource
-  describe('Getting a transaction', () => {
-    beforeEach(() => { mempool = Mempool({ transactions }) })
-
-    it('Can get a transaction by ID', async () => {
-      expect(await mempool.getTransaction('tx2')).to.eq(tx2)
+describe('Mempool', () => {
+  let mempool: Mempool
+  beforeEach(() => {
+    mempool = new Mempool({
+      transactions
     })
-    it('Is null if not found', async () => {
-      expect(await mempool.getTransaction('tx?')).to.be.null
-    })
+    mempool.initialize()
   })
-  beforeEach(() => { mempool = Mempool({ transactions }) })
-  describe('Getting a batch of transactions', () => {
-    it('Gets all if no filter passed', async () => {
-      expect(await mempool.getTransactions()).to.deep.eq(transactions)
+  describe('Loading transactions', () => {
+    it('Returns a promise for a transaction by id', async () => {
+      const result = await mempool.transaction.load('tx2')
+      expect(result).to.deep.eq(tx2)
     })
-    it('Can get a batch of transactions by ID', async () => {
-      expect(await mempool.getTransactions(['tx2', 'tx3'])).to.deep.eq([tx2, tx3])
+    it('Returns a promise that resolves to null if not found', async () => {
+      const result = await mempool.transaction.load('tx?')
+      expect(result).to.eq(null)
     })
-    it('Returns partially matching collection', async () => {
-      expect(await mempool.getTransactions(['tx2', 'tx?'])).to.deep.eq([tx2])
-    })
-    it('Is null if none are found', async () => {
-      expect(await mempool.getTransactions(['tx?'])).to.be.null
-    })
-  })
-  describe('has', () => {
-    beforeEach(() => { mempool = Mempool({ transactions }) })
-
-    it('can provide a simple boolean response', async () => {
-      expect(await mempool.has('tx2')).to.be.true
-      expect(await mempool.has('tx?')).to.be.false
+    it('Batches loads made within the same event tick, returning an array of promises', async () => {
+      const result = await Promise.all([
+        mempool.transaction.load('tx2'),
+        mempool.transaction.load('tx?'),
+        mempool.transaction.load('tx3')
+      ])
+      expect(result).to.deep.eq([tx2, null, tx3])
     })
   })
   describe('transactionCount', () => {
-    it('counts the number of transactions', async () => {
-      mempool = Mempool({ transactions })
-      expect(await mempool.transactionCount()).to.eq(2)
-      mempool = Mempool({ transactions: [] })
-      expect(await mempool.transactionCount()).to.eq(0)
+    it('Returns a promise', async () => {
+      const result = await mempool.transactionCount()
+      expect(result).to.eq(2)
     })
   })
 })

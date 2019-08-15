@@ -8,10 +8,14 @@ export type Scalars = {
   Float: number;
 };
 
-export type Block = {
+export type Block = Entity & {
   __typename?: "Block";
   id: Scalars["ID"];
   transactions: Array<Maybe<Transaction>>;
+};
+
+export type Entity = {
+  id: Scalars["ID"];
 };
 
 export type Ledger = {
@@ -67,13 +71,12 @@ export type QueryTransactionArgs = {
 };
 
 export type QueryTransactionsArgs = {
-  id?: Maybe<Scalars["ID"]>;
   ids?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
-export type Transaction = {
+export type Transaction = Entity & {
   __typename?: "Transaction";
-  id: Scalars["String"];
+  id: Scalars["ID"];
   fee: Scalars["Float"];
   inputs: Array<TransactionInput>;
   outputs: Array<TransactionOutput>;

@@ -1,2 +1,1 @@
-export * from './LedgerDataSource'
-export * from './InMemoryLedgerDataSource'
+export * from './Ledger'

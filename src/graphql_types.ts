@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from "graphql";
-import { Context } from "./Server";
+import { Context } from "./Context";
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -10,10 +10,14 @@ export type Scalars = {
   Float: number;
 };
 
-export type Block = {
+export type Block = Entity & {
   __typename?: "Block";
   id: Scalars["ID"];
   transactions: Array<Maybe<Transaction>>;
+};
+
+export type Entity = {
+  id: Scalars["ID"];
 };
 
 export type Ledger = {
@@ -69,13 +73,12 @@ export type QueryTransactionArgs = {
 };
 
 export type QueryTransactionsArgs = {
-  id?: Maybe<Scalars["ID"]>;
   ids?: Maybe<Array<Maybe<Scalars["ID"]>>>;
 };
 
-export type Transaction = {
+export type Transaction = Entity & {
   __typename?: "Transaction";
-  id: Scalars["String"];
+  id: Scalars["ID"];
   fee: Scalars["Float"];
   inputs: Array<TransactionInput>;
   outputs: Array<TransactionOutput>;
@@ -167,10 +170,11 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Transaction: ResolverTypeWrapper<Transaction>;
-  String: ResolverTypeWrapper<Scalars["String"]>;
+  Entity: ResolverTypeWrapper<Entity>;
   Float: ResolverTypeWrapper<Scalars["Float"]>;
   TransactionInput: ResolverTypeWrapper<TransactionInput>;
   Outpoint: ResolverTypeWrapper<Outpoint>;
+  String: ResolverTypeWrapper<Scalars["String"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   TransactionOutput: ResolverTypeWrapper<TransactionOutput>;
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
@@ -184,10 +188,11 @@ export type ResolversParentTypes = {
   Query: {};
   ID: Scalars["ID"];
   Transaction: Transaction;
-  String: Scalars["String"];
+  Entity: Entity;
   Float: Scalars["Float"];
   TransactionInput: TransactionInput;
   Outpoint: Outpoint;
+  String: Scalars["String"];
   Int: Scalars["Int"];
   TransactionOutput: TransactionOutput;
   Boolean: Scalars["Boolean"];
@@ -206,6 +211,18 @@ export type BlockResolvers<
     ParentType,
     ContextType
   >;
+};
+
+export type EntityResolvers<
+  ContextType = Context,
+  ParentType = ResolversParentTypes["Entity"]
+> = {
+  __resolveType: TypeResolveFn<
+    "Transaction" | "Block",
+    ParentType,
+    ContextType
+  >;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
 };
 
 export type LedgerResolvers<
@@ -282,7 +299,7 @@ export type TransactionResolvers<
   ContextType = Context,
   ParentType = ResolversParentTypes["Transaction"]
 > = {
-  id?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   fee?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   inputs?: Resolver<
     Array<ResolversTypes["TransactionInput"]>,
@@ -314,6 +331,7 @@ export type TransactionOutputResolvers<
 
 export type Resolvers<ContextType = Context> = {
   Block?: BlockResolvers<ContextType>;
+  Entity?: EntityResolvers;
   Ledger?: LedgerResolvers<ContextType>;
   Mempool?: MempoolResolvers<ContextType>;
   Outpoint?: OutpointResolvers<ContextType>;

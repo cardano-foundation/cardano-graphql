@@ -1,6 +1,9 @@
 import { MissingConfig } from './errors'
 
-export function getConfig (): { apiPort: number, mockResponses: boolean } {
+export function getConfig (): {
+  apiPort: number,
+  mockResponses: boolean
+  } {
   const {
     apiPort,
     mockResponses

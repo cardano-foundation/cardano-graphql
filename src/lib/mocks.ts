@@ -1,7 +1,5 @@
 import { Block, Transaction } from '../graphql_types'
 
-// Todo: Use faker to build this dynamically
-
 export const transactions = [{
   id: 'tx2',
   fee: 10,
@@ -31,6 +29,7 @@ export const transactions = [{
 }] as Transaction[]
 
 export const blocks = [{
-  id: 'block1',
-  transactions
+  id: 'block1'
+}, {
+  id: 'block2'
 }] as Block[]

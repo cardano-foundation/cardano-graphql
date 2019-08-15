@@ -13,6 +13,7 @@
   "globals": {
     "it": "readonly",
     "before": "readonly",
+    "after": "readonly",
     "describe": "readonly",
     "beforeEach": "readonly",
     "afterEach": "readonly"

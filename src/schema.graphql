@@ -1,3 +1,7 @@
+interface Entity {
+  id: ID!
+}
+
 type Ledger {
   blocks(id: ID): [Block]!
   blockHeight: Int!
@@ -5,7 +9,7 @@ type Ledger {
   transactions(id: ID, ids: [ID]): [Transaction]!
 }
 
-type Block {
+type Block implements Entity {
   id: ID!
   transactions: [Transaction]!
 }
@@ -31,8 +35,8 @@ type TransactionOutput {
   address: String!
 }
 
-type Transaction {
-  id: String!
+type Transaction implements Entity  {
+  id: ID!
   fee: Float!
   inputs: [TransactionInput!]!
   outputs: [TransactionOutput!]!
@@ -40,5 +44,5 @@ type Transaction {
 
 type Query {
   transaction(id: ID!): Transaction!
-  transactions(id: ID, ids: [ID]): [Transaction]!
+  transactions(ids: [ID]): [Transaction]!
 }

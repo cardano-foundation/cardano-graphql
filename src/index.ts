@@ -1,15 +1,25 @@
+import * as fs from 'fs'
+import * as path from 'path'
+import { ApolloServer } from 'apollo-server'
 import { getConfig } from './config'
-import { Server } from './Server'
-import { InMemoryLedgerDataSource, InMemoryMempoolDataSource } from './data_sources'
-import { transactions } from './lib/mocks'
+import { Ledger, Mempool } from './data_sources'
+import { transactions, blocks } from './lib/mocks'
+import { Context } from './Context'
+import { resolvers } from './resolvers'
 
 const config = getConfig()
-const server = Server({
-  dataSources: {
-    ledger: InMemoryLedgerDataSource({ transactions }),
-    mempool: InMemoryMempoolDataSource({ transactions: [] })
+
+const server = new ApolloServer({
+  dataSources (): Context['dataSources'] {
+    return {
+      ledger: new Ledger({ blocks, transactions }),
+      mempool: new Mempool({ transactions })
+    }
   },
-  mocks: config.mockResponses
+  introspection: true,
+  mocks: config.mockResponses,
+  resolvers,
+  typeDefs: fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'UTF8')
 })
 
 server.listen(config.apiPort).then(({ url }) => {

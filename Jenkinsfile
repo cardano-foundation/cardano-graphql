@@ -7,6 +7,7 @@ pipeline {
     stage('Install') {
       steps {
         sh 'npm i'
+        sh 'npm run build'
       }
     }
     stage('Unit/Integration Test') {

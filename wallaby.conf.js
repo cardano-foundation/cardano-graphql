@@ -7,12 +7,14 @@ module.exports = function () {
     ],
 
     tests: [
-      'src/**/*.spec.ts',
-      '!src/**/Server.spec.ts'
+      'src/**/*.spec.ts'
     ],
     env: {
       type: 'node'
     },
-    testFramework: 'mocha'
+    workers: {
+      restart: true
+    },
+    testFramework: 'mocha',
   }
 }

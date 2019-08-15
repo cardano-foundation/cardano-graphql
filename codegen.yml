@@ -5,7 +5,7 @@ generates:
       - typescript
   ./src/graphql_types.ts:
       config:
-        contextType: ./Server#Context
+        contextType: ./Context#Context
       plugins:
         - typescript
         - typescript-resolvers
