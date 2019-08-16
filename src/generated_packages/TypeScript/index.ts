@@ -62,7 +62,7 @@ export type Outpoint = {
 
 export type Query = {
   __typename?: "Query";
-  transaction: Transaction;
+  transaction?: Maybe<Transaction>;
   transactions: Array<Maybe<Transaction>>;
 };
 

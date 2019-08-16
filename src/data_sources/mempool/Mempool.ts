@@ -1,7 +1,7 @@
 import { DataSource } from 'apollo-datasource'
 import * as DataLoader from 'dataloader'
 import { Transaction } from '../../graphql_types'
-import { EntityLoader } from '../EntityLoader'
+import { EntityLoader } from '../../lib/data_loaders/EntityLoader'
 
 export class Mempool extends DataSource {
   transaction: DataLoader<Transaction['id'], Transaction>

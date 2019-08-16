@@ -64,7 +64,7 @@ export type Outpoint = {
 
 export type Query = {
   __typename?: "Query";
-  transaction: Transaction;
+  transaction?: Maybe<Transaction>;
   transactions: Array<Maybe<Transaction>>;
 };
 
@@ -203,7 +203,7 @@ export type ResolversParentTypes = {
 
 export type BlockResolvers<
   ContextType = Context,
-  ParentType = ResolversParentTypes["Block"]
+  ParentType extends ResolversParentTypes["Block"] = ResolversParentTypes["Block"]
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   transactions?: Resolver<
@@ -215,7 +215,7 @@ export type BlockResolvers<
 
 export type EntityResolvers<
   ContextType = Context,
-  ParentType = ResolversParentTypes["Entity"]
+  ParentType extends ResolversParentTypes["Entity"] = ResolversParentTypes["Entity"]
 > = {
   __resolveType: TypeResolveFn<
     "Transaction" | "Block",
@@ -227,7 +227,7 @@ export type EntityResolvers<
 
 export type LedgerResolvers<
   ContextType = Context,
-  ParentType = ResolversParentTypes["Ledger"]
+  ParentType extends ResolversParentTypes["Ledger"] = ResolversParentTypes["Ledger"]
 > = {
   blocks?: Resolver<
     Array<Maybe<ResolversTypes["Block"]>>,
@@ -252,7 +252,7 @@ export type LedgerResolvers<
 
 export type MempoolResolvers<
   ContextType = Context,
-  ParentType = ResolversParentTypes["Mempool"]
+  ParentType extends ResolversParentTypes["Mempool"] = ResolversParentTypes["Mempool"]
 > = {
   transaction?: Resolver<
     ResolversTypes["Transaction"],
@@ -271,7 +271,7 @@ export type MempoolResolvers<
 
 export type OutpointResolvers<
   ContextType = Context,
-  ParentType = ResolversParentTypes["Outpoint"]
+  ParentType extends ResolversParentTypes["Outpoint"] = ResolversParentTypes["Outpoint"]
 > = {
   txId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   outputIndex?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
@@ -279,10 +279,10 @@ export type OutpointResolvers<
 
 export type QueryResolvers<
   ContextType = Context,
-  ParentType = ResolversParentTypes["Query"]
+  ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
 > = {
   transaction?: Resolver<
-    ResolversTypes["Transaction"],
+    Maybe<ResolversTypes["Transaction"]>,
     ParentType,
     ContextType,
     QueryTransactionArgs
@@ -297,7 +297,7 @@ export type QueryResolvers<
 
 export type TransactionResolvers<
   ContextType = Context,
-  ParentType = ResolversParentTypes["Transaction"]
+  ParentType extends ResolversParentTypes["Transaction"] = ResolversParentTypes["Transaction"]
 > = {
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   fee?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
@@ -315,7 +315,7 @@ export type TransactionResolvers<
 
 export type TransactionInputResolvers<
   ContextType = Context,
-  ParentType = ResolversParentTypes["TransactionInput"]
+  ParentType extends ResolversParentTypes["TransactionInput"] = ResolversParentTypes["TransactionInput"]
 > = {
   outpoint?: Resolver<ResolversTypes["Outpoint"], ParentType, ContextType>;
   address?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
@@ -323,7 +323,7 @@ export type TransactionInputResolvers<
 
 export type TransactionOutputResolvers<
   ContextType = Context,
-  ParentType = ResolversParentTypes["TransactionOutput"]
+  ParentType extends ResolversParentTypes["TransactionOutput"] = ResolversParentTypes["TransactionOutput"]
 > = {
   value?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   address?: Resolver<ResolversTypes["String"], ParentType, ContextType>;

@@ -20,6 +20,7 @@ const server = new ApolloServer({
   mocks: config.mockResponses,
   resolvers,
   typeDefs: fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'UTF8')
+
 })
 
 server.listen(config.apiPort).then(({ url }) => {
