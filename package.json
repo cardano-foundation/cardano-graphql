@@ -2,10 +2,10 @@
   "name": "cardano-graphql",
   "version": "0.1.0",
   "description": "GraphQL API for Cardano with client-consumable types generated",
-  "main": "/dist/index.js",
+  "main": "dist/index.js",
   "private": true,
   "scripts": {
-    "build": "rm -rf dist && npm run codegen && tsc",
+    "build": "rm -rf dist && npm run codegen && tsc && npx cpx src/**/*.graphql dist",
     "dev": "concurrently \"npm run codegen --watch\" \"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\"",
     "codegen": "graphql-codegen",
     "lint": "eslint \"src/**/*.ts\"",
@@ -22,8 +22,10 @@
   "dependencies": {
     "apollo-datasource": "^0.6.1",
     "apollo-server": "^2.8.0",
+    "dataloader": "^1.4.0",
     "express": "^4.16.4",
-    "graphql": "^14.4.2"
+    "graphql": "^14.4.2",
+    "ts-custom-error": "^3.1.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.4.0",
@@ -44,7 +46,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "concurrently": "^4.1.1",
-    "dataloader": "^1.4.0",
+    "cpx": "^1.5.0",
     "eslint": "^6.1.0",
     "eslint-config-standard": "^13.0.1",
     "eslint-plugin-chai-friendly": "^0.4.1",
@@ -55,11 +57,9 @@
     "graphql-tag": "^2.10.1",
     "http-server": "^0.11.1",
     "mocha": "^6.2.0",
-    "node-fetch": "^2.2.0",
     "nyc": "^14.1.1",
     "sinon": "^7.4.1",
     "sinon-chai": "^3.3.0",
-    "ts-custom-error": "^3.1.1",
     "ts-node": "^8.3.0",
     "ts-node-dev": "^1.0.0-pre.40",
     "typescript": "^3.5.3"
