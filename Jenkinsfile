@@ -7,6 +7,7 @@ pipeline {
     stage('Install') {
       steps {
         sh 'npm i'
+        sh 'npm run lint'
         sh 'npm run build'
       }
     }
