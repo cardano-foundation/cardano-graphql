@@ -43,6 +43,6 @@ type Transaction implements Entity  {
 }
 
 type Query {
-  transaction(id: ID!): Transaction!
+  transaction(id: ID!): Transaction
   transactions(ids: [ID]): [Transaction]!
 }

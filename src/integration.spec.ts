@@ -28,8 +28,8 @@ describe('Integration', () => {
   })
 
   describe('Ledger', () => {
-    describe('Transactions', () => {
-      it('Returns a transaction by ID, or null data value if not found', async () => {
+    describe('transaction', () => {
+      it('Returns a transaction by ID, or null if not found', async () => {
         const result = await client.query({
           query: `query { transaction(id: "tx3") { id fee }}`
         })
@@ -37,20 +37,22 @@ describe('Integration', () => {
           query: `query { transaction(id: "tx?") { id fee }}`
         })
         expect(result.data.transaction).to.eql({ id: 'tx3', fee: 5 })
-        expect(notFoundResult.data).to.eql(null)
+        expect(notFoundResult.data.transaction).to.eql(null)
       })
-      it('Returns transactions by IDs, returning null data value for no results, or null values in the array if a partial set is found ', async () => {
+    })
+    describe('transactions', () => {
+      it('Returns transactions by IDs, or an array with null values if not found ', async () => {
         const result = await client.query({
           query: `query { transactions(ids: ["tx3", "tx2"]) { id fee } }`
         })
         const notFoundResult = await client.query({
-          query: `query { transaction(id: "tx?") { id fee } }`
+          query: `query { transactions(ids: ["tx?","tx??"]) { id fee } }`
         })
         const resultWithMissingTxs = await client.query({
           query: `query { transactions(ids: ["tx3", "tx?", "tx2"]) { id fee } }`
         })
         expect(result.data.transactions).to.eql([{ id: 'tx3', fee: 5 }, { id: 'tx2', fee: 10 }])
-        expect(notFoundResult.data).to.eql(null)
+        expect(notFoundResult.data.transactions).to.deep.eq([null, null])
         expect(resultWithMissingTxs.data.transactions).to.eql([{ id: 'tx3', fee: 5 }, null, { id: 'tx2', fee: 10 }])
       })
     })
