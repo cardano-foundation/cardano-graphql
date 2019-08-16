@@ -6,10 +6,5 @@ services:
       target: server
     environment:
       - API_PORT=3000
-      - MOCK_RESPONSES
-      - PG_HOST
-      - PG_USER
-      - PG_PASSWORD
-      - PG_DATABASE
     ports:
       - 4000:3000
