@@ -2,27 +2,32 @@ import { MissingConfig } from './errors'
 
 export function getConfig (): {
   apiPort: number,
-  mockResponses: boolean
+  mockResponses: boolean,
+  tracing: boolean
   } {
   const {
     apiPort,
-    mockResponses
+    mockResponses,
+    tracing
   } = filterAndTypecastEnvs(process.env)
 
   return {
     apiPort: apiPort || getPort(),
-    mockResponses
+    mockResponses,
+    tracing
   }
 }
 
 function filterAndTypecastEnvs (env: any) {
   const {
     API_PORT,
-    MOCK_RESPONSES
+    MOCK_RESPONSES,
+    TRACING
   } = env
   return {
     apiPort: Number(API_PORT),
-    mockResponses: Boolean(MOCK_RESPONSES)
+    mockResponses: Boolean(MOCK_RESPONSES),
+    tracing: Boolean(TRACING)
   }
 }
 
