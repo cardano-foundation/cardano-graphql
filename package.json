@@ -2,9 +2,9 @@
   "name": "cardano-graphql",
   "version": "0.1.0",
   "description": "GraphQL API for Cardano with client-consumable types generated",
-  "private": true,
   "scripts": {
     "codegen": "graphql-codegen",
+    "coverage": "http-server coverage",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "npm run lint -- --fix",
     "dev": "npm run codegen -- --watch",
@@ -12,7 +12,6 @@
     "dev:start": "stmux -w always -e ERROR -M -m beep,system -- [[ \"npm run dev\" .. \"npx eslint-watch -c .eslintrc.json --ext .ts\" .. \"tsc --watch --noEmit\" ] .. [ \"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\" ]]",
     "build": "rm -rf dist && npm run codegen && tsc && npx cpx src/**/*.graphql dist",
     "test": "NODE_ENV=test nyc mocha",
-    "test:coverage": "npm test && http-server coverage",
     "start": "node dist/index.js"
   },
   "contributors": [
