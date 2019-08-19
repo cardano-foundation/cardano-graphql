@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  postgres:
+    build:
+      context: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
