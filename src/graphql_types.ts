@@ -95,6 +95,8 @@ export type TransactionOutput = {
   value: Scalars["Int"];
   address: Scalars["String"];
 };
+export type WithIndex<TObject> = TObject & Record<string, any>;
+export type ResolversObject<TObject> = WithIndex<TObject>;
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
@@ -166,7 +168,7 @@ export type DirectiveResolverFn<
 ) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
-export type ResolversTypes = {
+export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Transaction: ResolverTypeWrapper<Transaction>;
@@ -181,10 +183,10 @@ export type ResolversTypes = {
   Ledger: ResolverTypeWrapper<Ledger>;
   Block: ResolverTypeWrapper<Block>;
   Mempool: ResolverTypeWrapper<Mempool>;
-};
+}>;
 
 /** Mapping between all available schema types and the resolvers parents */
-export type ResolversParentTypes = {
+export type ResolversParentTypes = ResolversObject<{
   Query: {};
   ID: Scalars["ID"];
   Transaction: Transaction;
@@ -199,36 +201,36 @@ export type ResolversParentTypes = {
   Ledger: Ledger;
   Block: Block;
   Mempool: Mempool;
-};
+}>;
 
 export type BlockResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["Block"] = ResolversParentTypes["Block"]
-> = {
+> = ResolversObject<{
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   transactions?: Resolver<
     Array<Maybe<ResolversTypes["Transaction"]>>,
     ParentType,
     ContextType
   >;
-};
+}>;
 
 export type EntityResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["Entity"] = ResolversParentTypes["Entity"]
-> = {
+> = ResolversObject<{
   __resolveType: TypeResolveFn<
     "Transaction" | "Block",
     ParentType,
     ContextType
   >;
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
-};
+}>;
 
 export type LedgerResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["Ledger"] = ResolversParentTypes["Ledger"]
-> = {
+> = ResolversObject<{
   blocks?: Resolver<
     Array<Maybe<ResolversTypes["Block"]>>,
     ParentType,
@@ -248,12 +250,12 @@ export type LedgerResolvers<
     ContextType,
     LedgerTransactionsArgs
   >;
-};
+}>;
 
 export type MempoolResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["Mempool"] = ResolversParentTypes["Mempool"]
-> = {
+> = ResolversObject<{
   transaction?: Resolver<
     ResolversTypes["Transaction"],
     ParentType,
@@ -267,20 +269,20 @@ export type MempoolResolvers<
     MempoolTransactionsArgs
   >;
   transactionCount?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-};
+}>;
 
 export type OutpointResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["Outpoint"] = ResolversParentTypes["Outpoint"]
-> = {
+> = ResolversObject<{
   txId?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
   outputIndex?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
-};
+}>;
 
 export type QueryResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
-> = {
+> = ResolversObject<{
   transaction?: Resolver<
     Maybe<ResolversTypes["Transaction"]>,
     ParentType,
@@ -293,12 +295,12 @@ export type QueryResolvers<
     ContextType,
     QueryTransactionsArgs
   >;
-};
+}>;
 
 export type TransactionResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["Transaction"] = ResolversParentTypes["Transaction"]
-> = {
+> = ResolversObject<{
   id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   fee?: Resolver<ResolversTypes["Float"], ParentType, ContextType>;
   inputs?: Resolver<
@@ -311,25 +313,25 @@ export type TransactionResolvers<
     ParentType,
     ContextType
   >;
-};
+}>;
 
 export type TransactionInputResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["TransactionInput"] = ResolversParentTypes["TransactionInput"]
-> = {
+> = ResolversObject<{
   outpoint?: Resolver<ResolversTypes["Outpoint"], ParentType, ContextType>;
   address?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-};
+}>;
 
 export type TransactionOutputResolvers<
   ContextType = Context,
   ParentType extends ResolversParentTypes["TransactionOutput"] = ResolversParentTypes["TransactionOutput"]
-> = {
+> = ResolversObject<{
   value?: Resolver<ResolversTypes["Int"], ParentType, ContextType>;
   address?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
-};
+}>;
 
-export type Resolvers<ContextType = Context> = {
+export type Resolvers<ContextType = Context> = ResolversObject<{
   Block?: BlockResolvers<ContextType>;
   Entity?: EntityResolvers;
   Ledger?: LedgerResolvers<ContextType>;
@@ -339,7 +341,7 @@ export type Resolvers<ContextType = Context> = {
   Transaction?: TransactionResolvers<ContextType>;
   TransactionInput?: TransactionInputResolvers<ContextType>;
   TransactionOutput?: TransactionOutputResolvers<ContextType>;
-};
+}>;
 
 /**
  * @deprecated
