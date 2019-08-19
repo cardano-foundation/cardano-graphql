@@ -13,7 +13,7 @@ export function getConfig (): {
 
   return {
     apiPort: apiPort || getPort(),
-    mockResponses,
+    mockResponses: process.env.NODE_ENV === 'production' ? false : mockResponses,
     tracing
   }
 }
