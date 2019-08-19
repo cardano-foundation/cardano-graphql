@@ -5,7 +5,7 @@ export const resolvers: Resolvers = {
     // obj should be typed correctly, but the compiler is complaining
     // https://github.com/input-output-hk/cardano-graphql/issues/12
     __resolveType: (obj: any) => {
-      if(obj.fee) return 'Transaction'
+      if (obj.fee) return 'Transaction'
     }
   },
   Query: {
