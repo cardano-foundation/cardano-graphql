@@ -7,7 +7,15 @@ pipeline {
     stage('Install') {
       steps {
         sh 'npm i'
+      }
+    }
+    stage('Validate Code Style') {
+      steps {
         sh 'npm run lint'
+      }
+    }
+    stage('Build') {
+      steps {
         sh 'npm run build'
       }
     }
