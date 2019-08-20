@@ -1,4 +1,5 @@
 FROM node:10.15.3-alpine as builder
+RUN apk add --update python make g++
 RUN mkdir /application
 COPY package.json /application/package.json
 WORKDIR /application
