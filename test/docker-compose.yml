@@ -5,6 +5,6 @@ services:
       context: postgres
     restart: always
     environment:
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=postgres
     ports:
       - 5432:5432
