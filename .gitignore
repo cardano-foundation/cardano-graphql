@@ -3,3 +3,5 @@ dist
 /.nyc_output
 /coverage
 tsconfig.tsbuildinfo
+src/graphql_types.ts
+src/generated_packages/TypeScript/index.ts
