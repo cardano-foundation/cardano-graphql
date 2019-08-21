@@ -1,18 +1,21 @@
 import { expect } from 'chai'
 import * as DataLoader from 'dataloader'
 import { Ledger } from './Ledger'
-import { blocks, transactions } from '../../lib/mocks'
+import { transactions } from '../../lib/mocks'
+import { Sequelize } from 'sequelize'
 
 const tx2 = transactions[0]
 const tx3 = transactions[1]
 
+const sequelize = new Sequelize('cexplorer', 'nix', 'password', {
+  host: 'localhost',
+  dialect: 'postgres'
+})
+
 describe('Ledger', () => {
   let ledger: Ledger
   beforeEach(() => {
-    ledger = new Ledger({
-      blocks,
-      transactions
-    })
+    ledger = new Ledger(sequelize)
     ledger.initialize()
   })
   describe('transaction', () => {

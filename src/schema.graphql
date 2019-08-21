@@ -43,6 +43,7 @@ type Transaction implements Entity  {
 }
 
 type Query {
+  block(id: ID!): Block
   transaction(id: ID!): Transaction
   transactions(ids: [ID]): [Transaction]!
 }

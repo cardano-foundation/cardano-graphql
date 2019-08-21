@@ -4,9 +4,15 @@ import * as fs from 'fs'
 import { createTestClient, ApolloServerTestClient } from 'apollo-server-testing'
 import { ApolloServerBase } from 'apollo-server-core'
 import { Mempool, Ledger } from './data_sources'
-import { blocks, transactions } from './lib/mocks'
+import { transactions } from './lib/mocks'
 import { resolvers } from './resolvers'
 import { Context } from './Context'
+import { Sequelize } from 'sequelize'
+
+const sequelize = new Sequelize('cexplorer', 'nix', 'password', {
+  host: 'localhost',
+  dialect: 'postgres'
+})
 
 describe('Integration', () => {
   let server: ApolloServerBase
@@ -16,7 +22,7 @@ describe('Integration', () => {
     server = new ApolloServerBase({
       dataSources (): Context['dataSources'] {
         return {
-          ledger: new Ledger({ blocks, transactions }),
+          ledger: new Ledger(sequelize),
           mempool: new Mempool({ transactions })
         }
       },
