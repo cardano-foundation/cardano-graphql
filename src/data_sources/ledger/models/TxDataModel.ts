@@ -1,30 +1,30 @@
-import { Column, Entity, OneToMany , PrimaryColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm'
 import { TxInDataModel } from '.'
 
 @Entity()
 export class TxDataModel {
-  @PrimaryColumn ('integer')
+  @PrimaryColumn('integer')
   id: number
 
-  @Column ({
+  @Column({
     type: 'blob',
     transformer: {
-      from(value: Buffer) {
+      from (value: Buffer) {
         return value.toString('hex')
       },
-      to(_value: string) {
+      to (_value: string) {
         throw new Error('Write not supported')
       }
     }
   })
   hash: string
 
-  @Column ('integer')
+  @Column('integer')
   block: number
 
-  @Column ('integer')
+  @Column('integer')
   fee: number
 
-  @OneToMany (_type => TxInDataModel, txIn => txIn.tx_in_id)
+  @OneToMany(_type => TxInDataModel, txIn => txIn.tx_in_id)
   txIn: TxInDataModel
 }

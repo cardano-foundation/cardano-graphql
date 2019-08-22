@@ -1,46 +1,46 @@
-import { Column, Entity, OneToMany , PrimaryColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm'
 import { TxDataModel } from '.'
 
 @Entity()
 export class BlockDataModel {
-  @PrimaryColumn ('integer')
+  @PrimaryColumn('integer')
   id: number
 
-  @Column ({
+  @Column({
     type: 'blob',
     transformer: {
-      from(value: Buffer) {
+      from (value: Buffer) {
         return value.toString('hex')
       },
-      to(_value: string) {
+      to (_value: string) {
         throw new Error('This model is readonly')
       }
     }
   })
   hash: string
 
-  @Column ('integer')
+  @Column('integer')
   slot_no: number
 
-  @Column ('integer')
+  @Column('integer')
   previous: number
 
-  @Column ({
+  @Column({
     type: 'blob',
     transformer: {
-      from(value: Buffer) {
+      from (value: Buffer) {
         return value.toString('hex')
       },
-      to(_value: string) {
+      to (_value: string) {
         throw new Error('This model is readonly')
       }
     }
   })
   merkel_root: string
 
-  @Column ('integer')
+  @Column('integer')
   size: number
 
-  @OneToMany (_type => TxDataModel, tx => tx.block)
+  @OneToMany(_type => TxDataModel, tx => tx.block)
   tx: TxDataModel
 }

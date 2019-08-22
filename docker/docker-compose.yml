@@ -6,5 +6,6 @@ services:
       target: server
     environment:
       - API_PORT=3000
+      - MOCK_RESPONSES=true
     ports:
-      - 4000:3000
+      - 3000:3000

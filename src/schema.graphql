@@ -41,8 +41,8 @@ type Slot {
 }
 
 type TransactionInput {
-  txId: String!,
-  outputIndex: Int!
+  sourceTxId: String!,
+  sourceTxOutputIndex: Int!
   address: String!
 }
 
@@ -60,8 +60,7 @@ type Transaction {
 }
 
 input TransactionFilter {
-  address: String
-  addresses: [String]
+  hashes: [String]
   epoch: Int
   slot: Int
   inBlockNo: Int
@@ -71,11 +70,7 @@ input TransactionFilter {
 }
 
 type Query {
-  block(id: ID!, filter: BlockFilter): Block
   blocks(ids: [String!], filter: BlockFilter): [Block!]!
-  epoch(number: Int) : Epoch!
   epochs(numbers: [Int!]): [Epoch!]!
-  transaction(id: ID!): Transaction
-  transactions(ids: [ID], filter: TransactionFilter): [Transaction]!
-  utxo(address: String): [TransactionOutput]!
+  transactions(hashes: [String!], filter: TransactionFilter): [Transaction]!
 }

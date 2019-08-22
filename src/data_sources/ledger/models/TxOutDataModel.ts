@@ -2,19 +2,18 @@ import { Column, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity()
 export class TxOutDataModel {
-  @PrimaryColumn ('integer')
+  @PrimaryColumn('integer')
   id: number
 
-  @Column ('integer')
+  @Column('integer')
   tx_id: number
 
-  @Column ('integer')
+  @Column('integer')
   index: number
 
-  @Column ('blob')
+  @Column('blob')
   address: string
 
-  @Column ('integer')
+  @Column('integer')
   value: number
-
 }
