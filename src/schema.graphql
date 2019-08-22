@@ -19,7 +19,7 @@ input BlockFilter {
 }
 
 type Epoch {
-  blocks: [Block!]!
+  blocks: [Block]!
   number: Int!
   slots: [Slot!]!
   transactions: [Transaction]
@@ -36,13 +36,8 @@ type Mempool {
 }
 
 type Slot {
-  blocks: [Block!]!
+  block: Block
   epoch: Epoch!
-  fees: Int!
-  hash: String!
-  number: Int!
-  totalOutput: Float!
-  transactions: [Transaction!]!
 }
 
 type TransactionInput {
