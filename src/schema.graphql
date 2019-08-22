@@ -1,13 +1,32 @@
-type Ledger {
-  blocks(id: ID): [Block]!
-  blockHeight: Int!
-  transaction(id: ID!): Transaction!
-  transactions(id: ID, ids: [ID]): [Transaction]!
-}
+scalar DateTime
 
 type Block {
   id: ID!
+  hash: String!
+  merkleRootHash: String!
+  number: Int!
+  previousBlock: Block
+  size: Float!
+  slot: Slot!
   transactions: [Transaction]!
+}
+
+input BlockFilter {
+  epoch: Int
+  slot: Int
+  afterHeight: Int
+  beforeHeight: Int
+}
+
+type Epoch {
+  blocks: [Block!]!
+  number: Int!
+  slots: [Slot!]!
+  transactions: [Transaction]
+}
+
+type Ledger {
+  blockHeight: Int!
 }
 
 type Mempool {
@@ -16,13 +35,19 @@ type Mempool {
   transactionCount: Int!
 }
 
-type Outpoint {
-  txId: String!,
-  outputIndex: Int!
+type Slot {
+  blocks: [Block!]!
+  epoch: Epoch!
+  fees: Int!
+  hash: String!
+  number: Int!
+  totalOutput: Float!
+  transactions: [Transaction!]!
 }
 
 type TransactionInput {
-  outpoint: Outpoint!
+  txId: String!,
+  outputIndex: Int!
   address: String!
 }
 
@@ -39,8 +64,23 @@ type Transaction {
   outputs: [TransactionOutput!]!
 }
 
+input TransactionFilter {
+  address: String
+  addresses: [String]
+  epoch: Int
+  slot: Int
+  inBlockNo: Int
+  inBlockId: ID
+  includedBefore: DateTime
+  includedAfter: DateTime
+}
+
 type Query {
-  block(id: ID!): Block
+  block(id: ID!, filter: BlockFilter): Block
+  blocks(ids: [String!], filter: BlockFilter): [Block!]!
+  epoch(number: Int) : Epoch!
+  epochs(numbers: [Int!]): [Epoch!]!
   transaction(id: ID!): Transaction
-  transactions(ids: [ID]): [Transaction]!
+  transactions(ids: [ID], filter: TransactionFilter): [Transaction]!
+  utxo(address: String): [TransactionOutput]!
 }

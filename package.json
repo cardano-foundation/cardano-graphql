@@ -27,9 +27,11 @@
     "dataloader-values": "^1.1.1",
     "express": "^4.16.4",
     "graphql": "^14.4.2",
+    "graphql-iso-date": "^3.6.1",
     "pg": "^7.12.1",
-    "sequelize": "^5.15.1",
-    "ts-custom-error": "^3.1.1"
+    "reflect-metadata": "^0.1.13",
+    "ts-custom-error": "^3.1.1",
+    "typeorm": "^0.2.18"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.5.0",
@@ -39,6 +41,7 @@
     "@types/chai": "^4.1.7",
     "@types/chai-as-promised": "^7.1.1",
     "@types/graphql": "^14.2.3",
+    "@types/graphql-iso-date": "^3.3.1",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.6.8",
     "@types/sinon": "^7.0.13",

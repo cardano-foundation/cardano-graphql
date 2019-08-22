@@ -1,49 +1,39 @@
+import { Connection } from 'typeorm'
 import { DataSource } from 'apollo-datasource'
-import { Sequelize } from 'sequelize'
 import * as DataLoader from 'dataloader'
-import { Block, Transaction } from '../../graphql_types'
-import { buildTxModel, buildTxInModel, buildTxOutModel } from './models'
+import alignDataLoaderValues from 'dataloader-values'
+import { Block, Epoch, Transaction, TransactionOutput } from '../../graphql_types'
+import * as mocks from '../../lib/mocks'
 
 export class Ledger extends DataSource {
-  transaction: DataLoader<Transaction['id'], Transaction>
-
+  private connection: Connection
   block: DataLoader<Block['id'], Block>
+  epoch: DataLoader<Epoch['number'], Epoch>
+  transaction: DataLoader<Transaction['id'], Transaction>
+  utxo: DataLoader<string, TransactionOutput>
 
-  constructor (private sequelize: Sequelize) {
+  constructor (connection: Connection) {
     super()
+    this.connection = connection
   }
 
   initialize (): void {
-
-  }
-
-  async blockById (id: Block['id']): Promise<Block> {
-    const Tx = buildTxModel(this.sequelize)
-    const TxIn = buildTxInModel(this.sequelize)
-    const TxOut = buildTxOutModel(this.sequelize)
-    return {
-      id,
-      transactions: await Tx.findAll({
-        include: [{
-          model: TxIn,
-          include: [{
-            model: TxOut,
-            // This is undeniably unpleasant syntax, but this is the most
-            // complicated join in the dataset
-            on: {
-              col1: Sequelize.where(Sequelize.col('txIns.tx_out_id'), '=', Sequelize.col('txIns->txOut.tx_id')),
-              col2: Sequelize.where(Sequelize.col('txIns.tx_out_index'), '=', Sequelize.col('txIns->txOut.index'))
-            }
-          }]
-        }, {
-          model: TxOut
-        }],
-        // Query goes here
-        where: {
-          block: id
-        }
-      })
-    }
+    this.block = new DataLoader<Block['id'], Block>((ids: Block['id'][]) => {
+      return Promise.resolve(alignDataLoaderValues({
+        keys: ids,
+        values: mocks.blocks,
+        getKey: ({ id }) => id
+      }))
+    })
+    this.epoch = new DataLoader<Epoch['number'], Epoch>((numbers: Epoch['number'][]) => {
+      return Promise.resolve(mocks.epochs)
+    })
+    this.transaction = new DataLoader<Transaction['id'], Transaction>((ids: Transaction['id'][]) => {
+      return Promise.resolve(mocks.transactions)
+    })
+    this.utxo = new DataLoader<string, TransactionOutput>((addresses: string[]) => {
+      return Promise.resolve(mocks.outputs)
+    })
   }
 
   blockHeight (): Promise<number> {
