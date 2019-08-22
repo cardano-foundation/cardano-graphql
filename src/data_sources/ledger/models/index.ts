@@ -1,3 +1,4 @@
-export * from './Tx'
-export * from './TxIn'
-export * from './TxOut'
+export * from './BlockDataModel'
+export * from './TxDataModel'
+export * from './TxInDataModel'
+export * from './TxOutDataModel'
