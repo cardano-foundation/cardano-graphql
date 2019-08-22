@@ -13,7 +13,9 @@
     "dev:start": "stmux -w always -e ERROR -M -m beep,system -- [[ \"npm run dev\" .. \"npx eslint-watch -c .eslintrc.json --ext .ts\" .. \"tsc --watch --noEmit\" ] .. [ \"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\" ]]",
     "build": "rm -rf dist && npm run codegen:internal && npm run codegen:external && tsc && npx cpx src/**/*.graphql dist",
     "test": "NODE_ENV=test nyc mocha",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "dc:dev": "docker-compose -f docker/docker-compose.dev.yml up",
+    "dc:down": "docker-compose -f docker/docker-compose.dev.yml down"
   },
   "contributors": [
     "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",

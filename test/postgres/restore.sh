@@ -1,0 +1,1 @@
+pg_restore /docker-entrypoint-initdb.d/cexplorer.pg_dump >/dev/null
