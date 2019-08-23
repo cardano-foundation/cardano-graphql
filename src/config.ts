@@ -4,14 +4,12 @@ import { Config as ServerConfig } from './Server'
 export function getConfig (): ServerConfig {
   const {
     apiPort,
-    mockResponses,
     tracing,
     postgres
   } = filterAndTypecastEnvs(process.env)
 
   return {
     apiPort: apiPort || getPort(),
-    mockResponses: process.env.NODE_ENV === 'production' ? false : mockResponses,
     postgres,
     tracing
   }
@@ -20,7 +18,6 @@ export function getConfig (): ServerConfig {
 function filterAndTypecastEnvs (env: any) {
   const {
     API_PORT,
-    MOCK_RESPONSES,
     TRACING,
     POSTGRES_DB,
     POSTGRES_HOST,
@@ -30,7 +27,6 @@ function filterAndTypecastEnvs (env: any) {
   } = env
   return {
     apiPort: Number(API_PORT),
-    mockResponses: Boolean(MOCK_RESPONSES),
     postgres: {
       database: POSTGRES_DB ? String(POSTGRES_DB) : 'cexplorer',
       host: POSTGRES_HOST ? String(POSTGRES_HOST) : 'localhost',

@@ -14,7 +14,6 @@ import { resolvers } from './resolvers'
 
 export type Config = {
   apiPort: number
-  mockResponses: boolean
   tracing: boolean
   postgres: {
     database: string
@@ -32,15 +31,15 @@ export function Server (config: Config) {
     type: 'postgres',
     entities: [BlockDataModel, TxDataModel, TxInDataModel, TxOutDataModel]
   })
-  const transactions = !config.mockResponses ? pgConnection.getRepository(TxDataModel) : null
   const apolloServer = new ApolloServer({
     dataSources (): Context['dataSources'] {
       return {
-        ledger: new Ledger({ transactions })
+        ledger: new Ledger({
+          transactions: pgConnection.getRepository(TxDataModel)
+        })
       }
     },
     introspection: true,
-    mocks: config.mockResponses,
     resolvers,
     tracing: config.tracing,
     typeDefs: fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'UTF8')
@@ -48,9 +47,7 @@ export function Server (config: Config) {
   let apolloServerInfo: ServerInfo
   return {
     async boot (): Promise<ServerInfo> {
-      if(!config.mockResponses) {
-        await pgConnection.connect()
-      }
+      await pgConnection.connect()
       apolloServerInfo = await apolloServer.listen({ port: config.apiPort })
       return apolloServerInfo
     },
