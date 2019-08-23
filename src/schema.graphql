@@ -35,12 +35,15 @@ type Slot {
 }
 
 type TransactionInput {
-  txId: String!,
-  outputIndex: Int!
+  sourceTxId: String!
+  sourceTxIndex: Int!
   address: String!
+  value: String!
 }
 
 type TransactionOutput {
+  txId: String!
+  index: Int!
   value: String!
   address: String!
 }

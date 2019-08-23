@@ -39,10 +39,31 @@ export class Ledger extends DataSource {
     const res = await this.transactionRepository.find({
       // take: args.first ? args.first : undefined,
       where: whereConditions,
-      relations: ['outputs']
+      relations: ['outputs', 'inputs', 'inputs.sourceOutput', 'inputs.sourceOutput.transaction']
     })
 
-    return res.map(r => ({ ...r, id: r.hash }))
+    return res.map(r => {
+      return {
+        ...r,
+        id: r.hash,
+        inputs: r.inputs.map(input => {
+          return {
+            sourceTxId: input.sourceOutput.transaction.hash,
+            sourceTxIndex: input.sourceOutput.index,
+            value: input.sourceOutput.value,
+            address: input.sourceOutput.address
+          }
+        }),
+        outputs: r.outputs.map(output => {
+          return {
+            ...output,
+            // This output is created by this transaction, so we know
+            // this is the correct hash.
+            txId: r.hash
+          }
+        })
+      }
+    })
   }
 
   blockHeight(): Promise<number> {
