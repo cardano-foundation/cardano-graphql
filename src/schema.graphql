@@ -61,11 +61,8 @@ input TransactionFilter {
 }
 
 type Query {
-  block(id: ID!, filter: BlockFilter): Block
   blocks(ids: [String!], filter: BlockFilter): [Block!]!
-  epoch(number: Int) : Epoch!
   epochs(numbers: [Int!]): [Epoch!]!
-  transaction(id: ID!): Transaction
-  transactions(ids: [ID], filter: TransactionFilter): [Transaction]!
+  transactions(filter: TransactionFilter): [Transaction]!
   utxo(address: String): [TransactionOutput]!
 }
