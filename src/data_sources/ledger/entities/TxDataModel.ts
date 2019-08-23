@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm'
-import { TxInDataModel, TxOutDataModel } from '.'
+import { TxOutDataModel } from '.'
 import { BufferTransformer } from '../../lib/BufferTransformer'
 
 @Entity('tx')
@@ -20,9 +20,12 @@ export class TxDataModel {
   @Column('integer')
   fee: number
 
-  @OneToMany(_type => TxInDataModel, txIn => txIn.txInId)
-  txIn: TxInDataModel
+  // @OneToMany(_type => TxInDataModel, txIn => txIn.txInId)
+  // @JoinColumn([
+  //   { referencedColumnName: 'tx_in_id' }
+  // ])
+  // txIn: TxInDataModel
 
-  @OneToMany(_type => TxOutDataModel, txOut => txOut.txId)
-  txOut: TxOutDataModel
+  @OneToMany(_type => TxOutDataModel, txOut => txOut.transaction)
+  outputs: TxOutDataModel[]
 }

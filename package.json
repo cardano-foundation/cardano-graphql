@@ -10,7 +10,7 @@
     "lint:fix": "npm run lint -- --fix",
     "dev": "npm run codegen:internal -- --watch",
     "dev:test": "stmux -w always -e ERROR -M -m beep,system -- [[ \"npm run dev\" .. \"npx eslint-watch -c .eslintrc.json --ext .ts\" .. \"tsc --watch --noEmit\" ] .. [ \"npm run test -- --watch\" ]]",
-    "dev:start": "stmux -w always -e ERROR -M -m beep,system -- [[ \"npm run dev\" .. \"npx eslint-watch -c .eslintrc.json --ext .ts\" .. \"tsc --watch --noEmit\" ] .. [ \"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\" ]]",
+    "dev:start": "stmux -w always -e ERROR -M -- [[ \"npm run dev\" .. \"npx eslint-watch -c .eslintrc.json --ext .ts\" .. \"tsc --watch --noEmit\" ] .. [ \"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\" ]]",
     "build": "rm -rf dist && npm run codegen:internal && npm run codegen:external && tsc && npx cpx src/**/*.graphql dist",
     "test": "NODE_ENV=test nyc mocha",
     "start": "node dist/index.js",

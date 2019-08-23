@@ -13,12 +13,12 @@ export type Config = {
 export class Ledger extends DataSource {
   private transactionRepository: Repository<TxDataModel>
 
-  constructor (config: Config) {
+  constructor(config: Config) {
     super()
     this.transactionRepository = config.transactions
   }
 
-  initialize (): void {
+  initialize(): void {
     // this.transactionsLoader = new DataLoader<Block['number'], Transaction>(async (numbers: Block['number'][]) => {
     //   return alignDataLoaderValues({
     //     keys: numbers,
@@ -28,21 +28,24 @@ export class Ledger extends DataSource {
     // })
   }
 
-  transactions(args: QueryTransactionsArgs) {
+  async transactions(args: QueryTransactionsArgs) {
     const whereConditions = []
     if (args.filter) {
       const { filter } = args
-      if(filter.ids) whereConditions.push({ hash: In(filter.ids) })
-      if(filter.blockNumbers) whereConditions.push({ block: In(filter.blockNumbers) })
+      if (filter.ids) whereConditions.push({ hash: In(filter.ids) })
+      if (filter.blockNumbers) whereConditions.push({ block: In(filter.blockNumbers) })
     }
-    return this.transactionRepository.find({
-      take: args.first ? args.first : undefined,
+
+    const res = await this.transactionRepository.find({
+      // take: args.first ? args.first : undefined,
       where: whereConditions,
-      relations: ['txIn', 'txOut']
+      relations: ['outputs']
     })
+
+    return res.map(r => ({ ...r, id: r.hash }))
   }
 
-  blockHeight (): Promise<number> {
+  blockHeight(): Promise<number> {
     return Promise.resolve(99)
   }
 }

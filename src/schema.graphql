@@ -41,7 +41,7 @@ type TransactionInput {
 }
 
 type TransactionOutput {
-  value: Int!
+  value: String!
   address: String!
 }
 

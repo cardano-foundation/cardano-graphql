@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { Column, Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm'
+import { TxDataModel } from './TxDataModel'
+import { BufferTransformer } from '../../lib/BufferTransformer'
 
 @Entity('tx_out')
 export class TxOutDataModel {
@@ -14,9 +16,19 @@ export class TxOutDataModel {
   @Column('integer')
   index: number
 
-  @Column('bytea')
+  @Column({
+    type: 'bytea',
+    readonly: true,
+    transformer: new BufferTransformer()
+  })
   address: string
 
   @Column('integer')
   value: number
+
+  @ManyToOne(_type => TxDataModel, transaction => transaction.outputs)
+  @JoinColumn([
+    { name: 'tx_id' }
+  ])
+  transaction: TxDataModel
 }

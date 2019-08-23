@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from 'typeorm'
-import { TxOutDataModel } from './TxOutDataModel'
+import { Column, Entity, PrimaryColumn } from 'typeorm'
+// import { TxOutDataModel } from './TxOutDataModel'
 
 @Entity('tx_in')
 export class TxInDataModel {
@@ -24,10 +24,10 @@ export class TxInDataModel {
   })
   txOutIndex: number
 
-  @OneToOne(_type => TxOutDataModel)
-  @JoinColumn([
-    { referencedColumnName: 'txId' },
-    { referencedColumnName: 'index' }
-  ])
-  sourceTxOut: TxOutDataModel
+  // @OneToOne(_type => TxOutDataModel)
+  // @JoinColumn([
+  //   { referencedColumnName: 'txId' },
+  //   { referencedColumnName: 'index' }
+  // ])
+  // sourceTxOut: TxOutDataModel
 }
