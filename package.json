@@ -12,7 +12,7 @@
     "dev:test": "stmux -w always -e ERROR -M -m beep,system -- [[ \"npm run dev\" .. \"npx eslint-watch -c .eslintrc.json --ext .ts\" .. \"tsc --watch --noEmit\" ] .. [ \"npm run test -- --watch\" ]]",
     "dev:start": "stmux -w always -e ERROR -M -- [[ \"npm run dev\" .. \"npx eslint-watch -c .eslintrc.json --ext .ts\" .. \"tsc --watch --noEmit\" ] .. [ \"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\" ]]",
     "build": "rm -rf dist && npm run codegen:internal && npm run codegen:external && tsc && npx cpx src/**/*.graphql dist",
-    "test": "NODE_ENV=test nyc mocha",
+    "test": "NODE_ENV=test jest",
     "start": "node dist/index.js",
     "dc:dev": "docker-compose -f docker/docker-compose.yml up",
     "dc:down": "docker-compose -f docker/docker-compose.yml down"
@@ -27,6 +27,7 @@
     "apollo-server": "^2.8.0",
     "dataloader": "^1.4.0",
     "dataloader-values": "^1.1.1",
+    "eslint-plugin-jest": "^22.15.2",
     "express": "^4.16.4",
     "graphql": "^14.4.2",
     "graphql-iso-date": "^3.6.1",
@@ -40,56 +41,29 @@
     "@graphql-codegen/typescript": "^1.5.0",
     "@graphql-codegen/typescript-graphql-files-modules": "^1.5.0",
     "@graphql-codegen/typescript-resolvers": "^1.5.0",
-    "@types/chai": "^4.1.7",
-    "@types/chai-as-promised": "^7.1.1",
     "@types/graphql": "^14.2.3",
     "@types/graphql-iso-date": "^3.3.1",
     "@types/jest": "^24.0.18",
-    "@types/mocha": "^5.2.7",
     "@types/node": "^12.6.8",
-    "@types/sinon": "^7.0.13",
-    "@types/sinon-chai": "^3.2.2",
     "@types/validator": "^10.11.3",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "apollo-server-core": "^2.8.1",
     "apollo-server-testing": "^2.8.1",
-    "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
     "cpx": "^1.5.0",
     "eslint": "^6.1.0",
     "eslint-config-standard": "^13.0.1",
-    "eslint-plugin-chai-friendly": "^0.4.1",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-watch": "^6.0.0",
     "graphql-tag": "^2.10.1",
-    "http-server": "^0.11.1",
     "jest": "^24.9.0",
-    "mocha": "^6.2.0",
-    "nyc": "^14.1.1",
-    "sinon": "^7.4.1",
-    "sinon-chai": "^3.3.0",
     "stmux": "^1.7.1",
+    "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "ts-node-dev": "^1.0.0-pre.40",
     "typescript": "^3.5.3"
-  },
-  "nyc": {
-    "extension": [
-      ".ts"
-    ],
-    "include": [
-      "src/**/*.ts"
-    ],
-    "exclude": [
-      "src/**/*.spec.ts"
-    ],
-    "reporter": [
-      "html"
-    ],
-    "all": true
   }
 }
