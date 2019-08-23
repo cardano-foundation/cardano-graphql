@@ -7,7 +7,7 @@ import { TxDataModel } from './entities'
 import { QueryTransactionsArgs } from '../../graphql_types'
 
 export type Config = {
-  transactions: Repository<TxDataModel>
+  transactions: Repository<TxDataModel> | null
 }
 
 export class Ledger extends DataSource {

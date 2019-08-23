@@ -32,12 +32,11 @@ export function Server (config: Config) {
     type: 'postgres',
     entities: [BlockDataModel, TxDataModel, TxInDataModel, TxOutDataModel]
   })
+  const transactions = !config.mockResponses ? pgConnection.getRepository(TxDataModel) : null
   const apolloServer = new ApolloServer({
     dataSources (): Context['dataSources'] {
       return {
-        ledger: new Ledger({
-          transactions: pgConnection.getRepository(TxDataModel)
-        })
+        ledger: new Ledger({ transactions })
       }
     },
     introspection: true,
@@ -49,7 +48,9 @@ export function Server (config: Config) {
   let apolloServerInfo: ServerInfo
   return {
     async boot (): Promise<ServerInfo> {
-      await pgConnection.connect()
+      if(!config.mockResponses) {
+        await pgConnection.connect()
+      }
       apolloServerInfo = await apolloServer.listen({ port: config.apiPort })
       return apolloServerInfo
     },
