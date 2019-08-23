@@ -29,12 +29,6 @@ type Ledger {
   blockHeight: Int!
 }
 
-type Mempool {
-  transaction(id: ID!): Transaction!
-  transactions(id: ID!): [Transaction]!
-  transactionCount: Int!
-}
-
 type Slot {
   block: Block
   epoch: Epoch!
@@ -53,21 +47,14 @@ type TransactionOutput {
 
 type Transaction {
   fee: Float!
-  hash: String!
   id: ID!
   inputs: [TransactionInput!]!
   outputs: [TransactionOutput!]!
 }
 
 input TransactionFilter {
-  address: String
-  addresses: [String]
-  epoch: Int
-  slot: Int
-  inBlockNo: Int
-  inBlockId: ID
-  includedBefore: DateTime
-  includedAfter: DateTime
+  ids: [ID]
+  blockNumbers: [Int]
 }
 
 type Query {
