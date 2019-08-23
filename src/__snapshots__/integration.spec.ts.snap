@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration Ledger transactions Returns transactions by IDs, or an array with null values if not found  1`] = `
+Object {
+  "data": Object {
+    "transactions": Array [
+      Object {
+        "fee": 0,
+        "id": "6ac19b8efd7114eea29080064b1ec6b5a10346a6212ee338d46f98b733851e3b",
+        "inputs": Array [
+          Object {
+            "address": "3e44c7393b8c1fa97516c4aaa7667a6ad4b8ee79e0bd5a2e005fcc27",
+            "sourceTxId": "3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843",
+            "sourceTxIndex": 0,
+            "value": "1084654000000",
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "4b4853a4c6e9fe3f56d816445a304fb6671423420343f7b62e5f484e",
+            "value": "1084654000000",
+          },
+        ],
+      },
+      Object {
+        "fee": 0,
+        "id": "3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843",
+        "inputs": Array [],
+        "outputs": Array [
+          Object {
+            "address": "3e44c7393b8c1fa97516c4aaa7667a6ad4b8ee79e0bd5a2e005fcc27",
+            "value": "1084654000000",
+          },
+        ],
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Ledger transactions Returns transactions by IDs, or an array with null values if not found  2`] = `
+Object {
+  "data": Object {
+    "transactions": Array [],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Ledger transactions Returns transactions by IDs, or an array with null values if not found  3`] = `
+Object {
+  "data": Object {
+    "transactions": Array [
+      Object {
+        "fee": 0,
+        "id": "3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843",
+        "inputs": Array [],
+        "outputs": Array [
+          Object {
+            "address": "3e44c7393b8c1fa97516c4aaa7667a6ad4b8ee79e0bd5a2e005fcc27",
+            "value": "1084654000000",
+          },
+        ],
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
