@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn, JoinColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm'
 import { TxOutDataModel, TxInDataModel } from '.'
 import { BufferTransformer } from '../../lib/BufferTransformer'
 

@@ -47,7 +47,7 @@ describe('Integration', () => {
     client = createTestClient(apolloServer)
   })
 
-  afterEach(async () => await pgConnection.close())
+  afterEach(() => pgConnection.close())
 
   describe('Ledger', () => {
     describe('transactions', () => {

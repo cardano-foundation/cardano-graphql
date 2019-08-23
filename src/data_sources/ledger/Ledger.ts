@@ -13,12 +13,12 @@ export type Config = {
 export class Ledger extends DataSource {
   private transactionRepository: Repository<TxDataModel>
 
-  constructor(config: Config) {
+  constructor (config: Config) {
     super()
     this.transactionRepository = config.transactions
   }
 
-  initialize(): void {
+  initialize (): void {
     // this.transactionsLoader = new DataLoader<Block['number'], Transaction>(async (numbers: Block['number'][]) => {
     //   return alignDataLoaderValues({
     //     keys: numbers,
@@ -28,7 +28,7 @@ export class Ledger extends DataSource {
     // })
   }
 
-  async transactions(args: QueryTransactionsArgs) {
+  async transactions (args: QueryTransactionsArgs) {
     const whereConditions = []
     if (args.filter) {
       const { filter } = args
@@ -66,7 +66,7 @@ export class Ledger extends DataSource {
     })
   }
 
-  blockHeight(): Promise<number> {
+  blockHeight (): Promise<number> {
     return Promise.resolve(99)
   }
 }
