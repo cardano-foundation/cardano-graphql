@@ -15,6 +15,6 @@ module.exports = function () {
     workers: {
       restart: true
     },
-    testFramework: 'mocha',
+    testFramework: 'jest',
   }
 }
