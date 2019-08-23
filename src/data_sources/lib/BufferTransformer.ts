@@ -1,7 +1,7 @@
 import { FindOperator, FindOperatorType, ValueTransformer } from 'typeorm'
 
 export class BufferTransformer implements ValueTransformer {
-  to(value: string | FindOperator<string | string[]>) {
+  to (value: string | FindOperator<string | string[]>) {
     if (!value) {
       return undefined
     } else if (typeof value === 'string') {
@@ -22,12 +22,12 @@ export class BufferTransformer implements ValueTransformer {
         operatorNaked._type as FindOperatorType,
         newValue,
         operator.useParameter,
-        operator.multipleParameters,
+        operator.multipleParameters
       )
     }
   }
 
-  from(value: Buffer): string {
+  from (value: Buffer): string {
     return value.toString('hex')
   }
 }
