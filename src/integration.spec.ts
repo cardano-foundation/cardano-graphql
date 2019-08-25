@@ -2,40 +2,24 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { createTestClient, ApolloServerTestClient } from 'apollo-server-testing'
 import { ApolloServerBase } from 'apollo-server-core'
-import { Connection, ConnectionManager } from 'typeorm'
 import { Context } from './Context'
-import {
-  BlockDataModel,
-  Ledger,
-  TxDataModel,
-  TxInDataModel,
-  TxOutDataModel
-} from './data_sources'
+import { Ledger, TxDataModel } from './data_sources'
+import { getConfig } from './config'
 import { resolvers } from './resolvers'
 
-const connectionManager = new ConnectionManager()
+const { postgres } = getConfig()
 
 describe('Integration', () => {
   let apolloServer: ApolloServerBase
   let client: ApolloServerTestClient
-  let pgConnection: Connection
 
   beforeEach(async () => {
-    pgConnection = connectionManager.create({
-      database: 'cexplorer',
-      host: 'localhost',
-      password: 'postgres',
-      port: 5432,
-      username: 'nix',
-      type: 'postgres',
-      entities: [BlockDataModel, TxDataModel, TxInDataModel, TxOutDataModel]
-    })
-    await pgConnection.connect()
+    await postgres.connect()
     apolloServer = new ApolloServerBase({
       dataSources (): Context['dataSources'] {
         return {
           ledger: new Ledger({
-            transactions: pgConnection.getRepository(TxDataModel)
+            transactions: postgres.getRepository(TxDataModel)
           })
         }
       },
@@ -46,7 +30,7 @@ describe('Integration', () => {
     client = createTestClient(apolloServer)
   })
 
-  afterEach(() => pgConnection.close())
+  afterEach(() => postgres.close())
 
   describe('Ledger', () => {
     describe('transactions', () => {

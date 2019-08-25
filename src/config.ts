@@ -1,7 +1,11 @@
 import { MissingConfig } from './errors'
 import { Config as ServerConfig } from './Server'
+import { BlockDataModel, TxDataModel, TxInDataModel, TxOutDataModel } from './data_sources/ledger/entities'
+import { ConnectionManager } from 'typeorm'
 
 export function getConfig (): ServerConfig {
+  const connectionManager = new ConnectionManager()
+
   const {
     apiPort,
     tracing,
@@ -10,7 +14,11 @@ export function getConfig (): ServerConfig {
 
   return {
     apiPort: apiPort || getPort(),
-    postgres,
+    postgres: connectionManager.create({
+      ...postgres,
+      type: 'postgres',
+      entities: [BlockDataModel, TxDataModel, TxInDataModel, TxOutDataModel]
+    }),
     tracing
   }
 }
@@ -21,6 +29,7 @@ function filterAndTypecastEnvs (env: any) {
     TRACING,
     POSTGRES_DB,
     POSTGRES_HOST,
+    POSTGRES_LOGGING,
     POSTGRES_PASSWORD,
     POSTGRES_PORT,
     POSTGRES_USER
@@ -32,7 +41,8 @@ function filterAndTypecastEnvs (env: any) {
       host: POSTGRES_HOST ? String(POSTGRES_HOST) : 'localhost',
       password: POSTGRES_PASSWORD ? String(POSTGRES_PASSWORD) : 'postgres',
       port: POSTGRES_PORT ? Number(POSTGRES_PORT) : 5432,
-      username: POSTGRES_USER ? String(POSTGRES_USER) : 'nix'
+      username: POSTGRES_USER ? String(POSTGRES_USER) : 'nix',
+      logging: POSTGRES_LOGGING ? Boolean(POSTGRES_LOGGING) : false
     },
     tracing: Boolean(TRACING)
   }
