@@ -33,8 +33,8 @@ export class TxInDataModel {
 
   @OneToOne(_type => TxOutDataModel)
   @JoinColumn([
-    { name: 'tx_out_id' },
-    { name: 'tx_out_index' }
+    { name: 'tx_out_id', referencedColumnName: 'txId' },
+    { name: 'tx_out_index', referencedColumnName: 'index' }
   ])
   sourceOutput: TxOutDataModel
 }
