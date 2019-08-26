@@ -50,7 +50,7 @@ export class Ledger extends DataSource {
     }
   }
 
-  blockHeight (): Promise<number> {
-    return Promise.resolve(99)
+  async blockHeight (): Promise<Ledger['blockHeight']> {
+    return this.blockRepository.count()
   }
 }

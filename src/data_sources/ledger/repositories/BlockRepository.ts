@@ -17,6 +17,12 @@ export class BlockRepository extends Repository<BlockDataModel> {
     }))
   }
 
+  count () {
+    return this.createQueryBuilder('block')
+      .select('SUM(block.block_no)', 'blockHeight')
+      .getRawOne()
+  }
+
   static async transform (dataSet: Promise<BlockDataModel[]>) {
     return (await dataSet).map((r: null | BlockDataModel) => {
       if (r === null) return r

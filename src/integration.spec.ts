@@ -35,6 +35,16 @@ describe('Integration', () => {
   afterEach(() => postgres.close())
 
   describe('Ledger', () => {
+    describe('Ledger information query', () => {
+      it('Return the block height', async () => {
+        const result = await client.query({
+          query: queries.ledgerMeta
+        })
+        expect(result.data.ledger.blockHeight).toBe(1298333403)
+        expect(result.data.ledger.blockHeight).toMatchSnapshot()
+      })
+    })
+
     describe('transactions', () => {
       it('Returns transactions by IDs', async () => {
         const result = await client.query({
@@ -48,7 +58,6 @@ describe('Integration', () => {
             }
           }
         })
-        console.log(result.data)
         expect(result.data.transactions.length).toBe(2)
         expect(result.data.transactions[0].id).toEqual('6ac19b8efd7114eea29080064b1ec6b5a10346a6212ee338d46f98b733851e3b')
         expect(result.data.transactions[1].id).toEqual('3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843')

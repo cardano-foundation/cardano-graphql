@@ -10,6 +10,7 @@ const resolverMap: Resolvers = {
   },
   Query: {
     blocks: (_root, args, { dataSources: { ledger } }) => ledger.blocks(args) as unknown as Promise<Block[]>,
+    ledger: (_root, _args, { dataSources: { ledger } }) => ledger.blockHeight(),
     transactions: (_root, args, { dataSources: { ledger } }) => ledger.transactions(args) as unknown as Promise<Transaction[]>
     // utxo: (_root, args, { dataSources: { ledger } }) => ledger.utxo.load(args.address)
   }
