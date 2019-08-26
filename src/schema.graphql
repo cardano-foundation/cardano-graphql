@@ -60,8 +60,8 @@ input TransactionFilter {
 }
 
 type Query {
-  blocks(filter: BlockFilter, first: Int): [Block]!
-  transactions(filter: TransactionFilter, first: Int): [Transaction]!
+  blocks(filter: BlockFilter!, first: Int): [Block]!
+  transactions(filter: TransactionFilter!, first: Int): [Transaction]!
   ledger: Ledger
 #  utxo(address: String): [TransactionOutput]!
 }
