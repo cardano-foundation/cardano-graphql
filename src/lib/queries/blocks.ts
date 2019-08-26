@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const blocksWithNoTx = gql`query blocksWithNoTx($filter: BlockFilter){
+export const blocksWithNoTx = gql`query blocksWithNoTx($filter: BlockFilter!){
     blocks(filter: $filter) {
         id
         merkelRootHash
@@ -11,7 +11,7 @@ export const blocksWithNoTx = gql`query blocksWithNoTx($filter: BlockFilter){
     }
 }`
 
-export const blocksWithSomeTx = gql`query blocksWithSomeTxs($filter: BlockFilter, $txLimit: Int){
+export const blocksWithTxs = gql`query blocksWithSomeTxs($filter: BlockFilter!){
     blocks(filter: $filter) {
         id
         merkelRootHash
@@ -19,7 +19,7 @@ export const blocksWithSomeTx = gql`query blocksWithSomeTxs($filter: BlockFilter
         previousBlockNo
         size
         slotNo
-        transactions(limit: $txLimit) {
+        transactions {
             id
             fee
             inputs {
@@ -36,7 +36,7 @@ export const blocksWithSomeTx = gql`query blocksWithSomeTxs($filter: BlockFilter
     }
 }`
 
-export const nestedBlocks = gql`query nestedBlocks($filter: BlockFilter){
+export const nestedBlocks = gql`query nestedBlocks($filter: BlockFilter!){
     blocks(filter: $filter) {
         id
         previousBlock {

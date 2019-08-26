@@ -86,15 +86,14 @@ describe('Integration', () => {
 
       it('Can return transactions in blocks as a nested array', async () => {
         const transactionsByBlock = await client.query({
-          query: queries.blocksWithSomeTx,
+          query: queries.blocksWithTxs,
           variables: {
             filter: {
               numbers: [1]
-            },
-            txLimit: 33
+            }
           }
         })
-        expect(transactionsByBlock.data.blocks[0].transactions.length).toBe(33)
+        // expect(transactionsByBlock.data.blocks[0].transactions.length).toBe(33)
         expect(transactionsByBlock).toMatchSnapshot()
       })
     })

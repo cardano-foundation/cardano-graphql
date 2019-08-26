@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Integration Ledger Ledger information query Return the block height 1`] = `1298333403`;
+
 exports[`Integration Ledger blocks Returns blocks by id 1`] = `
 Object {
   "data": Object {
