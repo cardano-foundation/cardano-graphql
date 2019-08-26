@@ -1,7 +1,6 @@
 import { DataSource } from 'apollo-datasource'
 import alignDataLoaderValues from 'dataloader-values'
-import { QueryBlocksArgs } from '../../graphql_types'
-import { QueryTransactionsArgs } from '../../graphql_types'
+import { QueryBlocksArgs, QueryTransactionsArgs } from '../../graphql_types'
 import { BlockRepository, TransactionRepository } from './repositories'
 
 export type Config = {
@@ -11,6 +10,7 @@ export type Config = {
 
 export class Ledger extends DataSource {
   private blockRepository: BlockRepository
+
   readonly transactionRepository: TransactionRepository
 
   constructor (config: Config) {
@@ -20,7 +20,7 @@ export class Ledger extends DataSource {
   }
 
   initialize (): void {
-   // Placeholder for initializing DataLoaders (optimisation)
+    // Placeholder for initializing DataLoaders (optimisation)
   }
 
   async blocks ({ filter, first }: QueryBlocksArgs) {

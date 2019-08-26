@@ -42,16 +42,16 @@ describe('Integration', () => {
           variables: {
             filter: {
               ids: [
-                "6ac19b8efd7114eea29080064b1ec6b5a10346a6212ee338d46f98b733851e3b",
-                "3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843"
+                '6ac19b8efd7114eea29080064b1ec6b5a10346a6212ee338d46f98b733851e3b',
+                '3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843'
               ]
             }
           }
         })
         console.log(result.data)
         expect(result.data.transactions.length).toBe(2)
-        expect(result.data.transactions[0].id).toEqual("6ac19b8efd7114eea29080064b1ec6b5a10346a6212ee338d46f98b733851e3b")
-        expect(result.data.transactions[1].id).toEqual("3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843")
+        expect(result.data.transactions[0].id).toEqual('6ac19b8efd7114eea29080064b1ec6b5a10346a6212ee338d46f98b733851e3b')
+        expect(result.data.transactions[1].id).toEqual('3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843')
         expect(result).toMatchSnapshot()
       })
 
@@ -61,16 +61,16 @@ describe('Integration', () => {
           variables: {
             filter: {
               ids: [
-                "?",
-                "3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843",
-                "??"
+                '?',
+                '3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843',
+                '??'
               ]
             }
           }
         })
         expect(resultWithMissingTxs.data.transactions.length).toBe(3)
         expect(resultWithMissingTxs.data.transactions[0]).toEqual(null)
-        expect(resultWithMissingTxs.data.transactions[1].id).toEqual("3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843")
+        expect(resultWithMissingTxs.data.transactions[1].id).toEqual('3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843')
         expect(resultWithMissingTxs.data.transactions[2]).toEqual(null)
         expect(resultWithMissingTxs).toMatchSnapshot()
       })
@@ -110,8 +110,8 @@ describe('Integration', () => {
           variables: {
             filter: {
               ids: [
-                "1dbc81e3196ba4ab9dcb07e1c37bb28ae1c289c0707061f28b567c2f48698d50",
-                "d3fdc8c8ea4050cc87a21cb73110d54e3ec92f8ae76941e8a1957ed6e6a7e0b0"
+                '1dbc81e3196ba4ab9dcb07e1c37bb28ae1c289c0707061f28b567c2f48698d50',
+                'd3fdc8c8ea4050cc87a21cb73110d54e3ec92f8ae76941e8a1957ed6e6a7e0b0'
               ]
             }
           }

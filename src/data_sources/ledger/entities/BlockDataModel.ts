@@ -39,5 +39,4 @@ export class BlockDataModel {
 
   @Column('integer')
   size: number
-
 }

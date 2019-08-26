@@ -3,18 +3,17 @@ import { BlockDataModel } from '../entities'
 
 @EntityRepository(BlockDataModel)
 export class BlockRepository extends Repository<BlockDataModel> {
-
   byNumbers (numbers: BlockDataModel['number'][], limit?: number) {
     return BlockRepository.transform(this.find({
-      take: limit ? limit : undefined,
-      where: { number: In(numbers)},
+      take: limit || undefined,
+      where: { number: In(numbers) }
     }))
   }
 
   byIds (ids: BlockDataModel['hash'][], limit?: number) {
     return BlockRepository.transform(this.find({
-      take: limit ? limit : undefined,
-      where: { hash: In(ids)},
+      take: limit || undefined,
+      where: { hash: In(ids) }
     }))
   }
 
@@ -23,9 +22,8 @@ export class BlockRepository extends Repository<BlockDataModel> {
       if (r === null) return r
       return {
         ...r,
-        id: r.hash,
+        id: r.hash
       }
     })
   }
-
 }

@@ -4,19 +4,18 @@ import { TxDataModel } from '../entities'
 
 @EntityRepository(TxDataModel)
 export class TransactionRepository extends Repository<TxDataModel> {
-
   byBlockNumbers (numbers: number[], limit: number) {
     return TransactionRepository.transform(this.find({
-      take: limit ? limit : undefined,
-      where: { block: In(numbers)},
+      take: limit || undefined,
+      where: { block: In(numbers) },
       relations: TransactionRepository.standardRelations
     }))
   }
 
   byIds (ids: TxDataModel['hash'][], limit?: number) {
     return TransactionRepository.transform(this.find({
-      take: limit ? limit : undefined,
-      where: { hash: In(ids)},
+      take: limit || undefined,
+      where: { hash: In(ids) },
       relations: TransactionRepository.standardRelations
     }))
   }
@@ -55,7 +54,7 @@ export class TransactionRepository extends Repository<TxDataModel> {
             // This output is created by this transaction, so we know
             // this is the correct hash.
             txId: data.hash,
-            value: parseInt(String(output.value)),
+            value: parseInt(String(output.value))
           }
         })
       }
@@ -63,5 +62,4 @@ export class TransactionRepository extends Repository<TxDataModel> {
       return transformedData as Transaction
     })
   }
-
 }
