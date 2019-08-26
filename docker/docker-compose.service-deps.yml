@@ -8,5 +8,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=nix
       - POSTGRES_DB=cexplorer
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
     volumes:
       - "../test/postgres:/docker-entrypoint-initdb.d"
