@@ -32,6 +32,7 @@
     "graphql-bigint": "^1.0.0",
     "graphql-iso-date": "^3.6.1",
     "pg": "^7.12.1",
+    "promise-exponential-retry": "^1.0.3",
     "reflect-metadata": "^0.1.13",
     "ts-custom-error": "^3.1.1",
     "typeorm": "^0.2.18"
