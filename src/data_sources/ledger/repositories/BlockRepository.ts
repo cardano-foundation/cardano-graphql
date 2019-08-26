@@ -1,5 +1,6 @@
 import { EntityRepository, In, Repository } from 'typeorm'
 import { BlockDataModel } from '../entities'
+import { TransactionRepository } from './TransactionRepository'
 
 @EntityRepository(BlockDataModel)
 export class BlockRepository extends Repository<BlockDataModel> {
@@ -24,11 +25,11 @@ export class BlockRepository extends Repository<BlockDataModel> {
   }
 
   static async transform (dataSet: Promise<BlockDataModel[]>) {
-    return (await dataSet).map((r: null | BlockDataModel) => {
-      if (r === null) return r
+    return (await dataSet).map((r: BlockDataModel) => {
       return {
         ...r,
-        id: r.hash
+        id: r.hash,
+        transactions: r.transactions.map(TransactionRepository.castTransaction)
       }
     })
   }

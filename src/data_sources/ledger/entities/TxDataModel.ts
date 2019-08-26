@@ -1,5 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm'
-import { TxOutDataModel, TxInDataModel } from '.'
+import { Column, Entity, OneToMany, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm'
+import { TxOutDataModel, TxInDataModel, BlockDataModel } from '.'
 import { BufferTransformer } from '../../lib/BufferTransformer'
 
 @Entity('tx')
@@ -28,4 +28,10 @@ export class TxDataModel {
 
   @OneToMany(_type => TxOutDataModel, txOut => txOut.transaction)
   outputs: TxOutDataModel[]
+
+  @ManyToOne(_type => BlockDataModel, block => block.transactions)
+  @JoinColumn([
+    { name: 'block' }
+  ])
+  block: BlockDataModel
 }

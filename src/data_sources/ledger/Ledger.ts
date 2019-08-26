@@ -1,6 +1,6 @@
 import { DataSource } from 'apollo-datasource'
-import alignDataLoaderValues from 'dataloader-values'
-import { QueryBlocksArgs, QueryTransactionsArgs } from '../../graphql_types'
+import { alignDataLoaderValues } from '../lib'
+import { QueryBlocksArgs, QueryTransactionsArgs, Ledger as LedgerT } from '../../graphql_types'
 import { BlockRepository, TransactionRepository } from './repositories'
 
 export type Config = {
@@ -50,7 +50,8 @@ export class Ledger extends DataSource {
     }
   }
 
-  async blockHeight (): Promise<Ledger['blockHeight']> {
-    return this.blockRepository.count()
+  async ledger (): Promise<LedgerT> {
+    const blockHeight = await this.blockRepository.count()
+    return { blockHeight }
   }
 }

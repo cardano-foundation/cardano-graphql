@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { Column, Entity, PrimaryColumn, OneToMany } from 'typeorm'
 import { BufferTransformer } from '../../lib/BufferTransformer'
+import { TxDataModel } from './TxDataModel'
 
 @Entity('block')
 export class BlockDataModel {
@@ -39,4 +40,7 @@ export class BlockDataModel {
 
   @Column('integer')
   size: number
+
+  @OneToMany(_type => TxDataModel, tx => tx.block)
+  transactions: TxDataModel[]
 }
