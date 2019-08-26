@@ -38,15 +38,11 @@ export class BlockRepository extends Repository<BlockDataModel> {
 
   static async transform (dataSet: Promise<BlockDataModel[]>) {
     return (await dataSet).map((r: BlockDataModel) => {
-      const x = {
+      return {
         ...r,
         id: r.hash,
         transactions: r.transactions.map(TransactionRepository.castTransaction)
       }
-
-      console.log(JSON.stringify(x, null, 2))
-
-      return x
     })
   }
 }
