@@ -89,11 +89,11 @@ describe('Integration', () => {
           query: queries.blocksWithTxs,
           variables: {
             filter: {
-              numbers: [1]
+              numbers: [23243]
             }
           }
         })
-        // expect(transactionsByBlock.data.blocks[0].transactions.length).toBe(33)
+        expect(transactionsByBlock.data.blocks[0].transactions.length).toBe(2)
         expect(transactionsByBlock).toMatchSnapshot()
       })
     })

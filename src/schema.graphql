@@ -3,12 +3,12 @@ scalar DateTime
 
 type Block {
   id: ID!
-  merkelRootHash: String!
+  merkelRootHash: String
   number: Int!
   previousBlockNo: Int
 #  previousBlock: Block
   size: Float!
-  slotNo: Int!
+  slotNo: Int
   transactions(limit: Int): [Transaction]!
 }
 

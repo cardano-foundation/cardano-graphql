@@ -28,6 +28,7 @@ export class BufferTransformer implements ValueTransformer {
   }
 
   from (value: Buffer): string {
+    if (!value) return ''
     return value.toString('hex')
   }
 }

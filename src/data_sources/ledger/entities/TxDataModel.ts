@@ -31,7 +31,7 @@ export class TxDataModel {
 
   @ManyToOne(_type => BlockDataModel, block => block.transactions)
   @JoinColumn([
-    { name: 'block' }
+    { name: 'block', referencedColumnName: 'id' }
   ])
   block: BlockDataModel
 }
