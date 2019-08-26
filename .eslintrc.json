@@ -27,6 +27,6 @@
     "no-unused-expressions": 0
   },
   "env": {
-    "jest/globals": true
+    "jest": true
   }
 }

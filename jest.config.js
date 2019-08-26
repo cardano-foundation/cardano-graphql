@@ -5,4 +5,5 @@ module.exports = {
   "transform": {
     "^.+\\.spec.ts?$": "ts-jest"
   },
+  preset: 'ts-jest'
 }
