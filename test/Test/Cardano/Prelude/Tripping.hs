@@ -9,6 +9,8 @@
 
 module Test.Cardano.Prelude.Tripping
   ( runTests
+  , canonicalDecodePretty
+  , canonicalEncodePretty
   , discoverPropArg
   , discoverRoundTrip
   , discoverRoundTripArg
@@ -45,6 +47,24 @@ import Hedgehog.Internal.TH (TExpQ)
 import Language.Haskell.TH (Exp(..), Q, location, runIO)
 import Language.Haskell.TH.Syntax (Loc(..), mkName, unTypeQ, unsafeTExpCoerce)
 
+canonicalDecodePretty
+  :: forall a
+   . CanonicalJSON.FromJSON (Either SchemaError) a
+  => LB.ByteString
+  -> Either Text a
+canonicalDecodePretty y = do
+  eVal <- first toS (CanonicalJSON.parseCanonicalJSON y)
+  first show (CanonicalJSON.fromJSON eVal :: Either SchemaError a)
+
+canonicalEncodePretty
+  :: forall a . CanonicalJSON.ToJSON Identity a => a -> LB.ByteString
+canonicalEncodePretty x =
+  LB.fromStrict
+    . encodeUtf8
+    . toS
+    $ CanonicalJSON.prettyCanonicalJSON
+    $ runIdentity
+    $ CanonicalJSON.toJSON x
 
 discoverRoundTrip :: TExpQ Group
 discoverRoundTrip = discoverPrefix "roundTrip"
@@ -118,25 +138,7 @@ roundTripsCanonicalJsonPretty
      )
   => a
   -> m ()
-roundTripsCanonicalJsonPretty a = tripping a canonicalEncPre canonicalDecPre
- where
-  canonicalEncPre
-    :: forall a . CanonicalJSON.ToJSON Identity a => a -> LB.ByteString
-  canonicalEncPre x =
-    LB.fromStrict
-      . encodeUtf8
-      . toS
-      $ CanonicalJSON.prettyCanonicalJSON
-      $ runIdentity
-      $ CanonicalJSON.toJSON x
-  canonicalDecPre
-    :: forall a
-     . CanonicalJSON.FromJSON (Either SchemaError) a
-    => LB.ByteString
-    -> Either Text a
-  canonicalDecPre y = do
-    eVal <- first toS (CanonicalJSON.parseCanonicalJSON y)
-    first show (CanonicalJSON.fromJSON eVal :: Either SchemaError a)
+roundTripsCanonicalJsonPretty a = tripping a canonicalEncodePretty canonicalDecodePretty
 
 runTests :: [IO Bool] -> IO ()
 runTests tests' = do
