@@ -33,10 +33,10 @@ pipeline {
         sh 'npm test'
       }
     }
-    post {
-      always {
-        sh 'npm run dc:service-deps-down'
-      }
+  }
+  post {
+    always {
+      sh 'npm run dc:service-deps-down'
     }
   }
 }
