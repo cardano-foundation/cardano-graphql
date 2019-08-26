@@ -23,7 +23,7 @@ pipeline {
         sh 'npm run build'
       }
     }
-    stage('Test DB Instantiation') {
+    stage('Instantiate Test Services') {
       steps {
         sh 'npm run dc:service-deps-up'
       }
