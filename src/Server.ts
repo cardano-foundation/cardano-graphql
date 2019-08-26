@@ -3,8 +3,7 @@ import * as path from 'path'
 import { Connection } from 'typeorm'
 import { ApolloServer, ServerInfo } from 'apollo-server'
 import { Context } from './Context'
-import { Ledger, TxDataModel } from './data_sources/ledger'
-
+import { BlockRepository, Ledger, TransactionRepository } from './data_sources/ledger'
 import { resolvers } from './resolvers'
 
 export type Config = {
@@ -18,7 +17,8 @@ export function Server ({ apiPort, tracing, postgres }: Config) {
     dataSources (): Context['dataSources'] {
       return {
         ledger: new Ledger({
-          transactions: postgres.getRepository(TxDataModel)
+          transactions: postgres.getCustomRepository(TransactionRepository),
+          blocks: postgres.getCustomRepository(BlockRepository)
         })
       }
     },

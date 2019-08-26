@@ -1,5 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm'
-import { TxDataModel } from './TxDataModel'
+import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { BufferTransformer } from '../../lib/BufferTransformer'
 
 @Entity('block')
@@ -19,19 +18,26 @@ export class BlockDataModel {
   })
   slotNo: number
 
-  @Column('integer')
-  previous: number
+  @Column({
+    name: 'block_no',
+    type: 'integer'
+  })
+  number: number
+
+  @Column({
+    name: 'previous',
+    type: 'integer'
+  })
+  previousBlockNo: number
 
   @Column({
     name: 'merkel_root',
     type: 'bytea',
     transformer: new BufferTransformer()
   })
-  merkelRoot: string
+  merkelRootHash: string
 
   @Column('integer')
   size: number
 
-  @OneToMany(_type => TxDataModel, tx => tx.block)
-  tx: TxDataModel
 }

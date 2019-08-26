@@ -1,68 +1,66 @@
+scalar BigInt
 scalar DateTime
 
 type Block {
   id: ID!
-  hash: String!
-  merkleRootHash: String!
+  merkelRootHash: String!
   number: Int!
-  previousBlock: Block
+  previousBlockNo: Int
+#  previousBlock: Block
   size: Float!
-  slot: Slot!
-  transactions: [Transaction]!
+  slotNo: Int!
+  transactions(limit: Int): [Transaction]!
 }
 
 input BlockFilter {
-  epoch: Int
-  slot: Int
-  afterHeight: Int
-  beforeHeight: Int
+  ids: [ID]
+  numbers: [Int]
 }
 
-type Epoch {
-  blocks: [Block]!
-  number: Int!
-  slots: [Slot!]!
-  transactions: [Transaction]
-}
+#type Epoch {
+#  blocks: [Block]!
+#  number: Int!
+#  slots: [Slot!]!
+#  transactions: [Transaction]
+#}
 
 type Ledger {
   blockHeight: Int!
 }
 
-type Slot {
-  block: Block
-  epoch: Epoch!
-}
+#type Slot {
+#  block: Block
+#  epoch: Epoch!
+#}
 
 type TransactionInput {
   sourceTxId: String!
   sourceTxIndex: Int!
   address: String!
-  value: String!
+  value: BigInt!
 }
 
 type TransactionOutput {
   txId: String!
   index: Int!
-  value: String!
+  value: BigInt!
   address: String!
 }
 
 type Transaction {
-  fee: Float!
-  id: ID!
-  inputs: [TransactionInput!]!
+  blockNo: Int
+  fee: Int!
+  id: String!
+  inputs: [TransactionInput]!
   outputs: [TransactionOutput!]!
 }
 
 input TransactionFilter {
   ids: [ID]
-  blockNumbers: [Int]
 }
 
 type Query {
-  blocks(ids: [String!], filter: BlockFilter): [Block!]!
-  epochs(numbers: [Int!]): [Epoch!]!
-  transactions(filter: TransactionFilter): [Transaction]!
-  utxo(address: String): [TransactionOutput]!
+  blocks(filter: BlockFilter, first: Int): [Block]!
+  transactions(filter: TransactionFilter, first: Int): [Transaction]!
+#  utxo(address: String): [TransactionOutput]!
 }

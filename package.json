@@ -30,6 +30,7 @@
     "eslint-plugin-jest": "^22.15.2",
     "express": "^4.16.4",
     "graphql": "^14.4.2",
+    "graphql-bigint": "^1.0.0",
     "graphql-iso-date": "^3.6.1",
     "pg": "^7.12.1",
     "reflect-metadata": "^0.1.13",

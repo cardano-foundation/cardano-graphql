@@ -14,8 +14,11 @@ export class TxDataModel {
   })
   hash: string
 
-  @Column('integer')
-  block: number
+  @Column({
+    name: 'block',
+    type: 'integer'
+  })
+  blockNo: number
 
   @Column('integer')
   fee: number

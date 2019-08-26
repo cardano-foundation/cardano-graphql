@@ -1,69 +1,53 @@
 import { DataSource } from 'apollo-datasource'
-// import * as DataLoader from 'dataloader'
-import { In, Repository } from 'typeorm'
-// import alignDataLoaderValues from 'dataloader-values'
-// import { Block, Epoch, Transaction, TransactionOutput } from '../../graphql_types'
-import { TxDataModel } from './entities'
+import alignDataLoaderValues from 'dataloader-values'
+import { QueryBlocksArgs } from '../../graphql_types'
 import { QueryTransactionsArgs } from '../../graphql_types'
+import { BlockRepository, TransactionRepository } from './repositories'
 
 export type Config = {
-  transactions: Repository<TxDataModel> | null
+  blocks: BlockRepository
+  transactions: TransactionRepository
 }
 
 export class Ledger extends DataSource {
-  private transactionRepository: Repository<TxDataModel>
+  private blockRepository: BlockRepository
+  readonly transactionRepository: TransactionRepository
 
   constructor (config: Config) {
     super()
+    this.blockRepository = config.blocks
     this.transactionRepository = config.transactions
   }
 
   initialize (): void {
-    // this.transactionsLoader = new DataLoader<Block['number'], Transaction>(async (numbers: Block['number'][]) => {
-    //   return alignDataLoaderValues({
-    //     keys: numbers,
-    //     values: await this.transactionRepository.find(numbers),
-    //     getKey: ({ hash }) => hash
-    //   })
-    // })
+   // Placeholder for initializing DataLoaders (optimisation)
   }
 
-  async transactions (args: QueryTransactionsArgs) {
-    const whereConditions = []
-    if (args.filter) {
-      const { filter } = args
-      if (filter.ids) whereConditions.push({ hash: In(filter.ids) })
-      if (filter.blockNumbers) whereConditions.push({ block: In(filter.blockNumbers) })
+  async blocks ({ filter, first }: QueryBlocksArgs) {
+    if (filter.ids) {
+      return alignDataLoaderValues({
+        keys: filter.ids,
+        values: await this.blockRepository.byIds(filter.ids, first),
+        getKey: ({ id }) => id
+      })
     }
+    if (filter.numbers) {
+      return alignDataLoaderValues({
+        keys: filter.numbers,
+        values: await this.blockRepository.byNumbers(filter.numbers),
+        getKey: ({ number }) => number
+      })
+    }
+  }
 
-    const res = await this.transactionRepository.find({
-      // take: args.first ? args.first : undefined,
-      where: whereConditions,
-      relations: ['outputs', 'inputs', 'inputs.sourceOutput', 'inputs.sourceOutput.transaction']
-    })
-
-    return res.map(r => {
-      return {
-        ...r,
-        id: r.hash,
-        inputs: r.inputs.map(input => {
-          return {
-            sourceTxId: input.sourceOutput.transaction.hash,
-            sourceTxIndex: input.sourceOutput.index,
-            value: input.sourceOutput.value,
-            address: input.sourceOutput.address
-          }
-        }),
-        outputs: r.outputs.map(output => {
-          return {
-            ...output,
-            // This output is created by this transaction, so we know
-            // this is the correct hash.
-            txId: r.hash
-          }
-        })
-      }
-    })
+  async transactions ({ filter, first }: QueryTransactionsArgs) {
+    if (filter.ids) {
+      return alignDataLoaderValues({
+        keys: filter.ids,
+        values: await this.transactionRepository.byIds(filter.ids, first),
+        getKey: ({ id }) => id
+      })
+    }
   }
 
   blockHeight (): Promise<number> {

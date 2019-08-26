@@ -3,6 +3,6 @@ module.exports = {
     "<rootDir>/src"
   ],
   "transform": {
-    "^.+\\.ts?$": "ts-jest"
+    "^.+\\.spec.ts?$": "ts-jest"
   },
 }
