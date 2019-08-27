@@ -14,4 +14,4 @@ const resolverMap: Resolvers = {
 export const resolvers = Object.assign({}, resolverMap, {
   BigInt: GraphQLBigInt,
   DateTime: GraphQLDateTime
-})
+}) as any
