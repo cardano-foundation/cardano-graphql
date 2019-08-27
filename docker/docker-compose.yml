@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+  api-server:
+    build:
+      context: ..
+      target: server
+    environment:
+      - API_PORT=3000
+    ports:
+      - ${API_PORT:-3000}:3000

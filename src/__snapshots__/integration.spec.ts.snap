@@ -1,0 +1,214 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration Ledger Ledger information query Return the block height 1`] = `1298333403`;
+
+exports[`Integration Ledger blocks Returns blocks by id 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "1dbc81e3196ba4ab9dcb07e1c37bb28ae1c289c0707061f28b567c2f48698d50",
+        "merkelRootHash": "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
+        "number": 2,
+        "previousBlockNo": 3,
+        "size": 665,
+        "slotNo": 1,
+      },
+      Object {
+        "id": "d3fdc8c8ea4050cc87a21cb73110d54e3ec92f8ae76941e8a1957ed6e6a7e0b0",
+        "merkelRootHash": "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
+        "number": 30,
+        "previousBlockNo": 31,
+        "size": 667,
+        "slotNo": 29,
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Ledger blocks Returns blocks by number 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "f0f7892b5c333cffc4b3c4344de48af4cc63f55e44936196f365a9ef2244134f",
+        "merkelRootHash": "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
+        "number": 1,
+        "previousBlockNo": 2,
+        "size": 665,
+        "slotNo": 0,
+      },
+      Object {
+        "id": "1dbc81e3196ba4ab9dcb07e1c37bb28ae1c289c0707061f28b567c2f48698d50",
+        "merkelRootHash": "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
+        "number": 2,
+        "previousBlockNo": 3,
+        "size": 665,
+        "slotNo": 1,
+      },
+      Object {
+        "id": "d3fdc8c8ea4050cc87a21cb73110d54e3ec92f8ae76941e8a1957ed6e6a7e0b0",
+        "merkelRootHash": "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
+        "number": 30,
+        "previousBlockNo": 31,
+        "size": 667,
+        "slotNo": 29,
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Ledger transactions Can return transactions in blocks as a nested array 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "dd0ae6f6293c5005f80d7370a12c69bf7ffa10779661d46f7a6452a9ea051e32",
+        "merkelRootHash": "9799975eec81d422d9936967ba5a033968177c0f884e1ddc1fe47316d375ed62",
+        "number": 23243,
+        "previousBlockNo": 23245,
+        "size": 1155,
+        "slotNo": 23256,
+        "transactions": Array [
+          Object {
+            "fee": 0,
+            "id": "98031b30c080352a24311694d7d37f22b88d6bb321123245be6e6bd766a09aa4",
+            "inputs": Array [
+              Object {
+                "address": "a0bfad4189299649267b1b693964bd359c6f7742ee43819a3b6e90ca",
+                "sourceTxId": "7e67a810f5d5d8ec27eaa5569a010d16ca150838b938c75d98a4b89c8d4e4d28",
+                "sourceTxIndex": 0,
+                "value": 8365622000000,
+              },
+            ],
+            "outputs": Array [
+              Object {
+                "address": "f35570cda30c4253771945f21abe0c3a2fd21cf84fde7b85adbb850b",
+                "value": 8365622000000,
+              },
+            ],
+          },
+          Object {
+            "fee": 0,
+            "id": "1ee0a5cd9d2ebc9f1da7cb2b17913b54b943f64d6ae04b5cc313edb8c31a406c",
+            "inputs": Array [
+              Object {
+                "address": "715f117044eb017f90d29d99b7ca31bde88e31f011b7cb166d7cd940",
+                "sourceTxId": "8f084ae6e1cfa49b58a78a93e9c064621ef7740e5571c9ed3d06945b5b716a1c",
+                "sourceTxIndex": 0,
+                "value": 3846153000000,
+              },
+            ],
+            "outputs": Array [
+              Object {
+                "address": "9dddb4e83c75b7f7e571aa83b7cccb7684b797e824a76ed6575468f9",
+                "value": 3846153000000,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Ledger transactions Returns null if for specific transaction lookup 1`] = `
+Object {
+  "data": Object {
+    "transactions": Array [
+      null,
+      Object {
+        "blockNo": 1,
+        "fee": 0,
+        "id": "3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843",
+        "inputs": Array [],
+        "outputs": Array [
+          Object {
+            "address": "3e44c7393b8c1fa97516c4aaa7667a6ad4b8ee79e0bd5a2e005fcc27",
+            "value": 1084654000000,
+          },
+        ],
+      },
+      null,
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Ledger transactions Returns transactions by IDs 1`] = `
+Object {
+  "data": Object {
+    "transactions": Array [
+      Object {
+        "blockNo": 23300,
+        "fee": 0,
+        "id": "6ac19b8efd7114eea29080064b1ec6b5a10346a6212ee338d46f98b733851e3b",
+        "inputs": Array [
+          Object {
+            "address": "3e44c7393b8c1fa97516c4aaa7667a6ad4b8ee79e0bd5a2e005fcc27",
+            "sourceTxId": "3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843",
+            "sourceTxIndex": 0,
+            "value": 1084654000000,
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "4b4853a4c6e9fe3f56d816445a304fb6671423420343f7b62e5f484e",
+            "value": 1084654000000,
+          },
+        ],
+      },
+      Object {
+        "blockNo": 1,
+        "fee": 0,
+        "id": "3ec59e9b74e297f4a60ea026baa225ce4ae8fde2b017ad1eb2b691acc1d0a843",
+        "inputs": Array [],
+        "outputs": Array [
+          Object {
+            "address": "3e44c7393b8c1fa97516c4aaa7667a6ad4b8ee79e0bd5a2e005fcc27",
+            "value": 1084654000000,
+          },
+        ],
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

@@ -1,0 +1,67 @@
+scalar BigInt
+scalar DateTime
+
+type Block {
+  id: ID!
+  merkelRootHash: String
+  number: Int!
+  previousBlockNo: Int
+#  previousBlock: Block
+  size: Float!
+  slotNo: Int
+  transactions(limit: Int): [Transaction]!
+}
+
+input BlockFilter {
+  ids: [ID]
+  numbers: [Int]
+}
+
+#type Epoch {
+#  blocks: [Block]!
+#  number: Int!
+#  slots: [Slot!]!
+#  transactions: [Transaction]
+#}
+
+type Ledger {
+  blockHeight: Int!
+}
+
+#type Slot {
+#  block: Block
+#  epoch: Epoch!
+#}
+
+type TransactionInput {
+  sourceTxId: String!
+  sourceTxIndex: Int!
+  address: String!
+  value: BigInt!
+}
+
+type TransactionOutput {
+  txId: String!
+  index: Int!
+  value: BigInt!
+  address: String!
+}
+
+type Transaction {
+  blockNo: Int
+  fee: Int!
+  id: String!
+  inputs: [TransactionInput]!
+  outputs: [TransactionOutput!]!
+}
+
+input TransactionFilter {
+  ids: [ID]
+}
+
+type Query {
+  blocks(filter: BlockFilter!, first: Int): [Block]!
+  transactions(filter: TransactionFilter!, first: Int): [Transaction]!
+  ledger: Ledger
+#  utxo(address: String): [TransactionOutput]!
+}
