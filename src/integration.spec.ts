@@ -70,7 +70,7 @@ describe('Integration', () => {
         //   blockNo: block43178.number,
         //   ...block43178.transactions[0]
         // })
-        // expect(result).toMatchSnapshot()
+        expect(result).toMatchSnapshot()
       })
 
       it('Returns null if for specific transaction lookup', async () => {
@@ -94,7 +94,7 @@ describe('Integration', () => {
         // })
         expect(resultWithMissingTxs.data.transactions[1].fee).toBe(block43177.transactions[0].fee)
         expect(resultWithMissingTxs.data.transactions[2]).toEqual(null)
-        // expect(resultWithMissingTxs).toMatchSnapshot()
+        expect(resultWithMissingTxs).toMatchSnapshot()
       })
 
       it('Can return transactions in blocks as a nested array', async () => {
@@ -107,7 +107,7 @@ describe('Integration', () => {
           }
         })
         expect(transactionsByBlock.data.blocks[0].transactions.length).toBe(block43177.transactions.length)
-        // expect(transactionsByBlock).toMatchSnapshot()
+        expect(transactionsByBlock).toMatchSnapshot()
       })
     })
 
@@ -123,7 +123,7 @@ describe('Integration', () => {
         })
         expect(result.data.blocks.length).toBe(3)
         // expect(block43177).toContainEqual(result.data.blocks[1])
-        // expect(result).toMatchSnapshot()
+        expect(result).toMatchSnapshot()
       })
       it('Returns blocks by id', async () => {
         const result = await client.query({
@@ -139,7 +139,7 @@ describe('Integration', () => {
         })
         expect(result.data.blocks.length).toBe(2)
         // expect(block43177).toContainEqual(result.data.blocks[1])
-        // expect(result).toMatchSnapshot()
+        expect(result).toMatchSnapshot()
       })
       // it('Can return previous blocks', async () => {
       //   const result = await client.query({
