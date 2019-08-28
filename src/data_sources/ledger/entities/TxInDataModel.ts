@@ -1,6 +1,5 @@
 import { Column, Entity, PrimaryColumn, ManyToOne, JoinColumn, OneToOne } from 'typeorm'
 import { TxDataModel, TxOutDataModel } from '.'
-// import { TxOutDataModel } from './TxOutDataModel'
 
 @Entity('tx_in')
 export class TxInDataModel {
