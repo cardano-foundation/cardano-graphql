@@ -25,7 +25,7 @@ pipeline {
     }
     stage('Instantiate Test Services') {
       steps {
-        sh 'npm run dc:service-deps-up'
+        sh 'npm run start-dependencies -- -d'
       }
     }
     stage('Unit/Integration Test') {
@@ -53,7 +53,7 @@ pipeline {
   }
   post {
     always {
-      sh 'npm run dc:service-deps-down'
+      sh 'npm run stop-dependencies'
     }
   }
 }
