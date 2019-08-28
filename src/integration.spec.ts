@@ -6,7 +6,7 @@ import { Context } from './Context'
 import { BlockRepository, Ledger, TransactionRepository } from './data_sources'
 import { getConfig } from './config'
 import { resolvers } from './resolvers'
-import { block43177, block43178 } from './lib/block_assertions'
+import { block43177, block43178 } from './lib/data_assertions'
 import * as queries from './lib/queries'
 
 const { postgres } = getConfig()
