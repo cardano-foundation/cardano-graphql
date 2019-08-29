@@ -1,4 +1,3 @@
-import { MissingConfig } from './errors'
 import { Config as ServerConfig } from './Server'
 import { BlockDataModel, TxDataModel, TxInDataModel, TxOutDataModel } from './data_sources/ledger/entities'
 import { ConnectionManager } from 'typeorm'
@@ -13,7 +12,7 @@ export function getConfig (): ServerConfig {
   } = filterAndTypecastEnvs(process.env)
 
   return {
-    apiPort: apiPort || getPort(),
+    apiPort: apiPort || 3100,
     postgres: connectionManager.create({
       ...postgres,
       type: 'postgres',
@@ -46,10 +45,4 @@ function filterAndTypecastEnvs (env: any) {
     },
     tracing: Boolean(TRACING)
   }
-}
-
-function getPort () {
-  // Dev-only
-  if (process.env.NODE_ENV === 'production') throw new MissingConfig('API_PORT env not set')
-  return 0
 }
