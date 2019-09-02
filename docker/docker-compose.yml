@@ -8,3 +8,26 @@ services:
       - API_PORT=3000
     ports:
       - ${API_PORT:-3000}:3000
+  hasura:
+    image: hasura/graphql-engine:v1.0.0-beta.6
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "postgres"
+    restart: always
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: #postgres://nix:postgres@postgres:5432/cexplorer
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
+      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
+      ## uncomment next line to set an admin secret
+      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+  postgres:
+    image: postgres:11.5-alpine
+    restart: always
+    environment:
+      - POSTGRES_LOGGING=true
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=nix
+      - POSTGRES_DB=cexplorer
+    volumes:
+      - "../test/postgres/init:/docker-entrypoint-initdb.d"

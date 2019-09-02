@@ -1,6 +1,9 @@
 import { Transaction } from '../../graphql_types'
 
 export const tx21c528 = {
+  block: {
+    number: 43177
+  },
   fee: 171246,
   id: '21c52888aacf1061353d3795a09bb29d8382526e29e4983abe568a0b9562bd55',
   inputs: [{
@@ -19,20 +22,26 @@ export const tx21c528 = {
 } as Transaction
 
 export const txa54489 = {
+  block: {
+    number: 43177
+  },
   fee: 0,
   id: 'a544893db34f32a1817aa1e2d19a8b39655df0d37ca77d882eeb639167b876a8',
   inputs: [{
     address: 'Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf',
-    value: 466152
+    value: 466152000000
   }],
   outputs: [{
     address: 'DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk',
-    value: 466152
+    value: 466152000000
   }]
   // totalOutput: 466152
 } as Transaction
 
 export const txd9e280 = {
+  block: {
+    number: 43178
+  },
   fee: 171246,
   id: 'd9e280725a54b956ed283e42820672894edf8d1f48b5af36d76ee32f88a79497',
   inputs: [{

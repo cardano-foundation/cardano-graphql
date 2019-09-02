@@ -1,0 +1,15 @@
+{
+  "name": "Cardano GraphQL Schema",
+  "schemaPath": "./src/schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "Cardano GraphQL Endpoint": {
+        "url": "http://localhost:3100/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL"
+        },
+        "introspect": true
+      }
+    }
+  }
+}

@@ -1,37 +1,156 @@
+schema {
+  query: Query
+}
+
 scalar BigInt
 scalar DateTime
 
+
+# expression to compare data of type date. All fields are combined with logical 'AND'.
+input Date_comparison_exp {
+  _eq: DateTime
+  _gt: DateTime
+  _gte: DateTime
+  _in: [DateTime]
+  _lt: DateTime
+  _lte: DateTime
+  _neq: DateTime
+  _nin: [DateTime]
+}
+
+# expression to compare data of type Int. All fields are combined with logical 'AND'.
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+
+# All fields are combined with logical 'AND'.
+input ID_comparison_exp {
+  _eq: String
+  _in: [String]
+  _nin: [String]
+}
+
+input text_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+# ordering options
+enum order_by {
+  # in the ascending order, nulls last
+  asc
+  # in the ascending order, nulls first
+  desc
+}
+
+# ordering options
+enum order_by_with_nulls {
+  # in the ascending order, nulls last
+  asc
+  # in the ascending order, nulls first
+  asc_nulls_first
+  # in the ascending order, nulls last
+  asc_nulls_last
+  # in the descending order, nulls first
+  desc
+  # in the descending order, nulls first
+  desc_nulls_first
+  # in the descending order, nulls last
+  desc_nulls_last
+}
+
 type Block {
+  epoch: Epoch
   id: ID!
   merkelRootHash: String
   number: Int!
-  previousBlockNo: Int
-#  previousBlock: Block
+  previousBlock: Block
   size: Float!
-  slotNo: Int
-  transactions(limit: Int): [Transaction]!
+  slot: Slot!
+  transactions(
+    limit: Int!,
+    orderBy: [transactions_order_by!]
+    offset: Int
+#    where: block_Transactions_filter
+  ): [Transaction]!
 }
 
-input BlockFilter {
-  ids: [ID]
-  numbers: [Int]
-}
-
-#type Epoch {
-#  blocks: [Block]!
-#  number: Int!
-#  slots: [Slot!]!
-#  transactions: [Transaction]
+#input block_Transactions_filter {
+#  size: Int_comparison_exp
 #}
 
-type Ledger {
+input blocks_filter {
+  #  dateCreated: Date_comparison_exp
+  id: ID_comparison_exp
+  number: Int_comparison_exp
+}
+
+input blocks_order_by {
+  number: order_by
+  size: order_by
+}
+
+enum Currency {
+  ADA
+}
+
+type CurrencyValue {
+  currency: Currency!
+  value: BigInt!
+}
+
+type Epoch {
+  blocks: [Block]!
+  output: [CurrencyValue]!
+  number: Int!
+  slots: [Slot!]!
+  startedAt: DateTime!
+  endedAt: DateTime
+  transactions: [Transaction]
+  transactionsCount: Int
+}
+
+input epochs_filter {
+  number: Int_comparison_exp
+}
+
+input epochs_order_by {
+  blockCount: order_by
+  number: order_by
+  fees: order_by
+}
+
+type LedgerStats {
   blockHeight: Int!
 }
 
-#type Slot {
-#  block: Block
-#  epoch: Epoch!
-#}
+type Slot {
+  block: Block
+  epoch: Epoch!
+  number: Int!
+}
 
 type TransactionInput {
   sourceTxId: String!
@@ -48,20 +167,45 @@ type TransactionOutput {
 }
 
 type Transaction {
-  blockNo: Int
+  block: Block
   fee: Int!
   id: String!
   inputs: [TransactionInput]!
   outputs: [TransactionOutput!]!
 }
 
-input TransactionFilter {
-  ids: [ID]
+input transactions_order_by {
+  block: order_by
+  fee: order_by
+}
+
+input transactions_filter {
+  #  dateCreated: Date_comparison_exp
+  id: ID_comparison_exp
+  block: blocks_filter
 }
 
 type Query {
-  blocks(filter: BlockFilter!, first: Int): [Block]!
-  transactions(filter: TransactionFilter!, first: Int): [Transaction]!
-  ledger: Ledger
-#  utxo(address: String): [TransactionOutput]!
+  blocks(
+    limit: Int = 1,
+    order_by: [blocks_order_by!],
+    offset: Int,
+    where: blocks_filter
+  ): [Block]!
+  epochs(
+    limit: Int = 1,
+    order_by: [epochs_order_by!],
+    offset: Int,
+    where: epochs_filter
+  ): [Epoch]!
+  ledgerStats: LedgerStats
+  transactions(
+    limit: Int = 1,
+    order_by: [transactions_order_by!],
+    offset: Int,
+    where: transactions_filter
+  ): [Transaction]!
+  utxo(
+    address: String
+  ): [TransactionOutput]!
 }

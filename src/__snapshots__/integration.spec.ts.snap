@@ -7,126 +7,296 @@ Object {
   "data": Object {
     "blocks": Array [
       Object {
-        "id": "1dbc81e3196ba4ab9dcb07e1c37bb28ae1c289c0707061f28b567c2f48698d50",
-        "merkelRootHash": "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
+        "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
+        "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
+        "number": 43177,
+        "previousBlock": null,
+        "size": 2554,
+        "slot": null,
+      },
+      Object {
+        "id": "7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f",
+        "merkelRootHash": "dc2718b3638853620c2f7e9f6fadbb43be3231c7406f5101173d75ef084cdc3f",
+        "number": 43178,
+        "previousBlock": null,
+        "size": 4877,
+        "slot": null,
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Ledger blocks are linked to their predecessor, and the chain can be traversed 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f",
+        "previousBlock": null,
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Ledger blocks can be accessed by number, with the return order in he array guaranteed 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f",
+        "merkelRootHash": "dc2718b3638853620c2f7e9f6fadbb43be3231c7406f5101173d75ef084cdc3f",
+        "number": 43178,
+        "previousBlock": null,
+        "size": 4877,
+        "slot": null,
+      },
+      Object {
+        "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
+        "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
+        "number": 43177,
+        "previousBlock": null,
+        "size": 2554,
+        "slot": null,
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration Ledger epochs Returns epoch details by number 1`] = `
+Object {
+  "data": Object {
+    "epochs": Array [
+      Object {
+        "blocks": Array [
+          Object {
+            "epoch": Object {
+              "number": 2,
+            },
+            "fees": 0,
+            "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
+            "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
+            "number": 43177,
+            "previousBlock": Object {
+              "number": 43176,
+            },
+            "size": 2554,
+            "slot": Object {
+              "epoch": Object {
+                "number": 2,
+              },
+              "number": 1,
+            },
+            "transactions": Array [
+              Object {
+                "block": Object {
+                  "number": 43177,
+                },
+                "fee": 171246,
+                "id": "21c52888aacf1061353d3795a09bb29d8382526e29e4983abe568a0b9562bd55",
+                "inputs": Array [
+                  Object {
+                    "address": "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y",
+                    "value": 408327486262,
+                  },
+                ],
+                "outputs": Array [
+                  Object {
+                    "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
+                    "value": 158327486262,
+                  },
+                  Object {
+                    "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
+                    "value": 250000000000,
+                  },
+                ],
+              },
+              Object {
+                "block": Object {
+                  "number": 43177,
+                },
+                "fee": 0,
+                "id": "a544893db34f32a1817aa1e2d19a8b39655df0d37ca77d882eeb639167b876a8",
+                "inputs": Array [
+                  Object {
+                    "address": "Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf",
+                    "value": 466152000000,
+                  },
+                ],
+                "outputs": Array [
+                  Object {
+                    "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
+                    "value": 466152000000,
+                  },
+                ],
+              },
+            ],
+          },
+          Object {
+            "epoch": Object {
+              "number": 2,
+            },
+            "fees": 0,
+            "id": "7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f",
+            "merkelRootHash": "dc2718b3638853620c2f7e9f6fadbb43be3231c7406f5101173d75ef084cdc3f",
+            "number": 43178,
+            "previousBlock": Object {
+              "number": 43177,
+            },
+            "size": 4877,
+            "slot": Object {
+              "epoch": Object {
+                "number": 2,
+              },
+              "number": 2,
+            },
+            "transactions": Array [
+              Object {
+                "block": Object {
+                  "number": 43178,
+                },
+                "fee": 171246,
+                "id": "d9e280725a54b956ed283e42820672894edf8d1f48b5af36d76ee32f88a79497",
+                "inputs": Array [
+                  Object {
+                    "address": "DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H",
+                    "value": 50805565431559,
+                  },
+                ],
+                "outputs": Array [
+                  Object {
+                    "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
+                    "value": 50704353889014,
+                  },
+                  Object {
+                    "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
+                    "value": 101211542545,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        "endedAt": "2017-11-09T07:44:51.000Z",
         "number": 2,
-        "previousBlockNo": 3,
-        "size": 665,
-        "slotNo": 1,
-      },
-      Object {
-        "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
-        "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
-        "number": 43177,
-        "previousBlockNo": 43180,
-        "size": 2554,
-        "slotNo": 43201,
-      },
-    ],
-  },
-  "errors": undefined,
-  "extensions": undefined,
-  "http": Object {
-    "headers": Headers {
-      Symbol(map): Object {},
-    },
-  },
-}
-`;
-
-exports[`Integration Ledger blocks Returns blocks by number 1`] = `
-Object {
-  "data": Object {
-    "blocks": Array [
-      Object {
-        "id": "f0f7892b5c333cffc4b3c4344de48af4cc63f55e44936196f365a9ef2244134f",
-        "merkelRootHash": "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
-        "number": 1,
-        "previousBlockNo": 2,
-        "size": 665,
-        "slotNo": 0,
-      },
-      Object {
-        "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
-        "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
-        "number": 43177,
-        "previousBlockNo": 43180,
-        "size": 2554,
-        "slotNo": 43201,
-      },
-      Object {
-        "id": "d3fdc8c8ea4050cc87a21cb73110d54e3ec92f8ae76941e8a1957ed6e6a7e0b0",
-        "merkelRootHash": "0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8",
-        "number": 30,
-        "previousBlockNo": 31,
-        "size": 667,
-        "slotNo": 29,
-      },
-    ],
-  },
-  "errors": undefined,
-  "extensions": undefined,
-  "http": Object {
-    "headers": Headers {
-      Symbol(map): Object {},
-    },
-  },
-}
-`;
-
-exports[`Integration Ledger transactions Can return transactions in blocks as a nested array 1`] = `
-Object {
-  "data": Object {
-    "blocks": Array [
-      Object {
-        "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
-        "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
-        "number": 43177,
-        "previousBlockNo": 43180,
-        "size": 2554,
-        "slotNo": 43201,
+        "output": Array [
+          Object {
+            "currency": "ADA",
+            "value": 217978153471859,
+          },
+        ],
+        "slots": Array [
+          Object {
+            "block": Object {
+              "number": 43177,
+            },
+            "epoch": Object {
+              "number": 2,
+            },
+            "number": 1,
+          },
+          Object {
+            "block": Object {
+              "number": 43178,
+            },
+            "epoch": Object {
+              "number": 2,
+            },
+            "number": 2,
+          },
+        ],
+        "startedAt": "2017-11-04T07:44:51.000Z",
         "transactions": Array [
           Object {
+            "block": Object {
+              "number": 43177,
+            },
             "fee": 171246,
             "id": "21c52888aacf1061353d3795a09bb29d8382526e29e4983abe568a0b9562bd55",
             "inputs": Array [
               Object {
-                "address": "5d79941ab8035a3ff52e4d25259d8002ab0c3f7b2499eca086ad730a",
-                "sourceTxId": "494714ddea994bd321ce3a850ceb21416aad3f693dbd38ce47daf0269d93c26f",
-                "sourceTxIndex": 0,
-                "value": 408327657508,
+                "address": "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y",
+                "value": 408327486262,
               },
             ],
             "outputs": Array [
               Object {
-                "address": "ac946cb9753fd7568768c9db335bb2250a153c6ca90fc549af2abc6e",
+                "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
                 "value": 158327486262,
               },
               Object {
-                "address": "885b5e0fa4c941e76228e5ddc2a97e07bd67337d6239109a320a5c17",
+                "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
                 "value": 250000000000,
               },
             ],
           },
           Object {
+            "block": Object {
+              "number": 43177,
+            },
             "fee": 0,
             "id": "a544893db34f32a1817aa1e2d19a8b39655df0d37ca77d882eeb639167b876a8",
             "inputs": Array [
               Object {
-                "address": "03d2c8b86a00c1893754aba507161bcc2f3813dc228ba9430a073873",
-                "sourceTxId": "2fd4e14f5c1dfa7026d872dd63e0ffe50cee0eb35b2493b4e0a9a8a52b62ab1b",
-                "sourceTxIndex": 0,
+                "address": "Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf",
                 "value": 466152000000,
               },
             ],
             "outputs": Array [
               Object {
-                "address": "dafc417d0467b23b3701bc66bd80bd67bbe1a4fe260c779271756994",
+                "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
                 "value": 466152000000,
               },
             ],
           },
+          Object {
+            "block": Object {
+              "number": 43178,
+            },
+            "fee": 171246,
+            "id": "d9e280725a54b956ed283e42820672894edf8d1f48b5af36d76ee32f88a79497",
+            "inputs": Array [
+              Object {
+                "address": "DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H",
+                "value": 50805565431559,
+              },
+            ],
+            "outputs": Array [
+              Object {
+                "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
+                "value": 50704353889014,
+              },
+              Object {
+                "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
+                "value": 101211542545,
+              },
+            ],
+          },
         ],
+        "transactionsCount": 4292,
       },
     ],
   },
@@ -146,23 +316,21 @@ Object {
     "transactions": Array [
       null,
       Object {
-        "blockNo": 43181,
-        "fee": 171246,
-        "id": "21c52888aacf1061353d3795a09bb29d8382526e29e4983abe568a0b9562bd55",
+        "block": Object {
+          "number": 43177,
+        },
+        "fee": 0,
+        "id": "a544893db34f32a1817aa1e2d19a8b39655df0d37ca77d882eeb639167b876a8",
         "inputs": Array [
           Object {
-            "address": "5d79941ab8035a3ff52e4d25259d8002ab0c3f7b2499eca086ad730a",
-            "value": 408327657508,
+            "address": "03d2c8b86a00c1893754aba507161bcc2f3813dc228ba9430a073873",
+            "value": 466152000000,
           },
         ],
         "outputs": Array [
           Object {
-            "address": "ac946cb9753fd7568768c9db335bb2250a153c6ca90fc549af2abc6e",
-            "value": 158327486262,
-          },
-          Object {
-            "address": "885b5e0fa4c941e76228e5ddc2a97e07bd67337d6239109a320a5c17",
-            "value": 250000000000,
+            "address": "dafc417d0467b23b3701bc66bd80bd67bbe1a4fe260c779271756994",
+            "value": 466152000000,
           },
         ],
       },
@@ -184,7 +352,9 @@ Object {
   "data": Object {
     "transactions": Array [
       Object {
-        "blockNo": 43181,
+        "block": Object {
+          "number": 43177,
+        },
         "fee": 171246,
         "id": "21c52888aacf1061353d3795a09bb29d8382526e29e4983abe568a0b9562bd55",
         "inputs": Array [
@@ -205,7 +375,9 @@ Object {
         ],
       },
       Object {
-        "blockNo": 43182,
+        "block": Object {
+          "number": 43178,
+        },
         "fee": 171246,
         "id": "d9e280725a54b956ed283e42820672894edf8d1f48b5af36d76ee32f88a79497",
         "inputs": Array [
@@ -236,3 +408,28 @@ Object {
   },
 }
 `;
+
+exports[`Integration blocks can be accessed by number, with the return order in he array guaranteed 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      null,
+      null,
+    ],
+  },
+  "errors": Array [
+    [GraphQLError: Cannot return null for non-nullable field Block.slot.],
+    [GraphQLError: Cannot return null for non-nullable field Block.slot.],
+  ],
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration blocks throws an error if query requests more than 100 blocks 1`] = `[GraphQLError: 110 exceeds the maximum allowed value of 100. Use the offset to paginate through a larger result set]`;
+
+exports[`Integration ledgerStats Return the block height 1`] = `99`;
