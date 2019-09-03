@@ -11,7 +11,7 @@ export function getConfig (): ServerConfig {
   return {
     apiPort: apiPort || 3100,
     hasuraUri: hasuraUri || 'http://localhost:8080/v1/graphql',
-    queryDepthLimit: queryDepthLimit || 2,
+    queryDepthLimit: queryDepthLimit || 10,
     tracing
   }
 }
