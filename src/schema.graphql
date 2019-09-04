@@ -2,6 +2,154 @@ schema {
   query: Query
 }
 
+type Query {
+  blocks(
+    limit: Int = 1,
+    order_by: [blocks_order_by!],
+    offset: Int,
+    where: blocks_filter
+  ): [Block]!
+  epochs(
+    limit: Int = 1,
+    order_by: [epochs_order_by!],
+    offset: Int,
+    where: epochs_filter
+  ): [Epoch]!
+  ledgerStats: LedgerStats
+  transactions(
+    limit: Int = 1,
+    order_by: [transactions_order_by!],
+    offset: Int,
+    where: transactions_filter
+  ): [Transaction]!
+  utxoSet(
+    limit: Int = 1,
+    order_by: [utxoSet_order_by!],
+    offset: Int,
+    where: utxoSet_filter
+  ): [TransactionOutput]!
+}
+
+type Transaction {
+  block: Block
+  # Date the transaction was included in the blockchain, referencing the slot start date
+  fee: Int!
+  id: String!
+  includedAt: DateTime!
+  inputs: [TransactionInput]!
+  outputs: [TransactionOutput!]!
+}
+
+input transactions_order_by {
+  block: order_by
+  fee: order_by
+}
+
+input transactions_filter {
+  #  dateCreated: Date_comparison_exp
+  id: ID_comparison_exp
+  block: blocks_filter
+}
+
+type TransactionInput {
+  sourceTxId: String!
+  sourceTxIndex: Int!
+  address: String!
+  value: BigInt!
+}
+
+type TransactionOutput {
+  address: String!
+  index: Int!
+  txId: String!
+  value: BigInt!
+}
+
+type Block {
+  createdAt: DateTime!
+  epoch: Epoch
+  fees: Int!
+  id: ID!
+  merkelRootHash: String
+  number: Int!
+  previousBlock: Block
+  size: Float!
+  slot: Slot!
+  transactions(
+    limit: Int = 1,
+    orderBy: [transactions_order_by!]
+    offset: Int
+    #    where: block_Transactions_filter
+  ): [Transaction]!
+}
+
+input blocks_filter {
+  dateCreated: Date_comparison_exp
+  id: ID_comparison_exp
+  number: Int_comparison_exp
+}
+
+#input block_Transactions_filter {
+#  size: Int_comparison_exp
+#}
+
+input blocks_order_by {
+  number: order_by
+  size: order_by
+}
+
+type Slot {
+  block: Block
+  epoch: Epoch!
+  number: Int!
+  # Calculated based on the genesis start date, using slot number and duration
+  startedAt: DateTime
+}
+
+type Epoch {
+  blocks: [Block]!
+  output: [CurrencyValue]!
+  number: Int!
+  slots: [Slot!]!
+  startedAt: DateTime!
+  endedAt: DateTime
+  transactions: [Transaction]
+  transactionsCount: Int
+}
+
+input epochs_filter {
+  afterDate: DateTime
+  beforeDate: DateTime
+  number: Int_comparison_exp
+}
+
+input epochs_order_by {
+  blockCount: order_by
+  number: order_by
+  fees: order_by
+}
+
+input utxoSet_filter {
+  address: text_comparison_exp
+}
+
+input utxoSet_order_by {
+  address: order_by
+}
+
+enum Currency {
+  ADA
+}
+
+type CurrencyValue {
+  currency: Currency!
+  value: BigInt!
+}
+
+type LedgerStats {
+  blockHeight: Int!
+}
+
 scalar BigInt
 scalar DateTime
 
@@ -79,152 +227,4 @@ enum order_by_with_nulls {
   desc_nulls_first
   # in the descending order, nulls last
   desc_nulls_last
-}
-
-type Block {
-  createdAt: DateTime!
-  epoch: Epoch
-  fees: Int!
-  id: ID!
-  merkelRootHash: String
-  number: Int!
-  previousBlock: Block
-  size: Float!
-  slot: Slot!
-  transactions(
-    limit: Int = 1,
-    orderBy: [transactions_order_by!]
-    offset: Int
-#    where: block_Transactions_filter
-  ): [Transaction]!
-}
-
-#input block_Transactions_filter {
-#  size: Int_comparison_exp
-#}
-
-input blocks_filter {
-  dateCreated: Date_comparison_exp
-  id: ID_comparison_exp
-  number: Int_comparison_exp
-}
-
-input blocks_order_by {
-  number: order_by
-  size: order_by
-}
-
-enum Currency {
-  ADA
-}
-
-type CurrencyValue {
-  currency: Currency!
-  value: BigInt!
-}
-
-type Epoch {
-  blocks: [Block]!
-  output: [CurrencyValue]!
-  number: Int!
-  slots: [Slot!]!
-  startedAt: DateTime!
-  endedAt: DateTime
-  transactions: [Transaction]
-  transactionsCount: Int
-}
-
-input epochs_filter {
-  number: Int_comparison_exp
-  beforeDate: DateTime,
-  afterDate: DateTime
-}
-
-input epochs_order_by {
-  blockCount: order_by
-  number: order_by
-  fees: order_by
-}
-
-type LedgerStats {
-  blockHeight: Int!
-}
-
-type Slot {
-  block: Block
-  epoch: Epoch!
-  number: Int!
-  # Calculated based on the genesis start date, using slot number and duration
-  startedAt: DateTime
-}
-
-type TransactionInput {
-  sourceTxId: String!
-  sourceTxIndex: Int!
-  address: String!
-  value: BigInt!
-}
-
-type TransactionOutput {
-  address: String!
-  index: Int!
-  txId: String!
-  value: BigInt!
-}
-
-type Transaction {
-  block: Block
-  # Date the transaction was included in the blockchain, referencing the slot start date
-  fee: Int!
-  id: String!
-  includedAt: DateTime!
-  inputs: [TransactionInput]!
-  outputs: [TransactionOutput!]!
-}
-
-input transactions_order_by {
-  block: order_by
-  fee: order_by
-}
-
-input transactions_filter {
-  #  dateCreated: Date_comparison_exp
-  id: ID_comparison_exp
-  block: blocks_filter
-}
-
-input utxoSet_filter {
-  address: text_comparison_exp
-}
-
-input utxoSet_order_by {
-  address: order_by
-}
-
-type Query {
-  blocks(
-    limit: Int = 1,
-    order_by: [blocks_order_by!],
-    offset: Int,
-    where: blocks_filter
-  ): [Block]!
-  epochs(
-    limit: Int = 1,
-    order_by: [epochs_order_by!],
-    offset: Int,
-    where: epochs_filter
-  ): [Epoch]!
-  ledgerStats: LedgerStats
-  transactions(
-    limit: Int = 1,
-    order_by: [transactions_order_by!],
-    offset: Int,
-    where: transactions_filter
-  ): [Transaction]!
-  utxoSet(
-    limit: Int = 1,
-    order_by: [utxoSet_order_by!],
-    offset: Int,
-    where: utxoSet_filter
-  ): [TransactionOutput]!
 }
