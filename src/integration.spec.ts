@@ -32,10 +32,10 @@ describe('Integration', () => {
 
   describe('blocks', () => {
     // it('returns a single result by default', async () => {
-      // const result = await client.query({
-      //   query: queries.blocksWithNoTx
-      // })
-      // expect(result.data.blocks.length).toBe(1)
+    // const result = await client.query({
+    //   query: queries.blocksWithNoTx
+    // })
+    // expect(result.data.blocks.length).toBe(1)
     // })
 
     it('throws an error if query requests more than 100 blocks', async () => {
@@ -189,14 +189,14 @@ describe('Integration', () => {
     })
 
     describe('utxoSet', () => {
-      it ('Returns the whole set by default', async () => {
-        const result = await client.query ({
-          query: queries.utxoSet,
+      it('Returns the whole set by default', async () => {
+        const result = await client.query({
+          query: queries.utxoSet
         })
-        expect (result).toMatchSnapshot ()
+        expect(result).toMatchSnapshot()
       })
-      it ('Can be filtered by address', async () => {
-        const result = await client.query ({
+      it('Can be filtered by address', async () => {
+        const result = await client.query({
           query: queries.utxoSet,
           variables: {
             where: {
@@ -204,7 +204,7 @@ describe('Integration', () => {
             }
           }
         })
-        expect (result).toMatchSnapshot ()
+        expect(result).toMatchSnapshot()
       })
     })
   })
