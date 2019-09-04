@@ -2,6 +2,8 @@ pipeline {
   agent any
 
   tools {nodejs "Node 10"}
+
+   // Lock concurrent builds due to the docker dependency
   options {
     lock resource: 'DockerJob'
     disableConcurrentBuilds()
