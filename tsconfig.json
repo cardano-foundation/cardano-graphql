@@ -2,7 +2,6 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2016",
-    "lib": ["dom"],
     "noEmitOnError": true,
     "noImplicitAny": true,
     "noUnusedParameters": true,
