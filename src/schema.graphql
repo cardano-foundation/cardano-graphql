@@ -82,7 +82,9 @@ enum order_by_with_nulls {
 }
 
 type Block {
+  createdAt: DateTime!
   epoch: Epoch
+  fees: Int!
   id: ID!
   merkelRootHash: String
   number: Int!
@@ -90,7 +92,7 @@ type Block {
   size: Float!
   slot: Slot!
   transactions(
-    limit: Int!,
+    limit: Int = 1,
     orderBy: [transactions_order_by!]
     offset: Int
 #    where: block_Transactions_filter
@@ -102,7 +104,7 @@ type Block {
 #}
 
 input blocks_filter {
-  #  dateCreated: Date_comparison_exp
+  dateCreated: Date_comparison_exp
   id: ID_comparison_exp
   number: Int_comparison_exp
 }
@@ -134,6 +136,8 @@ type Epoch {
 
 input epochs_filter {
   number: Int_comparison_exp
+  beforeDate: DateTime,
+  afterDate: DateTime
 }
 
 input epochs_order_by {
@@ -150,6 +154,8 @@ type Slot {
   block: Block
   epoch: Epoch!
   number: Int!
+  # Calculated based on the genesis start date, using slot number and duration
+  startedAt: DateTime
 }
 
 type TransactionInput {
@@ -160,16 +166,18 @@ type TransactionInput {
 }
 
 type TransactionOutput {
-  txId: String!
-  index: Int!
-  value: BigInt!
   address: String!
+  index: Int!
+  txId: String!
+  value: BigInt!
 }
 
 type Transaction {
   block: Block
+  # Date the transaction was included in the blockchain, referencing the slot start date
   fee: Int!
   id: String!
+  includedAt: DateTime!
   inputs: [TransactionInput]!
   outputs: [TransactionOutput!]!
 }
@@ -183,6 +191,14 @@ input transactions_filter {
   #  dateCreated: Date_comparison_exp
   id: ID_comparison_exp
   block: blocks_filter
+}
+
+input utxoSet_filter {
+  address: text_comparison_exp
+}
+
+input utxoSet_order_by {
+  address: order_by
 }
 
 type Query {
@@ -205,7 +221,10 @@ type Query {
     offset: Int,
     where: transactions_filter
   ): [Transaction]!
-  utxo(
-    address: String
+  utxoSet(
+    limit: Int = 1,
+    order_by: [utxoSet_order_by!],
+    offset: Int,
+    where: utxoSet_filter
   ): [TransactionOutput]!
 }

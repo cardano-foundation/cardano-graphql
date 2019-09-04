@@ -1,8 +1,8 @@
 import { Block } from '../../graphql_types'
 import { tx21c528, txa54489, txd9e280 } from './transaction_assertions'
-import { DeepPartial } from '../DeepPartial'
 
 export const block43177 = {
+  createdAt: new Date(Date.UTC(2017, 10, 4, 7, 45, 11)),
   epoch: {
     number: 2
   },
@@ -21,9 +21,10 @@ export const block43177 = {
     number: 1
   },
   transactions: [tx21c528, txa54489]
-} as DeepPartial<Block>
+} as Block
 
 export const block43178 = {
+  createdAt: new Date(Date.UTC(2017, 10, 4, 7, 45, 31)),
   epoch: {
     number: 2
   },
@@ -42,4 +43,4 @@ export const block43178 = {
     number: 2
   },
   transactions: [txd9e280]
-} as DeepPartial<Block>
+} as Block

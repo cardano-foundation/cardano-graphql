@@ -1,65 +1,73 @@
-import { delegateToSchema } from 'graphql-tools'
+// import { delegateToSchema } from 'graphql-tools'
 import { GraphQLDateTime } from 'graphql-iso-date'
 import { Resolvers } from './graphql_types'
 import { GraphQLError } from 'graphql'
+import {
+  block43177, block43178,
+  epoch2,
+  txa54489, txd9e280, tx21c528
+} from './lib/data_assertions'
 
 const GraphQLBigInt = require('graphql-bigint')
 
 const resolverMap: Resolvers = {
   Query: {
-    blocks: (_root, args, context, info) => {
+    blocks: (_root, args, _context, _info) => {
       checkLimit(args.limit, 100)
-      return delegateToSchema({
-        args,
-        context,
-        fieldName: 'blocks',
-        info,
-        operation: 'query',
-        schema: context.hasura
-      })
+      return [block43177, block43178]
+      // return delegateToSchema({
+      //   args,
+      //   context,
+      //   fieldName: 'blocks',
+      //   info,
+      //   operation: 'query',
+      //   schema: context.hasura
+      // })
     },
-    epochs: (_root, args, context, info) => {
+    epochs: (_root, args, _context, _info) => {
       checkLimit(args.limit, 100)
-      return delegateToSchema({
-        args,
-        context,
-        fieldName: 'transactions',
-        info,
-        operation: 'query',
-        schema: context.hasura
-      })
+      return [epoch2]
+      // return delegateToSchema({
+      //   args,
+      //   context,
+      //   fieldName: 'transactions',
+      //   info,
+      //   operation: 'query',
+      //   schema: context.hasura
+      // })
     },
     ledgerStats: (_root, _args, _context, _info) => {
-      // Todo: Implement view, maybe LedgerStats
-      // const res = delegateToSchema({
+      return { blockHeight: 99 }
+      // return delegateToSchema({
       //   context,
       //   fieldName: 'ledgerStats',
       //   info,
       //   operation: 'query',
       //   schema: context.hasura,
       // })
-      return { blockHeight: 99 }
     },
-    transactions: (_root, args, context, info) => {
+    transactions: (_root, args, _context, _info) => {
       checkLimit(args.limit, 250)
-      return delegateToSchema({
-        args,
-        context,
-        fieldName: 'transactions',
-        info,
-        operation: 'query',
-        schema: context.hasura
-      })
+      return [tx21c528, txa54489, txd9e280]
+      // return delegateToSchema({
+      //   args,
+      //   context,
+      //   fieldName: 'transactions',
+      //   info,
+      //   operation: 'query',
+      //   schema: context.hasura
+      // })
     },
-    utxo: (_root, args, context, info) => {
-      return delegateToSchema({
-        args: { where: { address: { _eq: args.address } } },
-        context,
-        fieldName: 'utxo',
-        info,
-        operation: 'query',
-        schema: context.hasura
-      })
+    utxoSet: (_root, _args, _context, _info) => {
+      return txd9e280.outputs
+      // return delegateToSchema({
+      //   args: { where: { address: { _eq: args.address } } },
+      //   context,
+      //   fieldName: 'utxo',
+      //   info,
+      //   operation: 'query',
+      //   schema: context.hasura
+      // })
     }
   }
 }

@@ -16,9 +16,9 @@ export const tx21c528 = {
   }, {
     address: 'DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb',
     value: 250000000000
+    // receivedAt: // Displayed in current explorer as 10/03/2017 21:45:11
+    // totalOutput: 408327486262
   }]
-  // totalOutput: 408327486262
-  // receivedTime: // Displayed in current explorer as 10/03/2017 21:45:11
 } as Transaction
 
 export const txa54489 = {
@@ -34,7 +34,8 @@ export const txa54489 = {
   outputs: [{
     address: 'DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk',
     value: 466152000000
-  }]
+  }],
+  // receivedAt:
   // totalOutput: 466152
 } as Transaction
 
@@ -55,6 +56,7 @@ export const txd9e280 = {
     address: 'DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY',
     value: 101211542545
   }
-  ]
+  ],
+  // receivedAt
   // totalOutput: 50805565431559
 } as Transaction
