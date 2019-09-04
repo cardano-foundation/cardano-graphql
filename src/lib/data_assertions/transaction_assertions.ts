@@ -2,6 +2,7 @@ import { Transaction } from '../../graphql_types'
 
 export const tx21c528 = {
   block: {
+    createdAt: new Date(Date.UTC(2017, 10, 4, 7, 45, 11)),
     number: 43177
   },
   fee: 171246,
@@ -23,6 +24,7 @@ export const tx21c528 = {
 
 export const txa54489 = {
   block: {
+    createdAt: new Date(Date.UTC(2017, 10, 4, 7, 45, 11)),
     number: 43177
   },
   fee: 0,
@@ -41,6 +43,7 @@ export const txa54489 = {
 
 export const txd9e280 = {
   block: {
+    createdAt: new Date(Date.UTC(2017, 10, 4, 7, 45, 11)),
     number: 43178
   },
   fee: 171246,
