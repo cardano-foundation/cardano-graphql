@@ -1,12 +1,12 @@
 version: '3.7'
 services:
   postgres:
-    image: postgres:11.5-alpine
+    build: ../test/postgres
     restart: always
     environment:
       - POSTGRES_LOGGING=true
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=nix
-      - POSTGRES_DB=cexplorer
     volumes:
-      - "../test/postgres/init:/docker-entrypoint-initdb.d"
+      - db_data:/var/lib/postgresql/data
+volumes:
+  db_data:
