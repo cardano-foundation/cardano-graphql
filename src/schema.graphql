@@ -15,7 +15,7 @@ type Query {
     offset: Int,
     where: epochs_filter
   ): [Epoch]!
-  ledgerStats: LedgerStats
+  ledger: Ledger
   transactions(
     limit: Int = 1,
     order_by: [transactions_order_by!],
@@ -137,6 +137,12 @@ input utxoSet_order_by {
   address: order_by
 }
 
+type StakePool {
+  delegatedStake: CurrencyValue
+  id: String!
+#  ownStake: CurrencyValue # Missing from Jormungandr
+}
+
 enum Currency {
   ADA
 }
@@ -146,7 +152,7 @@ type CurrencyValue {
   value: BigInt!
 }
 
-type LedgerStats {
+type Ledger {
   blockHeight: Int!
 }
 

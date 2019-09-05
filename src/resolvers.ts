@@ -36,7 +36,7 @@ const resolverMap: Resolvers = {
       //   schema: context.hasura
       // })
     },
-    ledgerStats: (_root, _args, _context, _info) => {
+    ledger: (_root, _args, _context, _info) => {
       return { blockHeight: 99 }
       // return delegateToSchema({
       //   context,

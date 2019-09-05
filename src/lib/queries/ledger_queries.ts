@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-export const ledgerStats = gql`query {
-    ledgerStats {
+export const ledger = gql`query {
+    ledger {
         blockHeight
     }
 }`

@@ -138,13 +138,13 @@ describe('Integration', () => {
     })
   })
 
-  describe('ledgerStats', () => {
-    it('Return the block height', async () => {
+  describe('ledger', () => {
+    it('Returns the block height', async () => {
       const result = await client.query({
-        query: queries.ledgerStats
+        query: queries.ledger
       })
-      expect(result.data.ledgerStats.blockHeight).toBe(99)
-      expect(result.data.ledgerStats.blockHeight).toMatchSnapshot()
+      expect(result.data.ledger.blockHeight).toBe(99)
+      expect(result.data.ledger.blockHeight).toMatchSnapshot()
     })
   })
 
