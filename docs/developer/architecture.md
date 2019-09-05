@@ -6,7 +6,7 @@ The GraphQL server in this codebase defines the public API, validates requests f
 The API currently implements two protective measures to reduce the attack surface. More sophisticated query cost associations can be added as an optimisation at a later date if required.
 
 
-1. Query result sets have a `limit` and require pagination using `offset` arguments. It excluded the limit is set to `1`
+1. Query result sets have a `limit` and require pagination using `offset` arguments. If excluded the limit is set to `1`
 
 2. A configurable node depth limit. `process.env.QUERY_DEPTH_LIMIT=3`
 

@@ -1,21 +1,40 @@
 # Interacting with the API 
-The API is usually served over TCP, leveraging the existing infrastructure of HTTP. GraphQL adds a powerful query layer to what you may be used to, exposing a more logical data model and providing opportunity for tailored results optimized on the client-side. Detailed below are some approaches for connecting and interacting with the API, however there may be other ways more suited for your use-case.
+The API is served over TCP, leveraging the existing infrastructure of HTTP. GraphQL adds a powerful query layer to give you complete control over the request, including the shape of the data in the response. Detailed below are some approaches for connecting and interacting with the API, however there may be other ways more suited for your use-case.
 
 ### Command Line
 ```
 curl -X POST \
 -H "Content-Type: application/json" \
--d '{"query": "{ hello }"}' \
+-d '{"query": "{ ledgerStats { blockHeight }}"}' \
 http://localhost:4000/graphql
 ```
 
 ### Request within app
-```
-var dice = 3;
-var sides = 6;
-var query = `query RollDice($dice: Int!, $sides: Int) {
-  rollDice(numDice: $dice, numSides: $sides)
-}`;
+``` javascript
+const query = `
+  query getTransactions($limit: Int!, $offset: Int!) {
+     transactions(
+      limit: $limit,
+      offset: $offset,
+      where: {
+        block: {
+          number: {
+            _gte: 50
+            _lt: 100
+          }
+        }
+      }
+    ) {
+      fee
+      block {
+        number
+      }
+      id
+    }
+  }`
+
+const limit = 100
+const offset = 2
 
 fetch('/graphql', {
   method: 'POST',
@@ -25,12 +44,12 @@ fetch('/graphql', {
   },
   body: JSON.stringify({
     query,
-    variables: { dice, sides },
+    variables: { limit, offset },
   })
 })
   .then(r => r.json())
-  .then(data => console.log('data returned:', data));
+  .then(data => console.log(`Page ${offset} containing ${limit} transactions:', data))
 ```
 
 #### Stateful client 
-Todo: Apollo client example, with and without use of React components
+A full example application will demonstrate this.
