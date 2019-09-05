@@ -5,13 +5,11 @@ services:
       context: ..
       target: server
     environment:
-      - HASURA_URI=http://hasura:8090/v1/graphql
+      - HASURA_URI=http://hasura:8080/v1/graphql
     ports:
       - ${API_PORT:-3100}:3100
   hasura:
     image: hasura/graphql-engine:v1.0.0-beta.6
-    ports:
-      - "8090:8080"
     depends_on:
       - "postgres"
     restart: always
@@ -19,7 +17,7 @@ services:
       HASURA_GRAPHQL_DATABASE_URL: postgres://nix:postgres@postgres:5432/cexplorer
       HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      ## uncomment next line to set an admin secret
+      ## Todo: Setup access key
       # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
   postgres:
     image: postgres:11.5-alpine
