@@ -12,14 +12,14 @@ services:
       HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
       HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
   postgres:
-    build: ../test/postgres
+    image: postgres:11.5-alpine
     restart: always
     environment:
       - POSTGRES_LOGGING=true
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=nix
+      - POSTGRES_DB=cexplorer
     ports:
       - ${POSTGRES_PORT:-5432}:5432
     volumes:
-      - db_data:/var/lib/postgresql/data
-volumes:
-  db_data:
+      - "../test/postgres/init:/docker-entrypoint-initdb.d"
