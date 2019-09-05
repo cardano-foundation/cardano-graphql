@@ -1,24 +1,17 @@
-import { MissingConfig } from './errors'
 import { Config as ServerConfig } from './Server'
-import { BlockDataModel, TxDataModel, TxInDataModel, TxOutDataModel } from './data_sources/ledger/entities'
-import { ConnectionManager } from 'typeorm'
 
 export function getConfig (): ServerConfig {
-  const connectionManager = new ConnectionManager()
-
   const {
     apiPort,
-    tracing,
-    postgres
+    hasuraUri,
+    queryDepthLimit,
+    tracing
   } = filterAndTypecastEnvs(process.env)
 
   return {
-    apiPort: apiPort || getPort(),
-    postgres: connectionManager.create({
-      ...postgres,
-      type: 'postgres',
-      entities: [BlockDataModel, TxDataModel, TxInDataModel, TxOutDataModel]
-    }),
+    apiPort: apiPort || 3100,
+    hasuraUri: hasuraUri || 'http://localhost:8090/v1/graphql',
+    queryDepthLimit: queryDepthLimit || 10,
     tracing
   }
 }
@@ -26,30 +19,14 @@ export function getConfig (): ServerConfig {
 function filterAndTypecastEnvs (env: any) {
   const {
     API_PORT,
-    TRACING,
-    POSTGRES_DB,
-    POSTGRES_HOST,
-    POSTGRES_LOGGING,
-    POSTGRES_PASSWORD,
-    POSTGRES_PORT,
-    POSTGRES_USER
+    HASURA_URI,
+    QUERY_DEPTH_LIMIT,
+    TRACING
   } = env
   return {
     apiPort: Number(API_PORT),
-    postgres: {
-      database: POSTGRES_DB ? String(POSTGRES_DB) : 'cexplorer',
-      host: POSTGRES_HOST ? String(POSTGRES_HOST) : 'localhost',
-      password: POSTGRES_PASSWORD ? String(POSTGRES_PASSWORD) : 'postgres',
-      port: POSTGRES_PORT ? Number(POSTGRES_PORT) : 5432,
-      username: POSTGRES_USER ? String(POSTGRES_USER) : 'nix',
-      logging: POSTGRES_LOGGING ? Boolean(POSTGRES_LOGGING) : false
-    },
+    hasuraUri: HASURA_URI,
+    queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
     tracing: Boolean(TRACING)
   }
-}
-
-function getPort () {
-  // Dev-only
-  if (process.env.NODE_ENV === 'production') throw new MissingConfig('API_PORT env not set')
-  return 0
 }

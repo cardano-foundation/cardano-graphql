@@ -5,7 +5,6 @@
   "scripts": {
     "codegen:external": "graphql-codegen --config ./codegen.external.yml",
     "codegen:internal": "graphql-codegen",
-    "coverage": "http-server coverage",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "npm run lint -- --fix",
     "dev": "npm run codegen:internal -- --watch",
@@ -14,8 +13,8 @@
     "build": "rm -rf dist && npm run codegen:internal && npm run codegen:external && tsc && npx cpx src/**/*.graphql dist",
     "test": "NODE_ENV=test jest",
     "start": "node dist/index.js",
-    "dc:service-deps-up": "docker-compose -f docker/docker-compose.service-deps.yml up -d",
-    "dc:service-deps-down": "docker-compose -f docker/docker-compose.service-deps.yml down"
+    "start-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml up",
+    "stop-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml down"
   },
   "contributors": [
     "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
@@ -23,19 +22,15 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "apollo-datasource": "^0.6.1",
+    "apollo-link-http": "^1.5.15",
     "apollo-server": "^2.8.0",
-    "dataloader": "^1.4.0",
+    "cross-fetch": "^3.0.4",
     "eslint-plugin-jest": "^22.15.2",
-    "express": "^4.16.4",
     "graphql": "^14.4.2",
     "graphql-bigint": "^1.0.0",
+    "graphql-depth-limit": "^1.1.0",
     "graphql-iso-date": "^3.6.1",
-    "pg": "^7.12.1",
-    "promise-exponential-retry": "^1.0.3",
-    "reflect-metadata": "^0.1.13",
-    "ts-custom-error": "^3.1.1",
-    "typeorm": "^0.2.18"
+    "promise-exponential-retry": "^1.0.3"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.5.0",
@@ -43,6 +38,7 @@
     "@graphql-codegen/typescript-graphql-files-modules": "^1.5.0",
     "@graphql-codegen/typescript-resolvers": "^1.5.0",
     "@types/graphql": "^14.2.3",
+    "@types/graphql-depth-limit": "^1.1.2",
     "@types/graphql-iso-date": "^3.3.1",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.6.8",
@@ -65,6 +61,6 @@
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "ts-node-dev": "^1.0.0-pre.40",
-    "typescript": "^3.5.3"
+    "typescript": "3.5.3"
   }
 }

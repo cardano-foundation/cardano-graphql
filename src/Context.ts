@@ -1,7 +1,5 @@
-import { Ledger } from './data_sources/ledger'
+import { GraphQLSchema } from 'graphql'
 
 export type Context = {
-  dataSources: {
-    ledger: Ledger
-  }
+  hasuraSchema: GraphQLSchema
 }

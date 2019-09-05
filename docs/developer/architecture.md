@@ -1,11 +1,27 @@
 # Architecture
 
-## Data access 
-The _data loader_ pattern enables optimized retrieval from storage from a granualar field-level query. It works by passing load requests to a batching function at the end of the request, where a minimal set of operations to fulfil the request can be executed. This solves the N+1 problem
+The GraphQL server in this codebase defines the public API, validates requests fit within the acceptable model, and then delegates resolution to [Hasura](https://hasura.io/). This service abstracts the complexity of GraphQL query resolution using a SQL database, including result mapping and real-time handling.
 
-Our implementation is covered by DataLoader's extensive [test coverage](https://github.com/graphql/dataloader/tree/master/src/__tests__).
-## Application-wide caching
-Caching of the full response from the data store can be implemented within a _data loader_ batch function, applied on a case-by-case basis depending on the known state of data, ttl, or other external trigger. There are currently no cached requests implemented.
+## Protective measures
+The API currently implements two protective measures to reduce the attack surface. More sophisticated query cost associations can be added as an optimisation at a later date if required.
 
-## Data Source
-A query model that encapsulates loading logic for use within GraphQL resolvers. Each request is assigned a new set of _data source_ instances, containing references to any application-wide caches.
+
+1. Query result sets have a `limit` and require pagination using `offset` arguments. If excluded the limit is set to `1`
+
+2. A configurable node depth limit. `process.env.QUERY_DEPTH_LIMIT=3`
+
+``` graphql
+{
+  blocks { # No limit provided, so defaults to 1
+    previousBlock {
+      previousBlock {
+        previousBlock { ## Now invalid
+           previousBlock {
+             id
+           }
+        }
+      }
+    }
+  }
+}
+```
