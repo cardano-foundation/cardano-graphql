@@ -394,7 +394,7 @@ Object {
 }
 `;
 
-exports[`Integration ledgerStats Return the block height 1`] = `99`;
+exports[`Integration ledger Returns the block height 1`] = `99`;
 
 exports[`Integration transactions Returns null if for specific transaction lookup 1`] = `
 Object {
