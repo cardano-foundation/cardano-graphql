@@ -151,7 +151,7 @@ describe('Integration', () => {
   describe('stakePools', () => {
     it('Returns Stake Pools', async () => {
       const result = await client.query({
-        query: queries.stakePools,
+        query: queries.stakePools
       })
       expect(result).toMatchSnapshot()
     })
