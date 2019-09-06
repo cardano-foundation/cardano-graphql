@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const epochDetails = gql`query blocksWithNoTx(
+export const epochDetails = gql`query epochDetails(
     $limit: Int,
     $order_by: [epochs_order_by!],
     $offset: Int,

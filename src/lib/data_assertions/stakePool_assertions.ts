@@ -15,7 +15,7 @@ export const stakePool1 = {
   retiring: false,
   rewardPayouts: [{
     slot: slot1Epoch2,
-    value: 1000
+    amount: 1000
   }],
   ticker: 'UIYU',
   url: 'https://linnea.name'
@@ -35,7 +35,7 @@ export const stakePool2 = {
   retiring: false,
   rewardPayouts: [{
     slot: slot1Epoch2,
-    value: 1000
+    amount: 1000
   }],
   slotsElected: [{
     epoch: {

@@ -150,6 +150,22 @@ describe('Integration', () => {
     })
   })
 
+  describe('stakepools', () => {
+    it('Returns epoch details by number', async () => {
+      const result = await client.query({
+        query: queries.stakePools,
+      })
+      // const resultWithConstructedDates = {
+      //   ...result.data.epochs[0],
+      //   endedAt: new Date(result.data.epochs[0].endedAt),
+      //   startedAt: new Date(result.data.epochs[0].startedAt)
+      // }
+      // expect(resultWithConstructedDates).toEqual(epoch2)
+      console.log(result.errors)
+      expect(result).toMatchSnapshot()
+    })
+  })
+
   describe('transactions', () => {
     it('Returns transactions by IDs', async () => {
       const result = await client.query({

@@ -41,11 +41,11 @@ type Query {
     where: epochs_filter
   ): [Epoch]!
   cardano: Cardano
-  stakepools (
+  stakePools (
     limit: Int = 1
-    order_by: [stakepools_order_by!]
+    order_by: [stakePools_order_by!]
     offset: Int
-    where: stakepools_filter
+    where: stakePools_filter
   ): [StakePool!]!
   transactions (
     limit: Int = 1
@@ -230,7 +230,7 @@ type RewardPayout {
   amount: Lovelaces
 }
 
-input stakepools_filter {
+input stakePools_filter {
   createdAt: Date_comparison_exp
   controlledStake: Lovelaces_comparison_exp
   isCharity: Boolean
@@ -241,7 +241,7 @@ input stakepools_filter {
   retiring: Boolean
 }
 
-input stakepools_order_by {
+input stakePools_order_by {
   createdAt: order_by
   controlledStake: order_by
   isCharity: order_by

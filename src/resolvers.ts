@@ -45,7 +45,6 @@ const resolverMap: Resolvers = {
     },
     epochs: (_root, args, _context, _info) => {
       checkLimit(args.limit, 100)
-      console.log(epoch2)
       return [epoch2]
       // return delegateToSchema({
       //   args,
@@ -70,7 +69,7 @@ const resolverMap: Resolvers = {
         stakeDistribution: [stakePool1]
       })
     },
-    stakepools: (_root, args, _context, _info) => {
+    stakePools: (_root, args, _context, _info) => {
       checkLimit(args.limit, 250)
       return Promise.resolve([stakePool1])
     },

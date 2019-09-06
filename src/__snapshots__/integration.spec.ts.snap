@@ -170,6 +170,8 @@ Object {
 
 exports[`Integration blocks throws an error if query requests more than 100 blocks 1`] = `[GraphQLError: 110 exceeds the maximum allowed value of 100. Use the offset to paginate through a larger result set]`;
 
+exports[`Integration cardano Returns the block height 1`] = `99`;
+
 exports[`Integration epochs Returns epoch details by number 1`] = `
 Object {
   "data": Object {
@@ -204,17 +206,26 @@ Object {
                 "inputs": Array [
                   Object {
                     "address": "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y",
-                    "value": 408327486262,
+                    "value": Object {
+                      "amount": 408327486262,
+                      "currency": "ADA",
+                    },
                   },
                 ],
                 "outputs": Array [
                   Object {
                     "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
-                    "value": 158327486262,
+                    "value": Object {
+                      "amount": 158327486262,
+                      "currency": "ADA",
+                    },
                   },
                   Object {
                     "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
-                    "value": 250000000000,
+                    "value": Object {
+                      "amount": 250000000000,
+                      "currency": "ADA",
+                    },
                   },
                 ],
               },
@@ -227,13 +238,19 @@ Object {
                 "inputs": Array [
                   Object {
                     "address": "Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf",
-                    "value": 466152000000,
+                    "value": Object {
+                      "amount": 466152000000,
+                      "currency": "ADA",
+                    },
                   },
                 ],
                 "outputs": Array [
                   Object {
                     "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
-                    "value": 466152000000,
+                    "value": Object {
+                      "amount": 466152000000,
+                      "currency": "ADA",
+                    },
                   },
                 ],
               },
@@ -267,17 +284,26 @@ Object {
                 "inputs": Array [
                   Object {
                     "address": "DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H",
-                    "value": 50805565431559,
+                    "value": Object {
+                      "amount": 50805565431559,
+                      "currency": "ADA",
+                    },
                   },
                 ],
                 "outputs": Array [
                   Object {
                     "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
-                    "value": 50704353889014,
+                    "value": Object {
+                      "amount": 50704353889014,
+                      "currency": "ADA",
+                    },
                   },
                   Object {
                     "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
-                    "value": 101211542545,
+                    "value": Object {
+                      "amount": 101211542545,
+                      "currency": "ADA",
+                    },
                   },
                 ],
               },
@@ -288,8 +314,8 @@ Object {
         "number": 2,
         "output": Array [
           Object {
+            "amount": 217978153471859,
             "currency": "ADA",
-            "value": 217978153471859,
           },
         ],
         "slots": Array [
@@ -323,17 +349,26 @@ Object {
             "inputs": Array [
               Object {
                 "address": "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y",
-                "value": 408327486262,
+                "value": Object {
+                  "amount": 408327486262,
+                  "currency": "ADA",
+                },
               },
             ],
             "outputs": Array [
               Object {
                 "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
-                "value": 158327486262,
+                "value": Object {
+                  "amount": 158327486262,
+                  "currency": "ADA",
+                },
               },
               Object {
                 "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
-                "value": 250000000000,
+                "value": Object {
+                  "amount": 250000000000,
+                  "currency": "ADA",
+                },
               },
             ],
           },
@@ -346,13 +381,19 @@ Object {
             "inputs": Array [
               Object {
                 "address": "Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf",
-                "value": 466152000000,
+                "value": Object {
+                  "amount": 466152000000,
+                  "currency": "ADA",
+                },
               },
             ],
             "outputs": Array [
               Object {
                 "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
-                "value": 466152000000,
+                "value": Object {
+                  "amount": 466152000000,
+                  "currency": "ADA",
+                },
               },
             ],
           },
@@ -365,17 +406,26 @@ Object {
             "inputs": Array [
               Object {
                 "address": "DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H",
-                "value": 50805565431559,
+                "value": Object {
+                  "amount": 50805565431559,
+                  "currency": "ADA",
+                },
               },
             ],
             "outputs": Array [
               Object {
                 "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
-                "value": 50704353889014,
+                "value": Object {
+                  "amount": 50704353889014,
+                  "currency": "ADA",
+                },
               },
               Object {
                 "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
-                "value": 101211542545,
+                "value": Object {
+                  "amount": 101211542545,
+                  "currency": "ADA",
+                },
               },
             ],
           },
@@ -394,7 +444,26 @@ Object {
 }
 `;
 
-exports[`Integration ledger Returns the block height 1`] = `99`;
+exports[`Integration stakepools Returns epoch details by number 1`] = `
+Object {
+  "data": Object {
+    "stakePools": Array [
+      Object {
+        "controlledStake": 33,
+        "id": "h5khccud3aoj7g2fdsdlb5ogixr3ej59lhc39qk20qpk5y3uoh142mx5g2rjm56h",
+        "ticker": "UIYU",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
 
 exports[`Integration transactions Returns null if for specific transaction lookup 1`] = `
 Object {
@@ -409,17 +478,26 @@ Object {
         "inputs": Array [
           Object {
             "address": "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y",
-            "value": 408327486262,
+            "value": Object {
+              "amount": 408327486262,
+              "currency": "ADA",
+            },
           },
         ],
         "outputs": Array [
           Object {
             "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
-            "value": 158327486262,
+            "value": Object {
+              "amount": 158327486262,
+              "currency": "ADA",
+            },
           },
           Object {
             "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
-            "value": 250000000000,
+            "value": Object {
+              "amount": 250000000000,
+              "currency": "ADA",
+            },
           },
         ],
       },
@@ -432,13 +510,19 @@ Object {
         "inputs": Array [
           Object {
             "address": "Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf",
-            "value": 466152000000,
+            "value": Object {
+              "amount": 466152000000,
+              "currency": "ADA",
+            },
           },
         ],
         "outputs": Array [
           Object {
             "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
-            "value": 466152000000,
+            "value": Object {
+              "amount": 466152000000,
+              "currency": "ADA",
+            },
           },
         ],
       },
@@ -451,17 +535,26 @@ Object {
         "inputs": Array [
           Object {
             "address": "DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H",
-            "value": 50805565431559,
+            "value": Object {
+              "amount": 50805565431559,
+              "currency": "ADA",
+            },
           },
         ],
         "outputs": Array [
           Object {
             "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
-            "value": 50704353889014,
+            "value": Object {
+              "amount": 50704353889014,
+              "currency": "ADA",
+            },
           },
           Object {
             "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
-            "value": 101211542545,
+            "value": Object {
+              "amount": 101211542545,
+              "currency": "ADA",
+            },
           },
         ],
       },
@@ -490,17 +583,26 @@ Object {
         "inputs": Array [
           Object {
             "address": "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y",
-            "value": 408327486262,
+            "value": Object {
+              "amount": 408327486262,
+              "currency": "ADA",
+            },
           },
         ],
         "outputs": Array [
           Object {
             "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
-            "value": 158327486262,
+            "value": Object {
+              "amount": 158327486262,
+              "currency": "ADA",
+            },
           },
           Object {
             "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
-            "value": 250000000000,
+            "value": Object {
+              "amount": 250000000000,
+              "currency": "ADA",
+            },
           },
         ],
       },
@@ -513,13 +615,19 @@ Object {
         "inputs": Array [
           Object {
             "address": "Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf",
-            "value": 466152000000,
+            "value": Object {
+              "amount": 466152000000,
+              "currency": "ADA",
+            },
           },
         ],
         "outputs": Array [
           Object {
             "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
-            "value": 466152000000,
+            "value": Object {
+              "amount": 466152000000,
+              "currency": "ADA",
+            },
           },
         ],
       },
@@ -532,17 +640,26 @@ Object {
         "inputs": Array [
           Object {
             "address": "DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H",
-            "value": 50805565431559,
+            "value": Object {
+              "amount": 50805565431559,
+              "currency": "ADA",
+            },
           },
         ],
         "outputs": Array [
           Object {
             "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
-            "value": 50704353889014,
+            "value": Object {
+              "amount": 50704353889014,
+              "currency": "ADA",
+            },
           },
           Object {
             "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
-            "value": 101211542545,
+            "value": Object {
+              "amount": 101211542545,
+              "currency": "ADA",
+            },
           },
         ],
       },
@@ -564,11 +681,17 @@ Object {
     "utxoSet": Array [
       Object {
         "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
-        "value": 50704353889014,
+        "value": Object {
+          "amount": 50704353889014,
+          "currency": "ADA",
+        },
       },
       Object {
         "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
-        "value": 101211542545,
+        "value": Object {
+          "amount": 101211542545,
+          "currency": "ADA",
+        },
       },
     ],
   },
@@ -588,11 +711,17 @@ Object {
     "utxoSet": Array [
       Object {
         "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
-        "value": 50704353889014,
+        "value": Object {
+          "amount": 50704353889014,
+          "currency": "ADA",
+        },
       },
       Object {
         "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
-        "value": 101211542545,
+        "value": Object {
+          "amount": 101211542545,
+          "currency": "ADA",
+        },
       },
     ],
   },
