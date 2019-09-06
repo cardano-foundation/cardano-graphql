@@ -444,6 +444,27 @@ Object {
 }
 `;
 
+exports[`Integration stakePools Returns Stake Pools 1`] = `
+Object {
+  "data": Object {
+    "stakePools": Array [
+      Object {
+        "controlledStake": 33,
+        "id": "h5khccud3aoj7g2fdsdlb5ogixr3ej59lhc39qk20qpk5y3uoh142mx5g2rjm56h",
+        "ticker": "UIYU",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration stakepools Returns epoch details by number 1`] = `
 Object {
   "data": Object {

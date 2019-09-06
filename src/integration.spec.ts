@@ -134,7 +134,6 @@ describe('Integration', () => {
       //   startedAt: new Date(result.data.epochs[0].startedAt)
       // }
       // expect(resultWithConstructedDates).toEqual(epoch2)
-      console.log(result.errors)
       expect(result).toMatchSnapshot()
     })
   })
@@ -144,24 +143,16 @@ describe('Integration', () => {
       const result = await client.query({
         query: queries.cardano
       })
-      console.log(result.errors)
       expect(result.data.cardano.blockHeight).toBe(99)
       expect(result.data.cardano.blockHeight).toMatchSnapshot()
     })
   })
 
-  describe('stakepools', () => {
-    it('Returns epoch details by number', async () => {
+  describe('stakePools', () => {
+    it('Returns Stake Pools', async () => {
       const result = await client.query({
         query: queries.stakePools,
       })
-      // const resultWithConstructedDates = {
-      //   ...result.data.epochs[0],
-      //   endedAt: new Date(result.data.epochs[0].endedAt),
-      //   startedAt: new Date(result.data.epochs[0].startedAt)
-      // }
-      // expect(resultWithConstructedDates).toEqual(epoch2)
-      console.log(result.errors)
       expect(result).toMatchSnapshot()
     })
   })
