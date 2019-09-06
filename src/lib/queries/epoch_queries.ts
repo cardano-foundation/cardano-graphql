@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const epochDetails = gql`query blocksWithNoTx(
+export const epochDetails = gql`query epochDetails(
     $limit: Int,
     $order_by: [epochs_order_by!],
     $offset: Int,
@@ -38,18 +38,24 @@ export const epochDetails = gql`query blocksWithNoTx(
                 id
                 inputs {
                     address
-                    value
+                    value {
+                        currency
+                        amount
+                    }
                 }
                 outputs {
                     address
-                    value
+                    value {
+                        currency
+                        amount
+                    }
                 }
             }
         }
         endedAt
         output {
             currency
-            value
+            amount
         }
         number
         slots {
@@ -70,11 +76,17 @@ export const epochDetails = gql`query blocksWithNoTx(
             id
             inputs {
                 address
-                value
+                value {
+                    currency
+                    amount
+                }
             }
             outputs {
                 address
-                value
+                value {
+                    currency
+                    amount
+                }
             }
         }
         transactionsCount

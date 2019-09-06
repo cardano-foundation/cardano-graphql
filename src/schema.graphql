@@ -1,33 +1,99 @@
 schema {
+  mutation: Mutation
   query: Query
 }
 
+scalar BigInt
+scalar DateTime
+scalar Lovelaces
+scalar Percentage
+scalar PublicKeyHash
+scalar StakePoolTicker
+scalar TransactionHash # may need more specificity
+
+type Mutation {
+  delegateStake (
+    # Constructed using a client SDK, signed, encoded
+    transaction: TransactionHash
+  ): Boolean!
+  registerStakePool (
+    # Constructed using a client SDK, includes registration certificate containing the staking key of the pool leader
+    transaction: TransactionHash
+  ): Boolean!
+  submitTransaction (
+    # Constructed using a client SDK, signed, encoded
+    transaction: TransactionHash
+  ): Boolean!
+
+}
+
 type Query {
-  blocks(
-    limit: Int = 1,
-    order_by: [blocks_order_by!],
+  blocks (
+    limit: Int = 1
+    order_by: [blocks_order_by!]
     offset: Int,
     where: blocks_filter
   ): [Block]!
-  epochs(
-    limit: Int = 1,
-    order_by: [epochs_order_by!],
-    offset: Int,
+  epochs (
+    limit: Int = 1
+    order_by: [epochs_order_by!]
+    offset: Int
     where: epochs_filter
   ): [Epoch]!
-  ledgerStats: LedgerStats
-  transactions(
-    limit: Int = 1,
-    order_by: [transactions_order_by!],
-    offset: Int,
+  cardano: Cardano
+  stakePools (
+    limit: Int = 1
+    order_by: [stakePools_order_by!]
+    offset: Int
+    where: stakePools_filter
+  ): [StakePool!]!
+  transactions (
+    limit: Int = 1
+    order_by: [transactions_order_by!]
+    offset: Int
     where: transactions_filter
   ): [Transaction]!
-  utxoSet(
-    limit: Int = 1,
-    order_by: [utxoSet_order_by!],
-    offset: Int,
+  utxoSet (
+    limit: Int = 1
+    order_by: [utxoSet_order_by!]
+    offset: Int
     where: utxoSet_filter
   ): [TransactionOutput]!
+}
+
+enum AddressType {
+  # The staking key is directly linked to the address.
+  Base
+  # A pointer to a delegation certificate on the blockchain which defines the staking key.
+  Pointer
+  #  Staking is not possible. This address type is meant for exchanges, who are not supposed to use funds entrusted to them for protocol participation.
+  Enterprise
+}
+
+enum Currency {
+  ADA
+}
+
+type Cardano {
+  blockHeight: BigInt!
+  configuration: Configuration!
+  currentEpoch: Epoch!
+  latestBlock: Block!
+  stakeDistribution: [StakePool!]!
+}
+
+type FeeConfiguration {
+  base: Lovelaces
+  coefficient: Lovelaces
+}
+
+type Configuration {
+  fees: FeeConfiguration
+}
+
+type Address {
+  addressType: AddressType!
+  delegation: StakePool
 }
 
 type Transaction {
@@ -55,14 +121,14 @@ type TransactionInput {
   sourceTxId: String!
   sourceTxIndex: Int!
   address: String!
-  value: BigInt!
+  value: CurrencyValue!
 }
 
 type TransactionOutput {
   address: String!
   index: Int!
   txId: String!
-  value: BigInt!
+  value: CurrencyValue!
 }
 
 type Block {
@@ -100,6 +166,8 @@ input blocks_order_by {
 
 type Slot {
   block: Block
+  # Public key of the elected UTXO
+  leader: PublicKeyHash
   epoch: Epoch!
   number: Int!
   # Calculated based on the genesis start date, using slot number and duration
@@ -107,12 +175,13 @@ type Slot {
 }
 
 type Epoch {
-  blocks: [Block]!
-  output: [CurrencyValue]!
-  number: Int!
-  slots: [Slot!]!
-  startedAt: DateTime!
+  blocks: [Block]
   endedAt: DateTime
+  output: [CurrencyValue]
+  number: Int!
+  slots: [Slot!]
+  stakeDistribution: [StakePool!]
+  startedAt: DateTime
   transactions: [Transaction]
   transactionsCount: Int
 }
@@ -137,22 +206,57 @@ input utxoSet_order_by {
   address: order_by
 }
 
-enum Currency {
-  ADA
+type StakePool {
+  controlledStake: Lovelaces!
+  createdAt: DateTime!
+  description: String!
+  id: String!
+  isCharity: Boolean!
+  ownStake: Lovelaces!
+  performance: Percentage
+  profitMargin: Int!
+  name: String!
+  ranking: Int!
+  retirement: DateTime
+  retiring: Boolean!
+  rewardPayouts: [RewardPayout]!
+  slotsElected: [Slot]!
+  ticker: StakePoolTicker!
+  url: String!
+}
+
+type RewardPayout {
+  slot: Slot
+  amount: Lovelaces
+}
+
+input stakePools_filter {
+  createdAt: Date_comparison_exp
+  controlledStake: Lovelaces_comparison_exp
+  isCharity: Boolean
+  ownStake: Lovelaces_comparison_exp
+  performance: Percentage_comparison_exp,
+  profitMargin: Int_comparison_exp
+  ranking: Int_comparison_exp
+  retiring: Boolean
+}
+
+input stakePools_order_by {
+  createdAt: order_by
+  controlledStake: order_by
+  isCharity: order_by
+  ownStake: order_by
+  performance: order_by
+  profitMargin: order_by
+  name: order_by
+  ranking: order_by
+  retiring: order_by
 }
 
 type CurrencyValue {
   currency: Currency!
-  value: BigInt!
+  amount: BigInt!
 }
-
-type LedgerStats {
-  blockHeight: Int!
-}
-
-scalar BigInt
-scalar DateTime
-
 
 # expression to compare data of type date. All fields are combined with logical 'AND'.
 input Date_comparison_exp {
@@ -179,6 +283,27 @@ input Int_comparison_exp {
   _nin: [Int!]
 }
 
+# expression to compare data of type Lovelaces. All fields are combined with logical 'AND'.
+input Lovelaces_comparison_exp {
+  _eq: Lovelaces
+  _gt: Lovelaces
+  _gte: Lovelaces
+  _in: [Lovelaces!]
+  _lt: Lovelaces
+  _lte: Lovelaces
+  _neq: Lovelaces
+  _nin: [Lovelaces!]
+}
+
+# expression to compare data of type Percentage. All fields are combined with logical 'AND'.
+input Percentage_comparison_exp {
+  _eq: Percentage
+  _gt: Percentage
+  _gte: Percentage
+  _lt: Int
+  _lte: Int
+  _neq: Int
+}
 
 # All fields are combined with logical 'AND'.
 input ID_comparison_exp {

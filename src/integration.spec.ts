@@ -138,13 +138,22 @@ describe('Integration', () => {
     })
   })
 
-  describe('ledgerStats', () => {
-    it('Return the block height', async () => {
+  describe('cardano', () => {
+    it('Returns the block height', async () => {
       const result = await client.query({
-        query: queries.ledgerStats
+        query: queries.cardano
       })
-      expect(result.data.ledgerStats.blockHeight).toBe(99)
-      expect(result.data.ledgerStats.blockHeight).toMatchSnapshot()
+      expect(result.data.cardano.blockHeight).toBe(99)
+      expect(result.data.cardano.blockHeight).toMatchSnapshot()
+    })
+  })
+
+  describe('stakePools', () => {
+    it('Returns Stake Pools', async () => {
+      const result = await client.query({
+        query: queries.stakePools
+      })
+      expect(result).toMatchSnapshot()
     })
   })
 
