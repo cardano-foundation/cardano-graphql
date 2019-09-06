@@ -1,6 +1,6 @@
 import { Currency, Epoch } from '../../graphql_types'
 import { block43177, block43178 } from './block_assertions'
-import { stakePool1, stakePool2 } from './stakepool_assertions'
+import { stakePool1, stakePool2 } from './stakePool_assertions'
 
 export const epoch2 = {
   blocks: [block43177, block43178],
