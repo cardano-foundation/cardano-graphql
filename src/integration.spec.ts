@@ -134,17 +134,19 @@ describe('Integration', () => {
       //   startedAt: new Date(result.data.epochs[0].startedAt)
       // }
       // expect(resultWithConstructedDates).toEqual(epoch2)
+      console.log(result.errors)
       expect(result).toMatchSnapshot()
     })
   })
 
-  describe('ledger', () => {
+  describe('cardano', () => {
     it('Returns the block height', async () => {
       const result = await client.query({
-        query: queries.ledger
+        query: queries.cardano
       })
-      expect(result.data.ledger.blockHeight).toBe(99)
-      expect(result.data.ledger.blockHeight).toMatchSnapshot()
+      console.log(result.errors)
+      expect(result.data.cardano.blockHeight).toBe(99)
+      expect(result.data.cardano.blockHeight).toMatchSnapshot()
     })
   })
 

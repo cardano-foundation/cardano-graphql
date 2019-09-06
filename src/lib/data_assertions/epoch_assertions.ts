@@ -1,5 +1,6 @@
 import { Currency, Epoch } from '../../graphql_types'
 import { block43177, block43178 } from './block_assertions'
+import { stakePool1, stakePool2 } from './stakepool_assertions'
 
 export const epoch2 = {
   blocks: [block43177, block43178],
@@ -7,7 +8,7 @@ export const epoch2 = {
   // output: [{ currency: Currency.Ada, value: 21797815347185914 }], // Correct, but larger than BigInt
   output: [{
     currency: Currency.Ada,
-    value: 217978153471859 // Missing the last digit to fit into BigInt bounds
+    amount: 217978153471859 // Missing the last digit to fit into BigInt bounds
   }],
   number: 2,
   slots: [{
@@ -27,6 +28,7 @@ export const epoch2 = {
     },
     number: 2
   }],
+  stakeDistribution: [stakePool1, stakePool2],
   startedAt: new Date(Date.UTC(2017, 10, 4, 7, 44, 51)),
   transactions: [
     block43177.transactions[0],

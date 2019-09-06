@@ -38,18 +38,24 @@ export const epochDetails = gql`query blocksWithNoTx(
                 id
                 inputs {
                     address
-                    value
+                    value {
+                        currency
+                        amount
+                    }
                 }
                 outputs {
                     address
-                    value
+                    value {
+                        currency
+                        amount
+                    }
                 }
             }
         }
         endedAt
         output {
             currency
-            value
+            amount
         }
         number
         slots {
@@ -70,11 +76,17 @@ export const epochDetails = gql`query blocksWithNoTx(
             id
             inputs {
                 address
-                value
+                value {
+                    currency
+                    amount
+                }
             }
             outputs {
                 address
-                value
+                value {
+                    currency
+                    amount
+                }
             }
         }
         transactionsCount

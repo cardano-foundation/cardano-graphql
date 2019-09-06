@@ -55,10 +55,16 @@ export const blocksWithTxs = gql`query blocksWithSomeTxs(
             id
             inputs {
                 address
-                value
+                value {
+                    currency
+                    amount
+                }
             }
             outputs {
-                value
+                value {
+                    currency
+                    amount
+                }
                 address
             }
         }

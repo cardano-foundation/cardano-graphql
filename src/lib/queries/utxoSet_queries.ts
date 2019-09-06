@@ -13,6 +13,9 @@ export const utxoSet = gql`query utxoSet(
         where: $where
     ) {
         address
-        value
+        value {
+            currency
+            amount
+        }
     }
 }`

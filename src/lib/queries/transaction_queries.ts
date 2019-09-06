@@ -19,11 +19,17 @@ export const transactions = gql`query transactions(
         id
         inputs {
             address
-            value
+            value {
+                currency
+                amount
+            }
         }
         outputs {
-            value
             address
+            value {
+                currency
+                amount
+            }
         }
     }
 }`
