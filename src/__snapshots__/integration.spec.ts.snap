@@ -449,9 +449,9 @@ Object {
   "data": Object {
     "stakePools": Array [
       Object {
-        "controlledStake": 33,
-        "id": "h5khccud3aoj7g2fdsdlb5ogixr3ej59lhc39qk20qpk5y3uoh142mx5g2rjm56h",
-        "ticker": "UIYU",
+        "controlledStake": 478,
+        "id": "36OD4JBLBNXW42DAWQXALZDN0IXACY9H",
+        "ticker": "ALDZ",
       },
     ],
   },
@@ -693,6 +693,27 @@ Object {
           "currency": "ADA",
         },
       },
+      Object {
+        "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
+        "value": Object {
+          "amount": 466152000000,
+          "currency": "ADA",
+        },
+      },
+      Object {
+        "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
+        "value": Object {
+          "amount": 158327486262,
+          "currency": "ADA",
+        },
+      },
+      Object {
+        "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
+        "value": Object {
+          "amount": 250000000000,
+          "currency": "ADA",
+        },
+      },
     ],
   },
   "errors": undefined,
@@ -720,6 +741,27 @@ Object {
         "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
         "value": Object {
           "amount": 101211542545,
+          "currency": "ADA",
+        },
+      },
+      Object {
+        "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
+        "value": Object {
+          "amount": 466152000000,
+          "currency": "ADA",
+        },
+      },
+      Object {
+        "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
+        "value": Object {
+          "amount": 158327486262,
+          "currency": "ADA",
+        },
+      },
+      Object {
+        "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
+        "value": Object {
+          "amount": 250000000000,
           "currency": "ADA",
         },
       },

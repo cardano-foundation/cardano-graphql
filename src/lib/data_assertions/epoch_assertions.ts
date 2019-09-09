@@ -1,6 +1,6 @@
 import { Currency, Epoch } from '../../graphql_types'
 import { block43177, block43178 } from './block_assertions'
-import { stakePool1, stakePool2 } from './stakePool_assertions'
+import { generateStakepools } from '../mocks'
 
 export const epoch2 = {
   blocks: [block43177, block43178],
@@ -28,7 +28,7 @@ export const epoch2 = {
     },
     number: 2
   }],
-  stakeDistribution: [stakePool1, stakePool2],
+  stakeDistribution: generateStakepools(100),
   startedAt: new Date(Date.UTC(2017, 10, 4, 7, 44, 51)),
   transactions: [
     block43177.transactions[0],

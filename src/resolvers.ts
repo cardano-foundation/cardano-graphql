@@ -9,12 +9,14 @@ import {
   StakePoolTicker,
   TransactionHash
 } from './lib/scalars'
+
 import {
   block43177, block43178,
   epoch2,
-  stakePool1,
   txa54489, txd9e280, tx21c528
 } from './lib/data_assertions'
+
+import { generateStakepools } from './lib/mocks'
 
 const GraphQLBigInt = require('graphql-bigint')
 
@@ -66,12 +68,12 @@ const resolverMap: Resolvers = {
           }
         },
         latestBlock: block43178,
-        stakeDistribution: [stakePool1]
+        stakeDistribution: generateStakepools(30)
       })
     },
     stakePools: (_root, args, _context, _info) => {
       checkLimit(args.limit, 250)
-      return Promise.resolve([stakePool1])
+      return Promise.resolve(generateStakepools(args.limit))
     },
     transactions: (_root, args, _context, _info) => {
       checkLimit(args.limit, 250)
@@ -85,8 +87,8 @@ const resolverMap: Resolvers = {
       //   schema: context.hasura
       // })
     },
-    utxoSet: (_root, _args, _context, _info) => {
-      return txd9e280.outputs
+    utxoSet: () => {
+      return [...txd9e280.outputs, ...txa54489.outputs, ...tx21c528.outputs]
       // return delegateToSchema({
       //   args: { where: { address: { _eq: args.address } } },
       //   context,

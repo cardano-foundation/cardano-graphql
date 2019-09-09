@@ -28,11 +28,12 @@ export const cardano = gql`query {
             ranking
             retirement
             retiring
-            rewardPayouts {
-                slot {
-                    number
+            slotsElected {
+                number
+                rewardPayouts {
+                    address
+                    amount
                 }
-                amount
             }
             ticker
             url
