@@ -16,7 +16,7 @@ import {
   txa54489, txd9e280, tx21c528
 } from './lib/data_assertions'
 
-import { generateStakepools } from './lib/mocks'
+import { generateStakeDelegations, generateStakeholders, generateStakepools } from './lib/mocks'
 
 const GraphQLBigInt = require('graphql-bigint')
 
@@ -70,6 +70,14 @@ const resolverMap: Resolvers = {
         latestBlock: block43178,
         stakeDistribution: generateStakepools(30)
       })
+    },
+    stakeholders: (_root, args, _context, _info) => {
+      checkLimit(args.limit, 250)
+      return Promise.resolve(generateStakeholders(args.limit))
+    },
+    stakeDelegations: (_root, args, _context, _info) => {
+      checkLimit(args.limit, 250)
+      return Promise.resolve(generateStakeDelegations(args.limit))
     },
     stakePools: (_root, args, _context, _info) => {
       checkLimit(args.limit, 250)

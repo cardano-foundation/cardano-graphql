@@ -42,6 +42,18 @@ type Query {
     where: epochs_filter
   ): [Epoch]!
   cardano: Cardano
+  stakeDelegations (
+    limit: PositiveInt = 1
+    order_by: [stakeDelegations_order_by!]
+    offset: PositiveInt
+    where: stakeDelegations_filter
+  ): [StakeDelegation]!
+  stakeholders (
+    limit: PositiveInt = 1
+    order_by: [stakeholders_order_by!]
+    offset: PositiveInt
+    where: stakeholders_filter
+  ): [Stakeholder!]!
   stakePools (
     limit: PositiveInt = 1
     order_by: [stakePools_order_by!]
@@ -214,6 +226,43 @@ input utxoSet_order_by {
   address: order_by
 }
 
+type StakeDelegation {
+  rewardAccount: RewardAccount!
+  stakingKey: PublicKeyHash!
+  stakePool: StakePool!
+}
+
+input stakeDelegations_filter {
+  rewardAccountAddress: ID_comparison_exp
+  rewardBalance: Int_comparison_exp
+  stakingKey: ID_comparison_exp
+}
+
+input stakeDelegations_order_by {
+  rewardBalance: order_by
+  stakingKey: order_by
+}
+
+type Stakeholder {
+  delegations (
+    limit: PositiveInt = 1
+    order_by: [stakeDelegations_order_by!]
+    offset: PositiveInt
+    where: stakeDelegations_filter
+  ): [StakeDelegation]
+  totalRewardBalance: Lovelaces!
+}
+
+input stakeholders_filter {
+  stakingKey: ID_comparison_exp
+  totalRewardBalance: Int_comparison_exp
+}
+
+input stakeholders_order_by {
+  stakingKey: order_by
+  totalRewardBalance: order_by
+}
+
 type StakePool {
   controlledStake: Lovelaces!
   createdAt: DateTime!
@@ -232,9 +281,13 @@ type StakePool {
   url: String!
 }
 
-type RewardPayout {
-  address: PublicKeyHash!
+type RewardAccount {
+  address: PublicKeyHash
   amount: Lovelaces
+}
+
+type RewardPayout {
+  rewardAccount: RewardAccount
   slot: Slot
 }
 
