@@ -444,27 +444,6 @@ Object {
 }
 `;
 
-exports[`Integration stakePools Returns Stake Pools 1`] = `
-Object {
-  "data": Object {
-    "stakePools": Array [
-      Object {
-        "controlledStake": 478,
-        "id": "36OD4JBLBNXW42DAWQXALZDN0IXACY9H",
-        "ticker": "ALDZ",
-      },
-    ],
-  },
-  "errors": undefined,
-  "extensions": undefined,
-  "http": Object {
-    "headers": Headers {
-      Symbol(map): Object {},
-    },
-  },
-}
-`;
-
 exports[`Integration transactions Returns null if for specific transaction lookup 1`] = `
 Object {
   "data": Object {
