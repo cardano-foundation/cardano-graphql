@@ -80,7 +80,12 @@ type Cardano {
   configuration: Configuration!
   currentEpoch: Epoch!
   latestBlock: Block!
-  stakeDistribution: [StakePool!]!
+  stakeDistribution(
+    limit: PositiveInt = 1
+    order_by: [stakePools_order_by!]
+    offset: PositiveInt,
+    where: stakePools_filter
+  ): [StakePool!]!
 }
 
 type FeeConfiguration {
@@ -119,9 +124,9 @@ input transactions_filter {
 }
 
 type TransactionInput {
+  address: String!
   sourceTxId: String!
   sourceTxIndex: Int!
-  address: String!
   value: CurrencyValue!
 }
 
@@ -140,7 +145,7 @@ type Block {
   merkelRootHash: String
   number: Int!
   previousBlock: Block
-  size: Float!
+  size: BigInt!
   slot: Slot!
   transactions(
     limit: Int = 1,
@@ -168,9 +173,11 @@ input blocks_order_by {
 type Slot {
   block: Block
   # Public key of the elected UTXO
-  leader: PublicKeyHash
   epoch: Epoch!
+  # vkspool
+  leader: PublicKeyHash
   number: Int!
+  rewardPayouts: [RewardPayout]!
   # Calculated based on the genesis start date, using slot number and duration
   startedAt: DateTime
 }
@@ -220,15 +227,15 @@ type StakePool {
   ranking: Int!
   retirement: DateTime
   retiring: Boolean!
-  rewardPayouts: [RewardPayout]!
   slotsElected: [Slot]!
   ticker: StakePoolTicker!
   url: String!
 }
 
 type RewardPayout {
-  slot: Slot
+  address: PublicKeyHash!
   amount: Lovelaces
+  slot: Slot
 }
 
 input stakePools_filter {
