@@ -26,8 +26,7 @@ export const cardano = gql`query {
             profitMargin
             name
             ranking
-            retirement
-            retiring
+            retirementEpochNumber
             slotsElected {
                 number
                 rewardPayouts {

@@ -15,7 +15,7 @@ export function generateStakepools (number: number): StakePool[] {
     profitMargin: faker.random.number(20),
     name: faker.company.companyName(),
     ranking: i,
-    retiring: false, // Todo: should be Epoch not Boolean
+    retirementEpochNumber: Math.random() >= 0.5 ? faker.random.number(300) : undefined,
     slotsElected: times(3, generateSlotWihRewards),
     ticker: faker.random.alphaNumeric(4).toUpperCase(),
     url: faker.internet.domainName()

@@ -153,8 +153,8 @@ describe('Integration', () => {
   //     const result = await client.query({
   //       query: queries.stakePools
   //     })
-      // expect(result).toMatchSnapshot()
-    // })
+  //     expect(result).toMatchSnapshot()
+  //   })
   // })
 
   describe('transactions', () => {

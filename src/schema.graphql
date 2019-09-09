@@ -218,15 +218,15 @@ type StakePool {
   controlledStake: Lovelaces!
   createdAt: DateTime!
   description: String!
-  id: String!
+  # Public staking key hash
+  id: PublicKeyHash!
   isCharity: Boolean!
   ownStake: Lovelaces!
   performance: Percentage
   profitMargin: Int!
   name: String!
   ranking: Int!
-  retirement: DateTime
-  retiring: Boolean!
+  retirementEpochNumber: Int
   slotsElected: [Slot]!
   ticker: StakePoolTicker!
   url: String!

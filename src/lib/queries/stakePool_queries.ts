@@ -14,6 +14,7 @@ export const stakePools = gql`query stakePools(
     ) {
         controlledStake
         id
+        retirementEpochNumber
         ticker
     }
 }`
