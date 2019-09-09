@@ -30,6 +30,7 @@
     "graphql-bigint": "^1.0.0",
     "graphql-depth-limit": "^1.1.0",
     "graphql-iso-date": "^3.6.1",
+    "graphql-scalars": "^1.0.1",
     "promise-exponential-retry": "^1.0.3"
   },
   "devDependencies": {

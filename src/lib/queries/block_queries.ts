@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 export const blocksWithNoTx = gql`query blocksWithNoTx(
-    $limit: Int,
+    $limit: PositiveInt,
     $order_by: [blocks_order_by!],
-    $offset: Int,
+    $offset: PositiveInt,
     $where: blocks_filter
 ){
     blocks(
@@ -26,9 +26,9 @@ export const blocksWithNoTx = gql`query blocksWithNoTx(
 }`
 
 export const blocksWithTxs = gql`query blocksWithSomeTxs(
-    $limit: Int,
+    $limit: PositiveInt,
     $order_by: [blocks_order_by!],
-    $offset: Int,
+    $offset: PositiveInt,
     $where: blocks_filter
 ){
     blocks(
@@ -72,7 +72,7 @@ export const blocksWithTxs = gql`query blocksWithSomeTxs(
 }`
 
 export const nestedBlocks = gql`query nestedBlocks(
-    $limit: Int,
+    $limit: PositiveInt,
     $order_by: [blocks_order_by!],
     $where: blocks_filter
 ){

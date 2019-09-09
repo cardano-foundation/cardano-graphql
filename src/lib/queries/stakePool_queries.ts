@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 export const stakePools = gql`query stakePools(
-    $limit: Int,
+    $limit: PositiveInt,
     $order_by: [stakePools_order_by!],
-    $offset: Int,
+    $offset: PositiveInt,
     $where: stakePools_filter
 ){
     stakePools(

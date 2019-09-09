@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 export const epochDetails = gql`query epochDetails(
-    $limit: Int,
+    $limit: PositiveInt,
     $order_by: [epochs_order_by!],
-    $offset: Int,
+    $offset: PositiveInt,
     $where: epochs_filter
 ){
     epochs(

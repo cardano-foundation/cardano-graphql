@@ -1,5 +1,5 @@
 // import { delegateToSchema } from 'graphql-tools'
-import { GraphQLDateTime } from 'graphql-iso-date'
+import { DateTimeResolver, PositiveIntResolver } from 'graphql-scalars'
 import { Resolvers } from './graphql_types'
 import { GraphQLError } from 'graphql'
 import {
@@ -101,12 +101,13 @@ const resolverMap: Resolvers = {
 
 export const resolvers = Object.assign({}, resolverMap, {
   BigInt: GraphQLBigInt,
-  DateTime: GraphQLDateTime,
+  DateTime: DateTimeResolver,
   Lovelaces: LoveLaces,
   Percentage: Percentage,
   PublicKeyHash: PublicKeyHash,
   StakePoolTicker: StakePoolTicker,
-  TransactionHash: TransactionHash
+  TransactionHash: TransactionHash,
+  PositiveInt: PositiveIntResolver
 }) as any
 
 function checkLimit (requested: number, maxAllowed: number): void {

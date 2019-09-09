@@ -10,6 +10,7 @@ scalar Percentage
 scalar PublicKeyHash
 scalar StakePoolTicker
 scalar TransactionHash # may need more specificity
+scalar PositiveInt
 
 type Mutation {
   delegateStake (
@@ -29,34 +30,34 @@ type Mutation {
 
 type Query {
   blocks (
-    limit: Int = 1
+    limit: PositiveInt = 1
     order_by: [blocks_order_by!]
-    offset: Int,
+    offset: PositiveInt,
     where: blocks_filter
   ): [Block]!
   epochs (
-    limit: Int = 1
+    limit: PositiveInt = 1
     order_by: [epochs_order_by!]
-    offset: Int
+    offset: PositiveInt
     where: epochs_filter
   ): [Epoch]!
   cardano: Cardano
   stakePools (
-    limit: Int = 1
+    limit: PositiveInt = 1
     order_by: [stakePools_order_by!]
-    offset: Int
+    offset: PositiveInt
     where: stakePools_filter
   ): [StakePool!]!
   transactions (
-    limit: Int = 1
+    limit: PositiveInt = 1
     order_by: [transactions_order_by!]
-    offset: Int
+    offset: PositiveInt
     where: transactions_filter
   ): [Transaction]!
   utxoSet (
-    limit: Int = 1
+    limit: PositiveInt = 1
     order_by: [utxoSet_order_by!]
-    offset: Int
+    offset: PositiveInt
     where: utxoSet_filter
   ): [TransactionOutput]!
 }

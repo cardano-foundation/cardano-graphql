@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 export const utxoSet = gql`query utxoSet(
-    $limit: Int,
+    $limit: PositiveInt,
     $order_by: [utxoSet_order_by!],
-    $offset: Int,
+    $offset: PositiveInt,
     $where: utxoSet_filter
 ){
     utxoSet(

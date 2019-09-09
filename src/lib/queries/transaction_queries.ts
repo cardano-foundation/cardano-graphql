@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 export const transactions = gql`query transactions(
-    $limit: Int,
+    $limit: PositiveInt,
     $order_by: [transactions_order_by!],
-    $offset: Int,
+    $offset: PositiveInt,
     $where: transactions_filter
 ){
     transactions(
