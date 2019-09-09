@@ -10,7 +10,7 @@ export function generateStakepools (number: number): StakePool[] {
     description: faker.lorem.paragraph(),
     id: faker.finance.bitcoinAddress(),
     isCharity: faker.random.boolean(),
-    ownStake: faker.random.number(500),
+    pledgedStake: faker.random.number(500),
     performance: faker.random.number(100),
     profitMargin: faker.random.number(20),
     name: faker.company.companyName(),

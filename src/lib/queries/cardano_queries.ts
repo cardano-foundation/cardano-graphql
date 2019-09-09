@@ -21,7 +21,7 @@ export const cardano = gql`query {
             description
             id
             isCharity
-            ownStake
+            pledgedStake
             performance
             profitMargin
             name

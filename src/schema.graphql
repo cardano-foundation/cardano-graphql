@@ -221,7 +221,7 @@ type StakePool {
   # Public staking key hash
   id: PublicKeyHash!
   isCharity: Boolean!
-  ownStake: Lovelaces!
+  pledgedStake: Lovelaces!
   performance: Percentage
   profitMargin: Int!
   name: String!
@@ -242,7 +242,7 @@ input stakePools_filter {
   createdAt: Date_comparison_exp
   controlledStake: Lovelaces_comparison_exp
   isCharity: Boolean
-  ownStake: Lovelaces_comparison_exp
+  pledgedStake: Lovelaces_comparison_exp
   performance: Percentage_comparison_exp,
   profitMargin: Int_comparison_exp
   ranking: Int_comparison_exp
@@ -253,7 +253,7 @@ input stakePools_order_by {
   createdAt: order_by
   controlledStake: order_by
   isCharity: order_by
-  ownStake: order_by
+  pledgedStake: order_by
   performance: order_by
   profitMargin: order_by
   name: order_by

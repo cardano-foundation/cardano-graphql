@@ -1,6 +1,6 @@
 import * as faker from 'faker'
 import { Slot } from '../../graphql_types'
-import { generateRewardPayout } from '../mocks/slot_mock'
+import { generateRewardPayout } from '../mocks/'
 import times = require('lodash.times')
 
 export const slot1Epoch2 = {
