@@ -30,8 +30,10 @@ export const cardano = gql`query {
             slotsElected {
                 number
                 rewardPayouts {
-                    address
-                    amount
+                    rewardAccount {
+                        address
+                        amount 
+                    }
                 }
             }
             ticker
