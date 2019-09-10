@@ -2,23 +2,21 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { ApolloServer, ServerInfo } from 'apollo-server'
 import * as depthLimit from 'graphql-depth-limit'
-import { buildHasuraSchema } from './lib/buildHasuraSchema'
 import { resolvers } from './resolvers'
 
 export type Config = {
   apiPort: number
-  hasuraUri: string
+  context: () => {}
   queryDepthLimit: number
   tracing: boolean
 }
 
-export function Server ({ apiPort, hasuraUri, queryDepthLimit, tracing }: Config) {
+export function Server ({ apiPort, context, queryDepthLimit, tracing }: Config) {
   let apolloServerInfo: ServerInfo
   return {
     async boot (): Promise<ServerInfo> {
-      const hasura = await buildHasuraSchema(hasuraUri)
       const apolloServer = new ApolloServer({
-        context: () => ({ hasura }),
+        context,
         introspection: true,
         resolvers,
         tracing,

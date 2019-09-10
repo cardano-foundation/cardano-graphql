@@ -10,7 +10,6 @@ import {
   tx21c528, txa54489, txd9e280
 } from './lib/data_assertions'
 import * as queries from './lib/queries'
-import { buildHasuraSchema } from './lib/buildHasuraSchema'
 import { getConfig } from './config'
 
 describe('Integration', () => {
@@ -18,10 +17,9 @@ describe('Integration', () => {
   let client: ApolloServerTestClient
 
   beforeEach(async () => {
-    const config = getConfig()
-    const hasura = await buildHasuraSchema(config.hasuraUri)
+    const { context } = await getConfig()
     apolloServer = new ApolloServerBase({
-      context: () => ({ hasura }),
+      context,
       introspection: true,
       resolvers,
       typeDefs: fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'UTF8'),

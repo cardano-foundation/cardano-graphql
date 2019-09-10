@@ -1,6 +1,7 @@
 import { Config as ServerConfig } from './Server'
+import { buildHasuraSchema } from './lib/buildHasuraSchema'
 
-export function getConfig (): ServerConfig {
+export async function getConfig (): Promise<ServerConfig> {
   const {
     apiPort,
     hasuraUri,
@@ -8,9 +9,16 @@ export function getConfig (): ServerConfig {
     tracing
   } = filterAndTypecastEnvs(process.env)
 
+  let context
+
+  if (hasuraUri) {
+    const hasura = await buildHasuraSchema(hasuraUri)
+    context = () => ({ hasura })
+  }
+
   return {
     apiPort: apiPort || 3100,
-    hasuraUri: hasuraUri || 'http://localhost:8090/v1/graphql',
+    context,
     queryDepthLimit: queryDepthLimit || 10,
     tracing
   }
