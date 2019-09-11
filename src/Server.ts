@@ -2,23 +2,25 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { ApolloServer, ServerInfo } from 'apollo-server'
 import * as depthLimit from 'graphql-depth-limit'
-import { resolvers } from './resolvers'
+import { scalarResolvers } from './resolvers'
+import { Resolvers } from './graphql_types'
 
 export type Config = {
   apiPort: number
-  context: () => {}
+  context: () => void
   queryDepthLimit: number
+  resolvers: Resolvers
   tracing: boolean
 }
 
-export function Server ({ apiPort, context, queryDepthLimit, tracing }: Config) {
+export function Server ({ apiPort, context, queryDepthLimit, resolvers, tracing }: Config) {
   let apolloServerInfo: ServerInfo
   return {
     async boot (): Promise<ServerInfo> {
       const apolloServer = new ApolloServer({
         context,
         introspection: true,
-        resolvers,
+        resolvers: Object.assign({}, scalarResolvers, resolvers),
         tracing,
         typeDefs: fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'UTF8'),
         validationRules: [depthLimit(queryDepthLimit)]

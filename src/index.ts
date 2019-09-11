@@ -6,5 +6,5 @@ getConfig().then((config) => {
   server.boot()
     .then(({ url }) => console.log(`Server ready at ${url}`))
     .catch((error) => console.error(error.message))
-  }
+}
 )

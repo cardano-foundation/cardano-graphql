@@ -1,24 +1,14 @@
 // import { delegateToSchema } from 'graphql-tools'
-import { GraphQLDateTime } from 'graphql-iso-date'
-import { Resolvers } from './graphql_types'
-import { GraphQLError } from 'graphql'
-import {
-  LoveLaces,
-  Percentage,
-  PublicKeyHash,
-  StakePoolTicker,
-  TransactionHash
-} from './lib/scalars'
+import { Resolvers } from '../graphql_types'
+import { checkLimit } from '../validation'
 import {
   block43177, block43178,
   epoch2,
   stakePool1,
   txa54489, txd9e280, tx21c528
-} from './lib/data_assertions'
+} from '../lib/data_assertions'
 
-const GraphQLBigInt = require('graphql-bigint')
-
-const resolverMap: Resolvers = {
+export const jormungandrResolvers: Resolvers = {
   Mutation: {
     delegateStake: (_root, _args, _context, _info) => {
       return false
@@ -96,24 +86,5 @@ const resolverMap: Resolvers = {
       //   schema: context.hasura
       // })
     }
-  }
-}
-
-export const resolvers = Object.assign({}, resolverMap, {
-  BigInt: GraphQLBigInt,
-  DateTime: GraphQLDateTime,
-  Lovelaces: LoveLaces,
-  Percentage: Percentage,
-  PublicKeyHash: PublicKeyHash,
-  StakePoolTicker: StakePoolTicker,
-  TransactionHash: TransactionHash
-}) as any
-
-function checkLimit (requested: number, maxAllowed: number): void {
-  if (requested < 0) throw new GraphQLError('Limit must be a positive integer')
-  if (requested > maxAllowed) {
-    throw new GraphQLError(
-      `${requested} exceeds the maximum allowed value of ${maxAllowed}. Use the offset to paginate through a larger result set`
-    )
   }
 }
