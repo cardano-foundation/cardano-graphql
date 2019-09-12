@@ -4,6 +4,7 @@
 */dist
 dist-newstyle/
 cabal.project.local
+.ghc.environment.*
 
 # Editors
 TAGS

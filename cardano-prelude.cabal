@@ -91,7 +91,7 @@ test-suite cardano-prelude-test
 
   build-depends:       base
                      , aeson
-                     , aeson-pretty
+                     , aeson-pretty >= 0.8.5
                      , attoparsec
                      , base16-bytestring
                      , bytestring
