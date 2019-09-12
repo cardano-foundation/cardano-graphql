@@ -310,7 +310,7 @@ Object {
             ],
           },
         ],
-        "endedAt": "2017-11-09T07:44:51.000Z",
+        "endedAt": 2017-11-09T07:44:51.000Z,
         "number": 2,
         "output": Array [
           Object {
@@ -338,7 +338,7 @@ Object {
             "number": 2,
           },
         ],
-        "startedAt": "2017-11-04T07:44:51.000Z",
+        "startedAt": 2017-11-04T07:44:51.000Z,
         "transactions": Array [
           Object {
             "block": Object {
