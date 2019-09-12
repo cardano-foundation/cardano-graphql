@@ -2,9 +2,8 @@ import { RetryPromise } from 'promise-exponential-retry'
 import { createHttpLink } from 'apollo-link-http'
 import { fetch } from 'cross-fetch'
 import { introspectSchema, makeRemoteExecutableSchema } from 'graphql-tools'
-import { Config as ServerConfig } from '../Server'
 
-export async function buildHasuraSchema (hasuraUri: ServerConfig['hasuraUri']) {
+export async function buildHasuraSchema (hasuraUri: string) {
   const link = createHttpLink({
     uri: hasuraUri,
     fetch
