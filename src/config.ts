@@ -1,6 +1,6 @@
 import { Config as ServerConfig } from './Server'
 import { buildHasuraSchema } from './lib/buildHasuraSchema'
-import { jormungandrResolvers } from './resolvers'
+import { jormungandrResolvers, mockedResolvers } from './resolvers'
 
 enum NodeImplementation {
   Jormungandr
@@ -22,7 +22,7 @@ export async function getConfig (): Promise<ServerConfig> {
     apiPort: apiPort || 3100,
     context,
     queryDepthLimit: queryDepthLimit || 10,
-    resolvers: (nodeImplementation === NodeImplementation.Jormungandr) ? jormungandrResolvers : undefined,
+    resolvers: (nodeImplementation === NodeImplementation.Jormungandr) ? jormungandrResolvers : mockedResolvers,
     tracing
   }
 }
@@ -38,7 +38,7 @@ function filterAndTypecastEnvs (env: any) {
   return {
     apiPort: Number(API_PORT),
     hasuraUri: HASURA_URI,
-    nodeImplementation: NODE_IMPLEMENTATION as NodeImplementation || NodeImplementation.Jormungandr,
+    nodeImplementation: NODE_IMPLEMENTATION as NodeImplementation,
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
     tracing: Boolean(TRACING)
   }
