@@ -3,9 +3,9 @@ import { checkLimit } from '../validation'
 import {
   block43177, block43178,
   epoch2,
-  stakePool1,
   txa54489, txd9e280, tx21c528
 } from '../lib/data_assertions'
+import { generateStakepools } from '../lib/mocks'
 
 export const mockedResolvers: Resolvers = {
   Mutation: {
@@ -39,12 +39,12 @@ export const mockedResolvers: Resolvers = {
           }
         },
         latestBlock: block43178,
-        stakeDistribution: [stakePool1]
+        stakeDistribution: generateStakepools(30)
       })
     },
     stakePools: (_root, args) => {
       checkLimit(args.limit, 250)
-      return Promise.resolve([stakePool1])
+      return Promise.resolve(generateStakepools(args.limit))
     },
     transactions: (_root, args) => {
       checkLimit(args.limit, 250)
