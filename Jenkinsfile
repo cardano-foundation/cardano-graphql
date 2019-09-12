@@ -56,6 +56,7 @@ pipeline {
   post {
     always {
       sh 'npm run stop-dependencies'
+      cleanWs()
     }
   }
 }
