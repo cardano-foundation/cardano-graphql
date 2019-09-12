@@ -1,7 +1,7 @@
 import { delegateToSchema } from 'graphql-tools'
+import { GraphQLError } from 'graphql'
 import { Resolvers } from '../graphql_types'
 import { checkLimit } from '../validation'
-import { GraphQLError } from 'graphql'
 
 export const jormungandrResolvers: Resolvers = {
   Mutation: {
