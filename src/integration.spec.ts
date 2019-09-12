@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import { createTestClient, ApolloServerTestClient } from 'apollo-server-testing'
 import { ApolloServerBase } from 'apollo-server-core'
 import * as depthLimit from 'graphql-depth-limit'
-import { jormungandrResolvers } from './resolvers'
+import { mockedResolvers } from './resolvers'
 import {
   block43177, block43178,
   epoch2,
@@ -21,7 +21,7 @@ describe('Integration', () => {
     apolloServer = new ApolloServerBase({
       context,
       introspection: true,
-      resolvers: jormungandrResolvers,
+      resolvers: mockedResolvers,
       typeDefs: fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'UTF8'),
       validationRules: [depthLimit(20)]
     })
