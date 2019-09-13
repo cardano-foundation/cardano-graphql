@@ -30,6 +30,7 @@ library
                        Cardano.Prelude.Formatting
                        Cardano.Prelude.GHC.Heap
                        Cardano.Prelude.GHC.Heap.NormalForm
+                       Cardano.Prelude.GHC.Heap.NormalForm.Classy
                        Cardano.Prelude.GHC.Heap.Tree
                        Cardano.Prelude.HeapWords
                        Cardano.Prelude.Json.Canonical
@@ -81,6 +82,7 @@ test-suite cardano-prelude-test
                        Test.Cardano.Prelude.Base16
                        Test.Cardano.Prelude.Gen
                        Test.Cardano.Prelude.GHC.Heap.NormalForm
+                       Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy
                        Test.Cardano.Prelude.GHC.Heap.Tree
                        Test.Cardano.Prelude.Golden
                        Test.Cardano.Prelude.Helpers
@@ -101,6 +103,7 @@ test-suite cardano-prelude-test
                      , cryptonite
                      , formatting
                      , ghc-heap
+                     , ghc-prim
                      , hedgehog
                      , hspec
                      , pretty-show
