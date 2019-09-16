@@ -71,8 +71,27 @@ isHeadNormalForm c = do
     BCOClosure{}      -> return False
     _                 -> return True
 
--- | The function 'isNormalForm' checks whether its argument is fully evaluated and
--- deeply evaluated.
+-- | The function 'isNormalForm' checks whether its argument is fully evaluated
+-- and deeply evaluated.
+--
+-- NOTE 1: If you want to override the behaviour of 'isNormalForm' for specific
+-- types (in particular, for specific types that may be /nested/ somewhere
+-- inside the @a@), consider using
+-- 'Cardano.Prelude.GHC.Heap.NormalForm.Classy.noUnexpectedThunks' instead.
+--
+-- NOTE 2: The normal form check can be quite brittle, especially with @-O0@.
+-- For example, writing something like
+--
+-- > let !x = ...
+-- > nf <- isNormalForm x
+--
+-- might translate to
+--
+-- > nf <- isNormalForm (case ... of x -> x)
+--
+-- which would trivially be @False@. In general, 'isNormalForm' should probably
+-- only be used with @-O1@, but even then the answer may still depend on
+-- internal decisions made by ghc during compilation.
 isNormalForm :: a -> IO Bool
 isNormalForm x = isNormalFormBoxed (asBox x)
 

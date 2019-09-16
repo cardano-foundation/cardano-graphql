@@ -54,6 +54,7 @@
             (hsPkgs.cryptonite)
             (hsPkgs.formatting)
             (hsPkgs.ghc-heap)
+            (hsPkgs.ghc-prim)
             (hsPkgs.hedgehog)
             (hsPkgs.hspec)
             (hsPkgs.pretty-show)
