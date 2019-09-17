@@ -1,6 +1,6 @@
 import * as faker from 'faker'
-import times = require('lodash.times')
 import { Address, AddressType, Currency } from '../../graphql_types'
+import times = require('lodash.times')
 
 export function generateAddresses (number: number): Address[] {
   return times(number, () => ({
