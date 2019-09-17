@@ -5,7 +5,7 @@ import {
   epoch2,
   txa54489, txd9e280, tx21c528
 } from '../lib/data_assertions'
-import { generateStakepools } from '../lib/mocks'
+import { generateAddresses, generateStakepools } from '../lib/mocks'
 
 export const mockedResolvers: Resolvers = {
   Mutation: {
@@ -20,6 +20,10 @@ export const mockedResolvers: Resolvers = {
     }
   },
   Query: {
+    addresses: (_root, args) => {
+      checkLimit(args.limit, 100)
+      return generateAddresses(args.limit)
+    },
     blocks: (_root, args) => {
       checkLimit(args.limit, 100)
       return [block43177, block43178]

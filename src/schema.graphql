@@ -25,14 +25,19 @@ type Mutation {
     # Constructed using a client SDK, signed, encoded
     transaction: TransactionHash
   ): Boolean!
-
 }
 
 type Query {
+  addresses (
+    limit: PositiveInt = 1
+    order_by: [address_order_by]
+    offset: PositiveInt
+    where: address_filter
+  ): [Address]!
   blocks (
     limit: PositiveInt = 1
     order_by: [blocks_order_by!]
-    offset: PositiveInt,
+    offset: PositiveInt
     where: blocks_filter
   ): [Block]!
   epochs (
@@ -75,12 +80,23 @@ type Query {
 }
 
 enum AddressType {
-  # The staking key is directly linked to the address.
+  # Indirectly specifies the staking key that should control the stake for the address. It references a stake key (sks, vks) by its verification key hash.
   Base
-  # A pointer to a delegation certificate on the blockchain which defines the staking key.
-  Pointer
-  #  Staking is not possible. This address type is meant for exchanges, who are not supposed to use funds entrusted to them for protocol participation.
+  # Introduced in Byron, they were interpreted as having stake rights but those stake rights were always delegated to a fixed set of staking keys specified in the genesis block.
+  Bootstrap
+  # Carry no stake rights whatsoever and thus using them allows completely opting out of participation in the proof of stake protocol.
   Enterprise
+  # Indirectly specifies the staking key that should control the stake for the address. It references a stake key by a stake key pointer which is a location on the blockchain of the stake key registration certificate for that key
+  Pointer
+  # Reward account addresses are used to distribute rewards for participating in the PoS protocol
+  RewardAccount
+  # Legacy address with no staking rights
+  Script
+}
+
+enum NetworkType {
+  Mainnet
+  Testnet
 }
 
 enum Currency {
@@ -95,7 +111,7 @@ type Cardano {
   stakeDistribution(
     limit: PositiveInt = 1
     order_by: [stakePools_order_by!]
-    offset: PositiveInt,
+    offset: PositiveInt
     where: stakePools_filter
   ): [StakePool!]!
 }
@@ -107,11 +123,23 @@ type FeeConfiguration {
 
 type Configuration {
   fees: FeeConfiguration
+  networkType: NetworkType
 }
 
 type Address {
   addressType: AddressType!
-  delegation: StakePool
+  hash: String!
+  totalValue: CurrencyValue
+}
+
+input address_order_by {
+  addressType: order_by
+  totalValue: order_by
+}
+
+input address_filter {
+  addressType: text_comparison_exp
+  totalValue: Int_comparison_exp
 }
 
 type Transaction {
@@ -119,7 +147,7 @@ type Transaction {
   # Date the transaction was included in the blockchain, referencing the slot start date
   fee: Int!
   id: String!
-  includedAt: DateTime!
+  includedAt: DateTime
   inputs: [TransactionInput]!
   outputs: [TransactionOutput!]!
 }
@@ -160,7 +188,7 @@ type Block {
   size: BigInt!
   slot: Slot!
   transactions(
-    limit: Int = 1,
+    limit: Int = 1
     orderBy: [transactions_order_by!]
     offset: Int
     #    where: block_Transactions_filter
@@ -296,7 +324,7 @@ input stakePools_filter {
   controlledStake: Lovelaces_comparison_exp
   isCharity: Boolean
   pledgedStake: Lovelaces_comparison_exp
-  performance: Percentage_comparison_exp,
+  performance: Percentage_comparison_exp
   profitMargin: Int_comparison_exp
   ranking: Int_comparison_exp
   retiring: Boolean
