@@ -83,6 +83,6 @@ export const txd9e280 = {
       amount: 101211542545
     }
   }]
-  // receivedAt
+  // includedAt
   // totalOutput: 50805565431559
 } as Transaction
