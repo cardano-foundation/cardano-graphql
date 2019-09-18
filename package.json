@@ -8,11 +8,11 @@
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "npm run lint -- --fix",
     "dev": "npm run codegen:internal -- --watch",
-    "dev:test": "HASURA_URI=http://localhost:8090/v1/graphql stmux -w always -e ERROR -M -- [[ \"npm run dev\" .. \"tsc --watch --noEmit\" ] .. [ \"npm run test -- --watchAll\" ]]",
-    "dev:start": "HASURA_URI=http://localhost:8090/v1/graphql stmux -w always -e ERROR -M -- [[ \"docker-compose -f docker/docker-compose.service-deps.yml up\" .. \"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\" ]]",
+    "dev:test": "stmux -w always -e ERROR -M -- [[ \"npm run dev\" .. \"tsc --watch --noEmit\" ] .. [ \"npm run test -- --watchAll\" ]]",
+    "dev:start": "stmux -w always -e ERROR -M -- [[ \"docker-compose -f docker/docker-compose.service-deps.yml up\" .. \"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\" ]]",
     "build": "rm -rf dist && npm run codegen:internal && npm run codegen:external && tsc && npx cpx src/**/*.graphql dist",
-    "test": "NODE_ENV=test jest",
-    "start": "HASURA_URI=http://localhost:8090/v1/graphql node dist/index.js",
+    "test": "jest",
+    "start": "node dist/index.js",
     "start-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml up",
     "stop-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml down"
   },
@@ -24,6 +24,7 @@
   "dependencies": {
     "apollo-link-http": "^1.5.15",
     "apollo-server": "^2.8.0",
+    "axios": "^0.19.0",
     "cross-fetch": "^3.0.4",
     "eslint-plugin-jest": "^22.15.2",
     "faker": "^4.1.0",

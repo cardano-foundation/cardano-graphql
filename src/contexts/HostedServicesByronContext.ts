@@ -1,5 +1,5 @@
 import { GraphQLSchema } from 'graphql'
 
-export type Context = {
+export type HostedServicesByronContext = {
   hasura?: GraphQLSchema
 }

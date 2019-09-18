@@ -3,38 +3,39 @@ import * as fs from 'fs'
 import { createTestClient, ApolloServerTestClient } from 'apollo-server-testing'
 import { ApolloServerBase } from 'apollo-server-core'
 import * as depthLimit from 'graphql-depth-limit'
-import { mockedResolvers } from './resolvers'
 import {
   block43177, block43178,
   epoch2,
   tx21c528, txa54489, txd9e280
-} from './lib/data_assertions'
-import * as queries from './lib/queries'
-import { getConfig } from './config'
+} from '../lib/data_assertions'
+import * as queries from '../lib/queries'
+import { getConfig } from '../config'
 
-describe('Integration', () => {
+describe('Jörmungandr integration', () => {
   let apolloServer: ApolloServerBase
   let client: ApolloServerTestClient
 
   beforeEach(async () => {
-    const { context } = await getConfig()
+    process.env.NODE_IMPLEMENTATION = 'Jormungandr'
+    process.env.NODE_API_URI = 'http://localhost:8443/api/v0/'
+    const { context, resolvers } = await getConfig()
     apolloServer = new ApolloServerBase({
       context,
       introspection: true,
-      resolvers: mockedResolvers,
-      typeDefs: fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'UTF8'),
+      resolvers,
+      typeDefs: fs.readFileSync(path.join(__dirname, '../schema.graphql'), 'UTF8'),
       validationRules: [depthLimit(20)]
     })
     client = createTestClient(apolloServer)
   })
 
   describe('blocks', () => {
-    // it('returns a single result by default', async () => {
-    // const result = await client.query({
-    //   query: queries.blocksWithNoTx
-    // })
-    // expect(result.data.blocks.length).toBe(1)
-    // })
+    it('returns a single result by default', async () => {
+    const result = await client.query({
+      query: queries.blocksWithNoTx
+    })
+    expect(result.data.blocks.length).toBe(1)
+    })
 
     it('throws an error if query requests more than 100 blocks', async () => {
       const result = await client.query({

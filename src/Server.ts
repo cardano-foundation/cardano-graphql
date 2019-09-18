@@ -7,7 +7,7 @@ import { Resolvers } from './graphql_types'
 
 export type Config = {
   apiPort: number
-  context: () => void
+  context: () => any
   queryDepthLimit: number
   resolvers: Resolvers
   tracing: boolean
