@@ -90,7 +90,11 @@ whenInHeadNormalForm k x = do
   Standard instances
 -------------------------------------------------------------------------------}
 
-deriving via UseIsNormalForm Bool  instance NoUnexpectedThunks Bool
+deriving via UseIsNormalForm Bool    instance NoUnexpectedThunks Bool
+deriving via UseIsNormalForm Natural instance NoUnexpectedThunks Natural
+deriving via UseIsNormalForm Integer instance NoUnexpectedThunks Integer
+deriving via UseIsNormalForm Float   instance NoUnexpectedThunks Float
+deriving via UseIsNormalForm Double  instance NoUnexpectedThunks Double
 
 deriving via UseIsNormalForm Int   instance NoUnexpectedThunks Int
 deriving via UseIsNormalForm Int8  instance NoUnexpectedThunks Int8
