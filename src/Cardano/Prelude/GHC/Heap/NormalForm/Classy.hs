@@ -1,11 +1,13 @@
-{-# LANGUAGE DefaultSignatures  #-}
-{-# LANGUAGE DerivingVia        #-}
-{-# LANGUAGE FlexibleContexts   #-}
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE TypeOperators      #-}
+{-# LANGUAGE DefaultSignatures   #-}
+{-# LANGUAGE DerivingVia         #-}
+{-# LANGUAGE FlexibleContexts    #-}
+{-# LANGUAGE StandaloneDeriving  #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TypeOperators       #-}
 
 module Cardano.Prelude.GHC.Heap.NormalForm.Classy (
     NoUnexpectedThunks(..)
+  , allNoUnexpectedThunks
   , genericWhnfNoUnexpectedThunks
   , UseIsNormalForm(..)
   ) where
@@ -15,8 +17,11 @@ import Cardano.Prelude.Base
 import Data.Foldable (toList)
 import Data.Sequence (Seq)
 import GHC.Exts.Heap
-import qualified Data.Map as Map
-import qualified Data.Set as Set
+
+import qualified Data.Map             as Map
+import qualified Data.Set             as Set
+import qualified Data.ByteString      as BS.Strict
+import qualified Data.ByteString.Lazy as BS.Lazy
 
 import qualified Cardano.Prelude.GHC.Heap.NormalForm as NF
 
@@ -57,6 +62,22 @@ genericWhnfNoUnexpectedThunks :: (Generic a, GNoUnexpectedThunks (Rep a))
                               => a -> IO Bool
 genericWhnfNoUnexpectedThunks = gNoUnexpectedThunks . from
 
+-- | Check whether all elements of the list have no unexpected thunks
+--
+-- This is a useful combinator when checking the elements of containers, if
+-- the containers /themselves/ are allowed to have thunks in them
+-- (classical example is 'FingerTree').
+allNoUnexpectedThunks :: forall a. NoUnexpectedThunks a => [a] -> IO Bool
+allNoUnexpectedThunks = go
+  where
+    go :: [a] -> IO Bool
+    go [] = return True
+    go (a:as) = do
+        nf <- noUnexpectedThunks a
+        if not nf
+          then return False
+          else go as
+
 whenInHeadNormalForm :: (a -> IO Bool) -> (a -> IO Bool)
 whenInHeadNormalForm k x = do
     c   <- getBoxedClosureData (asBox x)
@@ -69,24 +90,39 @@ whenInHeadNormalForm k x = do
   Standard instances
 -------------------------------------------------------------------------------}
 
-deriving via UseIsNormalForm Int instance NoUnexpectedThunks Int
+deriving via UseIsNormalForm Bool  instance NoUnexpectedThunks Bool
+
+deriving via UseIsNormalForm Int   instance NoUnexpectedThunks Int
+deriving via UseIsNormalForm Int8  instance NoUnexpectedThunks Int8
+deriving via UseIsNormalForm Int16 instance NoUnexpectedThunks Int16
+deriving via UseIsNormalForm Int32 instance NoUnexpectedThunks Int32
+deriving via UseIsNormalForm Int64 instance NoUnexpectedThunks Int64
+
+deriving via UseIsNormalForm Word   instance NoUnexpectedThunks Word
+deriving via UseIsNormalForm Word8  instance NoUnexpectedThunks Word8
+deriving via UseIsNormalForm Word16 instance NoUnexpectedThunks Word16
+deriving via UseIsNormalForm Word32 instance NoUnexpectedThunks Word32
+deriving via UseIsNormalForm Word64 instance NoUnexpectedThunks Word64
+
+deriving via UseIsNormalForm BS.Strict.ByteString instance NoUnexpectedThunks BS.Strict.ByteString
+deriving via UseIsNormalForm BS.Lazy.ByteString   instance NoUnexpectedThunks BS.Lazy.ByteString
 
 -- | Instance for 'Seq' checks elements only
 --
 -- The internal fingertree in 'Seq' might have thunks, which is essential for
 -- its asymptotic complexity.
 instance NoUnexpectedThunks a => NoUnexpectedThunks (Seq a) where
-  whnfNoUnexpectedThunks = andM . map noUnexpectedThunks . toList
+  whnfNoUnexpectedThunks = allNoUnexpectedThunks . toList
 
 -- | Instance for 'Map' checks elements only (Map is spine strict)
 instance ( NoUnexpectedThunks k
          , NoUnexpectedThunks v
          ) => NoUnexpectedThunks (Map k v) where
-  whnfNoUnexpectedThunks = andM . map noUnexpectedThunks . Map.toList
+  whnfNoUnexpectedThunks = allNoUnexpectedThunks . Map.toList
 
 -- | Instance for 'Set' checks elements only (Set is spine strict)
 instance NoUnexpectedThunks a => NoUnexpectedThunks (Set a) where
-  whnfNoUnexpectedThunks = andM . map noUnexpectedThunks . Set.toList
+  whnfNoUnexpectedThunks = allNoUnexpectedThunks . Set.toList
 
 -- | Instance for function closures is always 'True'
 --
@@ -173,10 +209,11 @@ instance GNoUnexpectedThunks f => GNoUnexpectedThunks (M1 i c f) where
 instance ( GNoUnexpectedThunks f
          , GNoUnexpectedThunks g
          ) => GNoUnexpectedThunks (f :*: g) where
-  gNoUnexpectedThunks (fp :*: gp) =
-      andM [ gNoUnexpectedThunks fp
-           , gNoUnexpectedThunks gp
-           ]
+  gNoUnexpectedThunks (fp :*: gp) = do
+      nf <- gNoUnexpectedThunks fp
+      if not nf
+        then return False
+        else gNoUnexpectedThunks gp
 
 instance ( GNoUnexpectedThunks f
          , GNoUnexpectedThunks g
@@ -189,13 +226,3 @@ instance NoUnexpectedThunks c => GNoUnexpectedThunks (K1 i c) where
 
 instance GNoUnexpectedThunks U1 where
   gNoUnexpectedThunks U1 = return True
-
-{-------------------------------------------------------------------------------
-  Auxiliary
--------------------------------------------------------------------------------}
-
-andM :: Monad m => [m Bool] -> m Bool
-andM []       = return True
-andM (mb:mbs) = do
-    b <- mb
-    if b then andM mbs else return False
