@@ -14,6 +14,7 @@ module Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy (tests) where
 -- tests pass with @-O0@. See 'isNormalForm' for discussion.
 import Cardano.Prelude hiding (($!))
 
+import Prelude (String)
 import GHC.Types (Int(..))
 import Control.Exception (throw)
 
@@ -34,14 +35,14 @@ import qualified Hedgehog.Range as Range
 
 -- | The model for a value describes that value, being explicit where we
 -- can expect thunks in the value.
-class Show (Model a) => FromModel a where
+class (NoUnexpectedThunks a, Show (Model a)) => FromModel a where
   data Model a :: Type
 
   -- | Generate model value (see below for examples)
   genModel  :: Gen (Model a)
 
   -- | Does the model describe a value in NF?
-  modelIsNF :: Model a -> Bool
+  modelIsNF :: [String] -> Model a -> ThunkInfo
 
   -- | Translate from the model to an actual value
   --
@@ -56,14 +57,19 @@ data Bottom = Bottom Text
 
 instance Exception Bottom
 
-testWithModel :: forall a. (FromModel a, NoUnexpectedThunks a)
-              => Proxy a -> Property
-testWithModel _ = withTests 1000 $ property $ do
+testWithModel :: forall a. FromModel a
+              => (ThunkInfo -> ThunkInfo -> Bool)
+              -> Proxy a
+              -- ^ Compare @ThunkInfo@. When we use 'noUnexpectedThunks' this
+              -- can just be @(==)@; however, when we use 'isNormalForm', the
+              -- context we will get from the model will be too detailed.
+              -> Property
+testWithModel compareInfo _proxy = withTests 1000 $ property $ do
     m :: Model a <- forAll genModel
-    classify "modelIsNF" $ modelIsNF m
+    collect $ modelIsNF [] m
     fromModel m $ \a -> do
-      isNF <- liftIO $ noUnexpectedThunks a
-      isNF === modelIsNF m
+      isNF <- liftIO $ noUnexpectedThunks [] a
+      Hedgehog.diff isNF compareInfo (modelIsNF [] m)
 
 {-------------------------------------------------------------------------------
   Int
@@ -75,8 +81,8 @@ instance FromModel Int where
     | IntValue Int
     deriving (Show)
 
-  modelIsNF IntUndefined = False
-  modelIsNF (IntValue _) = True
+  modelIsNF ctxt IntUndefined = UnexpectedThunk ("Int" : ctxt)
+  modelIsNF _    (IntValue _) = NoUnexpectedThunks
 
   fromModel IntUndefined k = k (bottom "int thunk")
   fromModel (IntValue n) k = case n of I# result -> k (I# result)
@@ -85,6 +91,34 @@ instance FromModel Int where
         pure $ IntUndefined
       , IntValue <$> Gen.int Range.linearBounded
       ]
+
+{-------------------------------------------------------------------------------
+  Pairs
+-------------------------------------------------------------------------------}
+
+instance (FromModel a, FromModel b) => FromModel (a, b) where
+  data Model (a, b) =
+      PairUndefined
+    | PairDefined (Model a) (Model b)
+
+  modelIsNF ctxt ab =
+      case ab of
+        PairUndefined   -> UnexpectedThunk ctxt'
+        PairDefined a b -> modelIsNF ctxt' a <> modelIsNF ctxt' b
+    where
+      ctxt' = "(,)" : ctxt
+
+  fromModel PairUndefined     k = k (bottom "pair thunk")
+  fromModel (PairDefined a b) k = fromModel a $ \a' ->
+                                  fromModel b $ \b' ->
+                                  k (a', b')
+
+  genModel = Gen.choice [
+        pure $ PairUndefined
+      , PairDefined <$> genModel <*> genModel
+      ]
+
+deriving instance (Show (Model a), Show (Model b)) => Show (Model (a, b))
 
 {-------------------------------------------------------------------------------
   Lists
@@ -96,9 +130,14 @@ instance FromModel a => FromModel [a] where
     | ListNil
     | ListCons (Model a) (Model [a])
 
-  modelIsNF ListUndefined   = False
-  modelIsNF ListNil         = True
-  modelIsNF (ListCons x xs) = modelIsNF x && modelIsNF xs
+  modelIsNF ctxt xs =
+      case xs of
+        ListUndefined  -> UnexpectedThunk ctxt'
+        ListNil        -> NoUnexpectedThunks
+        ListCons x xs' -> modelIsNF ctxt' x <> modelIsNF ctxt xs'
+
+    where
+      ctxt' = "[]" : ctxt
 
   fromModel ListUndefined   k = k (bottom "list thunk")
   fromModel ListNil         k = k []
@@ -127,11 +166,12 @@ instance FromModel (Seq Int) where
   data Model (Seq Int) = SeqEmpty | SeqEnqueue (Model Int) (Model (Seq Int))
     deriving (Show)
 
-  modelIsNF = all modelIsNF . modelForElems
+  modelIsNF ctxt = go
     where
-      modelForElems :: Model (Seq Int) -> [Model Int]
-      modelForElems SeqEmpty          = []
-      modelForElems (SeqEnqueue x xs) = x : modelForElems xs
+      go SeqEmpty          = NoUnexpectedThunks
+      go (SeqEnqueue x xs) = modelIsNF ctxt' x <> go xs
+
+      ctxt' = "Seq" : ctxt
 
   fromModel m = \k -> go m $ \s -> forceSeqToWhnf s k
     where
@@ -167,12 +207,12 @@ forceSeqToWhnf (SI.Seq (SI.Deep n l ft r)) k = k (SI.Seq (SI.Deep n l ft r))
   Using the standard 'isNormalForm' check
 -------------------------------------------------------------------------------}
 
-instance FromModel a => FromModel (UseIsNormalForm a) where
+instance (FromModel a, Typeable a) => FromModel (UseIsNormalForm a) where
   newtype Model (UseIsNormalForm a) = Wrap { unwrap :: Model a }
 
-  genModel      = Wrap <$> genModel
-  modelIsNF     = modelIsNF. unwrap
-  fromModel m k = fromModel (unwrap m) $ \x -> k (UseIsNormalForm x)
+  genModel       = Wrap <$> genModel
+  modelIsNF ctxt = modelIsNF ctxt . unwrap
+  fromModel m k  = fromModel (unwrap m) $ \x -> k (UseIsNormalForm x)
 
 deriving instance Show (Model a) => Show (Model (UseIsNormalForm a))
 
@@ -185,13 +225,17 @@ tests = and <$> sequence [checkSequential testGroup]
 
 testGroup :: Group
 testGroup = Group "Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy" [
-      ("prop_isNormalForm_Int"     ,                 testWithModel $ Proxy @(UseIsNormalForm Int))
-    , ("prop_isNormalForm_ListInt" ,                 testWithModel $ Proxy @(UseIsNormalForm [Int]))
-    , ("prop_isNormalForm_SeqInt"  , expectFailure $ testWithModel $ Proxy @(UseIsNormalForm (Seq Int)))
+      ("prop_isNormalForm_Int"        ,                 testWithModel ((==) `on` thunkInfoToIsNF) $ Proxy @(UseIsNormalForm Int))
+    , ("prop_isNormalForm_IntInt"     ,                 testWithModel ((==) `on` thunkInfoToIsNF) $ Proxy @(UseIsNormalForm (Int, Int)))
+    , ("prop_isNormalForm_ListInt"    ,                 testWithModel ((==) `on` thunkInfoToIsNF) $ Proxy @(UseIsNormalForm [Int]))
+    , ("prop_isNormalForm_IntListInt" ,                 testWithModel ((==) `on` thunkInfoToIsNF) $ Proxy @(UseIsNormalForm (Int, [Int])))
+    , ("prop_isNormalForm_SeqInt"     , expectFailure $ testWithModel ((==) `on` thunkInfoToIsNF) $ Proxy @(UseIsNormalForm (Seq Int)))
 
-    , ("prop_noUnexpectedThunks_Int"     , testWithModel $ Proxy @Int)
-    , ("prop_noUnexpectedThunks_ListInt" , testWithModel $ Proxy @[Int])
-    , ("prop_noUnexpectedThunks_SeqInt"  , testWithModel $ Proxy @(Seq Int))
+    , ("prop_noUnexpectedThunks_Int"        , testWithModel (==) $ Proxy @Int)
+    , ("prop_noUnexpectedThunks_IntInt"     , testWithModel (==) $ Proxy @(Int, Int))
+    , ("prop_noUnexpectedThunks_ListInt"    , testWithModel (==) $ Proxy @[Int])
+    , ("prop_noUnexpectedThunks_IntListInt" , testWithModel (==) $ Proxy @(Int, [Int]))
+    , ("prop_noUnexpectedThunks_SeqInt"     , testWithModel (==) $ Proxy @(Seq Int))
     ]
 
 {-------------------------------------------------------------------------------
