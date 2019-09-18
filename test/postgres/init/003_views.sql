@@ -42,6 +42,7 @@ with block_meta_cte as (
     id,
     block_no,
     slot_no,
+    epoch_no,
     quote_literal(block.slot_no * (select slot_duration from meta) * 0.001) as time_since_start,
     (select start_time from meta) as start_time,
     (select protocol_const from meta) as protocol_const
@@ -51,17 +52,15 @@ select
   id,
   block_no as "blockNo",
   slot_no as "slotNo",
+  epoch_no as "epochNo",
   time_since_start as "secondsSinceGenesis",
+  start_time as "timeSinceStart",
   case when slot_no >= 0
     then start_time + cast (time_since_start as interval)
     else start_time
   end as "createdAt",
   case when slot_no > 0
-    then floor(slot_no / (10 * protocol_const))
-    else 0
-  end as "epochNo",
-  case when slot_no > 0
-    then slot_no - (floor(slot_no / (10 * protocol_const)) * (10 * protocol_const))
+    then slot_no - (epoch_no * (10 * protocol_const))
     else 0
   end as "slotWithinEpoch"
 from block_meta_cte;
