@@ -4,7 +4,7 @@ import * as simpleGit from 'simple-git/promise'
 import { StakePoolMetadataRepository } from './StakePoolMetadataRepository'
 
 const git = simpleGit()
-async function addStakePoolToRemoteRepo (id: string) {
+async function addStakePoolToRemoteRepo (id: string, remoteUri: string) {
   await fs.writeJson(`sp_${id}.json`, {
     description: `A stakepool with the ID of ${id}`,
     isCharity: true,
@@ -15,19 +15,21 @@ async function addStakePoolToRemoteRepo (id: string) {
   })
   await git.add('./*')
   await git.commit(`Add stake pool ${id}`)
+  await git.addRemote('origin', remoteUri)
   return git.push()
 }
 
 describe('StakePoolMetadataRepository', () => {
   let metadataRepository: ReturnType<typeof StakePoolMetadataRepository>
   const LOCAL_REPO_PATH = path.join(__dirname, '__temp_metadata_repo__')
+  const REMOTE_REPO_URI = 'http://localhost:4040/stake-pool-metadata.git'
 
   const localRepoExists = () =>  fs.pathExists(LOCAL_REPO_PATH)
 
   beforeEach(async () => {
     metadataRepository = StakePoolMetadataRepository({
       localPath: LOCAL_REPO_PATH,
-      remoteUri: 'http://localhost:4040/stake-pool-metadata.git'
+      remoteUri: REMOTE_REPO_URI
     })
    await metadataRepository.destroy()
   })
@@ -47,7 +49,7 @@ describe('StakePoolMetadataRepository', () => {
       await metadataRepository.init()
       expect(await localRepoExists()).toBe(true)
       await metadataRepository.init()
-      await addStakePoolToRemoteRepo("4")
+      await addStakePoolToRemoteRepo("4", REMOTE_REPO_URI)
       expect(await fs.readFile(path.join(LOCAL_REPO_PATH, 'stake-pool-metadata','sp_4.json')))
     })
   })
