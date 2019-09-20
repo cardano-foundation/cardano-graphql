@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Integration blocks Returns blocks by id 1`] = `
+exports[`Integration test suite blocks Returns blocks by id 1`] = `
 Object {
   "data": Object {
     "blocks": Array [
@@ -40,7 +40,7 @@ Object {
 }
 `;
 
-exports[`Integration blocks Uses pagination with an offset for larger result sets 1`] = `
+exports[`Integration test suite blocks Uses pagination with an offset for larger result sets 1`] = `
 Array [
   Object {
     "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
@@ -69,7 +69,7 @@ Array [
 ]
 `;
 
-exports[`Integration blocks Uses pagination with an offset for larger result sets 2`] = `
+exports[`Integration test suite blocks Uses pagination with an offset for larger result sets 2`] = `
 Array [
   Object {
     "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
@@ -98,7 +98,7 @@ Array [
 ]
 `;
 
-exports[`Integration blocks are linked to their predecessor, and the chain can be traversed 1`] = `
+exports[`Integration test suite blocks are linked to their predecessor, and the chain can be traversed 1`] = `
 Object {
   "data": Object {
     "blocks": Array [
@@ -128,7 +128,7 @@ Object {
 }
 `;
 
-exports[`Integration blocks can be accessed by number, with the return order in he array guaranteed 1`] = `
+exports[`Integration test suite blocks can be accessed by number, with the return order in he array guaranteed 1`] = `
 Object {
   "data": Object {
     "blocks": Array [
@@ -168,11 +168,11 @@ Object {
 }
 `;
 
-exports[`Integration blocks throws an error if query requests more than 100 blocks 1`] = `[GraphQLError: 110 exceeds the maximum allowed value of 100. Use the offset to paginate through a larger result set]`;
+exports[`Integration test suite blocks throws an error if query requests more than 100 blocks 1`] = `[GraphQLError: 110 exceeds the maximum allowed value of 100. Use the offset to paginate through a larger result set]`;
 
-exports[`Integration cardano Returns the block height 1`] = `99`;
+exports[`Integration test suite cardano Returns the block height 1`] = `99`;
 
-exports[`Integration epochs Returns epoch details by number 1`] = `
+exports[`Integration test suite epochs Returns epoch details by number 1`] = `
 Object {
   "data": Object {
     "epochs": Array [
@@ -310,7 +310,7 @@ Object {
             ],
           },
         ],
-        "endedAt": 2017-11-09T07:44:51.000Z,
+        "endedAt": "2017-11-09T07:44:51.000Z",
         "number": 2,
         "output": Array [
           Object {
@@ -338,7 +338,7 @@ Object {
             "number": 2,
           },
         ],
-        "startedAt": 2017-11-04T07:44:51.000Z,
+        "startedAt": "2017-11-04T07:44:51.000Z",
         "transactions": Array [
           Object {
             "block": Object {
@@ -444,7 +444,7 @@ Object {
 }
 `;
 
-exports[`Integration transactions Returns null if for specific transaction lookup 1`] = `
+exports[`Integration test suite transactions Returns null if for specific transaction lookup 1`] = `
 Object {
   "data": Object {
     "transactions": Array [
@@ -549,7 +549,7 @@ Object {
 }
 `;
 
-exports[`Integration transactions Returns transactions by IDs 1`] = `
+exports[`Integration test suite transactions Returns transactions by IDs 1`] = `
 Object {
   "data": Object {
     "transactions": Array [
@@ -654,7 +654,7 @@ Object {
 }
 `;
 
-exports[`Integration transactions utxoSet Can be filtered by address 1`] = `
+exports[`Integration test suite transactions utxoSet Can be filtered by address 1`] = `
 Object {
   "data": Object {
     "utxoSet": Array [
@@ -684,7 +684,7 @@ Object {
 }
 `;
 
-exports[`Integration transactions utxoSet Returns the whole set by default 1`] = `
+exports[`Integration test suite transactions utxoSet Returns the whole set by default 1`] = `
 Object {
   "data": Object {
     "utxoSet": Array [
