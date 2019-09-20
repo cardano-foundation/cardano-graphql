@@ -7,7 +7,7 @@ import { Context } from './Context'
 
 export type Config = {
   apiPort: number
-  context: () => Context
+  context: () => Context | void
   queryDepthLimit: number
   resolvers: Resolvers
   tracing: boolean
@@ -15,6 +15,7 @@ export type Config = {
 
 export function Server ({ apiPort, context, queryDepthLimit, resolvers, tracing }: Config) {
   let apolloServerInfo: ServerInfo
+
   return {
     async boot (): Promise<ServerInfo> {
       const apolloServer = new ApolloServer({
