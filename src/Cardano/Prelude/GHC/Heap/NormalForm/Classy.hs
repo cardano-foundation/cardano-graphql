@@ -27,6 +27,9 @@ import Prelude (String)
 
 import qualified Data.ByteString as BS.Strict
 import qualified Data.ByteString.Lazy as BS.Lazy
+import qualified Data.Text as Text.Strict
+import qualified Data.Text.Lazy as Text.Lazy
+import qualified Data.IntMap as IntMap
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 
@@ -158,6 +161,7 @@ deriving via UseIsNormalForm Natural instance NoUnexpectedThunks Natural
 deriving via UseIsNormalForm Integer instance NoUnexpectedThunks Integer
 deriving via UseIsNormalForm Float   instance NoUnexpectedThunks Float
 deriving via UseIsNormalForm Double  instance NoUnexpectedThunks Double
+deriving via UseIsNormalForm Char    instance NoUnexpectedThunks Char
 
 deriving via UseIsNormalForm Int   instance NoUnexpectedThunks Int
 deriving via UseIsNormalForm Int8  instance NoUnexpectedThunks Int8
@@ -173,6 +177,9 @@ deriving via UseIsNormalForm Word64 instance NoUnexpectedThunks Word64
 
 deriving via UseIsNormalForm BS.Strict.ByteString instance NoUnexpectedThunks BS.Strict.ByteString
 deriving via UseIsNormalForm BS.Lazy.ByteString   instance NoUnexpectedThunks BS.Lazy.ByteString
+
+deriving via UseIsNormalForm Text.Strict.Text instance NoUnexpectedThunks Text.Strict.Text
+deriving via UseIsNormalForm Text.Lazy.Text   instance NoUnexpectedThunks Text.Lazy.Text
 
 -- | Instance for 'Seq' checks elements only
 --
@@ -192,6 +199,11 @@ instance NoUnexpectedThunks a => NoUnexpectedThunks (Set a) where
   showTypeOf _ = "Set"
   whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks ctxt . Set.toList
 
+-- | Instance for 'IntMap' checks elements only (IntMap is spine strict)
+instance NoUnexpectedThunks a => NoUnexpectedThunks (IntMap a) where
+  showTypeOf _ = "IntMap"
+  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks ctxt . IntMap.toList
+
 -- | Instance for function closures is always 'True'
 --
 -- We could use 'isNormalForm' here, but this would (1) break compositionality
@@ -205,6 +217,11 @@ instance NoUnexpectedThunks (a -> b) where
 instance NoUnexpectedThunks (IO a) where
   showTypeOf _ = "IO"
   whnfNoUnexpectedThunks _ctxt _fun = return NoUnexpectedThunks
+
+instance NoUnexpectedThunks a => NoUnexpectedThunks (Ratio a) where
+  showTypeOf _ = "Ratio"
+  whnfNoUnexpectedThunks ctxt r =
+      allNoUnexpectedThunks ctxt [numerator r, denominator r]
 
 {-------------------------------------------------------------------------------
   Instances that rely on generics
@@ -259,6 +276,7 @@ instance ( NoUnexpectedThunks a
          ) => NoUnexpectedThunks (Either a b)
 
 instance NoUnexpectedThunks a => NoUnexpectedThunks [a]
+instance NoUnexpectedThunks a => NoUnexpectedThunks (Maybe a)
 
 {-------------------------------------------------------------------------------
   Using the standard 'isNormalForm' check
