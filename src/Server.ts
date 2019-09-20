@@ -7,7 +7,7 @@ import { Context } from './Context'
 
 export type Config = {
   apiPort: number
-  context: () => Context
+  context: () => Context | void
   queryDepthLimit: number
   resolvers: Resolvers
   tracing: boolean
