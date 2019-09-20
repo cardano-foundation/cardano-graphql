@@ -9,21 +9,21 @@ scalar Lovelaces
 scalar Percentage
 scalar PublicKeyHash
 scalar StakePoolTicker
-scalar TransactionHash # may need more specificity
+scalar RawTransaction
 scalar PositiveInt
 
 type Mutation {
   delegateStake (
     # Constructed using a client SDK, signed, encoded
-    transaction: TransactionHash
+    transaction: RawTransaction
   ): Boolean!
   registerStakePool (
     # Constructed using a client SDK, includes registration certificate containing the staking key of the pool leader
-    transaction: TransactionHash
+    transaction: RawTransaction
   ): Boolean!
   submitTransaction (
     # Constructed using a client SDK, signed, encoded
-    transaction: TransactionHash
+    transaction: RawTransaction
   ): Boolean!
 }
 

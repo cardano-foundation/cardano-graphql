@@ -1,5 +1,5 @@
 export * from './Lovelaces'
 export * from './Percentage'
 export * from './PublicKeyHash'
+export * from './RawTransaction'
 export * from './StakePoolTicker'
-export * from './TransactionHash'

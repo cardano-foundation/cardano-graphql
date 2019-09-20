@@ -1,8 +1,8 @@
 import { GraphQLScalarType, Kind } from 'graphql'
 
-export const TransactionHash = new GraphQLScalarType({
-  name: 'TransactionHash',
-  description: 'TransactionHash string',
+export const RawTransaction = new GraphQLScalarType({
+  name: 'RawTransaction',
+  description: 'RawTransaction BLOB',
   serialize (value) {
     // Todo: Implement
     return value
