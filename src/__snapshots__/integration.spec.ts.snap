@@ -444,6 +444,31 @@ Object {
 }
 `;
 
+exports[`Integration stakePools Returns Stake Pools 1`] = `
+Object {
+  "data": Object {
+    "stakePools": Array [
+      Object {
+        "controlledStake": 367,
+        "id": "3F271RGB2ST5EY3WVL5TLGIRDHLV92GB8K",
+        "name": "Keeling - Frami",
+        "ranking": 0,
+        "retirementEpochNumber": 112,
+        "ticker": "8PAL",
+        "url": "blake.biz",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration test suite blocks Returns blocks by id 1`] = `
 Object {
   "data": Object {

@@ -43,7 +43,6 @@ describe('Integration', () => {
           limit: 110
         }
       })
-      console.log(result)
       expect(result.errors[0]).toMatchSnapshot()
     })
 
@@ -61,7 +60,6 @@ describe('Integration', () => {
           offset: 100
         }
       })
-      console.log(page1.data)
       expect(page1.data.blocks).toMatchSnapshot()
       expect(page2.data.blocks).toMatchSnapshot()
     })
@@ -148,14 +146,14 @@ describe('Integration', () => {
     })
   })
 
-  // describe('stakePools', () => {
-  //   it('Returns Stake Pools', async () => {
-  //     const result = await client.query({
-  //       query: queries.stakePools
-  //     })
-  //     expect(result).toMatchSnapshot()
-  //   })
-  // })
+  describe('stakePools', () => {
+    it('Returns Stake Pools', async () => {
+      const result = await client.query({
+        query: queries.stakePools
+      })
+      expect(result).toMatchSnapshot()
+    })
+  })
 
   describe('transactions', () => {
     it('Returns transactions by IDs', async () => {
