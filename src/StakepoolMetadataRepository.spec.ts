@@ -7,13 +7,13 @@ async function addStakePoolToRemoteRepo (id: string, _remoteUri: string) {
   const git = simpleGit()
   await fs.writeJson(`test/git/stake-pool-metadata/sp_${id}.json`, {
     description: `A stakepool with the ID of ${id}`,
-    isCharity: true,
+    isCharity: false,
     profitMargin: 30,
     name: `Stake Pool ${id}`,
     ticker: `SP${id}`,
     url: `http://stake.pool/${id}`
   })
-  await git.add('./*')
+  await git.add('*')
   await git.commit(`Add stake pool ${id}`)
   return git.push()
 }
