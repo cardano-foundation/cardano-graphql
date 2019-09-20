@@ -4,7 +4,7 @@ import {
   Percentage,
   PublicKeyHash,
   StakePoolTicker,
-  TransactionHash
+  RawTransaction
 } from '../lib/scalars'
 
 const GraphQLBigInt = require('graphql-bigint')
@@ -16,5 +16,5 @@ export const scalarResolvers = {
   Percentage: Percentage,
   PublicKeyHash: PublicKeyHash,
   StakePoolTicker: StakePoolTicker,
-  TransactionHash: TransactionHash
+  RawTransaction: RawTransaction
 } as any
