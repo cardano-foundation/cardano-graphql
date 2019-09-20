@@ -11,7 +11,7 @@
     "dev:test": "stmux -w always -e ERROR -M -- [[ \"npm run dev\" .. \"tsc --watch --noEmit\" ] .. [ \"npm run test -- --watchAll\" ]]",
     "dev:start": "stmux -w always -e ERROR -M -- [[ \"docker-compose -f docker/docker-compose.service-deps.yml up\" .. \"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\" ]]",
     "build": "rm -rf dist && npm run codegen:internal && npm run codegen:external && tsc && npx cpx src/**/*.graphql dist",
-    "test": "jest",
+    "test": "jest src/StakepoolMetadataRepository.spec.ts",
     "start": "node dist/index.js",
     "start-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml up",
     "stop-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml down"
@@ -27,13 +27,16 @@
     "cross-fetch": "^3.0.4",
     "eslint-plugin-jest": "^22.15.2",
     "faker": "^4.1.0",
+    "fs-extra": "^8.1.0",
     "graphql": "^14.4.2",
     "graphql-bigint": "^1.0.0",
     "graphql-depth-limit": "^1.1.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-scalars": "^1.0.1",
     "lodash.times": "^4.3.2",
-    "promise-exponential-retry": "^1.0.3"
+    "promise-exponential-retry": "^1.0.3",
+    "simple-git": "^1.126.0",
+    "ts-custom-error": "^3.1.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.5.0",
@@ -41,6 +44,7 @@
     "@graphql-codegen/typescript-graphql-files-modules": "^1.5.0",
     "@graphql-codegen/typescript-resolvers": "^1.5.0",
     "@types/faker": "^4.1.5",
+    "@types/fs-extra": "^8.0.0",
     "@types/graphql": "^14.2.3",
     "@types/graphql-depth-limit": "^1.1.2",
     "@types/graphql-iso-date": "^3.3.1",

@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  gitServer:
+    image: cirocosta/gitserver-http
+    ports:
+      - "4040:80"
+    restart: always
+    volumes:
+      - ../test/git:/var/lib/initial

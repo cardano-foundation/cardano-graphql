@@ -15,6 +15,7 @@ export type Config = {
 
 export function Server ({ apiPort, context, queryDepthLimit, resolvers, tracing }: Config) {
   let apolloServerInfo: ServerInfo
+
   return {
     async boot (): Promise<ServerInfo> {
       const apolloServer = new ApolloServer({
