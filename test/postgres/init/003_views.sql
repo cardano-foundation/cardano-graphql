@@ -8,10 +8,17 @@
 
 -- The standard utxo view which shows all unspent transaction outputs.
 create view "Utxo" as select
-  tx_out.*
-  from tx_out left outer join tx_in
-  on tx_out.tx_id = tx_in.tx_out_id and tx_out.index = tx_in.tx_out_index
-  where tx_in.tx_in_id is null;
+  address,
+  value,
+  tx.hash as "txId",
+  index
+from tx
+join tx_out
+  on tx.id = tx_out.tx_id
+left outer join tx_in
+  on tx_out.tx_id = tx_in.tx_out_id
+  and tx_out.index = tx_in.tx_out_index
+where tx_in.tx_in_id is null;
 
 create view "TransactionOutput" as
 select
@@ -19,80 +26,92 @@ select
   value,
   tx.hash as "txId",
   index
-from
-  tx
-  inner join tx_out on tx.id = tx_out.tx_id;
+from tx
+join tx_out
+  on tx.id = tx_out.tx_id;
 
 create view "TransactionInput" as
 select
-  address,
+  source_tx_out.address,
+  source_tx_out.value,
   tx.hash as "sourceTxId",
-  tx_in.tx_out_index as "sourceTxIndex",
-  value
+  tx_in.tx_out_index as "sourceTxIndex"
 from
   tx
-  inner join tx_out on tx.id = tx_out.tx_id
-  inner join tx_in on tx_in.tx_out_id = tx.id;
+join tx_in
+  on tx_in.tx_in_id = tx.id
+join tx_out as source_tx_out
+  on tx_in.tx_out_id = source_tx_out.tx_id
+  and tx_in.tx_out_index = source_tx_out.index;
 
-create view "BlockMeta" as
--- The common table expression isn't strictly speaking needed,
--- but it does clean up this view quite a lot
-with block_meta_cte as (
-  select
-    id,
-    block_no,
-    slot_no,
-    epoch_no,
-    quote_literal(block.slot_no * (select slot_duration from meta) * 0.001) as time_since_start,
+create view "Slot" as 
+with recursive slot_numbers as
+(
+  select 0 as slot
+  union all
+  select slot + 1 from slot_numbers
+  where slot + 1 <= (select max(slot_no) from block)
+), slot_meta as (
+  select 
+    slot,
+    quote_literal(slot * (select slot_duration from meta) * 0.001) as time_since_start,
     (select start_time from meta) as start_time,
     (select protocol_const from meta) as protocol_const
-  from block
+  from slot_numbers
 )
 select
-  id,
-  block_no as "blockNo",
-  slot_no as "slotNo",
-  epoch_no as "epochNo",
-  time_since_start as "secondsSinceGenesis",
-  start_time as "timeSinceStart",
-  case when slot_no >= 0
+  slot as "number",
+  block.hash as block,
+  block.slot_leader as leader,
+  case when slot > 0
+    then floor(slot / (10 * protocol_const))
+    else 0	
+  end as "epochNo",
+  case when slot >= 0
     then start_time + cast (time_since_start as interval)
     else start_time
   end as "createdAt",
-  case when slot_no > 0
-    then slot_no - (epoch_no * (10 * protocol_const))
+  case when slot > 0
+    then slot - (epoch_no * (10 * protocol_const))
     else 0
   end as "slotWithinEpoch"
-from block_meta_cte;
+from slot_meta
+left outer join block
+  on block.slot_no = slot_meta.slot;
 
 create view "Block" as
 select
-  "BlockMeta"."createdAt",
   (select sum(fee) from tx where tx.block = block.id) as "fees",
   block."hash" as id,
   block.merkel_root as "merkelRootHash",
   block.block_no as number,
   previous_block."hash" as "previousBlock",
-  block.size as size
+  block.size as size,
+  "Slot"."createdAt",
+  -- Even though we have epochNo defined in the Slot view,
+  -- this is written by the node-client and makes identification
+  -- of EBBs simpler, as EBBs don't have a slot_no
+  block.epoch_no as "epochNo",
+  "Slot"."slotWithinEpoch"
 from block
 left outer join block as previous_block
   on block.previous = previous_block.id
-inner join "BlockMeta"
-  on "BlockMeta".id = block.id;
+inner join "Slot"
+  on "Slot".number = block.slot_no;
 
 create view "Transaction" as
 select
   block.hash as "block",
   tx.fee,
   tx.hash as id,
-  "BlockMeta"."createdAt" as "includedAt",
+  "Slot"."createdAt" as "includedAt",
   (select sum("value") from tx_out where tx_id = tx.id) as "totalOutput"
 from
   tx
-inner join "BlockMeta"
-  on "BlockMeta".id = tx.block
 inner join block
-  on block.id = tx.block;
+  on block.id = tx.block
+inner join "Slot"
+  on "Slot".number = block.slot_no;
 
 create view "Epoch" as 
 select
@@ -100,7 +119,7 @@ select
   max("Block"."createdAt") as "endedAt",
   min("Block"."createdAt") as "startedAt",
   count(distinct tx.hash) as "transactionsCount",
-  "BlockMeta"."epochNo" as "number"
+  block.epoch_no as "number"
 from block
 join "Block"
   on block.hash = "Block".id
@@ -108,31 +127,12 @@ join tx
   on tx.block = block.id
 join tx_out
   on tx_out.tx_id = tx.id
-join "BlockMeta"
-  on "BlockMeta".id = block.id
-group by "BlockMeta"."epochNo"
-order by "BlockMeta"."epochNo";
+group by block.epoch_no
+order by block.epoch_no;
 
-create view "Slot" as 
-with recursive slot_numbers as
-(
-  select 0 as slot_no
-  union all
-  select slot_no + 1 FROM slot_numbers
-  where slot_no + 1 <= (select max(slot_no) from block)
-)
-select
-  slot_numbers.slot_no as "number",
-  block.hash as block,
-  block.slot_leader as leader,
-  "BlockMeta"."epochNo",
-  "BlockMeta"."createdAt" -- This is currently null if there is no block. Lift date calc here
-from slot_numbers
-left outer join block
-  on block.slot_no = slot_numbers.slot_no
-left outer join "BlockMeta"
-  on block.id = "BlockMeta".id;
-
+-- This function plays really nicely with Hasura,
+-- and allows us to query the utxo set at any block height
+-- https://docs.hasura.io/1.0/graphql/manual/queries/custom-functions.html
 CREATE FUNCTION utxo_set_at_block("blockId" hash32type)
 RETURNS SETOF "TransactionOutput" AS $$
   select
