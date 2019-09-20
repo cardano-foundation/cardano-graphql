@@ -1,5 +1,449 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Integration blocks Returns blocks by id 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
+        "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
+        "number": 43177,
+        "previousBlock": Object {
+          "number": 43176,
+        },
+        "size": 2554,
+        "slot": Object {
+          "number": 1,
+        },
+      },
+      Object {
+        "id": "7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f",
+        "merkelRootHash": "dc2718b3638853620c2f7e9f6fadbb43be3231c7406f5101173d75ef084cdc3f",
+        "number": 43178,
+        "previousBlock": Object {
+          "number": 43177,
+        },
+        "size": 4877,
+        "slot": Object {
+          "number": 2,
+        },
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration blocks Uses pagination with an offset for larger result sets 1`] = `
+Array [
+  Object {
+    "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
+    "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
+    "number": 43177,
+    "previousBlock": Object {
+      "number": 43176,
+    },
+    "size": 2554,
+    "slot": Object {
+      "number": 1,
+    },
+  },
+  Object {
+    "id": "7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f",
+    "merkelRootHash": "dc2718b3638853620c2f7e9f6fadbb43be3231c7406f5101173d75ef084cdc3f",
+    "number": 43178,
+    "previousBlock": Object {
+      "number": 43177,
+    },
+    "size": 4877,
+    "slot": Object {
+      "number": 2,
+    },
+  },
+]
+`;
+
+exports[`Integration blocks Uses pagination with an offset for larger result sets 2`] = `
+Array [
+  Object {
+    "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
+    "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
+    "number": 43177,
+    "previousBlock": Object {
+      "number": 43176,
+    },
+    "size": 2554,
+    "slot": Object {
+      "number": 1,
+    },
+  },
+  Object {
+    "id": "7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f",
+    "merkelRootHash": "dc2718b3638853620c2f7e9f6fadbb43be3231c7406f5101173d75ef084cdc3f",
+    "number": 43178,
+    "previousBlock": Object {
+      "number": 43177,
+    },
+    "size": 4877,
+    "slot": Object {
+      "number": 2,
+    },
+  },
+]
+`;
+
+exports[`Integration blocks are linked to their predecessor, and the chain can be traversed 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
+        "previousBlock": Object {
+          "number": 43176,
+          "previousBlock": null,
+        },
+      },
+      Object {
+        "id": "7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f",
+        "previousBlock": Object {
+          "number": 43177,
+          "previousBlock": null,
+        },
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration blocks can be accessed by number, with the return order in he array guaranteed 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
+        "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
+        "number": 43177,
+        "previousBlock": Object {
+          "number": 43176,
+        },
+        "size": 2554,
+        "slot": Object {
+          "number": 1,
+        },
+      },
+      Object {
+        "id": "7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f",
+        "merkelRootHash": "dc2718b3638853620c2f7e9f6fadbb43be3231c7406f5101173d75ef084cdc3f",
+        "number": 43178,
+        "previousBlock": Object {
+          "number": 43177,
+        },
+        "size": 4877,
+        "slot": Object {
+          "number": 2,
+        },
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration blocks throws an error if query requests more than 100 blocks 1`] = `[GraphQLError: 110 exceeds the maximum allowed value of 100. Use the offset to paginate through a larger result set]`;
+
+exports[`Integration cardano Returns the block height 1`] = `99`;
+
+exports[`Integration epochs Returns epoch details by number 1`] = `
+Object {
+  "data": Object {
+    "epochs": Array [
+      Object {
+        "blocks": Array [
+          Object {
+            "epoch": Object {
+              "number": 2,
+            },
+            "fees": 171246,
+            "id": "d2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325",
+            "merkelRootHash": "3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab",
+            "number": 43177,
+            "previousBlock": Object {
+              "number": 43176,
+            },
+            "size": 2554,
+            "slot": Object {
+              "epoch": Object {
+                "number": 2,
+              },
+              "number": 1,
+            },
+            "transactions": Array [
+              Object {
+                "block": Object {
+                  "number": 43177,
+                },
+                "fee": 171246,
+                "id": "21c52888aacf1061353d3795a09bb29d8382526e29e4983abe568a0b9562bd55",
+                "inputs": Array [
+                  Object {
+                    "address": "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y",
+                    "value": Object {
+                      "amount": 408327486262,
+                      "currency": "ADA",
+                    },
+                  },
+                ],
+                "outputs": Array [
+                  Object {
+                    "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
+                    "value": Object {
+                      "amount": 158327486262,
+                      "currency": "ADA",
+                    },
+                  },
+                  Object {
+                    "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
+                    "value": Object {
+                      "amount": 250000000000,
+                      "currency": "ADA",
+                    },
+                  },
+                ],
+              },
+              Object {
+                "block": Object {
+                  "number": 43177,
+                },
+                "fee": 0,
+                "id": "a544893db34f32a1817aa1e2d19a8b39655df0d37ca77d882eeb639167b876a8",
+                "inputs": Array [
+                  Object {
+                    "address": "Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf",
+                    "value": Object {
+                      "amount": 466152000000,
+                      "currency": "ADA",
+                    },
+                  },
+                ],
+                "outputs": Array [
+                  Object {
+                    "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
+                    "value": Object {
+                      "amount": 466152000000,
+                      "currency": "ADA",
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+          Object {
+            "epoch": Object {
+              "number": 2,
+            },
+            "fees": 171246,
+            "id": "7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f",
+            "merkelRootHash": "dc2718b3638853620c2f7e9f6fadbb43be3231c7406f5101173d75ef084cdc3f",
+            "number": 43178,
+            "previousBlock": Object {
+              "number": 43177,
+            },
+            "size": 4877,
+            "slot": Object {
+              "epoch": Object {
+                "number": 2,
+              },
+              "number": 2,
+            },
+            "transactions": Array [
+              Object {
+                "block": Object {
+                  "number": 43178,
+                },
+                "fee": 171246,
+                "id": "d9e280725a54b956ed283e42820672894edf8d1f48b5af36d76ee32f88a79497",
+                "inputs": Array [
+                  Object {
+                    "address": "DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H",
+                    "value": Object {
+                      "amount": 50805565431559,
+                      "currency": "ADA",
+                    },
+                  },
+                ],
+                "outputs": Array [
+                  Object {
+                    "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
+                    "value": Object {
+                      "amount": 50704353889014,
+                      "currency": "ADA",
+                    },
+                  },
+                  Object {
+                    "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
+                    "value": Object {
+                      "amount": 101211542545,
+                      "currency": "ADA",
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        "endedAt": "2017-11-09T07:44:51.000Z",
+        "number": 2,
+        "output": Array [
+          Object {
+            "amount": 217978153471859,
+            "currency": "ADA",
+          },
+        ],
+        "slots": Array [
+          Object {
+            "block": Object {
+              "number": 43177,
+            },
+            "epoch": Object {
+              "number": 2,
+            },
+            "number": 1,
+          },
+          Object {
+            "block": Object {
+              "number": 43178,
+            },
+            "epoch": Object {
+              "number": 2,
+            },
+            "number": 2,
+          },
+        ],
+        "startedAt": "2017-11-04T07:44:51.000Z",
+        "transactions": Array [
+          Object {
+            "block": Object {
+              "number": 43177,
+            },
+            "fee": 171246,
+            "id": "21c52888aacf1061353d3795a09bb29d8382526e29e4983abe568a0b9562bd55",
+            "inputs": Array [
+              Object {
+                "address": "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y",
+                "value": Object {
+                  "amount": 408327486262,
+                  "currency": "ADA",
+                },
+              },
+            ],
+            "outputs": Array [
+              Object {
+                "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
+                "value": Object {
+                  "amount": 158327486262,
+                  "currency": "ADA",
+                },
+              },
+              Object {
+                "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
+                "value": Object {
+                  "amount": 250000000000,
+                  "currency": "ADA",
+                },
+              },
+            ],
+          },
+          Object {
+            "block": Object {
+              "number": 43177,
+            },
+            "fee": 0,
+            "id": "a544893db34f32a1817aa1e2d19a8b39655df0d37ca77d882eeb639167b876a8",
+            "inputs": Array [
+              Object {
+                "address": "Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf",
+                "value": Object {
+                  "amount": 466152000000,
+                  "currency": "ADA",
+                },
+              },
+            ],
+            "outputs": Array [
+              Object {
+                "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
+                "value": Object {
+                  "amount": 466152000000,
+                  "currency": "ADA",
+                },
+              },
+            ],
+          },
+          Object {
+            "block": Object {
+              "number": 43178,
+            },
+            "fee": 171246,
+            "id": "d9e280725a54b956ed283e42820672894edf8d1f48b5af36d76ee32f88a79497",
+            "inputs": Array [
+              Object {
+                "address": "DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H",
+                "value": Object {
+                  "amount": 50805565431559,
+                  "currency": "ADA",
+                },
+              },
+            ],
+            "outputs": Array [
+              Object {
+                "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
+                "value": Object {
+                  "amount": 50704353889014,
+                  "currency": "ADA",
+                },
+              },
+              Object {
+                "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
+                "value": Object {
+                  "amount": 101211542545,
+                  "currency": "ADA",
+                },
+              },
+            ],
+          },
+        ],
+        "transactionsCount": 4292,
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration test suite blocks Returns blocks by id 1`] = `
 Object {
   "data": Object {
@@ -685,6 +1129,276 @@ Object {
 `;
 
 exports[`Integration test suite transactions utxoSet Returns the whole set by default 1`] = `
+Object {
+  "data": Object {
+    "utxoSet": Array [
+      Object {
+        "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
+        "value": Object {
+          "amount": 50704353889014,
+          "currency": "ADA",
+        },
+      },
+      Object {
+        "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
+        "value": Object {
+          "amount": 101211542545,
+          "currency": "ADA",
+        },
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration transactions Returns null if for specific transaction lookup 1`] = `
+Object {
+  "data": Object {
+    "transactions": Array [
+      Object {
+        "block": Object {
+          "number": 43177,
+        },
+        "fee": 171246,
+        "id": "21c52888aacf1061353d3795a09bb29d8382526e29e4983abe568a0b9562bd55",
+        "inputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y",
+            "value": Object {
+              "amount": 408327486262,
+              "currency": "ADA",
+            },
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
+            "value": Object {
+              "amount": 158327486262,
+              "currency": "ADA",
+            },
+          },
+          Object {
+            "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
+            "value": Object {
+              "amount": 250000000000,
+              "currency": "ADA",
+            },
+          },
+        ],
+      },
+      Object {
+        "block": Object {
+          "number": 43177,
+        },
+        "fee": 0,
+        "id": "a544893db34f32a1817aa1e2d19a8b39655df0d37ca77d882eeb639167b876a8",
+        "inputs": Array [
+          Object {
+            "address": "Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf",
+            "value": Object {
+              "amount": 466152000000,
+              "currency": "ADA",
+            },
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
+            "value": Object {
+              "amount": 466152000000,
+              "currency": "ADA",
+            },
+          },
+        ],
+      },
+      Object {
+        "block": Object {
+          "number": 43178,
+        },
+        "fee": 171246,
+        "id": "d9e280725a54b956ed283e42820672894edf8d1f48b5af36d76ee32f88a79497",
+        "inputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H",
+            "value": Object {
+              "amount": 50805565431559,
+              "currency": "ADA",
+            },
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
+            "value": Object {
+              "amount": 50704353889014,
+              "currency": "ADA",
+            },
+          },
+          Object {
+            "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
+            "value": Object {
+              "amount": 101211542545,
+              "currency": "ADA",
+            },
+          },
+        ],
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration transactions Returns transactions by IDs 1`] = `
+Object {
+  "data": Object {
+    "transactions": Array [
+      Object {
+        "block": Object {
+          "number": 43177,
+        },
+        "fee": 171246,
+        "id": "21c52888aacf1061353d3795a09bb29d8382526e29e4983abe568a0b9562bd55",
+        "inputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y",
+            "value": Object {
+              "amount": 408327486262,
+              "currency": "ADA",
+            },
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX",
+            "value": Object {
+              "amount": 158327486262,
+              "currency": "ADA",
+            },
+          },
+          Object {
+            "address": "DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb",
+            "value": Object {
+              "amount": 250000000000,
+              "currency": "ADA",
+            },
+          },
+        ],
+      },
+      Object {
+        "block": Object {
+          "number": 43177,
+        },
+        "fee": 0,
+        "id": "a544893db34f32a1817aa1e2d19a8b39655df0d37ca77d882eeb639167b876a8",
+        "inputs": Array [
+          Object {
+            "address": "Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf",
+            "value": Object {
+              "amount": 466152000000,
+              "currency": "ADA",
+            },
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk",
+            "value": Object {
+              "amount": 466152000000,
+              "currency": "ADA",
+            },
+          },
+        ],
+      },
+      Object {
+        "block": Object {
+          "number": 43178,
+        },
+        "fee": 171246,
+        "id": "d9e280725a54b956ed283e42820672894edf8d1f48b5af36d76ee32f88a79497",
+        "inputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H",
+            "value": Object {
+              "amount": 50805565431559,
+              "currency": "ADA",
+            },
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
+            "value": Object {
+              "amount": 50704353889014,
+              "currency": "ADA",
+            },
+          },
+          Object {
+            "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
+            "value": Object {
+              "amount": 101211542545,
+              "currency": "ADA",
+            },
+          },
+        ],
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration transactions utxoSet Can be filtered by address 1`] = `
+Object {
+  "data": Object {
+    "utxoSet": Array [
+      Object {
+        "address": "DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9",
+        "value": Object {
+          "amount": 50704353889014,
+          "currency": "ADA",
+        },
+      },
+      Object {
+        "address": "DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY",
+        "value": Object {
+          "amount": 101211542545,
+          "currency": "ADA",
+        },
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration transactions utxoSet Returns the whole set by default 1`] = `
 Object {
   "data": Object {
     "utxoSet": Array [

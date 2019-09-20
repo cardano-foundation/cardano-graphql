@@ -3,10 +3,11 @@ import * as path from 'path'
 import { ApolloServer, ServerInfo } from 'apollo-server'
 import * as depthLimit from 'graphql-depth-limit'
 import { Resolvers } from './graphql_types'
+import { Context } from './Context'
 
 export type Config = {
   apiPort: number
-  context: () => any
+  context: () => Context
   queryDepthLimit: number
   resolvers: Resolvers
   tracing: boolean

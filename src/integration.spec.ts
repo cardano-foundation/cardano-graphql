@@ -11,7 +11,7 @@ import {
 import * as queries from './lib/queries'
 import { getConfig } from './config'
 
-describe('Integration test suite', () => {
+describe('Integration', () => {
   let apolloServer: ApolloServerBase
   let client: ApolloServerTestClient
 
