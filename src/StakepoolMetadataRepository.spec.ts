@@ -3,10 +3,9 @@ import * as fs from 'fs-extra'
 import * as simpleGit from 'simple-git/promise'
 import { StakePoolMetadataRepository } from './StakePoolMetadataRepository'
 
-async function addStakePoolToRemoteRepo (id: string, remoteUri: string) {
-  console.log(remoteUri)
+async function addStakePoolToRemoteRepo (id: string, _remoteUri: string) {
   const git = simpleGit()
-  await fs.writeJson(`sp_${id}.json`, {
+  await fs.writeJson(`test/git/stake-pool-metadata/sp_${id}.json`, {
     description: `A stakepool with the ID of ${id}`,
     isCharity: true,
     profitMargin: 30,
@@ -16,7 +15,6 @@ async function addStakePoolToRemoteRepo (id: string, remoteUri: string) {
   })
   await git.add('./*')
   await git.commit(`Add stake pool ${id}`)
-  console.log(await git.checkIsRepo())
   return git.push()
 }
 
