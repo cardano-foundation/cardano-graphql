@@ -13,14 +13,6 @@ scalar RawTransaction
 scalar PositiveInt
 
 type Mutation {
-  delegateStake (
-    # Constructed using a client SDK, signed, encoded
-    transaction: RawTransaction
-  ): Boolean!
-  registerStakePool (
-    # Constructed using a client SDK, includes registration certificate containing the staking key of the pool leader
-    transaction: RawTransaction
-  ): Boolean!
   submitTransaction (
     # Constructed using a client SDK, signed, encoded
     transaction: RawTransaction

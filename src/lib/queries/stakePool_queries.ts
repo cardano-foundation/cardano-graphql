@@ -12,9 +12,12 @@ export const stakePools = gql`query stakePools(
         offset: $offset,
         where: $where
     ) {
-        controlledStake
         id
-        retirementEpochNumber
         ticker
+        name
+        url
+        ranking
+        controlledStake
+        retirementEpochNumber
     }
 }`

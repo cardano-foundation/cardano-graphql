@@ -3,18 +3,7 @@ import { GraphQLError } from 'graphql'
 import { Resolvers } from '../graphql_types'
 import { checkLimit } from '../validation'
 
-export const byronResolvers: Resolvers = {
-  Mutation: {
-    delegateStake: (_root, _args, _context, _info) => {
-      throw new GraphQLError('Not implemented')
-    },
-    registerStakePool: (_root, _args, _context, _info) => {
-      throw new GraphQLError('Not implemented')
-    },
-    submitTransaction: (_root, _args, _context, _info) => {
-      throw new GraphQLError('Not implemented')
-    }
-  },
+export const hasuraResolvers: Resolvers = {
   Query: {
     blocks: (_root, args, context, info) => {
       checkLimit(args.limit, 100)

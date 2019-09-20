@@ -7,35 +7,34 @@ import {
   block43177, block43178,
   epoch2,
   tx21c528, txa54489, txd9e280
-} from '../lib/data_assertions'
-import * as queries from '../lib/queries'
-import { getConfig } from '../config'
+} from './lib/data_assertions'
+import * as queries from './lib/queries'
+import { getConfig } from './config'
 
-describe('Jörmungandr integration', () => {
+describe('Integration test suite', () => {
   let apolloServer: ApolloServerBase
   let client: ApolloServerTestClient
 
   beforeEach(async () => {
-    process.env.NODE_IMPLEMENTATION = 'Jormungandr'
-    process.env.NODE_API_URI = 'http://localhost:8443/api/v0/'
+    // process.env.HASURA_URI = 'http://localhost:8090/v1/graphql'
     const { context, resolvers } = await getConfig()
     apolloServer = new ApolloServerBase({
       context,
       introspection: true,
       resolvers,
-      typeDefs: fs.readFileSync(path.join(__dirname, '../schema.graphql'), 'UTF8'),
+      typeDefs: fs.readFileSync(path.join(__dirname, './schema.graphql'), 'UTF8'),
       validationRules: [depthLimit(20)]
     })
     client = createTestClient(apolloServer)
   })
 
   describe('blocks', () => {
-    it('returns a single result by default', async () => {
-    const result = await client.query({
-      query: queries.blocksWithNoTx
-    })
-    expect(result.data.blocks.length).toBe(1)
-    })
+    // it('returns a single result by default', async () => {
+    // const result = await client.query({
+    //   query: queries.blocksWithNoTx
+    // })
+    // expect(result.data.blocks.length).toBe(1)
+    // })
 
     it('throws an error if query requests more than 100 blocks', async () => {
       const result = await client.query({
@@ -44,6 +43,7 @@ describe('Jörmungandr integration', () => {
           limit: 110
         }
       })
+      console.log(result)
       expect(result.errors[0]).toMatchSnapshot()
     })
 
@@ -61,6 +61,7 @@ describe('Jörmungandr integration', () => {
           offset: 100
         }
       })
+      console.log(page1.data)
       expect(page1.data.blocks).toMatchSnapshot()
       expect(page2.data.blocks).toMatchSnapshot()
     })

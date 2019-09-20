@@ -9,12 +9,6 @@ import { generateAddresses, generateStakepools } from '../lib/mocks'
 
 export const mockedResolvers: Resolvers = {
   Mutation: {
-    delegateStake: () => {
-      return false
-    },
-    registerStakePool: () => {
-      return false
-    },
     submitTransaction: () => {
       return false
     }

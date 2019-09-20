@@ -3,6 +3,7 @@ generates:
   ./src/graphql_types.ts:
       config:
         useIndexSignature: true
+        contextType: ./Context#Context
       plugins:
         - typescript
         - typescript-resolvers
