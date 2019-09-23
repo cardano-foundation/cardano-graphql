@@ -34,7 +34,8 @@ create view "TransactionInput" as
 select
   source_tx_out.address,
   source_tx_out.value,
-  tx.hash as "sourceTxId",
+  tx.hash as "txId",
+  source_tx.hash as "sourceTxId",
   tx_in.tx_out_index as "sourceTxIndex"
 from
   tx
@@ -42,7 +43,10 @@ join tx_in
   on tx_in.tx_in_id = tx.id
 join tx_out as source_tx_out
   on tx_in.tx_out_id = source_tx_out.tx_id
-  and tx_in.tx_out_index = source_tx_out.index;
+  and tx_in.tx_out_index = source_tx_out.index
+join tx as source_tx
+  on source_tx_out.tx_id = source_tx.id;
+
 
 create view "Slot" as 
 with recursive slot_numbers as
@@ -61,7 +65,7 @@ with recursive slot_numbers as
 )
 select
   slot as "number",
-  block.hash as block,
+  block.hash as "blockId",
   block.slot_leader as leader,
   case when slot > 0
     then floor(slot / (10 * protocol_const))
@@ -85,19 +89,20 @@ select
   block."hash" as id,
   block.merkel_root as "merkelRootHash",
   block.block_no as number,
-  previous_block."hash" as "previousBlock",
+  previous_block."hash" as "previousBlockId",
   block.size as size,
   -- Even though we have epochNo defined in the Slot view,
   -- this is written by the node-client and makes identification
   -- of EBBs simpler, as EBBs don't have a slot_no
-  block.epoch_no as "epochNo"
+  block.epoch_no as "epochNo",
+  block.slot_no as "slotNo"
 from block
 left outer join block as previous_block
   on block.previous = previous_block.id;
 
 create view "Transaction" as
 select
-  block.hash as "block",
+  block.hash as "blockId",
   tx.fee,
   tx.hash as id,
   "Slot"."createdAt" as "includedAt",
