@@ -87,17 +87,13 @@ select
   block.block_no as number,
   previous_block."hash" as "previousBlock",
   block.size as size,
-  "Slot"."createdAt",
   -- Even though we have epochNo defined in the Slot view,
   -- this is written by the node-client and makes identification
   -- of EBBs simpler, as EBBs don't have a slot_no
-  block.epoch_no as "epochNo",
-  "Slot"."slotWithinEpoch"
+  block.epoch_no as "epochNo"
 from block
 left outer join block as previous_block
-  on block.previous = previous_block.id
-inner join "Slot"
-  on "Slot".number = block.slot_no;
+  on block.previous = previous_block.id;
 
 create view "Transaction" as
 select
@@ -116,19 +112,19 @@ inner join "Slot"
 create view "Epoch" as 
 select
   sum(tx_out.value) as output,
-  max("Block"."createdAt") as "endedAt",
-  min("Block"."createdAt") as "startedAt",
+  max("Slot"."createdAt") as "endedAt",
+  min("Slot"."createdAt") as "startedAt",
   count(distinct tx.hash) as "transactionsCount",
-  block.epoch_no as "number"
-from block
-join "Block"
-  on block.hash = "Block".id
+  "Slot"."epochNo" as "number"
+from "Slot"
+left outer join block
+  on block.slot_no = "Slot".number
 join tx
   on tx.block = block.id
 join tx_out
   on tx_out.tx_id = tx.id
-group by block.epoch_no
-order by block.epoch_no;
+group by "Slot"."epochNo"
+order by "Slot"."epochNo";
 
 -- This function plays really nicely with Hasura,
 -- and allows us to query the utxo set at any block height
@@ -151,3 +147,12 @@ RETURNS SETOF "TransactionOutput" AS $$
   where tx_in.tx_in_id is null
   and tx.block <= (select id from block where hash = "blockId")
 $$ LANGUAGE sql STABLE;
+
+create view "Cardano" as 
+select
+  number as "blockHeight",
+  "epochNo" as "currentEpochNo"
+from "Block"
+where number is not null
+order by number desc
+limit 1;
