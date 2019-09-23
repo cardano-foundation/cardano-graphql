@@ -1,7 +1,10 @@
+{-# LANGUAGE BangPatterns        #-}
 {-# LANGUAGE DefaultSignatures   #-}
 {-# LANGUAGE DerivingVia         #-}
 {-# LANGUAGE FlexibleContexts    #-}
 {-# LANGUAGE FlexibleInstances   #-}
+{-# LANGUAGE KindSignatures      #-}
+{-# LANGUAGE PolyKinds           #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE StandaloneDeriving  #-}
 {-# LANGUAGE TypeApplications    #-}
@@ -13,6 +16,7 @@ module Cardano.Prelude.GHC.Heap.NormalForm.Classy (
   , genericWhnfNoUnexpectedThunks
   , UseIsNormalForm(..)
   , ThunkInfo(..)
+  , UnexpectedThunkInfo(..)
   , thunkInfoToIsNF
   , showTypeOfTypeable
   ) where
@@ -21,18 +25,18 @@ import Cardano.Prelude.Base
 
 import Data.Foldable (toList)
 import Data.Sequence (Seq)
-import Data.Typeable
 import GHC.Exts.Heap
 import Prelude (String)
 
 import qualified Data.ByteString as BS.Strict
 import qualified Data.ByteString.Lazy as BS.Lazy
-import qualified Data.Text as Text.Strict
-import qualified Data.Text.Lazy as Text.Lazy
 import qualified Data.IntMap as IntMap
 import qualified Data.Map as Map
 import qualified Data.Set as Set
+import qualified Data.Text as Text.Strict
+import qualified Data.Text.Lazy as Text.Lazy
 
+import Cardano.Prelude.GHC.Heap.Tree
 import qualified Cardano.Prelude.GHC.Heap.NormalForm as NF
 
 data ThunkInfo =
@@ -40,40 +44,42 @@ data ThunkInfo =
     NoUnexpectedThunks
 
     -- | We found unexpected thunks
-    --
-    -- The @[String]@ argument is intended to give a clue to add debugging.
-    -- For example, suppose we have something of type @(Int, [Int])@. The
-    -- various contexts we might get are
-    --
-    -- > Context                  The thunk is..
-    -- > ----------------------------------------------------------------------
-    -- > ["(,)"]                  the pair itself
-    -- > ["Int","(,)"]            the Int in the pair
-    -- > ["[]","(,)"]             the [Int] in the pair
-    -- > ["Int","[]","(,)"]       an Int in the [Int] in the pair
-    --
-    -- TODO: The ghc-debug work by Matthew Pickering includes some work that
-    -- allows to get source spans from closures. If we could take advantage of
-    -- that, we could not only show the type of the unexpected thunk, but also
-    -- where it got allocated.
-  | UnexpectedThunk [String]
-  deriving (Show, Eq)
+  | UnexpectedThunk UnexpectedThunkInfo
+  deriving (Show)
+
+-- | Information about unexpected thunks
+--
+-- TODO: The ghc-debug work by Matthew Pickering includes some work that allows
+-- to get source spans from closures. If we could take advantage of that, we
+-- could not only show the type of the unexpected thunk, but also where it got
+-- allocated.
+data UnexpectedThunkInfo = UnexpectedThunkInfo {
+      -- The @[String]@ argument is intended to give a clue to add debugging.
+      -- For example, suppose we have something of type @(Int, [Int])@. The
+      -- various contexts we might get are
+      --
+      -- > Context                  The thunk is..
+      -- > ---------------------------------------------------------------------
+      -- > ["(,)"]                  the pair itself
+      -- > ["Int","(,)"]            the Int in the pair
+      -- > ["[]","(,)"]             the [Int] in the pair
+      -- > ["Int","[]","(,)"]       an Int in the [Int] in the pair
+      unexpectedThunkContext   :: [String]
+
+      -- | CallStack to where we /found/ the unexpected thunk
+      --
+      -- NOTE: This is /not/ the callstack of the /creation/ of the thunk.
+    , unexpectedThunkCallStack :: CallStack
+
+      -- | The specific closure where we found the problem
+    , unexpectedThunkClosure   :: Text
+    }
+  deriving (Show)
 
 -- | Was the value in normal form?
 thunkInfoToIsNF :: ThunkInfo -> Bool
 thunkInfoToIsNF NoUnexpectedThunks  = True
 thunkInfoToIsNF (UnexpectedThunk _) = False
-
-instance Monoid ThunkInfo where
-  mempty = NoUnexpectedThunks
-
--- | Short-circuiting form of 'ThunkInfo'
---
--- NOTE: This is of limited use; probably want to use 'allNoUnexpectedThunks'
--- instead.
-instance Semigroup ThunkInfo where
-  NoUnexpectedThunks  <> b = b
-  UnexpectedThunk nfo <> _ = UnexpectedThunk nfo
 
 class NoUnexpectedThunks a where
   -- | Show type @a@ (to add to the context)
@@ -106,7 +112,7 @@ class NoUnexpectedThunks a where
   -- > noUnexpectedThunks x == isNormalForm x
   --
   -- See also discussion of caveats listed for 'NF.isNormalForm'.
-  noUnexpectedThunks :: [String] -> a -> IO ThunkInfo
+  noUnexpectedThunks :: HasCallStack => [String] -> a -> IO ThunkInfo
   noUnexpectedThunks ctxt =
       whenInHeadNormalForm (showTypeOf (Proxy @a) : ctxt) whnfNoUnexpectedThunks
 
@@ -121,28 +127,30 @@ class NoUnexpectedThunks a where
 --
 -- NOTE: if it's in WHNF then we can safely translate to generic value without
 -- forcing anything.
-genericWhnfNoUnexpectedThunks :: (Generic a, GWhnfNoUnexpectedThunks (Rep a))
+genericWhnfNoUnexpectedThunks :: forall a.
+                                 (Generic a, GWhnfNoUnexpectedThunks (Rep a))
                               => [String] -> a -> IO ThunkInfo
-genericWhnfNoUnexpectedThunks ctxt = gWhnfNoUnexpectedThunks ctxt . from
+genericWhnfNoUnexpectedThunks ctxt x =
+    -- Force the result of @from@ to WHNF: we are not interested in thunks
+    -- that arise from the translation to the generic representation.
+    let fp :: Rep a x
+        !fp = from x
+    in gWhnfNoUnexpectedThunks ctxt fp
 
--- | Check whether all elements of the list have no unexpected thunks
---
--- This is a useful combinator when checking the elements of containers, if
--- the containers /themselves/ are allowed to have thunks in them
--- (classical example is 'FingerTree').
-allNoUnexpectedThunks :: forall a. NoUnexpectedThunks a
-                      => [String] -> [a] -> IO ThunkInfo
-allNoUnexpectedThunks ctxt = go
+-- | Short-circuit a list of checks
+allNoUnexpectedThunks :: [IO ThunkInfo] -> IO ThunkInfo
+allNoUnexpectedThunks = go
   where
-    go :: [a] -> IO ThunkInfo
+    go :: [IO ThunkInfo] -> IO ThunkInfo
     go []     = return NoUnexpectedThunks
     go (a:as) = do
-        nf <- noUnexpectedThunks ctxt a
+        nf <- a
         case nf of
           NoUnexpectedThunks  -> go as
           UnexpectedThunk nfo -> return $ UnexpectedThunk nfo
 
-whenInHeadNormalForm :: [String]
+whenInHeadNormalForm :: HasCallStack
+                     => [String]
                      -> ([String] -> a -> IO ThunkInfo)
                      -> (a -> IO ThunkInfo)
 whenInHeadNormalForm ctxt k x = do
@@ -150,7 +158,11 @@ whenInHeadNormalForm ctxt k x = do
     hnf <- NF.isHeadNormalForm c
     if hnf
       then k ctxt x
-      else return $ UnexpectedThunk ctxt
+      else return $ UnexpectedThunk UnexpectedThunkInfo {
+               unexpectedThunkContext   = ctxt
+             , unexpectedThunkCallStack = callStack
+             , unexpectedThunkClosure   = renderClosure c
+             }
 
 {-------------------------------------------------------------------------------
   Standard instances
@@ -187,22 +199,30 @@ deriving via UseIsNormalForm Text.Lazy.Text   instance NoUnexpectedThunks Text.L
 -- its asymptotic complexity.
 instance NoUnexpectedThunks a => NoUnexpectedThunks (Seq a) where
   showTypeOf _ = "Seq"
-  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks ctxt . toList
+  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks
+                              . map (noUnexpectedThunks ctxt)
+                              . toList
 
 -- | Instance for 'Map' checks elements only (Map is spine strict)
 instance (NoUnexpectedThunks k, NoUnexpectedThunks v) => NoUnexpectedThunks (Map k v) where
   showTypeOf _ = "Map"
-  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks ctxt . Map.toList
+  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks
+                              . map (noUnexpectedThunks ctxt)
+                              . Map.toList
 
 -- | Instance for 'Set' checks elements only (Set is spine strict)
 instance NoUnexpectedThunks a => NoUnexpectedThunks (Set a) where
   showTypeOf _ = "Set"
-  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks ctxt . Set.toList
+  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks
+                              . map (noUnexpectedThunks ctxt)
+                              . Set.toList
 
 -- | Instance for 'IntMap' checks elements only (IntMap is spine strict)
 instance NoUnexpectedThunks a => NoUnexpectedThunks (IntMap a) where
   showTypeOf _ = "IntMap"
-  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks ctxt . IntMap.toList
+  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks
+                              . map (noUnexpectedThunks ctxt)
+                              . IntMap.toList
 
 -- | Instance for function closures is always 'True'
 --
@@ -220,8 +240,19 @@ instance NoUnexpectedThunks (IO a) where
 
 instance NoUnexpectedThunks a => NoUnexpectedThunks (Ratio a) where
   showTypeOf _ = "Ratio"
-  whnfNoUnexpectedThunks ctxt r =
-      allNoUnexpectedThunks ctxt [numerator r, denominator r]
+  whnfNoUnexpectedThunks ctxt r = do
+     -- The 'Ratio' constructor is not exported: we only have two accessor
+     -- functions. However, @numerator r@ is obviously trivially a trunk
+     -- (due to the unevaluated call to @numerator@). By forcing the values of
+     -- @n@ and @d@ where we get rid of these function calls, leaving on the
+     -- values inside the @Ratio@. Note that @Ratio@ is strict in both of these
+     -- fields, so forcing them to WHNF won't change them.
+     let !n = numerator   r
+         !d = denominator r
+     allNoUnexpectedThunks [
+         noUnexpectedThunks ctxt n
+       , noUnexpectedThunks ctxt d
+       ]
 
 {-------------------------------------------------------------------------------
   Instances that rely on generics
@@ -285,13 +316,20 @@ instance NoUnexpectedThunks a => NoUnexpectedThunks (Maybe a)
 newtype UseIsNormalForm a = UseIsNormalForm a
 
 instance Typeable a => NoUnexpectedThunks (UseIsNormalForm a) where
-  showTypeOf              = showTypeOfTypeable
-  whnfNoUnexpectedThunks  = noUnexpectedThunks
-  noUnexpectedThunks ctxt = fmap mkInfo . NF.isNormalForm
+  showTypeOf                = showTypeOfTypeable
+  whnfNoUnexpectedThunks    = noUnexpectedThunks
+  noUnexpectedThunks ctxt x = do
+      c  <- getBoxedClosureData (asBox x)
+      nf <- NF.isNormalForm x
+      if nf
+        then return $ NoUnexpectedThunks
+        else return $ UnexpectedThunk UnexpectedThunkInfo {
+                 unexpectedThunkContext   = ctxt'
+               , unexpectedThunkCallStack = callStack
+               , unexpectedThunkClosure   = renderClosure c
+               }
     where
-      mkInfo :: Bool -> ThunkInfo
-      mkInfo True  = NoUnexpectedThunks
-      mkInfo False = UnexpectedThunk (showTypeOfTypeable (Proxy @a) : ctxt)
+      ctxt' = showTypeOfTypeable (Proxy @a) : ctxt
 
 {-------------------------------------------------------------------------------
   Generic instance
@@ -307,10 +345,10 @@ instance ( GWhnfNoUnexpectedThunks f
          , GWhnfNoUnexpectedThunks g
          ) => GWhnfNoUnexpectedThunks (f :*: g) where
   gWhnfNoUnexpectedThunks ctxt (fp :*: gp) = do
-      nf <- gWhnfNoUnexpectedThunks ctxt fp
-      case nf of
-        NoUnexpectedThunks  -> gWhnfNoUnexpectedThunks ctxt gp
-        UnexpectedThunk nfo -> return $ UnexpectedThunk nfo
+      allNoUnexpectedThunks [
+          gWhnfNoUnexpectedThunks ctxt fp
+        , gWhnfNoUnexpectedThunks ctxt gp
+        ]
 
 instance ( GWhnfNoUnexpectedThunks f
          , GWhnfNoUnexpectedThunks g
@@ -347,14 +385,11 @@ instance GWhnfNoUnexpectedThunks U1 where
   Auxiliary
 -------------------------------------------------------------------------------}
 
-showTypeOfTypeable :: forall a. Typeable a => Proxy a -> String
-showTypeOfTypeable _ = show (typeOf x)
-  where
-    x :: a
-    x = x
+showTypeOfTypeable :: forall k proxy (a :: k). Typeable a => proxy a -> String
+showTypeOfTypeable = show . typeRep
 
-showTypeOfGeneric :: forall a. (Generic a, GShowTypeOf (Rep a))
-                  => Proxy a -> String
+showTypeOfGeneric :: forall proxy a. (Generic a, GShowTypeOf (Rep a))
+                  => proxy a -> String
 showTypeOfGeneric _ = gShowTypeOf (from x)
   where
     x :: a

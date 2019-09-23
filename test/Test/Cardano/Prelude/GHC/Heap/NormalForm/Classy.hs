@@ -42,7 +42,9 @@ class (NoUnexpectedThunks a, Show (Model a)) => FromModel a where
   genModel  :: Gen (Model a)
 
   -- | Does the model describe a value in NF?
-  modelIsNF :: [String] -> Model a -> ThunkInfo
+  --
+  -- If not, return the (type) context of the thunk.
+  modelIsNF :: [String] -> Model a -> Maybe [String]
 
   -- | Translate from the model to an actual value
   --
@@ -58,7 +60,7 @@ data Bottom = Bottom Text
 instance Exception Bottom
 
 testWithModel :: forall a. FromModel a
-              => (ThunkInfo -> ThunkInfo -> Bool)
+              => (ThunkInfo -> Maybe [String] -> Bool)
               -> Proxy a
               -- ^ Compare @ThunkInfo@. When we use 'noUnexpectedThunks' this
               -- can just be @(==)@; however, when we use 'isNormalForm', the
@@ -81,8 +83,8 @@ instance FromModel Int where
     | IntValue Int
     deriving (Show)
 
-  modelIsNF ctxt IntUndefined = UnexpectedThunk ("Int" : ctxt)
-  modelIsNF _    (IntValue _) = NoUnexpectedThunks
+  modelIsNF ctxt IntUndefined = Just ("Int" : ctxt)
+  modelIsNF _    (IntValue _) = Nothing
 
   fromModel IntUndefined k = k (bottom "int thunk")
   fromModel (IntValue n) k = case n of I# result -> k (I# result)
@@ -103,8 +105,8 @@ instance (FromModel a, FromModel b) => FromModel (a, b) where
 
   modelIsNF ctxt ab =
       case ab of
-        PairUndefined   -> UnexpectedThunk ctxt'
-        PairDefined a b -> modelIsNF ctxt' a <> modelIsNF ctxt' b
+        PairUndefined   -> Just ctxt'
+        PairDefined a b -> modelIsNF ctxt' a <|> modelIsNF ctxt' b
     where
       ctxt' = "(,)" : ctxt
 
@@ -132,9 +134,9 @@ instance FromModel a => FromModel [a] where
 
   modelIsNF ctxt xs =
       case xs of
-        ListUndefined  -> UnexpectedThunk ctxt'
-        ListNil        -> NoUnexpectedThunks
-        ListCons x xs' -> modelIsNF ctxt' x <> modelIsNF ctxt xs'
+        ListUndefined  -> Just ctxt'
+        ListNil        -> Nothing
+        ListCons x xs' -> modelIsNF ctxt' x <|> modelIsNF ctxt xs'
 
     where
       ctxt' = "[]" : ctxt
@@ -168,8 +170,8 @@ instance FromModel (Seq Int) where
 
   modelIsNF ctxt = go
     where
-      go SeqEmpty          = NoUnexpectedThunks
-      go (SeqEnqueue x xs) = modelIsNF ctxt' x <> go xs
+      go SeqEmpty          = Nothing
+      go (SeqEnqueue x xs) = modelIsNF ctxt' x <|> go xs
 
       ctxt' = "Seq" : ctxt
 
@@ -225,18 +227,33 @@ tests = and <$> sequence [checkSequential testGroup]
 
 testGroup :: Group
 testGroup = Group "Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy" [
-      ("prop_isNormalForm_Int"        ,                 testWithModel ((==) `on` thunkInfoToIsNF) $ Proxy @(UseIsNormalForm Int))
-    , ("prop_isNormalForm_IntInt"     ,                 testWithModel ((==) `on` thunkInfoToIsNF) $ Proxy @(UseIsNormalForm (Int, Int)))
-    , ("prop_isNormalForm_ListInt"    ,                 testWithModel ((==) `on` thunkInfoToIsNF) $ Proxy @(UseIsNormalForm [Int]))
-    , ("prop_isNormalForm_IntListInt" ,                 testWithModel ((==) `on` thunkInfoToIsNF) $ Proxy @(UseIsNormalForm (Int, [Int])))
-    , ("prop_isNormalForm_SeqInt"     , expectFailure $ testWithModel ((==) `on` thunkInfoToIsNF) $ Proxy @(UseIsNormalForm (Seq Int)))
+      ("prop_isNormalForm_Int"        ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm Int))
+    , ("prop_isNormalForm_IntInt"     ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm (Int, Int)))
+    , ("prop_isNormalForm_ListInt"    ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm [Int]))
+    , ("prop_isNormalForm_IntListInt" ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm (Int, [Int])))
+    , ("prop_isNormalForm_SeqInt"     , expectFailure $ testWithModel agreeOnNF $ Proxy @(UseIsNormalForm (Seq Int)))
 
-    , ("prop_noUnexpectedThunks_Int"        , testWithModel (==) $ Proxy @Int)
-    , ("prop_noUnexpectedThunks_IntInt"     , testWithModel (==) $ Proxy @(Int, Int))
-    , ("prop_noUnexpectedThunks_ListInt"    , testWithModel (==) $ Proxy @[Int])
-    , ("prop_noUnexpectedThunks_IntListInt" , testWithModel (==) $ Proxy @(Int, [Int]))
-    , ("prop_noUnexpectedThunks_SeqInt"     , testWithModel (==) $ Proxy @(Seq Int))
+    , ("prop_noUnexpectedThunks_Int"        , testWithModel agreeOnContext $ Proxy @Int)
+    , ("prop_noUnexpectedThunks_IntInt"     , testWithModel agreeOnContext $ Proxy @(Int, Int))
+    , ("prop_noUnexpectedThunks_ListInt"    , testWithModel agreeOnContext $ Proxy @[Int])
+    , ("prop_noUnexpectedThunks_IntListInt" , testWithModel agreeOnContext $ Proxy @(Int, [Int]))
+    , ("prop_noUnexpectedThunks_SeqInt"     , testWithModel agreeOnContext $ Proxy @(Seq Int))
     ]
+
+-- | When using @UseIsNormalForm@ we don't get a context, so merely check if
+-- both the model and the implementation agree whether or not the value is
+-- in NF
+agreeOnNF :: ThunkInfo -> Maybe [String] -> Bool
+NoUnexpectedThunks `agreeOnNF` Nothing = True
+UnexpectedThunk _  `agreeOnNF` Just _  = True
+_                  `agreeOnNF` _       = False
+
+-- | Check whether the model and the implementation agree on whether the value
+-- is in NF, and if not, what the context of the thunk is.
+agreeOnContext :: ThunkInfo -> Maybe [String] -> Bool
+NoUnexpectedThunks   `agreeOnContext` Nothing   = True
+UnexpectedThunk info `agreeOnContext` Just ctxt = unexpectedThunkContext info == ctxt
+_                    `agreeOnContext` _         = False
 
 {-------------------------------------------------------------------------------
   Hedgehog auxiliary
