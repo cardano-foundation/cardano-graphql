@@ -6,4 +6,3 @@ export class MetadataMissingForStakePool extends CustomError {
     this.message = `Stakepool ${id} has not registered metadata`
   }
 }
-
