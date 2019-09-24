@@ -1,76 +1,152 @@
 import * as path from 'path'
 import * as fs from 'fs-extra'
 import * as simpleGit from 'simple-git/promise'
+import { extract } from 'tar'
+import { StakePool } from './graphql_types'
 import { StakePoolMetadataRepository } from './StakePoolMetadataRepository'
 
-const LOCAL_TEMP_PATH = '../__temp_'
+const REPO_NAME = 'stake-pool-metadata'
+const repoTar = path.join(path.join(__dirname, '../test/stake-pool-metadata-repo.tar.gz'))
+const remoteRepoPath = path.join(path.join(__dirname, '../test/__temp__/', REPO_NAME))
+const localPath = path.join(__dirname, '../state', REPO_NAME)
+const git = simpleGit()
 
-async function addStakePoolToRemoteRepo (id: string, remoteUri: string) {
-  const localPath = path.join(LOCAL_TEMP_PATH, 'writer')
-  const git = simpleGit()
-  if(!await fs.pathExists(localPath)) {
-    await git.clone(remoteUri, localPath)
-  }
-  await fs.writeJson(path.join(localPath, `sp_${id}.json`), {
+describe('StakePoolMetadataRepository', () => {
+  let metadataRepository: ReturnType<typeof StakePoolMetadataRepository>
+  const localRepoExists = () => fs.pathExists(localPath)
+
+  beforeEach(async () => {
+    if (await fs.pathExists(remoteRepoPath)) await fs.remove(remoteRepoPath)
+    await extract({
+      file: repoTar,
+      C: path.join(__dirname, '../test/__temp__/')
+    })
+    metadataRepository = StakePoolMetadataRepository({
+      cloneOptions: { '--local': null },
+      localPath,
+      remoteUri: remoteRepoPath
+    })
+    await metadataRepository.destroy()
+  })
+
+  afterEach(async () => {
+    await metadataRepository.destroy()
+    await fs.remove(remoteRepoPath)
+  })
+
+  describe('destroy', () => {
+    beforeEach(async () => {
+      await metadataRepository.init()
+      expect(await localRepoExists()).toBe(true)
+    })
+
+    it('cleanups up the local git directory, and is idempotent', async () => {
+      await metadataRepository.destroy()
+      expect(await localRepoExists()).toBe(false)
+      await metadataRepository.destroy()
+      expect(await localRepoExists()).toBe(false)
+    })
+  })
+
+  describe('init', () => {
+    beforeEach(async () => {
+      expect(await localRepoExists()).toBe(false)
+    })
+
+    it('clones the remote repository if no local repository exists, and loads the stake pool entries into the db', async () => {
+      await metadataRepository.init()
+      expect(await localRepoExists()).toBe(true)
+      expect(metadataRepository.size()).toBe(3)
+    })
+    it('pulls any changes if there is an existing local repository', async () => {
+      await metadataRepository.init()
+      expect(await localRepoExists()).toBe(true)
+      expect(await metadataRepository.has('sp4')).toBe(false)
+      await addStakePoolToRemoteRepo('sp4')
+      await metadataRepository.init()
+      expect(await metadataRepository.has('sp4')).toBe(true)
+    })
+  })
+
+  describe('has', () => {
+    beforeEach(() => metadataRepository.init())
+
+    afterEach(() => metadataRepository.destroy())
+
+    it('knows what is included based on ID', async () => {
+      expect(await metadataRepository.has('sp1')).toBe(true)
+      expect(await metadataRepository.has('sp2')).toBe(true)
+      expect(await metadataRepository.has('sp?')).toBe(false)
+    })
+  })
+
+  describe('get', () => {
+    beforeEach(async () => metadataRepository.init())
+
+    afterEach(async () => metadataRepository.destroy())
+
+    it('returns the Stake Pool metadata for the matching stake pool ID', async () => {
+      expect(await metadataRepository.get('sp1')).toMatchSnapshot()
+    })
+    it('returns undefined no match is found', async () => {
+      expect(await metadataRepository.get('?')).toBeUndefined()
+    })
+  })
+
+  describe('syncWithRemote', () => {
+    beforeEach(async () => {
+      await metadataRepository.init()
+      expect(await localRepoExists()).toBe(true)
+      expect(await metadataRepository.has('sp3')).toBe(true)
+      expect(await metadataRepository.has('sp4')).toBe(false)
+    })
+
+    it('Adds new stake pools', async () => {
+      await addStakePoolToRemoteRepo('sp4')
+      expect(await metadataRepository.has('sp4')).toBe(false)
+      await metadataRepository.syncWithRemote()
+      expect(await metadataRepository.has('sp4')).toBe(true)
+    })
+    it('Updates changes to existing stake pools', async () => {
+      expect((await metadataRepository.get('sp3')).profitMargin).toBe(30)
+      await updateStakePoolInRemoteRepo('sp3', { profitMargin: 40 })
+      await metadataRepository.syncWithRemote()
+      expect((await metadataRepository.get('sp3')).profitMargin).toBe(40)
+    })
+    it('Removes stake pools', async () => {
+      await deleteStakePoolInRemoteRepo('sp3')
+      expect(await metadataRepository.has('sp3')).toBe(true)
+      await metadataRepository.syncWithRemote()
+      expect(await metadataRepository.has('sp3')).toBe(false)
+    })
+  })
+})
+
+async function addStakePoolToRemoteRepo (id: string) {
+  await fs.writeJson(path.join(remoteRepoPath, `${id}.json`), {
     description: `A stakepool with the ID of ${id}`,
     isCharity: false,
     profitMargin: 30,
     name: `Stake Pool ${id}`,
-    ticker: `SP${id}`,
+    ticker: `${id}`,
     url: `http://stake.pool/${id}`
   })
-  await git.add('./*')
-  await git.commit(`Add stake pool ${id}`)
-  return git.push('origin', 'master')
+  return commit(`Add stake pool ${id}`)
 }
 
-describe('StakePoolMetadataRepository', () => {
-  let metadataRepository: ReturnType<typeof StakePoolMetadataRepository>
-  const LOCAL_REPO_PATH = path.join(__dirname, '__temp_metadata_repo__')
-  const REMOTE_REPO_URI = 'http://localhost:4040/stake-pool-metadata.git'
+async function updateStakePoolInRemoteRepo (id: string, change: Partial<StakePool>) {
+  const filePath = path.join(remoteRepoPath, `${id}.json`)
+  await fs.writeJson(filePath, { ...await fs.readJson(filePath), ...change })
+  return commit(`Update stake pool ${id}`)
+}
 
-  const localRepoExists = () =>  fs.pathExists(LOCAL_REPO_PATH)
+async function deleteStakePoolInRemoteRepo (id: string) {
+  await fs.unlink(path.join(remoteRepoPath, `${id}.json`))
+  return commit(`Delete stake pool ${id}`)
+}
 
-  beforeEach(async () => {
-    metadataRepository = StakePoolMetadataRepository({
-      localPath: LOCAL_REPO_PATH,
-      remoteUri: REMOTE_REPO_URI
-    })
-   await metadataRepository.destroy()
-  })
-
-  afterEach(async () => await metadataRepository.destroy())
-
-  describe('init', () => {
-
-    it('Ensures the directory exists and clones the remote repository if needed', async () => {
-      expect(await localRepoExists()).toBe(false)
-      await metadataRepository.init()
-      expect(await localRepoExists()).toBe(true)
-      expect(await fs.pathExists(path.join(LOCAL_REPO_PATH, 'stake-pool-metadata','.git')))
-    })
-    it('pulls any changes if the local repository already exists', async () => {
-      expect(await localRepoExists()).toBe(false)
-      await metadataRepository.init()
-      expect(await localRepoExists()).toBe(true)
-      await metadataRepository.init()
-      await addStakePoolToRemoteRepo("4", REMOTE_REPO_URI)
-      expect(await fs.readFile(path.join(LOCAL_REPO_PATH, 'stake-pool-metadata','sp_4.json')))
-    })
-  })
-
-  // describe('get', () => {
-  //
-  //   beforeEach(() => {
-  //     metadataRepository.init()
-  //   })
-  //
-  //   it('returns the json for the matching stake pool ID', () => {
-  //
-  //   })
-  //   it('throws a 404 if no match is found', () => {
-  //
-  //   })
-  // })
-
-})
+async function commit (message: string) {
+  await git.cwd(remoteRepoPath)
+  await git.add('./*')
+  return git.commit(message)
+}

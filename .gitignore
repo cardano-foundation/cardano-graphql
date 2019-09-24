@@ -1,8 +1,9 @@
 .idea
 node_modules
+state
 dist
-/.nyc_output
 /coverage
 tsconfig.tsbuildinfo
 src/graphql_types.ts
 src/generated_packages/TypeScript/index.ts
+test/__temp__

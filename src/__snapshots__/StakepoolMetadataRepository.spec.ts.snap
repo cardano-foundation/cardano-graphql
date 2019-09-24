@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`StakePoolMetadataRepository get returns the Stake Pool metadata for the matching stake pool ID 1`] = `
+Object {
+  "description": "A stakepool with the ID of sp1",
+  "id": "sp1",
+  "isCharity": false,
+  "name": "Stake Pool SP1",
+  "profitMargin": 30,
+  "ticker": "SP1",
+  "url": "http://stake.pool/sp1",
+}
+`;
