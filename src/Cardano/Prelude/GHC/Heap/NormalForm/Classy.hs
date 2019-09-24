@@ -25,6 +25,7 @@ import Cardano.Prelude.Base
 
 import Data.Foldable (toList)
 import Data.Sequence (Seq)
+import Data.List.NonEmpty (NonEmpty)
 import GHC.Exts.Heap
 import Prelude (String)
 
@@ -308,6 +309,7 @@ instance ( NoUnexpectedThunks a
 
 instance NoUnexpectedThunks a => NoUnexpectedThunks [a]
 instance NoUnexpectedThunks a => NoUnexpectedThunks (Maybe a)
+instance NoUnexpectedThunks a => NoUnexpectedThunks (NonEmpty a)
 
 {-------------------------------------------------------------------------------
   Using the standard 'isNormalForm' check
