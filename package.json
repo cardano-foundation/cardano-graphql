@@ -45,7 +45,6 @@
     "@graphql-codegen/typescript-graphql-files-modules": "^1.5.0",
     "@graphql-codegen/typescript-resolvers": "^1.5.0",
     "@types/faker": "^4.1.5",
-    "@types/fs-extra": "^8.0.0",
     "@types/graphql": "^14.2.3",
     "@types/graphql-depth-limit": "^1.1.2",
     "@types/graphql-iso-date": "^3.3.1",
