@@ -7,7 +7,8 @@ import { StakePoolMetadataRepository } from './StakePoolMetadataRepository'
 
 const REPO_NAME = 'stake-pool-metadata'
 const repoTar = path.join(path.join(__dirname, '../test/stake-pool-metadata-repo.tar.gz'))
-const remoteRepoPath = path.join(path.join(__dirname, '../test/__temp__/', REPO_NAME))
+const tempDir = path.join(__dirname, '../test/__temp__/')
+const remoteRepoPath = path.join(tempDir, REPO_NAME)
 const localPath = path.join(__dirname, '../state', REPO_NAME)
 const git = simpleGit()
 
@@ -15,11 +16,14 @@ describe('StakePoolMetadataRepository', () => {
   let metadataRepository: ReturnType<typeof StakePoolMetadataRepository>
   const localRepoExists = () => fs.pathExists(localPath)
 
+  beforeAll(() => fs.ensureDir(tempDir))
+  afterAll(() => fs.remove(tempDir))
+
   beforeEach(async () => {
     if (await fs.pathExists(remoteRepoPath)) await fs.remove(remoteRepoPath)
     await extract({
       file: repoTar,
-      C: path.join(__dirname, '../test/__temp__/')
+      C: tempDir
     })
     metadataRepository = StakePoolMetadataRepository({
       cloneOptions: { '--local': null },
