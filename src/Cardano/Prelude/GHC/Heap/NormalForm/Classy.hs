@@ -15,6 +15,8 @@ module Cardano.Prelude.GHC.Heap.NormalForm.Classy (
   , allNoUnexpectedThunks
   , genericWhnfNoUnexpectedThunks
   , UseIsNormalForm(..)
+  , noUnexpectedThunksUsingNormalForm
+  , DontCheckForThunks(..)
   , ThunkInfo(..)
   , UnexpectedThunkInfo(..)
   , thunkInfoToIsNF
@@ -225,20 +227,6 @@ instance NoUnexpectedThunks a => NoUnexpectedThunks (IntMap a) where
                               . map (noUnexpectedThunks ctxt)
                               . IntMap.toList
 
--- | Instance for function closures is always 'True'
---
--- We could use 'isNormalForm' here, but this would (1) break compositionality
--- (what if the function closure contained a sequence?) and (2) 'isNormalForm'
--- doesn't seem to work so well for function closures anyway.
-instance NoUnexpectedThunks (a -> b) where
-  showTypeOf _ = "->"
-  whnfNoUnexpectedThunks _ctxt _fun = return NoUnexpectedThunks
-
--- | See comments for @a -> b@
-instance NoUnexpectedThunks (IO a) where
-  showTypeOf _ = "IO"
-  whnfNoUnexpectedThunks _ctxt _fun = return NoUnexpectedThunks
-
 instance NoUnexpectedThunks a => NoUnexpectedThunks (Ratio a) where
   showTypeOf _ = "Ratio"
   whnfNoUnexpectedThunks ctxt r = do
@@ -254,6 +242,17 @@ instance NoUnexpectedThunks a => NoUnexpectedThunks (Ratio a) where
          noUnexpectedThunks ctxt n
        , noUnexpectedThunks ctxt d
        ]
+
+{-------------------------------------------------------------------------------
+  Instances where we don't check (function closures, IO, etc.)
+
+  We could use 'isNormalForm' here, but this would (1) break compositionality
+  (what if the function closure contained a sequence?) and (2) 'isNormalForm'
+  doesn't seem to work so well for function closures anyway.
+-------------------------------------------------------------------------------}
+
+deriving via DontCheckForThunks (a -> b) instance NoUnexpectedThunks (a -> b)
+deriving via DontCheckForThunks (IO a)   instance NoUnexpectedThunks (IO a)
 
 {-------------------------------------------------------------------------------
   Instances that rely on generics
@@ -318,20 +317,34 @@ instance NoUnexpectedThunks a => NoUnexpectedThunks (NonEmpty a)
 newtype UseIsNormalForm a = UseIsNormalForm a
 
 instance Typeable a => NoUnexpectedThunks (UseIsNormalForm a) where
-  showTypeOf                = showTypeOfTypeable
-  whnfNoUnexpectedThunks    = noUnexpectedThunks
-  noUnexpectedThunks ctxt x = do
-      c  <- getBoxedClosureData (asBox x)
-      nf <- NF.isNormalForm x
-      if nf
-        then return $ NoUnexpectedThunks
-        else return $ UnexpectedThunk UnexpectedThunkInfo {
-                 unexpectedThunkContext   = ctxt'
-               , unexpectedThunkCallStack = callStack
-               , unexpectedThunkClosure   = renderClosure c
-               }
+  showTypeOf              = showTypeOfTypeable
+  whnfNoUnexpectedThunks  = noUnexpectedThunks
+  noUnexpectedThunks ctxt = noUnexpectedThunksUsingNormalForm ctxt'
     where
       ctxt' = showTypeOfTypeable (Proxy @a) : ctxt
+
+-- | Check for no unexpected thunks using 'NF.isNormalForm'
+--
+-- The context here should already include the name of the type we are checking,
+-- so that we don't have to impose any constraints on @a@ here.
+noUnexpectedThunksUsingNormalForm :: [String] -> a -> IO ThunkInfo
+noUnexpectedThunksUsingNormalForm ctxt x = do
+    c  <- getBoxedClosureData (asBox x)
+    nf <- NF.isNormalForm x
+    if nf
+      then return $ NoUnexpectedThunks
+      else return $ UnexpectedThunk UnexpectedThunkInfo {
+               unexpectedThunkContext   = ctxt
+             , unexpectedThunkCallStack = callStack
+             , unexpectedThunkClosure   = renderClosure c
+             }
+
+newtype DontCheckForThunks a = DontCheckForThunks a
+
+instance NoUnexpectedThunks (DontCheckForThunks a) where
+  showTypeOf _           = "<<not checked for thunks>>" -- will never appear
+  whnfNoUnexpectedThunks = noUnexpectedThunks
+  noUnexpectedThunks _ _ = return NoUnexpectedThunks
 
 {-------------------------------------------------------------------------------
   Generic instance
