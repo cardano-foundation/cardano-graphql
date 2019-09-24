@@ -7,7 +7,7 @@ module.exports = function () {
     ],
 
     tests: [
-      'src/**/StakepoolMetadataRepository.spec.ts'
+      'src/**/*.spec.ts'
     ],
     env: {
       type: 'node'
