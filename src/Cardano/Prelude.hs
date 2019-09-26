@@ -12,3 +12,4 @@ import Cardano.Prelude.HeapWords as X
 import Cardano.Prelude.Json.Canonical as X
 import Cardano.Prelude.Json.Parse as X
 import Cardano.Prelude.Orphans ()
+import Cardano.Prelude.Strict as X
