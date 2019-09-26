@@ -60,6 +60,7 @@
             (hsPkgs.pretty-show)
             (hsPkgs.QuickCheck)
             (hsPkgs.quickcheck-instances)
+            (hsPkgs.random)
             (hsPkgs.text)
             (hsPkgs.template-haskell)
             (hsPkgs.time)
