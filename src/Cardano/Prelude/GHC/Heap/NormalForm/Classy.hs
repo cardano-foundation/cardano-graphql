@@ -1,4 +1,5 @@
 {-# LANGUAGE BangPatterns        #-}
+{-# LANGUAGE DataKinds           #-}
 {-# LANGUAGE DefaultSignatures   #-}
 {-# LANGUAGE DerivingVia         #-}
 {-# LANGUAGE FlexibleContexts    #-}
@@ -11,16 +12,20 @@
 {-# LANGUAGE TypeOperators       #-}
 
 module Cardano.Prelude.GHC.Heap.NormalForm.Classy (
+    -- * Check a value for unexpected thunks
     NoUnexpectedThunks(..)
   , allNoUnexpectedThunks
-  , genericWhnfNoUnexpectedThunks
-  , UseIsNormalForm(..)
-  , noUnexpectedThunksUsingNormalForm
-  , DontCheckForThunks(..)
+  , noUnexpectedThunksInValues
+  , noUnexpectedThunksInKeysAndValues
+    -- * Results of the check
   , ThunkInfo(..)
   , UnexpectedThunkInfo(..)
   , thunkInfoToIsNF
-  , showTypeOfTypeable
+    -- * Deriving-via wrappers
+  , UseIsNormalForm(..)
+  , UseIsNormalFormNamed(..)
+  , OnlyCheckIsWHNF(..)
+  , AllowThunk(..)
   ) where
 
 import Cardano.Prelude.Base
@@ -38,9 +43,136 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.Text as Text.Strict
 import qualified Data.Text.Lazy as Text.Lazy
+import qualified Data.Vector.Unboxed as Unboxed
 
 import Cardano.Prelude.GHC.Heap.Tree
 import qualified Cardano.Prelude.GHC.Heap.NormalForm as NF
+
+{-------------------------------------------------------------------------------
+  Check a value for unexpected thunks
+-------------------------------------------------------------------------------}
+
+-- | Check a value for unexpected thunks
+class NoUnexpectedThunks a where
+  -- | Check if the argument does not contain any unexpected thunks
+  --
+  -- For most datatypes, we should have that
+  --
+  -- > noUnexpectedThunks ctxt x == NoUnexpectedThunks
+  --
+  -- if and only if
+  --
+  -- > isNormalForm x
+  --
+  -- For some datatypes however, some thunks are expected. For example, the
+  -- internal fingertree 'Data.Sequence.Sequence' might contain thunks (this is
+  -- important for the asymptotic complexity of this data structure). However,
+  -- we should still check that the /values/ in the sequence don't contain any
+  -- unexpected thunks.
+  --
+  -- This means that we need to traverse the sequence, which might force some of
+  -- the thunks in the tree. In general, it is acceptable for
+  -- 'noUnexpectedThunks' to force such "expected thunks", as long as it always
+  -- reports the /unexpected/ thunks.
+  --
+  -- The default implementation of 'noUnexpectedThunks' checks that the argument
+  -- is in WHNF, and if so, adds the type into the context (using 'showTypeOf'),
+  -- and calls 'whnfNoUnexpectedThunks'. See 'UnexpectedThunkInfo' for a
+  -- detailed discussion of the type context.
+  --
+  -- See also discussion of caveats listed for 'NF.isNormalForm'.
+  noUnexpectedThunks :: HasCallStack => [String] -> a -> IO ThunkInfo
+  noUnexpectedThunks ctxt x = do
+      c   <- getBoxedClosureData (asBox x)
+      hnf <- NF.isHeadNormalForm c
+      if hnf
+        then whnfNoUnexpectedThunks ctxt' x
+        else return $ UnexpectedThunk UnexpectedThunkInfo {
+                          unexpectedThunkContext   = ctxt'
+                        , unexpectedThunkCallStack = callStack
+                        , unexpectedThunkClosure   = Just (renderClosure c)
+                        }
+    where
+      ctxt' :: [String]
+      ctxt' = showTypeOf (Proxy @a) : ctxt
+
+  -- | Check that the argument is in normal form, assuming it is in WHNF.
+  --
+  -- The context will already have been extended with the type we're looking at,
+  -- so all that's left is to look at the thunks /inside/ the type. The default
+  -- implementation uses GHC Generics to do this.
+  whnfNoUnexpectedThunks :: [String] -> a -> IO ThunkInfo
+  default whnfNoUnexpectedThunks :: (Generic a, GWhnfNoUnexpectedThunks (Rep a))
+                                 => [String] -> a -> IO ThunkInfo
+  whnfNoUnexpectedThunks ctxt x = gWhnfNoUnexpectedThunks ctxt fp
+    where
+      -- Force the result of @from@ to WHNF: we are not interested in thunks
+      -- that arise from the translation to the generic representation.
+      fp :: Rep a x
+      !fp = from x
+
+  -- | Show type @a@ (to add to the context)
+  --
+  -- We try hard to avoid 'Typeable' constraints in this module: there are types
+  -- with no 'Typeable' instance but with a 'NoUnexpectedThunks' instance (most
+  -- important example are types such as @ST s@ which rely on parametric
+  -- polymorphism). By default we should therefore only show the "outer layer";
+  -- for example, if we have a type
+  --
+  -- > Seq (ST s ())
+  --
+  -- then 'showTypeOf' should just give @Seq@, leaving it up to the instance for
+  -- @ST@ to decide how to implement 'showTypeOf'; this keeps things
+  -- compositional. The default implementation does precisely this using the
+  -- metadata that GHC Generics provides.
+  --
+  -- For convenience, however, some of the @deriving via@ newtype wrappers we
+  -- provide /do/ depend on @Typeable@; see below.
+  showTypeOf :: Proxy a -> String
+  default showTypeOf :: (Generic a, GShowTypeOf (Rep a)) => Proxy a -> String
+  showTypeOf _ = gShowTypeOf (from x)
+    where
+      x :: a
+      x = x
+
+-- | Short-circuit a list of checks
+allNoUnexpectedThunks :: [IO ThunkInfo] -> IO ThunkInfo
+allNoUnexpectedThunks = go
+  where
+    go :: [IO ThunkInfo] -> IO ThunkInfo
+    go []     = return NoUnexpectedThunks
+    go (a:as) = do
+        nf <- a
+        case nf of
+          NoUnexpectedThunks  -> go as
+          UnexpectedThunk nfo -> return $ UnexpectedThunk nfo
+
+-- | Check that all elements in the list are thunk-free
+--
+-- Does not check the list itself. Useful for checking the elements of a
+-- container.
+--
+-- See also 'noUnexpectedThunksInKeysAndValues'
+noUnexpectedThunksInValues :: NoUnexpectedThunks a
+                           => [String] -> [a] -> IO ThunkInfo
+noUnexpectedThunksInValues ctxt =
+      allNoUnexpectedThunks
+    . map (noUnexpectedThunks ctxt)
+
+-- | Variant on 'noUnexpectedThunksInValues' for keyed containers.
+--
+-- Neither the list nor the tuples are checked for thunks.
+noUnexpectedThunksInKeysAndValues :: (NoUnexpectedThunks k, NoUnexpectedThunks v)
+                                  => [String] -> [(k, v)] -> IO ThunkInfo
+noUnexpectedThunksInKeysAndValues ctxt =
+      allNoUnexpectedThunks
+    . concatMap (\(k, v) -> [ noUnexpectedThunks ctxt k
+                            , noUnexpectedThunks ctxt v
+                            ])
+
+{-------------------------------------------------------------------------------
+  Results of the check
+-------------------------------------------------------------------------------}
 
 data ThunkInfo =
     -- | We found no unexpected thunks
@@ -75,7 +207,12 @@ data UnexpectedThunkInfo = UnexpectedThunkInfo {
     , unexpectedThunkCallStack :: CallStack
 
       -- | The specific closure where we found the problem
-    , unexpectedThunkClosure   :: Text
+      --
+      -- This will be unavailable when we used 'isNormalForm' to do the check,
+      -- since in that case we don't have detailed information available about
+      -- exactly which thunk was the problem. To aid debugging in such cases
+      -- 'buildAndRenderClosureTree' can be used to render the closure tree.
+    , unexpectedThunkClosure   :: Maybe Text
     }
   deriving (Show)
 
@@ -84,91 +221,153 @@ thunkInfoToIsNF :: ThunkInfo -> Bool
 thunkInfoToIsNF NoUnexpectedThunks  = True
 thunkInfoToIsNF (UnexpectedThunk _) = False
 
-class NoUnexpectedThunks a where
-  -- | Show type @a@ (to add to the context)
-  --
-  -- NOTE: This should be compositional. For example, 'showTypeOf' for @Seq a@
-  -- should just show @"Seq"@, rather than for instance requiring @Typeable@ on
-  -- @a@; the latter would not be compositional (in the sense that 'showTypeOf'
-  -- on @a@ would be irrelevant). In general, we don't want to avoid @Typeable@
-  -- constraints, because some things are instances of 'NoUnexpectedThunks' but
-  -- not instances of 'Typeable'.
-  showTypeOf :: Proxy a -> String
-  default showTypeOf :: (Generic a, GShowTypeOf (Rep a)) => Proxy a -> String
-  showTypeOf = showTypeOfGeneric
+{-------------------------------------------------------------------------------
+  Newtype wrappers for deriving via
+-------------------------------------------------------------------------------}
 
-  -- | Check if the argument does not contain any unexpected thunks
-  --
-  -- It is acceptable for 'noUnexpectedThunks' to evaluate its argument to NF
-  -- as it executes, as long as arguments that contain unexpected thunks are
-  -- reported as not in normal form (return @False@).
-  --
-  -- For example, the internal fingertree 'Data.Sequence.Sequence' might contain
-  -- thunks (this is important for the asymptotic complexity of this data
-  -- structure). However, we should still check that the /values/ in the
-  -- sequence don't contain any unexpected thunks. This means that we need to
-  -- traverse the sequence, which might force some of the thunks in the tree;
-  -- this is acceptable.
-  --
-  -- For most datatypes we should have that
-  --
-  -- > noUnexpectedThunks x == isNormalForm x
-  --
-  -- See also discussion of caveats listed for 'NF.isNormalForm'.
-  noUnexpectedThunks :: HasCallStack => [String] -> a -> IO ThunkInfo
-  noUnexpectedThunks ctxt =
-      whenInHeadNormalForm (showTypeOf (Proxy @a) : ctxt) whnfNoUnexpectedThunks
-
-  -- | Like 'noUnexpectedThunks', but can assume value is in WHNF
-  whnfNoUnexpectedThunks :: [String] -> a -> IO ThunkInfo
-  default whnfNoUnexpectedThunks :: (Generic a, GWhnfNoUnexpectedThunks (Rep a))
-                                 => [String] -> a -> IO ThunkInfo
-  whnfNoUnexpectedThunks = genericWhnfNoUnexpectedThunks
-
--- | Check if argument contains no unexpected thunks by converting to generic
--- representation first
+-- | Newtype wrapper for use with @deriving via@ to use 'isNormalForm'
 --
--- NOTE: if it's in WHNF then we can safely translate to generic value without
--- forcing anything.
-genericWhnfNoUnexpectedThunks :: forall a.
-                                 (Generic a, GWhnfNoUnexpectedThunks (Rep a))
-                              => [String] -> a -> IO ThunkInfo
-genericWhnfNoUnexpectedThunks ctxt x =
-    -- Force the result of @from@ to WHNF: we are not interested in thunks
-    -- that arise from the translation to the generic representation.
-    let fp :: Rep a x
-        !fp = from x
-    in gWhnfNoUnexpectedThunks ctxt fp
+-- 'NoUnexpectedThunks' instances derived using 'UseIsNormalForm' will use
+-- 'isNormalForm' to check whether the argument is in normal form or not.
+-- Since 'isNormalForm' does not need any additional type class instances, this
+-- is useful for types that contain fields for which 'NoUnexpectedThunks'
+-- instances are not available.
+--
+-- Since the primary use case for 'UseIsNormalForm' then is to give instances
+-- for 'NoUnexpectedThunks' from third party libraries, we also don't want to
+-- rely on a 'Generic' instance, which may likewise not be available. Instead,
+-- we will rely on 'Typeable', which is available for /all/ types. However, as
+-- 'showTypeOf' explains, requiring 'Typeable' may not always be suitable; if
+-- it isn't, 'UseIsNormalFormNamed' can be used.
+--
+-- Example:
+--
+-- > deriving via UseIsNormalForm T instance NoUnexpectedThunks T
+newtype UseIsNormalForm a = UseIsNormalForm a
 
--- | Short-circuit a list of checks
-allNoUnexpectedThunks :: [IO ThunkInfo] -> IO ThunkInfo
-allNoUnexpectedThunks = go
-  where
-    go :: [IO ThunkInfo] -> IO ThunkInfo
-    go []     = return NoUnexpectedThunks
-    go (a:as) = do
-        nf <- a
-        case nf of
-          NoUnexpectedThunks  -> go as
-          UnexpectedThunk nfo -> return $ UnexpectedThunk nfo
+-- | Newtype wrapper for use with @deriving via@ to use 'isNormalForm'
+--
+-- This is a variant on 'UseIsNormalForm' which does not depend on 'Typeable',
+-- but instead requires a name to be explicitly given. Example:
+--
+-- > deriving via UseIsNormalFormNamed "T" T instance NoUnexpecedThunks T
+newtype UseIsNormalFormNamed (name :: Symbol) a = UseIsNormalFormNamed a
 
-whenInHeadNormalForm :: HasCallStack
-                     => [String]
-                     -> ([String] -> a -> IO ThunkInfo)
-                     -> (a -> IO ThunkInfo)
-whenInHeadNormalForm ctxt k x = do
-    c   <- getBoxedClosureData (asBox x)
-    hnf <- NF.isHeadNormalForm c
-    if hnf
-      then k ctxt x
-      else return $ UnexpectedThunk UnexpectedThunkInfo {
-               unexpectedThunkContext   = ctxt
-             , unexpectedThunkCallStack = callStack
-             , unexpectedThunkClosure   = renderClosure c
-             }
+-- | Newtype wrapper for use with @deriving via@ to check for WHNF only
+--
+-- For some types we don't want to check for nested thunks, and we only want
+-- check if the argument is in WHNF, not in NF. A typical example are functions;
+-- see the instance of @(a -> b)@ for detailed discussion. This should be used
+-- sparingly.
+--
+-- Example:
+--
+-- > deriving via OnlyCheckIsWHNF "T" T instance NoUnexpectedThunks T
+newtype OnlyCheckIsWHNF (name :: Symbol) a = OnlyCheckIsWHNF a
+
+-- | Newtype wrapper for values that should be allowed to be a thunk
+--
+-- This should be used /VERY/ sparingly, and should /ONLY/ be used on values
+-- (or, even rarer, types) which you are /SURE/ cannot retain any data that they
+-- shouldn't. Bear in mind allowing a value of type @T@ to be a thunk might
+-- cause a value of type @S@ to be retained if @T@ was computed from @S@.
+newtype AllowThunk a = AllowThunk a
 
 {-------------------------------------------------------------------------------
-  Standard instances
+  Internal: instances for the deriving-via wrappers
+-------------------------------------------------------------------------------}
+
+instance Typeable a => NoUnexpectedThunks (UseIsNormalForm a) where
+  showTypeOf _ = show $ typeRep (Proxy @a)
+  whnfNoUnexpectedThunks = noUnexpectedThunksUsingNormalForm
+
+instance KnownSymbol name => NoUnexpectedThunks (UseIsNormalFormNamed name a) where
+  showTypeOf _ = symbolVal (Proxy @name)
+  whnfNoUnexpectedThunks = noUnexpectedThunksUsingNormalForm
+
+instance KnownSymbol name => NoUnexpectedThunks (OnlyCheckIsWHNF name a) where
+  showTypeOf _ = symbolVal (Proxy @name)
+  whnfNoUnexpectedThunks _ _ = return NoUnexpectedThunks
+
+instance NoUnexpectedThunks (AllowThunk a) where
+  showTypeOf _ = "<never used since never fails>"
+  noUnexpectedThunks _ _ = return NoUnexpectedThunks
+  whnfNoUnexpectedThunks = noUnexpectedThunks
+
+-- | Internal: implementation of 'whnfNoUnexpectedThunks' for 'UseIsNormalForm'
+-- and 'UseIsNormalFormNamed'
+noUnexpectedThunksUsingNormalForm :: [String] -> a -> IO ThunkInfo
+noUnexpectedThunksUsingNormalForm ctxt x = do
+    nf <- NF.isNormalForm x
+    return $ if nf then NoUnexpectedThunks
+                   else UnexpectedThunk UnexpectedThunkInfo {
+                            unexpectedThunkContext   = ctxt
+                          , unexpectedThunkCallStack = callStack
+                          , unexpectedThunkClosure   = Nothing
+                          }
+
+{-------------------------------------------------------------------------------
+  Internal: generic infrastructure
+-------------------------------------------------------------------------------}
+
+class GWhnfNoUnexpectedThunks f where
+  gWhnfNoUnexpectedThunks :: [String] -> f x -> IO ThunkInfo
+
+instance GWhnfNoUnexpectedThunks f => GWhnfNoUnexpectedThunks (M1 i c f) where
+  gWhnfNoUnexpectedThunks ctxt (M1 fp) = gWhnfNoUnexpectedThunks ctxt fp
+
+instance ( GWhnfNoUnexpectedThunks f
+         , GWhnfNoUnexpectedThunks g
+         ) => GWhnfNoUnexpectedThunks (f :*: g) where
+  gWhnfNoUnexpectedThunks ctxt (fp :*: gp) = do
+      allNoUnexpectedThunks [
+          gWhnfNoUnexpectedThunks ctxt fp
+        , gWhnfNoUnexpectedThunks ctxt gp
+        ]
+
+instance ( GWhnfNoUnexpectedThunks f
+         , GWhnfNoUnexpectedThunks g
+         ) => GWhnfNoUnexpectedThunks (f :+: g) where
+  gWhnfNoUnexpectedThunks ctxt (L1 fp) = gWhnfNoUnexpectedThunks ctxt fp
+  gWhnfNoUnexpectedThunks ctxt (R1 gp) = gWhnfNoUnexpectedThunks ctxt gp
+
+instance NoUnexpectedThunks c => GWhnfNoUnexpectedThunks (K1 i c) where
+  gWhnfNoUnexpectedThunks ctxt (K1 c) = noUnexpectedThunks ctxt' c
+    where
+      -- If @c@ is a recursive occurrence of the type itself, we want to avoid
+      -- accumulating context. For example, suppose we are dealing with @[Int]@,
+      -- and we have an unexpected thunk as the third @Int@ in the list. If
+      -- we use the generic instance, then without this correction, the final
+      -- context will look something like
+      --
+      -- > ["Int", "[]", "[]", "[]"]
+      --
+      -- While that is more informative (it's the /third/ element that is a
+      -- thunk), it's not that helpful (typically we just want /all/ elements
+      -- to be in NF). We strip the context here so that we just get
+      --
+      -- > ["Int", "[]"]
+      --
+      -- which is a bit easier to interpret.
+      ctxt' = case ctxt of
+                hd : tl | hd == showTypeOf (Proxy @c) -> tl
+                _otherwise                            -> ctxt
+
+instance GWhnfNoUnexpectedThunks U1 where
+  gWhnfNoUnexpectedThunks _ctxt U1 = return NoUnexpectedThunks
+
+{-------------------------------------------------------------------------------
+  Internal: generic function to get name of a type
+-------------------------------------------------------------------------------}
+
+class GShowTypeOf f where
+  gShowTypeOf :: f x -> String
+
+instance Datatype c => GShowTypeOf (D1 c f) where
+  gShowTypeOf = datatypeName
+
+{-------------------------------------------------------------------------------
+  Instances for primitive types
 -------------------------------------------------------------------------------}
 
 deriving via UseIsNormalForm Bool    instance NoUnexpectedThunks Bool
@@ -190,75 +389,21 @@ deriving via UseIsNormalForm Word16 instance NoUnexpectedThunks Word16
 deriving via UseIsNormalForm Word32 instance NoUnexpectedThunks Word32
 deriving via UseIsNormalForm Word64 instance NoUnexpectedThunks Word64
 
-deriving via UseIsNormalForm BS.Strict.ByteString instance NoUnexpectedThunks BS.Strict.ByteString
-deriving via UseIsNormalForm BS.Lazy.ByteString   instance NoUnexpectedThunks BS.Lazy.ByteString
-
-deriving via UseIsNormalForm Text.Strict.Text instance NoUnexpectedThunks Text.Strict.Text
-deriving via UseIsNormalForm Text.Lazy.Text   instance NoUnexpectedThunks Text.Lazy.Text
-
--- | Instance for 'Seq' checks elements only
---
--- The internal fingertree in 'Seq' might have thunks, which is essential for
--- its asymptotic complexity.
-instance NoUnexpectedThunks a => NoUnexpectedThunks (Seq a) where
-  showTypeOf _ = "Seq"
-  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks
-                              . map (noUnexpectedThunks ctxt)
-                              . toList
-
--- | Instance for 'Map' checks elements only (Map is spine strict)
-instance (NoUnexpectedThunks k, NoUnexpectedThunks v) => NoUnexpectedThunks (Map k v) where
-  showTypeOf _ = "Map"
-  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks
-                              . map (noUnexpectedThunks ctxt)
-                              . Map.toList
-
--- | Instance for 'Set' checks elements only (Set is spine strict)
-instance NoUnexpectedThunks a => NoUnexpectedThunks (Set a) where
-  showTypeOf _ = "Set"
-  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks
-                              . map (noUnexpectedThunks ctxt)
-                              . Set.toList
-
--- | Instance for 'IntMap' checks elements only (IntMap is spine strict)
-instance NoUnexpectedThunks a => NoUnexpectedThunks (IntMap a) where
-  showTypeOf _ = "IntMap"
-  whnfNoUnexpectedThunks ctxt = allNoUnexpectedThunks
-                              . map (noUnexpectedThunks ctxt)
-                              . IntMap.toList
-
-instance NoUnexpectedThunks a => NoUnexpectedThunks (Ratio a) where
-  showTypeOf _ = "Ratio"
-  whnfNoUnexpectedThunks ctxt r = do
-     -- The 'Ratio' constructor is not exported: we only have two accessor
-     -- functions. However, @numerator r@ is obviously trivially a trunk
-     -- (due to the unevaluated call to @numerator@). By forcing the values of
-     -- @n@ and @d@ where we get rid of these function calls, leaving on the
-     -- values inside the @Ratio@. Note that @Ratio@ is strict in both of these
-     -- fields, so forcing them to WHNF won't change them.
-     let !n = numerator   r
-         !d = denominator r
-     allNoUnexpectedThunks [
-         noUnexpectedThunks ctxt n
-       , noUnexpectedThunks ctxt d
-       ]
-
 {-------------------------------------------------------------------------------
-  Instances where we don't check (function closures, IO, etc.)
+  Instances for text types
 
-  We could use 'isNormalForm' here, but this would (1) break compositionality
-  (what if the function closure contained a sequence?) and (2) 'isNormalForm'
-  doesn't seem to work so well for function closures anyway.
+  We use UseIsNormalFormNamed here so that we can distinguish between strict
+  and lazy variants.
 -------------------------------------------------------------------------------}
 
-deriving via DontCheckForThunks (a -> b) instance NoUnexpectedThunks (a -> b)
-deriving via DontCheckForThunks (IO a)   instance NoUnexpectedThunks (IO a)
+deriving via UseIsNormalFormNamed "Strict.ByteString" BS.Strict.ByteString instance NoUnexpectedThunks BS.Strict.ByteString
+deriving via UseIsNormalFormNamed "Lazy.ByteString"   BS.Lazy.ByteString   instance NoUnexpectedThunks BS.Lazy.ByteString
+
+deriving via UseIsNormalFormNamed "Strict.Text" Text.Strict.Text instance NoUnexpectedThunks Text.Strict.Text
+deriving via UseIsNormalFormNamed "Lazy.Text"   Text.Lazy.Text   instance NoUnexpectedThunks Text.Lazy.Text
 
 {-------------------------------------------------------------------------------
-  Instances that rely on generics
-
-  We define instances for tuples up to length 7; larger tuples don't have
-  standard 'Generic' instances.
+  Instances that use the generic definition
 -------------------------------------------------------------------------------}
 
 instance NoUnexpectedThunks ()
@@ -311,107 +456,85 @@ instance NoUnexpectedThunks a => NoUnexpectedThunks (Maybe a)
 instance NoUnexpectedThunks a => NoUnexpectedThunks (NonEmpty a)
 
 {-------------------------------------------------------------------------------
-  Using the standard 'isNormalForm' check
+  Spine-strict container types
+
+  Such types can /only/ contain thunks in the values, so that's all we check.
+  Note that containers using keys are typically strict in those keys, but that
+  forces them to WHNF only, not NF; in /most/ cases the @Ord@ instance on those
+  keys will force them to NF, but not /always/ (for example, when using lists
+  as keys); this means we must check keys for thunks to be sure.
 -------------------------------------------------------------------------------}
 
-newtype UseIsNormalForm a = UseIsNormalForm a
+instance (NoUnexpectedThunks k, NoUnexpectedThunks v) => NoUnexpectedThunks (Map k v) where
+  showTypeOf _ = "Map"
+  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInKeysAndValues ctxt . Map.toList
 
-instance Typeable a => NoUnexpectedThunks (UseIsNormalForm a) where
-  showTypeOf              = showTypeOfTypeable
-  whnfNoUnexpectedThunks  = noUnexpectedThunks
-  noUnexpectedThunks ctxt = noUnexpectedThunksUsingNormalForm ctxt'
-    where
-      ctxt' = showTypeOfTypeable (Proxy @a) : ctxt
+instance NoUnexpectedThunks a => NoUnexpectedThunks (Set a) where
+  showTypeOf _ = "Set"
+  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInValues ctxt . Set.toList
 
--- | Check for no unexpected thunks using 'NF.isNormalForm'
+instance NoUnexpectedThunks a => NoUnexpectedThunks (IntMap a) where
+  showTypeOf _ = "IntMap"
+  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInValues ctxt . IntMap.toList
+
+{-------------------------------------------------------------------------------
+  Instances for which we check for WHNF only
+
+  These all need justification.
+-------------------------------------------------------------------------------}
+
+-- | Unboxed vectors can't contain thunks
 --
--- The context here should already include the name of the type we are checking,
--- so that we don't have to impose any constraints on @a@ here.
-noUnexpectedThunksUsingNormalForm :: [String] -> a -> IO ThunkInfo
-noUnexpectedThunksUsingNormalForm ctxt x = do
-    c  <- getBoxedClosureData (asBox x)
-    nf <- NF.isNormalForm x
-    if nf
-      then return $ NoUnexpectedThunks
-      else return $ UnexpectedThunk UnexpectedThunkInfo {
-               unexpectedThunkContext   = ctxt
-             , unexpectedThunkCallStack = callStack
-             , unexpectedThunkClosure   = renderClosure c
-             }
+-- Implementation note: defined manually rather than using 'OnlyCheckIsWHNF'
+-- due to ghc limitation in deriving via, making it impossible to use with it
+-- with data families.
+instance NoUnexpectedThunks (Unboxed.Vector a) where
+  showTypeOf _ = "Unboxed.Vector"
+  whnfNoUnexpectedThunks _ _ = return NoUnexpectedThunks
 
-newtype DontCheckForThunks a = DontCheckForThunks a
+-- | We do NOT check function closures for captured thunks by default
+--
+-- Since we have no type information about the values captured in a thunk,
+-- the only check we could possibly do is 'isNormalForm': we can't recursively
+-- call 'noUnexpectedThunks' on those captured values, which is problematic if
+-- any of those captured values /requires/ a custom instance (for example,
+-- data types that depend on laziness, such as 'Seq').
+--
+-- By default we therefore /only/ check if the function is in WHNF, and don't
+-- check the captured values at all. If you want a stronger check, you can
+-- use @IsNormalForm (a -> b)@ instead.
+deriving via OnlyCheckIsWHNF "->" (a -> b) instance NoUnexpectedThunks (a -> b)
 
-instance NoUnexpectedThunks (DontCheckForThunks a) where
-  showTypeOf _           = "<<not checked for thunks>>" -- will never appear
-  whnfNoUnexpectedThunks = noUnexpectedThunks
-  noUnexpectedThunks _ _ = return NoUnexpectedThunks
-
-{-------------------------------------------------------------------------------
-  Generic instance
--------------------------------------------------------------------------------}
-
-class GWhnfNoUnexpectedThunks f where
-  gWhnfNoUnexpectedThunks :: [String] -> f x -> IO ThunkInfo
-
-instance GWhnfNoUnexpectedThunks f => GWhnfNoUnexpectedThunks (M1 i c f) where
-  gWhnfNoUnexpectedThunks ctxt (M1 fp) = gWhnfNoUnexpectedThunks ctxt fp
-
-instance ( GWhnfNoUnexpectedThunks f
-         , GWhnfNoUnexpectedThunks g
-         ) => GWhnfNoUnexpectedThunks (f :*: g) where
-  gWhnfNoUnexpectedThunks ctxt (fp :*: gp) = do
-      allNoUnexpectedThunks [
-          gWhnfNoUnexpectedThunks ctxt fp
-        , gWhnfNoUnexpectedThunks ctxt gp
-        ]
-
-instance ( GWhnfNoUnexpectedThunks f
-         , GWhnfNoUnexpectedThunks g
-         ) => GWhnfNoUnexpectedThunks (f :+: g) where
-  gWhnfNoUnexpectedThunks ctxt (L1 fp) = gWhnfNoUnexpectedThunks ctxt fp
-  gWhnfNoUnexpectedThunks ctxt (R1 gp) = gWhnfNoUnexpectedThunks ctxt gp
-
-instance NoUnexpectedThunks c => GWhnfNoUnexpectedThunks (K1 i c) where
-  gWhnfNoUnexpectedThunks ctxt (K1 c) = noUnexpectedThunks ctxt' c
-    where
-      -- If @c@ is a recursive occurrence of the type itself, we want to avoid
-      -- accumulating context. For example, suppose we are dealing with @[Int]@,
-      -- and we have an unexpected thunk as the third @Int@ in the list. If
-      -- we use the generic instance, then without this correction, the final
-      -- context will look something like
-      --
-      -- > ["Int", "[]", "[]", "[]"]
-      --
-      -- While that is more informative (it's the /third/ element that is a
-      -- thunk), it's not that helpful (typically we just want /all/ elements
-      -- to be in NF). We strip the context here so that we just get
-      --
-      -- > ["Int", "[]"]
-      --
-      -- which is a bit easier to interpret.
-      ctxt' = case ctxt of
-                hd : tl | hd == showTypeOf (Proxy @c) -> tl
-                _otherwise                            -> ctxt
-
-instance GWhnfNoUnexpectedThunks U1 where
-  gWhnfNoUnexpectedThunks _ctxt U1 = return NoUnexpectedThunks
+-- | We do not check IO actions for captured thunks by default
+--
+-- See instance for @(a -> b)@ for detailed discussion.
+deriving via OnlyCheckIsWHNF "IO" (IO a) instance NoUnexpectedThunks (IO a)
 
 {-------------------------------------------------------------------------------
-  Auxiliary
+  Special cases
 -------------------------------------------------------------------------------}
 
-showTypeOfTypeable :: forall k proxy (a :: k). Typeable a => proxy a -> String
-showTypeOfTypeable = show . typeRep
+-- | Since CallStacks can't retain application data, we don't want to check
+-- them for thunks /at all/
+deriving via AllowThunk CallStack instance NoUnexpectedThunks CallStack
 
-showTypeOfGeneric :: forall proxy a. (Generic a, GShowTypeOf (Rep a))
-                  => proxy a -> String
-showTypeOfGeneric _ = gShowTypeOf (from x)
-  where
-    x :: a
-    x = x
+-- | Instance for 'Seq' checks elements only
+--
+-- The internal fingertree in 'Seq' might have thunks, which is essential for
+-- its asymptotic complexity.
+instance NoUnexpectedThunks a => NoUnexpectedThunks (Seq a) where
+  showTypeOf _ = "Seq"
+  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInValues ctxt . toList
 
-class GShowTypeOf f where
-  gShowTypeOf :: f x -> String
-
-instance Datatype c => GShowTypeOf (D1 c f) where
-  gShowTypeOf = datatypeName
+instance NoUnexpectedThunks a => NoUnexpectedThunks (Ratio a) where
+  showTypeOf _ = "Ratio"
+  whnfNoUnexpectedThunks ctxt r = noUnexpectedThunksInValues ctxt [n, d]
+   where
+     -- The 'Ratio' constructor is not exported: we only have two accessor
+     -- functions. However, @numerator r@ is obviously trivially a trunk
+     -- (due to the unevaluated call to @numerator@). By forcing the values of
+     -- @n@ and @d@ where we get rid of these function calls, leaving only the
+     -- values inside the @Ratio@. Note that @Ratio@ is strict in both of these
+     -- fields, so forcing them to WHNF won't change them.
+     !n = numerator   r
+     !d = denominator r

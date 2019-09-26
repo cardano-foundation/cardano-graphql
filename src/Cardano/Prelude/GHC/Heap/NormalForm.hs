@@ -82,12 +82,11 @@ isHeadNormalForm c = do
 -- NOTE 2: The normal form check can be quite brittle, especially with @-O0@.
 -- For example, writing something like
 --
--- > let !x = ...
--- > nf <- isNormalForm x
+-- > let !(Value x) = ... in ....
 --
 -- might translate to
 --
--- > nf <- isNormalForm (case ... of x -> x)
+-- > let !.. = ... in ... (case ... of Value x -> x)
 --
 -- which would trivially be @False@. In general, 'isNormalForm' should probably
 -- only be used with @-O1@, but even then the answer may still depend on

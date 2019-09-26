@@ -109,6 +109,7 @@ test-suite cardano-prelude-test
                      , pretty-show
                      , QuickCheck
                      , quickcheck-instances
+                     , random
                      , text
                      , template-haskell
                      , time

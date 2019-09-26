@@ -1,3 +1,5 @@
+{-# LANGUAGE DataKinds           #-}
+{-# LANGUAGE DerivingVia         #-}
 {-# LANGUAGE FlexibleContexts    #-}
 {-# LANGUAGE FlexibleInstances   #-}
 {-# LANGUAGE MagicHash           #-}
@@ -7,6 +9,7 @@
 {-# LANGUAGE StandaloneDeriving  #-}
 {-# LANGUAGE TypeApplications    #-}
 {-# LANGUAGE TypeFamilies        #-}
+{-# LANGUAGE UnboxedTuples       #-}
 
 module Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy (tests) where
 
@@ -14,9 +17,11 @@ module Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy (tests) where
 -- tests pass with @-O0@. See 'isNormalForm' for discussion.
 import Cardano.Prelude hiding (($!))
 
-import Prelude (String)
-import GHC.Types (Int(..))
 import Control.Exception (throw)
+import GHC.Types (Int(..), IO(..))
+import Prelude (String)
+import System.Random (randomRIO)
+import qualified Data.Text as Text
 
 import Data.Sequence (Seq)
 import qualified Data.Sequence          as Seq
@@ -44,7 +49,7 @@ class (NoUnexpectedThunks a, Show (Model a)) => FromModel a where
   -- | Does the model describe a value in NF?
   --
   -- If not, return the (type) context of the thunk.
-  modelIsNF :: [String] -> Model a -> Maybe [String]
+  modelThunkInfo :: [String] -> Model a -> Maybe [String]
 
   -- | Translate from the model to an actual value
   --
@@ -68,10 +73,12 @@ testWithModel :: forall a. FromModel a
               -> Property
 testWithModel compareInfo _proxy = withTests 1000 $ property $ do
     m :: Model a <- forAll genModel
-    collect $ modelIsNF [] m
+    collect $ modelThunkInfo [] m
     fromModel m $ \a -> do
+      tree <- liftIO $ buildAndRenderClosureTree treeOpts a
       isNF <- liftIO $ noUnexpectedThunks [] a
-      Hedgehog.diff isNF compareInfo (modelIsNF [] m)
+      annotate (Text.unpack tree)
+      Hedgehog.diff isNF compareInfo (modelThunkInfo [] m)
 
 {-------------------------------------------------------------------------------
   Int
@@ -83,8 +90,8 @@ instance FromModel Int where
     | IntValue Int
     deriving (Show)
 
-  modelIsNF ctxt IntUndefined = Just ("Int" : ctxt)
-  modelIsNF _    (IntValue _) = Nothing
+  modelThunkInfo ctxt IntUndefined = Just ("Int" : ctxt)
+  modelThunkInfo _    (IntValue _) = Nothing
 
   fromModel IntUndefined k = k (bottom "int thunk")
   fromModel (IntValue n) k = case n of I# result -> k (I# result)
@@ -103,10 +110,10 @@ instance (FromModel a, FromModel b) => FromModel (a, b) where
       PairUndefined
     | PairDefined (Model a) (Model b)
 
-  modelIsNF ctxt ab =
+  modelThunkInfo ctxt ab =
       case ab of
         PairUndefined   -> Just ctxt'
-        PairDefined a b -> modelIsNF ctxt' a <|> modelIsNF ctxt' b
+        PairDefined a b -> modelThunkInfo ctxt' a <|> modelThunkInfo ctxt' b
     where
       ctxt' = "(,)" : ctxt
 
@@ -132,11 +139,11 @@ instance FromModel a => FromModel [a] where
     | ListNil
     | ListCons (Model a) (Model [a])
 
-  modelIsNF ctxt xs =
+  modelThunkInfo ctxt xs =
       case xs of
         ListUndefined  -> Just ctxt'
         ListNil        -> Nothing
-        ListCons x xs' -> modelIsNF ctxt' x <|> modelIsNF ctxt xs'
+        ListCons x xs' -> modelThunkInfo ctxt' x <|> modelThunkInfo ctxt xs'
 
     where
       ctxt' = "[]" : ctxt
@@ -168,10 +175,10 @@ instance FromModel (Seq Int) where
   data Model (Seq Int) = SeqEmpty | SeqEnqueue (Model Int) (Model (Seq Int))
     deriving (Show)
 
-  modelIsNF ctxt = go
+  modelThunkInfo ctxt = go
     where
       go SeqEmpty          = Nothing
-      go (SeqEnqueue x xs) = modelIsNF ctxt' x <|> go xs
+      go (SeqEnqueue x xs) = modelThunkInfo ctxt' x <|> go xs
 
       ctxt' = "Seq" : ctxt
 
@@ -206,6 +213,146 @@ forceSeqToWhnf (SI.Seq (SI.Single a))      k = k (SI.Seq (SI.Single a))
 forceSeqToWhnf (SI.Seq (SI.Deep n l ft r)) k = k (SI.Seq (SI.Deep n l ft r))
 
 {-------------------------------------------------------------------------------
+  Special case: function closures
+
+  Since we don't traverse the function closure, we should only check if
+  the function itself is in WHNF or not.
+
+  We have to be careful here exactly how we phrase this test to avoid the GHC
+  optimizer being too smart, turning what we think ought to be thunks into
+  top-level CAFs.
+-------------------------------------------------------------------------------}
+
+-- | Ackermann (anything that ghc won't just optimize away..)
+ack :: Int -> Int -> Int
+ack 0 n = succ n
+ack m 0 = ack (pred m) 1
+ack m n = ack (pred m) (ack m (pred n))
+
+-- | Function which is not strict in either 'Int' argument
+{-# NOINLINE notStrict #-}
+notStrict :: Bool -> Int -> Int -> Int
+notStrict False x _ = x
+notStrict True  _ y = y
+
+definitelyInNF :: Int -> Int
+definitelyInNF n = n
+
+instance FromModel (Int -> Int) where
+  data Model (Int -> Int) =
+      FnInNF                           -- Function in NF
+    | FnNotInNF Bool Int               -- Function in WHNF but not in NF
+    | FnNotInWHNF (Model (Int -> Int)) -- Function not in WHNF
+    | FnToWHNF (Model (Int -> Int))    -- Force function to WHNF
+    deriving (Show)
+
+  fromModel FnInNF          k = k definitelyInNF
+  fromModel (FnNotInNF b n) k = k (notStrict b (ack 5 n))
+  fromModel (FnNotInWHNF f) k = fromModel f $ \f' -> k (if ack 3 3 > 0 then f' else f')
+  fromModel (FnToWHNF    f) k = fromModel f $ \f' -> f' `seq` k f'
+
+  modelThunkInfo _    FnInNF          = Nothing
+  modelThunkInfo _    (FnNotInNF _ _) = Nothing
+  modelThunkInfo ctxt (FnNotInWHNF _) = Just ("->" : ctxt)
+  modelThunkInfo _    (FnToWHNF _)    = Nothing
+
+  genModel = Gen.choice [
+        pure FnInNF
+      , FnNotInNF   <$> Gen.bool <*> Gen.int Range.linearBounded
+      , FnNotInWHNF <$> genModel
+      , FnToWHNF    <$> genModel
+      ]
+
+{-------------------------------------------------------------------------------
+  Special case: IO
+
+  Similar kind of thing as for function closures. Here we have to be even more
+  careful in our choice of examples to get something that works both with @-O0@
+  and @-O1@.
+-------------------------------------------------------------------------------}
+
+-- IO action which is definitely in NF
+doNothing :: IO ()
+doNothing = IO (\w -> (# w, () #) )
+
+instance FromModel (IO ()) where
+  -- We reuse the model we use for functions, we do the same 4 types
+  newtype Model (IO ()) = ModelIO (Model (Int -> Int))
+    deriving Show
+
+  fromModel (ModelIO m) = go m
+    where
+      go :: Model (Int -> Int) -> (IO () -> r) -> r
+      go FnInNF          k = k doNothing
+      go (FnNotInNF b n) k = k (IO (\w -> let x = notStrict b (ack 5 n) 6
+                                          in x `seq` (# w, () #) ))
+      go (FnNotInWHNF f) k = go f $ \f' -> k (if ack 3 3 > 0 then f' else f')
+      go (FnToWHNF    f) k = go f $ \f' -> f' `seq` k f'
+
+  modelThunkInfo ctxt (ModelIO f) =
+     case modelThunkInfo ctxt f of
+       Just ("->" : ctxt') -> Just ("IO" : ctxt')
+       info                -> info
+
+  genModel = ModelIO <$> genModel
+
+{-------------------------------------------------------------------------------
+  Check that we /can/ check functions and IO actions for nested thunks
+-------------------------------------------------------------------------------}
+
+newtype ThunkFree a = ThunkFree a
+  deriving NoUnexpectedThunks via UseIsNormalForm a
+
+instance FromModel (ThunkFree (Int -> Int)) where
+  newtype Model (ThunkFree (Int -> Int)) = ThunkFreeFn (Model (Int -> Int))
+    deriving (Show)
+
+  genModel = ThunkFreeFn <$> genModel
+  fromModel (ThunkFreeFn f) k = fromModel f $ \f' -> k (ThunkFree f')
+
+  modelThunkInfo ctxt (ThunkFreeFn m)
+    | isInNF m  = Nothing
+    | otherwise = Just ("Int -> Int" : ctxt)
+    where
+      isInNF :: Model (Int -> Int) -> Bool
+      isInNF FnInNF          = True
+      isInNF (FnNotInNF _ _) = False
+      isInNF (FnNotInWHNF _) = False
+      isInNF (FnToWHNF f)    =
+         -- Computing the effect of forcing to WHNF is a bit tricky:
+         case f of
+           -- If the function is in NF, forcing it leaves it in NF
+           FnInNF -> True
+
+           -- If the function is already in WHNF, but not in NF, then
+           -- forcing it will have no effect
+           FnNotInNF _ _ -> False
+
+           -- Forcing twice is the same as forcing one
+           FnToWHNF f' -> isInNF (FnToWHNF f')
+
+           -- Forcing a computation reveals what's underneath. It doesn't matter
+           -- however /how many/ computations are underneath
+           --
+           -- > force (compute (compute (compute x))) = x
+           --
+           -- so we leave the FnToWHNF at the top.
+           FnNotInWHNF f' -> isInNF (FnToWHNF f')
+
+-- Just for completeness sake, we do the same for IO
+instance FromModel (ThunkFree (IO ())) where
+  newtype Model (ThunkFree (IO ())) = ThunkFreeIO (Model (Int -> Int))
+    deriving (Show)
+
+  genModel = ThunkFreeIO <$> genModel
+  fromModel (ThunkFreeIO m) k = fromModel (ModelIO m) $ \f -> k (ThunkFree f)
+
+  modelThunkInfo ctxt (ThunkFreeIO f) =
+     case modelThunkInfo ctxt (ThunkFreeFn f) of
+       Just ("Int -> Int" : ctxt') -> Just ("IO ()" : ctxt')
+       info                        -> info
+
+{-------------------------------------------------------------------------------
   Using the standard 'isNormalForm' check
 -------------------------------------------------------------------------------}
 
@@ -213,10 +360,51 @@ instance (FromModel a, Typeable a) => FromModel (UseIsNormalForm a) where
   newtype Model (UseIsNormalForm a) = Wrap { unwrap :: Model a }
 
   genModel       = Wrap <$> genModel
-  modelIsNF ctxt = modelIsNF ctxt . unwrap
+  modelThunkInfo ctxt = modelThunkInfo ctxt . unwrap
   fromModel m k  = fromModel (unwrap m) $ \x -> k (UseIsNormalForm x)
 
 deriving instance Show (Model a) => Show (Model (UseIsNormalForm a))
+
+{-------------------------------------------------------------------------------
+  Some sanity checks
+
+  These are primarily designed to check that we can distinguish between
+  functions with nested thunks and functions without.
+-------------------------------------------------------------------------------}
+
+{-# NOINLINE checkNF #-}
+checkNF :: Bool -> IO a -> Property
+checkNF expectedNF mkX = withTests 1 $ property $ do
+    x    <- liftIO $ mkX
+    tree <- liftIO $ buildAndRenderClosureTree treeOpts x
+    nf   <- liftIO $ isNormalForm x
+    annotate (Text.unpack tree)
+    nf === expectedNF
+
+treeOpts :: ClosureTreeOptions
+treeOpts = ClosureTreeOptions AnyDepth TraverseCyclicClosures
+
+{-# NOINLINE sanityCheckInt #-}
+sanityCheckInt :: Property
+sanityCheckInt = checkNF False $ return (bottom "thunk" :: Int)
+
+{-# NOINLINE sanityCheckPair #-}
+sanityCheckPair :: Property
+sanityCheckPair = checkNF False $ return ((bottom "thunk", True) :: (Int, Bool))
+
+{-# NOINLINE sanityCheckFn #-}
+sanityCheckFn :: Property
+sanityCheckFn = checkNF False $ do
+    b <- randomRIO (False, True)
+    n <- ack 5 <$> randomRIO (0, 10)
+    return $ (notStrict b n :: Int -> Int)
+
+{-# NOINLINE sanityCheckIO #-}
+sanityCheckIO :: Property
+sanityCheckIO = checkNF False $ do
+    b <- randomRIO (False, True)
+    n <- ack 5 <$> randomRIO (0, 10)
+    return $ (print (notStrict b n 6) :: IO ())
 
 {-------------------------------------------------------------------------------
   Driver
@@ -227,7 +415,12 @@ tests = and <$> sequence [checkSequential testGroup]
 
 testGroup :: Group
 testGroup = Group "Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy" [
-      ("prop_isNormalForm_Int"        ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm Int))
+      ("prop_sanityCheck_Int"  , sanityCheckInt)
+    , ("prop_sanityCheck_Pair" , sanityCheckPair)
+    , ("prop_sanityCheck_Fn"   , sanityCheckFn)
+    , ("prop_sanityCheck_IO"   , sanityCheckIO)
+
+    , ("prop_isNormalForm_Int"        ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm Int))
     , ("prop_isNormalForm_IntInt"     ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm (Int, Int)))
     , ("prop_isNormalForm_ListInt"    ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm [Int]))
     , ("prop_isNormalForm_IntListInt" ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm (Int, [Int])))
@@ -238,6 +431,12 @@ testGroup = Group "Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy" [
     , ("prop_noUnexpectedThunks_ListInt"    , testWithModel agreeOnContext $ Proxy @[Int])
     , ("prop_noUnexpectedThunks_IntListInt" , testWithModel agreeOnContext $ Proxy @(Int, [Int]))
     , ("prop_noUnexpectedThunks_SeqInt"     , testWithModel agreeOnContext $ Proxy @(Seq Int))
+
+    , ("prop_noUnexpectedThunks_Fn" , testWithModel agreeOnContext $ Proxy @(Int -> Int))
+    , ("prop_noUnexpectedThunks_IO" , testWithModel agreeOnContext $ Proxy @(IO ()))
+
+    , ("prop_noUnexpectedThunks_ThunkFreeFn" , testWithModel agreeOnContext $ Proxy @(ThunkFree (Int -> Int)))
+    , ("prop_noUnexpectedThunks_ThunkFreeIO" , testWithModel agreeOnContext $ Proxy @(ThunkFree (IO ())))
     ]
 
 -- | When using @UseIsNormalForm@ we don't get a context, so merely check if
