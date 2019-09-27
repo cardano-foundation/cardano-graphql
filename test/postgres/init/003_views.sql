@@ -87,7 +87,7 @@ left outer join slot_leader
 
 create view "Block" as
 select
-  (select sum(fee) from tx where tx.block = block.id) as "fees",
+  COALESCE((select sum(tx.fee) from tx where tx.block = block.id), 0) as "fees",
   block."hash" as id,
   block.merkel_root as "merkelRootHash",
   block.block_no as number,
