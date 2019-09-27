@@ -66,7 +66,7 @@ with recursive slot_numbers as
 select
   slot as "number",
   block.hash as "blockId",
-  block.slot_leader as leader,
+  slot_leader.hash as leader,
   case when slot > 0
     then floor(slot / (10 * protocol_const))
     else 0	
@@ -81,7 +81,9 @@ select
   end as "slotWithinEpoch"
 from slot_meta
 left outer join block
-  on block.slot_no = slot_meta.slot;
+  on block.slot_no = slot_meta.slot
+left outer join slot_leader
+  on block.slot_leader = slot_leader.id;
 
 create view "Block" as
 select
@@ -103,7 +105,7 @@ left outer join block as previous_block
 create view "Transaction" as
 select
   block.hash as "blockId",
-  tx.fee,
+  COALESCE(tx.fee, 0) as fee,
   tx.hash as id,
   "Slot"."createdAt" as "includedAt",
   (select sum("value") from tx_out where tx_id = tx.id) as "totalOutput"
