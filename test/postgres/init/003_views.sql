@@ -48,7 +48,7 @@ join tx as source_tx
   on source_tx_out.tx_id = source_tx.id;
 
 
-create view "Slot" as 
+create view "Slot" as
 with recursive slot_numbers as
 (
   select 0 as slot
@@ -56,7 +56,7 @@ with recursive slot_numbers as
   select slot + 1 from slot_numbers
   where slot + 1 <= (select max(slot_no) from block)
 ), slot_meta as (
-  select 
+  select
     slot,
     quote_literal(slot * (select slot_duration from meta) * 0.001) as time_since_start,
     (select start_time from meta) as start_time,
@@ -69,12 +69,12 @@ select
   slot_leader.hash as leader,
   case when slot > 0
     then floor(slot / (10 * protocol_const))
-    else 0	
+    else 0
   end as "epochNo",
   case when slot >= 0
     then start_time + cast (time_since_start as interval)
     else start_time
-  end as "createdAt",
+  end as "startedAt",
   case when slot > 0
     then slot - (epoch_no * (10 * protocol_const))
     else 0
@@ -107,7 +107,7 @@ select
   block.hash as "blockId",
   COALESCE(tx.fee, 0) as fee,
   tx.hash as id,
-  "Slot"."createdAt" as "includedAt",
+  "Slot"."startedAt" as "includedAt",
   (select sum("value") from tx_out where tx_id = tx.id) as "totalOutput"
 from
   tx
@@ -116,11 +116,11 @@ inner join block
 inner join "Slot"
   on "Slot".number = block.slot_no;
 
-create view "Epoch" as 
+create view "Epoch" as
 select
   sum(tx_out.value) as output,
-  max("Slot"."createdAt") as "endedAt",
-  min("Slot"."createdAt") as "startedAt",
+  max("Slot"."startedAt") as "endedAt",
+  min("Slot"."startedAt") as "startedAt",
   count(distinct tx.hash) as "transactionsCount",
   "Slot"."epochNo" as "number"
 from "Slot"
@@ -155,7 +155,7 @@ RETURNS SETOF "TransactionOutput" AS $$
   and tx.block <= (select id from block where hash = "blockId")
 $$ LANGUAGE sql STABLE;
 
-create view "Cardano" as 
+create view "Cardano" as
 select
   number as "blockHeight",
   "epochNo" as "currentEpochNo"
