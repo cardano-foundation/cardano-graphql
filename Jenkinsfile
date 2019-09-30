@@ -52,10 +52,14 @@ pipeline {
         }
       }
     }
+    stage('Stop Test Services') {
+      steps {
+        sh 'npm run stop-dependencies'
+      }
+    }
   }
   post {
     always {
-      sh 'npm run stop-dependencies'
       cleanWs()
     }
   }
