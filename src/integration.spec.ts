@@ -101,7 +101,10 @@ describe('Integration', () => {
         query: gql`query {
             blocks (
                 limit: 2,
-                where: { id: { _in: [${block29021.id}, ${block29022.id}]}}
+                where: { id: { _in: [
+                  \"${block29021.id}\",
+                  \"${block29022.id}\"
+                ]}}
             ) {
                 epoch {
                     number
@@ -224,7 +227,7 @@ describe('Integration', () => {
         query: gql`query {
             transactions(
                 limit: 2,
-                where: { id: { _in: [${txe68043.id}, ${tx05ad8b.id}]}}
+                where: { id: { _in: [\"${txe68043.id}\", \"${tx05ad8b.id}\"]}}
             ) {
                 block {
                     number

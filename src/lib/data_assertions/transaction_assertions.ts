@@ -1,7 +1,6 @@
 
 export const txe68043 = {
   block: {
-    fees: '342316',
     number: 29021
   },
   fee: '171070',

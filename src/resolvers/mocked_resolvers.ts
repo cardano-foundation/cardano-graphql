@@ -20,15 +20,15 @@ export const mockedResolvers: Resolvers = {
     }
   },
   Query: {
-    blocks: (_root, args) => {
+    blocks: (_root, args): any => {
       checkLimit(args.limit, 100)
       return [block29021, block29022]
     },
-    epochs: (_root, args) => {
+    epochs: (_root, args): any => {
       checkLimit(args.limit, 100)
       return [epoch1]
     },
-    cardano: () => {
+    cardano: (): any => {
       return Promise.resolve({
         blockHeight: 99,
         currentEpoch: epoch1,
@@ -46,11 +46,11 @@ export const mockedResolvers: Resolvers = {
       checkLimit(args.limit, 250)
       return Promise.resolve([stakePool1])
     },
-    transactions: (_root, args) => {
+    transactions: (_root, args): any => {
       checkLimit(args.limit, 250)
       return [tx05ad8b, txe68043]
     },
-    utxoSet: () => {
+    utxoSet: (): any => {
       return tx05ad8b.outputs
     }
   }

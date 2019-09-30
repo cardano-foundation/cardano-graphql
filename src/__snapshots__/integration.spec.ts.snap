@@ -252,38 +252,61 @@ Object {
 }
 `;
 
-exports[`Integration stakePools Returns Stake Pools 1`] = `
-Object {
-  "data": undefined,
-  "errors": Array [
-    [ValidationError: Variable "$limit" is not defined.],
-    [ValidationError: Variable "$order_by" is not defined.],
-    [ValidationError: Variable "$offset" is not defined.],
-    [ValidationError: Variable "$where" is not defined.],
-  ],
-  "extensions": undefined,
-  "http": Object {
-    "headers": Headers {
-      Symbol(map): Object {},
-    },
-  },
-}
-`;
-
 exports[`Integration transactions Returns transactions by IDs 1`] = `
 Object {
   "data": Object {
     "transactions": Array [
-      null,
-      null,
+      Object {
+        "block": Object {
+          "number": 29021,
+        },
+        "fee": "171246",
+        "id": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
+        "inputs": Array [
+          Object {
+            "address": "DdzFFzCqrht5ExAdoZVExXoZTpoMYGKxva3thvvvHapsLZQzSX3kCqwgqi5NSM2oUtHYYDqsSnvSGbqkarB6cSgDZohUhLWZ9KFdDWsa",
+            "value": "4924799649906",
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsxVv8Sjuj35Zkw42T9WjwXa6DasrNknm5M3bPVDnWJWwhX5NymoZncUArTfFYZ9sYGaA9htKSNYoK5Vkzx2vUtunAFt3eE",
+            "value": "4824799478660",
+          },
+          Object {
+            "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+            "value": "100000000000",
+          },
+        ],
+        "totalOutput": "4924799478660",
+      },
+      Object {
+        "block": Object {
+          "number": 29021,
+        },
+        "fee": "171070",
+        "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+        "inputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsggyaAMAUTjGtjBr1CTp8tTcHYWbqtoyQBZcaYHM16rjbUDawTwoVaEPawAMPLJmpJVXHBNxZnTgmQzqAcNDe6XvMe5BkB",
+            "value": "768403000000",
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8",
+            "value": "768401828930",
+          },
+          Object {
+            "address": "DdzFFzCqrhsgrGt7zHydkE4cKxjB7SgsdnMPUFxYEwBu1u4sGobxZL5Xo3eDycCrtSYAUyw9aAsZZxFpTdgur6MwYDYMwAZ4xNGKRD3o",
+            "value": "1000000",
+          },
+        ],
+        "totalOutput": "768402828930",
+      },
     ],
   },
-  "errors": Array [
-    [GraphQLError: Int cannot represent non 32-bit signed integer value: 4924799649906],
-    [GraphQLError: Int cannot represent non 32-bit signed integer value: 4824799478660],
-    [GraphQLError: Int cannot represent non 32-bit signed integer value: 768403000000],
-    [GraphQLError: Int cannot represent non 32-bit signed integer value: 768401828930],
-  ],
+  "errors": undefined,
   "extensions": undefined,
   "http": Object {
     "headers": Headers {

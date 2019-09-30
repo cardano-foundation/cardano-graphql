@@ -87,7 +87,7 @@ left outer join slot_leader
 
 create view "Block" as
 select
-  COALESCE((select sum(tx.fee) from tx where tx.block = block.id), 0) as "fees",
+  CAST(COALESCE((select sum(tx.fee) from tx where tx.block = block.id), 0) as integer) as "fees",
   block."hash" as id,
   block.merkel_root as "merkelRootHash",
   block.block_no as number,
@@ -108,7 +108,7 @@ select
   COALESCE(tx.fee, 0) as fee,
   tx.hash as id,
   "Slot"."startedAt" as "includedAt",
-  (select sum("value") from tx_out where tx_id = tx.id) as "totalOutput"
+  cast((select sum("value") from tx_out where tx_id = tx.id) as bigint) as "totalOutput"
 from
   tx
 inner join block
@@ -118,7 +118,7 @@ inner join "Slot"
 
 create view "Epoch" as
 select
-  sum(tx_out.value) as output,
+  cast(sum(tx_out.value) as bigint) as output,
   max("Slot"."startedAt") as "endedAt",
   min("Slot"."startedAt") as "startedAt",
   count(distinct tx.hash) as "transactionsCount",
