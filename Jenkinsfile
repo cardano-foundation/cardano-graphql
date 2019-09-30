@@ -34,11 +34,6 @@ pipeline {
       steps {
         sh 'npm test'
       }
-      post {
-        always {
-           sh 'npm run stop-dependencies'
-        }
-      }
     }
     stage('Build & Push Docker Images') {
       steps {

@@ -12,7 +12,7 @@ export async function buildHasuraSchema (hasuraUri: string) {
     schema: await RetryPromise.retryPromise(
       'Connecting to Hasura',
       () => introspectSchema(link),
-      30, 2000
+      30
     ),
     link
   })
