@@ -42,9 +42,7 @@ export const hasuraResolvers: Resolvers = {
       throw new GraphQLError('Not implemented')
     },
     transactions: (_root, args, context, info) => {
-      console.log('hey')
       checkLimit(args.limit, 250)
-      console.log(args.limit)
       return delegateToSchema({
         args,
         context,
