@@ -26,7 +26,7 @@ describe('Integration', () => {
       validationRules: [depthLimit(20)]
     })
     client = createTestClient(apolloServer)
-  }, 20000)
+  }, 60000)
 
   describe('blocks', () => {
     it('returns the most recent block by default ', async () => {
