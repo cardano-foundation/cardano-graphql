@@ -34,6 +34,11 @@ pipeline {
       steps {
         sh 'npm test'
       }
+      post {
+        always {
+           sh 'npm run stop-dependencies'
+        }
+      }
     }
     stage('Build & Push Docker Images') {
       steps {
@@ -50,11 +55,6 @@ pipeline {
             sh "docker push samjeston/cardano-graphql-pgseed:develop"
           }
         }
-      }
-    }
-    stage('Stop Test Services') {
-      steps {
-        sh 'npm run stop-dependencies'
       }
     }
   }
