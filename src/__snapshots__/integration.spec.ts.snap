@@ -315,3 +315,119 @@ Object {
   },
 }
 `;
+
+exports[`Integration transactions utxoSet Can be filtered by address 1`] = `
+Object {
+  "data": Object {
+    "utxoSet": Array [
+      Object {
+        "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+        "value": "100000000000",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration transactions utxoSet Returns the whole set by default 1`] = `
+Object {
+  "data": Object {
+    "utxoSet": Array [
+      Object {
+        "address": "Ae2tdPwUPEZ9vtyppa1FdJzvqJZkEcXgdHxVYAzTWcPaoNycVq5rc36LC1S",
+        "value": "538861000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt",
+        "value": "1153846000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEYyahAbgfTxhChyWV6xMWKCDQs35Cr9qUXgzVviBrvhJ6NyUzA",
+        "value": "455585000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZLC5VMKspod9dcf5PtUtvobxd3THtoxfR9uuzcqDghef9oiTc",
+        "value": "390975000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZ415vhqz7i5t8jP5dKsDHUmTpTGf4XxeezzJJzhaubdWm4Aj2",
+        "value": "378507000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZ5GNoihaqR2Q43dTxBu9e9Y8m3daWcVw1bvswn4Y8APVUHqaZ",
+        "value": "499999000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZH6yx1bPBeTVy2ikCuJ2aLmsXpYT622bTw6LEy9UHiu9k8KF5",
+        "value": "411085000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZDjmVmgpcP1Dcm2C7frvbdZ8XvJjAPNVxLodknP4XACUTiidE",
+        "value": "901105000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEYyeBiwUSF6e1zXBY2Rbc8jEpXgcueqUyvkTaJekBw3sTbeMBG",
+        "value": "500919000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZ9BzUH1zgCijhBep4ZnwUhmM2zS7nkmnZV7gvbV54f5oCxxX7",
+        "value": "462355000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZKsHEnJoZZkUccHv1vsztJ37amLwxxdJpFYicuLwRpKFgsEjn",
+        "value": "391257000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZ2cE1drgm8LKf7L6QVqEmov7eYegL6S7W3L7ZHu2q3AxiU6PW",
+        "value": "7692307000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZKxVVgakuw9iytSjfYzEbDhjVCwmWQpgyuNcPxtueMujWDAEu",
+        "value": "469217000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEYwEuhFnowz2h8rxJ9JoNbjiU6H7dL1ed5RLMikDr6qUJsJ9jt",
+        "value": "383233000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZ3qXMX6imKEXTGPVBtY1QAx1oroD5Mf4buQiSvaJqi3qXVA3R",
+        "value": "1000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZBA28BxMDYxGFHGS3MWaa6ioT9ZBnCoy8ojtPy6YcapAvXhGq",
+        "value": "416901000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZBZTsRj7nGvvWQDTkqD9KLpCPpuZvjA1roL7KLDDVgkPU5S8j",
+        "value": "385506000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZAVCQEGtLWUy5JhzoJCqAaaN9yvAZAGgjyZT49SjLnzsZeMzX",
+        "value": "500305000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZA6N6PzxtcoP4PKrBQBLM4FTB89q4zaWnEBdbCD8QTo51zPCn",
+        "value": "380005000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZH6K1hZZTC7T1zcZpKQdWmxUdGQtf8bix78EULKVnDQhQYYY3",
+        "value": "377802000000",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

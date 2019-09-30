@@ -250,34 +250,38 @@ describe('Integration', () => {
       expect(result).toMatchSnapshot()
     })
 
-    // describe('utxoSet', () => {
-    //   it('Returns the whole set by default', async () => {
-    //     const result = await client.query({
-    //       query: gql`query {
-    //           utxoSet {
-    //               address
-    //               value
-    //           }
-    //       }`
-    //     })
-    //     expect(result).toMatchSnapshot()
-    //   })
-    //   it('Can be filtered by address', async () => {
-    //     const result = await client.query({
-    //       query: gql`query {
-    //           utxoSet(
-    //               where: { address: { _eq:
-    //               "DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y"
-    //               }
-    //               }
-    //           ) {
-    //               address
-    //               value
-    //           }
-    //       }`
-    //     })
-    //     expect(result).toMatchSnapshot()
-    //   })
-    // })
+    describe('utxoSet', () => {
+      it('Returns the whole set by default', async () => {
+        const result = await client.query({
+          query: gql`query {
+              utxoSet(
+                  limit: 20
+              ) {
+                  address
+                  value
+              }
+          }`
+        })
+        expect(result.data.utxoSet.length).toBe(20)
+        expect(result).toMatchSnapshot()
+      })
+      it('Can be filtered by address', async () => {
+        const result = await client.query({
+          query: gql`query {
+              utxoSet(
+                  where: { address: { _eq:
+                  "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s"
+                  }
+                  }
+              ) {
+                  address
+                  value
+              }
+          }`
+        })
+        expect(result.data.utxoSet.length).toBe(1)
+        expect(result).toMatchSnapshot()
+      })
+    })
   })
 })

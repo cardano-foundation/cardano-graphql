@@ -53,8 +53,9 @@ export const hasuraResolvers: Resolvers = {
       })
     },
     utxoSet: (_root, args, context, info) => {
+      checkLimit(args.limit, 250)
       return delegateToSchema({
-        args: { where: { address: { _eq: args.where.address } } },
+        args,
         context,
         fieldName: 'Utxo',
         info,
