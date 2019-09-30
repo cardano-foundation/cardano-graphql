@@ -32,7 +32,8 @@
     "graphql-iso-date": "^3.6.1",
     "graphql-type-datetime": "^0.2.4",
     "lodash.isequal": "^4.5.0",
-    "promise-exponential-retry": "^1.0.3"
+    "promise-exponential-retry": "^1.0.3",
+    "ts-custom-error": "^3.1.1"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "^1.5.0",

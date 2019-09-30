@@ -12,7 +12,7 @@ export const txe68043 = {
   }],
   outputs: [{
     address: 'DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8',
-    value: '768401828930',
+    value: '768401828930'
   }, {
     address: 'DdzFFzCqrhsgrGt7zHydkE4cKxjB7SgsdnMPUFxYEwBu1u4sGobxZL5Xo3eDycCrtSYAUyw9aAsZZxFpTdgur6MwYDYMwAZ4xNGKRD3o',
     value: '1000000'

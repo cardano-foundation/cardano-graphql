@@ -35,7 +35,7 @@ export const block29022 = {
   size: 631,
   slot: {
     number: 29036,
-    startedAt: '2017-09-30T15:03:31+00:00',
+    startedAt: '2017-09-30T15:03:31+00:00'
   },
   transactions: [] as any
 }
