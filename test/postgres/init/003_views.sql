@@ -68,7 +68,7 @@ select
   block.hash as "blockId",
   slot_leader.hash as leader,
   case when slot > 0
-    then floor(slot / (10 * protocol_const))
+    then CAST(floor(slot / (10 * protocol_const)) AS INT)
     else 0
   end as "epochNo",
   case when slot >= 0
