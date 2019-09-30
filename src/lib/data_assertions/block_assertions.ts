@@ -1,46 +1,40 @@
-import { Block } from '../../graphql_types'
-import { tx21c528, txa54489, txd9e280 } from './transaction_assertions'
+import { tx05ad8b, txe68043 } from './transaction_assertions'
 
-export const block43177 = {
-  createdAt: new Date(Date.UTC(2017, 10, 4, 7, 45, 11)),
+export const block29021 = {
   epoch: {
-    number: 2
-  },
-  fees: 171246,
-  id: 'd2210effd1b09da47998c7fc9e890beb1825114e734c343dd920829e781c6325',
-  merkelRootHash: '3d94dbe277e2a76fc0b1bbee29ff452658a4a01058c32eb2fd7b51d7e10fedab',
-  number: 43177,
-  previousBlock: {
-    number: 43176
-  },
-  size: 2554,
-  slot: {
-    epoch: {
-      number: 2
-    },
     number: 1
   },
-  transactions: [tx21c528, txa54489]
-} as Block
-
-export const block43178 = {
-  createdAt: new Date(Date.UTC(2017, 10, 4, 7, 45, 31)),
-  epoch: {
-    number: 2
-  },
-  fees: 171246,
-  id: '7e89b8df0e4f7f16c04d6068d839052ff1a514054d7146625ce2c42511f80d6f',
-  merkelRootHash: 'dc2718b3638853620c2f7e9f6fadbb43be3231c7406f5101173d75ef084cdc3f',
-  number: 43178,
+  fees: '342316',
+  id: '00aea2405f7cf4eb1d9e6694770ea25eeb113b857e377d22641aa1099742615d',
+  merkelRootHash: '1acc618aebd703ab201ef790a379a0bd8748ac7a4ed4bf425e0b12f8b7afd812',
+  number: 29021,
   previousBlock: {
-    number: 43177
+    id: '663c25ee1434e6d29f8bd08bd52ddbb16a30bb54ca3c69c815e3de7bc4c42770',
+    number: 29020
   },
-  size: 4877,
+  size: 1349,
   slot: {
-    epoch: {
-      number: 2
-    },
-    number: 2
+    number: 29035,
+    startedAt: '2017-09-30T15:03:11+00:00'
   },
-  transactions: [txd9e280]
-} as Block
+  transactions: [tx05ad8b, txe68043]
+}
+
+export const block29022 = {
+  epoch: {
+    number: 1
+  },
+  fees: '0',
+  id: 'bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380',
+  merkelRootHash: '0e5751c026e543b2e8ab2eb06099daa1d1e5df47778f7787faab45cdf12fe3a8',
+  number: 29022,
+  previousBlock: {
+    id: '00aea2405f7cf4eb1d9e6694770ea25eeb113b857e377d22641aa1099742615d',
+    number: 29021
+  },
+  size: 631,
+  slot: {
+    number: 29036,
+    startedAt: '2017-09-30T15:03:31+00:00',
+  }
+}

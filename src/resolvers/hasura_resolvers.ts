@@ -1,27 +1,17 @@
 import { delegateToSchema } from 'graphql-tools'
 import { GraphQLError } from 'graphql'
-import { Resolvers } from '../graphql_types'
+import { Resolvers, Order_By_With_Nulls } from '../graphql_types'
 import { checkLimit } from '../validation'
+const isEqual = require('lodash.isequal')
 
-export const jormungandrResolvers: Resolvers = {
-  Mutation: {
-    delegateStake: (_root, _args, _context, _info) => {
-      throw new GraphQLError('Not implemented')
-    },
-    registerStakePool: (_root, _args, _context, _info) => {
-      throw new GraphQLError('Not implemented')
-    },
-    submitTransaction: (_root, _args, _context, _info) => {
-      throw new GraphQLError('Not implemented')
-    }
-  },
+export const hasuraResolvers: Resolvers = {
   Query: {
-    blocks: (_root, args, context, info) => {
+    blocks: async (_root, args, context, info) => {
       checkLimit(args.limit, 100)
       return delegateToSchema({
-        args,
+        args: isEqual(args, { limit: 1 }) ? { ...args, ...{ order_by: { number: Order_By_With_Nulls.DescNullsLast }}} : args,
         context,
-        fieldName: 'blocks',
+        fieldName: 'Block',
         info,
         operation: 'query',
         schema: context.hasura
@@ -32,24 +22,33 @@ export const jormungandrResolvers: Resolvers = {
       return delegateToSchema({
         args,
         context,
-        fieldName: 'transactions',
+        fieldName: 'Epoch',
         info,
         operation: 'query',
         schema: context.hasura
       })
     },
-    cardano: (_root, _args, _context, _info) => {
-      throw new GraphQLError('Not implemented')
+    cardano: async (_root, args, context, info) => {
+      return (await delegateToSchema({
+        args,
+        context,
+        fieldName: 'Cardano',
+        info,
+        operation: 'query',
+        schema: context.hasura
+      }))[0]
     },
     stakePools: (_root, _args, _context, _info) => {
       throw new GraphQLError('Not implemented')
     },
     transactions: (_root, args, context, info) => {
+      console.log('hey')
       checkLimit(args.limit, 250)
+      console.log(args.limit)
       return delegateToSchema({
         args,
         context,
-        fieldName: 'transactions',
+        fieldName: 'Transaction',
         info,
         operation: 'query',
         schema: context.hasura
@@ -59,7 +58,7 @@ export const jormungandrResolvers: Resolvers = {
       return delegateToSchema({
         args: { where: { address: { _eq: args.where.address } } },
         context,
-        fieldName: 'utxo',
+        fieldName: 'Utxo',
         info,
         operation: 'query',
         schema: context.hasura

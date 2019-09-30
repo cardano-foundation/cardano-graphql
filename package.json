@@ -30,6 +30,8 @@
     "graphql-bigint": "^1.0.0",
     "graphql-depth-limit": "^1.1.0",
     "graphql-iso-date": "^3.6.1",
+    "graphql-type-datetime": "^0.2.4",
+    "lodash.isequal": "^4.5.0",
     "promise-exponential-retry": "^1.0.3"
   },
   "devDependencies": {
@@ -41,6 +43,7 @@
     "@types/graphql-depth-limit": "^1.1.2",
     "@types/graphql-iso-date": "^3.3.1",
     "@types/jest": "^24.0.18",
+    "@types/lodash.isequal": "^4.5.5",
     "@types/node": "^12.6.8",
     "@types/validator": "^10.11.3",
     "@typescript-eslint/eslint-plugin": "^1.13.0",

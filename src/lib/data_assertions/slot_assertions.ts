@@ -1,8 +1,7 @@
-import { Slot } from '../../graphql_types'
 
-export const slot1Epoch2 = {
+export const slot1Epoch1 = {
   epoch: {
-    number: 2
+    number: 1
   },
   number: 1
-} as Slot
+}

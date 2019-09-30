@@ -1,10 +1,10 @@
 import { Resolvers } from '../graphql_types'
 import { checkLimit } from '../validation'
 import {
-  block43177, block43178,
-  epoch2,
+  block29021, block29022,
+  epoch1,
   stakePool1,
-  txa54489, txd9e280, tx21c528
+  txe68043, tx05ad8b
 } from '../lib/data_assertions'
 
 export const mockedResolvers: Resolvers = {
@@ -22,23 +22,23 @@ export const mockedResolvers: Resolvers = {
   Query: {
     blocks: (_root, args) => {
       checkLimit(args.limit, 100)
-      return [block43177, block43178]
+      return [block29021, block29022]
     },
     epochs: (_root, args) => {
       checkLimit(args.limit, 100)
-      return [epoch2]
+      return [epoch1]
     },
     cardano: () => {
       return Promise.resolve({
         blockHeight: 99,
-        currentEpoch: epoch2,
+        currentEpoch: epoch1,
         configuration: {
           fees: {
             base: 155381,
             coefficient: 43946
           }
         },
-        latestBlock: block43178,
+        latestBlock: block29022,
         stakeDistribution: [stakePool1]
       })
     },
@@ -48,10 +48,10 @@ export const mockedResolvers: Resolvers = {
     },
     transactions: (_root, args) => {
       checkLimit(args.limit, 250)
-      return [tx21c528, txa54489, txd9e280]
+      return [tx05ad8b, txe68043]
     },
     utxoSet: () => {
-      return txd9e280.outputs
+      return tx05ad8b.outputs
     }
   }
 }
