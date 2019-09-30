@@ -1,6 +1,7 @@
 import { Config as ServerConfig } from './Server'
+import { MissingConfig } from './lib/errors'
 import { buildHasuraSchema } from './lib/buildHasuraSchema'
-import { hasuraResolvers, mockedResolvers, scalarResolvers } from './resolvers'
+import { hasuraResolvers, scalarResolvers } from './resolvers'
 
 export async function getConfig (): Promise<ServerConfig> {
   const {
@@ -10,11 +11,15 @@ export async function getConfig (): Promise<ServerConfig> {
     tracing
   } = filterAndTypecastEnvs(process.env)
 
+  if (!hasuraUri) {
+    throw new MissingConfig('HASURA_URI env not set')
+  }
+
   return {
     apiPort: apiPort || 3100,
     context: hasuraUri ? await buildContext(hasuraUri) : undefined,
     queryDepthLimit: queryDepthLimit || 10,
-    resolvers: Object.assign({}, scalarResolvers, hasuraUri ? hasuraResolvers : mockedResolvers),
+    resolvers: Object.assign({}, scalarResolvers, hasuraResolvers),
     tracing
   }
 }
