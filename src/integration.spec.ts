@@ -122,7 +122,7 @@ describe('Integration', () => {
                     number
                     startedAt
                 }
-                transactions {
+                transactions(orderBy: {fee: asc}) {
                     block {
                         number
                     }

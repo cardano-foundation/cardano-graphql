@@ -8,12 +8,17 @@ export async function buildHasuraSchema (hasuraUri: string) {
     uri: hasuraUri,
     fetch
   })
+
+  await RetryPromise.retryPromise('Hasura Schema introspection', async () => {
+    const schema = await introspectSchema(link)
+    const baseBlockType = schema.getType('Block')
+    if (!baseBlockType) {
+      throw new Error('Remote schema is missing')
+    }
+  }, 30)
+
   return makeRemoteExecutableSchema({
-    schema: await RetryPromise.retryPromise(
-      'Connecting to Hasura',
-      () => introspectSchema(link),
-      30
-    ),
+    schema: await introspectSchema(link),
     link
   })
 }

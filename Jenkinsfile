@@ -36,7 +36,7 @@ pipeline {
       }
       post {
         always {
-           sh 'npm run stop-dependencies'
+          sh 'npm run stop-dependencies'
         }
       }
     }
