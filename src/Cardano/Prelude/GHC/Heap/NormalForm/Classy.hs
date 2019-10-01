@@ -43,7 +43,8 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import qualified Data.Text as Text.Strict
 import qualified Data.Text.Lazy as Text.Lazy
-import qualified Data.Vector.Unboxed as Unboxed
+import qualified Data.Vector as Vector.Boxed
+import qualified Data.Vector.Unboxed as Vector.Unboxed
 
 import Cardano.Prelude.GHC.Heap.Tree
 import qualified Cardano.Prelude.GHC.Heap.NormalForm as NF
@@ -301,7 +302,7 @@ noUnexpectedThunksUsingNormalForm ctxt x = do
     nf <- NF.isNormalForm x
     return $ if nf then NoUnexpectedThunks
                    else UnexpectedThunk UnexpectedThunkInfo {
-                            unexpectedThunkContext   = ctxt
+                            unexpectedThunkContext   = "..." : ctxt
                           , unexpectedThunkCallStack = callStack
                           , unexpectedThunkClosure   = Nothing
                           }
@@ -465,17 +466,27 @@ instance NoUnexpectedThunks a => NoUnexpectedThunks (NonEmpty a)
   as keys); this means we must check keys for thunks to be sure.
 -------------------------------------------------------------------------------}
 
-instance (NoUnexpectedThunks k, NoUnexpectedThunks v) => NoUnexpectedThunks (Map k v) where
+instance ( NoUnexpectedThunks k
+         , NoUnexpectedThunks v
+         ) => NoUnexpectedThunks (Map k v) where
   showTypeOf _ = "Map"
-  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInKeysAndValues ctxt . Map.toList
+  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInKeysAndValues ctxt
+                              . Map.toList
 
 instance NoUnexpectedThunks a => NoUnexpectedThunks (Set a) where
   showTypeOf _ = "Set"
-  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInValues ctxt . Set.toList
+  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInValues ctxt
+                              . Set.toList
 
 instance NoUnexpectedThunks a => NoUnexpectedThunks (IntMap a) where
   showTypeOf _ = "IntMap"
-  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInValues ctxt . IntMap.toList
+  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInValues ctxt
+                              . IntMap.toList
+
+instance NoUnexpectedThunks a => NoUnexpectedThunks (Vector.Boxed.Vector a) where
+  showTypeOf _ = "Boxed.Vector"
+  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInValues ctxt
+                              . Vector.Boxed.toList
 
 {-------------------------------------------------------------------------------
   Instances for which we check for WHNF only
@@ -488,7 +499,7 @@ instance NoUnexpectedThunks a => NoUnexpectedThunks (IntMap a) where
 -- Implementation note: defined manually rather than using 'OnlyCheckIsWHNF'
 -- due to ghc limitation in deriving via, making it impossible to use with it
 -- with data families.
-instance NoUnexpectedThunks (Unboxed.Vector a) where
+instance NoUnexpectedThunks (Vector.Unboxed.Vector a) where
   showTypeOf _ = "Unboxed.Vector"
   whnfNoUnexpectedThunks _ _ = return NoUnexpectedThunks
 
