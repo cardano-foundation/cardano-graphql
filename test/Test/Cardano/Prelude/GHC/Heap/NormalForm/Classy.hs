@@ -17,24 +17,23 @@ module Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy (tests) where
 
 -- We avoid bang patterns as well as the use of '($!)', to make sure that these
 -- tests pass with @-O0@. See 'isNormalForm' for discussion.
-import           Cardano.Prelude          hiding (($!))
+import Cardano.Prelude hiding (($!))
 
-import           Control.Exception        (throw)
-import qualified Data.Text                as Text
-import           GHC.Types                (IO (..), Int (..))
-import           Prelude                  (String)
-import           System.Random            (randomRIO)
+import GHC.Types (IO (..), Int (..))
+import Prelude (String)
+import System.Random (randomRIO)
+import qualified Data.Text as Text
 
-import           Data.Sequence            (Seq)
-import qualified Data.Sequence            as Seq
-import qualified Data.Sequence.Internal   as SI
+import Data.Sequence (Seq)
+import qualified Data.Sequence as Seq
+import qualified Data.Sequence.Internal as SI
 
-import           Hedgehog
-import qualified Hedgehog.Gen             as Gen
-import           Hedgehog.Internal.Region
-import           Hedgehog.Internal.Report
-import           Hedgehog.Internal.Runner
-import qualified Hedgehog.Range           as Range
+import Hedgehog
+import Hedgehog.Internal.Region
+import Hedgehog.Internal.Report
+import Hedgehog.Internal.Runner
+import qualified Hedgehog.Gen as Gen
+import qualified Hedgehog.Range as Range
 
 {-------------------------------------------------------------------------------
   Infrastructure
@@ -90,14 +89,6 @@ constrNF args =
     firstNotNF (IsWHNF  a : _    ) = Just a
     firstNotNF (IsNF      : args') = firstNotNF args'
 
-bottom :: Text -> a
-bottom = throw . Bottom
-
-data Bottom = Bottom Text
-  deriving (Show)
-
-instance Exception Bottom
-
 testWithModel :: forall a. FromModel a
               => (ThunkInfo -> Maybe [String] -> Bool)
               -> Proxy a
@@ -121,22 +112,22 @@ testWithModel compareInfo _proxy = withTests 1000 $ property $ do
 
 instance FromModel Int where
   data Model Int =
-      IntUndefined
+      IntThunk (Model Int)
     | IntValue Int
     deriving (Show)
 
   -- for integers there is no difference between NF/WHNF
   modelIsNF ctxt = \case
-      IntUndefined -> NotWHNF ctxt'
-      IntValue _   -> IsNF
+      IntThunk _ -> NotWHNF ctxt'
+      IntValue _ -> IsNF
     where
       ctxt' = "Int" : ctxt
 
-  fromModel IntUndefined k = k (bottom "int thunk")
+  fromModel (IntThunk i) k = fromModel i $ \i' -> k (if ack 3 3 > 0 then i' else i')
   fromModel (IntValue n) k = case n of I# result -> k (I# result)
 
   genModel = Gen.choice [
-        pure $ IntUndefined
+        IntThunk <$> genModel
       , IntValue <$> Gen.int Range.linearBounded
       ]
 
@@ -146,22 +137,22 @@ instance FromModel Int where
 
 instance (FromModel a, FromModel b) => FromModel (a, b) where
   data Model (a, b) =
-      PairUndefined
+      PairThunk (Model (a, b))
     | PairDefined (Model a) (Model b)
 
   modelIsNF ctxt = \case
-      PairUndefined   -> NotWHNF ctxt'
+      PairThunk _     -> NotWHNF ctxt'
       PairDefined a b -> constrNF [modelIsNF ctxt' a, modelIsNF ctxt' b]
     where
       ctxt' = "(,)" : ctxt
 
-  fromModel PairUndefined     k = k (bottom "pair thunk")
+  fromModel (PairThunk p)     k = fromModel p $ \p' -> k (if ack 3 3 > 0 then p' else p')
   fromModel (PairDefined a b) k = fromModel a $ \a' ->
                                   fromModel b $ \b' ->
                                   k (a', b')
 
   genModel = Gen.choice [
-        pure $ PairUndefined
+        PairThunk <$> genModel
       , PairDefined <$> genModel <*> genModel
       ]
 
@@ -173,18 +164,18 @@ deriving instance (Show (Model a), Show (Model b)) => Show (Model (a, b))
 
 instance FromModel a => FromModel [a] where
   data Model [a] =
-      ListUndefined
+      ListThunk (Model [a])
     | ListNil
     | ListCons (Model a) (Model [a])
 
   modelIsNF ctxt = \case
-      ListUndefined  -> NotWHNF ctxt'
+      ListThunk _    -> NotWHNF ctxt'
       ListNil        -> IsNF
       ListCons x xs' -> constrNF [modelIsNF ctxt' x, modelIsNF ctxt xs']
     where
       ctxt' = "[]" : ctxt
 
-  fromModel ListUndefined   k = k (bottom "list thunk")
+  fromModel (ListThunk xs)  k = fromModel xs $ \xs' -> k (if ack 3 3 > 0 then xs' else xs')
   fromModel ListNil         k = k []
   fromModel (ListCons x xs) k = fromModel x  $ \x'  ->
                                 fromModel xs $ \xs' ->
@@ -195,11 +186,11 @@ instance FromModel a => FromModel [a] where
       go sz
     where
       go :: Int -> Gen (Model [a])
-      go 0 = Gen.choice [
-                 pure $ ListUndefined
-               , pure $ ListNil
+      go 0 = pure ListNil
+      go n = Gen.choice [
+                 ListThunk <$> go (n - 1)
+               , ListCons <$> genModel <*> go (n - 1)
                ]
-      go n = ListCons <$> genModel <*> go (n - 1)
 
 deriving instance Show (Model a) => Show (Model [a])
 
@@ -428,11 +419,17 @@ treeOpts = ClosureTreeOptions AnyDepth TraverseCyclicClosures
 
 {-# NOINLINE sanityCheckInt #-}
 sanityCheckInt :: Property
-sanityCheckInt = checkNF False $ return (bottom "thunk" :: Int)
+sanityCheckInt = checkNF False $ return (if ack 3 3 > 0 then x else x)
+  where
+    x :: Int
+    x = 0
 
 {-# NOINLINE sanityCheckPair #-}
 sanityCheckPair :: Property
-sanityCheckPair = checkNF False $ return ((bottom "thunk", True) :: (Int, Bool))
+sanityCheckPair = checkNF False $ return (if ack 3 3 > 0 then x else x)
+  where
+    x :: (Int, Bool)
+    x = (0, True)
 
 {-# NOINLINE sanityCheckFn #-}
 sanityCheckFn :: Property
@@ -467,6 +464,8 @@ testGroup = Group "Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy" [
     , ("prop_isNormalForm_ListInt"    ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm [Int]))
     , ("prop_isNormalForm_IntListInt" ,                 testWithModel agreeOnNF $ Proxy @(UseIsNormalForm (Int, [Int])))
     , ("prop_isNormalForm_SeqInt"     , expectFailure $ testWithModel agreeOnNF $ Proxy @(UseIsNormalForm (Seq Int)))
+
+    -- TODO: add list of pairs tests
 
     , ("prop_noUnexpectedThunks_Int"        , testWithModel agreeOnContext $ Proxy @Int)
     , ("prop_noUnexpectedThunks_IntInt"     , testWithModel agreeOnContext $ Proxy @(Int, Int))
