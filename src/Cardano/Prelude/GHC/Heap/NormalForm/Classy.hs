@@ -301,7 +301,7 @@ noUnexpectedThunksUsingNormalForm ctxt x = do
     nf <- NF.isNormalForm x
     return $ if nf then NoUnexpectedThunks
                    else UnexpectedThunk UnexpectedThunkInfo {
-                            unexpectedThunkContext   = ctxt
+                            unexpectedThunkContext   = "..." : ctxt
                           , unexpectedThunkCallStack = callStack
                           , unexpectedThunkClosure   = Nothing
                           }
