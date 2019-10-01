@@ -5,25 +5,22 @@ The API is served over TCP, leveraging the existing infrastructure of HTTP. Grap
 ```
 curl -X POST \
 -H "Content-Type: application/json" \
--d '{"query": "{ ledgerStats { blockHeight }}"}' \
+-d '{"query": "{ cardano { blockHeight }}"}' \
 http://localhost:4000/graphql
 ```
 
 ### Request within app
 ``` javascript
 const query = `
-  query getTransactions($limit: Int!, $offset: Int!) {
+  query getTransactions(
+    $limit: Int,
+    $offset: Int,
+    $where: Transaction_bool_exp
+  ) {
      transactions(
       limit: $limit,
       offset: $offset,
-      where: {
-        block: {
-          number: {
-            _gte: 50
-            _lt: 100
-          }
-        }
-      }
+      where: $where
     ) {
       fee
       block {
@@ -35,6 +32,14 @@ const query = `
 
 const limit = 100
 const offset = 2
+const where = {
+  block: {
+    number: {
+      _gte: 50
+      _lt: 100
+    }
+  }
+}
 
 fetch('/graphql', {
   method: 'POST',
@@ -44,7 +49,7 @@ fetch('/graphql', {
   },
   body: JSON.stringify({
     query,
-    variables: { limit, offset },
+    variables: { limit, offset, where },
   })
 })
   .then(r => r.json())
