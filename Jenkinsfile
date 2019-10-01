@@ -27,7 +27,7 @@ pipeline {
     }
     stage('Instantiate Test Services') {
       steps {
-        sh 'npm run start-dependencies -- -d'
+        sh 'npm run start-dependencies'
       }
     }
     stage('Unit/Integration Test') {
@@ -51,6 +51,11 @@ pipeline {
           }
         }
       }
+    }
+  }
+  post {
+    always {
+      cleanWs()
     }
   }
 }
