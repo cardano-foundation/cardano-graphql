@@ -27,12 +27,17 @@ pipeline {
     }
     stage('Instantiate Test Services') {
       steps {
-        sh 'npm run start-dependencies'
+        sh 'npm run start-dependencies -- -d'
       }
     }
     stage('Unit/Integration Test') {
       steps {
         sh 'npm test'
+      }
+      post {
+        always {
+           sh 'npm run stop-dependencies'
+        }
       }
     }
     stage('Build & Push Docker Images') {
