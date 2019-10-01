@@ -11,10 +11,13 @@ export async function buildHasuraSchema (hasuraUri: string) {
 
   await RetryPromise.retryPromise('Hasura Schema introspection', async () => {
     const schema = await introspectSchema(link)
-    const baseBlockType = schema.getType('Block')
-    if (!baseBlockType) {
-      throw new Error('Remote schema is missing')
-    }
+    const coreTypes = ['Cardano', 'Epoch', 'Slot', 'Block', 'Transaction']
+    coreTypes.forEach(t => {
+      const gqlType = schema.getType('Block')
+      if (!gqlType) {
+        throw new Error(`Remote schema is missing ${t}`)
+      }
+    })
   }, 30)
 
   return makeRemoteExecutableSchema({

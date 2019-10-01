@@ -22,18 +22,6 @@ Object {
 exports[`Integration blocks Uses pagination with an offset for larger result sets 1`] = `
 Array [
   Object {
-    "id": "f0f7892b5c333cffc4b3c4344de48af4cc63f55e44936196f365a9ef2244134f",
-    "number": 1,
-  },
-  Object {
-    "id": "1dbc81e3196ba4ab9dcb07e1c37bb28ae1c289c0707061f28b567c2f48698d50",
-    "number": 2,
-  },
-  Object {
-    "id": "52b7912de176ab76c233d6e08ccdece53ac1863c08cc59d3c5dec8d924d9b536",
-    "number": 3,
-  },
-  Object {
     "id": "be06c81f4ad34d98578b67840d8e65b2aeb148469b290f6b5235e41b75d38572",
     "number": 4,
   },
@@ -101,11 +89,6 @@ Array [
     "id": "7c6901c6346781c2bc5cbc49577490e336c2545c320ce4a61605bc71a9c5bed0",
     "number": 20,
   },
-]
-`;
-
-exports[`Integration blocks Uses pagination with an offset for larger result sets 2`] = `
-Array [
   Object {
     "id": "336113931d88269b5b56e7988fb4f9469e69aaa67ff84c6eef0f3e5adf1af442",
     "number": 21,
@@ -118,6 +101,11 @@ Array [
     "id": "a076c4b645ec23e7e6fa909821edb3e28106d0ffa6325cd2d32e0f3b53c1c09b",
     "number": 23,
   },
+]
+`;
+
+exports[`Integration blocks Uses pagination with an offset for larger result sets 2`] = `
+Array [
   Object {
     "id": "99627f41664532199a53f90686e2370d4b83b1b7ed36d49f91c4b87ffd119b94",
     "number": 24,
@@ -185,6 +173,18 @@ Array [
   Object {
     "id": "8bf5c27d07e57fb5e843a5d9088928180afbf8c733929b6a84fc95c5df670e5d",
     "number": 40,
+  },
+  Object {
+    "id": "1dcac253454fe43882bb4921b2a305a332adbdacca5aafb66829351035058277",
+    "number": 41,
+  },
+  Object {
+    "id": "8675f84d2d0dfe12cefeb6bfe2888fbb80a0b753fe4dbf612edfb70151523192",
+    "number": 42,
+  },
+  Object {
+    "id": "2a5ad3f0333b8118ec17791ca834d2d8760e853f3d319f4f00fb805bb2953cb0",
+    "number": 43,
   },
 ]
 `;
