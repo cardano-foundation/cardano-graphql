@@ -49,39 +49,33 @@ join tx as source_tx
 
 
 create view "Slot" as
-with recursive slot_numbers as
-(
-  select 0 as slot
-  union all
-  select slot + 1 from slot_numbers
-  where slot + 1 <= (select max(slot_no) from block)
-), slot_meta as (
+with slot_meta as (
   select
-    slot,
-    quote_literal(slot * (select slot_duration from meta) * 0.001) as time_since_start,
+    slot_no,
+    quote_literal(slot_no * (select slot_duration from meta) * 0.001) as time_since_start,
     (select start_time from meta) as start_time,
     (select protocol_const from meta) as protocol_const
-  from slot_numbers
+  from block
 )
 select
-  slot as "number",
+  slot_meta.slot_no as "number",
   block.hash as "blockId",
   slot_leader.hash as leader,
-  case when slot > 0
-    then CAST(floor(slot / (10 * protocol_const)) AS INT)
+  case when slot_meta.slot_no > 0
+    then CAST(floor(slot_meta.slot_no / (10 * protocol_const)) AS INT)
     else 0
   end as "epochNo",
-  case when slot >= 0
+  case when slot_meta.slot_no >= 0
     then start_time + cast (time_since_start as interval)
     else start_time
   end as "startedAt",
-  case when slot > 0
-    then slot - (epoch_no * (10 * protocol_const))
+  case when slot_meta.slot_no > 0
+    then slot_meta.slot_no - (epoch_no * (10 * protocol_const))
     else 0
   end as "slotWithinEpoch"
 from slot_meta
-left outer join block
-  on block.slot_no = slot_meta.slot
+join block
+  on slot_meta.slot_no = block.slot_no
 left outer join slot_leader
   on block.slot_leader = slot_leader.id;
 
@@ -113,7 +107,8 @@ from
   tx
 inner join block
   on block.id = tx.block
-inner join "Slot"
+-- Left join here to include transactions in the genesis block
+left outer join "Slot"
   on "Slot".number = block.slot_no;
 
 create view "Epoch" as
