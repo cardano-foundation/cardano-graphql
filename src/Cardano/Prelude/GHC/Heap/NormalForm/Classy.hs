@@ -33,6 +33,7 @@ import Cardano.Prelude.Base
 import Data.Foldable (toList)
 import Data.Sequence (Seq)
 import Data.List.NonEmpty (NonEmpty)
+import Data.Time
 import GHC.Exts.Heap
 import Prelude (String)
 
@@ -389,6 +390,17 @@ deriving via UseIsNormalForm Word8  instance NoUnexpectedThunks Word8
 deriving via UseIsNormalForm Word16 instance NoUnexpectedThunks Word16
 deriving via UseIsNormalForm Word32 instance NoUnexpectedThunks Word32
 deriving via UseIsNormalForm Word64 instance NoUnexpectedThunks Word64
+
+deriving via UseIsNormalForm Day              instance NoUnexpectedThunks Day
+deriving via UseIsNormalForm DiffTime         instance NoUnexpectedThunks DiffTime
+deriving via UseIsNormalForm LocalTime        instance NoUnexpectedThunks LocalTime
+deriving via UseIsNormalForm NominalDiffTime  instance NoUnexpectedThunks NominalDiffTime
+deriving via UseIsNormalForm TimeLocale       instance NoUnexpectedThunks TimeLocale
+deriving via UseIsNormalForm TimeOfDay        instance NoUnexpectedThunks TimeOfDay
+deriving via UseIsNormalForm TimeZone         instance NoUnexpectedThunks TimeZone
+deriving via UseIsNormalForm UniversalTime    instance NoUnexpectedThunks UniversalTime
+deriving via UseIsNormalForm UTCTime          instance NoUnexpectedThunks UTCTime
+deriving via UseIsNormalForm ZonedTime        instance NoUnexpectedThunks ZonedTime
 
 {-------------------------------------------------------------------------------
   Instances for text types
