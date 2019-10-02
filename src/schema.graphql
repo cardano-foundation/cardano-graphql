@@ -142,7 +142,7 @@ type Block {
   slot: Slot
   transactions(
     limit: Int = 1,
-    orderBy: [Transaction_order_by!]
+    order_by: [Transaction_order_by!]
     offset: Int
     where: Transaction_bool_exp
   ): [Transaction]!

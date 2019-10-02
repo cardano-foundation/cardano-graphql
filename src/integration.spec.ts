@@ -46,7 +46,6 @@ describe('Integration', () => {
         }`
       })).data.cardano.blockHeight
 
-      console.log(result)
       expect(result[0].number).toEqual(blockHeight)
       expect(result).toMatchSnapshot()
     })
@@ -79,7 +78,7 @@ describe('Integration', () => {
         }`
       })
       console.log(page1)
-      console.log('------')
+      console.log('-----')
       console.log(page2)
       expect(page1.data.blocks).toMatchSnapshot()
       expect(page2.data.blocks).toMatchSnapshot()
@@ -95,7 +94,6 @@ describe('Integration', () => {
             }
         }`
       })
-      console.log(result)
       expect(result.data.blocks.length).toBe(1)
       expect(result.data.blocks[0]).toEqual({ id: block29022.id })
       expect(result).toMatchSnapshot()
@@ -128,7 +126,7 @@ describe('Integration', () => {
                     number
                     startedAt
                 }
-                transactions(orderBy: {fee: asc}) {
+                transactions(order_by: {fee: desc}) {
                     block {
                         number
                     }
@@ -149,7 +147,6 @@ describe('Integration', () => {
             }
         }`
       })
-      console.log(result)
       expect(result.data.blocks.length).toBe(2)
       expect(result.data.blocks[0]).toEqual(block29021)
       expect(result.data.blocks[1]).toEqual(block29022)
@@ -173,7 +170,6 @@ describe('Integration', () => {
             }
         }`
       })
-      console.log(result)
       expect(result.data.blocks[0].previousBlock.previousBlock.previousBlock.number).toBe(29019)
       expect(result).toMatchSnapshot()
     })
@@ -192,7 +188,6 @@ describe('Integration', () => {
             }
         }`
       })
-      console.log(result)
       expect(result.data.epochs[0]).toEqual(epoch1)
       expect(result).toMatchSnapshot()
     })
@@ -210,7 +205,6 @@ describe('Integration', () => {
             }
         }`
       })
-      console.log(result)
       expect(result.data.cardano.blockHeight).toBe(31070)
       expect(result.data.cardano.blockHeight).toMatchSnapshot()
     })
@@ -237,7 +231,8 @@ describe('Integration', () => {
         query: gql`query {
             transactions(
                 limit: 2,
-                where: { id: { _in: [\"${txe68043.id}\", \"${tx05ad8b.id}\"]}}
+                where: { id: { _in: [\"${txe68043.id}\", \"${tx05ad8b.id}\"]}},
+                order_by: {fee: desc}
             ) {
                 block {
                     number
@@ -256,7 +251,6 @@ describe('Integration', () => {
             }
         }`
       })
-      console.log(result)
       expect(result.data.transactions.length).toBe(2)
       expect(result).toMatchSnapshot()
     })
@@ -273,7 +267,6 @@ describe('Integration', () => {
               }
           }`
         })
-        console.log(result)
         expect(result.data.utxoSet.length).toBe(20)
         expect(result).toMatchSnapshot()
       })
@@ -291,7 +284,6 @@ describe('Integration', () => {
               }
           }`
         })
-        console.log(result)
         expect(result.data.utxoSet.length).toBe(1)
         expect(result).toMatchSnapshot()
       })
