@@ -77,9 +77,6 @@ describe('Integration', () => {
             }
         }`
       })
-      console.log(page1)
-      console.log('-----')
-      console.log(page2)
       expect(page1.data.blocks).toMatchSnapshot()
       expect(page2.data.blocks).toMatchSnapshot()
     })

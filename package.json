@@ -23,6 +23,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "apollo-link-http": "^1.5.15",
+    "apollo-link-retry": "^2.2.15",
     "apollo-server": "^2.8.0",
     "cross-fetch": "^3.0.4",
     "eslint-plugin-jest": "^22.15.2",
