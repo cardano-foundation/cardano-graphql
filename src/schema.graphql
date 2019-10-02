@@ -3,6 +3,7 @@ schema {
   query: Query
 }
 
+scalar Hash32HexString
 scalar BigInt
 scalar DateTime
 scalar Lovelaces
@@ -30,34 +31,34 @@ type Mutation {
 type Query {
   blocks (
     limit: Int = 1
-    order_by: [blocks_order_by!]
+    order_by: [Block_order_by!]
     offset: Int,
-    where: blocks_filter
+    where: Block_bool_exp
   ): [Block]!
   epochs (
     limit: Int = 1
-    order_by: [epochs_order_by!]
+    order_by: [Epoch_order_by!]
     offset: Int
-    where: epochs_filter
+    where: Epoch_bool_exp
   ): [Epoch]!
   cardano: Cardano
   stakePools (
     limit: Int = 1
-    order_by: [stakePools_order_by!]
+    order_by: [StakePool_order_by!]
     offset: Int
-    where: stakePools_filter
+    where: StakePool_bool_exp
   ): [StakePool!]!
   transactions (
     limit: Int = 1
-    order_by: [transactions_order_by!]
+    order_by: [Transaction_order_by!]
     offset: Int
-    where: transactions_filter
+    where: Transaction_bool_exp
   ): [Transaction]!
   utxoSet (
     limit: Int = 1
-    order_by: [utxoSet_order_by!]
+    order_by: [Utxo_order_by!]
     offset: Int
-    where: utxoSet_filter
+    where: Utxo_bool_exp
   ): [TransactionOutput]!
 }
 
@@ -70,16 +71,12 @@ enum AddressType {
   Enterprise
 }
 
-enum Currency {
-  ADA
-}
-
 type Cardano {
-  blockHeight: BigInt!
-  configuration: Configuration!
+  blockHeight: Int!
+#  configuration: Configuration!
   currentEpoch: Epoch!
-  latestBlock: Block!
-  stakeDistribution: [StakePool!]!
+#  latestBlock: Block!
+#  stakeDistribution: [StakePool!]!
 }
 
 type FeeConfiguration {
@@ -98,60 +95,62 @@ type Address {
 
 type Transaction {
   block: Block
-  # Date the transaction was included in the blockchain, referencing the slot start date
-  fee: Int!
-  id: String!
+  fee: String!
+  id: Hash32HexString!
+  # Date the transaction was included in the blockchain, determined by the slot start date
   includedAt: DateTime!
-  inputs: [TransactionInput]!
+  inputs: [TransactionInput!]!
   outputs: [TransactionOutput!]!
+  totalOutput: String!
 }
 
-input transactions_order_by {
+input Transaction_order_by {
   block: order_by
   fee: order_by
 }
 
-input transactions_filter {
+input Transaction_bool_exp {
   #  dateCreated: Date_comparison_exp
-  id: ID_comparison_exp
-  block: blocks_filter
+  id: Hash32HexString_comparison_exp
+  block: Block_bool_exp
 }
 
 type TransactionInput {
-  sourceTxId: String!
+  sourceTxId: Hash32HexString!
   sourceTxIndex: Int!
   address: String!
-  value: CurrencyValue!
+  value: String!
 }
 
 type TransactionOutput {
   address: String!
   index: Int!
-  txId: String!
-  value: CurrencyValue!
+  txId: Hash32HexString!
+  value: String!
 }
 
 type Block {
-  createdAt: DateTime!
   epoch: Epoch
-  fees: Int!
-  id: ID!
-  merkelRootHash: String
-  number: Int!
+  fees: String
+  id: Hash32HexString!
+  merkelRootHash: Hash32HexString
+  # Genesis and Epoch Boundary Blocks (EBBs) do not have numbers
+  number: Int
   previousBlock: Block
-  size: Float!
-  slot: Slot!
+  size: Int!
+  # Genesis and Epoch Boundary Blocks (EBBs) are not created within slots
+  slot: Slot
   transactions(
     limit: Int = 1,
-    orderBy: [transactions_order_by!]
+    order_by: [Transaction_order_by!]
     offset: Int
-    #    where: block_Transactions_filter
+    where: Transaction_bool_exp
   ): [Transaction]!
 }
 
-input blocks_filter {
+input Block_bool_exp {
   dateCreated: Date_comparison_exp
-  id: ID_comparison_exp
+  id: Hash32HexString_comparison_exp
   number: Int_comparison_exp
 }
 
@@ -159,7 +158,7 @@ input blocks_filter {
 #  size: Int_comparison_exp
 #}
 
-input blocks_order_by {
+input Block_order_by {
   number: order_by
   size: order_by
 }
@@ -177,32 +176,31 @@ type Slot {
 type Epoch {
   blocks: [Block]
   endedAt: DateTime
-  output: [CurrencyValue]
+  output: String!
   number: Int!
-  slots: [Slot!]
+  slots: [Slot!]!
   stakeDistribution: [StakePool!]
   startedAt: DateTime
-  transactions: [Transaction]
-  transactionsCount: Int
+  transactionsCount: String
 }
 
-input epochs_filter {
+input Epoch_bool_exp {
   afterDate: DateTime
   beforeDate: DateTime
   number: Int_comparison_exp
 }
 
-input epochs_order_by {
+input Epoch_order_by {
   blockCount: order_by
   number: order_by
   fees: order_by
 }
 
-input utxoSet_filter {
+input Utxo_bool_exp {
   address: text_comparison_exp
 }
 
-input utxoSet_order_by {
+input Utxo_order_by {
   address: order_by
 }
 
@@ -210,7 +208,7 @@ type StakePool {
   controlledStake: Lovelaces!
   createdAt: DateTime!
   description: String!
-  id: String!
+  id: Hash32HexString!
   isCharity: Boolean!
   ownStake: Lovelaces!
   performance: Percentage
@@ -230,7 +228,7 @@ type RewardPayout {
   amount: Lovelaces
 }
 
-input stakePools_filter {
+input StakePool_bool_exp {
   createdAt: Date_comparison_exp
   controlledStake: Lovelaces_comparison_exp
   isCharity: Boolean
@@ -241,7 +239,7 @@ input stakePools_filter {
   retiring: Boolean
 }
 
-input stakePools_order_by {
+input StakePool_order_by {
   createdAt: order_by
   controlledStake: order_by
   isCharity: order_by
@@ -251,11 +249,6 @@ input stakePools_order_by {
   name: order_by
   ranking: order_by
   retiring: order_by
-}
-
-type CurrencyValue {
-  currency: Currency!
-  amount: BigInt!
 }
 
 # expression to compare data of type date. All fields are combined with logical 'AND'.
@@ -306,10 +299,10 @@ input Percentage_comparison_exp {
 }
 
 # All fields are combined with logical 'AND'.
-input ID_comparison_exp {
-  _eq: String
-  _in: [String]
-  _nin: [String]
+input Hash32HexString_comparison_exp {
+  _eq: Hash32HexString
+  _in: [Hash32HexString]
+  _nin: [Hash32HexString]
 }
 
 input text_comparison_exp {

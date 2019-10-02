@@ -1,88 +1,42 @@
-import { Currency, Transaction } from '../../graphql_types'
 
-export const tx21c528 = {
+export const txe68043 = {
   block: {
-    createdAt: new Date(Date.UTC(2017, 10, 4, 7, 45, 11)),
-    number: 43177
+    number: 29021
   },
-  fee: 171246,
-  id: '21c52888aacf1061353d3795a09bb29d8382526e29e4983abe568a0b9562bd55',
+  fee: '171070',
+  id: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
+  includedAt: '2017-09-30T15:03:11+00:00',
   inputs: [{
-    address: 'DdzFFzCqrhsr1WxmzVcLWpTwqQQJkk9Be4SpM3VdWaT892biB9rCVFKgbsRPAHu484jPhjE5e57S9cCzF8yKwXhLgri2SnvSMZtLB87y',
-    value: {
-      currency: Currency.Ada,
-      amount: 408327486262
-    }
+    address: 'DdzFFzCqrhsggyaAMAUTjGtjBr1CTp8tTcHYWbqtoyQBZcaYHM16rjbUDawTwoVaEPawAMPLJmpJVXHBNxZnTgmQzqAcNDe6XvMe5BkB',
+    value: '768403000000'
   }],
   outputs: [{
-    address: 'DdzFFzCqrht2MmZqCL83LrSM83MpMMbbeAV8orZLRQ5TbFSvAE65oh5xsQTq3BrQNwuabD7rx3kD8tMFBGntBzeRtGBV7rcejde7BmGX',
-    value: {
-      currency: Currency.Ada,
-      amount: 158327486262
-    }
+    address: 'DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8',
+    value: '768401828930'
   }, {
-    address: 'DdzFFzCqrhswcudBNjXCvvytPhiPzT8nKmELNkwyZZ4ofR6Gm25DhBnuVmkxdZwtB9QTe7RUzyU8SVcMmExrDsME25bVPdrzrNX3HGmb',
-    value: {
-      currency: Currency.Ada,
-      amount: 250000000000
-    }
-    // receivedAt: // Displayed in current explorer as 10/03/2017 21:45:11
-    // totalOutput: 408327486262
-  }]
-} as Transaction
+    address: 'DdzFFzCqrhsgrGt7zHydkE4cKxjB7SgsdnMPUFxYEwBu1u4sGobxZL5Xo3eDycCrtSYAUyw9aAsZZxFpTdgur6MwYDYMwAZ4xNGKRD3o',
+    value: '1000000'
+  }],
+  totalOutput: '768402828930'
+}
 
-export const txa54489 = {
+export const tx05ad8b = {
   block: {
-    createdAt: new Date(Date.UTC(2017, 10, 4, 7, 45, 11)),
-    number: 43177
+    number: 29021
   },
-  fee: 0,
-  id: 'a544893db34f32a1817aa1e2d19a8b39655df0d37ca77d882eeb639167b876a8',
+  fee: '171246',
+  id: '05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102',
+  includedAt: '2017-09-30T15:03:11+00:00',
   inputs: [{
-    address: 'Ae2tdPwUPEYwBtbe6mSgaXEyrZHEQEXkXdJiKoZq8dd4Ju5jBoEtFBxihJf',
-    value: {
-      currency: Currency.Ada,
-      amount: 466152000000
-    }
+    address: 'DdzFFzCqrht5ExAdoZVExXoZTpoMYGKxva3thvvvHapsLZQzSX3kCqwgqi5NSM2oUtHYYDqsSnvSGbqkarB6cSgDZohUhLWZ9KFdDWsa',
+    value: '4924799649906'
   }],
   outputs: [{
-    address: 'DdzFFzCqrht8RtzRyasbwCt9naTo4QiSF4LYhJnAHRR1AmSfTrxgQRfmDPLAFccgy1hYpMyV2h33Ncd3c5SeSaFau1BrDDFptU382eVk',
-    value: {
-      currency: Currency.Ada,
-      amount: 466152000000
-    }
-  }]
-  // receivedAt:
-  // totalOutput: 466152
-} as Transaction
-
-export const txd9e280 = {
-  block: {
-    createdAt: new Date(Date.UTC(2017, 10, 4, 7, 45, 11)),
-    number: 43178
-  },
-  fee: 171246,
-  id: 'd9e280725a54b956ed283e42820672894edf8d1f48b5af36d76ee32f88a79497',
-  inputs: [{
-    address: 'DdzFFzCqrhsmGwaWgX1btSvf1fwW2yxfvSc84b7Rs7h8VX3qmLxxB6JPnxM9aoBpHavPC72dbhvRSxxc8Z5J68BytbbhzJWdbnHjBj5H',
-    value: {
-      currency: Currency.Ada,
-      amount: 50805565431559
-    }
-  }],
-  outputs: [{
-    address: 'DdzFFzCqrhtB3CFFtj5szEfAQSnA2PwuhARbC4pd31jVvyZzVLbUh6JKkBbkTDmUszqeH6GXgAMamJohnLP1RP54Cn2Bd1V7g3DD6DZ9',
-    value: {
-      currency: Currency.Ada,
-      amount: 50704353889014
-    }
+    address: 'DdzFFzCqrhsxVv8Sjuj35Zkw42T9WjwXa6DasrNknm5M3bPVDnWJWwhX5NymoZncUArTfFYZ9sYGaA9htKSNYoK5Vkzx2vUtunAFt3eE',
+    value: '4824799478660'
   }, {
-    address: 'DdzFFzCqrhsfhRA44fZGrnMSrFdV9U3VZ3AVtLsiwT7vZKaCjkhqzKiyBocJkYZQfVHbkCqtyGcUoWaaQJY5jqj4zwgfBzKGo8BgwMeY',
-    value: {
-      currency: Currency.Ada,
-      amount: 101211542545
-    }
-  }]
-  // receivedAt
-  // totalOutput: 50805565431559
-} as Transaction
+    address: 'DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s',
+    value: '100000000000'
+  }],
+  totalOutput: '4924799478660'
+}

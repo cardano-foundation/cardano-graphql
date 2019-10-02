@@ -1,9 +1,9 @@
 import { StakePool } from '../../graphql_types'
-import { slot1Epoch2 } from '.'
+import { slot1Epoch1 } from '.'
 
 export const stakePool1 = {
   controlledStake: 33,
-  createdAt: new Date(Date.UTC(2019, 8, 19, 21, 27, 33)),
+  createdAt: '2019-08-19T21:27:33',
   description: 'totam suscipit est',
   id: 'h5khccud3aoj7g2fdsdlb5ogixr3ej59lhc39qk20qpk5y3uoh142mx5g2rjm56h',
   isCharity: true,
@@ -14,7 +14,7 @@ export const stakePool1 = {
   ranking: 1,
   retiring: false,
   rewardPayouts: [{
-    slot: slot1Epoch2,
+    slot: slot1Epoch1,
     amount: 1000
   }],
   ticker: 'UIYU',
@@ -22,7 +22,7 @@ export const stakePool1 = {
 } as StakePool
 
 export const stakePool2 = {
-  createdAt: new Date(Date.UTC(2019, 8, 20, 1, 34, 17)),
+  createdAt: '2019-08-20T01:34:17',
   controlledStake: 55,
   description: 'velit accusantium minima',
   id: 'h5khccud3aoj7g2fdsdlb5ogixr3ej59lhc39qk20qpk5y3uoh142mx5g2rjm56h',
@@ -34,8 +34,8 @@ export const stakePool2 = {
   ranking: 2,
   retiring: false,
   rewardPayouts: [{
-    slot: slot1Epoch2,
-    amount: 1000
+    slot: slot1Epoch1,
+    amount: '1000'
   }],
   slotsElected: [{
     epoch: {
