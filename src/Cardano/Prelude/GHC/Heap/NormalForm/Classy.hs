@@ -33,6 +33,7 @@ import Cardano.Prelude.Base
 import Data.Foldable (toList)
 import Data.Sequence (Seq)
 import Data.List.NonEmpty (NonEmpty)
+import Data.Time
 import GHC.Exts.Heap
 import Prelude (String)
 
@@ -390,6 +391,17 @@ deriving via UseIsNormalForm Word16 instance NoUnexpectedThunks Word16
 deriving via UseIsNormalForm Word32 instance NoUnexpectedThunks Word32
 deriving via UseIsNormalForm Word64 instance NoUnexpectedThunks Word64
 
+deriving via UseIsNormalForm Day              instance NoUnexpectedThunks Day
+deriving via UseIsNormalForm DiffTime         instance NoUnexpectedThunks DiffTime
+deriving via UseIsNormalForm LocalTime        instance NoUnexpectedThunks LocalTime
+deriving via UseIsNormalForm NominalDiffTime  instance NoUnexpectedThunks NominalDiffTime
+deriving via UseIsNormalForm TimeLocale       instance NoUnexpectedThunks TimeLocale
+deriving via UseIsNormalForm TimeOfDay        instance NoUnexpectedThunks TimeOfDay
+deriving via UseIsNormalForm TimeZone         instance NoUnexpectedThunks TimeZone
+deriving via UseIsNormalForm UniversalTime    instance NoUnexpectedThunks UniversalTime
+deriving via UseIsNormalForm UTCTime          instance NoUnexpectedThunks UTCTime
+deriving via UseIsNormalForm ZonedTime        instance NoUnexpectedThunks ZonedTime
+
 {-------------------------------------------------------------------------------
   Instances for text types
 
@@ -397,8 +409,14 @@ deriving via UseIsNormalForm Word64 instance NoUnexpectedThunks Word64
   and lazy variants.
 -------------------------------------------------------------------------------}
 
-deriving via UseIsNormalFormNamed "Strict.ByteString" BS.Strict.ByteString instance NoUnexpectedThunks BS.Strict.ByteString
-deriving via UseIsNormalFormNamed "Lazy.ByteString"   BS.Lazy.ByteString   instance NoUnexpectedThunks BS.Lazy.ByteString
+-- | Strict bytestrings /shouldn't/ contain any thunks, but could, due to
+-- <https://gitlab.haskell.org/ghc/ghc/issues/17290>. However, such thunks
+-- can't retain any data that they shouldn't, and so it's safe to ignore such
+-- thunks.
+deriving via OnlyCheckIsWHNF "Strict.ByteString" BS.Strict.ByteString instance NoUnexpectedThunks BS.Strict.ByteString
+
+-- | Unlike strict bytestrings, lazy bytestrings of course /could/ have thunks
+deriving via UseIsNormalFormNamed "Lazy.ByteString" BS.Lazy.ByteString instance NoUnexpectedThunks BS.Lazy.ByteString
 
 deriving via UseIsNormalFormNamed "Strict.Text" Text.Strict.Text instance NoUnexpectedThunks Text.Strict.Text
 deriving via UseIsNormalFormNamed "Lazy.Text"   Text.Lazy.Text   instance NoUnexpectedThunks Text.Lazy.Text
