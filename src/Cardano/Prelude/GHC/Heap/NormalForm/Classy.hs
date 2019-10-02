@@ -409,8 +409,14 @@ deriving via UseIsNormalForm ZonedTime        instance NoUnexpectedThunks ZonedT
   and lazy variants.
 -------------------------------------------------------------------------------}
 
-deriving via UseIsNormalFormNamed "Strict.ByteString" BS.Strict.ByteString instance NoUnexpectedThunks BS.Strict.ByteString
-deriving via UseIsNormalFormNamed "Lazy.ByteString"   BS.Lazy.ByteString   instance NoUnexpectedThunks BS.Lazy.ByteString
+-- | Strict bytestrings /shouldn't/ contain any thunks, but could, due to
+-- <https://gitlab.haskell.org/ghc/ghc/issues/17290>. However, such thunks
+-- can't retain any data that they shouldn't, and so it's safe to ignore such
+-- thunks.
+deriving via OnlyCheckIsWHNF "Strict.ByteString" BS.Strict.ByteString instance NoUnexpectedThunks BS.Strict.ByteString
+
+-- | Unlike strict bytestrings, lazy bytestrings of course /could/ have thunks
+deriving via UseIsNormalFormNamed "Lazy.ByteString" BS.Lazy.ByteString instance NoUnexpectedThunks BS.Lazy.ByteString
 
 deriving via UseIsNormalFormNamed "Strict.Text" Text.Strict.Text instance NoUnexpectedThunks Text.Strict.Text
 deriving via UseIsNormalFormNamed "Lazy.Text"   Text.Lazy.Text   instance NoUnexpectedThunks Text.Lazy.Text
