@@ -64,7 +64,7 @@ pipeline {
             def packageJSON = readJSON file: 'package.json'
             sh "docker tag samjeston/cardano-graphql-dev:${GIT_COMMIT_HASH} samjeston/cardano-graphql-dev:${packageJSON.version}"
             sh "docker tag samjeston/cardano-graphql-pgseed:${GIT_COMMIT_HASH} samjeston/cardano-graphql-pgseed:${packageJSON.version}"
-            sh "docker tag samjeston/cardano-graphql-pgseed:${GIT_COMMIT_HASH} samjeston/cardano-graphql-hasura:${packageJSON.version}"
+            sh "docker tag samjeston/cardano-graphql-hasura:${GIT_COMMIT_HASH} samjeston/cardano-graphql-hasura:${packageJSON.version}"
             sh "docker push samjeston/cardano-graphql-dev:${packageJSON.version}"
             sh "docker push samjeston/cardano-graphql-pgseed:${packageJSON.version}"
             sh "docker push samjeston/cardano-graphql-hasura:${packageJSON.version}"
