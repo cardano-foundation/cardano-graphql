@@ -9,17 +9,16 @@ services:
     ports:
       - ${API_PORT:-3100}:3100
   hasura:
-    image: hasura/graphql-engine:v1.0.0-beta.6
+    image: hasura/graphql-engine:v1.0.0-beta.6.cli-migrations
     depends_on:
       - "postgres"
     restart: always
     environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://nix:postgres@postgres:5432/cexplorer
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_STRINGIFY_NUMERIC_TYPES: "true"
-      ## Todo: Setup access key
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://nix:postgres@postgres:5432/cexplorer
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=false
+      - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
+    volumes:
+      - ../hasura:/hasura-migrations
   postgres:
     image: postgres:11.5-alpine
     restart: always
@@ -29,4 +28,4 @@ services:
       - POSTGRES_USER=nix
       - POSTGRES_DB=cexplorer
     volumes:
-      - "../test/postgres/init:/docker-entrypoint-initdb.d"
+      - ../test/postgres/init:/docker-entrypoint-initdb.d

@@ -3,7 +3,6 @@ import {
   LoveLaces,
   Percentage,
   PublicKeyHash,
-  StakePoolTicker,
   TransactionHash
 } from '../lib/scalars'
 
@@ -17,6 +16,5 @@ export const scalarResolvers = {
   Lovelaces: LoveLaces,
   Percentage: Percentage,
   PublicKeyHash: PublicKeyHash,
-  StakePoolTicker: StakePoolTicker,
   TransactionHash: TransactionHash
 } as any

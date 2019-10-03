@@ -1,5 +1,4 @@
 import { delegateToSchema } from 'graphql-tools'
-import { GraphQLError } from 'graphql'
 import { Resolvers, Order_By_With_Nulls as OrderByWithNulls } from '../graphql_types'
 import { checkLimit } from '../validation'
 const isEqual = require('lodash.isequal')
@@ -37,9 +36,6 @@ export const hasuraResolvers: Resolvers = {
         operation: 'query',
         schema: context.hasura
       }))[0]
-    },
-    stakePools: (_root, _args, _context, _info) => {
-      throw new GraphQLError('Not implemented')
     },
     transactions: (_root, args, context, info) => {
       checkLimit(args.limit, 250)

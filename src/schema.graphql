@@ -1,5 +1,4 @@
 schema {
-  mutation: Mutation
   query: Query
 }
 
@@ -9,24 +8,7 @@ scalar DateTime
 scalar Lovelaces
 scalar Percentage
 scalar PublicKeyHash
-scalar StakePoolTicker
 scalar TransactionHash # may need more specificity
-
-type Mutation {
-  delegateStake (
-    # Constructed using a client SDK, signed, encoded
-    transaction: TransactionHash
-  ): Boolean!
-  registerStakePool (
-    # Constructed using a client SDK, includes registration certificate containing the staking key of the pool leader
-    transaction: TransactionHash
-  ): Boolean!
-  submitTransaction (
-    # Constructed using a client SDK, signed, encoded
-    transaction: TransactionHash
-  ): Boolean!
-
-}
 
 type Query {
   blocks (
@@ -42,12 +24,6 @@ type Query {
     where: Epoch_bool_exp
   ): [Epoch]!
   cardano: Cardano
-  stakePools (
-    limit: Int = 1
-    order_by: [StakePool_order_by!]
-    offset: Int
-    where: StakePool_bool_exp
-  ): [StakePool!]!
   transactions (
     limit: Int = 1
     order_by: [Transaction_order_by!]
@@ -62,35 +38,9 @@ type Query {
   ): [TransactionOutput]!
 }
 
-enum AddressType {
-  # The staking key is directly linked to the address.
-  Base
-  # A pointer to a delegation certificate on the blockchain which defines the staking key.
-  Pointer
-  #  Staking is not possible. This address type is meant for exchanges, who are not supposed to use funds entrusted to them for protocol participation.
-  Enterprise
-}
-
 type Cardano {
   blockHeight: Int!
-#  configuration: Configuration!
   currentEpoch: Epoch!
-#  latestBlock: Block!
-#  stakeDistribution: [StakePool!]!
-}
-
-type FeeConfiguration {
-  base: Lovelaces
-  coefficient: Lovelaces
-}
-
-type Configuration {
-  fees: FeeConfiguration
-}
-
-type Address {
-  addressType: AddressType!
-  delegation: StakePool
 }
 
 type Transaction {
@@ -154,10 +104,6 @@ input Block_bool_exp {
   number: Int_comparison_exp
 }
 
-#input block_Transactions_filter {
-#  size: Int_comparison_exp
-#}
-
 input Block_order_by {
   number: order_by
   size: order_by
@@ -179,7 +125,6 @@ type Epoch {
   output: String!
   number: Int!
   slots: [Slot!]!
-  stakeDistribution: [StakePool!]
   startedAt: DateTime
   transactionsCount: String
 }
@@ -202,53 +147,6 @@ input Utxo_bool_exp {
 
 input Utxo_order_by {
   address: order_by
-}
-
-type StakePool {
-  controlledStake: Lovelaces!
-  createdAt: DateTime!
-  description: String!
-  id: Hash32HexString!
-  isCharity: Boolean!
-  ownStake: Lovelaces!
-  performance: Percentage
-  profitMargin: Int!
-  name: String!
-  ranking: Int!
-  retirement: DateTime
-  retiring: Boolean!
-  rewardPayouts: [RewardPayout]!
-  slotsElected: [Slot]!
-  ticker: StakePoolTicker!
-  url: String!
-}
-
-type RewardPayout {
-  slot: Slot
-  amount: Lovelaces
-}
-
-input StakePool_bool_exp {
-  createdAt: Date_comparison_exp
-  controlledStake: Lovelaces_comparison_exp
-  isCharity: Boolean
-  ownStake: Lovelaces_comparison_exp
-  performance: Percentage_comparison_exp,
-  profitMargin: Int_comparison_exp
-  ranking: Int_comparison_exp
-  retiring: Boolean
-}
-
-input StakePool_order_by {
-  createdAt: order_by
-  controlledStake: order_by
-  isCharity: order_by
-  ownStake: order_by
-  performance: order_by
-  profitMargin: order_by
-  name: order_by
-  ranking: order_by
-  retiring: order_by
 }
 
 # expression to compare data of type date. All fields are combined with logical 'AND'.
