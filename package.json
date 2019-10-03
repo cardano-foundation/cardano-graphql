@@ -1,6 +1,6 @@
 {
   "name": "cardano-graphql",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "GraphQL API for Cardano with client-consumable types generated",
   "scripts": {
     "codegen:external": "graphql-codegen --config ./codegen.external.yml",
