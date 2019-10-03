@@ -1,12 +1,21 @@
-FROM node:alpine
-LABEL maintainer="Rhys Bartels-Waller <rhys.bartelswaller@iohk.io>"
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-# Install dependencies
-COPY package.json /usr/src/app
-COPY yarn.lock  /usr/src/app
-RUN yarn install
-# Bundle app dist
-COPY ./dist /usr/src/app/
-EXPOSE 3000
+FROM node:10.15.3-alpine as builder
+RUN apk add --update python make g++
+RUN mkdir /application
+COPY package.json /application/package.json
+WORKDIR /application
+RUN npm i
+COPY . /application
+RUN npm run build
+
+FROM node:10.15.3-alpine as production_deps
+RUN mkdir /application
+COPY package.json /application/package.json
+WORKDIR /application
+RUN npm i --production
+
+FROM node:10.15.3-alpine as server
+RUN mkdir /application
+COPY --from=builder /application/dist /application
+COPY --from=production_deps /application/node_modules /application/node_modules
+WORKDIR /application
 CMD ["node", "index.js"]

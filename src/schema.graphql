@@ -1,0 +1,246 @@
+schema {
+  query: Query
+}
+
+scalar Hash32HexString
+scalar BigInt
+scalar DateTime
+scalar Lovelaces
+scalar Percentage
+scalar PublicKeyHash
+scalar TransactionHash # may need more specificity
+
+type Query {
+  blocks (
+    limit: Int = 1
+    order_by: [Block_order_by!]
+    offset: Int,
+    where: Block_bool_exp
+  ): [Block]!
+  epochs (
+    limit: Int = 1
+    order_by: [Epoch_order_by!]
+    offset: Int
+    where: Epoch_bool_exp
+  ): [Epoch]!
+  cardano: Cardano
+  transactions (
+    limit: Int = 1
+    order_by: [Transaction_order_by!]
+    offset: Int
+    where: Transaction_bool_exp
+  ): [Transaction]!
+  utxoSet (
+    limit: Int = 1
+    order_by: [Utxo_order_by!]
+    offset: Int
+    where: Utxo_bool_exp
+  ): [TransactionOutput]!
+}
+
+type Cardano {
+  blockHeight: Int!
+  currentEpoch: Epoch!
+}
+
+type Transaction {
+  block: Block
+  fee: String!
+  id: Hash32HexString!
+  # Date the transaction was included in the blockchain, determined by the slot start date
+  includedAt: DateTime!
+  inputs: [TransactionInput!]!
+  outputs: [TransactionOutput!]!
+  totalOutput: String!
+}
+
+input Transaction_order_by {
+  block: order_by
+  fee: order_by
+}
+
+input Transaction_bool_exp {
+  #  dateCreated: Date_comparison_exp
+  id: Hash32HexString_comparison_exp
+  block: Block_bool_exp
+}
+
+type TransactionInput {
+  sourceTxId: Hash32HexString!
+  sourceTxIndex: Int!
+  address: String!
+  value: String!
+}
+
+type TransactionOutput {
+  address: String!
+  index: Int!
+  txId: Hash32HexString!
+  value: String!
+}
+
+type Block {
+  epoch: Epoch
+  fees: String
+  id: Hash32HexString!
+  merkelRootHash: Hash32HexString
+  # Genesis and Epoch Boundary Blocks (EBBs) do not have numbers
+  number: Int
+  previousBlock: Block
+  size: Int!
+  # Genesis and Epoch Boundary Blocks (EBBs) are not created within slots
+  slot: Slot
+  transactions(
+    limit: Int = 1,
+    order_by: [Transaction_order_by!]
+    offset: Int
+    where: Transaction_bool_exp
+  ): [Transaction]!
+}
+
+input Block_bool_exp {
+  dateCreated: Date_comparison_exp
+  id: Hash32HexString_comparison_exp
+  number: Int_comparison_exp
+}
+
+input Block_order_by {
+  number: order_by
+  size: order_by
+}
+
+type Slot {
+  block: Block
+  # Public key of the elected UTXO
+  leader: PublicKeyHash
+  epoch: Epoch!
+  number: Int!
+  # Calculated based on the genesis start date, using slot number and duration
+  startedAt: DateTime
+}
+
+type Epoch {
+  blocks: [Block]
+  endedAt: DateTime
+  output: String!
+  number: Int!
+  slots: [Slot!]!
+  startedAt: DateTime
+  transactionsCount: String
+}
+
+input Epoch_bool_exp {
+  afterDate: DateTime
+  beforeDate: DateTime
+  number: Int_comparison_exp
+}
+
+input Epoch_order_by {
+  blockCount: order_by
+  number: order_by
+  fees: order_by
+}
+
+input Utxo_bool_exp {
+  address: text_comparison_exp
+}
+
+input Utxo_order_by {
+  address: order_by
+}
+
+# expression to compare data of type date. All fields are combined with logical 'AND'.
+input Date_comparison_exp {
+  _eq: DateTime
+  _gt: DateTime
+  _gte: DateTime
+  _in: [DateTime]
+  _lt: DateTime
+  _lte: DateTime
+  _neq: DateTime
+  _nin: [DateTime]
+}
+
+# expression to compare data of type Int. All fields are combined with logical 'AND'.
+input Int_comparison_exp {
+  _eq: Int
+  _gt: Int
+  _gte: Int
+  _in: [Int!]
+  _is_null: Boolean
+  _lt: Int
+  _lte: Int
+  _neq: Int
+  _nin: [Int!]
+}
+
+# expression to compare data of type Lovelaces. All fields are combined with logical 'AND'.
+input Lovelaces_comparison_exp {
+  _eq: Lovelaces
+  _gt: Lovelaces
+  _gte: Lovelaces
+  _in: [Lovelaces!]
+  _lt: Lovelaces
+  _lte: Lovelaces
+  _neq: Lovelaces
+  _nin: [Lovelaces!]
+}
+
+# expression to compare data of type Percentage. All fields are combined with logical 'AND'.
+input Percentage_comparison_exp {
+  _eq: Percentage
+  _gt: Percentage
+  _gte: Percentage
+  _lt: Int
+  _lte: Int
+  _neq: Int
+}
+
+# All fields are combined with logical 'AND'.
+input Hash32HexString_comparison_exp {
+  _eq: Hash32HexString
+  _in: [Hash32HexString]
+  _nin: [Hash32HexString]
+}
+
+input text_comparison_exp {
+  _eq: String
+  _gt: String
+  _gte: String
+  _ilike: String
+  _in: [String]
+  _is_null: Boolean
+  _like: String
+  _lt: String
+  _lte: String
+  _neq: String
+  _nilike: String
+  _nin: [String]
+  _nlike: String
+  _nsimilar: String
+  _similar: String
+}
+
+# ordering options
+enum order_by {
+  # in the ascending order, nulls last
+  asc
+  # in the ascending order, nulls first
+  desc
+}
+
+# ordering options
+enum order_by_with_nulls {
+  # in the ascending order, nulls last
+  asc
+  # in the ascending order, nulls first
+  asc_nulls_first
+  # in the ascending order, nulls last
+  asc_nulls_last
+  # in the descending order, nulls first
+  desc
+  # in the descending order, nulls first
+  desc_nulls_first
+  # in the descending order, nulls last
+  desc_nulls_last
+}

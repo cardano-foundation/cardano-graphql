@@ -1,0 +1,433 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Integration blocks Can return blocks by number 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration blocks Uses pagination with an offset for larger result sets 1`] = `
+Array [
+  Object {
+    "id": "be06c81f4ad34d98578b67840d8e65b2aeb148469b290f6b5235e41b75d38572",
+    "number": 4,
+  },
+  Object {
+    "id": "46debe49b4fe0bc8c07cfe650de89632ca1ab5d58f04f8c88d8102da7ef79b7f",
+    "number": 5,
+  },
+  Object {
+    "id": "365201e928da50760fce4bdad09a7338ba43a43aff1c0e8d3ec458388c932ec8",
+    "number": 6,
+  },
+  Object {
+    "id": "e39d988dd815fc2cb234c2abef0d7f57765eeffb67331814bdb01c590359325e",
+    "number": 7,
+  },
+  Object {
+    "id": "2d9136c363c69ad07e1a918de2ff5aeeba4361e33b9c2597511874f211ca26e9",
+    "number": 8,
+  },
+  Object {
+    "id": "f4b2213e2ed6dc8d4da0f4234ced91714c8cbaa0f3750abb90d10aff23ce4d67",
+    "number": 9,
+  },
+  Object {
+    "id": "9cf9488161d63c7c414008737e1fab2eb8b85bf55dfe3fd8a09d2bc0c4327fe3",
+    "number": 10,
+  },
+  Object {
+    "id": "4bcd56b2e530a9690a94fb12a03cfd2cb7f25cdb229fda545c8cfddb57e13e24",
+    "number": 11,
+  },
+  Object {
+    "id": "7054258f4310b7803419681db10cd4a47707c5d5182ec9317fae7e2e93a399af",
+    "number": 12,
+  },
+  Object {
+    "id": "8b72b27a29fbe95f925f97afa0ce81c2e9aface13a539c733733153dadb8c928",
+    "number": 13,
+  },
+  Object {
+    "id": "5701cdc2396dc3f3ee32a13ea538d9a24059c3d00e7b928da3172835504001a9",
+    "number": 14,
+  },
+  Object {
+    "id": "8ee800d2d2cb242a5fe96a13371118a3ceb1cd068d5daa91385c351954bece35",
+    "number": 15,
+  },
+  Object {
+    "id": "d7900f547f96465c55ea3d8e6a9f6aeb88be200ad2138540eee716e94c1d211c",
+    "number": 16,
+  },
+  Object {
+    "id": "d0d37e4c9eabfe893c9c2cdaab7e90d450e570462a4dd315b6e7a6dcb54bd29a",
+    "number": 17,
+  },
+  Object {
+    "id": "0be303663930359a7c2d2d039458cd537110863c24f475bffb09b19dc3f9d54a",
+    "number": 18,
+  },
+  Object {
+    "id": "29dd9773213662145e5e399e3bc5dd2e86ef1f563bfb5309c552dc4349632278",
+    "number": 19,
+  },
+  Object {
+    "id": "7c6901c6346781c2bc5cbc49577490e336c2545c320ce4a61605bc71a9c5bed0",
+    "number": 20,
+  },
+  Object {
+    "id": "336113931d88269b5b56e7988fb4f9469e69aaa67ff84c6eef0f3e5adf1af442",
+    "number": 21,
+  },
+  Object {
+    "id": "ae230b33767ee2f0492347f062a48976cfd4367987c1a96fa5de52eba3268f5f",
+    "number": 22,
+  },
+  Object {
+    "id": "a076c4b645ec23e7e6fa909821edb3e28106d0ffa6325cd2d32e0f3b53c1c09b",
+    "number": 23,
+  },
+]
+`;
+
+exports[`Integration blocks Uses pagination with an offset for larger result sets 2`] = `
+Array [
+  Object {
+    "id": "99627f41664532199a53f90686e2370d4b83b1b7ed36d49f91c4b87ffd119b94",
+    "number": 24,
+  },
+  Object {
+    "id": "0f1f41d1d29a7f4e601ab00deb07eeaf7a56c14cf554f5189d88f22157bb2844",
+    "number": 25,
+  },
+  Object {
+    "id": "b6e5f58337dfb37da5f0ceedb127b808db72c14f86711fe69fadeadce54d17f1",
+    "number": 26,
+  },
+  Object {
+    "id": "30830e8bd51959ddee37e5a3517d02d52d5f9b9c416edb7571a3e90e3a588599",
+    "number": 27,
+  },
+  Object {
+    "id": "3265de2d67fd906f0c1316a10a8286656f749fa05f3fa0f26e6216a859d349fc",
+    "number": 28,
+  },
+  Object {
+    "id": "35837ea76e42d5f0bc3309127c9deb92e87d449ffc7d864d5eee3cbd63b2574a",
+    "number": 29,
+  },
+  Object {
+    "id": "d3fdc8c8ea4050cc87a21cb73110d54e3ec92f8ae76941e8a1957ed6e6a7e0b0",
+    "number": 30,
+  },
+  Object {
+    "id": "bfd2d6b38a6e16e5710d5e6eedefaf30fe7e15753a4cb9e8da95d0a9b10525c5",
+    "number": 31,
+  },
+  Object {
+    "id": "cd7c2415cffa1de98f87fadad6329045c4342637336f1c8b2e016f25f3c7fac5",
+    "number": 32,
+  },
+  Object {
+    "id": "1009f9569b4edaf2fc47803f7c623418f7e2d46d561cd85995edf50533a0c581",
+    "number": 33,
+  },
+  Object {
+    "id": "26b99991a7220932651eea69733dfda48dd187f3d0b44517ca334067958372b4",
+    "number": 34,
+  },
+  Object {
+    "id": "151d7119e85f5bc9400fea907731a1cf2e8800b7a2828d1a068902aaebcf2081",
+    "number": 35,
+  },
+  Object {
+    "id": "f4ee7dd414985862e03862688a3acbdb06bef42c09042a9b9ba4d63cc675a311",
+    "number": 36,
+  },
+  Object {
+    "id": "7f9f47d868f688255a0b7a04b7337ad8827edc37bedf8ee21166e1c989e2ef0e",
+    "number": 37,
+  },
+  Object {
+    "id": "1be4840723bc6c6ee2c3a23ba64c216a478a9654f360382ed31231af6593fe1d",
+    "number": 38,
+  },
+  Object {
+    "id": "61032e54e26679b8384caf62df8024665da80f0dc81ae5b76152c9d55a705fdb",
+    "number": 39,
+  },
+  Object {
+    "id": "8bf5c27d07e57fb5e843a5d9088928180afbf8c733929b6a84fc95c5df670e5d",
+    "number": 40,
+  },
+  Object {
+    "id": "1dcac253454fe43882bb4921b2a305a332adbdacca5aafb66829351035058277",
+    "number": 41,
+  },
+  Object {
+    "id": "8675f84d2d0dfe12cefeb6bfe2888fbb80a0b753fe4dbf612edfb70151523192",
+    "number": 42,
+  },
+  Object {
+    "id": "2a5ad3f0333b8118ec17791ca834d2d8760e853f3d319f4f00fb805bb2953cb0",
+    "number": 43,
+  },
+]
+`;
+
+exports[`Integration blocks are linked to their predecessor, and the chain can be traversed 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+        "previousBlock": Object {
+          "number": 29021,
+          "previousBlock": Object {
+            "number": 29020,
+            "previousBlock": Object {
+              "number": 29019,
+            },
+          },
+        },
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration blocks returns the most recent block by default  1`] = `
+Array [
+  Object {
+    "number": 31070,
+  },
+]
+`;
+
+exports[`Integration blocks throws an error if query requests more than 100 blocks 1`] = `[GraphQLError: 110 exceeds the maximum allowed value of 100. Use the offset to paginate through a larger result set]`;
+
+exports[`Integration cardano Returns the block height 1`] = `31070`;
+
+exports[`Integration epochs Returns epoch details by number 1`] = `
+Object {
+  "data": Object {
+    "epochs": Array [
+      Object {
+        "endedAt": "2017-10-01T02:25:51+00:00",
+        "number": 1,
+        "output": "17282903106017760",
+        "startedAt": "2017-09-28T21:45:51+00:00",
+        "transactionsCount": "5344",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration transactions Returns transactions by IDs 1`] = `
+Object {
+  "data": Object {
+    "transactions": Array [
+      Object {
+        "block": Object {
+          "number": 29021,
+        },
+        "fee": "171246",
+        "id": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
+        "inputs": Array [
+          Object {
+            "address": "DdzFFzCqrht5ExAdoZVExXoZTpoMYGKxva3thvvvHapsLZQzSX3kCqwgqi5NSM2oUtHYYDqsSnvSGbqkarB6cSgDZohUhLWZ9KFdDWsa",
+            "value": "4924799649906",
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsxVv8Sjuj35Zkw42T9WjwXa6DasrNknm5M3bPVDnWJWwhX5NymoZncUArTfFYZ9sYGaA9htKSNYoK5Vkzx2vUtunAFt3eE",
+            "value": "4824799478660",
+          },
+          Object {
+            "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+            "value": "100000000000",
+          },
+        ],
+        "totalOutput": "4924799478660",
+      },
+      Object {
+        "block": Object {
+          "number": 29021,
+        },
+        "fee": "171070",
+        "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+        "inputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsggyaAMAUTjGtjBr1CTp8tTcHYWbqtoyQBZcaYHM16rjbUDawTwoVaEPawAMPLJmpJVXHBNxZnTgmQzqAcNDe6XvMe5BkB",
+            "value": "768403000000",
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8",
+            "value": "768401828930",
+          },
+          Object {
+            "address": "DdzFFzCqrhsgrGt7zHydkE4cKxjB7SgsdnMPUFxYEwBu1u4sGobxZL5Xo3eDycCrtSYAUyw9aAsZZxFpTdgur6MwYDYMwAZ4xNGKRD3o",
+            "value": "1000000",
+          },
+        ],
+        "totalOutput": "768402828930",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration transactions utxoSet Can be filtered by address 1`] = `
+Object {
+  "data": Object {
+    "utxoSet": Array [
+      Object {
+        "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+        "value": "100000000000",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration transactions utxoSet Returns the whole set by default 1`] = `
+Object {
+  "data": Object {
+    "utxoSet": Array [
+      Object {
+        "address": "Ae2tdPwUPEZ9vtyppa1FdJzvqJZkEcXgdHxVYAzTWcPaoNycVq5rc36LC1S",
+        "value": "538861000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt",
+        "value": "1153846000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEYyahAbgfTxhChyWV6xMWKCDQs35Cr9qUXgzVviBrvhJ6NyUzA",
+        "value": "455585000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZLC5VMKspod9dcf5PtUtvobxd3THtoxfR9uuzcqDghef9oiTc",
+        "value": "390975000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZ415vhqz7i5t8jP5dKsDHUmTpTGf4XxeezzJJzhaubdWm4Aj2",
+        "value": "378507000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZ5GNoihaqR2Q43dTxBu9e9Y8m3daWcVw1bvswn4Y8APVUHqaZ",
+        "value": "499999000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZH6yx1bPBeTVy2ikCuJ2aLmsXpYT622bTw6LEy9UHiu9k8KF5",
+        "value": "411085000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZDjmVmgpcP1Dcm2C7frvbdZ8XvJjAPNVxLodknP4XACUTiidE",
+        "value": "901105000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEYyeBiwUSF6e1zXBY2Rbc8jEpXgcueqUyvkTaJekBw3sTbeMBG",
+        "value": "500919000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZ9BzUH1zgCijhBep4ZnwUhmM2zS7nkmnZV7gvbV54f5oCxxX7",
+        "value": "462355000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZKsHEnJoZZkUccHv1vsztJ37amLwxxdJpFYicuLwRpKFgsEjn",
+        "value": "391257000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZ2cE1drgm8LKf7L6QVqEmov7eYegL6S7W3L7ZHu2q3AxiU6PW",
+        "value": "7692307000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZKxVVgakuw9iytSjfYzEbDhjVCwmWQpgyuNcPxtueMujWDAEu",
+        "value": "469217000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEYwEuhFnowz2h8rxJ9JoNbjiU6H7dL1ed5RLMikDr6qUJsJ9jt",
+        "value": "383233000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZ3qXMX6imKEXTGPVBtY1QAx1oroD5Mf4buQiSvaJqi3qXVA3R",
+        "value": "1000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZBA28BxMDYxGFHGS3MWaa6ioT9ZBnCoy8ojtPy6YcapAvXhGq",
+        "value": "416901000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZBZTsRj7nGvvWQDTkqD9KLpCPpuZvjA1roL7KLDDVgkPU5S8j",
+        "value": "385506000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZAVCQEGtLWUy5JhzoJCqAaaN9yvAZAGgjyZT49SjLnzsZeMzX",
+        "value": "500305000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZA6N6PzxtcoP4PKrBQBLM4FTB89q4zaWnEBdbCD8QTo51zPCn",
+        "value": "380005000000",
+      },
+      Object {
+        "address": "Ae2tdPwUPEZH6K1hZZTC7T1zcZpKQdWmxUdGQtf8bix78EULKVnDQhQYYY3",
+        "value": "377802000000",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
