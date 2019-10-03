@@ -54,6 +54,11 @@ pipeline {
             sh "docker push samjeston/cardano-graphql-dev:develop"
             sh "docker push samjeston/cardano-graphql-pgseed:develop"
           }
+          if (env.BRANCH_NAME == 'master') {
+            def packageJSON = readJSON file: 'package.json'
+            sh "docker push samjeston/cardano-graphql-dev:${packageJSON.version}"
+            sh "docker push samjeston/cardano-graphql-pgseed:${packageJSON.version}"
+          }
         }
       }
     }
