@@ -12,7 +12,7 @@ services:
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
       - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
     volumes:
-      - ../hasura/migrations:/hasura-migrations
+      - ../hasura:/hasura-migrations
   postgres:
     image: postgres:11.5-alpine
     restart: always
