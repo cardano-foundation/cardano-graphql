@@ -11,6 +11,7 @@ packages:
   # Waiting on Stackage release
   - hedgehog-1.0
   - micro-recursion-schemes-5.0.2.2
+  - protolude-0.2.4
   - streaming-binary-0.3.0.1
   - cborg-0.2.2.0
   - canonical-json-0.6.0.0
