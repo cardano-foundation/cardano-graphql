@@ -21,7 +21,7 @@ module Test.Cardano.Prelude.Tripping
   )
 where
 
-import Cardano.Prelude
+import Cardano.Prelude hiding (unlines)
 
 import Data.Aeson (FromJSON, ToJSON, decode, encode)
 import Data.String (String, unlines)
