@@ -47,8 +47,6 @@ type Transaction {
   block: Block
   fee: String!
   id: Hash32HexString!
-  # Date the transaction was included in the blockchain, determined by the slot start date
-  includedAt: DateTime!
   inputs: [TransactionInput!]!
   outputs: [TransactionOutput!]!
   totalOutput: String!
@@ -60,7 +58,6 @@ input Transaction_order_by {
 }
 
 input Transaction_bool_exp {
-  #  dateCreated: Date_comparison_exp
   id: Hash32HexString_comparison_exp
   block: Block_bool_exp
 }
@@ -88,8 +85,6 @@ type Block {
   number: Int
   previousBlock: Block
   size: Int!
-  # Genesis and Epoch Boundary Blocks (EBBs) are not created within slots
-  slot: Slot
   transactions(
     limit: Int = 1,
     order_by: [Transaction_order_by!]
@@ -99,7 +94,6 @@ type Block {
 }
 
 input Block_bool_exp {
-  dateCreated: Date_comparison_exp
   id: Hash32HexString_comparison_exp
   number: Int_comparison_exp
 }
@@ -109,29 +103,14 @@ input Block_order_by {
   size: order_by
 }
 
-type Slot {
-  block: Block
-  # Public key of the elected UTXO
-  leader: PublicKeyHash
-  epoch: Epoch!
-  number: Int!
-  # Calculated based on the genesis start date, using slot number and duration
-  startedAt: DateTime
-}
-
 type Epoch {
   blocks: [Block]
-  endedAt: DateTime
   output: String!
   number: Int!
-  slots: [Slot!]!
-  startedAt: DateTime
   transactionsCount: String
 }
 
 input Epoch_bool_exp {
-  afterDate: DateTime
-  beforeDate: DateTime
   number: Int_comparison_exp
 }
 
