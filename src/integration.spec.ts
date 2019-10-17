@@ -119,17 +119,13 @@ describe('Integration', () => {
                     number
                 }
                 size
-                slot {
-                    number
-                    startedAt
-                }
+                slotNo
                 transactions(order_by: {fee: desc}) {
                     block {
                         number
                     }
                     fee
                     id
-                    includedAt
                     inputs {
                         address
                         value
@@ -177,10 +173,8 @@ describe('Integration', () => {
       const result = await client.query({
         query: gql`query {
             epochs( where: { number: { _eq: ${epoch1.number} }}) {
-                endedAt
                 output
                 number
-                startedAt
                 transactionsCount
             }
         }`
