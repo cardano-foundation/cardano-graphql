@@ -53,7 +53,8 @@ select
   slot_duration as "slotDuration",
   start_time as "startTime",
   protocol_const as "protocolConst"
-from meta;
+from meta
+limit 1;
 
 create view "Block" as
 select

@@ -83,6 +83,7 @@ type Block {
   merkelRootHash: Hash32HexString
   # Genesis and Epoch Boundary Blocks (EBBs) do not have numbers
   number: Int
+  slotNo: Int
   previousBlock: Block
   size: Int!
   transactions(
