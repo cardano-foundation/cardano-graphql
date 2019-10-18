@@ -213,7 +213,21 @@ describe('Integration', () => {
       expect(result.data.epochs[0]).toEqual(epoch1)
       expect(result).toMatchSnapshot()
     })
-    
+
+    it('Returns epoch details by number range', async () => {
+      const result = await client.query({
+        query: gql`query {
+            epochs( where: { number: { _in: [${epoch1.number}] }}) {
+                output
+                number
+                transactionsCount
+            }
+        }`
+      })
+      expect(result.data.epochs[0]).toEqual(epoch1)
+      expect(result).toMatchSnapshot()
+    })
+
     it('Returns blocks scoped to epoch', async () => {
       const validQueryResult = await client.query({
         query: gql`query {
@@ -235,20 +249,6 @@ describe('Integration', () => {
       })
       expect(validQueryResult.data.epochs[0].blocks.length).toBe(20)
       expect(invalidQueryResult.data.epochs[0].blocks.length).toBe(0)
-    })  
-
-    it('Returns epoch details by number range', async () => {
-      const result = await client.query({
-        query: gql`query {
-            epochs( where: { number: { _in: [${epoch1.number}] }}) {
-                output
-                number
-                transactionsCount
-            }
-        }`
-      })
-      expect(result.data.epochs[0]).toEqual(epoch1)
-      expect(result).toMatchSnapshot()
     })
   })
 
