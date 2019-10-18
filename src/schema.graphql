@@ -96,6 +96,7 @@ type Block {
 
 input Block_bool_exp {
   id: Hash32HexString_comparison_exp
+  epoch: Epoch_bool_exp
   number: Int_comparison_exp
 }
 
@@ -105,7 +106,12 @@ input Block_order_by {
 }
 
 type Epoch {
-  blocks: [Block]
+  blocks (
+    limit: Int = 1
+    order_by: [Block_order_by!]
+    offset: Int,
+    where: Block_bool_exp
+  ): [Block]
   output: String!
   number: Int!
   transactionsCount: String
