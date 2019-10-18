@@ -227,6 +227,29 @@ describe('Integration', () => {
       expect(result.data.epochs[0]).toEqual(epoch1)
       expect(result).toMatchSnapshot()
     })
+
+    it('Returns blocks scoped to epoch', async () => {
+      const validQueryResult = await client.query({
+        query: gql`query {
+            epochs( where: { number: { _eq: 1 }}) {
+                blocks(limit: 20) {
+                    id
+                }
+            }
+        }`
+      })
+      const invalidQueryResult = await client.query({
+        query: gql`query {
+            epochs( where: { number: { _eq: 1 }}) {
+                blocks(limit: 20, where: { epoch: { number: { _eq: 0 } }}) {
+                    id
+                }
+            }
+        }`
+      })
+      expect(validQueryResult.data.epochs[0].blocks.length).toBe(20)
+      expect(invalidQueryResult.data.epochs[0].blocks.length).toBe(0)
+    })
   })
 
   describe('cardano', () => {
