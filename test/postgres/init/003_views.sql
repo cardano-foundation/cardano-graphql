@@ -94,6 +94,7 @@ join tx
   on tx.block = block.id
 join tx_out
   on tx_out.tx_id = tx.id
+where epoch_no is not null
 group by block.epoch_no
 order by block.epoch_no;
 

@@ -4,6 +4,9 @@ ON block(slot_no);
 CREATE INDEX idx_block_block_no 
 ON block(block_no);
 
+CREATE INDEX idx_block_epoch_no 
+ON block(epoch_no);
+
 CREATE INDEX idx_block_previous 
 ON block(previous);
 
