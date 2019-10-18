@@ -169,10 +169,55 @@ describe('Integration', () => {
   })
 
   describe('epochs', () => {
+    const noBoundErrorMessage = 'number must be specified (_eq) or bounded (_gte | _gt && _lte | _lt)'
+    const boundTooLargeMessage = 'Maximum number of epochs queryable in a range is 10'
+
+    it('throws if number is not specified in the where clause', async () => {
+      const result = await client.query({
+        query: gql`query {
+            epochs {
+                output
+                number
+                transactionsCount
+            }
+        }`
+      })
+
+      expect(result.errors[0].message).toEqual(noBoundErrorMessage)
+    })
+
+    it('throws if the bound specified in the where clause is too large', async () => {
+      const result = await client.query({
+        query: gql`query {
+            epochs(where: {number: {_in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]}}) {
+                output
+                number
+                transactionsCount
+            }
+        }`
+      })
+
+      expect(result.errors[0].message).toEqual(boundTooLargeMessage)
+    })
+
     it('Returns epoch details by number', async () => {
       const result = await client.query({
         query: gql`query {
             epochs( where: { number: { _eq: ${epoch1.number} }}) {
+                output
+                number
+                transactionsCount
+            }
+        }`
+      })
+      expect(result.data.epochs[0]).toEqual(epoch1)
+      expect(result).toMatchSnapshot()
+    })
+
+    it('Returns epoch details by number range', async () => {
+      const result = await client.query({
+        query: gql`query {
+            epochs( where: { number: { _in: [${epoch1.number}] }}) {
                 output
                 number
                 transactionsCount
