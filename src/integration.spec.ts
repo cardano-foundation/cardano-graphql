@@ -114,6 +114,7 @@ describe('Integration', () => {
                 id
                 merkelRootHash
                 number
+                createdAt
                 previousBlock {
                     id
                     number
@@ -126,6 +127,7 @@ describe('Integration', () => {
                     }
                     fee
                     id
+                    includedAt
                     inputs {
                         address
                         value
@@ -207,6 +209,8 @@ describe('Integration', () => {
                 output
                 number
                 transactionsCount
+                startedAt
+                endedAt
             }
         }`
       })
@@ -221,6 +225,8 @@ describe('Integration', () => {
                 output
                 number
                 transactionsCount
+                startedAt
+                endedAt
             }
         }`
       })

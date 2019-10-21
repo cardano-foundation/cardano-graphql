@@ -68,7 +68,8 @@ select
   -- this is written by the node-client and makes identification
   -- of EBBs simpler, as EBBs don't have a slot_no
   block.epoch_no as "epochNo",
-  block.slot_no as "slotNo"
+  block.slot_no as "slotNo",
+  block.time as  "createdAt"
 from block
 left outer join block as previous_block
   on block.previous = previous_block.id;
@@ -78,7 +79,8 @@ select
   block.hash as "blockId",
   COALESCE(tx.fee, 0) as fee,
   tx.hash as id,
-  cast((select sum("value") from tx_out where tx_id = tx.id) as bigint) as "totalOutput"
+  cast((select sum("value") from tx_out where tx_id = tx.id) as bigint) as "totalOutput",
+  block.time as "includedAt"
 from
   tx
 inner join block
@@ -88,7 +90,11 @@ create view "Epoch" as
 select
   cast(sum(tx_out.value) as bigint) as output,
   count(distinct tx.hash) as "transactionsCount",
-  block.epoch_no as "number"
+  block.epoch_no as "number",
+  min(block.time) as "startedAt",
+  LEAD(min(block.time), 1) OVER (
+    ORDER BY epoch_no
+  ) "endedAt"
 from block
 join tx
   on tx.block = block.id

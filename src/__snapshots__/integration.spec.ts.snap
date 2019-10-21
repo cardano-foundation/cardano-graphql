@@ -234,8 +234,10 @@ Object {
   "data": Object {
     "epochs": Array [
       Object {
+        "endedAt": null,
         "number": 1,
         "output": "17282903106017760",
+        "startedAt": "2017-09-28T21:45:51",
         "transactionsCount": "5344",
       },
     ],
@@ -255,8 +257,10 @@ Object {
   "data": Object {
     "epochs": Array [
       Object {
+        "endedAt": null,
         "number": 1,
         "output": "17282903106017760",
+        "startedAt": "2017-09-28T21:45:51",
         "transactionsCount": "5344",
       },
     ],
