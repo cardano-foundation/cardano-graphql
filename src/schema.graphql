@@ -50,6 +50,7 @@ type Transaction {
   inputs: [TransactionInput!]!
   outputs: [TransactionOutput!]!
   totalOutput: String!
+  includedAt: DateTime!
 }
 
 input Transaction_order_by {
@@ -86,6 +87,7 @@ type Block {
   slotNo: Int
   previousBlock: Block
   size: Int!
+  createdAt: DateTime!
   transactions(
     limit: Int = 1,
     order_by: [Transaction_order_by!]
@@ -115,6 +117,8 @@ type Epoch {
   output: String!
   number: Int!
   transactionsCount: String
+  startedAt: DateTime!
+  endedAt: DateTime
 }
 
 input Epoch_bool_exp {
