@@ -1,0 +1,19 @@
+config:
+  target: "https://cardano-graphql-byron.daedalus-operations.com/"
+  phases:
+    - duration: 5
+      arrivalRate: 20
+scenarios:
+  - flow:
+    - post:
+        url: "/"
+        json:
+          query: "{blocks(limit: 20, where: {number: {_is_null: false}}) {id, fees, transactions { id, fee, inputs { address }, outputs { address }}}}"
+    - post:
+        url: "/"
+        json:
+          query: "{transactions(limit: 20) {id, fee, inputs { address }, outputs { address }}}"
+    - post:
+        url: "/"
+        json:
+          query: "{epochs(where: {number: {_in: [100, 101, 102, 103, 104, 105]}}) { number }}"
