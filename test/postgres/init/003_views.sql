@@ -69,7 +69,11 @@ select
   -- of EBBs simpler, as EBBs don't have a slot_no
   block.epoch_no as "epochNo",
   block.slot_no as "slotNo",
-  block.time as  "createdAt"
+  case when block.slot_no > 0	
+    then block.slot_no - (block.epoch_no * (10 * (select protocol_const from meta)))	
+    else 0	
+  end as "slotWithinEpoch",
+  block.time as "createdAt"
 from block
 left outer join block as previous_block
   on block.previous = previous_block.id;
@@ -92,9 +96,7 @@ select
   count(distinct tx.hash) as "transactionsCount",
   block.epoch_no as "number",
   min(block.time) as "startedAt",
-  LEAD(min(block.time), 1) OVER (
-    ORDER BY epoch_no
-  ) "endedAt"
+  max(block.time) as "lastBlockTime"
 from block
 join tx
   on tx.block = block.id

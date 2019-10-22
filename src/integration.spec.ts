@@ -121,6 +121,7 @@ describe('Integration', () => {
                 }
                 size
                 slotNo
+                slotWithinEpoch
                 transactions(order_by: {fee: desc}) {
                     block {
                         number
@@ -171,7 +172,7 @@ describe('Integration', () => {
   })
 
   describe('epochs', () => {
-    const noBoundErrorMessage = 'number must be specified (_eq) or bounded (_gte | _gt && _lte | _lt)'
+    const noBoundErrorMessage = 'number must be specified (_eq) or bounded (_in)'
     const boundTooLargeMessage = 'Maximum number of epochs queryable in a range is 10'
 
     it('throws if number is not specified in the where clause', async () => {
@@ -210,7 +211,7 @@ describe('Integration', () => {
                 number
                 transactionsCount
                 startedAt
-                endedAt
+                lastBlockTime
             }
         }`
       })
@@ -226,7 +227,7 @@ describe('Integration', () => {
                 number
                 transactionsCount
                 startedAt
-                endedAt
+                lastBlockTime
             }
         }`
       })

@@ -18,19 +18,17 @@ export const hasuraResolvers: Resolvers = {
       })
     },
     epochs: (_root, args, context, info) => {
-      checkLimit(args.limit, 100)
-
       // The arg properties weirdly extend the null prototype,
       // so implicit falsy checks don't behave as expected
       if (args.where === undefined || args.where.number === undefined) {
-        throw new GraphQLError('number must be specified (_eq) or bounded (_gte | _gt && _lte | _lt)')
+        throw new GraphQLError('number must be specified (_eq) or bounded (_in)')
       }
 
       const hasEqArg = args.where.number._eq !== undefined
       const hasRange = args.where.number._in !== undefined
 
       if (!hasEqArg && !hasRange) {
-        throw new GraphQLError('number must be specified (_eq) or bounded (_gte | _gt && _lte | _lt)')
+        throw new GraphQLError('number must be specified (_eq) or bounded (_in)')
       }
 
       if (hasRange && args.where.number._in.length > 10) {
