@@ -14,7 +14,8 @@
     "test": "NODE_ENV=test jest",
     "start": "HASURA_URI=http://localhost:8090/v1/graphql node dist/index.js",
     "start-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml up",
-    "stop-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml down"
+    "stop-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml down",
+    "loadtest-staging": "artillery run test/loadtest/config.yml"
   },
   "contributors": [
     "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
@@ -52,6 +53,7 @@
     "@typescript-eslint/parser": "^1.13.0",
     "apollo-server-core": "^2.8.1",
     "apollo-server-testing": "^2.8.1",
+    "artillery": "^1.6.0-29",
     "cpx": "^1.5.0",
     "eslint": "^6.1.0",
     "eslint-config-standard": "^13.0.1",
