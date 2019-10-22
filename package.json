@@ -15,7 +15,7 @@
     "start": "HASURA_URI=http://localhost:8090/v1/graphql node dist/index.js",
     "start-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml up",
     "stop-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml down",
-    "loadtest-staging": "artillery run test/loadtest/config.yml"
+    "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml"
   },
   "contributors": [
     "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
