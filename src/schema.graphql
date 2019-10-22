@@ -85,6 +85,7 @@ type Block {
   # Genesis and Epoch Boundary Blocks (EBBs) do not have numbers
   number: Int
   slotNo: Int
+  slotWithinEpoch: Int
   previousBlock: Block
   size: Int!
   createdAt: DateTime!
@@ -118,7 +119,7 @@ type Epoch {
   number: Int!
   transactionsCount: String
   startedAt: DateTime!
-  endedAt: DateTime
+  lastBlockTime: DateTime!
 }
 
 input Epoch_bool_exp {
