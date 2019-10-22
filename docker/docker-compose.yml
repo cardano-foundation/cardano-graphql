@@ -5,6 +5,7 @@ services:
       context: ..
       target: server
     environment:
+      - CACHE_ENABLED=true
       - HASURA_URI=http://hasura:8080/v1/graphql
     ports:
       - ${API_PORT:-3100}:3100
