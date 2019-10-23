@@ -27,6 +27,7 @@
 typedef struct HashSet_ {
   void const ** hsBuffer;
   unsigned int hsCapacity;
+  unsigned int hsMaxCapacity;
   unsigned int hsCount;
 } HashSet;
 
@@ -36,7 +37,7 @@ typedef enum {
   HASHSET_INSERT_FULL
 } Inserted;
 
-HashSet* hs_cardanoprelude_hashset_alloc(unsigned int const capacity);
+HashSet* hs_cardanoprelude_hashset_alloc(unsigned int const initCapacity, unsigned int const maxCapacity);
 bool     hs_cardanoprelude_hashset_member(HashSet* const set, void const * const p);
 Inserted hs_cardanoprelude_hashset_insert(HashSet* const set, void const * const p);
 void     hs_cardanoprelude_hashset_delete(HashSet* const set, void const * const p);

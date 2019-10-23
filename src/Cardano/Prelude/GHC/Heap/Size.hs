@@ -68,7 +68,7 @@ toCountFailure n
 -- a location we marked as already visited. This is also the reason that we
 -- count the size of the object in C rather than in Haskell.
 foreign import ccall unsafe "hs_cardanoprelude_closureSize"
-  closureSize_ :: CUInt -> CUInt -> Ptr CUInt -> Addr# -> IO CULong
+  closureSize_ :: CUInt -> CUInt -> CUInt -> Ptr CUInt -> Addr# -> IO CULong
 
 -- | Wrapper around 'closureSize_' that takes the address of arbitrary closure
 --
@@ -80,13 +80,22 @@ foreign import ccall unsafe "hs_cardanoprelude_closureSize"
 -- In addition, we also call 'performGC' before measuring the size of the
 -- closure, so that we don't count unnecessary indirections (such as black
 -- holes).
-closureSize :: CUInt -> CUInt -> Ptr CUInt -> a -> IO CULong
-closureSize work visited err a = do
+closureSize :: CUInt -> CUInt -> CUInt -> Ptr CUInt -> a -> IO CULong
+closureSize workListCapacity
+            visitedInitCapacity
+            visitedMaxCapacity
+            err
+            a
+          = do
     performMajorGC
     -- Low level trickery to avoid GC in between 'anyToAddr#' and 'closureSize_'
     IO $ \world0 ->
       let !(# world1, addr #) = anyToAddr# a world0
-      in unIO (closureSize_ work visited err addr) world1
+      in unIO (closureSize_ workListCapacity
+                            visitedInitCapacity
+                            visitedMaxCapacity
+                            err
+                            addr) world1
 
 -- | Compute the size of the given closure
 --
@@ -97,31 +106,48 @@ closureSize work visited err a = do
 -- 'computeHeapSizeWorkList' can be used to estimate the size of the worklist
 -- required.
 computeHeapSize' :: Word  -- ^ Capacity of the worklist
-                 -> Word  -- ^ Capacity of the visited set
+                 -> Word  -- ^ Initial capacity of the visited set
+                 -> Word  -- ^ Maximum capacity of the visited set
                  -> a -> IO (Either CountFailure Word64)
-computeHeapSize' workListCapacity visitedCapacity a =
+computeHeapSize' workListCapacity
+                 visitedInitCapacity
+                 visitedMaxCapacity
+                 a
+               = do
     alloca $ \(err :: Ptr CUInt) -> do
-      size     <- closureSize workListCapacity' visitedCapacity' err a
+      size     <- closureSize workListCapacity'
+                              visitedInitCapacity'
+                              visitedMaxCapacity'
+                              err
+                              a
       mFailure <- toCountFailure <$> peek err
       return $ case mFailure of
                  Just failure -> Left failure
                  Nothing      -> Right (fromIntegral size)
   where
-    workListCapacity' = fromIntegral workListCapacity
-    visitedCapacity'  = fromIntegral visitedCapacity
+    workListCapacity'    = fromIntegral workListCapacity
+    visitedInitCapacity' = fromIntegral visitedInitCapacity
+    visitedMaxCapacity'  = fromIntegral visitedMaxCapacity
 
 -- | Compute the size of the given closure
 --
 -- This is a wrapper around 'computeHeapSize'' which sets some defaults for the
 -- capacity of worklist and the visited set: it uses a worklist capacity of 10k
--- (which, assuming balanced data structures, should be more than enough) and a
--- visited set capacity of 1M. This means that this will require roughly 8MB of
--- memory.
---
+-- (which, assuming balanced data structures, should be more than enough), an
+-- initial visited set capacity of 250k, and a maximum visited set capacity of
+-- 16M. This means that this will use between 2 MB and 128 MB of heaps space.
+ --
 -- Should these limits not be sufficient, or conversely, the memory requirements
 -- be too large, use 'computeHeapSize'' directly.
 computeHeapSize :: a -> IO (Either CountFailure Word64)
-computeHeapSize = computeHeapSize' (10 * 1000) (1 * 1000 * 1000)
+computeHeapSize =
+   computeHeapSize' workListCapacity
+                    visitedInitCapacity
+                    visitedMaxCapacity
+  where
+    workListCapacity    =        10 * 1000 --  80 kB
+    visitedInitCapacity =       250 * 1000 --   2 MB
+    visitedMaxCapacity  = 16 * 1000 * 1000 -- 128 MB
 
 {-------------------------------------------------------------------------------
   Compute the depth of the closure
