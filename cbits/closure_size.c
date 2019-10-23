@@ -256,7 +256,8 @@ static CountFailure pushNested(WorkList* const work, HashSet* const visited, Stg
  *
  * The caller should check *err for an error code.
  */
- uint64_t hs_cardanoprelude_closureSize(unsigned int const workListCapacity, unsigned int const visitedInitCapacity, unsigned int const visitedMaxCapacity, unsigned int* const err, StgPtr const root) {
+ uint64_t hs_cardanoprelude_closureSize(unsigned int const workListCapacity, unsigned int const visitedInitCapacity, unsigned int const visitedMaxCapacity, unsigned int* const err, StgStablePtr const sp) {
+    StgPtr const root = deRefStablePtr(sp);
     ASSERT(LOOKS_LIKE_CLOSURE_PTR(root));
 
     // Start optimistic

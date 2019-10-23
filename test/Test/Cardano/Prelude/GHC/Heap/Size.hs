@@ -183,7 +183,7 @@ prop_MVar = withTests 1 $ property $ do
 -- We run this test repeatedly, to flush out any potential non-determinism
 -- in the C code.
 prop_list = withTests 1000 $ property $ do
-    sz <- liftIO $ computeHeapSize' 2 102 xs
+    sz <- liftIO $ computeHeapSize' FirstPerformGC 2 102 102 xs
     -- 100 cons nodes : each 3 words
     --   1 nil  node  : 2 words
     --   1 I#   nod e : 2 words
@@ -193,14 +193,14 @@ prop_list = withTests 1000 $ property $ do
     !xs = force $ replicate 100 1
 
 prop_list_visited_full = withTests 1 $ property $ do
-    sz <- liftIO $ computeHeapSize' 2 101 xs
+    sz <- liftIO $ computeHeapSize' FirstPerformGC 2 101 101 xs
     sz === Left VisitedFull
   where
     xs :: [Int]
     !xs = force $ replicate 100 1
 
 prop_list_worklist_full = withTests 1 $ property $ do
-    sz <- liftIO $ computeHeapSize' 1 102 xs
+    sz <- liftIO $ computeHeapSize' FirstPerformGC 1 102 102 xs
     sz === Left WorkListFull
   where
     xs :: [Int]
