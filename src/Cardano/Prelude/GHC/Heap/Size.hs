@@ -5,10 +5,9 @@
 {-# LANGUAGE UnboxedTuples       #-}
 {-# LANGUAGE UnliftedFFITypes    #-}
 
-{-# OPTIONS_GHC -Wno-missing-signatures -Wno-monomorphism-restriction #-}
-
 module Cardano.Prelude.GHC.Heap.Size (
     CountFailure(..)
+  , PerformGC(..)
   , computeHeapSize
   , computeHeapSize'
   , computeHeapSizeWorkList
@@ -18,6 +17,7 @@ import Cardano.Prelude.Base hiding (Any)
 
 import Foreign.C.Types
 import Foreign.Marshal.Alloc
+import Foreign.StablePtr
 import Foreign.Storable
 import GHC.Exts.Heap.ClosureTypes (ClosureType)
 import GHC.Prim
@@ -27,6 +27,8 @@ import System.Mem (performMajorGC)
 {-------------------------------------------------------------------------------
   Failure
 -------------------------------------------------------------------------------}
+
+cNO_FAILURE, cWORK_LIST_FULL, cVISITED_FULL, cOUT_OF_MEMORY, cUNSUPPORTED_CLOSURE :: CUInt
 
 cNO_FAILURE          = 0
 cWORK_LIST_FULL      = 1
@@ -68,25 +70,45 @@ toCountFailure n
 -- a location we marked as already visited. This is also the reason that we
 -- count the size of the object in C rather than in Haskell.
 foreign import ccall unsafe "hs_cardanoprelude_closureSize"
-  closureSize_ :: CUInt -> CUInt -> Ptr CUInt -> Addr# -> IO CULong
+  closureSize_ :: CUInt -> CUInt -> CUInt -> Ptr CUInt -> StablePtr a -> IO CULong
 
--- | Wrapper around 'closureSize_' that takes the address of arbitrary closure
+-- | Should we perform a GC call before counting the size?
+data PerformGC =
+    -- | Yes, first perform GC before counting
+    --
+    -- This should be used for most accurate results. Without calling GC first,
+    -- the computed size might be larger than expected due to leftover
+    -- indirections (black holes, selector thunks, etc.)
+    FirstPerformGC
+
+    -- | No, do not perform GC before counting
+    --
+    -- If pinpoint accuracy is not requried, then GC can be skipped, making the
+    -- call much less expensive.
+  | DontPerformGC
+
+-- | Wrapper around 'closureSize_' that takes care of creating the stable ptr
 --
--- It is important that GC /cannot/ happen in between taking the address of the
--- closure and passing it to the C function, otherwise we might end up passing
--- an evaluated closure; this means we /must not/ do any allocation in between
--- these two calls.
---
--- In addition, we also call 'performGC' before measuring the size of the
--- closure, so that we don't count unnecessary indirections (such as black
--- holes).
-closureSize :: CUInt -> CUInt -> Ptr CUInt -> a -> IO CULong
-closureSize work visited err a = do
-    performMajorGC
-    -- Low level trickery to avoid GC in between 'anyToAddr#' and 'closureSize_'
-    IO $ \world0 ->
-      let !(# world1, addr #) = anyToAddr# a world0
-      in unIO (closureSize_ work visited err addr) world1
+-- We can't simply pass the address of the closure to the C function, because
+-- we have no guarantee that GC will not happen in between taking that address
+-- and the C call. We therefore create and pass a stable pointer instead.
+closureSize :: PerformGC -> CUInt -> CUInt -> CUInt -> Ptr CUInt -> a -> IO CULong
+closureSize performGC
+            workListCapacity
+            visitedInitCapacity
+            visitedMaxCapacity
+            err
+            a
+          = do
+    case performGC of
+      FirstPerformGC -> performMajorGC
+      DontPerformGC  -> return ()
+    bracket (newStablePtr a) freeStablePtr $ \stablePtr ->
+      closureSize_ workListCapacity
+                   visitedInitCapacity
+                   visitedMaxCapacity
+                   err
+                   stablePtr
 
 -- | Compute the size of the given closure
 --
@@ -96,32 +118,59 @@ closureSize work visited err a = do
 --
 -- 'computeHeapSizeWorkList' can be used to estimate the size of the worklist
 -- required.
-computeHeapSize' :: Word  -- ^ Capacity of the worklist
-                 -> Word  -- ^ Capacity of the visited set
+computeHeapSize' :: PerformGC -- ^ Should we call GC before counting?
+                 -> Word      -- ^ Capacity of the worklist
+                 -> Word      -- ^ Initial capacity of the visited set
+                 -> Word      -- ^ Maximum capacity of the visited set
                  -> a -> IO (Either CountFailure Word64)
-computeHeapSize' workListCapacity visitedCapacity a =
+computeHeapSize' performGC
+                 workListCapacity
+                 visitedInitCapacity
+                 visitedMaxCapacity
+                 a
+               = do
     alloca $ \(err :: Ptr CUInt) -> do
-      size     <- closureSize workListCapacity' visitedCapacity' err a
+      size     <- closureSize performGC
+                              workListCapacity'
+                              visitedInitCapacity'
+                              visitedMaxCapacity'
+                              err
+                              a
       mFailure <- toCountFailure <$> peek err
       return $ case mFailure of
                  Just failure -> Left failure
                  Nothing      -> Right (fromIntegral size)
   where
-    workListCapacity' = fromIntegral workListCapacity
-    visitedCapacity'  = fromIntegral visitedCapacity
+    workListCapacity', visitedInitCapacity', visitedMaxCapacity' :: CUInt
+    workListCapacity'    = fromIntegral workListCapacity
+    visitedInitCapacity' = fromIntegral visitedInitCapacity
+    visitedMaxCapacity'  = fromIntegral visitedMaxCapacity
 
 -- | Compute the size of the given closure
 --
 -- This is a wrapper around 'computeHeapSize'' which sets some defaults for the
 -- capacity of worklist and the visited set: it uses a worklist capacity of 10k
--- (which, assuming balanced data structures, should be more than enough) and a
--- visited set capacity of 1M. This means that this will require roughly 8MB of
--- memory.
+-- (which, assuming balanced data structures, should be more than enough), an
+-- initial visited set capacity of 250k, and a maximum visited set capacity of
+-- 16M. This means that this will use between 2 MB and 128 MB of heaps space.
 --
+-- It also does NOT perform GC before counting, for improved performance.
+-- Client code can call 'performMajorGC' manually or use 'computeHeapSize''.
+ --
 -- Should these limits not be sufficient, or conversely, the memory requirements
 -- be too large, use 'computeHeapSize'' directly.
 computeHeapSize :: a -> IO (Either CountFailure Word64)
-computeHeapSize = computeHeapSize' (10 * 1000) (1 * 1000 * 1000)
+computeHeapSize =
+   computeHeapSize' DontPerformGC
+                    workListCapacity
+                    visitedInitCapacity
+                    visitedMaxCapacity
+  where
+    -- Memory usage assuming 64-bit (i.e. 8 byte) pointers
+    workListCapacity, visitedInitCapacity, visitedMaxCapacity :: Word
+    workListCapacity    =        10 * 1000 --  80 kB
+    visitedInitCapacity =       250 * 1000 --   2 MB
+    visitedMaxCapacity  = 16 * 1000 * 1000 -- 128 MB
 
 {-------------------------------------------------------------------------------
   Compute the depth of the closure
@@ -199,13 +248,7 @@ computeHeapSizeWorkList a =
     collect acc ix =
         case ix <# sizeofArray# ptrs of
           0# -> acc
-          _  -> let !n = fromIntegral (I# (sizeofArray# ptrs -# (ix +# 1#))) in
-                case indexArray# ptrs ix of
-                  (# p #) -> collect ((p, n) : acc) (ix +# 1#)
-
-{-------------------------------------------------------------------------------
-  Auxiliary: IO
--------------------------------------------------------------------------------}
-
-unIO :: IO a -> State# RealWorld -> (# State# RealWorld, a #)
-unIO (IO f) = f
+          _  -> let n :: Word64
+                    !n = fromIntegral (I# (sizeofArray# ptrs -# (ix +# 1#)))
+                in case indexArray# ptrs ix of
+                     (# p #) -> collect ((p, n) : acc) (ix +# 1#)

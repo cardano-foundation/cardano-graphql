@@ -256,7 +256,8 @@ static CountFailure pushNested(WorkList* const work, HashSet* const visited, Stg
  *
  * The caller should check *err for an error code.
  */
- uint64_t hs_cardanoprelude_closureSize(unsigned int const workListCapacity, unsigned int const visitedCapacity, unsigned int* const err, StgPtr const root) {
+ uint64_t hs_cardanoprelude_closureSize(unsigned int const workListCapacity, unsigned int const visitedInitCapacity, unsigned int const visitedMaxCapacity, unsigned int* const err, StgStablePtr const sp) {
+    StgPtr const root = deRefStablePtr(sp);
     ASSERT(LOOKS_LIKE_CLOSURE_PTR(root));
 
     // Start optimistic
@@ -273,7 +274,7 @@ static CountFailure pushNested(WorkList* const work, HashSet* const visited, Stg
     }
 
     // Initialize the visited set
-    HashSet* visited = hs_cardanoprelude_hashset_alloc(visitedCapacity);
+    HashSet* visited = hs_cardanoprelude_hashset_alloc(visitedInitCapacity, visitedMaxCapacity);
     if(visited == NULL) {
       *err = OUT_OF_MEMORY;
       hs_cardanoprelude_worklist_free(work);

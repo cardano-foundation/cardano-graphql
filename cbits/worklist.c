@@ -21,7 +21,7 @@ WorkList* hs_cardanoprelude_worklist_alloc(unsigned int capacity) {
     return NULL;
   }
 
-  HashSet* set = hs_cardanoprelude_hashset_alloc(capacity);
+  HashSet* set = hs_cardanoprelude_hashset_alloc(capacity, capacity);
   if(set == NULL) {
     free(work);
     free(stack);
