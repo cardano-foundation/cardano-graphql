@@ -6,7 +6,7 @@ const isEqual = require('lodash.isequal')
 export const hasuraResolvers: Resolvers = {
   Query: {
     blocks: async (_root, args, context, info) => {
-      validateQueryArgs(args, 100)
+      validateQueryArgs(args)
       return delegateToSchema({
         args: isEqual(args, { limit: 1 }) ? { ...args, ...{ order_by: { number: OrderByWithNulls.DescNullsLast } } } : args,
         context,
@@ -17,7 +17,7 @@ export const hasuraResolvers: Resolvers = {
       })
     },
     epochs: (_root, args, context, info) => {
-      validateQueryArgs(args, 10)
+      validateQueryArgs(args)
       return delegateToSchema({
         args,
         context,
@@ -38,7 +38,7 @@ export const hasuraResolvers: Resolvers = {
       }))[0]
     },
     transactions: (_root, args, context, info) => {
-      validateQueryArgs(args, 100)
+      validateQueryArgs(args)
       return delegateToSchema({
         args,
         context,
@@ -49,7 +49,7 @@ export const hasuraResolvers: Resolvers = {
       })
     },
     utxoSet: (_root, args, context, info) => {
-      validateQueryArgs(args, 100)
+      validateQueryArgs(args)
       return delegateToSchema({
         args,
         context,

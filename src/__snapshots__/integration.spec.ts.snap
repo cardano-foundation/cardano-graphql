@@ -47,8 +47,6 @@ Object {
 }
 `;
 
-exports[`Integration blocks throws an error if query requests more than 100 blocks 1`] = `[GraphQLError: 110 exceeds the maximum allowed value of 100. Use the offset to paginate through a larger result set]`;
-
 exports[`Integration cardano Returns the block height 1`] = `31070`;
 
 exports[`Integration epochs Returns epoch details by number 1`] = `
