@@ -29,18 +29,18 @@ describe('Integration', () => {
   }, 60000)
 
   describe('blocks', () => {
-    it('throws an error if query requests more than 100 blocks', async () => {
+    it('caps the response to 100 blocks', async () => {
       const result = await client.query({
         query: gql`query {
-            blocks (where: { number: { _neq: 1 }}, limit: 110) {
+            blocks (where: { number: { _neq: 1 }}) {
                 id
             }
         }`
       })
-      expect(result.errors[0]).toMatchSnapshot()
+      expect(result.data.blocks.length).toBe(100)
     })
 
-    it('Uses pagination with an offset for larger result sets', async () => {
+    it('allows custom pagination size with a limit and offset', async () => {
       const page1 = await client.query({
         query: gql`query {
             blocks (where: { epoch: { number: { _eq: 1 }}}, limit: 20, offset: 3, order_by: {number: asc}) {
@@ -126,33 +126,6 @@ describe('Integration', () => {
       expect(result.data.blocks.length).toBe(2)
       expect(result.data.blocks[0]).toEqual(block29021)
       expect(result.data.blocks[1]).toEqual(block29022)
-    })
-    it('limits the result set to 100 if only an exclusion is provided', async () => {
-      const result = await client.query({
-        query: gql`query {
-            blocks (
-                where: { number: { _neq: ${block29022.number}}}) {
-                id
-            }
-        }`
-      })
-      expect(result.data.blocks.length).toBe(100)
-    })
-    it('caps the set specified in the where clause if is too large', async () => {
-      const result = await client.query({
-        query: gql`query {
-            blocks(where: {number: {_in: [
-                1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
-                26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
-                51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75,
-                76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100,
-                101
-            ]}}) {
-                id
-            }
-        }`
-      })
-      expect(result.data.blocks.length).toEqual(100)
     })
     it('are linked to their predecessor, and the chain can be traversed', async () => {
       const result = await client.query({
