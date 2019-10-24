@@ -1,1 +1,1 @@
-export * from './checkLimit'
+export * from './validateQueryArgs'
