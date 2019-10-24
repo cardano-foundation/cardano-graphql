@@ -18,7 +18,7 @@ export async function getConfig (): Promise<ServerConfig> {
 
   return {
     apiPort: apiPort || 3100,
-    cacheEnabled: cacheEnabled ? cacheEnabled : false,
+    cacheEnabled: cacheEnabled || false,
     context: hasuraUri ? await buildContext(hasuraUri) : undefined,
     queryDepthLimit: queryDepthLimit || 10,
     resolvers: Object.assign({}, scalarResolvers, hasuraResolvers),
