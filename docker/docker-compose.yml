@@ -5,6 +5,7 @@ services:
       context: ..
       target: server
     environment:
+      - CACHE_ENABLED=true
       - HASURA_URI=http://hasura:8080/v1/graphql
     ports:
       - ${API_PORT:-3100}:3100
@@ -19,6 +20,8 @@ services:
       - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
     volumes:
       - ../hasura/migrations:/hasura-migrations
+    ports:
+      - "8090:8080"
   postgres:
     image: postgres:11.5-alpine
     restart: always

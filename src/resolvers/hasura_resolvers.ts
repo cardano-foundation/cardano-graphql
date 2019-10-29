@@ -1,15 +1,11 @@
 import { delegateToSchema } from 'graphql-tools'
-import { Resolvers, Order_By_With_Nulls as OrderByWithNulls } from '../graphql_types'
-import { checkLimit } from '../validation'
-import { GraphQLError } from 'graphql'
-const isEqual = require('lodash.isequal')
+import { Resolvers } from '../graphql_types'
 
 export const hasuraResolvers: Resolvers = {
   Query: {
     blocks: async (_root, args, context, info) => {
-      checkLimit(args.limit, 100)
       return delegateToSchema({
-        args: isEqual(args, { limit: 1 }) ? { ...args, ...{ order_by: { number: OrderByWithNulls.DescNullsLast } } } : args,
+        args,
         context,
         fieldName: 'Block',
         info,
@@ -18,23 +14,6 @@ export const hasuraResolvers: Resolvers = {
       })
     },
     epochs: (_root, args, context, info) => {
-      // The arg properties weirdly extend the null prototype,
-      // so implicit falsy checks don't behave as expected
-      if (args.where === undefined || args.where.number === undefined) {
-        throw new GraphQLError('number must be specified (_eq) or bounded (_in)')
-      }
-
-      const hasEqArg = args.where.number._eq !== undefined
-      const hasRange = args.where.number._in !== undefined
-
-      if (!hasEqArg && !hasRange) {
-        throw new GraphQLError('number must be specified (_eq) or bounded (_in)')
-      }
-
-      if (hasRange && args.where.number._in.length > 10) {
-        throw new GraphQLError('Maximum number of epochs queryable in a range is 10')
-      }
-
       return delegateToSchema({
         args,
         context,
@@ -55,7 +34,6 @@ export const hasuraResolvers: Resolvers = {
       }))[0]
     },
     transactions: (_root, args, context, info) => {
-      checkLimit(args.limit, 250)
       return delegateToSchema({
         args,
         context,
@@ -66,7 +44,6 @@ export const hasuraResolvers: Resolvers = {
       })
     },
     utxoSet: (_root, args, context, info) => {
-      checkLimit(args.limit, 250)
       return delegateToSchema({
         args,
         context,

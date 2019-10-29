@@ -12,29 +12,29 @@ scalar TransactionHash # may need more specificity
 
 type Query {
   blocks (
-    limit: Int = 1
+    limit: Int
     order_by: [Block_order_by!]
-    offset: Int,
+    offset: Int
     where: Block_bool_exp
   ): [Block]!
   epochs (
-    limit: Int = 1
+    limit: Int
     order_by: [Epoch_order_by!]
     offset: Int
     where: Epoch_bool_exp
   ): [Epoch]!
   cardano: Cardano
   transactions (
-    limit: Int = 1
+    limit: Int
     order_by: [Transaction_order_by!]
     offset: Int
     where: Transaction_bool_exp
   ): [Transaction]!
   utxoSet (
-    limit: Int = 1
+    limit: Int
     order_by: [Utxo_order_by!]
     offset: Int
-    where: Utxo_bool_exp
+    where: Utxo_bool_exp!
   ): [TransactionOutput]!
 }
 
@@ -90,7 +90,7 @@ type Block {
   size: Int!
   createdAt: DateTime!
   transactions(
-    limit: Int = 1,
+    limit: Int
     order_by: [Transaction_order_by!]
     offset: Int
     where: Transaction_bool_exp
@@ -110,9 +110,9 @@ input Block_order_by {
 
 type Epoch {
   blocks (
-    limit: Int = 1
+    limit: Int
     order_by: [Block_order_by!]
-    offset: Int,
+    offset: Int
     where: Block_bool_exp
   ): [Block]
   output: String!
@@ -191,6 +191,7 @@ input Percentage_comparison_exp {
 input Hash32HexString_comparison_exp {
   _eq: Hash32HexString
   _in: [Hash32HexString]
+  _neq: Hash32HexString
   _nin: [Hash32HexString]
 }
 

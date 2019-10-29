@@ -29,41 +29,21 @@ describe('Integration', () => {
   }, 60000)
 
   describe('blocks', () => {
-    it('returns the most recent block by default ', async () => {
-      const result = (await client.query({
-        query: gql`query {
-            blocks {
-                number
-            }
-        }`
-      })).data.blocks
-
-      const blockHeight = (await client.query({
-        query: gql`query {
-            cardano {
-                blockHeight
-            }
-        }`
-      })).data.cardano.blockHeight
-
-      expect(result[0].number).toEqual(blockHeight)
-      expect(result).toMatchSnapshot()
-    })
-    it('throws an error if query requests more than 100 blocks', async () => {
+    it('caps the response to 100 blocks', async () => {
       const result = await client.query({
         query: gql`query {
-            blocks (limit: 110) {
+            blocks {
                 id
             }
         }`
       })
-      expect(result.errors[0]).toMatchSnapshot()
+      expect(result.data.blocks.length).toBe(100)
     })
 
-    it('Uses pagination with an offset for larger result sets', async () => {
+    it('allows custom pagination size with a limit and offset', async () => {
       const page1 = await client.query({
         query: gql`query {
-            blocks (limit: 20, offset: 3, order_by: {number: asc}) {
+            blocks (limit: 20, offset: 3, order_by: { number: asc }) {
                 id
                 number
             }
@@ -71,21 +51,22 @@ describe('Integration', () => {
       })
       const page2 = await client.query({
         query: gql`query {
-            blocks (limit: 20, offset: 23, order_by: {number: asc}) {
+            blocks (limit: 20, offset: 23, order_by: { number: asc }) {
                 id
                 number
             }
         }`
       })
-      expect(page1.data.blocks).toMatchSnapshot()
-      expect(page2.data.blocks).toMatchSnapshot()
+      expect(page1.data.blocks.length).toBe(20)
+      expect(page1.data.blocks[19].number).toBe(23)
+      expect(page2.data.blocks.length).toBe(20)
+      expect(page2.data.blocks[19].number).toBe(43)
     })
 
     it('Can return blocks by number', async () => {
       const result = await client.query({
         query: gql`query {
             blocks (
-                limit: 2,
                 where: { number: { _eq: ${block29022.number}}}) {
                 id
             }
@@ -100,7 +81,6 @@ describe('Integration', () => {
       const result = await client.query({
         query: gql`query {
             blocks (
-                limit: 2,
                 where: { id: { _in: [
                   \"${block29021.id}\",
                   \"${block29022.id}\"
@@ -146,8 +126,6 @@ describe('Integration', () => {
       expect(result.data.blocks.length).toBe(2)
       expect(result.data.blocks[0]).toEqual(block29021)
       expect(result.data.blocks[1]).toEqual(block29022)
-      // expect(result.data.blocks[1]).toEqual(block43178)
-      // expect(result).toMatchSnapshot()
     })
     it('are linked to their predecessor, and the chain can be traversed', async () => {
       const result = await client.query({
@@ -172,37 +150,6 @@ describe('Integration', () => {
   })
 
   describe('epochs', () => {
-    const noBoundErrorMessage = 'number must be specified (_eq) or bounded (_in)'
-    const boundTooLargeMessage = 'Maximum number of epochs queryable in a range is 10'
-
-    it('throws if number is not specified in the where clause', async () => {
-      const result = await client.query({
-        query: gql`query {
-            epochs {
-                output
-                number
-                transactionsCount
-            }
-        }`
-      })
-
-      expect(result.errors[0].message).toEqual(noBoundErrorMessage)
-    })
-
-    it('throws if the bound specified in the where clause is too large', async () => {
-      const result = await client.query({
-        query: gql`query {
-            epochs(where: {number: {_in: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]}}) {
-                output
-                number
-                transactionsCount
-            }
-        }`
-      })
-
-      expect(result.errors[0].message).toEqual(boundTooLargeMessage)
-    })
-
     it('Returns epoch details by number', async () => {
       const result = await client.query({
         query: gql`query {
@@ -239,8 +186,10 @@ describe('Integration', () => {
       const validQueryResult = await client.query({
         query: gql`query {
             epochs( where: { number: { _eq: 1 }}) {
-                blocks(limit: 20) {
-                    id
+                blocks(limit: 1) {
+                    epoch {
+                        number
+                    }
                 }
             }
         }`
@@ -254,7 +203,7 @@ describe('Integration', () => {
             }
         }`
       })
-      expect(validQueryResult.data.epochs[0].blocks.length).toBe(20)
+      expect(validQueryResult.data.epochs[0].blocks[0].epoch.number).toBe(1)
       expect(invalidQueryResult.data.epochs[0].blocks.length).toBe(0)
     })
   })
@@ -276,29 +225,13 @@ describe('Integration', () => {
     })
   })
 
-  // describe('stakePools', () => {
-  //   it('Returns Stake Pools', async () => {
-  //     const result = await client.query({
-  //       query: gql`query {
-  //           stakePools {
-  //               controlledStake
-  //               id
-  //               ticker
-  //           }
-  //       }`
-  //     })
-  //     expect(result).toMatchSnapshot()
-  //   })
-  // })
-
   describe('transactions', () => {
     it('Returns transactions by IDs', async () => {
       const result = await client.query({
         query: gql`query {
             transactions(
-                limit: 2,
                 where: { id: { _in: [\"${txe68043.id}\", \"${tx05ad8b.id}\"]}},
-                order_by: {fee: desc}
+                order_by: { fee: desc }
             ) {
                 block {
                     number
@@ -322,24 +255,11 @@ describe('Integration', () => {
     })
 
     describe('utxoSet', () => {
-      it('Returns the whole set by default', async () => {
+      it('Can be scoped by address', async () => {
         const result = await client.query({
           query: gql`query {
               utxoSet(
-                  limit: 20
-              ) {
-                  address
-                  value
-              }
-          }`
-        })
-        expect(result.data.utxoSet.length).toBe(20)
-        expect(result).toMatchSnapshot()
-      })
-      it('Can be filtered by address', async () => {
-        const result = await client.query({
-          query: gql`query {
-              utxoSet(
+                  order_by: { address: asc }
                   where: { address: { _eq:
                   "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s"
                   }
@@ -350,7 +270,25 @@ describe('Integration', () => {
               }
           }`
         })
-        expect(result.data.utxoSet.length).toBe(1)
+        expect(result.data.utxoSet.length).toBe(2)
+        expect(result).toMatchSnapshot()
+      })
+      it('Can be scoped by list of addresses', async () => {
+        const result = await client.query({
+          query: gql`query {
+              utxoSet(
+                  order_by: { address: asc }
+                  where: { address: { _in: [
+                      "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+                      "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt"
+                  ]}}
+              ) {
+                  address
+                  value
+              }
+          }`
+        })
+        expect(result.data.utxoSet.length).toBe(3)
         expect(result).toMatchSnapshot()
       })
     })

@@ -12,7 +12,7 @@ scenarios:
     - post:
         url: "/"
         json:
-          query: "{transactions(limit: 20) {id, fee, inputs { address }, outputs { address }}}"
+          query: "{transactions(limit: 20, where: {block: { number: {_is_null: false}}}) {id, fee, inputs { address }, outputs { address }}}"
     - post:
         url: "/"
         json:
