@@ -277,7 +277,7 @@ describe('Integration', () => {
         const result = await client.query({
           query: gql`query {
               utxoSet(
-                  order_by: { address: asc }
+                  order_by: { address: desc }
                   where: { address: { _in: [
                       "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
                       "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt"
