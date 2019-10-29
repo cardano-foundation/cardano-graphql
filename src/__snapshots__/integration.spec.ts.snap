@@ -188,16 +188,16 @@ Object {
   "data": Object {
     "utxoSet": Array [
       Object {
+        "address": "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt",
+        "value": "1153846000000",
+      },
+      Object {
         "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
         "value": "150000000000",
       },
       Object {
         "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
         "value": "100000000000",
-      },
-      Object {
-        "address": "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt",
-        "value": "1153846000000",
       },
     ],
   },
