@@ -32,7 +32,7 @@ describe('Integration', () => {
     it('caps the response to 100 blocks', async () => {
       const result = await client.query({
         query: gql`query {
-            blocks (where: { number: { _neq: 1 }}) {
+            blocks {
                 id
             }
         }`
@@ -43,7 +43,7 @@ describe('Integration', () => {
     it('allows custom pagination size with a limit and offset', async () => {
       const page1 = await client.query({
         query: gql`query {
-            blocks (where: { epoch: { number: { _eq: 1 }}}, limit: 20, offset: 3, order_by: {number: asc}) {
+            blocks (limit: 20, offset: 3, order_by: { number: asc }) {
                 id
                 number
             }
@@ -51,16 +51,16 @@ describe('Integration', () => {
       })
       const page2 = await client.query({
         query: gql`query {
-            blocks (where: { epoch: { number: { _eq: 1 }}}, limit: 20, offset: 23, order_by: {number: asc}) {
+            blocks (limit: 20, offset: 23, order_by: { number: asc }) {
                 id
                 number
             }
         }`
       })
       expect(page1.data.blocks.length).toBe(20)
-      expect(page1.data.blocks[19].number).toBe(21609)
+      expect(page1.data.blocks[19].number).toBe(23)
       expect(page2.data.blocks.length).toBe(20)
-      expect(page2.data.blocks[19].number).toBe(21629)
+      expect(page2.data.blocks[19].number).toBe(43)
     })
 
     it('Can return blocks by number', async () => {
@@ -186,8 +186,10 @@ describe('Integration', () => {
       const validQueryResult = await client.query({
         query: gql`query {
             epochs( where: { number: { _eq: 1 }}) {
-                blocks(limit: 20) {
-                    id
+                blocks(limit: 1) {
+                    epoch {
+                        number
+                    }
                 }
             }
         }`
@@ -201,7 +203,7 @@ describe('Integration', () => {
             }
         }`
       })
-      expect(validQueryResult.data.epochs[0].blocks.length).toBe(20)
+      expect(validQueryResult.data.epochs[0].blocks[0].epoch.number).toBe(1)
       expect(invalidQueryResult.data.epochs[0].blocks.length).toBe(0)
     })
   })
@@ -229,7 +231,7 @@ describe('Integration', () => {
         query: gql`query {
             transactions(
                 where: { id: { _in: [\"${txe68043.id}\", \"${tx05ad8b.id}\"]}},
-                order_by: {fee: desc}
+                order_by: { fee: desc }
             ) {
                 block {
                     number
@@ -257,6 +259,7 @@ describe('Integration', () => {
         const result = await client.query({
           query: gql`query {
               utxoSet(
+                  order_by: { address: asc }
                   where: { address: { _eq:
                   "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s"
                   }
@@ -274,6 +277,7 @@ describe('Integration', () => {
         const result = await client.query({
           query: gql`query {
               utxoSet(
+                  order_by: { address: asc }
                   where: { address: { _in: [
                       "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
                       "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt"

@@ -165,11 +165,11 @@ Object {
     "utxoSet": Array [
       Object {
         "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
-        "value": "100000000000",
+        "value": "150000000000",
       },
       Object {
         "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
-        "value": "150000000000",
+        "value": "100000000000",
       },
     ],
   },
@@ -193,11 +193,11 @@ Object {
       },
       Object {
         "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
-        "value": "100000000000",
+        "value": "150000000000",
       },
       Object {
         "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
-        "value": "150000000000",
+        "value": "100000000000",
       },
     ],
   },

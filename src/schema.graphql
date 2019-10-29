@@ -15,20 +15,20 @@ type Query {
     limit: Int
     order_by: [Block_order_by!]
     offset: Int
-    where: Block_bool_exp!
+    where: Block_bool_exp
   ): [Block]!
   epochs (
     limit: Int
     order_by: [Epoch_order_by!]
     offset: Int
-    where: Epoch_bool_exp!
+    where: Epoch_bool_exp
   ): [Epoch]!
   cardano: Cardano
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
     offset: Int
-    where: Transaction_bool_exp!
+    where: Transaction_bool_exp
   ): [Transaction]!
   utxoSet (
     limit: Int
