@@ -93,6 +93,7 @@ type Block {
     offset: Int
     where: Transaction_bool_exp
   ): [Transaction]!
+  transactions_aggregate: Transaction_aggregate!
 }
 
 input Block_bool_exp {
@@ -106,19 +107,60 @@ input Block_order_by {
   size: order_by
 }
 
+type Transaction_aggregate {
+  aggregate: Transaction_aggregate_fields
+}
+
+type Transaction_aggregate_fields {
+  avg: Transaction_avg_fields
+  count: Int
+  max: Transaction_max_fields
+  min: Transaction_min_fields
+}
+
+type Transaction_avg_fields {
+  fee: Float
+  totalOutput: Float
+}
+
+type Transaction_max_fields {
+  fee: Int
+  totalOutput: BigInt
+}
+
+type Transaction_min_fields {
+  fee: Int
+  totalOutput: BigInt
+}
+
+type Transaction_sum_fields {
+  fee: Int
+  totalOutput: BigInt
+}
+
 type Epoch {
-  blocks_aggregate: Block_aggregate!
   blocks (
     limit: Int
     order_by: [Block_order_by!]
     offset: Int
     where: Block_bool_exp
   ): [Block]
+  blocks_aggregate: Block_aggregate!
   output: String!
   number: Int!
   transactionsCount: String
   startedAt: DateTime!
   lastBlockTime: DateTime!
+}
+
+input Epoch_bool_exp {
+  number: Int_comparison_exp
+}
+
+input Epoch_order_by {
+  blockCount: order_by
+  number: order_by
+  fees: order_by
 }
 
 type Block_aggregate {
@@ -151,16 +193,6 @@ size: Int
 type Block_sum_fields {
   fees: Int
   size: Int
-}
-
-input Epoch_bool_exp {
-  number: Int_comparison_exp
-}
-
-input Epoch_order_by {
-  blockCount: order_by
-  number: order_by
-  fees: order_by
 }
 
 input Utxo_bool_exp {

@@ -127,6 +127,36 @@ describe('Integration', () => {
       expect(result.data.blocks[0]).toEqual(block29021.basic)
       expect(result.data.blocks[1]).toEqual(block29022.basic)
     })
+
+    it('Can return aggregated data', async () => {
+      const result = await client.query({
+        query: gql`query {
+            blocks( where: { number: { _eq: 29021 }}) {
+                transactions_aggregate {
+                    aggregate {
+                        avg {
+                            fee
+                            totalOutput
+                        }
+                        count
+                        max {
+                            fee
+                            totalOutput
+                        }
+                        min {
+                            fee
+                            totalOutput
+                        }
+                    }
+                }
+                number
+            }
+        }`
+      })
+      expect(result.data.blocks[0]).toEqual(block29021.aggregated)
+      expect(result).toMatchSnapshot()
+    })
+
     it('are linked to their predecessor, and the chain can be traversed', async () => {
       const result = await client.query({
         query: gql`query {

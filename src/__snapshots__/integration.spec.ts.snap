@@ -1,5 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Integration blocks Can return aggregated data 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "number": 29021,
+        "transactions_aggregate": Object {
+          "aggregate": Object {
+            "avg": Object {
+              "fee": 171158,
+              "totalOutput": 2846601153795,
+            },
+            "count": 2,
+            "max": Object {
+              "fee": 171246,
+              "totalOutput": 4924799478660,
+            },
+            "min": Object {
+              "fee": 171070,
+              "totalOutput": 768402828930,
+            },
+          },
+        },
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration blocks Can return blocks by number 1`] = `
 Object {
   "data": Object {
