@@ -17,7 +17,7 @@ export const block29021 = {
       number: 29020
     },
     size: 1349,
-    transactions: [tx05ad8b, txe68043]
+    transactions: [tx05ad8b.basic, txe68043.basic]
   },
   aggregated: {
     number: 29021,
