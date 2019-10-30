@@ -18,6 +18,26 @@ export const block29021 = {
     },
     size: 1349,
     transactions: [tx05ad8b, txe68043]
+  },
+  aggregated: {
+    number: 29021,
+    transactions_aggregate: {
+      aggregate: {
+        avg: {
+          fee: 171158,
+          totalOutput: 2846601153795
+        },
+        count: 2,
+        max: {
+          fee: 171246,
+          totalOutput: 4924799478660
+        },
+        min: {
+          fee: 171070,
+          totalOutput: 768402828930
+        }
+      }
+    }
   }
 }
 
