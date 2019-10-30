@@ -102,7 +102,7 @@ describe('Integration', () => {
                 size
                 slotNo
                 slotWithinEpoch
-                transactions(order_by: {fee: desc}) {
+                transactions(order_by: { fee: desc}) {
                     block {
                         number
                     }
@@ -293,11 +293,11 @@ describe('Integration', () => {
   })
 
   describe('transactions', () => {
-    it('Returns transactions by IDs', async () => {
-      const result = await client.query({
+    it ('Returns transactions by IDs', async () => {
+      const result = await client.query ({
         query: gql`query {
             transactions(
-                where: { id: { _in: [\"${txe68043.id}\", \"${tx05ad8b.id}\"]}},
+                where: { id: { _in: [\"${txe68043.basic.id}\", \"${tx05ad8b.basic.id}\"]}},
                 order_by: { fee: desc }
             ) {
                 block {
@@ -317,47 +317,100 @@ describe('Integration', () => {
             }
         }`
       })
-      expect(result.data.transactions.length).toBe(2)
-      expect(result).toMatchSnapshot()
+      expect (result.data.transactions.length).toBe (2)
+      expect (result).toMatchSnapshot ()
     })
 
-    describe('utxoSet', () => {
-      it('Can be scoped by address', async () => {
-        const result = await client.query({
-          query: gql`query {
-              utxoSet(
-                  order_by: { address: asc }
-                  where: { address: { _eq:
-                  "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s"
-                  }
-                  }
-              ) {
-                  address
-                  value
-              }
-          }`
-        })
-        expect(result.data.utxoSet.length).toBe(2)
-        expect(result).toMatchSnapshot()
+    it('Can return aggregated data', async () => {
+      const result = await client.query({
+        query: gql`query {
+            transactions(
+                where: { id: { _in: [\"${txe68043.aggregated.id}\", \"${tx05ad8b.aggregated.id}\"]}},
+                order_by: { fee: desc }
+            ) {
+                fee
+                id
+                inputs_aggregate {
+                    aggregate {
+                        avg {
+                            value
+                        }
+                        count
+                        max {
+                            value
+                        }
+                        min {
+                            value
+                        }
+                        sum {
+                            value
+                        }
+                    }
+                }
+                outputs_aggregate {
+                    aggregate {
+                        avg {
+                            value
+                        }
+                        count
+                        max {
+                            value
+                        }
+                        min {
+                            value
+                        }
+                        sum {
+                            value
+                        }
+                    }
+                }
+            }
+        }`
       })
-      it('Can be scoped by list of addresses', async () => {
-        const result = await client.query({
-          query: gql`query {
-              utxoSet(
-                  order_by: { address: asc }
-                  where: { address: { _in: [
-                      "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
-                      "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt"
-                  ]}}
-              ) {
-                  address
-                  value
-              }
-          }`
-        })
-        expect(result.data.utxoSet.length).toBe(3)
-        expect(result).toMatchSnapshot()
+      expect(result.data.transactions.length).toBe(2)
+      const { transactions: txs } = result.data
+      expect(txs).toEqual([tx05ad8b.aggregated, txe68043.aggregated])
+      expect(txs[1].inputs_aggregate.aggregate.sum.value).toEqual(txs[1].outputs_aggregate.aggregate.sum.value + parseInt(txs[1].fee))
+      expect(result).toMatchSnapshot()
+    })
+  })
+
+  describe('utxoSet', () => {
+    it('Can be scoped by address', async () => {
+      const result = await client.query({
+        query: gql`query {
+            utxoSet(
+                order_by: { address: asc }
+                where: { address: { _eq:
+                "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s"
+                }
+                }
+            ) {
+                address
+                value
+            }
+        }`
       })
+      expect(result.data.utxoSet.length).toBe(2)
+      expect(result).toMatchSnapshot()
+    })
+    it('Can be scoped by list of addresses', async () => {
+      const result = await client.query({
+        query: gql`query {
+            utxoSet(
+                order_by: { address: asc }
+                where: { address: { _in: [
+                    "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+                    "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt"
+                ]}}
+            ) {
+                address
+                value
+            }
+        }`
+      })
+      expect(result.data.utxoSet.length).toBe(3)
+      expect(result).toMatchSnapshot()
     })
   })
 })

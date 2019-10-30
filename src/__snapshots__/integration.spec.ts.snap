@@ -175,6 +175,98 @@ Object {
 }
 `;
 
+exports[`Integration transactions Can return aggregated data 1`] = `
+Object {
+  "data": Object {
+    "transactions": Array [
+      Object {
+        "fee": "171246",
+        "id": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
+        "inputs_aggregate": Object {
+          "aggregate": Object {
+            "avg": Object {
+              "value": 4924799649906,
+            },
+            "count": 1,
+            "max": Object {
+              "value": 4924799649906,
+            },
+            "min": Object {
+              "value": 4924799649906,
+            },
+            "sum": Object {
+              "value": 4924799649906,
+            },
+          },
+        },
+        "outputs_aggregate": Object {
+          "aggregate": Object {
+            "avg": Object {
+              "value": 2462399739330,
+            },
+            "count": 2,
+            "max": Object {
+              "value": 4824799478660,
+            },
+            "min": Object {
+              "value": 100000000000,
+            },
+            "sum": Object {
+              "value": 4924799478660,
+            },
+          },
+        },
+      },
+      Object {
+        "fee": "171070",
+        "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+        "inputs_aggregate": Object {
+          "aggregate": Object {
+            "avg": Object {
+              "value": 768403000000,
+            },
+            "count": 1,
+            "max": Object {
+              "value": 768403000000,
+            },
+            "min": Object {
+              "value": 768403000000,
+            },
+            "sum": Object {
+              "value": 768403000000,
+            },
+          },
+        },
+        "outputs_aggregate": Object {
+          "aggregate": Object {
+            "avg": Object {
+              "value": 384201414465,
+            },
+            "count": 2,
+            "max": Object {
+              "value": 768401828930,
+            },
+            "min": Object {
+              "value": 1000000,
+            },
+            "sum": Object {
+              "value": 768402828930,
+            },
+          },
+        },
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration transactions Returns transactions by IDs 1`] = `
 Object {
   "data": Object {
@@ -239,7 +331,7 @@ Object {
 }
 `;
 
-exports[`Integration transactions utxoSet Can be scoped by address 1`] = `
+exports[`Integration utxoSet Can be scoped by address 1`] = `
 Object {
   "data": Object {
     "utxoSet": Array [
@@ -263,7 +355,7 @@ Object {
 }
 `;
 
-exports[`Integration transactions utxoSet Can be scoped by list of addresses 1`] = `
+exports[`Integration utxoSet Can be scoped by list of addresses 1`] = `
 Object {
   "data": Object {
     "utxoSet": Array [
