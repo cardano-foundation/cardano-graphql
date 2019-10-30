@@ -13,7 +13,7 @@ export const hasuraResolvers: Resolvers = {
         schema: context.hasura
       })
     },
-    epochs: async (_root, args, context, info) => {
+    epochs: (_root, args, context, info) => {
       return delegateToSchema({
         args,
         context,
