@@ -147,6 +147,10 @@ describe('Integration', () => {
                             fee
                             totalOutput
                         }
+                        sum {
+                            fee
+                            totalOutput
+                        }
                     }
                 }
                 number
@@ -212,6 +216,10 @@ describe('Integration', () => {
                             size
                         }
                         min {
+                            fees
+                            size
+                        }
+                        sum {
                             fees
                             size
                         }

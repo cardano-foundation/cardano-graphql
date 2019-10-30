@@ -21,6 +21,10 @@ Object {
               "fee": 171070,
               "totalOutput": 768402828930,
             },
+            "sum": Object {
+              "fee": 342316,
+              "totalOutput": 5693202307590,
+            },
           },
         },
       },
@@ -104,6 +108,10 @@ Object {
             "min": Object {
               "fees": 0,
               "size": 631,
+            },
+            "sum": Object {
+              "fees": 266560276,
+              "size": 8365354,
             },
           },
         },
