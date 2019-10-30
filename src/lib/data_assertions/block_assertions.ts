@@ -35,6 +35,10 @@ export const block29021 = {
         min: {
           fee: 171070,
           totalOutput: 768402828930
+        },
+        sum: {
+          fee: 342316,
+          totalOutput: 5693202307590
         }
       }
     }

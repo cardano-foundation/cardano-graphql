@@ -24,6 +24,10 @@ export const epoch1 = {
         min: {
           fees: 0,
           size: 631
+        },
+        sum: {
+          fees: 266560276,
+          size: 8365354
         }
       }
     },

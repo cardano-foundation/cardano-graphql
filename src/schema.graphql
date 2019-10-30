@@ -116,6 +116,7 @@ type Transaction_aggregate_fields {
   count: Int
   max: Transaction_max_fields
   min: Transaction_min_fields
+  sum: Transaction_sum_fields
 }
 
 type Transaction_avg_fields {
@@ -124,17 +125,17 @@ type Transaction_avg_fields {
 }
 
 type Transaction_max_fields {
-  fee: Int
+  fee: BigInt
   totalOutput: BigInt
 }
 
 type Transaction_min_fields {
-  fee: Int
+  fee: BigInt
   totalOutput: BigInt
 }
 
 type Transaction_sum_fields {
-  fee: Int
+  fee: BigInt
   totalOutput: BigInt
 }
 
@@ -172,6 +173,7 @@ type Block_aggregate_fields {
   count: Int
   max: Block_max_fields
   min: Block_min_fields
+  sum: Block_sum_fields
 }
 
 type Block_avg_fields {
@@ -180,19 +182,19 @@ type Block_avg_fields {
 }
 
 type Block_max_fields {
-fees: Int
-size: Int
+  fees: BigInt
+  size: BigInt
 }
 
 type Block_min_fields {
-fees: Int
-size: Int
+  fees: BigInt
+  size: BigInt
 }
 
 
 type Block_sum_fields {
-  fees: Int
-  size: Int
+  fees: BigInt
+  size: BigInt
 }
 
 input Utxo_bool_exp {
