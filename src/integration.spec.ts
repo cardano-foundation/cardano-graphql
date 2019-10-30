@@ -293,8 +293,8 @@ describe('Integration', () => {
   })
 
   describe('transactions', () => {
-    it ('Returns transactions by IDs', async () => {
-      const result = await client.query ({
+    it('Returns transactions by IDs', async () => {
+      const result = await client.query({
         query: gql`query {
             transactions(
                 where: { id: { _in: [\"${txe68043.basic.id}\", \"${tx05ad8b.basic.id}\"]}},
@@ -317,8 +317,8 @@ describe('Integration', () => {
             }
         }`
       })
-      expect (result.data.transactions.length).toBe (2)
-      expect (result).toMatchSnapshot ()
+      expect(result.data.transactions.length).toBe(2)
+      expect(result).toMatchSnapshot()
     })
 
     it('Can return aggregated data', async () => {

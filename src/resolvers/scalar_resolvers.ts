@@ -1,7 +1,7 @@
 import {
   Hash32HexString,
   LoveLaces,
-  Percentage,
+  Percentage
 } from '../lib/scalars'
 
 const GraphQLBigInt = require('graphql-bigint')
