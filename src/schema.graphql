@@ -61,6 +61,38 @@ input Transaction_bool_exp {
   block: Block_bool_exp
 }
 
+type Transaction_aggregate {
+  aggregate: Transaction_aggregate_fields
+}
+
+type Transaction_aggregate_fields {
+  avg: Transaction_avg_fields
+  count: Int
+  max: Transaction_max_fields
+  min: Transaction_min_fields
+  sum: Transaction_sum_fields
+}
+
+type Transaction_avg_fields {
+  fee: Float
+  totalOutput: Float
+}
+
+type Transaction_max_fields {
+  fee: BigInt
+  totalOutput: BigInt
+}
+
+type Transaction_min_fields {
+  fee: BigInt
+  totalOutput: BigInt
+}
+
+type Transaction_sum_fields {
+  fee: BigInt
+  totalOutput: BigInt
+}
+
 type TransactionInput {
   sourceTxId: Hash32HexString!
   sourceTxIndex: Int!
@@ -107,63 +139,6 @@ input Block_order_by {
   size: order_by
 }
 
-type Transaction_aggregate {
-  aggregate: Transaction_aggregate_fields
-}
-
-type Transaction_aggregate_fields {
-  avg: Transaction_avg_fields
-  count: Int
-  max: Transaction_max_fields
-  min: Transaction_min_fields
-  sum: Transaction_sum_fields
-}
-
-type Transaction_avg_fields {
-  fee: Float
-  totalOutput: Float
-}
-
-type Transaction_max_fields {
-  fee: BigInt
-  totalOutput: BigInt
-}
-
-type Transaction_min_fields {
-  fee: BigInt
-  totalOutput: BigInt
-}
-
-type Transaction_sum_fields {
-  fee: BigInt
-  totalOutput: BigInt
-}
-
-type Epoch {
-  blocks (
-    limit: Int
-    order_by: [Block_order_by!]
-    offset: Int
-    where: Block_bool_exp
-  ): [Block]
-  blocks_aggregate: Block_aggregate!
-  output: String!
-  number: Int!
-  transactionsCount: String
-  startedAt: DateTime!
-  lastBlockTime: DateTime!
-}
-
-input Epoch_bool_exp {
-  number: Int_comparison_exp
-}
-
-input Epoch_order_by {
-  blockCount: order_by
-  number: order_by
-  fees: order_by
-}
-
 type Block_aggregate {
   aggregate: Block_aggregate_fields
 }
@@ -191,10 +166,34 @@ type Block_min_fields {
   size: BigInt
 }
 
-
 type Block_sum_fields {
   fees: BigInt
   size: BigInt
+}
+
+type Epoch {
+  blocks (
+    limit: Int
+    order_by: [Block_order_by!]
+    offset: Int
+    where: Block_bool_exp
+  ): [Block]
+  blocks_aggregate: Block_aggregate!
+  output: String!
+  number: Int!
+  transactionsCount: String
+  startedAt: DateTime!
+  lastBlockTime: DateTime!
+}
+
+input Epoch_bool_exp {
+  number: Int_comparison_exp
+}
+
+input Epoch_order_by {
+  blockCount: order_by
+  number: order_by
+  fees: order_by
 }
 
 input Utxo_bool_exp {
