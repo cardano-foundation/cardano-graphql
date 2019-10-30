@@ -82,8 +82,8 @@ describe('Integration', () => {
         query: gql`query {
             blocks (
                 where: { id: { _in: [
-                  \"${block29021.id}\",
-                  \"${block29022.id}\"
+                    \"${block29021.id}\",
+                    \"${block29022.id}\"
                 ]}},
                 order_by: { number: asc }
             ) {
@@ -153,7 +153,7 @@ describe('Integration', () => {
     it('Returns epoch details by number', async () => {
       const result = await client.query({
         query: gql`query {
-            epochs( where: { number: { _eq: ${epoch1.number} }}) {
+            epochs( where: { number: { _eq: 1 }}) {
                 output
                 number
                 transactionsCount
@@ -162,14 +162,43 @@ describe('Integration', () => {
             }
         }`
       })
-      expect(result.data.epochs[0]).toEqual(epoch1)
+      expect(result.data.epochs[0]).toEqual(epoch1.basic)
+      expect(result).toMatchSnapshot()
+    })
+
+    it('Can return aggregated data', async () => {
+      const result = await client.query({
+        query: gql`query {
+            epochs( where: { number: { _eq: 1 }}) {
+                blocks_aggregate {
+                    aggregate {
+                        avg {
+                            fees
+                            size
+                        }
+                        count
+                        max {
+                            fees
+                            size
+                        }
+                        min {
+                            fees
+                            size
+                        }
+                    }
+                }
+                number
+            }
+        }`
+      })
+      expect(result.data.epochs[0]).toEqual(epoch1.aggregated)
       expect(result).toMatchSnapshot()
     })
 
     it('Returns epoch details by number range', async () => {
       const result = await client.query({
         query: gql`query {
-            epochs( where: { number: { _in: [${epoch1.number}] }}) {
+            epochs( where: { number: { _in: [1] }}) {
                 output
                 number
                 transactionsCount
@@ -178,7 +207,7 @@ describe('Integration', () => {
             }
         }`
       })
-      expect(result.data.epochs[0]).toEqual(epoch1)
+      expect(result.data.epochs[0]).toEqual(epoch1.basic)
       expect(result).toMatchSnapshot()
     })
 

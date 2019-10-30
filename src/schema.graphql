@@ -107,7 +107,7 @@ input Block_order_by {
 }
 
 type Epoch {
-  blockTotal: Int
+  blocks_aggregate: Block_aggregate!
   blocks (
     limit: Int
     order_by: [Block_order_by!]
@@ -119,6 +119,38 @@ type Epoch {
   transactionsCount: String
   startedAt: DateTime!
   lastBlockTime: DateTime!
+}
+
+type Block_aggregate {
+  aggregate: Block_aggregate_fields
+}
+
+type Block_aggregate_fields {
+  avg: Block_avg_fields
+  count: Int
+  max: Block_max_fields
+  min: Block_min_fields
+}
+
+type Block_avg_fields {
+  fees: Float
+  size: Float
+}
+
+type Block_max_fields {
+fees: Int
+size: Int
+}
+
+type Block_min_fields {
+fees: Int
+size: Int
+}
+
+
+type Block_sum_fields {
+  fees: Int
+  size: Int
 }
 
 input Epoch_bool_exp {

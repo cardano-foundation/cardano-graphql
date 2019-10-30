@@ -49,6 +49,42 @@ Object {
 
 exports[`Integration cardano Returns the block height 1`] = `31070`;
 
+exports[`Integration epochs Can return aggregated data 1`] = `
+Object {
+  "data": Object {
+    "epochs": Array [
+      Object {
+        "blocks_aggregate": Object {
+          "aggregate": Object {
+            "avg": Object {
+              "fees": 28103.350131787032,
+              "size": 881.9561412756984,
+            },
+            "count": 9485,
+            "max": Object {
+              "fees": 684456,
+              "size": 648087,
+            },
+            "min": Object {
+              "fees": 0,
+              "size": 631,
+            },
+          },
+        },
+        "number": 1,
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration epochs Returns epoch details by number 1`] = `
 Object {
   "data": Object {
