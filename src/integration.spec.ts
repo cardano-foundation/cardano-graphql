@@ -67,13 +67,13 @@ describe('Integration', () => {
       const result = await client.query({
         query: gql`query {
             blocks (
-                where: { number: { _eq: ${block29022.number}}}) {
+                where: { number: { _eq: 29022}}) {
                 id
             }
         }`
       })
       expect(result.data.blocks.length).toBe(1)
-      expect(result.data.blocks[0]).toEqual({ id: block29022.id })
+      expect(result.data.blocks[0]).toEqual({ id: block29022.basic.id })
       expect(result).toMatchSnapshot()
     })
 
@@ -82,8 +82,8 @@ describe('Integration', () => {
         query: gql`query {
             blocks (
                 where: { id: { _in: [
-                    \"${block29021.id}\",
-                    \"${block29022.id}\"
+                    \"${block29021.basic.id}\",
+                    \"${block29022.basic.id}\"
                 ]}},
                 order_by: { number: asc }
             ) {
@@ -124,13 +124,13 @@ describe('Integration', () => {
         }`
       })
       expect(result.data.blocks.length).toBe(2)
-      expect(result.data.blocks[0]).toEqual(block29021)
-      expect(result.data.blocks[1]).toEqual(block29022)
+      expect(result.data.blocks[0]).toEqual(block29021.basic)
+      expect(result.data.blocks[1]).toEqual(block29022.basic)
     })
     it('are linked to their predecessor, and the chain can be traversed', async () => {
       const result = await client.query({
         query: gql`query {
-            blocks (where: { number: { _eq: ${block29022.number}}}) {
+            blocks (where: { number: { _eq: 29022}}) {
                 id
                 previousBlock {
                     number
