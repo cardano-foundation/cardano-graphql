@@ -40,6 +40,25 @@ Object {
 }
 `;
 
+exports[`Integration blocks Can return blocks by an array of IDs 1`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration blocks Can return blocks by number 1`] = `
 Object {
   "data": Object {
@@ -129,6 +148,46 @@ Object {
 }
 `;
 
+exports[`Integration epochs Returns blocks scoped to epoch 1`] = `
+Object {
+  "data": Object {
+    "epochs": Array [
+      Object {
+        "blocks_aggregate": Object {
+          "aggregate": Object {
+            "avg": Object {
+              "fees": 28103.350131787032,
+              "size": 881.9561412756984,
+            },
+            "count": 9485,
+            "max": Object {
+              "fees": 684456,
+              "size": 648087,
+            },
+            "min": Object {
+              "fees": 0,
+              "size": 631,
+            },
+            "sum": Object {
+              "fees": 266560276,
+              "size": 8365354,
+            },
+          },
+        },
+        "number": 1,
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration epochs Returns epoch details by number 1`] = `
 Object {
   "data": Object {
@@ -139,6 +198,34 @@ Object {
         "output": "17282903106017760",
         "startedAt": "2017-09-28T21:45:51",
         "transactionsCount": "5344",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration epochs Returns epoch details by number 2`] = `
+Object {
+  "data": Object {
+    "blocks": Array [
+      Object {
+        "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+        "previousBlock": Object {
+          "number": 29021,
+          "previousBlock": Object {
+            "number": 29020,
+            "previousBlock": Object {
+              "number": 29019,
+            },
+          },
+        },
       },
     ],
   },
@@ -267,6 +354,70 @@ Object {
 }
 `;
 
+exports[`Integration transactions Can return aggregated data 2`] = `
+Object {
+  "data": Object {
+    "transactions": Array [
+      Object {
+        "block": Object {
+          "number": 29021,
+        },
+        "fee": "171246",
+        "id": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
+        "inputs": Array [
+          Object {
+            "address": "DdzFFzCqrht5ExAdoZVExXoZTpoMYGKxva3thvvvHapsLZQzSX3kCqwgqi5NSM2oUtHYYDqsSnvSGbqkarB6cSgDZohUhLWZ9KFdDWsa",
+            "value": "4924799649906",
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsxVv8Sjuj35Zkw42T9WjwXa6DasrNknm5M3bPVDnWJWwhX5NymoZncUArTfFYZ9sYGaA9htKSNYoK5Vkzx2vUtunAFt3eE",
+            "value": "4824799478660",
+          },
+          Object {
+            "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+            "value": "100000000000",
+          },
+        ],
+        "totalOutput": "4924799478660",
+      },
+      Object {
+        "block": Object {
+          "number": 29021,
+        },
+        "fee": "171070",
+        "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+        "inputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsggyaAMAUTjGtjBr1CTp8tTcHYWbqtoyQBZcaYHM16rjbUDawTwoVaEPawAMPLJmpJVXHBNxZnTgmQzqAcNDe6XvMe5BkB",
+            "value": "768403000000",
+          },
+        ],
+        "outputs": Array [
+          Object {
+            "address": "DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8",
+            "value": "768401828930",
+          },
+          Object {
+            "address": "DdzFFzCqrhsgrGt7zHydkE4cKxjB7SgsdnMPUFxYEwBu1u4sGobxZL5Xo3eDycCrtSYAUyw9aAsZZxFpTdgur6MwYDYMwAZ4xNGKRD3o",
+            "value": "1000000",
+          },
+        ],
+        "totalOutput": "768402828930",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
 exports[`Integration transactions Returns transactions by IDs 1`] = `
 Object {
   "data": Object {
@@ -363,6 +514,30 @@ Object {
         "address": "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt",
         "value": "1153846000000",
       },
+      Object {
+        "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+        "value": "100000000000",
+      },
+      Object {
+        "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+        "value": "150000000000",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration utxoSet Can be scoped by list of addresses 2`] = `
+Object {
+  "data": Object {
+    "utxoSet": Array [
       Object {
         "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
         "value": "100000000000",
