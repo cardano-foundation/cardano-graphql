@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds           #-}
 {-# LANGUAGE DeriveFunctor       #-}
+{-# LANGUAGE DeriveGeneric       #-}
 {-# LANGUAGE DerivingVia         #-}
 {-# LANGUAGE FlexibleContexts    #-}
 {-# LANGUAGE FlexibleInstances   #-}
@@ -56,10 +57,10 @@ class (NoUnexpectedThunks a, Show (Model a)) => FromModel a where
   -- unexpected thunks iff the model is not fully in NF.
   modelUnexpected :: [String] -> Model a -> Maybe [String]
   modelUnexpected ctxt m =
-      case modelIsNF ctxt m of
-        IsNF      -> Nothing
-        IsWHNF  c -> Just c
-        NotWHNF c -> Just c
+    case modelIsNF ctxt m of
+      IsNF      -> Nothing
+      IsWHNF  c -> Just c
+      NotWHNF c -> Just c
 
   -- | Translate from the model to an actual value
   --
@@ -127,8 +128,8 @@ instance FromModel Int where
   fromModel (IntValue n) k = case n of I# result -> k (I# result)
 
   genModel = Gen.choice [
-        IntThunk <$> genModel
-      , IntValue <$> Gen.int Range.linearBounded
+        IntValue <$> Gen.int Range.linearBounded
+      , IntThunk <$> genModel
       ]
 
 {-------------------------------------------------------------------------------
@@ -152,8 +153,8 @@ instance (FromModel a, FromModel b) => FromModel (a, b) where
                                   k (a', b')
 
   genModel = Gen.choice [
-        PairThunk <$> genModel
-      , PairDefined <$> genModel <*> genModel
+        PairDefined <$> genModel <*> genModel
+      , PairThunk <$> genModel
       ]
 
 deriving instance (Show (Model a), Show (Model b)) => Show (Model (a, b))
@@ -188,8 +189,8 @@ instance FromModel a => FromModel [a] where
       go :: Int -> Gen (Model [a])
       go 0 = pure ListNil
       go n = Gen.choice [
-                 ListThunk <$> go (n - 1)
-               , ListCons <$> genModel <*> go (n - 1)
+                 ListCons <$> genModel <*> go (n - 1)
+               , ListThunk <$> go (n - 1)
                ]
 
 deriving instance Show (Model a) => Show (Model [a])
@@ -225,8 +226,8 @@ instance FromModel (Seq Int) where
       -- check) can diverge, because the internal @FingerTree@ may not be
       -- fully evaluated.
       Gen.choice [
-          go genModel sz
-        , go (pure $ IntValue 0) sz
+          go (pure $ IntValue 0) sz
+        , go genModel sz
         ]
     where
       go :: Gen (Model Int) -> Int -> Gen (Model (Seq Int))
@@ -237,6 +238,47 @@ forceSeqToWhnf :: Seq a -> (Seq a -> r) -> r
 forceSeqToWhnf (SI.Seq SI.EmptyT)          k = k (SI.Seq SI.EmptyT)
 forceSeqToWhnf (SI.Seq (SI.Single a))      k = k (SI.Seq (SI.Single a))
 forceSeqToWhnf (SI.Seq (SI.Deep n l ft r)) k = k (SI.Seq (SI.Deep n l ft r))
+
+{-------------------------------------------------------------------------------
+  AllowThunksIn
+-------------------------------------------------------------------------------}
+
+data Record = Record
+  { field1 :: [Int]
+  , field2 :: Int
+  } deriving (Generic, Show)
+
+instance FromModel (AllowThunksIn '["field1"] Record) where
+  data Model (AllowThunksIn '["field1"] Record)
+    = RecordThunk   (Model (AllowThunksIn '["field1"] Record))
+    | RecordDefined (Model [Int]) (Model Int)
+
+  modelIsNF ctxt = \case
+    RecordThunk _ -> NotWHNF ctxt'
+    RecordDefined a b -> constrNF [modelIsNF ctxt' a, modelIsNF ctxt' b]
+    where
+      ctxt' = "Record" : ctxt
+
+  modelUnexpected ctxt m =
+      case m of
+        RecordThunk   _   -> Just ctxt'
+        RecordDefined _ y -> modelUnexpected ctxt' y
+      where
+        ctxt' = "Record" : ctxt
+
+  fromModel (RecordThunk r) k = fromModel r $ \r' -> k (if ack 3 3 > 0 then r' else r')
+  fromModel (RecordDefined a b) k =
+    fromModel a $ \a' ->
+    fromModel b $ \b' ->
+    k (AllowThunksIn (Record a' b'))
+
+  genModel = Gen.choice [
+        RecordDefined <$> genModel <*> genModel
+      , RecordThunk <$> genModel
+      ]
+
+deriving instance Show (Model (AllowThunksIn '["field1"] Record))
+
 
 {-------------------------------------------------------------------------------
   Special case: function closures
@@ -472,6 +514,10 @@ testGroup = Group "Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy" [
     , ("prop_noUnexpectedThunks_ListInt"    , testWithModel agreeOnContext $ Proxy @[Int])
     , ("prop_noUnexpectedThunks_IntListInt" , testWithModel agreeOnContext $ Proxy @(Int, [Int]))
     , ("prop_noUnexpectedThunks_SeqInt"     , testWithModel agreeOnContext $ Proxy @(Seq Int))
+
+    , ("prop_noUnexpectedThunks_AllowThunksIn"
+      , testWithModel agreeOnContext $ Proxy @(AllowThunksIn '["field1"] Record)
+      )
 
     , ("prop_noUnexpectedThunks_Fn" , testWithModel agreeOnContext $ Proxy @(Int -> Int))
     , ("prop_noUnexpectedThunks_IO" , testWithModel agreeOnContext $ Proxy @(IO ()))

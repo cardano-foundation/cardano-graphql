@@ -1,15 +1,23 @@
-{-# LANGUAGE BangPatterns        #-}
-{-# LANGUAGE DataKinds           #-}
-{-# LANGUAGE DefaultSignatures   #-}
-{-# LANGUAGE DerivingVia         #-}
-{-# LANGUAGE FlexibleContexts    #-}
-{-# LANGUAGE FlexibleInstances   #-}
-{-# LANGUAGE KindSignatures      #-}
-{-# LANGUAGE PolyKinds           #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE StandaloneDeriving  #-}
-{-# LANGUAGE TypeApplications    #-}
-{-# LANGUAGE TypeOperators       #-}
+{-# LANGUAGE BangPatterns          #-}
+{-# LANGUAGE DataKinds             #-}
+{-# LANGUAGE DefaultSignatures     #-}
+{-# LANGUAGE DerivingVia           #-}
+{-# LANGUAGE FlexibleContexts      #-}
+{-# LANGUAGE FlexibleInstances     #-}
+{-# LANGUAGE KindSignatures        #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE PolyKinds             #-}
+{-# LANGUAGE ScopedTypeVariables   #-}
+{-# LANGUAGE StandaloneDeriving    #-}
+{-# LANGUAGE TypeApplications      #-}
+{-# LANGUAGE TypeOperators         #-}
+{-# LANGUAGE UndecidableInstances  #-}
+{-# LANGUAGE FunctionalDependencies#-}
+{-# LANGUAGE TypeFamilies          #-}
+-- This here to allow the following instance:
+-- instance (HasField x a t, HasFields xs a) => HasFields (x ': xs) a
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
+
 
 module Cardano.Prelude.GHC.Heap.NormalForm.Classy (
     -- * Check a value for unexpected thunks
@@ -26,6 +34,7 @@ module Cardano.Prelude.GHC.Heap.NormalForm.Classy (
   , UseIsNormalFormNamed(..)
   , OnlyCheckIsWHNF(..)
   , AllowThunk(..)
+  , AllowThunksIn(..)
   ) where
 
 import Cardano.Prelude.Base
@@ -35,6 +44,7 @@ import Data.Sequence (Seq)
 import Data.List.NonEmpty (NonEmpty)
 import Data.Time
 import GHC.Exts.Heap
+import GHC.TypeLits (CmpSymbol)
 import Prelude (String)
 
 import qualified Data.ByteString as BS.Strict
@@ -104,9 +114,9 @@ class NoUnexpectedThunks a where
   -- so all that's left is to look at the thunks /inside/ the type. The default
   -- implementation uses GHC Generics to do this.
   whnfNoUnexpectedThunks :: [String] -> a -> IO ThunkInfo
-  default whnfNoUnexpectedThunks :: (Generic a, GWhnfNoUnexpectedThunks (Rep a))
+  default whnfNoUnexpectedThunks :: (Generic a, GWhnfNoUnexpectedThunks '[] (Rep a))
                                  => [String] -> a -> IO ThunkInfo
-  whnfNoUnexpectedThunks ctxt x = gWhnfNoUnexpectedThunks ctxt fp
+  whnfNoUnexpectedThunks ctxt x = gWhnfNoUnexpectedThunks (Proxy @'[]) ctxt fp
     where
       -- Force the result of @from@ to WHNF: we are not interested in thunks
       -- that arise from the translation to the generic representation.
@@ -275,6 +285,17 @@ newtype OnlyCheckIsWHNF (name :: Symbol) a = OnlyCheckIsWHNF a
 -- cause a value of type @S@ to be retained if @T@ was computed from @S@.
 newtype AllowThunk a = AllowThunk a
 
+-- | Newtype wrapper for records where some of the fields are allowed to be
+-- thunks.
+--
+--Example:
+-- > deriving via AllowThunksIn '["foo","bar"] T instance NoUnexpectedThunks T
+--
+-- This will create an instance that skips the thunk checks for the "foo" and
+-- "bar" fields.
+
+newtype AllowThunksIn (fields :: [Symbol]) a = AllowThunksIn a
+
 {-------------------------------------------------------------------------------
   Internal: instances for the deriving-via wrappers
 -------------------------------------------------------------------------------}
@@ -296,6 +317,21 @@ instance NoUnexpectedThunks (AllowThunk a) where
   noUnexpectedThunks _ _ = return NoUnexpectedThunks
   whnfNoUnexpectedThunks = noUnexpectedThunks
 
+instance (HasFields s a, Generic a, Typeable a, GWhnfNoUnexpectedThunks s (Rep a))
+   => NoUnexpectedThunks (AllowThunksIn s a) where
+  showTypeOf _ = show $ typeRep (Proxy @a)
+  whnfNoUnexpectedThunks ctxt (AllowThunksIn x) = gWhnfNoUnexpectedThunks (Proxy @s) ctxt fp
+    where
+      fp :: Rep a x
+      !fp = from x
+
+-- | This exists to catch mismatches between the arguments to `AllowThunksIn` and
+-- the fields of a record. If any of the symbols is not the name of a field then
+-- this constraint won't be satisfied.
+class HasFields (s :: [Symbol]) a
+instance HasFields '[] a
+instance (HasField x a t, HasFields xs a) => HasFields (x ': xs) a
+
 -- | Internal: implementation of 'whnfNoUnexpectedThunks' for 'UseIsNormalForm'
 -- and 'UseIsNormalFormNamed'
 noUnexpectedThunksUsingNormalForm :: [String] -> a -> IO ThunkInfo
@@ -312,29 +348,48 @@ noUnexpectedThunksUsingNormalForm ctxt x = do
   Internal: generic infrastructure
 -------------------------------------------------------------------------------}
 
-class GWhnfNoUnexpectedThunks f where
-  gWhnfNoUnexpectedThunks :: [String] -> f x -> IO ThunkInfo
+class GWhnfNoUnexpectedThunks (a :: [Symbol]) f where
+  gWhnfNoUnexpectedThunks :: proxy a -> [String] -> f x -> IO ThunkInfo
 
-instance GWhnfNoUnexpectedThunks f => GWhnfNoUnexpectedThunks (M1 i c f) where
-  gWhnfNoUnexpectedThunks ctxt (M1 fp) = gWhnfNoUnexpectedThunks ctxt fp
+instance GWhnfNoUnexpectedThunks a f => GWhnfNoUnexpectedThunks a (D1 c f) where
+  gWhnfNoUnexpectedThunks a ctxt (M1 fp) = gWhnfNoUnexpectedThunks a ctxt fp
 
-instance ( GWhnfNoUnexpectedThunks f
-         , GWhnfNoUnexpectedThunks g
-         ) => GWhnfNoUnexpectedThunks (f :*: g) where
-  gWhnfNoUnexpectedThunks ctxt (fp :*: gp) = do
+instance GWhnfNoUnexpectedThunks a f => GWhnfNoUnexpectedThunks a (C1 c f) where
+  gWhnfNoUnexpectedThunks a ctxt (M1 fp) = gWhnfNoUnexpectedThunks a ctxt fp
+
+instance (CaseS1 f (ElemSymbol fieldName a)) =>
+  GWhnfNoUnexpectedThunks a (S1 ('MetaSel ('Just fieldName) su ss ds) f)  where
+  gWhnfNoUnexpectedThunks _ ctxt (M1 fp) = aux (Proxy @(ElemSymbol fieldName a)) ctxt fp
+
+class CaseS1 f (b :: Bool) where
+  aux :: proxy b -> [String] -> f x -> IO ThunkInfo
+instance CaseS1 f 'True where
+  aux _ _ _ = return NoUnexpectedThunks
+instance GWhnfNoUnexpectedThunks '[] f => CaseS1 f 'False where
+  aux _ ctxt f = gWhnfNoUnexpectedThunks (Proxy @'[]) ctxt f
+
+instance
+  GWhnfNoUnexpectedThunks a f =>
+  GWhnfNoUnexpectedThunks a (S1 ('MetaSel ('Nothing) su ss ds) f) where
+  gWhnfNoUnexpectedThunks a ctxt (M1 fp) = gWhnfNoUnexpectedThunks a ctxt fp
+
+instance ( GWhnfNoUnexpectedThunks a f
+         , GWhnfNoUnexpectedThunks a g
+         ) => GWhnfNoUnexpectedThunks a (f :*: g) where
+  gWhnfNoUnexpectedThunks a ctxt (fp :*: gp) = do
       allNoUnexpectedThunks [
-          gWhnfNoUnexpectedThunks ctxt fp
-        , gWhnfNoUnexpectedThunks ctxt gp
+          gWhnfNoUnexpectedThunks a ctxt fp
+        , gWhnfNoUnexpectedThunks a ctxt gp
         ]
 
-instance ( GWhnfNoUnexpectedThunks f
-         , GWhnfNoUnexpectedThunks g
-         ) => GWhnfNoUnexpectedThunks (f :+: g) where
-  gWhnfNoUnexpectedThunks ctxt (L1 fp) = gWhnfNoUnexpectedThunks ctxt fp
-  gWhnfNoUnexpectedThunks ctxt (R1 gp) = gWhnfNoUnexpectedThunks ctxt gp
+instance ( GWhnfNoUnexpectedThunks a f
+         , GWhnfNoUnexpectedThunks a g
+         ) => GWhnfNoUnexpectedThunks a (f :+: g) where
+  gWhnfNoUnexpectedThunks a ctxt (L1 fp) = gWhnfNoUnexpectedThunks a ctxt fp
+  gWhnfNoUnexpectedThunks a ctxt (R1 gp) = gWhnfNoUnexpectedThunks a ctxt gp
 
-instance NoUnexpectedThunks c => GWhnfNoUnexpectedThunks (K1 i c) where
-  gWhnfNoUnexpectedThunks ctxt (K1 c) = noUnexpectedThunks ctxt' c
+instance NoUnexpectedThunks c => GWhnfNoUnexpectedThunks a (K1 i c) where
+  gWhnfNoUnexpectedThunks _a ctxt (K1 c) = noUnexpectedThunks ctxt' c
     where
       -- If @c@ is a recursive occurrence of the type itself, we want to avoid
       -- accumulating context. For example, suppose we are dealing with @[Int]@,
@@ -355,8 +410,8 @@ instance NoUnexpectedThunks c => GWhnfNoUnexpectedThunks (K1 i c) where
                 hd : tl | hd == showTypeOf (Proxy @c) -> tl
                 _otherwise                            -> ctxt
 
-instance GWhnfNoUnexpectedThunks U1 where
-  gWhnfNoUnexpectedThunks _ctxt U1 = return NoUnexpectedThunks
+instance GWhnfNoUnexpectedThunks a U1 where
+  gWhnfNoUnexpectedThunks _a _ctxt U1 = return NoUnexpectedThunks
 
 {-------------------------------------------------------------------------------
   Internal: generic function to get name of a type
@@ -567,3 +622,23 @@ instance NoUnexpectedThunks a => NoUnexpectedThunks (Ratio a) where
      -- fields, so forcing them to WHNF won't change them.
      !n = numerator   r
      !d = denominator r
+
+{-------------------------------------------------------------------------------
+  Type level symbol comparison logic
+-------------------------------------------------------------------------------}
+
+type family EqSymbol s t where
+  EqSymbol s t = IsEq (CmpSymbol s t)
+
+type family IsEq (o :: Ordering) where
+  IsEq 'EQ = 'True
+  IsEq _x   = 'False
+
+type family Or (a :: Bool) (b :: Bool) where
+  Or 'False 'False = 'False
+  Or _a _b = 'True
+
+type family ElemSymbol (s :: Symbol) (xs :: [Symbol]) where
+  ElemSymbol s (x ': xs) = Or (EqSymbol s x) (ElemSymbol s xs)
+  ElemSymbol _s '[] = 'False
+
