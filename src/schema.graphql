@@ -7,8 +7,6 @@ scalar BigInt
 scalar DateTime
 scalar Lovelaces
 scalar Percentage
-scalar PublicKeyHash
-scalar TransactionHash # may need more specificity
 
 type Query {
   blocks (
@@ -47,14 +45,27 @@ type Transaction {
   block: Block
   fee: String!
   id: Hash32HexString!
-  inputs: [TransactionInput!]!
-  outputs: [TransactionOutput!]!
+  inputs (
+    limit: Int
+    order_by: [Coin_order_by]
+    offset: Int
+    where: Coin_bool_exp
+  ): [TransactionInput!]!
+  inputs_aggregate: Coin_aggregate
+  outputs (
+    limit: Int
+    order_by: [Coin_order_by]
+    offset: Int
+    where: Coin_bool_exp
+  ): [TransactionOutput!]!
+  outputs_aggregate: Coin_aggregate
   totalOutput: String!
   includedAt: DateTime!
 }
 
 input Transaction_order_by {
   block: order_by
+  includedAt: order_by
   fee: order_by
 }
 
@@ -63,11 +74,82 @@ input Transaction_bool_exp {
   block: Block_bool_exp
 }
 
+type Transaction_aggregate {
+  aggregate: Transaction_aggregate_fields
+}
+
+type Transaction_aggregate_fields {
+  avg: Transaction_avg_fields
+  count: Int
+  max: Transaction_max_fields
+  min: Transaction_min_fields
+  sum: Transaction_sum_fields
+}
+
+type Transaction_avg_fields {
+  fee: Float
+  totalOutput: Float
+}
+
+type Transaction_max_fields {
+  fee: BigInt
+  totalOutput: BigInt
+}
+
+type Transaction_min_fields {
+  fee: BigInt
+  totalOutput: BigInt
+}
+
+type Transaction_sum_fields {
+  fee: BigInt
+  totalOutput: BigInt
+}
+
 type TransactionInput {
   sourceTxId: Hash32HexString!
   sourceTxIndex: Int!
   address: String!
   value: String!
+}
+
+input Coin_order_by {
+  address: order_by
+  txId: order_by
+  value: order_by
+}
+
+input Coin_bool_exp {
+  address: text_comparison_exp
+  value: BigInt_comparison_exp
+}
+
+type Coin_aggregate {
+  aggregate: Coin_aggregate_fields
+}
+
+type Coin_aggregate_fields {
+  avg: Coin_avg_fields
+  count: Int
+  max: Coin_max_fields
+  min: Coin_min_fields
+  sum: Coin_sum_fields
+}
+
+type Coin_avg_fields {
+  value: BigInt
+}
+
+type Coin_max_fields {
+  value: BigInt
+}
+
+type Coin_min_fields {
+  value: BigInt
+}
+
+type Coin_sum_fields {
+  value: BigInt
 }
 
 type TransactionOutput {
@@ -95,6 +177,7 @@ type Block {
     offset: Int
     where: Transaction_bool_exp
   ): [Transaction]!
+  transactions_aggregate: Transaction_aggregate!
 }
 
 input Block_bool_exp {
@@ -108,6 +191,38 @@ input Block_order_by {
   size: order_by
 }
 
+type Block_aggregate {
+  aggregate: Block_aggregate_fields
+}
+
+type Block_aggregate_fields {
+  avg: Block_avg_fields
+  count: Int
+  max: Block_max_fields
+  min: Block_min_fields
+  sum: Block_sum_fields
+}
+
+type Block_avg_fields {
+  fees: Float
+  size: Float
+}
+
+type Block_max_fields {
+  fees: BigInt
+  size: BigInt
+}
+
+type Block_min_fields {
+  fees: BigInt
+  size: BigInt
+}
+
+type Block_sum_fields {
+  fees: BigInt
+  size: BigInt
+}
+
 type Epoch {
   blocks (
     limit: Int
@@ -115,6 +230,7 @@ type Epoch {
     offset: Int
     where: Block_bool_exp
   ): [Block]
+  blocks_aggregate: Block_aggregate!
   output: String!
   number: Int!
   transactionsCount: String
@@ -163,6 +279,19 @@ input Int_comparison_exp {
   _lte: Int
   _neq: Int
   _nin: [Int!]
+}
+
+# expression to compare data of type BigInt. All fields are combined with logical 'AND'.
+input BigInt_comparison_exp {
+  _eq: BigInt
+  _gt: BigInt
+  _gte: BigInt
+  _in: [BigInt!]
+  _is_null: Boolean
+  _lt: BigInt
+  _lte: BigInt
+  _neq: BigInt
+  _nin: [BigInt!]
 }
 
 # expression to compare data of type Lovelaces. All fields are combined with logical 'AND'.

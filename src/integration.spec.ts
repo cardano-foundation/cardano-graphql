@@ -67,13 +67,13 @@ describe('Integration', () => {
       const result = await client.query({
         query: gql`query {
             blocks (
-                where: { number: { _eq: ${block29022.number}}}) {
+                where: { number: { _eq: 29022}}) {
                 id
             }
         }`
       })
       expect(result.data.blocks.length).toBe(1)
-      expect(result.data.blocks[0]).toEqual({ id: block29022.id })
+      expect(result.data.blocks[0]).toEqual({ id: block29022.basic.id })
       expect(result).toMatchSnapshot()
     })
 
@@ -82,8 +82,8 @@ describe('Integration', () => {
         query: gql`query {
             blocks (
                 where: { id: { _in: [
-                  \"${block29021.id}\",
-                  \"${block29022.id}\"
+                    \"${block29021.basic.id}\",
+                    \"${block29022.basic.id}\"
                 ]}},
                 order_by: { number: asc }
             ) {
@@ -102,7 +102,7 @@ describe('Integration', () => {
                 size
                 slotNo
                 slotWithinEpoch
-                transactions(order_by: {fee: desc}) {
+                transactions(order_by: { fee: desc}) {
                     block {
                         number
                     }
@@ -124,13 +124,47 @@ describe('Integration', () => {
         }`
       })
       expect(result.data.blocks.length).toBe(2)
-      expect(result.data.blocks[0]).toEqual(block29021)
-      expect(result.data.blocks[1]).toEqual(block29022)
+      expect(result.data.blocks[0]).toEqual(block29021.basic)
+      expect(result.data.blocks[1]).toEqual(block29022.basic)
     })
+
+    it('Can return aggregated data', async () => {
+      const result = await client.query({
+        query: gql`query {
+            blocks( where: { number: { _eq: 29021 }}) {
+                transactions_aggregate {
+                    aggregate {
+                        avg {
+                            fee
+                            totalOutput
+                        }
+                        count
+                        max {
+                            fee
+                            totalOutput
+                        }
+                        min {
+                            fee
+                            totalOutput
+                        }
+                        sum {
+                            fee
+                            totalOutput
+                        }
+                    }
+                }
+                number
+            }
+        }`
+      })
+      expect(result.data.blocks[0]).toEqual(block29021.aggregated)
+      expect(result).toMatchSnapshot()
+    })
+
     it('are linked to their predecessor, and the chain can be traversed', async () => {
       const result = await client.query({
         query: gql`query {
-            blocks (where: { number: { _eq: ${block29022.number}}}) {
+            blocks (where: { number: { _eq: 29022}}) {
                 id
                 previousBlock {
                     number
@@ -153,7 +187,7 @@ describe('Integration', () => {
     it('Returns epoch details by number', async () => {
       const result = await client.query({
         query: gql`query {
-            epochs( where: { number: { _eq: ${epoch1.number} }}) {
+            epochs( where: { number: { _eq: 1 }}) {
                 output
                 number
                 transactionsCount
@@ -162,14 +196,47 @@ describe('Integration', () => {
             }
         }`
       })
-      expect(result.data.epochs[0]).toEqual(epoch1)
+      expect(result.data.epochs[0]).toEqual(epoch1.basic)
+      expect(result).toMatchSnapshot()
+    })
+
+    it('Can return aggregated data', async () => {
+      const result = await client.query({
+        query: gql`query {
+            epochs( where: { number: { _eq: 1 }}) {
+                blocks_aggregate {
+                    aggregate {
+                        avg {
+                            fees
+                            size
+                        }
+                        count
+                        max {
+                            fees
+                            size
+                        }
+                        min {
+                            fees
+                            size
+                        }
+                        sum {
+                            fees
+                            size
+                        }
+                    }
+                }
+                number
+            }
+        }`
+      })
+      expect(result.data.epochs[0]).toEqual(epoch1.aggregated)
       expect(result).toMatchSnapshot()
     })
 
     it('Returns epoch details by number range', async () => {
       const result = await client.query({
         query: gql`query {
-            epochs( where: { number: { _in: [${epoch1.number}] }}) {
+            epochs( where: { number: { _in: [1] }}) {
                 output
                 number
                 transactionsCount
@@ -178,7 +245,7 @@ describe('Integration', () => {
             }
         }`
       })
-      expect(result.data.epochs[0]).toEqual(epoch1)
+      expect(result.data.epochs[0]).toEqual(epoch1.basic)
       expect(result).toMatchSnapshot()
     })
 
@@ -230,7 +297,7 @@ describe('Integration', () => {
       const result = await client.query({
         query: gql`query {
             transactions(
-                where: { id: { _in: [\"${txe68043.id}\", \"${tx05ad8b.id}\"]}},
+                where: { id: { _in: [\"${txe68043.basic.id}\", \"${tx05ad8b.basic.id}\"]}},
                 order_by: { fee: desc }
             ) {
                 block {
@@ -254,43 +321,96 @@ describe('Integration', () => {
       expect(result).toMatchSnapshot()
     })
 
-    describe('utxoSet', () => {
-      it('Can be scoped by address', async () => {
-        const result = await client.query({
-          query: gql`query {
-              utxoSet(
-                  order_by: { address: asc }
-                  where: { address: { _eq:
-                  "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s"
-                  }
-                  }
-              ) {
-                  address
-                  value
-              }
-          }`
-        })
-        expect(result.data.utxoSet.length).toBe(2)
-        expect(result).toMatchSnapshot()
+    it('Can return aggregated data', async () => {
+      const result = await client.query({
+        query: gql`query {
+            transactions(
+                where: { id: { _in: [\"${txe68043.aggregated.id}\", \"${tx05ad8b.aggregated.id}\"]}},
+                order_by: { fee: desc }
+            ) {
+                fee
+                id
+                inputs_aggregate {
+                    aggregate {
+                        avg {
+                            value
+                        }
+                        count
+                        max {
+                            value
+                        }
+                        min {
+                            value
+                        }
+                        sum {
+                            value
+                        }
+                    }
+                }
+                outputs_aggregate {
+                    aggregate {
+                        avg {
+                            value
+                        }
+                        count
+                        max {
+                            value
+                        }
+                        min {
+                            value
+                        }
+                        sum {
+                            value
+                        }
+                    }
+                }
+            }
+        }`
       })
-      it('Can be scoped by list of addresses', async () => {
-        const result = await client.query({
-          query: gql`query {
-              utxoSet(
-                  order_by: { address: asc }
-                  where: { address: { _in: [
-                      "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
-                      "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt"
-                  ]}}
-              ) {
-                  address
-                  value
-              }
-          }`
-        })
-        expect(result.data.utxoSet.length).toBe(3)
-        expect(result).toMatchSnapshot()
+      expect(result.data.transactions.length).toBe(2)
+      const { transactions: txs } = result.data
+      expect(txs).toEqual([tx05ad8b.aggregated, txe68043.aggregated])
+      expect(txs[1].inputs_aggregate.aggregate.sum.value).toEqual(txs[1].outputs_aggregate.aggregate.sum.value + parseInt(txs[1].fee))
+      expect(result).toMatchSnapshot()
+    })
+  })
+
+  describe('utxoSet', () => {
+    it('Can be scoped by address', async () => {
+      const result = await client.query({
+        query: gql`query {
+            utxoSet(
+                order_by: { address: asc }
+                where: { address: { _eq:
+                "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s"
+                }
+                }
+            ) {
+                address
+                value
+            }
+        }`
       })
+      expect(result.data.utxoSet.length).toBe(2)
+      expect(result).toMatchSnapshot()
+    })
+    it('Can be scoped by list of addresses', async () => {
+      const result = await client.query({
+        query: gql`query {
+            utxoSet(
+                order_by: { address: asc }
+                where: { address: { _in: [
+                    "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+                    "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt"
+                ]}}
+            ) {
+                address
+                value
+            }
+        }`
+      })
+      expect(result.data.utxoSet.length).toBe(3)
+      expect(result).toMatchSnapshot()
     })
   })
 })

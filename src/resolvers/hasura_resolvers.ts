@@ -3,7 +3,7 @@ import { Resolvers } from '../graphql_types'
 
 export const hasuraResolvers: Resolvers = {
   Query: {
-    blocks: async (_root, args, context, info) => {
+    blocks: (_root, args, context, info) => {
       return delegateToSchema({
         args,
         context,
