@@ -1,8 +1,12 @@
+-- Part of the dump. Still need to be PR'd into cardano-explorer
 CREATE INDEX idx_block_slot_no 
 ON block(slot_no);
 
 CREATE INDEX idx_block_block_no 
 ON block(block_no);
+
+CREATE INDEX idx_block_epoch_no 
+ON block(epoch_no);
 
 CREATE INDEX idx_block_previous 
 ON block(previous);

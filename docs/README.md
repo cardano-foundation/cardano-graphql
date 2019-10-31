@@ -8,8 +8,15 @@
 
  
  ## ENVs
- ### `API_PORT`: Int
-Defaults to a random port in development, required for production.
+ ### `API_PORT`: Number
+Default: `3100`
 
- ### `MOCK_RESPONSES`: Boolean
-Configure the `ApolloServer` to [return mock responses](https://www.apollographql.com/docs/apollo-server/features/mocking/)
+### `HASURA_URI`: String
+Hasura GraphQL server endpoint eg `http://localhost:8090/v1/graphql`
+
+## `QUERY_DEPTH_LIMIT`: Number 
+Default `10`
+Used to set [depthLimit](https://github.com/stems/graphql-depth-limit)
+
+## `TRACING`: Boolean
+Passed as an option to [ApolloServer](https://www.apollographql.com/docs/apollo-server/api/apollo-server/)

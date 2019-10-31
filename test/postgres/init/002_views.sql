@@ -48,36 +48,13 @@ join tx as source_tx
   on source_tx_out.tx_id = source_tx.id;
 
 
-create view "Slot" as
-with slot_meta as (
-  select
-    slot_no,
-    quote_literal(slot_no * (select slot_duration from meta) * 0.001) as time_since_start,
-    (select start_time from meta) as start_time,
-    (select protocol_const from meta) as protocol_const
-  from block
-)
+create view "Meta" as
 select
-  slot_meta.slot_no as "number",
-  block.hash as "blockId",
-  slot_leader.hash as leader,
-  case when slot_meta.slot_no > 0
-    then CAST(floor(slot_meta.slot_no / (10 * protocol_const)) AS INT)
-    else 0
-  end as "epochNo",
-  case when slot_meta.slot_no >= 0
-    then start_time + cast (time_since_start as interval)
-    else start_time
-  end as "startedAt",
-  case when slot_meta.slot_no > 0
-    then slot_meta.slot_no - (epoch_no * (10 * protocol_const))
-    else 0
-  end as "slotWithinEpoch"
-from slot_meta
-join block
-  on slot_meta.slot_no = block.slot_no
-left outer join slot_leader
-  on block.slot_leader = slot_leader.id;
+  slot_duration as "slotDuration",
+  start_time as "startTime",
+  protocol_const as "protocolConst"
+from meta
+limit 1;
 
 create view "Block" as
 select
@@ -91,7 +68,12 @@ select
   -- this is written by the node-client and makes identification
   -- of EBBs simpler, as EBBs don't have a slot_no
   block.epoch_no as "epochNo",
-  block.slot_no as "slotNo"
+  block.slot_no as "slotNo",
+  case when block.slot_no > 0	
+    then block.slot_no - (block.epoch_no * (10 * (select protocol_const from meta)))	
+    else 0	
+  end as "slotWithinEpoch",
+  block.time as "createdAt"
 from block
 left outer join block as previous_block
   on block.previous = previous_block.id;
@@ -101,32 +83,28 @@ select
   block.hash as "blockId",
   COALESCE(tx.fee, 0) as fee,
   tx.hash as id,
-  "Slot"."startedAt" as "includedAt",
-  cast((select sum("value") from tx_out where tx_id = tx.id) as bigint) as "totalOutput"
+  cast((select sum("value") from tx_out where tx_id = tx.id) as bigint) as "totalOutput",
+  block.time as "includedAt"
 from
   tx
 inner join block
-  on block.id = tx.block
--- Left join here to include transactions in the genesis block
-left outer join "Slot"
-  on "Slot".number = block.slot_no;
+  on block.id = tx.block;
 
 create view "Epoch" as
 select
   cast(sum(tx_out.value) as bigint) as output,
-  max("Slot"."startedAt") as "endedAt",
-  min("Slot"."startedAt") as "startedAt",
   count(distinct tx.hash) as "transactionsCount",
-  "Slot"."epochNo" as "number"
-from "Slot"
-left outer join block
-  on block.slot_no = "Slot".number
+  block.epoch_no as "number",
+  min(block.time) as "startedAt",
+  max(block.time) as "lastBlockTime"
+from block
 join tx
   on tx.block = block.id
 join tx_out
   on tx_out.tx_id = tx.id
-group by "Slot"."epochNo"
-order by "Slot"."epochNo";
+where epoch_no is not null
+group by block.epoch_no
+order by block.epoch_no;
 
 -- This function plays really nicely with Hasura,
 -- and allows us to query the utxo set at any block height

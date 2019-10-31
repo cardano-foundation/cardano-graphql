@@ -1,6 +1,6 @@
 {
   "name": "cardano-graphql",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "GraphQL API for Cardano with client-consumable types generated",
   "scripts": {
     "codegen:external": "graphql-codegen --config ./codegen.external.yml",
@@ -14,7 +14,8 @@
     "test": "NODE_ENV=test jest",
     "start": "HASURA_URI=http://localhost:8090/v1/graphql node dist/index.js",
     "start-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml up",
-    "stop-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml down"
+    "stop-dependencies": "docker-compose -f docker/docker-compose.service-deps.yml down",
+    "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml"
   },
   "contributors": [
     "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
@@ -32,7 +33,7 @@
     "graphql-depth-limit": "^1.1.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-type-datetime": "^0.2.4",
-    "lodash.isequal": "^4.5.0",
+    "lodash.isempty": "^4.4.0",
     "promise-exponential-retry": "^1.0.3",
     "ts-custom-error": "^3.1.1"
   },
@@ -41,17 +42,17 @@
     "@graphql-codegen/typescript": "^1.5.0",
     "@graphql-codegen/typescript-graphql-files-modules": "^1.5.0",
     "@graphql-codegen/typescript-resolvers": "^1.5.0",
-    "@types/graphql": "^14.2.3",
     "@types/graphql-depth-limit": "^1.1.2",
     "@types/graphql-iso-date": "^3.3.1",
     "@types/jest": "^24.0.18",
-    "@types/lodash.isequal": "^4.5.5",
+    "@types/lodash.isempty": "^4.4.6",
     "@types/node": "^12.6.8",
     "@types/validator": "^10.11.3",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "apollo-server-core": "^2.8.1",
     "apollo-server-testing": "^2.8.1",
+    "artillery": "^1.6.0-29",
     "cpx": "^1.5.0",
     "eslint": "^6.1.0",
     "eslint-config-standard": "^13.0.1",

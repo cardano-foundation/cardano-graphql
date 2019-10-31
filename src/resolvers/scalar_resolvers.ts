@@ -1,9 +1,7 @@
 import {
   Hash32HexString,
   LoveLaces,
-  Percentage,
-  PublicKeyHash,
-  TransactionHash
+  Percentage
 } from '../lib/scalars'
 
 const GraphQLBigInt = require('graphql-bigint')
@@ -14,7 +12,5 @@ export const scalarResolvers = {
   BigInt: GraphQLBigInt,
   DateTime: GraphQLDateTime,
   Lovelaces: LoveLaces,
-  Percentage: Percentage,
-  PublicKeyHash: PublicKeyHash,
-  TransactionHash: TransactionHash
+  Percentage: Percentage
 } as any

@@ -1,14 +1,16 @@
 import { RetryPromise } from 'promise-exponential-retry'
 import { createHttpLink } from 'apollo-link-http'
 import { RetryLink } from 'apollo-link-retry'
-import { ApolloLink } from 'apollo-link'
+import { ApolloLink, execute, makePromise } from 'apollo-link'
 import { fetch } from 'cross-fetch'
+import gql from 'graphql-tag'
 import { introspectSchema, makeRemoteExecutableSchema } from 'graphql-tools'
 
 export async function buildHasuraSchema (hasuraUri: string) {
   const httpLink = createHttpLink({
     uri: hasuraUri,
-    fetch
+    fetch,
+    headers: { 'X-Hasura-Role': 'cardano-graphql' }
   })
 
   const link = ApolloLink.from([
@@ -25,6 +27,19 @@ export async function buildHasuraSchema (hasuraUri: string) {
         throw new Error(`Remote schema is missing ${t}`)
       }
     })
+  }, 30)
+
+  // Hasura applies metadata after the server is booted, so there is a potential race condition
+  // when provisioning a new deployment we need to protect against.
+  await RetryPromise.retryPromise('Checking Hasura metadata is applied', async () => {
+    const result = await makePromise(execute(link, { query: gql`
+            query { Block(where: {number: {_eq: 1}}) {
+                transactions_aggregate { aggregate { count }}
+            }}`
+    }))
+    if (!result.data || result.data.Block[0].transactions_aggregate.aggregate.count === null) {
+      throw new Error('Hasura Metadata not applied')
+    }
   }, 30)
 
   return makeRemoteExecutableSchema({

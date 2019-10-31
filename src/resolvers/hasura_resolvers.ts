@@ -1,14 +1,11 @@
 import { delegateToSchema } from 'graphql-tools'
-import { Resolvers, Order_By_With_Nulls as OrderByWithNulls } from '../graphql_types'
-import { checkLimit } from '../validation'
-const isEqual = require('lodash.isequal')
+import { Resolvers } from '../graphql_types'
 
 export const hasuraResolvers: Resolvers = {
   Query: {
-    blocks: async (_root, args, context, info) => {
-      checkLimit(args.limit, 100)
+    blocks: (_root, args, context, info) => {
       return delegateToSchema({
-        args: isEqual(args, { limit: 1 }) ? { ...args, ...{ order_by: { number: OrderByWithNulls.DescNullsLast } } } : args,
+        args,
         context,
         fieldName: 'Block',
         info,
@@ -17,7 +14,6 @@ export const hasuraResolvers: Resolvers = {
       })
     },
     epochs: (_root, args, context, info) => {
-      checkLimit(args.limit, 100)
       return delegateToSchema({
         args,
         context,
@@ -38,7 +34,6 @@ export const hasuraResolvers: Resolvers = {
       }))[0]
     },
     transactions: (_root, args, context, info) => {
-      checkLimit(args.limit, 250)
       return delegateToSchema({
         args,
         context,
@@ -49,7 +44,6 @@ export const hasuraResolvers: Resolvers = {
       })
     },
     utxoSet: (_root, args, context, info) => {
-      checkLimit(args.limit, 250)
       return delegateToSchema({
         args,
         context,
