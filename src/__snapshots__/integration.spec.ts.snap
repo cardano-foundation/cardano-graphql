@@ -87,7 +87,60 @@ Object {
 }
 `;
 
-exports[`Integration cardano Returns the block height 1`] = `31070`;
+exports[`Integration cardano Returns key information about the network 1`] = `
+Object {
+  "data": Object {
+    "cardano": Object {
+      "blockHeight": 31070,
+      "currentEpoch": Object {
+        "number": 1,
+      },
+      "protocolConst": 2160,
+      "slotDuration": 20000,
+      "startTime": "2017-09-23T21:44:51",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`Integration epochs Can return aggregated Epoch data 1`] = `
+Object {
+  "data": Object {
+    "epochs_aggregate": Object {
+      "aggregate": Object {
+        "count": "2",
+        "max": Object {
+          "number": "1",
+          "output": "17282903106017760",
+          "transactionsCount": "5344",
+        },
+        "min": Object {
+          "output": "10378568796482912",
+          "transactionsCount": "33",
+        },
+        "sum": Object {
+          "output": "27661471902500670",
+          "transactionsCount": "5377",
+        },
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
 
 exports[`Integration epochs Can return aggregated data 1`] = `
 Object {
