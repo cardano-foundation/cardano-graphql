@@ -23,15 +23,37 @@ export const hasuraResolvers: Resolvers = {
         schema: context.hasura
       })
     },
-    cardano: async (_root, args, context, info) => {
-      return (await delegateToSchema({
+    epochs_aggregate: (_root, args, context, info) => {
+      return delegateToSchema({
         args,
+        context,
+        fieldName: 'Epoch_aggregate',
+        info,
+        operation: 'query',
+        schema: context.hasura
+      })
+    },
+    cardano: async (_root, _args, context, info) => {
+      // These two queries are very lightweight, just selecting single rows,
+      // Could optimise, but there's little performance gain
+      const cardanoResult = await delegateToSchema({
         context,
         fieldName: 'Cardano',
         info,
         operation: 'query',
         schema: context.hasura
-      }))[0]
+      })
+      const metaResult = await delegateToSchema({
+        context,
+        fieldName: 'Meta',
+        info,
+        operation: 'query',
+        schema: context.hasura
+      })
+      return {
+        ...cardanoResult ? cardanoResult[0] : undefined,
+        ...metaResult ? metaResult[0] : undefined
+      }
     },
     transactions: (_root, args, context, info) => {
       return delegateToSchema({

@@ -249,6 +249,32 @@ describe('Integration', () => {
       expect(result).toMatchSnapshot()
     })
 
+    it('Can return aggregated Epoch data', async () => {
+      const result = await client.query({
+        query: gql`query {
+            epochs_aggregate {
+                aggregate {
+                    count
+                    max {
+                        number
+                        output
+                        transactionsCount
+                    }
+                    min {
+                        output
+                        transactionsCount
+                    }
+                    sum {
+                        output
+                        transactionsCount
+                    }
+                }
+            }
+        }`
+      })
+      expect(result).toMatchSnapshot()
+    })
+
     it('Returns blocks scoped to epoch', async () => {
       const validQueryResult = await client.query({
         query: gql`query {
@@ -276,7 +302,7 @@ describe('Integration', () => {
   })
 
   describe('cardano', () => {
-    it('Returns the block height', async () => {
+    it('Returns key information about the network', async () => {
       const result = await client.query({
         query: gql`query {
             cardano {
@@ -284,11 +310,13 @@ describe('Integration', () => {
                 currentEpoch {
                     number
                 }
+                protocolConst
+                slotDuration
+                startTime
             }
         }`
       })
-      expect(result.data.cardano.blockHeight).toBe(31070)
-      expect(result.data.cardano.blockHeight).toMatchSnapshot()
+      expect(result).toMatchSnapshot()
     })
   })
 
