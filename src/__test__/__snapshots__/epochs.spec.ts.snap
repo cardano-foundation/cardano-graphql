@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`epochs Can return aggregated Epoch data 1`] = `
+Object {
+  "data": Object {
+    "epochs_aggregate": Object {
+      "aggregate": Object {
+        "count": "2",
+        "max": Object {
+          "number": "1",
+          "output": "17282903106017760",
+          "transactionsCount": "5344",
+        },
+        "min": Object {
+          "output": "10378568796482912",
+          "transactionsCount": "33",
+        },
+        "sum": Object {
+          "output": "27661471902500670",
+          "transactionsCount": "5377",
+        },
+      },
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`epochs Can return aggregated data 1`] = `
+Object {
+  "data": Object {
+    "epochs": Array [
+      Object {
+        "blocks_aggregate": Object {
+          "aggregate": Object {
+            "avg": Object {
+              "fees": 28103.350131787032,
+              "size": 881.9561412756984,
+            },
+            "count": 9485,
+            "max": Object {
+              "fees": 684456,
+              "size": 648087,
+            },
+            "min": Object {
+              "fees": 0,
+              "size": 631,
+            },
+            "sum": Object {
+              "fees": 266560276,
+              "size": 8365354,
+            },
+          },
+        },
+        "number": 1,
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`epochs Returns epoch details by number 1`] = `
+Object {
+  "data": Object {
+    "epochs": Array [
+      Object {
+        "lastBlockTime": "2017-10-01T02:25:51",
+        "number": 1,
+        "output": "17282903106017760",
+        "startedAt": "2017-09-28T21:45:51",
+        "transactionsCount": "5344",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
+
+exports[`epochs Returns epoch details by number range 1`] = `
+Object {
+  "data": Object {
+    "epochs": Array [
+      Object {
+        "lastBlockTime": "2017-10-01T02:25:51",
+        "number": 1,
+        "output": "17282903106017760",
+        "startedAt": "2017-09-28T21:45:51",
+        "transactionsCount": "5344",
+      },
+    ],
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;

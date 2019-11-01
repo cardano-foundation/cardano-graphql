@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`cardano Returns key information about the network 1`] = `
+Object {
+  "data": Object {
+    "cardano": Object {
+      "blockHeight": 31070,
+      "currentEpoch": Object {
+        "number": 1,
+      },
+      "protocolConst": 2160,
+      "slotDuration": 20000,
+      "startTime": "2017-09-23T21:44:51",
+    },
+  },
+  "errors": undefined,
+  "extensions": undefined,
+  "http": Object {
+    "headers": Headers {
+      Symbol(map): Object {},
+    },
+  },
+}
+`;
