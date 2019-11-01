@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 0.2.1
+### Features
+- Extends API to include support for aggregated Epoch results
+- Extends API to include network metadata: `protocolConst`, `slotDuration`, and `startTime`
+
 ## 0.2.0
 ### Features
 - Extends API to include support for aggregated results
