@@ -27,7 +27,7 @@ pipeline {
     }
     stage('Instantiate Test Services') {
       steps {
-        sh 'yarn start-dependencies -- -d'
+        sh 'yarn start-dependencies -d'
       }
     }
     stage('Unit/Integration Test') {
