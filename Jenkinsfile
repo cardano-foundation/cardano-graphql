@@ -12,31 +12,31 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh 'npm i'
+        sh 'yarn'
       }
     }
     stage('Validate Code Style') {
       steps {
-        sh 'npm run lint'
+        sh 'yarn lint'
       }
     }
     stage('Build') {
       steps {
-        sh 'npm run build'
+        sh 'yarn build'
       }
     }
     stage('Instantiate Test Services') {
       steps {
-        sh 'npm run start-dependencies -- -d'
+        sh 'yarn start-dependencies -- -d'
       }
     }
     stage('Unit/Integration Test') {
       steps {
-        sh 'npm test'
+        sh 'yarn test'
       }
       post {
         always {
-          sh 'npm run stop-dependencies'
+          sh 'yarn stop-dependencies'
         }
       }
     }

@@ -1,17 +1,17 @@
 FROM node:10.15.3-alpine as builder
-RUN apk add --update python make g++
+RUN apk add --update python make g++ yarn
 RUN mkdir /application
 COPY package.json /application/package.json
 WORKDIR /application
-RUN npm i
+RUN yarn
 COPY . /application
-RUN npm run build
+RUN yarn build
 
 FROM node:10.15.3-alpine as production_deps
 RUN mkdir /application
 COPY package.json /application/package.json
 WORKDIR /application
-RUN npm i --production
+RUN yarn --production
 
 FROM node:10.15.3-alpine as server
 RUN mkdir /application
