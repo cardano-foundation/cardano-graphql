@@ -69,9 +69,9 @@ select
   -- of EBBs simpler, as EBBs don't have a slot_no
   block.epoch_no as "epochNo",
   block.slot_no as "slotNo",
-  case when block.slot_no > 0	
-    then block.slot_no - (block.epoch_no * (10 * (select protocol_const from meta)))	
-    else 0	
+  case when block.slot_no > 0
+    then block.slot_no - (block.epoch_no * (10 * (select protocol_const from meta)))
+    else 0
   end as "slotWithinEpoch",
   block.time as "createdAt"
 from block

@@ -1,7 +1,7 @@
 FROM node:10.15.3-alpine as builder
 RUN apk add --update python make g++ yarn
 RUN mkdir /application
-COPY package.json /application/package.json
+COPY package.json yarn.lock /application/
 WORKDIR /application
 RUN yarn
 COPY . /application
@@ -9,7 +9,7 @@ RUN yarn build
 
 FROM node:10.15.3-alpine as production_deps
 RUN mkdir /application
-COPY package.json /application/package.json
+COPY package.json yarn.lock /application/
 WORKDIR /application
 RUN yarn --production
 
