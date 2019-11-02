@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import { epoch1 } from './data_assertions'
-import { TestClient } from './TestClient'
+import { epoch1 } from '../data_assertions'
+import { TestClient } from '../TestClient'
 
-export function run (createClient: () => Promise<TestClient>) {
+export function epochTests (createClient: () => Promise<TestClient>) {
   describe('epochs', () => {
     let client: TestClient
 

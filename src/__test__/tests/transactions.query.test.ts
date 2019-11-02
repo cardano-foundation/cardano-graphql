@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import { tx05ad8b, txe68043 } from './data_assertions'
-import { TestClient } from './TestClient'
+import { tx05ad8b, txe68043 } from '../data_assertions'
+import { TestClient } from '../TestClient'
 
-export function run (createClient: () => Promise<TestClient>) {
+export function transactionTests (createClient: () => Promise<TestClient>) {
   describe('transactions', () => {
     let client: TestClient
 

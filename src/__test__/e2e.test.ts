@@ -2,19 +2,7 @@ import { ApolloClient, gql, InMemoryCache } from 'apollo-boost'
 import { createHttpLink } from 'apollo-link-http'
 import { RetryPromise } from 'promise-exponential-retry'
 import fetch from 'cross-fetch'
-import { run as blocksTests } from './blocks.query.test'
-import { run as cardanoTests } from './cardano.query.test'
-import { run as epochTests } from './epochs.query.test'
-import { run as transactionTests } from './transactions.query.test'
-import { run as utxoSetTests } from './utxoSet.query.test'
-
-const tests = [
-  blocksTests,
-  cardanoTests,
-  epochTests,
-  transactionTests,
-  utxoSetTests
-]
+import * as tests from './tests'
 
 const createClient = async () => {
   const client = new ApolloClient({
@@ -35,5 +23,4 @@ const createClient = async () => {
     }, 50)
   return client
 }
-
-tests.forEach(t => t(createClient))
+Object.values(tests).forEach(test => test(createClient))

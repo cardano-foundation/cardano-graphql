@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
-import { TestClient } from './TestClient'
+import { TestClient } from '../TestClient'
 
-export function run (createClient: () => Promise<TestClient>) {
+export function cardanoTests (createClient: () => Promise<TestClient>) {
   describe('cardano', () => {
     let client: TestClient
 

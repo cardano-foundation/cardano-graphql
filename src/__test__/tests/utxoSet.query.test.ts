@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
-import { TestClient } from './TestClient'
+import { TestClient } from '../TestClient'
 
-export function run (createClient: () => Promise<TestClient>) {
+export function utxoSetTests (createClient: () => Promise<TestClient>) {
   describe('utxoSet', () => {
     let client: TestClient
 

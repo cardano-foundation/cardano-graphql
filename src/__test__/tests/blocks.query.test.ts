@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
-import { block29021, block29022 } from './data_assertions'
-import { TestClient } from './TestClient'
+import { block29021, block29022 } from '../data_assertions'
+import { TestClient } from '../TestClient'
 
-export function run (makeClient: () => Promise<TestClient>) {
+export function blocksTests (makeClient: () => Promise<TestClient>) {
   describe('blocks', () => {
     let client: TestClient
     beforeEach(async () => {
