@@ -27,16 +27,16 @@ pipeline {
     }
     stage('Instantiate Test Services') {
       steps {
-        sh 'yarn start-dependencies -d'
+        sh 'yarn start:test-stack -d'
       }
     }
-    stage('Unit/Integration Test') {
+    stage('e2e Test') {
       steps {
-        sh 'yarn test'
+        sh 'yarn test:e2e'
       }
       post {
         always {
-          sh 'yarn stop-dependencies'
+          sh 'yarn stop:test-stack'
         }
       }
     }
