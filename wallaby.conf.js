@@ -3,11 +3,11 @@ module.exports = function () {
     files: [
       'src/**/*.ts',
       'src/**/*.graphql',
-      '!src/**/*.spec.ts'
+      '!src/**/integration.test.ts'
     ],
 
     tests: [
-      'src/**/*.spec.ts'
+      'src/**/integration.test.ts'
     ],
     env: {
       type: 'node'

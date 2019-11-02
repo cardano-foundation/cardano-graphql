@@ -4,5 +4,6 @@ dist
 /.nyc_output
 /coverage
 tsconfig.tsbuildinfo
+yarn-error.log
 src/graphql_types.ts
 src/generated_packages/TypeScript/index.ts
