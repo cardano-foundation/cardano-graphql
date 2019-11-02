@@ -20,11 +20,6 @@ pipeline {
         sh 'yarn lint'
       }
     }
-    stage('Build') {
-      steps {
-        sh 'yarn build'
-      }
-    }
     stage('Instantiate Test Services') {
       steps {
         sh 'yarn start:test-stack -d'
@@ -39,6 +34,11 @@ pipeline {
           sh 'yarn stop:test-stack'
         }
       }
+    }
+    stage('Build') {
+       steps {
+          sh 'yarn build'
+       }
     }
     stage('Build & Push Docker Images') {
       steps {
