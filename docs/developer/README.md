@@ -18,5 +18,5 @@ A [multiplex](https://www.npmjs.com/package/stmux) terminal with the code genera
 Services and a [ts-node-dev](https://www.npmjs.com/package/ts-node-dev) watcher
 
 ## Integrationt test strategy
-It's convenient to use the Apollo Integration test server during development, particuarly with Wallaby, as it serves the GraphQL server without booting a HTTP server. The same tests are run on the CI server to provide end-to-end assurance, using an instance of ApolloClient and the API running in a [Docker container](../../docker/docker-compose.yml).
+It's convenient to use the Apollo Integration test server during development, particularly with Wallaby, as it serves the GraphQL server without booting a HTTP server. The same tests are run on the CI server to provide end-to-end assurance, using an instance of ApolloClient and the API running in a [Docker container](../../docker/docker-compose.test.yml).
 
