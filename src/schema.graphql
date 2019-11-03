@@ -169,13 +169,17 @@ type TransactionOutput {
 }
 
 type Block {
+  # Genesis block does not belong to the 0th epoch
   epoch: Epoch
-  fees: String
+  fees: String!
   id: Hash32HexString!
+  # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a merkel root
   merkelRootHash: Hash32HexString
-  # Genesis and Epoch Boundary Blocks (EBBs) do not have numbers
+  # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a block number
   number: Int
+  # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
   slotNo: Int
+  # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
   slotWithinEpoch: Int
   previousBlock: Block
   size: Int!
@@ -238,11 +242,11 @@ type Epoch {
     order_by: [Block_order_by!]
     offset: Int
     where: Block_bool_exp
-  ): [Block]
+  ): [Block!]!
   blocks_aggregate: Block_aggregate!
   output: String!
   number: Int!
-  transactionsCount: String
+  transactionsCount: String!
   startedAt: DateTime!
   lastBlockTime: DateTime!
 }
