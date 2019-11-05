@@ -158,6 +158,21 @@ Object {
 }
 `;
 
+exports[`epochs Can return filtered aggregated data 1`] = `
+Object {
+  "epochs": Array [
+    Object {
+      "blocks_aggregate": Object {
+        "aggregate": Object {
+          "count": 8108,
+        },
+      },
+      "number": 1,
+    },
+  ],
+}
+`;
+
 exports[`epochs Returns epoch details by number 1`] = `
 Object {
   "epochs": Array [
@@ -270,6 +285,26 @@ Object {
 `;
 
 exports[`transactions Can return aggregated data 2`] = `
+Object {
+  "transactions": Array [
+    Object {
+      "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+      "inputs_aggregate": Object {
+        "aggregate": Object {
+          "count": 1,
+        },
+      },
+      "outputs_aggregate": Object {
+        "aggregate": Object {
+          "count": 1,
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`transactions Can return filtered aggregated data 1`] = `
 Object {
   "transactions": Array [
     Object {
