@@ -13,6 +13,16 @@ export const hasuraResolvers: Resolvers = {
         schema: context.hasura
       })
     },
+    blocks_aggregate: (_root, args, context, info) => {
+      return delegateToSchema({
+        args,
+        context,
+        fieldName: 'Block_aggregate',
+        info,
+        operation: 'query',
+        schema: context.hasura
+      })
+    },
     epochs: (_root, args, context, info) => {
       return delegateToSchema({
         args,
@@ -65,11 +75,31 @@ export const hasuraResolvers: Resolvers = {
         schema: context.hasura
       })
     },
-    utxoSet: (_root, args, context, info) => {
+    transactions_aggregate: (_root, args, context, info) => {
+      return delegateToSchema({
+        args,
+        context,
+        fieldName: 'Transaction_aggregate',
+        info,
+        operation: 'query',
+        schema: context.hasura
+      })
+    },
+    utxos: (_root, args, context, info) => {
       return delegateToSchema({
         args,
         context,
         fieldName: 'Utxo',
+        info,
+        operation: 'query',
+        schema: context.hasura
+      })
+    },
+    utxos_aggregate: (_root, args, context, info) => {
+      return delegateToSchema({
+        args,
+        context,
+        fieldName: 'Utxo_aggregate',
         info,
         operation: 'query',
         schema: context.hasura

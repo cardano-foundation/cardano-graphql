@@ -15,6 +15,12 @@ type Query {
     offset: Int
     where: Block_bool_exp
   ): [Block]!
+  blocks_aggregate (
+    limit: Int
+    order_by: [Block_order_by!]
+    offset: Int
+    where: Block_bool_exp
+  ): Block_aggregate!
   epochs (
     limit: Int
     order_by: [Epoch_order_by!]
@@ -34,12 +40,24 @@ type Query {
     offset: Int
     where: Transaction_bool_exp
   ): [Transaction]!
-  utxoSet (
+  transactions_aggregate (
+    limit: Int
+    order_by: [Transaction_order_by!]
+    offset: Int
+    where: Transaction_bool_exp
+  ): Transaction_aggregate!
+  utxos (
     limit: Int
     order_by: [Utxo_order_by!]
     offset: Int
-    where: Utxo_bool_exp!
+    where: Utxo_bool_exp
   ): [TransactionOutput]!
+  utxos_aggregate (
+    limit: Int
+    order_by: [Utxo_order_by!]
+    offset: Int
+    where: Utxo_bool_exp
+  ): Utxo_aggregate!
 }
 
 type Cardano {
@@ -189,6 +207,35 @@ type TransactionOutput {
   txId: Hash32HexString!
   value: String!
 }
+
+type Utxo_aggregate {
+  aggregate: Utxo_aggregate_fields
+}
+
+type Utxo_aggregate_fields {
+  avg: Uxto_avg_fields
+  count: Int
+  max: Uxto_max_fields
+  min: Uxto_min_fields
+  sum: Uxto_sum_fields
+}
+
+type Uxto_avg_fields {
+  value: String
+}
+
+type Uxto_max_fields {
+  value: String
+}
+
+type Uxto_min_fields {
+  value: String
+}
+
+type Uxto_sum_fields {
+  value: String
+}
+
 
 type Block {
   createdAt: DateTime!
@@ -355,6 +402,7 @@ input Utxo_bool_exp {
 input Utxo_order_by {
   address: order_by
   value: order_by
+  index: order_by
 }
 
 # expression to compare data of type date. All fields are combined with logical 'AND'.

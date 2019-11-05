@@ -158,21 +158,6 @@ Object {
 }
 `;
 
-exports[`epochs Can return filtered aggregated data 2`] = `
-Object {
-  "epochs": Array [
-    Object {
-      "blocks_aggregate": Object {
-        "aggregate": Object {
-          "count": 1120,
-        },
-      },
-      "number": 1,
-    },
-  ],
-}
-`;
-
 exports[`epochs Returns epoch details by number 1`] = `
 Object {
   "epochs": Array [
@@ -359,9 +344,9 @@ Object {
 }
 `;
 
-exports[`utxoSet Can be scoped by address 1`] = `
+exports[`utxos Can be scoped by address 1`] = `
 Object {
-  "utxoSet": Array [
+  "utxos": Array [
     Object {
       "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
       "value": "100000000000",
@@ -374,9 +359,9 @@ Object {
 }
 `;
 
-exports[`utxoSet Can be scoped by list of addresses 1`] = `
+exports[`utxos Can be scoped by list of addresses 1`] = `
 Object {
-  "utxoSet": Array [
+  "utxos": Array [
     Object {
       "address": "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt",
       "value": "1153846000000",
@@ -390,5 +375,27 @@ Object {
       "value": "150000000000",
     },
   ],
+}
+`;
+
+exports[`utxos Can return aggregated UTXO data 1`] = `
+Object {
+  "utxos_aggregate": Object {
+    "aggregate": Object {
+      "avg": Object {
+        "value": "26556.16176470588",
+      },
+      "count": 68,
+      "max": Object {
+        "value": "175212",
+      },
+      "min": Object {
+        "value": "1",
+      },
+      "sum": Object {
+        "value": "1805819",
+      },
+    },
+  },
 }
 `;
