@@ -341,11 +341,16 @@ type Epoch_sum_fields {
 }
 
 input Utxo_bool_exp {
+  _and: [Utxo_bool_exp]
+  _not: Utxo_bool_exp
+  _or: [Utxo_bool_exp]
   address: text_comparison_exp
+  value: text_comparison_exp
 }
 
 input Utxo_order_by {
   address: order_by
+  value: order_by
 }
 
 # expression to compare data of type date. All fields are combined with logical 'AND'.
