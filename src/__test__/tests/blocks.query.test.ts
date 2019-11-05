@@ -75,6 +75,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
                 merkelRootHash
                 number
                 createdAt
+                createdBy
                 previousBlock {
                     id
                     number

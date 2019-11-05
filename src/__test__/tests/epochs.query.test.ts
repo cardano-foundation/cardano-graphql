@@ -66,6 +66,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
                 blocks_aggregate ( where: { 
                     _and: [{
                         slotNo: { _is_null: false },
+                        createdBy: { _eq: "SlotLeader-6c9e14978b9d6629" },
                         fees: { _lt: 100 }
                     }]
                 }){
