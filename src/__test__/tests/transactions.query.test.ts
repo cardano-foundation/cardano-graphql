@@ -90,7 +90,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
       expect(txs[1].inputs_aggregate.aggregate.sum.value).toEqual(txs[1].outputs_aggregate.aggregate.sum.value + parseInt(txs[1].fee))
       expect(result.data).toMatchSnapshot()
     })
-    it('Can return aggregated data', async () => {
+    it('Can return filtered aggregated data', async () => {
       const result = await client.query({
         query: gql`query {
             transactions(
