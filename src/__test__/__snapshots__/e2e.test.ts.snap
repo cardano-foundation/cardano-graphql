@@ -149,7 +149,7 @@ Object {
     Object {
       "blocks_aggregate": Object {
         "aggregate": Object {
-          "count": 8108,
+          "count": 1120,
         },
       },
       "number": 1,
