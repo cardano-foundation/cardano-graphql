@@ -22,7 +22,7 @@ pipeline {
     }
     stage('Instantiate Test Services') {
       steps {
-        sh 'yarn start:test-stack -d'
+        sh 'yarn start:test-stack --build -d'
       }
     }
     stage('e2e Test') {
@@ -31,7 +31,7 @@ pipeline {
       }
       post {
         always {
-          sh 'yarn stop:test-stack'
+          sh 'yarn stop:test-stack --rmi'
         }
       }
     }
