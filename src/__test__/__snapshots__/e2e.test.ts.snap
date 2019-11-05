@@ -41,6 +41,21 @@ Object {
 }
 `;
 
+exports[`blocks Can return filtered aggregated data 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "number": 29021,
+      "transactions_aggregate": Object {
+        "aggregate": Object {
+          "count": 2,
+        },
+      },
+    },
+  ],
+}
+`;
+
 exports[`blocks are linked to their predecessor, and the chain can be traversed 1`] = `
 Object {
   "blocks": Array [
@@ -120,6 +135,21 @@ Object {
             "fees": 266560276,
             "size": 8365354,
           },
+        },
+      },
+      "number": 1,
+    },
+  ],
+}
+`;
+
+exports[`epochs Can return filtered aggregated data 1`] = `
+Object {
+  "epochs": Array [
+    Object {
+      "blocks_aggregate": Object {
+        "aggregate": Object {
+          "count": 8108,
         },
       },
       "number": 1,
@@ -232,6 +262,26 @@ Object {
           "sum": Object {
             "value": 768402828930,
           },
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`transactions Can return filtered aggregated data 1`] = `
+Object {
+  "transactions": Array [
+    Object {
+      "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+      "inputs_aggregate": Object {
+        "aggregate": Object {
+          "count": 1,
+        },
+      },
+      "outputs_aggregate": Object {
+        "aggregate": Object {
+          "count": 1,
         },
       },
     },

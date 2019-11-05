@@ -219,14 +219,28 @@ type Block {
 }
 
 input Block_bool_exp {
-  id: Hash32HexString_comparison_exp
+  _and: [Block_bool_exp]
+  _not: Block_bool_exp
+  _or: [Block_bool_exp]
   epoch: Epoch_bool_exp
+  fees: BigInt_comparison_exp
+  id: Hash32HexString_comparison_exp
   number: Int_comparison_exp
+  previousBlock: Block_bool_exp
+  size: Int_comparison_exp
+  slotNo: Int_comparison_exp
+  slotWithinEpoch: Int_comparison_exp
+  transactions: Transaction_bool_exp
 }
 
 input Block_order_by {
-  number: order_by
+  createdAt: order_by
+  epoch: Epoch_order_by
+  fees: order_by
+  number: order_by_with_nulls
   size: order_by
+  slotNo: order_by_with_nulls
+  slotWithinEpoch: order_by_with_nulls
 }
 
 type Block_aggregate {
@@ -268,7 +282,12 @@ type Epoch {
     offset: Int
     where: Block_bool_exp
   ): [Block!]!
-  blocks_aggregate: Block_aggregate!
+  blocks_aggregate (
+    limit: Int
+    order_by: [Block_order_by!]
+    offset: Int
+    where: Block_bool_exp
+  ): Block_aggregate!
   output: String!
   number: Int!
   transactionsCount: String!

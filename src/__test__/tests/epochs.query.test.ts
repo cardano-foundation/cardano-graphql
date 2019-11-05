@@ -59,6 +59,27 @@ export function epochTests (createClient: () => Promise<TestClient>) {
       expect(result.data).toMatchSnapshot()
     })
 
+    it('Can return filtered aggregated data', async () => {
+      const result = await client.query({
+        query: gql`query {
+            epochs( where: { number: { _eq: 1 }}) {
+                blocks_aggregate ( where: { 
+                    _and: [{
+                        slotNo: { _is_null: false },
+                        fees: { _lt: 100 }
+                    }]
+                }){
+                    aggregate {
+                        count
+                    }
+                }
+                number
+            }
+        }`
+      })
+      expect(result.data).toMatchSnapshot()
+    })
+
     it('Returns epoch details by number range', async () => {
       const result = await client.query({
         query: gql`query {
