@@ -31,7 +31,7 @@ pipeline {
       }
       post {
         always {
-          sh 'yarn stop:test-stack --rmi'
+          sh 'yarn stop:test-stack --rmi local'
         }
       }
     }
