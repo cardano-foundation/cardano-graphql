@@ -12,33 +12,33 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh 'npm i'
+        sh 'yarn'
       }
     }
     stage('Validate Code Style') {
       steps {
-        sh 'npm run lint'
-      }
-    }
-    stage('Build') {
-      steps {
-        sh 'npm run build'
+        sh 'yarn lint'
       }
     }
     stage('Instantiate Test Services') {
       steps {
-        sh 'npm run start-dependencies -- -d'
+        sh 'yarn start:test-stack --build -d'
       }
     }
-    stage('Unit/Integration Test') {
+    stage('e2e Test') {
       steps {
-        sh 'npm test'
+        sh 'yarn test:e2e'
       }
       post {
         always {
-          sh 'npm run stop-dependencies'
+          sh 'yarn stop:test-stack --rmi local'
         }
       }
+    }
+    stage('Build') {
+       steps {
+          sh 'yarn build'
+       }
     }
     stage('Build & Push Docker Images') {
       steps {

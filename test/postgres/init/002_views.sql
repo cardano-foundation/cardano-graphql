@@ -63,20 +63,23 @@ select
   block.merkel_root as "merkelRootHash",
   block.block_no as number,
   previous_block."hash" as "previousBlockId",
+  slot_leader."desciption" as "createdBy",
   block.size as size,
   -- Even though we have epochNo defined in the Slot view,
   -- this is written by the node-client and makes identification
   -- of EBBs simpler, as EBBs don't have a slot_no
   block.epoch_no as "epochNo",
   block.slot_no as "slotNo",
-  case when block.slot_no > 0	
-    then block.slot_no - (block.epoch_no * (10 * (select protocol_const from meta)))	
-    else 0	
+  case when block.slot_no > 0
+    then block.slot_no - (block.epoch_no * (10 * (select protocol_const from meta)))
+    else 0
   end as "slotWithinEpoch",
   block.time as "createdAt"
 from block
 left outer join block as previous_block
-  on block.previous = previous_block.id;
+  on block.previous = previous_block.id
+left outer join slot_leader
+  on block.slot_leader = slot_leader.id;
 
 create view "Transaction" as
 select
