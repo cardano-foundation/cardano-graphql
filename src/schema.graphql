@@ -60,14 +60,24 @@ type Transaction {
     offset: Int
     where: Coin_bool_exp
   ): [TransactionInput!]!
-  inputs_aggregate: Coin_aggregate
+  inputs_aggregate (
+    limit: Int
+    order_by: [Coin_order_by]
+    offset: Int
+    where: Coin_bool_exp
+  ): Coin_aggregate
   outputs (
     limit: Int
     order_by: [Coin_order_by]
     offset: Int
     where: Coin_bool_exp
   ): [TransactionOutput!]!
-  outputs_aggregate: Coin_aggregate
+  outputs_aggregate(
+    limit: Int
+    order_by: [Coin_order_by]
+    offset: Int
+    where: Coin_bool_exp
+  ): Coin_aggregate
   totalOutput: String!
   includedAt: DateTime!
 }
@@ -136,6 +146,9 @@ input Coin_order_by {
 }
 
 input Coin_bool_exp {
+  _and: [Coin_bool_exp]
+  _not: Coin_bool_exp
+  _or: [Coin_bool_exp]
   address: text_comparison_exp
   value: BigInt_comparison_exp
 }

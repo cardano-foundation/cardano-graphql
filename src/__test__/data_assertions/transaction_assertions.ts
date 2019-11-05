@@ -57,6 +57,19 @@ export const txe68043 = {
         }
       }
     }
+  },
+  aggregated_filtered: {
+    id: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
+    inputs_aggregate: {
+      aggregate: {
+        count: 0
+      }
+    },
+    outputs_aggregate: {
+      aggregate: {
+        count: 1
+      }
+    }
   }
 }
 
