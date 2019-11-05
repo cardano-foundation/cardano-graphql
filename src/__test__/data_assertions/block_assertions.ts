@@ -42,6 +42,14 @@ export const block29021 = {
         }
       }
     }
+  },
+  aggregated_filtered: {
+    number: 29021,
+    transactions_aggregate: {
+      aggregate: {
+        count: 2
+      }
+    }
   }
 }
 

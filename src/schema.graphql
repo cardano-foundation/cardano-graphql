@@ -74,13 +74,20 @@ type Transaction {
 
 input Transaction_order_by {
   block: order_by
-  includedAt: order_by
   fee: order_by
 }
 
 input Transaction_bool_exp {
-  id: Hash32HexString_comparison_exp
+  _and: [Transaction_bool_exp]
+  _not: Transaction_bool_exp
+  _or: [Transaction_bool_exp]
   block: Block_bool_exp
+  fee: BigInt_comparison_exp
+  id: Hash32HexString_comparison_exp
+  includedAt: Date_comparison_exp
+  inputs: Coin_bool_exp
+  outputs: Coin_bool_exp
+  totalOutput: text_comparison_exp
 }
 
 type Transaction_aggregate {
@@ -169,7 +176,7 @@ type TransactionOutput {
 }
 
 type Block {
-  # Genesis block does not belong to the 0th epoch
+  # Genesis block does not belong to the 0th epoch, therefore it could be null
   epoch: Epoch
   fees: String!
   id: Hash32HexString!
@@ -190,7 +197,12 @@ type Block {
     offset: Int
     where: Transaction_bool_exp
   ): [Transaction]!
-  transactions_aggregate: Transaction_aggregate!
+  transactions_aggregate (
+    limit: Int
+    order_by: [Transaction_order_by!]
+    offset: Int
+    where: Transaction_bool_exp
+  ): Transaction_aggregate!
 }
 
 input Block_bool_exp {

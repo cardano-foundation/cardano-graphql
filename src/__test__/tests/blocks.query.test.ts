@@ -141,6 +141,29 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
       expect(result.data).toMatchSnapshot()
     })
 
+    it('Can return filtered aggregated data', async () => {
+      const result = await client.query({
+        query: gql`query {
+            blocks( where: { number: { _eq: 29021 }}) {
+                transactions_aggregate( 
+                    where: {
+                        _and: [
+                            { fee: { _gt: 10 }},
+                            { totalOutput: { _lt: "4924799478670" } }
+                        ]
+                    }) {
+                    aggregate {
+                        count
+                    }
+                }
+                number
+            }
+        }`
+      })
+      expect(result.data.blocks[0]).toEqual(block29021.aggregated_filtered)
+      expect(result.data).toMatchSnapshot()
+    })
+
     it('are linked to their predecessor, and the chain can be traversed', async () => {
       const result = await client.query({
         query: gql`query {
