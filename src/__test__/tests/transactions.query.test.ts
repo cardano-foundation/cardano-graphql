@@ -90,5 +90,27 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
       expect(txs[1].inputs_aggregate.aggregate.sum.value).toEqual(txs[1].outputs_aggregate.aggregate.sum.value + parseInt(txs[1].fee))
       expect(result.data).toMatchSnapshot()
     })
+    it('Can return filtered aggregated data', async () => {
+      const result = await client.query({
+        query: gql`query {
+            transactions(
+                where: { id: { _eq: \"${txe68043.aggregated_filtered.id}\"}}
+            ) {
+                id
+                inputs_aggregate ( where: { value: { _gt: 3842014 }}) {
+                    aggregate {
+                        count
+                    }
+                }
+                outputs_aggregate ( where: { address: { _eq: "DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8"}}) {
+                    aggregate {
+                        count
+                    }
+                }
+            }
+        }`
+      })
+      expect(result.data).toMatchSnapshot()
+    })
   })
 }

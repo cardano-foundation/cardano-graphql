@@ -60,27 +60,46 @@ type Transaction {
     offset: Int
     where: Coin_bool_exp
   ): [TransactionInput!]!
-  inputs_aggregate: Coin_aggregate
+  inputs_aggregate (
+    limit: Int
+    order_by: [Coin_order_by]
+    offset: Int
+    where: Coin_bool_exp
+  ): Coin_aggregate
   outputs (
     limit: Int
     order_by: [Coin_order_by]
     offset: Int
     where: Coin_bool_exp
   ): [TransactionOutput!]!
-  outputs_aggregate: Coin_aggregate
+  outputs_aggregate(
+    limit: Int
+    order_by: [Coin_order_by]
+    offset: Int
+    where: Coin_bool_exp
+  ): Coin_aggregate
   totalOutput: String!
   includedAt: DateTime!
 }
 
 input Transaction_order_by {
   block: order_by
-  includedAt: order_by
   fee: order_by
+  includedAt: order_by
+  totalOutput: order_by
 }
 
 input Transaction_bool_exp {
-  id: Hash32HexString_comparison_exp
+  _and: [Transaction_bool_exp]
+  _not: Transaction_bool_exp
+  _or: [Transaction_bool_exp]
   block: Block_bool_exp
+  fee: BigInt_comparison_exp
+  id: Hash32HexString_comparison_exp
+  includedAt: Date_comparison_exp
+  inputs: Coin_bool_exp
+  outputs: Coin_bool_exp
+  totalOutput: text_comparison_exp
 }
 
 type Transaction_aggregate {
@@ -129,6 +148,9 @@ input Coin_order_by {
 }
 
 input Coin_bool_exp {
+  _and: [Coin_bool_exp]
+  _not: Coin_bool_exp
+  _or: [Coin_bool_exp]
   address: text_comparison_exp
   value: BigInt_comparison_exp
 }
@@ -169,7 +191,7 @@ type TransactionOutput {
 }
 
 type Block {
-  # Genesis block does not belong to the 0th epoch
+  # Genesis block does not belong to the 0th epoch, therefore it could be null
   epoch: Epoch
   fees: String!
   id: Hash32HexString!
@@ -190,18 +212,37 @@ type Block {
     offset: Int
     where: Transaction_bool_exp
   ): [Transaction]!
-  transactions_aggregate: Transaction_aggregate!
+  transactions_aggregate (
+    limit: Int
+    order_by: [Transaction_order_by!]
+    offset: Int
+    where: Transaction_bool_exp
+  ): Transaction_aggregate!
 }
 
 input Block_bool_exp {
-  id: Hash32HexString_comparison_exp
+  _and: [Block_bool_exp]
+  _not: Block_bool_exp
+  _or: [Block_bool_exp]
   epoch: Epoch_bool_exp
+  fees: BigInt_comparison_exp
+  id: Hash32HexString_comparison_exp
   number: Int_comparison_exp
+  previousBlock: Block_bool_exp
+  size: Int_comparison_exp
+  slotNo: Int_comparison_exp
+  slotWithinEpoch: Int_comparison_exp
+  transactions: Transaction_bool_exp
 }
 
 input Block_order_by {
-  number: order_by
+  createdAt: order_by
+  epoch: Epoch_order_by
+  fees: order_by
+  number: order_by_with_nulls
   size: order_by
+  slotNo: order_by_with_nulls
+  slotWithinEpoch: order_by_with_nulls
 }
 
 type Block_aggregate {
@@ -243,7 +284,12 @@ type Epoch {
     offset: Int
     where: Block_bool_exp
   ): [Block!]!
-  blocks_aggregate: Block_aggregate!
+  blocks_aggregate (
+    limit: Int
+    order_by: [Block_order_by!]
+    offset: Int
+    where: Block_bool_exp
+  ): Block_aggregate!
   output: String!
   number: Int!
   transactionsCount: String!
@@ -252,13 +298,19 @@ type Epoch {
 }
 
 input Epoch_bool_exp {
+  _and: [Epoch_bool_exp]
+  _not: Epoch_bool_exp
+  _or: [Epoch_bool_exp]
+  blocks: Block_bool_exp
   number: Int_comparison_exp
+  output: text_comparison_exp
+  transactionsCount: text_comparison_exp
 }
 
 input Epoch_order_by {
-  blockCount: order_by
   number: order_by
-  fees: order_by
+  output: order_by
+  transactionsCount: order_by
 }
 
 type Epoch_aggregate {
@@ -289,11 +341,16 @@ type Epoch_sum_fields {
 }
 
 input Utxo_bool_exp {
+  _and: [Utxo_bool_exp]
+  _not: Utxo_bool_exp
+  _or: [Utxo_bool_exp]
   address: text_comparison_exp
+  value: text_comparison_exp
 }
 
 input Utxo_order_by {
   address: order_by
+  value: order_by
 }
 
 # expression to compare data of type date. All fields are combined with logical 'AND'.
