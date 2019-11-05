@@ -85,6 +85,8 @@ type Transaction {
 input Transaction_order_by {
   block: order_by
   fee: order_by
+  includedAt: order_by
+  totalOutput: order_by
 }
 
 input Transaction_bool_exp {
