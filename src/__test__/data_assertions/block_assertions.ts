@@ -17,6 +17,10 @@ export const block29021 = {
       id: '663c25ee1434e6d29f8bd08bd52ddbb16a30bb54ca3c69c815e3de7bc4c42770',
       number: 29020
     },
+    nextBlock: {
+      id: 'bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380',
+      number: 29022
+    },
     size: 1349,
     transactions: [tx05ad8b.basic, txe68043.basic]
   },
@@ -68,6 +72,10 @@ export const block29022 = {
     previousBlock: {
       id: '00aea2405f7cf4eb1d9e6694770ea25eeb113b857e377d22641aa1099742615d',
       number: 29021
+    },
+    nextBlock: {
+      id: '9a20077183a044fbe41a6ac71747b3463966ba724cd0478786a3df5000b37008',
+      number: 29023
     },
     size: 631,
     slotNo: 29036,

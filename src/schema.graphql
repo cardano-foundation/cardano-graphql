@@ -253,6 +253,7 @@ type Block {
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
   slotWithinEpoch: Int
   previousBlock: Block
+  nextBlock: Block
   size: Int!
   transactions(
     limit: Int
@@ -279,6 +280,7 @@ input Block_bool_exp {
   id: Hash32HexString_comparison_exp
   number: Int_comparison_exp
   previousBlock: Block_bool_exp
+  nextBlock: Block_bool_exp
   size: Int_comparison_exp
   slotNo: Int_comparison_exp
   slotWithinEpoch: Int_comparison_exp
