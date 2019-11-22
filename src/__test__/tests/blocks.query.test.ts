@@ -70,6 +70,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
                 epoch {
                     number
                 }
+                epochNo
                 fees
                 id
                 merkelRootHash
@@ -77,6 +78,10 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
                 createdAt
                 createdBy
                 previousBlock {
+                    id
+                    number
+                }
+                nextBlock {
                     id
                     number
                 }
@@ -183,6 +188,27 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
         }`
       })
       expect(result.data.blocks[0].previousBlock.previousBlock.previousBlock.number).toBe(29019)
+      expect(result.data).toMatchSnapshot()
+    })
+
+    it('are linked to their successor, and the chain can be traversed', async () => {
+      const result = await client.query({
+        query: gql`query {
+            blocks (where: { number: { _eq: 29022}}) {
+                id
+                nextBlock {
+                    number
+                    nextBlock {
+                        number
+                        nextBlock {
+                            number
+                        }
+                    }
+                }
+            }
+        }`
+      })
+      expect(result.data.blocks[0].nextBlock.nextBlock.nextBlock.number).toBe(29025)
       expect(result.data).toMatchSnapshot()
     })
   })

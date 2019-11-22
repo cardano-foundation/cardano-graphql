@@ -63,6 +63,7 @@ select
   block.merkel_root as "merkelRootHash",
   block.block_no as number,
   previous_block."hash" as "previousBlockId",
+  next_block."hash" as "nextBlockId",
   slot_leader."desciption" as "createdBy",
   block.size as size,
   -- Even though we have epochNo defined in the Slot view,
@@ -78,6 +79,8 @@ select
 from block
 left outer join block as previous_block
   on block.previous = previous_block.id
+left outer join block as next_block
+  on next_block.previous = block.id
 left outer join slot_leader
   on block.slot_leader = slot_leader.id;
 

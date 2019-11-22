@@ -75,6 +75,25 @@ Object {
 }
 `;
 
+exports[`blocks are linked to their successor, and the chain can be traversed 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "nextBlock": Object {
+        "nextBlock": Object {
+          "nextBlock": Object {
+            "number": 29025,
+          },
+          "number": 29024,
+        },
+        "number": 29023,
+      },
+    },
+  ],
+}
+`;
+
 exports[`cardano Returns key information about the network 1`] = `
 Object {
   "cardano": Object {
