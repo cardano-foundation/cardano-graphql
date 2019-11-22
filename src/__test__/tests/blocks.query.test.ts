@@ -70,6 +70,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
                 epoch {
                     number
                 }
+                epochNo
                 fees
                 id
                 merkelRootHash

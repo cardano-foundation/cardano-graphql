@@ -242,6 +242,7 @@ type Block {
   createdBy: String!
   # Genesis block does not belong to the 0th epoch, therefore it could be null
   epoch: Epoch
+  epochNo: Int!
   fees: String!
   id: Hash32HexString!
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a merkel root
