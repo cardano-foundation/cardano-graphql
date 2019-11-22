@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 0.4.0
+### Features
+- Block.nextBlock
+- Block.epochNo is a workaround for the less performant Block.epoch.number
+
 ## 0.3.0
 ### Features
 - Can now scope aggregated queries to the same filters as the non-aggregated counterparts
