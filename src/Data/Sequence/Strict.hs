@@ -7,7 +7,6 @@
 
 -- | Strict variants of 'Seq' operations.
 --
--- TODO: Move this to @cardano-prelude@ as a new module, @Data.Sequence.Strict@.
 module Data.Sequence.Strict
   ( StrictSeq (Empty, (:<|), (:|>))
 

@@ -8,7 +8,6 @@
 
 -- | Strict variants of 'FingerTree' operations.
 --
--- TODO: Move this to @cardano-prelude@ as a new module, @Data.FingerTree.Strict@.
 module Data.FingerTree.Strict
   ( StrictFingerTree
 
