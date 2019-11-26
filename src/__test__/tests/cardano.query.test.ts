@@ -23,6 +23,7 @@ export function cardanoTests (createClient: () => Promise<TestClient>) {
             }
         }`
       })
+      console.log(result)
       expect(result.data).toMatchSnapshot()
     })
   })
