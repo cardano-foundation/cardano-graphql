@@ -11,4 +11,5 @@ Integrated query UI and documentation is available in the GraphQL Playground, av
 - [API Consumer Documentation](./docs/api_consumer)
 - [Developer Documentation](./docs/developer)
 - [Updating Hasura Metadata](./docs/hasura)
+- [Refresh Test DB Dump](./docs/refresh_db)
 
