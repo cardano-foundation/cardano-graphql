@@ -18,6 +18,7 @@ export const txe68043 = {
       address: 'DdzFFzCqrhsgrGt7zHydkE4cKxjB7SgsdnMPUFxYEwBu1u4sGobxZL5Xo3eDycCrtSYAUyw9aAsZZxFpTdgur6MwYDYMwAZ4xNGKRD3o',
       value: '1000000'
     }],
+    size: 216,
     totalOutput: '768402828930'
   },
   aggregated: {
@@ -92,6 +93,7 @@ export const tx05ad8b = {
       address: 'DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s',
       value: '100000000000'
     }],
+    size: 220,
     totalOutput: '4924799478660'
   },
   aggregated: {

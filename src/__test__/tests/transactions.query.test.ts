@@ -30,6 +30,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                     address
                     value
                 }
+                size
                 totalOutput
             }
         }`
