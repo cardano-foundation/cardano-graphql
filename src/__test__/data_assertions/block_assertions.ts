@@ -31,19 +31,23 @@ export const block29021 = {
       aggregate: {
         avg: {
           fee: 171158,
+          size: 218,
           totalOutput: 2846601153795
         },
         count: 2,
         max: {
           fee: 171246,
+          size: 220,
           totalOutput: 4924799478660
         },
         min: {
           fee: 171070,
+          size: 216,
           totalOutput: 768402828930
         },
         sum: {
           fee: 342316,
+          size: 436,
           totalOutput: 5693202307590
         }
       }

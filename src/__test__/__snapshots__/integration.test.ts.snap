@@ -9,19 +9,23 @@ Object {
         "aggregate": Object {
           "avg": Object {
             "fee": 171158,
+            "size": 218,
             "totalOutput": 2846601153795,
           },
           "count": 2,
           "max": Object {
             "fee": 171246,
+            "size": 220,
             "totalOutput": 4924799478660,
           },
           "min": Object {
             "fee": 171070,
+            "size": 216,
             "totalOutput": 768402828930,
           },
           "sum": Object {
             "fee": 342316,
+            "size": 436,
             "totalOutput": 5693202307590,
           },
         },
@@ -97,10 +101,11 @@ Object {
 exports[`cardano Returns key information about the network 1`] = `
 Object {
   "cardano": Object {
-    "blockHeight": 31070,
+    "blockHeight": 70849,
     "currentEpoch": Object {
-      "number": 1,
+      "number": 3,
     },
+    "networkName": "mainnet",
     "protocolConst": 2160,
     "slotDuration": 20000,
     "startTime": "2017-09-23T21:44:51",
@@ -112,19 +117,19 @@ exports[`epochs Can return aggregated Epoch data 1`] = `
 Object {
   "epochs_aggregate": Object {
     "aggregate": Object {
-      "count": "2",
+      "count": "4",
       "max": Object {
-        "number": "1",
-        "output": "17282903106017760",
-        "transactionsCount": "5344",
+        "number": "3",
+        "output": "101402912214214220",
+        "transactionsCount": "12870",
       },
       "min": Object {
         "output": "10378568796482912",
         "transactionsCount": "33",
       },
       "sum": Object {
-        "output": "27661471902500670",
-        "transactionsCount": "5377",
+        "output": "188216297614740450",
+        "transactionsCount": "18161",
       },
     },
   },
@@ -138,12 +143,12 @@ Object {
       "blocks_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "fees": 28103.350131787032,
-            "size": 881.9561412756984,
+            "fees": 47846.34914312181,
+            "size": 868.0383047707272,
           },
-          "count": 9485,
+          "count": 21590,
           "max": Object {
-            "fees": 684456,
+            "fees": 1377042,
             "size": 648087,
           },
           "min": Object {
@@ -151,8 +156,8 @@ Object {
             "size": 631,
           },
           "sum": Object {
-            "fees": 266560276,
-            "size": 8365354,
+            "fees": 1033002678,
+            "size": 18740947,
           },
         },
       },
@@ -168,7 +173,7 @@ Object {
     Object {
       "blocks_aggregate": Object {
         "aggregate": Object {
-          "count": 1120,
+          "count": 2408,
         },
       },
       "number": 1,
@@ -181,11 +186,11 @@ exports[`epochs Returns epoch details by number 1`] = `
 Object {
   "epochs": Array [
     Object {
-      "lastBlockTime": "2017-10-01T02:25:51",
+      "lastBlockTime": "2017-10-03T21:43:51",
       "number": 1,
-      "output": "17282903106017760",
+      "output": "101402912214214220",
       "startedAt": "2017-09-28T21:45:51",
-      "transactionsCount": "5344",
+      "transactionsCount": "12870",
     },
   ],
 }
@@ -195,11 +200,11 @@ exports[`epochs Returns epoch details by number range 1`] = `
 Object {
   "epochs": Array [
     Object {
-      "lastBlockTime": "2017-10-01T02:25:51",
+      "lastBlockTime": "2017-10-03T21:43:51",
       "number": 1,
-      "output": "17282903106017760",
+      "output": "101402912214214220",
       "startedAt": "2017-09-28T21:45:51",
-      "transactionsCount": "5344",
+      "transactionsCount": "12870",
     },
   ],
 }
@@ -333,6 +338,7 @@ Object {
           "value": "100000000000",
         },
       ],
+      "size": 220,
       "totalOutput": "4924799478660",
     },
     Object {
@@ -357,6 +363,7 @@ Object {
           "value": "1000000",
         },
       ],
+      "size": 216,
       "totalOutput": "768402828930",
     },
   ],
@@ -402,9 +409,9 @@ Object {
   "utxos_aggregate": Object {
     "aggregate": Object {
       "avg": Object {
-        "value": "26556.16176470588",
+        "value": "24207.026699029127",
       },
-      "count": 68,
+      "count": 412,
       "max": Object {
         "value": "175212",
       },
@@ -412,7 +419,7 @@ Object {
         "value": "1",
       },
       "sum": Object {
-        "value": "1805819",
+        "value": "9973295",
       },
     },
   },

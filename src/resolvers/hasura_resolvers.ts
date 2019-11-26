@@ -44,26 +44,14 @@ export const hasuraResolvers: Resolvers = {
       })
     },
     cardano: async (_root, _args, context, info) => {
-      // These two queries are very lightweight, just selecting single rows,
-      // Could optimise, but there's little performance gain
-      const cardanoResult = await delegateToSchema({
+      const result = await delegateToSchema({
         context,
         fieldName: 'Cardano',
         info,
         operation: 'query',
         schema: context.hasura
       })
-      const metaResult = await delegateToSchema({
-        context,
-        fieldName: 'Meta',
-        info,
-        operation: 'query',
-        schema: context.hasura
-      })
-      return {
-        ...cardanoResult ? cardanoResult[0] : undefined,
-        ...metaResult ? metaResult[0] : undefined
-      }
+      return result[0]
     },
     transactions: (_root, args, context, info) => {
       return delegateToSchema({

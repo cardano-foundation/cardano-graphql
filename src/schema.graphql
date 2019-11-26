@@ -33,7 +33,7 @@ type Query {
     offset: Int
     where: Epoch_bool_exp
   ): Epoch_aggregate!
-  cardano: Cardano
+  cardano: Cardano!
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
@@ -63,6 +63,7 @@ type Query {
 type Cardano {
   blockHeight: Int!
   currentEpoch: Epoch!
+  networkName: String!
   protocolConst: Int!
   slotDuration: Int!
   startTime: DateTime!
@@ -96,6 +97,7 @@ type Transaction {
     offset: Int
     where: Coin_bool_exp
   ): Coin_aggregate
+  size: Int!
   totalOutput: String!
   includedAt: DateTime!
 }
@@ -104,6 +106,7 @@ input Transaction_order_by {
   block: order_by
   fee: order_by
   includedAt: order_by
+  size: order_by
   totalOutput: order_by
 }
 
@@ -117,6 +120,7 @@ input Transaction_bool_exp {
   includedAt: Date_comparison_exp
   inputs: Coin_bool_exp
   outputs: Coin_bool_exp
+  size: Int_comparison_exp
   totalOutput: text_comparison_exp
 }
 
@@ -134,21 +138,25 @@ type Transaction_aggregate_fields {
 
 type Transaction_avg_fields {
   fee: Float
+  size: Float
   totalOutput: Float
 }
 
 type Transaction_max_fields {
   fee: BigInt
+  size: Int
   totalOutput: BigInt
 }
 
 type Transaction_min_fields {
   fee: BigInt
+  size: Int
   totalOutput: BigInt
 }
 
 type Transaction_sum_fields {
   fee: BigInt
+  size: BigInt
   totalOutput: BigInt
 }
 
@@ -242,7 +250,7 @@ type Block {
   createdBy: String!
   # Genesis block does not belong to the 0th epoch, therefore it could be null
   epoch: Epoch
-  epochNo: Int!
+  epochNo: Int
   fees: String!
   id: Hash32HexString!
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a merkel root
