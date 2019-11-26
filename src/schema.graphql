@@ -33,7 +33,7 @@ type Query {
     offset: Int
     where: Epoch_bool_exp
   ): Epoch_aggregate!
-  cardano: Cardano
+  cardano: Cardano!
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
