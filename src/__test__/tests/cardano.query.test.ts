@@ -17,13 +17,13 @@ export function cardanoTests (createClient: () => Promise<TestClient>) {
                 currentEpoch {
                     number
                 }
+                networkName
                 protocolConst
                 slotDuration
                 startTime
             }
         }`
       })
-      console.log(result)
       expect(result.data).toMatchSnapshot()
     })
   })
