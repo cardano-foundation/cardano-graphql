@@ -10,7 +10,7 @@ services:
     ports:
       - ${API_PORT:-3100}:3100
   hasura:
-    image: hasura/graphql-engine:v1.0.0-beta.6.cli-migrations
+    image: hasura/graphql-engine:v1.0.0-beta.10.cli-migrations
     depends_on:
       - "postgres"
     restart: always
