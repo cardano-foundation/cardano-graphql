@@ -107,6 +107,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
                     size
                     totalOutput
                 }
+                transactionsCount
             }
         }`
       })

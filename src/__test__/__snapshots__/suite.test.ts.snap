@@ -101,7 +101,7 @@ Object {
 exports[`cardano Returns key information about the network 1`] = `
 Object {
   "cardano": Object {
-    "blockHeight": 70849,
+    "blockHeight": 70205,
     "currentEpoch": Object {
       "number": 3,
     },
@@ -128,8 +128,8 @@ Object {
         "transactionsCount": "33",
       },
       "sum": Object {
-        "output": "188216297614740450",
-        "transactionsCount": "18161",
+        "output": "185850210776378720",
+        "transactionsCount": "18007",
       },
     },
   },
@@ -409,9 +409,9 @@ Object {
   "utxos_aggregate": Object {
     "aggregate": Object {
       "avg": Object {
-        "value": "24207.026699029127",
+        "value": "24072.92420537897",
       },
-      "count": 412,
+      "count": 409,
       "max": Object {
         "value": "175212",
       },
@@ -419,7 +419,7 @@ Object {
         "value": "1",
       },
       "sum": Object {
-        "value": "9973295",
+        "value": "9845826",
       },
     },
   },

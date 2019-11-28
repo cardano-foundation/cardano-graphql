@@ -3,13 +3,16 @@ module.exports = function () {
     files: [
       'src/**/*.ts',
       'src/**/*.graphql',
-      '!src/**/integration.test.ts'
+      '!src/**/suite.test.ts'
     ],
 
     tests: [
-      'src/**/integration.test.ts'
+      'src/**/suite.test.ts'
     ],
     env: {
+      params: {
+        env: 'TEST_MODE=integration'
+      },
       type: 'node'
     },
     workers: {
