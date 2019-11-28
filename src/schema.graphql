@@ -33,7 +33,7 @@ type Query {
     offset: Int
     where: Epoch_bool_exp
   ): Epoch_aggregate!
-  cardano: Cardano
+  cardano: Cardano!
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
@@ -63,6 +63,7 @@ type Query {
 type Cardano {
   blockHeight: Int!
   currentEpoch: Epoch!
+  networkName: String!
   protocolConst: Int!
   slotDuration: Int!
   startTime: DateTime!
@@ -70,7 +71,7 @@ type Cardano {
 
 type Transaction {
   block: Block
-  fee: String!
+  fee: BigInt!
   id: Hash32HexString!
   inputs (
     limit: Int
@@ -96,6 +97,7 @@ type Transaction {
     offset: Int
     where: Coin_bool_exp
   ): Coin_aggregate
+  size: BigInt!
   totalOutput: String!
   includedAt: DateTime!
 }
@@ -104,6 +106,7 @@ input Transaction_order_by {
   block: order_by
   fee: order_by
   includedAt: order_by
+  size: order_by
   totalOutput: order_by
 }
 
@@ -117,6 +120,7 @@ input Transaction_bool_exp {
   includedAt: Date_comparison_exp
   inputs: Coin_bool_exp
   outputs: Coin_bool_exp
+  size: BigInt_comparison_exp
   totalOutput: text_comparison_exp
 }
 
@@ -125,31 +129,35 @@ type Transaction_aggregate {
 }
 
 type Transaction_aggregate_fields {
-  avg: Transaction_avg_fields
-  count: Int
-  max: Transaction_max_fields
-  min: Transaction_min_fields
-  sum: Transaction_sum_fields
+  avg: Transaction_avg_fields!
+  count: String!
+  max: Transaction_max_fields!
+  min: Transaction_min_fields!
+  sum: Transaction_sum_fields!
 }
 
 type Transaction_avg_fields {
   fee: Float
+  size: Float
   totalOutput: Float
 }
 
 type Transaction_max_fields {
-  fee: BigInt
-  totalOutput: BigInt
+  fee: String
+  size: String
+  totalOutput: String
 }
 
 type Transaction_min_fields {
-  fee: BigInt
-  totalOutput: BigInt
+  fee: String
+  size: String
+  totalOutput: String
 }
 
 type Transaction_sum_fields {
-  fee: BigInt
-  totalOutput: BigInt
+  fee: String
+  size: String
+  totalOutput: String
 }
 
 type TransactionInput {
@@ -170,7 +178,7 @@ input Coin_bool_exp {
   _not: Coin_bool_exp
   _or: [Coin_bool_exp]
   address: text_comparison_exp
-  value: BigInt_comparison_exp
+  value: text_comparison_exp
 }
 
 type Coin_aggregate {
@@ -178,27 +186,27 @@ type Coin_aggregate {
 }
 
 type Coin_aggregate_fields {
-  avg: Coin_avg_fields
-  count: Int
-  max: Coin_max_fields
-  min: Coin_min_fields
-  sum: Coin_sum_fields
+  avg: Coin_avg_fields!
+  count: String!
+  max: Coin_max_fields!
+  min: Coin_min_fields!
+  sum: Coin_sum_fields!
 }
 
 type Coin_avg_fields {
-  value: BigInt
+  value: String
 }
 
 type Coin_max_fields {
-  value: BigInt
+  value: String
 }
 
 type Coin_min_fields {
-  value: BigInt
+  value: String
 }
 
 type Coin_sum_fields {
-  value: BigInt
+  value: String
 }
 
 type TransactionOutput {
@@ -213,11 +221,11 @@ type Utxo_aggregate {
 }
 
 type Utxo_aggregate_fields {
-  avg: Uxto_avg_fields
-  count: Int
-  max: Uxto_max_fields
-  min: Uxto_min_fields
-  sum: Uxto_sum_fields
+  avg: Uxto_avg_fields!
+  count: String!
+  max: Uxto_max_fields!
+  min: Uxto_min_fields!
+  sum: Uxto_sum_fields!
 }
 
 type Uxto_avg_fields {
@@ -242,8 +250,8 @@ type Block {
   createdBy: String!
   # Genesis block does not belong to the 0th epoch, therefore it could be null
   epoch: Epoch
-  epochNo: Int!
-  fees: String!
+  epochNo: Int
+  fees: BigInt!
   id: Hash32HexString!
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a merkel root
   merkelRootHash: Hash32HexString
@@ -255,7 +263,7 @@ type Block {
   slotWithinEpoch: Int
   previousBlock: Block
   nextBlock: Block
-  size: Int!
+  size: BigInt!
   transactions(
     limit: Int
     order_by: [Transaction_order_by!]
@@ -268,6 +276,7 @@ type Block {
     offset: Int
     where: Transaction_bool_exp
   ): Transaction_aggregate!
+  transactionsCount: String!
 }
 
 input Block_bool_exp {
@@ -282,10 +291,11 @@ input Block_bool_exp {
   number: Int_comparison_exp
   previousBlock: Block_bool_exp
   nextBlock: Block_bool_exp
-  size: Int_comparison_exp
+  size: BigInt_comparison_exp
   slotNo: Int_comparison_exp
   slotWithinEpoch: Int_comparison_exp
   transactions: Transaction_bool_exp
+  transactionsCount: text_comparison_exp
 }
 
 input Block_order_by {
@@ -297,6 +307,7 @@ input Block_order_by {
   size: order_by
   slotNo: order_by_with_nulls
   slotWithinEpoch: order_by_with_nulls
+  transactionsCount: order_by
 }
 
 type Block_aggregate {
@@ -304,11 +315,11 @@ type Block_aggregate {
 }
 
 type Block_aggregate_fields {
-  avg: Block_avg_fields
-  count: Int
-  max: Block_max_fields
-  min: Block_min_fields
-  sum: Block_sum_fields
+  avg: Block_avg_fields!
+  count: String!
+  max: Block_max_fields!
+  min: Block_min_fields!
+  sum: Block_sum_fields!
 }
 
 type Block_avg_fields {
@@ -317,18 +328,18 @@ type Block_avg_fields {
 }
 
 type Block_max_fields {
-  fees: BigInt
-  size: BigInt
+  fees: String
+  size: String
 }
 
 type Block_min_fields {
-  fees: BigInt
-  size: BigInt
+  fees: String
+  size: String
 }
 
 type Block_sum_fields {
-  fees: BigInt
-  size: BigInt
+  fees: String
+  size: String
 }
 
 type Epoch {
@@ -379,7 +390,7 @@ type Epoch_aggregate_fields {
 }
 
 type Epoch_max_fields {
-  number: String!
+  number: Int!
   output: String!
   transactionsCount: String!
 }
@@ -463,9 +474,9 @@ input Percentage_comparison_exp {
   _eq: Percentage
   _gt: Percentage
   _gte: Percentage
-  _lt: Int
-  _lte: Int
-  _neq: Int
+  _lt: Percentage
+  _lte: Percentage
+  _neq: Percentage
 }
 
 # All fields are combined with logical 'AND'.

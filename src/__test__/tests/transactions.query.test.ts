@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import gql from 'graphql-tag'
 import { tx05ad8b, txe68043 } from '../data_assertions'
 import { TestClient } from '../TestClient'
@@ -30,6 +31,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                     address
                     value
                 }
+                size
                 totalOutput
             }
         }`
@@ -87,7 +89,8 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
       expect(result.data.transactions.length).toBe(2)
       const { transactions: txs } = result.data
       expect(txs).toEqual([tx05ad8b.aggregated, txe68043.aggregated])
-      expect(txs[1].inputs_aggregate.aggregate.sum.value).toEqual(txs[1].outputs_aggregate.aggregate.sum.value + parseInt(txs[1].fee))
+      const outputsPlusFee = new BigNumber(txs[1].outputs_aggregate.aggregate.sum.value).plus(txs[1].fee).toString()
+      expect(txs[1].inputs_aggregate.aggregate.sum.value).toEqual(outputsPlusFee)
       expect(result.data).toMatchSnapshot()
     })
     it('Can return filtered aggregated data', async () => {
@@ -97,7 +100,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                 where: { id: { _eq: \"${txe68043.aggregated_filtered.id}\"}}
             ) {
                 id
-                inputs_aggregate ( where: { value: { _gt: 3842014 }}) {
+                inputs_aggregate ( where: { value: { _gt: "3842014" }}) {
                     aggregate {
                         count
                     }

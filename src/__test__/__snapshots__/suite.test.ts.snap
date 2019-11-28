@@ -1,0 +1,427 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`blocks Can return aggregated data 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "number": 29021,
+      "transactions_aggregate": Object {
+        "aggregate": Object {
+          "avg": Object {
+            "fee": 171158,
+            "size": 218,
+            "totalOutput": 2846601153795,
+          },
+          "count": "2",
+          "max": Object {
+            "fee": "171246",
+            "size": "220",
+            "totalOutput": "4924799478660",
+          },
+          "min": Object {
+            "fee": "171070",
+            "size": "216",
+            "totalOutput": "768402828930",
+          },
+          "sum": Object {
+            "fee": "342316",
+            "size": "436",
+            "totalOutput": "5693202307590",
+          },
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`blocks Can return blocks by number 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+    },
+  ],
+}
+`;
+
+exports[`blocks Can return filtered aggregated data 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "number": 29021,
+      "transactions_aggregate": Object {
+        "aggregate": Object {
+          "count": "2",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`blocks are linked to their predecessor, and the chain can be traversed 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "previousBlock": Object {
+        "number": 29021,
+        "previousBlock": Object {
+          "number": 29020,
+          "previousBlock": Object {
+            "number": 29019,
+          },
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`blocks are linked to their successor, and the chain can be traversed 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "nextBlock": Object {
+        "nextBlock": Object {
+          "nextBlock": Object {
+            "number": 29025,
+          },
+          "number": 29024,
+        },
+        "number": 29023,
+      },
+    },
+  ],
+}
+`;
+
+exports[`cardano Returns key information about the network 1`] = `
+Object {
+  "cardano": Object {
+    "blockHeight": 70205,
+    "currentEpoch": Object {
+      "number": 3,
+    },
+    "networkName": "mainnet",
+    "protocolConst": 2160,
+    "slotDuration": 20000,
+    "startTime": "2017-09-23T21:44:51",
+  },
+}
+`;
+
+exports[`epochs Can return aggregated Epoch data 1`] = `
+Object {
+  "epochs_aggregate": Object {
+    "aggregate": Object {
+      "count": "4",
+      "max": Object {
+        "number": 3,
+        "output": "101402912214214220",
+        "transactionsCount": "12870",
+      },
+      "min": Object {
+        "output": "10378568796482912",
+        "transactionsCount": "33",
+      },
+      "sum": Object {
+        "output": "185850210776378720",
+        "transactionsCount": "18007",
+      },
+    },
+  },
+}
+`;
+
+exports[`epochs Can return aggregated data 1`] = `
+Object {
+  "epochs": Array [
+    Object {
+      "blocks_aggregate": Object {
+        "aggregate": Object {
+          "avg": Object {
+            "fees": 47846.34914312181,
+            "size": 868.0383047707272,
+          },
+          "count": "21590",
+          "max": Object {
+            "fees": "1377042",
+            "size": "648087",
+          },
+          "min": Object {
+            "fees": "0",
+            "size": "631",
+          },
+          "sum": Object {
+            "fees": "1033002678",
+            "size": "18740947",
+          },
+        },
+      },
+      "number": 1,
+    },
+  ],
+}
+`;
+
+exports[`epochs Can return filtered aggregated data 1`] = `
+Object {
+  "epochs": Array [
+    Object {
+      "blocks_aggregate": Object {
+        "aggregate": Object {
+          "count": "2408",
+        },
+      },
+      "number": 1,
+    },
+  ],
+}
+`;
+
+exports[`epochs Returns epoch details by number 1`] = `
+Object {
+  "epochs": Array [
+    Object {
+      "lastBlockTime": "2017-10-03T21:43:51",
+      "number": 1,
+      "output": "101402912214214220",
+      "startedAt": "2017-09-28T21:45:51",
+      "transactionsCount": "12870",
+    },
+  ],
+}
+`;
+
+exports[`epochs Returns epoch details by number range 1`] = `
+Object {
+  "epochs": Array [
+    Object {
+      "lastBlockTime": "2017-10-03T21:43:51",
+      "number": 1,
+      "output": "101402912214214220",
+      "startedAt": "2017-09-28T21:45:51",
+      "transactionsCount": "12870",
+    },
+  ],
+}
+`;
+
+exports[`transactions Can return aggregated data 1`] = `
+Object {
+  "transactions": Array [
+    Object {
+      "fee": 171246,
+      "id": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
+      "inputs_aggregate": Object {
+        "aggregate": Object {
+          "avg": Object {
+            "value": "4924799649906",
+          },
+          "count": "1",
+          "max": Object {
+            "value": "4924799649906",
+          },
+          "min": Object {
+            "value": "4924799649906",
+          },
+          "sum": Object {
+            "value": "4924799649906",
+          },
+        },
+      },
+      "outputs_aggregate": Object {
+        "aggregate": Object {
+          "avg": Object {
+            "value": "2462399739330",
+          },
+          "count": "2",
+          "max": Object {
+            "value": "4824799478660",
+          },
+          "min": Object {
+            "value": "100000000000",
+          },
+          "sum": Object {
+            "value": "4924799478660",
+          },
+        },
+      },
+    },
+    Object {
+      "fee": 171070,
+      "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+      "inputs_aggregate": Object {
+        "aggregate": Object {
+          "avg": Object {
+            "value": "768403000000",
+          },
+          "count": "1",
+          "max": Object {
+            "value": "768403000000",
+          },
+          "min": Object {
+            "value": "768403000000",
+          },
+          "sum": Object {
+            "value": "768403000000",
+          },
+        },
+      },
+      "outputs_aggregate": Object {
+        "aggregate": Object {
+          "avg": Object {
+            "value": "384201414465",
+          },
+          "count": "2",
+          "max": Object {
+            "value": "768401828930",
+          },
+          "min": Object {
+            "value": "1000000",
+          },
+          "sum": Object {
+            "value": "768402828930",
+          },
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`transactions Can return filtered aggregated data 1`] = `
+Object {
+  "transactions": Array [
+    Object {
+      "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+      "inputs_aggregate": Object {
+        "aggregate": Object {
+          "count": "1",
+        },
+      },
+      "outputs_aggregate": Object {
+        "aggregate": Object {
+          "count": "1",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`transactions Returns transactions by IDs 1`] = `
+Object {
+  "transactions": Array [
+    Object {
+      "block": Object {
+        "number": 29021,
+      },
+      "fee": 171246,
+      "id": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
+      "inputs": Array [
+        Object {
+          "address": "DdzFFzCqrht5ExAdoZVExXoZTpoMYGKxva3thvvvHapsLZQzSX3kCqwgqi5NSM2oUtHYYDqsSnvSGbqkarB6cSgDZohUhLWZ9KFdDWsa",
+          "value": "4924799649906",
+        },
+      ],
+      "outputs": Array [
+        Object {
+          "address": "DdzFFzCqrhsxVv8Sjuj35Zkw42T9WjwXa6DasrNknm5M3bPVDnWJWwhX5NymoZncUArTfFYZ9sYGaA9htKSNYoK5Vkzx2vUtunAFt3eE",
+          "value": "4824799478660",
+        },
+        Object {
+          "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+          "value": "100000000000",
+        },
+      ],
+      "size": 220,
+      "totalOutput": "4924799478660",
+    },
+    Object {
+      "block": Object {
+        "number": 29021,
+      },
+      "fee": 171070,
+      "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+      "inputs": Array [
+        Object {
+          "address": "DdzFFzCqrhsggyaAMAUTjGtjBr1CTp8tTcHYWbqtoyQBZcaYHM16rjbUDawTwoVaEPawAMPLJmpJVXHBNxZnTgmQzqAcNDe6XvMe5BkB",
+          "value": "768403000000",
+        },
+      ],
+      "outputs": Array [
+        Object {
+          "address": "DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8",
+          "value": "768401828930",
+        },
+        Object {
+          "address": "DdzFFzCqrhsgrGt7zHydkE4cKxjB7SgsdnMPUFxYEwBu1u4sGobxZL5Xo3eDycCrtSYAUyw9aAsZZxFpTdgur6MwYDYMwAZ4xNGKRD3o",
+          "value": "1000000",
+        },
+      ],
+      "size": 216,
+      "totalOutput": "768402828930",
+    },
+  ],
+}
+`;
+
+exports[`utxos Can be scoped by address 1`] = `
+Object {
+  "utxos": Array [
+    Object {
+      "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+      "value": "100000000000",
+    },
+    Object {
+      "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+      "value": "150000000000",
+    },
+  ],
+}
+`;
+
+exports[`utxos Can be scoped by list of addresses 1`] = `
+Object {
+  "utxos": Array [
+    Object {
+      "address": "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt",
+      "value": "1153846000000",
+    },
+    Object {
+      "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+      "value": "100000000000",
+    },
+    Object {
+      "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
+      "value": "150000000000",
+    },
+  ],
+}
+`;
+
+exports[`utxos Can return aggregated UTXO data 1`] = `
+Object {
+  "utxos_aggregate": Object {
+    "aggregate": Object {
+      "avg": Object {
+        "value": "24072.92420537897",
+      },
+      "count": "409",
+      "max": Object {
+        "value": "175212",
+      },
+      "min": Object {
+        "value": "1",
+      },
+      "sum": Object {
+        "value": "9845826",
+      },
+    },
+  },
+}
+`;

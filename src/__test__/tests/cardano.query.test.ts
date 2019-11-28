@@ -17,6 +17,7 @@ export function cardanoTests (createClient: () => Promise<TestClient>) {
                 currentEpoch {
                     number
                 }
+                networkName
                 protocolConst
                 slotDuration
                 startTime

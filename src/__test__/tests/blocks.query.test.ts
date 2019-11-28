@@ -104,8 +104,10 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
                         value
                         address
                     }
+                    size
                     totalOutput
                 }
+                transactionsCount
             }
         }`
       })
@@ -122,19 +124,23 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
                     aggregate {
                         avg {
                             fee
+                            size
                             totalOutput
                         }
                         count
                         max {
                             fee
+                            size
                             totalOutput
                         }
                         min {
                             fee
+                            size
                             totalOutput
                         }
                         sum {
                             fee
+                            size
                             totalOutput
                         }
                     }
@@ -154,7 +160,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
                 transactions_aggregate( 
                     where: {
                         _and: [
-                            { fee: { _gt: 10 }},
+                            { fee: { _gt: "10" }},
                             { totalOutput: { _lt: "4924799478670" } }
                         ]
                     }) {
