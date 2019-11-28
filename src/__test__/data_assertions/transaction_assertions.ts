@@ -4,7 +4,7 @@ export const txe68043 = {
     block: {
       number: 29021
     },
-    fee: '171070',
+    fee: 171070,
     id: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
     includedAt: '2017-09-30T15:03:11',
     inputs: [{
@@ -22,39 +22,39 @@ export const txe68043 = {
     totalOutput: '768402828930'
   },
   aggregated: {
-    fee: '171070',
+    fee: 171070,
     id: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
     inputs_aggregate: {
       aggregate: {
         avg: {
-          value: 768403000000
+          value: '768403000000'
         },
-        count: 1,
+        count: '1',
         max: {
-          value: 768403000000
+          value: '768403000000'
         },
         min: {
-          value: 768403000000
+          value: '768403000000'
         },
         sum: {
-          value: 768403000000
+          value: '768403000000'
         }
       }
     },
     outputs_aggregate: {
       aggregate: {
         avg: {
-          value: 384201414465
+          value: '384201414465'
         },
-        count: 2,
+        count: '2',
         max: {
-          value: 768401828930
+          value: '768401828930'
         },
         min: {
-          value: 1000000
+          value: '1000000'
         },
         sum: {
-          value: 768402828930
+          value: '768402828930'
         }
       }
     }
@@ -63,12 +63,12 @@ export const txe68043 = {
     id: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
     inputs_aggregate: {
       aggregate: {
-        count: 0
+        count: '0'
       }
     },
     outputs_aggregate: {
       aggregate: {
-        count: 1
+        count: '1'
       }
     }
   }
@@ -79,7 +79,7 @@ export const tx05ad8b = {
     block: {
       number: 29021
     },
-    fee: '171246',
+    fee: 171246,
     id: '05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102',
     includedAt: '2017-09-30T15:03:11',
     inputs: [{
@@ -97,39 +97,39 @@ export const tx05ad8b = {
     totalOutput: '4924799478660'
   },
   aggregated: {
-    fee: '171246',
+    fee: 171246,
     id: '05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102',
     inputs_aggregate: {
       aggregate: {
         avg: {
-          value: 4924799649906
+          value: '4924799649906'
         },
-        count: 1,
+        count: '1',
         max: {
-          value: 4924799649906
+          value: '4924799649906'
         },
         min: {
-          value: 4924799649906
+          value: '4924799649906'
         },
         sum: {
-          value: 4924799649906
+          value: '4924799649906'
         }
       }
     },
     outputs_aggregate: {
       aggregate: {
         avg: {
-          value: 2462399739330
+          value: '2462399739330'
         },
-        count: 2,
+        count: '2',
         max: {
-          value: 4824799478660
+          value: '4824799478660'
         },
         min: {
-          value: 100000000000
+          value: '100000000000'
         },
         sum: {
-          value: 4924799478660
+          value: '4924799478660'
         }
       }
     }

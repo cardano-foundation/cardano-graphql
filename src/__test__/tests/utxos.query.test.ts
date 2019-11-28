@@ -67,7 +67,7 @@ export function utxosTests (createClient: () => Promise<TestClient>) {
             }
         }`
       })
-      expect(result.data.utxos_aggregate.aggregate.count).toBe(409)
+      expect(result.data.utxos_aggregate.aggregate.count).toBe('409')
       expect(result.data).toMatchSnapshot()
     })
   })

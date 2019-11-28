@@ -160,7 +160,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
                 transactions_aggregate( 
                     where: {
                         _and: [
-                            { fee: { _gt: 10 }},
+                            { fee: { _gt: "10" }},
                             { totalOutput: { _lt: "4924799478670" } }
                         ]
                     }) {
