@@ -1,6 +1,24 @@
 Changelog
 =========
 
+## 1.0.0
+## Features
+- `Block.transactionsCount` - An optimised version of the aggregate query.
+- `Cardano.networkName` - Unlocks application-side logic based on the network it's connected to.
+- `Transaction.size` - New
+## Fixes
+- The aggregated and known very large numbers are now typed as String. Cardano JS has utilities to work with these return values, currently limited to currency conversion.
+- `cardano` query return value is accurately defined to always return an object of type `Cardano` 
+- `Transaction.fee` was a String, now a `BigInt`
+
+### Chores
+- The PostgreSQL views have been incorperated upstream, and are no longer managed in this codebase.
+- Updates to Hasura 1.0.0-beta.10
+- Includes script to dump a sample using a Cardano Docker stack.
+- Improves CI process by consolidating the Jest snapshot files.
+- Renamed npm scripts `start-dependencies` and `stop-dependencies` for alignment with `start:*` and `stop:*`
+- `Cardano` now matches the postgres view, and is an improvement over the previous version which performed two queries.
+
 ## 0.4.0
 ### Features
 - Block.nextBlock
