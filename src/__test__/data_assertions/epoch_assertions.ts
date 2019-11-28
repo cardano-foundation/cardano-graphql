@@ -16,18 +16,18 @@ export const epoch1 = {
           fees: 47846.34914312181,
           size: 868.0383047707272
         },
-        count: 21590,
+        count: '21590',
         max: {
-          fees: 1377042,
-          size: 648087
+          fees: '1377042',
+          size: '648087'
         },
         min: {
-          fees: 0,
-          size: 631
+          fees: '0',
+          size: '631'
         },
         sum: {
-          fees: 1033002678,
-          size: 18740947
+          fees: '1033002678',
+          size: '18740947'
         }
       }
     },

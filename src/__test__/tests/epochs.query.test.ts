@@ -63,7 +63,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
       const result = await client.query({
         query: gql`query {
             epochs( where: { number: { _eq: 1 }}) {
-                blocks_aggregate ( where: { 
+                blocks_aggregate ( where: {
                     _and: [{
                         slotNo: { _is_null: false },
                         createdBy: { _eq: "SlotLeader-6c9e14978b9d6629" },

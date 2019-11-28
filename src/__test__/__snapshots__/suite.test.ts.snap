@@ -12,21 +12,21 @@ Object {
             "size": 218,
             "totalOutput": 2846601153795,
           },
-          "count": 2,
+          "count": "2",
           "max": Object {
-            "fee": 171246,
-            "size": 220,
-            "totalOutput": 4924799478660,
+            "fee": "171246",
+            "size": "220",
+            "totalOutput": "4924799478660",
           },
           "min": Object {
-            "fee": 171070,
-            "size": 216,
-            "totalOutput": 768402828930,
+            "fee": "171070",
+            "size": "216",
+            "totalOutput": "768402828930",
           },
           "sum": Object {
-            "fee": 342316,
-            "size": 436,
-            "totalOutput": 5693202307590,
+            "fee": "342316",
+            "size": "436",
+            "totalOutput": "5693202307590",
           },
         },
       },
@@ -52,7 +52,7 @@ Object {
       "number": 29021,
       "transactions_aggregate": Object {
         "aggregate": Object {
-          "count": 2,
+          "count": "2",
         },
       },
     },
@@ -119,7 +119,7 @@ Object {
     "aggregate": Object {
       "count": "4",
       "max": Object {
-        "number": "3",
+        "number": 3,
         "output": "101402912214214220",
         "transactionsCount": "12870",
       },
@@ -146,18 +146,18 @@ Object {
             "fees": 47846.34914312181,
             "size": 868.0383047707272,
           },
-          "count": 21590,
+          "count": "21590",
           "max": Object {
-            "fees": 1377042,
-            "size": 648087,
+            "fees": "1377042",
+            "size": "648087",
           },
           "min": Object {
-            "fees": 0,
-            "size": 631,
+            "fees": "0",
+            "size": "631",
           },
           "sum": Object {
-            "fees": 1033002678,
-            "size": 18740947,
+            "fees": "1033002678",
+            "size": "18740947",
           },
         },
       },
@@ -173,7 +173,7 @@ Object {
     Object {
       "blocks_aggregate": Object {
         "aggregate": Object {
-          "count": 2408,
+          "count": "2408",
         },
       },
       "number": 1,
@@ -214,77 +214,77 @@ exports[`transactions Can return aggregated data 1`] = `
 Object {
   "transactions": Array [
     Object {
-      "fee": "171246",
+      "fee": 171246,
       "id": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
       "inputs_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "value": 4924799649906,
+            "value": "4924799649906",
           },
-          "count": 1,
+          "count": "1",
           "max": Object {
-            "value": 4924799649906,
+            "value": "4924799649906",
           },
           "min": Object {
-            "value": 4924799649906,
+            "value": "4924799649906",
           },
           "sum": Object {
-            "value": 4924799649906,
+            "value": "4924799649906",
           },
         },
       },
       "outputs_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "value": 2462399739330,
+            "value": "2462399739330",
           },
-          "count": 2,
+          "count": "2",
           "max": Object {
-            "value": 4824799478660,
+            "value": "4824799478660",
           },
           "min": Object {
-            "value": 100000000000,
+            "value": "100000000000",
           },
           "sum": Object {
-            "value": 4924799478660,
+            "value": "4924799478660",
           },
         },
       },
     },
     Object {
-      "fee": "171070",
+      "fee": 171070,
       "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
       "inputs_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "value": 768403000000,
+            "value": "768403000000",
           },
-          "count": 1,
+          "count": "1",
           "max": Object {
-            "value": 768403000000,
+            "value": "768403000000",
           },
           "min": Object {
-            "value": 768403000000,
+            "value": "768403000000",
           },
           "sum": Object {
-            "value": 768403000000,
+            "value": "768403000000",
           },
         },
       },
       "outputs_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "value": 384201414465,
+            "value": "384201414465",
           },
-          "count": 2,
+          "count": "2",
           "max": Object {
-            "value": 768401828930,
+            "value": "768401828930",
           },
           "min": Object {
-            "value": 1000000,
+            "value": "1000000",
           },
           "sum": Object {
-            "value": 768402828930,
+            "value": "768402828930",
           },
         },
       },
@@ -300,12 +300,12 @@ Object {
       "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
       "inputs_aggregate": Object {
         "aggregate": Object {
-          "count": 1,
+          "count": "1",
         },
       },
       "outputs_aggregate": Object {
         "aggregate": Object {
-          "count": 1,
+          "count": "1",
         },
       },
     },
@@ -320,7 +320,7 @@ Object {
       "block": Object {
         "number": 29021,
       },
-      "fee": "171246",
+      "fee": 171246,
       "id": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
       "inputs": Array [
         Object {
@@ -345,7 +345,7 @@ Object {
       "block": Object {
         "number": 29021,
       },
-      "fee": "171070",
+      "fee": 171070,
       "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
       "inputs": Array [
         Object {
@@ -411,7 +411,7 @@ Object {
       "avg": Object {
         "value": "24072.92420537897",
       },
-      "count": 409,
+      "count": "409",
       "max": Object {
         "value": "175212",
       },
