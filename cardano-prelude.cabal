@@ -40,6 +40,7 @@ library
                        Cardano.Prelude.Json.Canonical
                        Cardano.Prelude.Json.Parse
                        Cardano.Prelude.Orphans
+                       Cardano.Prelude.Show
                        Cardano.Prelude.Strict
 
   build-depends:       base
@@ -52,6 +53,7 @@ library
                      , containers
                      , fingertree
                      , formatting
+                     , generic-deriving
                      , ghc-heap
                      , ghc-prim
                      , hashable
@@ -102,6 +104,7 @@ test-suite cardano-prelude-test
                        Test.Cardano.Prelude.Orphans
                        Test.Cardano.Prelude.QuickCheck.Arbitrary
                        Test.Cardano.Prelude.QuickCheck.Property
+                       Test.Cardano.Prelude.Show
                        Test.Cardano.Prelude.Tripping
 
   build-depends:       base
