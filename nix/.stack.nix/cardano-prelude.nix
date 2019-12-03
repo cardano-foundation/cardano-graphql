@@ -67,6 +67,7 @@ in { system, compiler, flags, pkgs, hsPkgs, pkgconfPkgs, ... }:
           (hsPkgs."containers" or (buildDepError "containers"))
           (hsPkgs."fingertree" or (buildDepError "fingertree"))
           (hsPkgs."formatting" or (buildDepError "formatting"))
+          (hsPkgs."generic-deriving" or (buildDepError "generic-deriving"))
           (hsPkgs."ghc-heap" or (buildDepError "ghc-heap"))
           (hsPkgs."ghc-prim" or (buildDepError "ghc-prim"))
           (hsPkgs."hashable" or (buildDepError "hashable"))
