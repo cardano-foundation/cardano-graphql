@@ -1,6 +1,6 @@
 {
   "name": "cardano-graphql",
-  "version": "1.0.0-rc.0",
+  "version": "1.0.0-rc.1",
   "description": "GraphQL API for Cardano with client-consumable types generated",
   "scripts": {
     "codegen:external": "graphql-codegen --config ./codegen.external.yml",
@@ -50,6 +50,7 @@
     "@types/jest": "^24.0.18",
     "@types/lodash.isempty": "^4.4.6",
     "@types/node": "^12.6.8",
+    "@types/node-fetch": "^2.5.4",
     "@types/validator": "^10.11.3",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
