@@ -2,13 +2,13 @@
 {-# LANGUAGE DerivingStrategies         #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE PatternSynonyms            #-}
-{-# LANGUAGE StandaloneDeriving         #-}
 {-# LANGUAGE ViewPatterns               #-}
 
 -- | Strict variants of 'Seq' operations.
 --
 module Data.Sequence.Strict
   ( StrictSeq (Empty, (:<|), (:|>))
+  , getSeq
 
     -- * Construction
   , empty
@@ -39,17 +39,26 @@ module Data.Sequence.Strict
   , spanr
 
     -- * Indexing
+  , lookup
+  , (!?)
   , take
   , takeLast
   , drop
   , dropLast
   , splitAt
   , splitAtEnd
+
+    -- * Indexing with predicates
+  , findIndexL
+  , findIndicesL
+  , findIndexR
+  , findIndicesR
   ) where
 
 import           Cardano.Prelude (NoUnexpectedThunks (..), forceElemsToWHNF,
                      noUnexpectedThunksInValues)
-import           Prelude hiding (drop, length, null, scanl, splitAt, take)
+import           Prelude hiding (drop, length, lookup, null, scanl, splitAt,
+                     take)
 
 import           Codec.Serialise (Serialise)
 import           Data.Foldable (foldl', toList)
@@ -73,7 +82,7 @@ infixl 5 :|>
 -- construction functions in this module. These functions essentially just
 -- wrap the original "Data.Sequence" functions while forcing the provided
 -- value to WHNF.
-newtype StrictSeq a = StrictSeq (Seq a)
+newtype StrictSeq a = StrictSeq { getSeq :: Seq a }
   deriving stock (Eq, Ord, Show)
   deriving newtype (Foldable, Semigroup, Serialise)
 
@@ -207,6 +216,29 @@ spanr p (StrictSeq xs) = toStrictSeqTuple (Seq.spanr p xs)
   Indexing
 -------------------------------------------------------------------------------}
 
+-- | \( O(\log(\min(i,n-i))) \). The element at the specified position,
+-- counting from 0. If the specified position is negative or at
+-- least the length of the sequence, 'lookup' returns 'Nothing'.
+--
+-- prop> 0 <= i < length xs ==> lookup i xs == Just (toList xs !! i)
+-- prop> i < 0 || i >= length xs ==> lookup i xs = Nothing
+--
+-- Unlike 'index', this can be used to retrieve an element without
+-- forcing it. For example, to insert the fifth element of a sequence
+-- @xs@ into a 'Data.Map.Lazy.Map' @m@ at key @k@, you could use
+--
+-- @
+-- case lookup 5 xs of
+--   Nothing -> m
+--   Just x -> 'Data.Map.Lazy.insert' k x m
+-- @
+lookup :: Int -> StrictSeq a -> Maybe a
+lookup i (StrictSeq xs) = Seq.lookup i xs
+
+-- | \( O(\log(\min(i,n-i))) \). A flipped, infix version of 'lookup'.
+(!?) :: StrictSeq a -> Int -> Maybe a
+(!?) = flip lookup
+
 -- | \( O(\log(\min(i,n-i))) \). The first @i@ elements of a sequence.
 -- If @i@ is negative, @'take' i s@ yields the empty sequence.
 -- If the sequence contains fewer than @i@ elements, the whole sequence
@@ -253,6 +285,26 @@ splitAtEnd :: Int -> StrictSeq a -> (StrictSeq a, StrictSeq a)
 splitAtEnd i xs
   | length xs >= i = splitAt (length xs - i) xs
   | otherwise      = (Empty, xs)
+
+-- | @'findIndexL' p xs@ finds the index of the leftmost element that
+-- satisfies @p@, if any exist.
+findIndexL :: (a -> Bool) -> StrictSeq a -> Maybe Int
+findIndexL p (StrictSeq xs) = Seq.findIndexL p xs
+
+-- | @'findIndexR' p xs@ finds the index of the rightmost element that
+-- satisfies @p@, if any exist.
+findIndexR :: (a -> Bool) -> StrictSeq a -> Maybe Int
+findIndexR p (StrictSeq xs) = Seq.findIndexR p xs
+
+-- | @'findIndicesL' p@ finds all indices of elements that satisfy @p@, in
+-- ascending order.
+findIndicesL :: (a -> Bool) -> StrictSeq a -> [Int]
+findIndicesL p (StrictSeq xs) = Seq.findIndicesL p xs
+
+-- | @'findIndicesR' p@ finds all indices of elements that satisfy @p@, in
+-- descending order.
+findIndicesR :: (a -> Bool) -> StrictSeq a -> [Int]
+findIndicesR p (StrictSeq xs) = Seq.findIndicesR p xs
 
 {-------------------------------------------------------------------------------
   Helpers
