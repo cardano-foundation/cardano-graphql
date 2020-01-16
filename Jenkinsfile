@@ -1,7 +1,12 @@
 pipeline {
   agent any
 
-  tools {nodejs "Node 10"}
+  environment {
+    GIT_COMMIT_HASH = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+    PACKAGE_JSON = readJSON file: 'package.json'
+  }
+
+  tools {nodejs 'Node 10'}
 
    // Lock concurrent builds due to the docker dependency
   options {
@@ -38,38 +43,30 @@ pipeline {
     stage('Build') {
        steps {
           sh 'yarn build'
+          sh 'docker build -t inputoutput/cardano-graphql:${env.GIT_COMMIT_HASH} .'
        }
     }
-    stage('Build & Push Docker Images') {
+    stage('Push Docker Commit Hash Image') {
       steps {
-        script {
-          GIT_COMMIT_HASH = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
-          sh "docker build -t samjeston/cardano-graphql-dev:${GIT_COMMIT_HASH} ."
-          sh "docker build -t samjeston/cardano-graphql-pgseed:${GIT_COMMIT_HASH} -f test/postgres/Dockerfile ."
-          sh "docker build -t samjeston/cardano-graphql-hasura:${GIT_COMMIT_HASH} -f hasura/Dockerfile ."
-
-          sh "docker push samjeston/cardano-graphql-dev:${GIT_COMMIT_HASH}"
-          sh "docker push samjeston/cardano-graphql-pgseed:${GIT_COMMIT_HASH}"
-          sh "docker push samjeston/cardano-graphql-hasura:${GIT_COMMIT_HASH}"
-
-          if (env.BRANCH_NAME == 'develop') {
-            sh "docker tag samjeston/cardano-graphql-dev:${GIT_COMMIT_HASH} samjeston/cardano-graphql-dev:develop"
-            sh "docker tag samjeston/cardano-graphql-pgseed:${GIT_COMMIT_HASH} samjeston/cardano-graphql-pgseed:develop"
-            sh "docker tag samjeston/cardano-graphql-hasura:${GIT_COMMIT_HASH} samjeston/cardano-graphql-hasura:develop"
-            sh "docker push samjeston/cardano-graphql-dev:develop"
-            sh "docker push samjeston/cardano-graphql-pgseed:develop"
-            sh "docker push samjeston/cardano-graphql-hasura:develop"
-          }
-          if (env.BRANCH_NAME == 'master') {
-            def packageJSON = readJSON file: 'package.json'
-            sh "docker tag samjeston/cardano-graphql-dev:${GIT_COMMIT_HASH} samjeston/cardano-graphql-dev:${packageJSON.version}"
-            sh "docker tag samjeston/cardano-graphql-pgseed:${GIT_COMMIT_HASH} samjeston/cardano-graphql-pgseed:${packageJSON.version}"
-            sh "docker tag samjeston/cardano-graphql-hasura:${GIT_COMMIT_HASH} samjeston/cardano-graphql-hasura:${packageJSON.version}"
-            sh "docker push samjeston/cardano-graphql-dev:${packageJSON.version}"
-            sh "docker push samjeston/cardano-graphql-pgseed:${packageJSON.version}"
-            sh "docker push samjeston/cardano-graphql-hasura:${packageJSON.version}"
-          }
-        }
+        sh 'docker push inputoutput/cardano-graphql:${env.GIT_COMMIT_HASH}'
+      }
+    }
+    stage('Tag and Push Develop Docker Image') {
+      when {
+        branch 'develop'
+      }
+      steps {
+        sh 'docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT_HASH} inputoutput/cardano-graphql:develop'
+        sh 'docker push inputoutput/cardano-graphql:develop'
+      }
+    }
+    stage('Tag and Push Release Docker Image') {
+      when {
+        branch pattern: "release-\\d+", comparator: "REGEXP"}
+      }
+      steps {
+        sh 'docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT_HASH} inputoutput/cardano-graphql:${env.PACKAGE_JSON.version}'
+        sh 'docker push inputoutput/cardano-graphql:${env.PACKAGE_JSON.version}'
       }
     }
   }
