@@ -62,7 +62,7 @@ pipeline {
     }
     stage('Tag and Push Release Docker Image') {
       when {
-        branch pattern: "release-\\d+", comparator: "REGEXP"}
+        branch pattern: "release-\\d+", comparator: "REGEXP"
       }
       steps {
         sh 'docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT_HASH} inputoutput/cardano-graphql:${env.PACKAGE_JSON.version}'
