@@ -2,7 +2,6 @@ pipeline {
   agent any
 
   environment {
-    GIT_COMMIT_HASH = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
     PACKAGE_JSON = readJSON file: 'package.json'
   }
 
@@ -18,7 +17,6 @@ pipeline {
     stage('Install') {
       steps {
         sh 'yarn'
-        echo "${env.GIT_COMMIT_HASH}"
       }
     }
     stage('Validate Code Style') {
@@ -26,13 +24,9 @@ pipeline {
         sh 'yarn lint'
       }
     }
-    stage('Instantiate Test Services') {
+    stage('Test') {
       steps {
         sh 'yarn start:test-stack --build -d'
-      }
-    }
-    stage('e2e Test') {
-      steps {
         sh 'yarn test:e2e'
       }
       post {
@@ -45,29 +39,13 @@ pipeline {
        steps {
           sh 'yarn build'
           sh "docker build -t inputoutput/cardano-graphql:${env.GIT_COMMIT} ."
+          sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.GIT_BRANCH}"
        }
     }
-    stage('Push Docker Commit Image') {
+    stage('Publish') {
       steps {
         sh "docker push inputoutput/cardano-graphql:${env.GIT_COMMIT}"
-      }
-    }
-    stage('Tag and Push Develop Docker Image') {
-      when {
-        branch 'develop'
-      }
-      steps {
-        sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:develop"
-        sh "docker push inputoutput/cardano-graphql:develop"
-      }
-    }
-    stage('Tag and Push Release Docker Image') {
-      when {
-        branch 'release/*'
-      }
-      steps {
-        sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.PACKAGE_JSON.version}"
-        sh "docker push inputoutput/cardano-graphql:${env.PACKAGE_JSON.version}"
+        sh "docker push inputoutput/cardano-graphql:${env.GIT_BRANCH}"
       }
     }
   }
