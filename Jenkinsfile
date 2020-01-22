@@ -41,17 +41,19 @@ pipeline {
           sh "docker build -t inputoutput/cardano-graphql:${env.GIT_COMMIT} ."
        }
     }
-    stage('Add extra Docker Tags') {
+    stage('Publish: git revision') {
+       steps {
+         sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.GIT_BRANCH}"
+         sh "docker push inputoutput/cardano-graphql:${env.GIT_COMMIT}"
+       }
+    }
+    stage('Publish: branch') {
       when {
         branch '!*/*'
       }
       steps {
         sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.GIT_BRANCH}"
-      }
-    }
-    stage('Publish') {
-      steps {
-        sh "docker push inputoutput/cardano-graphql"
+        sh "docker push inputoutput/cardano-graphql:${env.GIT_BRANCH}"
       }
     }
   }
