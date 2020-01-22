@@ -43,7 +43,6 @@ pipeline {
     }
     stage('Publish: git revision') {
        steps {
-         sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.GIT_BRANCH}"
          sh "docker push inputoutput/cardano-graphql:${env.GIT_COMMIT}"
        }
     }
