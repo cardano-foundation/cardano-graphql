@@ -26,7 +26,6 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'yarn start:test-stack --build -d'
         sh 'yarn test:e2e'
       }
       post {
@@ -39,13 +38,19 @@ pipeline {
        steps {
           sh 'yarn build'
           sh "docker build -t inputoutput/cardano-graphql:${env.GIT_COMMIT} ."
-          sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.GIT_BRANCH}"
        }
+    }
+    stage('Add extra Docker Tags') {
+      when {
+        branch '!*/*'
+      }
+      steps {
+        sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.GIT_BRANCH}"
+      }
     }
     stage('Publish') {
       steps {
-        sh "docker push inputoutput/cardano-graphql:${env.GIT_COMMIT}"
-        sh "docker push inputoutput/cardano-graphql:${env.GIT_BRANCH}"
+        sh "docker push inputoutput/cardano-graphql"
       }
     }
   }
