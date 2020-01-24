@@ -8,21 +8,21 @@
     "lint": "eslint \"src/**/*.ts\"",
     "dev": "yarn codegen:internal --watch",
     "dev:test": "HASURA_URI=http://localhost:8090/v1/graphql stmux -w always -e ERROR -M -- [[ \"yarn dev\" .. \"yarn start:dependencies\" .. \"tsc --watch --noEmit\" .. \"yarn test:integration --watchAll\" ]]",
-    "dev:start": "HASURA_URI=http://localhost:8090/v1/graphql stmux -w always -e ERROR -M -- [[ \"docker-compose -f docker/docker-compose.service-deps.yml up\" .. \"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\" ]]",
+    "dev:start": "HASURA_URI=http://localhost:8090/v1/graphql stmux -w always -e ERROR -M -- [[ \\\"docker-compose -f docker-compose.dev.yml up\\\" .. \\\"ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts\\\" ]]",
     "build": "rm -rf dist && yarn codegen:internal && yarn codegen:external && tsc && npx cpx src/**/*.graphql dist",
     "test:integration": "NODE_ENV=test TEST_MODE=integration jest suite",
     "test:e2e": "NODE_ENV=test TEST_MODE=e2e jest suite",
     "start": "HASURA_URI=http://localhost:8090/v1/graphql node dist/index.js",
-    "start:dependencies": "docker-compose -f docker/docker-compose.service-deps.yml up",
-    "start:test-stack": "docker-compose -f docker/docker-compose.test.yml up",
-    "stop:dependencies": "docker-compose -f docker/docker-compose.service-deps.yml down",
-    "stop:test-stack": "docker-compose -f docker/docker-compose.test.yml down",
+    "start:dependencies": "docker-compose -f docker-compose.dev.yml up",
+    "start:test-stack": "docker-compose -f test/docker-compose.yml up",
+    "stop:dependencies": "docker-compose -f docker-compose.dev.yml down",
+    "stop:test-stack": "docker-compose -f test/docker-compose.yml down",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml",
     "refresh-db": "sh ./test/postgres/refresh_dump.sh"
   },
   "contributors": [
     "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
-    "Sam Jeston <sam.jeston@iohk.io> (https://iohk.io)"
+    "Sam Jeston <sam.jeston@gmail.com>"
   ],
   "license": "Apache-2.0",
   "dependencies": {
