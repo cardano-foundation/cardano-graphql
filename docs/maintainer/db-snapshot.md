@@ -1,4 +1,6 @@
-# Refresh Test DB Dump
+# DB Snapshot
+
+The project uses a small snapshot from the mainnet as the development and test dataset, as this allows concrete assertions to remain mostly static, and removes the need to stand up a Cardano network.  
 
 1. clone `cardano-docker-stack` from GH
 2. From cardano-docker-stack, run `./scripts/start_mainnet.sh`
