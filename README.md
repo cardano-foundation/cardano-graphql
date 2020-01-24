@@ -6,7 +6,7 @@ Cross-platform, _typed_, and **queryable** API service for Cardano, powered by [
 The [schema](src_temp/schema.graphql) is defined in native `.graphql`, and used to generate [packages](src/generated_packages/README.md) for internal and client-side static typing. [Apollo Server](https://www.apollographql.com/docs/apollo-server/) exposes the NodeJS execution engine over a HTTP endpoint. 
 
 ## Documentation
-Integrated query UI and documentation is available in the GraphQL Playground, available from the a local dev environment. A hosted version of the Playground [will be provided](https://github.com/input-output-hk/cardano-graphql/issues/9).
+Integrated query UI and documentation is available in the GraphQL Playground, available at http://localhost:3100 when running `yarn start:test-stack`.
 
 - [API Consumer Documentation](./docs/api_consumer)
 - [Developer Documentation](./docs/developer)
