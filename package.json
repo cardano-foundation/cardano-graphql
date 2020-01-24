@@ -22,7 +22,7 @@
   },
   "contributors": [
     "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
-    "Sam Jeston <sam.jeston@iohk.io> (https://iohk.io)"
+    "Sam Jeston <sam.jeston@gmail.com>"
   ],
   "license": "Apache-2.0",
   "dependencies": {
