@@ -48,7 +48,9 @@ pipeline {
     }
     stage('Publish: Branch') {
       when {
-        branch '!*/*'
+        expression {
+          return env.GIT_BRANCH != '*/*';
+        }
       }
       steps {
         sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.GIT_BRANCH}"
