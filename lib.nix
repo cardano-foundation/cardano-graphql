@@ -1,19 +1,42 @@
+{ system ? builtins.currentSystem
+, crossSystem ? null
+, config ? {}
+, overlays ? []
+}:
+
 let
-  # Allow overriding pinned nixpkgs for debugging purposes via cardano_pkgs
-  # Imports the iohk-nix library.
-  # The version can be overridden for debugging purposes by setting
-  # NIX_PATH=iohk_nix=/path/to/iohk-nix
-  iohkNix = import (
-    let try = builtins.tryEval <iohk_nix>;
-    in if try.success
-    then builtins.trace "using host <iohk_nix>" try.value
-    else
-      let
-        spec = builtins.fromJSON (builtins.readFile ./nix/iohk-nix-src.json);
-      in builtins.fetchTarball {
-        url = "${spec.url}/archive/${spec.rev}.tar.gz";
-        inherit (spec) sha256;
-      }) {};
-  pkgs = iohkNix.pkgs;
+  sources = import ./nix/sources.nix;
+  iohkNix = import sources.iohk-nix {
+    sourcesOverride = sources;
+  };
+  haskellNix = import sources."haskell.nix";
+  args = haskellNix // {
+    inherit system crossSystem;
+    overlays = (haskellNix.overlays or []) ++ overlays;
+    config = (haskellNix.config or {}) // config;
+  };
+  nixpkgs = import sources.nixpkgs;
+  pkgs = nixpkgs args;
+  haskellPackages = import ./nix/pkgs.nix {
+    inherit pkgs;
+    src = ./.;
+  };
   lib = pkgs.lib;
-in lib // iohkNix
+  niv = (import sources.niv {}).niv;
+  isCardanoPrelude = with lib; package:
+    (package.isHaskell or false) &&
+      (hasPrefix "cardano-prelude" package.identifier.name);
+  filterCardanoPackages = pkgs.lib.filterAttrs (_: package: isCardanoPrelude package);
+  getPackageChecks = pkgs.lib.mapAttrs (_: package: package.checks);
+in lib // {
+  inherit (pkgs.haskell-nix.haskellLib) collectComponents;
+  inherit
+    niv
+    sources
+    haskellPackages
+    pkgs
+    iohkNix
+    isCardanoPrelude
+    getPackageChecks
+    filterCardanoPackages;
+}
