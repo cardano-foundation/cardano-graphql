@@ -30,9 +30,10 @@ import qualified Data.Sequence as Seq
 import qualified Data.Sequence.Internal as SI
 
 import Hedgehog
-import Hedgehog.Internal.Region
-import Hedgehog.Internal.Report
-import Hedgehog.Internal.Runner
+import Hedgehog.Internal.Config (UseColor (..))
+import Hedgehog.Internal.Region (displayRegion)
+import Hedgehog.Internal.Report (Result (..), reportStatus)
+import Hedgehog.Internal.Runner (checkNamed)
 import qualified Hedgehog.Gen as Gen
 import qualified Hedgehog.Range as Range
 
@@ -547,7 +548,7 @@ _                    `agreeOnContext` _         = False
 
 expectFailure :: Property -> Property
 expectFailure p = withTests 1 $ property $ do
-    report <- liftIO $ displayRegion $ \r -> checkNamed r Nothing (Just "EXPECTED FAILURE") p
+    report <- liftIO $ displayRegion $ \r -> checkNamed r EnableColor (Just "EXPECTED FAILURE") p
     case reportStatus report of
       Failed _ ->
         success
