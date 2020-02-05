@@ -9,8 +9,8 @@ packages:
 
   - base58-bytestring-0.1.0
   # Waiting on Stackage release
-  - hedgehog-1.0
+  - hedgehog-1.0.2
   - micro-recursion-schemes-5.0.2.2
   - streaming-binary-0.3.0.1
-  - cborg-0.2.2.0
+  - cborg-0.2.2.1
   - canonical-json-0.6.0.0

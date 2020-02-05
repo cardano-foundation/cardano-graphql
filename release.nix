@@ -1,52 +1,69 @@
+############################################################################
+#
+# Hydra release jobset.
+#
+# The purpose of this file is to select jobs defined in default.nix and map
+# them to all supported build platforms.
+#
+############################################################################
+
+# The project sources
+{ cardano-prelude ? { outPath = ./.; rev = "abcdef"; }
+
+# Function arguments to pass to the project
+, projectArgs ? {
+    config = { allowUnfree = false; inHydra = true; };
+    gitrev = cardano-prelude.rev;
+  }
+
+# The systems that the jobset will be built for.
+, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" ]
+
+# The systems used for cross-compiling
+, supportedCrossSystems ? [ "x86_64-linux" ]
+
+# A Hydra option
+, scrubJobs ? true
+
+# Import IOHK common nix lib
+, commonLib ? import ./lib.nix {}
+
+}:
+
+with (import commonLib.iohkNix.release-lib) {
+  inherit (commonLib) pkgs;
+  inherit supportedSystems supportedCrossSystems scrubJobs projectArgs;
+  packageSet = import cardano-prelude;
+  gitrev = cardano-prelude.rev;
+};
+
+with pkgs.lib;
+
 let
-  commonLib = import ./lib.nix;
-  default = import ./default.nix {};
-  # Path of nix-tools jobs that we want to evict from release.nix:
-  disabled = [
-    # FIXME: those tests freeze on darwin hydra agents:
-  ];
-in
-{ cardano-prelude ? { outPath = ./.; rev = "acdef"; }, ... }@args:
-commonLib.pkgs.lib.mapAttrsRecursiveCond
-(as: !(as ? "type" && as.type == "derivation"))
-(path: v: if (builtins.elem path disabled) then null else v)
-(commonLib.nix-tools.release-nix {
-  package-set-path = ./nix/nix-tools.nix;
+  testsSupportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
+  # Recurse through an attrset, returning all test derivations in a list.
+  collectTests' = ds: filter (d: elem d.system testsSupportedSystems) (collect isDerivation ds);
+  # Adds the package name to the test derivations for windows-testing-bundle.nix
+  # (passthru.identifier.name does not survive mapTestOn)
+  collectTests = ds: concatLists (
+    mapAttrsToList (packageName: package:
+      map (drv: drv // { inherit packageName; }) (collectTests' package)
+    ) ds);
 
-  # packages from our stack.yaml or plan file (via nix/pkgs.nix) we
-  # are interested in building on CI via nix-tools.
-  packages = [ "cardano-prelude" ];
+  # musl64 disabled for now: https://github.com/NixOS/nixpkgs/issues/43795
+  #inherit (systems.examples) mingwW64 musl64;
+  inherit (systems.examples) mingwW64 musl64;
 
-  # The set of jobs we consider crutial for each CI run.
-  # if a single one of these fails, the build will be marked
-  # as failed.
-  #
-  # The names can be looked up on hydra when in doubt.
-  #
-  # custom jobs will follow their name as set forth in
-  # other-packages.
-  #
-  # nix-tools packages are prefixed with `nix-tools` and
-  # follow the following naming convention:
-  #
-  #   namespace                      optional cross compilation prefix                 build machine
-  #   .-------.                              .-----------------.                .--------------------------.
-  #   nix-tools.{libs,exes,tests,benchmarks}.{x86_64-pc-mingw-,}$pkg.$component.{x86_64-linux,x86_64-darwin}
-  #             '--------------------------'                    '-------------'
-  #                 component type                          cabal pkg and component*
-  #
-  # * note that for `libs`, $component is empty, as cabal only
-  #   provides a single library for packages right now.
-  # * note that for `exes`, $component is also empty, because it
-  #   it provides all exes under a single result directory.
-  #   To  specify a single executable component to build, use
-  #   `cexes` as component type.
-  #
+  jobs = {
+    native = mapTestOn (__trace (__toJSON (packagePlatforms project)) (packagePlatforms project));
+    "${mingwW64.config}" = mapTestOnCross mingwW64 (packagePlatformsCross project);
+    # musl64 disabled for now: https://github.com/NixOS/nixpkgs/issues/43795
+    #musl64 = mapTestOnCross musl64 (packagePlatformsCross project);
+  } // (mkRequiredJob (
+      collectTests jobs.native.tests ++
+      collectTests jobs.native.benchmarks ++ [
+      jobs.native.haskellPackages.cardano-prelude.components.library.x86_64-linux
+      jobs.native.haskellPackages.cardano-prelude.components.library.x86_64-darwin
+    ]));
 
-  # The required jobs that must pass for ci not to fail:
-  required-name = "required";
-  required-targets = jobs: [
-    # targets are specified using above nomenclature:
-    jobs.nix-tools.libs.cardano-prelude.x86_64-linux
-  ];
-} (builtins.removeAttrs args ["cardano-prelude"]))
+in jobs
