@@ -57,9 +57,9 @@ pipeline {
         sh "docker push inputoutput/cardano-graphql:${env.GIT_BRANCH}"
       }
     }
-    stage('Publish: Release') {
+    stage('Publish: Tag') {
       when {
-        tag "v*"
+        buildingTag()
       }
       steps {
         sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.TAG_NAME}"
