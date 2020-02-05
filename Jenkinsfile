@@ -48,7 +48,7 @@ pipeline {
     }
     stage('Publish: Master Branch') {
       when {
-        branch { 'master' }
+        branch 'master'
       }
       steps {
         sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.GIT_BRANCH}"
