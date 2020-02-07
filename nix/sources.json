@@ -5,10 +5,10 @@
         "homepage": "https://input-output-hk.github.io/haskell.nix",
         "owner": "input-output-hk",
         "repo": "haskell.nix",
-        "rev": "659d80f56349982ad0803c5b6552c99a062ebd8d",
-        "sha256": "1z6w3g0ra37p5grd8brk4q717d6iwm5pwshl9z9pzhgckyzjyd9s",
+        "rev": "6a2fe9ae07de5be7d3cf5410af556ce2f06a0a7d",
+        "sha256": "0bj7iivivjlfnhcag1dy0g6asyib8r1hsk1g3n51wpar4grgqyyq",
         "type": "tarball",
-        "url": "https://github.com/input-output-hk/haskell.nix/archive/659d80f56349982ad0803c5b6552c99a062ebd8d.tar.gz",
+        "url": "https://github.com/input-output-hk/haskell.nix/archive/6a2fe9ae07de5be7d3cf5410af556ce2f06a0a7d.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "iohk-nix": {
@@ -17,34 +17,10 @@
         "homepage": null,
         "owner": "input-output-hk",
         "repo": "iohk-nix",
-        "rev": "493582154fbbe03563056a263bff729c3a8cee1c",
-        "sha256": "064pa40w1j72kxbp99ca31hi88hdpy10vk8i6g35ii10242qw2b5",
+        "rev": "8eb95138be415ea7a02c80cc52cbc14edc0a9e05",
+        "sha256": "1p6j5pz023ixyl4rc19ww2njv5wrffyl2f69zx1jazlqllnakbbz",
         "type": "tarball",
-        "url": "https://github.com/input-output-hk/iohk-nix/archive/493582154fbbe03563056a263bff729c3a8cee1c.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
-    "niv": {
-        "branch": "iohk",
-        "description": "Easy dependency management for Nix projects",
-        "homepage": "https://github.com/nmattia/niv",
-        "owner": "input-output-hk",
-        "repo": "niv",
-        "rev": "89da7b2e7ae0779fd351618fc74df1b1da5e6214",
-        "sha256": "0jn88ahv6mycxdkzihy1v0dz2110q0d42q4ggyj68l2lyba6y0yy",
-        "type": "tarball",
-        "url": "https://github.com/input-output-hk/niv/archive/89da7b2e7ae0779fd351618fc74df1b1da5e6214.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
-    "nixpkgs": {
-        "branch": "release-19.03",
-        "description": "Nix Packages collection",
-        "homepage": null,
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "f618cfbf4544b09088cbbb6004cfc84dd432e20c",
-        "sha256": "1272psriz048bc1ab4vjkd0qq942kifalraq0j9km62cgza1mf5h",
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/f618cfbf4544b09088cbbb6004cfc84dd432e20c.tar.gz",
+        "url": "https://github.com/input-output-hk/iohk-nix/archive/8eb95138be415ea7a02c80cc52cbc14edc0a9e05.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
