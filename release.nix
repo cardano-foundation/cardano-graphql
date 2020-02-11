@@ -25,14 +25,16 @@
 # A Hydra option
 , scrubJobs ? true
 
-# Import IOHK common nix lib
-, commonLib ? import ./lib.nix {}
+# Dependencies overrides
+, sourcesOverride ? {}
+
+# Import pkgs, including IOHK common nix lib
+, pkgs ? import ./nix { inherit sourcesOverride; }
 
 }:
 
-with (import commonLib.iohkNix.release-lib) {
-  inherit (commonLib) pkgs;
-  inherit supportedSystems supportedCrossSystems scrubJobs projectArgs;
+with (import pkgs.iohkNix.release-lib) {
+  inherit pkgs supportedSystems supportedCrossSystems scrubJobs projectArgs;
   packageSet = import cardano-prelude;
   gitrev = cardano-prelude.rev;
 };
@@ -60,7 +62,7 @@ let
     # musl64 disabled for now: https://github.com/NixOS/nixpkgs/issues/43795
     #musl64 = mapTestOnCross musl64 (packagePlatformsCross project);
   } // (mkRequiredJob (
-      collectTests jobs.native.tests ++
+      collectTests jobs.native.checks ++
       collectTests jobs.native.benchmarks ++ [
       jobs.native.haskellPackages.cardano-prelude.components.library.x86_64-linux
       jobs.native.haskellPackages.cardano-prelude.components.library.x86_64-darwin
