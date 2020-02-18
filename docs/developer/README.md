@@ -1,6 +1,6 @@
 # Developer
  
-Review to level concepts in [project architecture](./architecture.md) first. [Configuration](./configuration.md) of the development environment is possible.  
+Review high level concepts in [project architecture](./architecture.md) first. [Configuration](./configuration.md) of the development environment is possible.  
 
 The project uses the [GitLab Flow](https://docs.gitlab.com/ee/topics/gitlab_flow.html) process, so branch from `master` for all changes.
 
