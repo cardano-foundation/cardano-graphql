@@ -7,10 +7,15 @@ packages:
   - git: https://github.com/input-output-hk/cardano-crypto
     commit: 3c707936ba0a665375acf5bd240dc4b6eaa6c0bc
 
+    # Contains fix for cbor pretty printing
+  - git: https://github.com/well-typed/cborg
+    commit: 42a83192749774268337258f4f94c97584b80ca6
+    subdirs:
+        - cborg
+
   - base58-bytestring-0.1.0
   # Waiting on Stackage release
   - hedgehog-1.0.2
   - micro-recursion-schemes-5.0.2.2
   - streaming-binary-0.3.0.1
-  - cborg-0.2.2.1
   - canonical-json-0.6.0.0
