@@ -1,0 +1,62 @@
+{
+    "gitignore": {
+        "branch": "master",
+        "description": "Nix function for filtering local git sources",
+        "homepage": "",
+        "owner": "hercules-ci",
+        "repo": "gitignore",
+        "rev": "f9e996052b5af4032fe6150bba4a6fe4f7b9d698",
+        "sha256": "0jrh5ghisaqdd0vldbywags20m2cxpkbbk5jjjmwaw0gr8nhsafv",
+        "type": "tarball",
+        "url": "https://github.com/hercules-ci/gitignore/archive/f9e996052b5af4032fe6150bba4a6fe4f7b9d698.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "niv": {
+        "branch": "iohk",
+        "description": "Easy dependency management for Nix projects",
+        "homepage": "https://github.com/nmattia/niv",
+        "owner": "input-output-hk",
+        "repo": "niv",
+        "rev": "4229fbcf62997467c34283a2f353702359e78e5a",
+        "sha256": "1y1h6aj0rxrrhvp9jpr6xw3zsa1l8ac25ng4xzjskr5kg620pxqr",
+        "type": "tarball",
+        "url": "https://github.com/input-output-hk/niv/archive/4229fbcf62997467c34283a2f353702359e78e5a.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs": {
+        "branch": "nixos-19.09",
+        "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
+        "homepage": "https://github.com/NixOS/nixpkgs",
+        "owner": "NixOS",
+        "repo": "nixpkgs-channels",
+        "rev": "9bbad4c6254513fa62684da57886c4f988a92092",
+        "sha256": "00dhkkmar3ynfkx9x0h7hzjpcqvwsfmgz3j0xj80156kbw7zq4bb",
+        "type": "tarball",
+        "url": "https://github.com/NixOS/nixpkgs-channels/archive/9bbad4c6254513fa62684da57886c4f988a92092.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "nixpkgs-hasura-base": {
+        "branch": "master",
+        "description": "Nix Packages collection",
+        "homepage": null,
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "933a5c89fdf0db2a41a1b3cf4a7e6538f91737b4",
+        "sha256": "1h31jahfch250slqy8nz3kp5ywq231zcyx3a5i7bn8drkmx68gya",
+        "type": "tarball",
+        "url": "https://github.com/nixos/nixpkgs/archive/933a5c89fdf0db2a41a1b3cf4a7e6538f91737b4.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "yarn2nix": {
+        "branch": "master",
+        "description": "Generate nix expressions from a yarn.lock file",
+        "homepage": null,
+        "owner": "moretea",
+        "repo": "yarn2nix",
+        "rev": "9e7279edde2a4e0f5ec04c53f5cd64440a27a1ae",
+        "sha256": "0zz2lrwn3y3rb8gzaiwxgz02dvy3s552zc70zvfqc0zh5dhydgn7",
+        "type": "tarball",
+        "url": "https://github.com/moretea/yarn2nix/archive/9e7279edde2a4e0f5ec04c53f5cd64440a27a1ae.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    }
+}
