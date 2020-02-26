@@ -25,6 +25,7 @@ module Cardano.Prelude.GHC.Heap.NormalForm.Classy (
   , allNoUnexpectedThunks
   , noUnexpectedThunksInValues
   , noUnexpectedThunksInKeysAndValues
+  , unsafeNoUnexpectedThunks
     -- * Results of the check
   , ThunkInfo(..)
   , UnexpectedThunkInfo(..)
@@ -43,9 +44,10 @@ import Data.Foldable (toList)
 import Data.Sequence (Seq)
 import Data.List.NonEmpty (NonEmpty)
 import Data.Time
-import GHC.Exts.Heap
+import GHC.Exts.Heap (asBox, getBoxedClosureData)
 import GHC.TypeLits (CmpSymbol)
 import Prelude (String)
+import System.IO.Unsafe (unsafePerformIO)
 
 import qualified Data.ByteString as BS.Strict
 import qualified Data.ByteString.Lazy as BS.Lazy
@@ -181,6 +183,37 @@ noUnexpectedThunksInKeysAndValues ctxt =
     . concatMap (\(k, v) -> [ noUnexpectedThunks ctxt k
                             , noUnexpectedThunks ctxt v
                             ])
+
+{-# NOINLINE unsafeNoUnexpectedThunks #-}
+unsafeNoUnexpectedThunks :: NoUnexpectedThunks a => a -> Maybe String
+unsafeNoUnexpectedThunks a = unsafePerformIO $ errorMessage =<< noUnexpectedThunks [] a
+  where
+    errorMessage :: ThunkInfo -> IO (Maybe String)
+    errorMessage NoUnexpectedThunks     = return Nothing
+    errorMessage (UnexpectedThunk info) = do
+        -- We render the tree /after/ checking; in a way, this is not correct,
+        -- because 'noUnexpectedThunks' might have forced some stuff. However,
+        -- computing the tree beforehand, even when there is no failure, would
+        -- be prohibitively expensive.
+        --
+        -- TODO rendering the tree has been disabled for now, as this loops
+        -- indefinitely, consuming gigabytes of memory, and prevents us from
+        -- printing a message about the thunk. Moreover, the thunk info is in
+        -- most cases a clearer indication of where the thunk is than the
+        -- /huge/ tree. Use the two commented-out lines below to include the
+        -- tree in the message.
+        --
+        -- tree <- Text.Strict.unpack <$> buildAndRenderClosureTree opts a
+        -- return $ Just $ show info ++ "\nTree:\n" ++ tree
+
+        let _mkTree = Text.Strict.unpack <$> buildAndRenderClosureTree opts a
+        return $ Just $ show info
+
+    opts :: ClosureTreeOptions
+    opts = ClosureTreeOptions {
+        ctoMaxDepth       = AnyDepth
+      , ctoCyclicClosures = NoTraverseCyclicClosures
+      }
 
 {-------------------------------------------------------------------------------
   Results of the check
@@ -641,4 +674,3 @@ type family Or (a :: Bool) (b :: Bool) where
 type family ElemSymbol (s :: Symbol) (xs :: [Symbol]) where
   ElemSymbol s (x ': xs) = Or (EqSymbol s x) (ElemSymbol s xs)
   ElemSymbol _s '[] = 'False
-
