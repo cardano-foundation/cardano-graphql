@@ -6,8 +6,12 @@
     "type": "git",
     "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
   },
-  "main": "",
-  "scripts": {},
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "prepublishOnly": "yarn build && cpx ../../src/schema.graphql ."
+  },
   "keywords": [
     "Cardano",
     "GraphQL",
@@ -16,5 +20,15 @@
   "contributors": [
     "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)"
   ],
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "cpx": "^1.5.0",
+    "typescript": "^3.8.3"
+  },
+  "files": [
+    "dist/*",
+    "schema.graphql",
+    "LICENSE",
+    "LICENSE_NOTICE"
+  ]
 }
