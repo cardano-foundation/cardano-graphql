@@ -1,7 +1,7 @@
 {
   "name": "cardano-graphql-ts",
-  "version": "0.1.1",
-  "description": "TypeScript definitions for Cardano GraphQL",
+  "version": "1.0.0-rc.2",
+  "description": "A client package for Cardano GraphQL, including a TypeScript type definitions for the schema, also included",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
