@@ -14,8 +14,7 @@
     "TypeScript"
   ],
   "contributors": [
-    "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
-    "Sam Jeston <sam.jeston@iohk.io> (https://iohk.io)"
+    "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)"
   ],
   "license": "Apache-2.0"
 }
