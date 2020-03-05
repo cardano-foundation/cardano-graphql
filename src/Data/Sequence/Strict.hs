@@ -86,6 +86,12 @@ newtype StrictSeq a = StrictSeq { getSeq :: Seq a }
   deriving stock (Eq, Ord, Show)
   deriving newtype (Foldable, Semigroup, Serialise)
 
+instance Functor StrictSeq where
+  fmap f (StrictSeq s) = StrictSeq . forceElemsToWHNF $ fmap f s
+
+instance Traversable StrictSeq where
+  sequenceA (StrictSeq xs) = toStrict <$> sequenceA xs
+
 -- | Instance for 'StrictSeq' checks elements only
 --
 -- The internal fingertree in 'Seq' might have thunks, which is essential for
