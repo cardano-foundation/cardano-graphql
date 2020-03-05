@@ -5,6 +5,7 @@ coverage
 dist
 generated_packages/TypeScript/index.ts
 node_modules
+result*
 src/graphql_types.ts
 tsconfig.tsbuildinfo
 yarn-error.log
