@@ -1,0 +1,34 @@
+{
+  "name": "cardano-graphql-ts",
+  "version": "1.0.0-rc.2",
+  "description": "A client package for Cardano GraphQL, including a TypeScript type definitions for the schema, also included",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "prepublishOnly": "yarn build && cpx ../../src/schema.graphql ."
+  },
+  "keywords": [
+    "Cardano",
+    "GraphQL",
+    "TypeScript"
+  ],
+  "contributors": [
+    "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)"
+  ],
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "cpx": "^1.5.0",
+    "typescript": "^3.8.3"
+  },
+  "files": [
+    "dist/*",
+    "schema.graphql",
+    "LICENSE",
+    "LICENSE_NOTICE"
+  ]
+}

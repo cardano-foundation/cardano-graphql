@@ -3,7 +3,7 @@
 
 Cross-platform, _typed_, and **queryable** API service for Cardano, powered by [Hasura](https://hasura.io/) to precisely query projected Cardano state from [PostgreSQL](https://www.postgresql.org/).
 
-The [schema](src_temp/schema.graphql) is defined in native `.graphql`, and used to generate [packages](src/generated_packages/README.md) for internal and client-side static typing. [Apollo Server](https://www.apollographql.com/docs/apollo-server/) exposes the NodeJS execution engine over a HTTP endpoint. 
+The [schema](src/schema.graphql) is defined in native `.graphql`, and used to generate [packages](generated_packages/README.md) for internal and client-side static typing. [Apollo Server](https://www.apollographql.com/docs/apollo-server/) exposes the NodeJS execution engine over a HTTP endpoint. 
 
 **GraphQL** is a query language and execution environment with server and client implementations across many programming languages. The language can be serialized for network transmission, schema implementations hashed for assurance, and is suited for describing most domains.
  
