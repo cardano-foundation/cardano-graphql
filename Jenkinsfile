@@ -59,9 +59,20 @@ pipeline {
       when {
         buildingTag()
       }
+      environment {
+        NPM_REGISTRY_AUTH = credentials('npm-registry-auth')
+        NPM_REGISTRY_URI = credentials('npm-registry-uri')
+      }
       steps {
         sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.TAG_NAME}"
         sh "docker push inputoutput/cardano-graphql:${env.TAG_NAME}"
+        sh "npx npm-auth --secure-token=$NPM_REGISTRY_AUTH_USR --email=$NPM_REGISTRY_AUTH_PSW --registry=$NPM_REGISTRY_URI"
+        sh "yarn --cwd ./generated_packages/TypeScript publish"
+      }
+      post {
+        steps {
+          sh "rm .npmrc"
+        }
       }
     }
   }

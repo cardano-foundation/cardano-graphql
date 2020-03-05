@@ -1,9 +1,10 @@
 .idea
-node_modules
+.npmrc
+.nyc_output
+coverage
 dist
-/.nyc_output
-/coverage
+generated_packages/TypeScript/index.ts
+node_modules
+src/graphql_types.ts
 tsconfig.tsbuildinfo
 yarn-error.log
-src/graphql_types.ts
-generated_packages/TypeScript/index.ts
