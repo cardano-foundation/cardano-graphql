@@ -70,8 +70,8 @@ pipeline {
         sh "yarn --cwd ./generated_packages/TypeScript publish"
       }
       post {
-        steps {
-          sh "rm .npmrc"
+        always {
+          sh "rm -f .npmrc"
         }
       }
     }
