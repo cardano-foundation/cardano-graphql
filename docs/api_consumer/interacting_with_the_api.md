@@ -3,7 +3,7 @@ The API is served over TCP, leveraging the existing infrastructure of HTTP. Grap
 
 ### Command Line
 ```
-➜  Curl -X POST \  
+➜  curl -X POST \
 -H "Content-Type: application/json" \
 -d '{"query": "{ cardano { blockHeight }}"}' \
 http://localhost:3100/graphql  

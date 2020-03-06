@@ -15,5 +15,6 @@ Integrated query UI and documentation is available in the GraphQL Playground, av
 - [API Consumer](./docs/api_consumer)
 - [Developer](./docs/developer)
 - [Maintainer](./docs/maintainer)
+- [Ops](./docs/ops)
 - [QA](./docs/qa)
 

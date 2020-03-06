@@ -24,4 +24,4 @@ services:
     ports:
       - ${POSTGRES_PORT:-5432}:5432
     volumes:
-      - ../test/postgres/init:/docker-entrypoint-initdb.d
+      - ./test/postgres/init:/docker-entrypoint-initdb.d
