@@ -9,7 +9,7 @@ This project is setup to support a [Wallaby](https://wallabyjs.com/) integrated 
 ## Choose a development workflow
 
 ### Wallaby `yarn dev` + IDE configuration
-With your IDE managing test execution running in the Wallaby process, this script just performs a background task of auto-transpiling TS from the GraphQL schema.
+With your IDE managing test execution running in the Wallaby process, this script starts the service dependencies and performs a background task of auto-transpiling TS from the GraphQL schema.
 
 ### TDD `yarn dev:test`
 A [multiplex](https://www.npmjs.com/package/stmux) terminal with the code generator task, services, tsc watcher, and jest watcher.
