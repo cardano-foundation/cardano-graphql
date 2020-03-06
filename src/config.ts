@@ -5,6 +5,7 @@ import { hasuraResolvers, scalarResolvers } from './resolvers'
 
 export async function getConfig (): Promise<ServerConfig> {
   const {
+    allowedOrigins,
     apiPort,
     cacheEnabled,
     hasuraUri,
@@ -17,6 +18,7 @@ export async function getConfig (): Promise<ServerConfig> {
   }
 
   return {
+    allowedOrigins: allowedOrigins || true,
     apiPort: apiPort || 3100,
     cacheEnabled: cacheEnabled || false,
     context: hasuraUri ? await buildContext(hasuraUri) : undefined,
@@ -28,6 +30,7 @@ export async function getConfig (): Promise<ServerConfig> {
 
 function filterAndTypecastEnvs (env: any) {
   const {
+    ALLOWED_ORIGINS,
     API_PORT,
     CACHE_ENABLED,
     HASURA_URI,
@@ -35,6 +38,7 @@ function filterAndTypecastEnvs (env: any) {
     TRACING
   } = env
   return {
+    allowedOrigins: ALLOWED_ORIGINS,
     apiPort: Number(API_PORT),
     cacheEnabled: Boolean(CACHE_ENABLED),
     hasuraUri: HASURA_URI,
