@@ -4,9 +4,6 @@ compiler: ghc-8.6.5
 name: cardano-snapshot
 
 packages:
-  - git: https://github.com/input-output-hk/cardano-crypto
-    commit: 3c707936ba0a665375acf5bd240dc4b6eaa6c0bc
-
     # Contains fix for cbor pretty printing
   - git: https://github.com/well-typed/cborg
     commit: 42a83192749774268337258f4f94c97584b80ca6
