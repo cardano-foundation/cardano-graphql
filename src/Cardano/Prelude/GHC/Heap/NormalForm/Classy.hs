@@ -6,6 +6,7 @@
 {-# LANGUAGE FlexibleInstances     #-}
 {-# LANGUAGE KindSignatures        #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE PolyKinds             #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 {-# LANGUAGE StandaloneDeriving    #-}
@@ -445,6 +446,12 @@ instance NoUnexpectedThunks c => GWhnfNoUnexpectedThunks a (K1 i c) where
 
 instance GWhnfNoUnexpectedThunks a U1 where
   gWhnfNoUnexpectedThunks _a _ctxt U1 = return NoUnexpectedThunks
+
+instance GWhnfNoUnexpectedThunks a V1 where
+  -- By assumption, the argument is already in WHNF. Since every inhabitant of
+  -- this type is bottom, this code is therefore unreachable.
+  gWhnfNoUnexpectedThunks _a _ctxt _ =
+      panic "unreachable gWhnfNoUnexpectedThunks @V1"
 
 {-------------------------------------------------------------------------------
   Internal: generic function to get name of a type
