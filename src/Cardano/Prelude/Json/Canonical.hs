@@ -3,6 +3,8 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NumDecimals           #-}
 {-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE RankNTypes            #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications      #-}
 {-# LANGUAGE UndecidableInstances  #-}
 
@@ -12,18 +14,22 @@
 
 module Cardano.Prelude.Json.Canonical
   ( SchemaError(..)
+  , canonicalDecodePretty
+  , canonicalEncodePretty
   )
 where
 
 import Cardano.Prelude.Base
 
 import Control.Monad.Except (MonadError(throwError))
+import qualified Data.ByteString.Lazy as LB
 import Data.Fixed (E12, resolution)
 import qualified Data.Text.Lazy.Builder as Builder (fromText)
 import Data.Time (NominalDiffTime, UTCTime)
 import Data.Time.Clock.POSIX (posixSecondsToUTCTime, utcTimeToPOSIXSeconds)
 import Formatting (bprint, builder)
 import Formatting.Buildable (Buildable(build))
+import qualified Text.JSON.Canonical as CanonicalJSON
 import Text.JSON.Canonical
   ( FromJSON(fromJSON)
   , Int54
@@ -115,3 +121,22 @@ instance MonadError SchemaError m => FromJSON m UTCTime where
 
 instance MonadError SchemaError m => FromJSON m NominalDiffTime where
   fromJSON = fmap (fromRational . (% 1e6)) . fromJSON
+
+canonicalDecodePretty
+  :: forall a
+   . CanonicalJSON.FromJSON (Either SchemaError) a
+  => LB.ByteString
+  -> Either Text a
+canonicalDecodePretty y = do
+  eVal <- first toS (CanonicalJSON.parseCanonicalJSON y)
+  first show (CanonicalJSON.fromJSON eVal :: Either SchemaError a)
+
+canonicalEncodePretty
+  :: forall a . CanonicalJSON.ToJSON Identity a => a -> LB.ByteString
+canonicalEncodePretty x =
+  LB.fromStrict
+    . encodeUtf8
+    . toS
+    $ CanonicalJSON.prettyCanonicalJSON
+    $ runIdentity
+    $ CanonicalJSON.toJSON x
