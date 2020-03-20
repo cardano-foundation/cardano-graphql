@@ -1,10 +1,13 @@
 # DB Snapshot
 
-The project uses a small snapshot from the mainnet as the development and test dataset, as this allows concrete assertions to remain mostly static, and removes the need to stand up a Cardano network.  
+The project uses a small snapshot from the mainnet as the development and test dataset, enabling
+concrete assertions to remain mostly static. You will need to refresh this dataset if there are
+changes to `cardano-db-sync-extended`. 
 
-1. clone `cardano-docker-stack` from GH
-2. From cardano-docker-stack, run `./scripts/start_mainnet.sh`
-3. Once the stack starts, use `docker ps` to identify `cardano-explorer` container. Then use `docker logs -f _container_name_` to monitor the block height as the explorer receives and writes blocks.
-4. Once block height is above 70000, run `yarn refresh-db` from the root directory of `cardano-graphql`
+## Warning
+**The script will remove any existing volumes associated with the mainnet stack**
 
-Note: It is _expected_ that some of the snapshot values will change and need to be updated, as you will not dump the db at the exact same block as the last dump
+1. Ensure you have [jq](https://stedolan.github.io/jq/download/) installed
+2. `yarn create-db-snapshot`
+3. Once complete, the new dev/test database dump will overwrite the previous. Run tests, update new valid assertions and Jest snapshots.
+4. Commit changes. 
