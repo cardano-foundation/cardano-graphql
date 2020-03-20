@@ -52,6 +52,7 @@ import System.IO.Unsafe (unsafePerformIO)
 
 import qualified Data.ByteString as BS.Strict
 import qualified Data.ByteString.Lazy as BS.Lazy
+import           Data.ByteString.Short (ShortByteString)
 import qualified Data.IntMap as IntMap
 import qualified Data.Map as Map
 import qualified Data.Set as Set
@@ -509,6 +510,15 @@ deriving via UseIsNormalForm ZonedTime        instance NoUnexpectedThunks ZonedT
 -- can't retain any data that they shouldn't, and so it's safe to ignore such
 -- thunks.
 deriving via OnlyCheckIsWHNF "Strict.ByteString" BS.Strict.ByteString instance NoUnexpectedThunks BS.Strict.ByteString
+
+-- | We have:
+--
+-- > data ShortByteString = SBS ByteArray#
+--
+-- which means that values of this type consist of a tag followed by an
+-- __unboxed__ byte array, which can't contain thunks. Therefore we only check
+-- WHNF.
+deriving via OnlyCheckIsWHNF "ShortByteString" ShortByteString instance NoUnexpectedThunks ShortByteString
 
 -- | Unlike strict bytestrings, lazy bytestrings of course /could/ have thunks
 deriving via UseIsNormalFormNamed "Lazy.ByteString" BS.Lazy.ByteString instance NoUnexpectedThunks BS.Lazy.ByteString
