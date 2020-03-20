@@ -1,5 +1,17 @@
 version: '3.7'
 services:
+  postgres:
+    image: postgres:11.5-alpine
+    restart: always
+    environment:
+      - POSTGRES_LOGGING=true
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=cexplorer
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d
   hasura:
     image: hasura/graphql-engine:v1.0.0-beta.10.cli-migrations
     ports:
@@ -13,15 +25,3 @@ services:
       - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
     volumes:
       - ../hasura/migrations:/hasura-migrations
-  postgres:
-    image: postgres:11.5-alpine
-    restart: always
-    environment:
-      - POSTGRES_LOGGING=true
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_DB=cexplorer
-    ports:
-      - ${POSTGRES_PORT:-5432}:5432
-    volumes:
-      - ./test/postgres/init:/docker-entrypoint-initdb.d

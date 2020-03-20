@@ -1,0 +1,78 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:11.5-alpine
+    environment:
+      - POSTGRES_LOGGING=true
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: on-failure
+  cardano-node:
+    image: inputoutput/cardano-node:master
+    environment:
+      - NETWORK=${NETWORK}
+    volumes:
+      - node-data:/data
+    logging:
+      driver: none
+  cardano-db-sync-extended:
+    image: inputoutput/cardano-db-sync:master
+    environment:
+      - EXTENDED=true
+      - NETWORK=${NETWORK}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    depends_on:
+      - cardano-node
+      - postgres
+    logging:
+      driver: none
+    secrets:
+      - postgres_password
+      - postgres_user
+      - postgres_db
+    volumes:
+      - node-data:/data
+    restart: on-failure
+  hasura:
+    image: hasura/graphql-engine:v1.0.0-beta.10.cli-migrations
+    ports:
+      - "8090:8080"
+    depends_on:
+      - "postgres"
+    restart: always
+    environment:
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:IKZhCH587wkd04S9lUmjUyqT@postgres:5432/cexplorer
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+      - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
+    volumes:
+      - ./hasura/migrations:/hasura-migrations
+  http-server:
+    build:
+      context: .
+      target: server
+    environment:
+      - CACHE_ENABLED=true
+      - HASURA_URI=http://hasura:8080/v1/graphql
+    ports:
+      - ${API_PORT:-3100}:3100
+secrets:
+  postgres_db:
+    file: ./config/secrets/postgres_db
+  postgres_password:
+    file: ./config/secrets/postgres_password
+  postgres_user:
+    file: ./config/secrets/postgres_user
+  hasura_admin:
+    file: ./config/secrets/hasura_admin
+volumes:
+  node-data:
+  postgres-data:
