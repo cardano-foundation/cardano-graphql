@@ -1,6 +1,7 @@
-# Interacting with the API 
+# Interacting with the API
 The API is served over TCP, leveraging the existing infrastructure of HTTP. GraphQL adds a powerful query layer to give you complete control over the request, including the shape of the data in the response. Detailed below are some approaches for connecting and interacting with the API, however there may be other ways more suited for your use-case.
 
+Setup up a local stack using [docker-compose](../qa/README.md), or use a public deployment.
 ### Command Line
 ```
 ➜  curl -X POST \
