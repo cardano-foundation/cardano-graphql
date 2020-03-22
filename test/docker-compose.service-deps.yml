@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   postgres:
-    image: postgres:11.5-alpine
+    image: postgres:${POSTGRES_VERSION}
     restart: always
     environment:
       - POSTGRES_LOGGING=true
@@ -13,7 +13,7 @@ services:
     volumes:
       - ./postgres/init:/docker-entrypoint-initdb.d
   hasura:
-    image: hasura/graphql-engine:v1.0.0-beta.10.cli-migrations
+    image: hasura/graphql-engine:${HASURA_VERSION}
     ports:
       - "8090:8080"
     depends_on:

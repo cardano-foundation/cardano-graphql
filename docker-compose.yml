@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   postgres:
-    image: postgres:11.5-alpine
+    image: postgres:${POSTGRES_VERSION}
     environment:
       - POSTGRES_LOGGING=true
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
@@ -16,18 +16,18 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: on-failure
   cardano-node:
-    image: inputoutput/cardano-node:master
+    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION}
     environment:
-      - NETWORK=${NETWORK}
+      - NETWORK=${NETWORK:-testnet}
     volumes:
       - node-data:/data
     logging:
       driver: none
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:master
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION}
     environment:
       - EXTENDED=true
-      - NETWORK=${NETWORK}
+      - NETWORK=${NETWORK:-testnet}
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
     depends_on:
@@ -43,7 +43,7 @@ services:
       - node-data:/data
     restart: on-failure
   hasura:
-    image: hasura/graphql-engine:v1.0.0-beta.10.cli-migrations
+    image: hasura/graphql-engine:${HASURA_VERSION}
     ports:
       - "8090:8080"
     depends_on:
