@@ -17,8 +17,6 @@
     "stop:service-deps": "docker-compose -f test/docker-compose.service-deps.yml down",
     "start:test-stack": "docker-compose -f test/docker-compose.test-stack.yml up",
     "stop:test-stack": "docker-compose -f test/docker-compose.test-stack.yml down",
-    "start:mainnet": "NETWORK=mainnet docker-compose up",
-    "stop:mainnet": "docker-compose down",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml",
     "create-db-snapsot": "yarn start:mainnet -d && sh ./test/postgres/dump_when_block_height_reached.sh http://localhost:3100/graphql cexplorer && yarn stop:mainnet -v"
   },
