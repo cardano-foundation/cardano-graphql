@@ -2,6 +2,8 @@
   "name": "cardano-graphql",
   "version": "1.0.0-rc.2",
   "description": "GraphQL API for Cardano with client-consumable types generated",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "codegen:external": "graphql-codegen --config ./codegen.external.yml",
     "codegen:internal": "graphql-codegen",
@@ -18,13 +20,18 @@
     "start:sample-stack": "docker-compose -f test/docker-compose.test.db-sample.yml up",
     "stop:sample-stack": "docker-compose -f test/docker-compose.test.db-sample.yml down",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml",
-    "create-db-snapsot": "yarn start:mainnet -d && sh ./test/postgres/dump_when_block_height_reached.sh http://localhost:3100/graphql cexplorer && yarn stop:mainnet -v"
+    "create-db-snapsot": "yarn start:mainnet -d && sh ./test/postgres/dump_when_block_height_reached.sh http://localhost:3100/graphql cexplorer && yarn stop:mainnet -v",
+    "prepare": "yarn build"
   },
   "contributors": [
     "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
     "Sam Jeston <sam.jeston@gmail.com>"
   ],
   "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/input-output-hk/cardano-graphql/issues"
+  },
+  "homepage": "https://github.com/input-output-hk/cardano-graphql#README.md",
   "dependencies": {
     "apollo-link-http": "^1.5.15",
     "apollo-link-retry": "^2.2.15",
@@ -74,5 +81,12 @@
     "ts-node": "^8.3.0",
     "ts-node-dev": "^1.0.0-pre.40",
     "typescript": "3.5.3"
-  }
+  },
+  "files": [
+    "dist/*",
+    "!dist/__test__",
+    "!dist/**/*.test.*",
+    "LICENSE",
+    "LICENSE_NOTICE"
+  ]
 }
