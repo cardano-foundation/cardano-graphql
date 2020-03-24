@@ -1,6 +1,6 @@
 {
   "name": "cardano-graphql-cli",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0-rc.3",
   "description": "Management tool for managing a Cardano GraphQL deployment",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,7 +11,7 @@
     "build": "tsc -p .",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
     "start": "npm install -g && cgql",
-    "prepare": "npm build"
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
