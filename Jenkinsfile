@@ -26,12 +26,12 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'yarn start:test-stack --build -d'
+        sh 'yarn start:sample-stack --build -d'
         sh 'yarn test:e2e'
       }
       post {
         always {
-          sh 'yarn stop:test-stack --rmi local'
+          sh 'yarn stop:sample-stack --rmi local'
         }
       }
     }

@@ -15,8 +15,8 @@
     "start": "HASURA_URI=http://localhost:8090/v1/graphql node dist/index.js",
     "start:service-deps": "docker-compose -f test/docker-compose.service-deps.yml up",
     "stop:service-deps": "docker-compose -f test/docker-compose.service-deps.yml down",
-    "start:test-stack": "docker-compose -f test/docker-compose.test-stack.yml up",
-    "stop:test-stack": "docker-compose -f test/docker-compose.test-stack.yml down",
+    "start:sample-stack": "docker-compose -f test/docker-compose.test.db-sample.yml up",
+    "stop:sample-stack": "docker-compose -f test/docker-compose.test.db-sample.yml down",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml",
     "create-db-snapsot": "yarn start:mainnet -d && sh ./test/postgres/dump_when_block_height_reached.sh http://localhost:3100/graphql cexplorer && yarn stop:mainnet -v"
   },

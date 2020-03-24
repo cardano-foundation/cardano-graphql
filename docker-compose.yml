@@ -50,7 +50,7 @@ services:
       - "postgres"
     restart: always
     environment:
-      - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:IKZhCH587wkd04S9lUmjUyqT@postgres:5432/cexplorer
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:doNoUseThisSecret!@postgres:5432/cexplorer
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
       - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
     volumes:
