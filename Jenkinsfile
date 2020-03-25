@@ -23,6 +23,7 @@ pipeline {
     stage('Validate Code Style') {
       steps {
         sh 'yarn lint'
+        sh 'yarn lint --cwd ./cli'
       }
     }
     stage('Test') {

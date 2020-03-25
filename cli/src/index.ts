@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as chalk from 'chalk'
-import { program } from 'commander'
+import program from 'commander'
 import * as figlet from 'figlet'
 import { createWriteStream, ensureDir, writeFile } from 'fs-extra'
 import * as inquirer from 'inquirer'
