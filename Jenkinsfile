@@ -23,14 +23,14 @@ pipeline {
     stage('Validate Code Style') {
       steps {
         sh 'yarn lint'
-        sh 'yarn lint --cwd ./cli'
+        sh 'yarn --cwd ./cli lint'
       }
     }
     stage('Test') {
       steps {
         sh 'yarn start:sample-stack --build -d'
         sh 'yarn test:e2e'
-        sh 'yarn test --cwd ./cli'
+        sh 'yarn --cwd ./cli test'
       }
       post {
         always {
