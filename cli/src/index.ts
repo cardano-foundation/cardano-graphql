@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 import * as chalk from 'chalk'
-import { program } from 'commander'
+import * as program from 'commander'
 import * as figlet from 'figlet'
 import { createWriteStream, ensureDir, writeFile } from 'fs-extra'
 import * as inquirer from 'inquirer'
-import fetch from 'node-fetch'
+import fetch from 'cross-fetch'
 import * as generatePassword from 'password-generator'
 import * as path from 'path'
 const clear = require('clear')
@@ -19,7 +19,7 @@ console.log(
       'cgql',
       {
         horizontalLayout: 'full',
-        font: "Stop"
+        font: 'Stop'
       })
   )
 )
@@ -76,7 +76,7 @@ program
   .option('-o, --out-dir <out>', 'Directory to write file', process.cwd())
   .action(async ({ outDir }) => {
     await ensureDir(outDir)
-    const dockerComposeFile = await createWriteStream(path.join(outDir,'docker-compose.yml'))
+    const dockerComposeFile = await createWriteStream(path.join(outDir, 'docker-compose.yml'))
     const response = await fetch(
       'https://raw.githubusercontent.com/input-output-hk/cardano-graphql/master/docker-compose.yml'
     )
@@ -88,8 +88,7 @@ program
           NETWORK=testnet or mainnet docker-compose up -d
           `
     )
-    }
-  )
+  })
 
 if (!process.argv.slice(2).length) {
   program.outputHelp()
