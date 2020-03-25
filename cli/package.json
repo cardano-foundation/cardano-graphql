@@ -10,8 +10,8 @@
   "scripts": {
     "build": "tsc -p .",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
-    "start": "npm install -g && cgql",
-    "prepare": "npm run build"
+    "start": "yarn global add file:$PWD && cgql",
+    "prepare": "yarn build"
   },
   "repository": {
     "type": "git",
