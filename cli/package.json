@@ -2,16 +2,16 @@
   "name": "cardano-graphql-cli",
   "version": "1.0.0-rc.4",
   "description": "Management tool for managing a Cardano GraphQL deployment",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./bin/index.js",
   "bin": {
-    "cgql": "./dist/index.js"
+    "cgql": "./bin/index.js"
   },
   "scripts": {
-    "build": "tsc -p .",
+    "add-global": "yarn global add file:$PWD",
+    "build": "tsc",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
-    "start": "yarn global add file:$PWD && cgql",
-    "prepare": "yarn build"
+    "prepare": "yarn build",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -47,15 +47,18 @@
     "@types/figlet": "^1.2.0",
     "@types/fs-extra": "^8.1.0",
     "@types/inquirer": "^6.5.0",
+    "@types/jest": "^25.1.4",
     "@types/js-yaml": "^3.12.2",
     "@types/node": "^12.6.8",
+    "jest": "^25.1.0",
     "ts-node-dev": "^1.0.0-pre.40",
     "typescript": "3.5.3"
   },
   "files": [
     "dist/*",
+    "!dist/__test__",
+    "!dist/**/*.test.*",
     "LICENSE",
-    "LICENSE_NOTICE",
-    "README.md"
+    "LICENSE_NOTICE"
   ]
 }

@@ -8,7 +8,7 @@
     "noUnusedLocals": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "outDir": "dist/",
+    "outDir": "bin",
     "sourceMap": true,
     "composite": true,
     "rootDir": "src",
@@ -20,6 +20,7 @@
     "src/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/*.test.ts"
   ]
 }

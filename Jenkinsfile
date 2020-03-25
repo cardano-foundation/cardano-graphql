@@ -17,6 +17,7 @@ pipeline {
     stage('Install') {
       steps {
         sh 'yarn'
+        sh 'yarn --cwd ./cli'
       }
     }
     stage('Validate Code Style') {
@@ -28,6 +29,7 @@ pipeline {
       steps {
         sh 'yarn start:sample-stack --build -d'
         sh 'yarn test:e2e'
+        sh 'yarn test --cwd ./cli'
       }
       post {
         always {
