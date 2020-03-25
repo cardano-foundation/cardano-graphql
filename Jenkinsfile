@@ -67,8 +67,8 @@ pipeline {
         sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.TAG_NAME}"
         sh "docker push inputoutput/cardano-graphql:${env.TAG_NAME}"
         sh "npx npm-auth --secure-token=$NPM_REGISTRY_AUTH_USR --email=$NPM_REGISTRY_AUTH_PSW --registry=$NPM_REGISTRY_URI"
-        sh "yarn --cwd ./cli publish"
-        sh "yarn --cwd ./generated_packages/TypeScript publish"
+        sh "npm publish --cwd ./cli"
+        sh "npm publish publish --cwd ./generated_packages/TypeScript"
       }
       post {
         always {
