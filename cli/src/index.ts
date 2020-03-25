@@ -5,7 +5,7 @@ import { program } from 'commander'
 import * as figlet from 'figlet'
 import { createWriteStream, ensureDir, writeFile } from 'fs-extra'
 import * as inquirer from 'inquirer'
-import fetch from 'node-fetch'
+import fetch from 'cross-fetch'
 import * as generatePassword from 'password-generator'
 import * as path from 'path'
 const clear = require('clear')
