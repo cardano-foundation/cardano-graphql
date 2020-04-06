@@ -88,38 +88,45 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
                 size
                 slotNo
                 slotWithinEpoch
-                transactions(order_by: { fee: desc}) {
-                    block {
-                        number
-                    }
-                    fee
-                    id
-                    includedAt
-                    inputs {
-                        address
-                        value
-                    }
-
-                    outputs {
-                        value
-                        address
-                    }
-                    size
-                    totalOutput
-                }
+#                transactions(order_by: { fee: desc}) {
+#                    block {
+#                        number
+#                    }
+#                    fee
+#                    id
+#                    includedAt
+#                    inputs {
+#                        address
+#                        value
+#                    }
+#
+#                    outputs {
+#                        value
+#                        address
+#                    }
+#                    size
+#                    totalOutput
+#                }
                 transactionsCount
             }
         }`
       })
       expect(result.data.blocks.length).toBe(2)
-      expect(result.data.blocks[0]).toEqual(block29021.basic)
-      expect(result.data.blocks[1]).toEqual(block29022.basic)
+      expect(result.data.blocks).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining(block29021.basic),
+          expect.objectContaining(block29022.basic)
+        ])
+      )
     })
 
     it('Can return aggregated data', async () => {
       const result = await client.query({
         query: gql`query {
-            blocks( where: { number: { _eq: 29021 }}) {
+            blocks( where: { _and: [
+                { number: { _eq: 29021 }},
+                { epoch: { number: { _lt: 185 }}}
+            ]}) {
                 transactions_aggregate {
                     aggregate {
                         avg {

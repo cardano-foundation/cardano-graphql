@@ -100,7 +100,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
     it('Can return aggregated Epoch data', async () => {
       const result = await client.query({
         query: gql`query {
-            epochs_aggregate {
+            epochs_aggregate ( where: { number: { _lt: 185 }}) {
                 aggregate {
                     count
                     max {

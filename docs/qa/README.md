@@ -7,7 +7,8 @@
 ## Launch the stack on preferred supported network
 ### Start
 ```
-NETWORK=mainnet docker-compose up
+docker-compose up
+# OR
 NETWORK=testnet docker-compose up
 ```
 The GraphQL Playground can be found at http://localhost:3100

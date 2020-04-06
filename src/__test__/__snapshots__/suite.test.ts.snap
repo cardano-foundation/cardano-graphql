@@ -98,13 +98,9 @@ Object {
 }
 `;
 
-exports[`cardano Returns key information about the network 1`] = `
+exports[`cardano Returns static information about the network 1`] = `
 Object {
   "cardano": Object {
-    "blockHeight": 70075,
-    "currentEpoch": Object {
-      "number": 3,
-    },
     "networkName": "mainnet",
     "protocolConst": 2160,
     "slotDuration": 20000,
@@ -117,19 +113,19 @@ exports[`epochs Can return aggregated Epoch data 1`] = `
 Object {
   "epochs_aggregate": Object {
     "aggregate": Object {
-      "count": "4",
+      "count": "185",
       "max": Object {
-        "number": 3,
-        "output": "101402912214214220",
-        "transactionsCount": "12870",
+        "number": 184,
+        "output": "424616166073756860",
+        "transactionsCount": "40972",
       },
       "min": Object {
-        "output": "9898701559268516",
+        "output": "2654692166740613",
         "transactionsCount": "33",
       },
       "sum": Object {
-        "output": "185159791478390400",
-        "transactionsCount": "17981",
+        "output": "8293029495565297000",
+        "transactionsCount": "1938088",
       },
     },
   },
@@ -330,12 +326,12 @@ Object {
       ],
       "outputs": Array [
         Object {
-          "address": "DdzFFzCqrhsxVv8Sjuj35Zkw42T9WjwXa6DasrNknm5M3bPVDnWJWwhX5NymoZncUArTfFYZ9sYGaA9htKSNYoK5Vkzx2vUtunAFt3eE",
-          "value": "4824799478660",
-        },
-        Object {
           "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
           "value": "100000000000",
+        },
+        Object {
+          "address": "DdzFFzCqrhsxVv8Sjuj35Zkw42T9WjwXa6DasrNknm5M3bPVDnWJWwhX5NymoZncUArTfFYZ9sYGaA9htKSNYoK5Vkzx2vUtunAFt3eE",
+          "value": "4824799478660",
         },
       ],
       "size": 220,
@@ -355,73 +351,17 @@ Object {
       ],
       "outputs": Array [
         Object {
-          "address": "DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8",
-          "value": "768401828930",
-        },
-        Object {
           "address": "DdzFFzCqrhsgrGt7zHydkE4cKxjB7SgsdnMPUFxYEwBu1u4sGobxZL5Xo3eDycCrtSYAUyw9aAsZZxFpTdgur6MwYDYMwAZ4xNGKRD3o",
           "value": "1000000",
+        },
+        Object {
+          "address": "DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8",
+          "value": "768401828930",
         },
       ],
       "size": 216,
       "totalOutput": "768402828930",
     },
   ],
-}
-`;
-
-exports[`utxos Can be scoped by address 1`] = `
-Object {
-  "utxos": Array [
-    Object {
-      "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
-      "value": "100000000000",
-    },
-    Object {
-      "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
-      "value": "150000000000",
-    },
-  ],
-}
-`;
-
-exports[`utxos Can be scoped by list of addresses 1`] = `
-Object {
-  "utxos": Array [
-    Object {
-      "address": "Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt",
-      "value": "1153846000000",
-    },
-    Object {
-      "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
-      "value": "100000000000",
-    },
-    Object {
-      "address": "DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s",
-      "value": "150000000000",
-    },
-  ],
-}
-`;
-
-exports[`utxos Can return aggregated UTXO data 1`] = `
-Object {
-  "utxos_aggregate": Object {
-    "aggregate": Object {
-      "avg": Object {
-        "value": "24166.083538083538",
-      },
-      "count": "407",
-      "max": Object {
-        "value": "175212",
-      },
-      "min": Object {
-        "value": "1",
-      },
-      "sum": Object {
-        "value": "9835596",
-      },
-    },
-  },
 }
 `;

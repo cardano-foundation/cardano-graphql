@@ -28,13 +28,13 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'yarn start:sample-stack --build -d'
+        sh 'docker-compose up --build -d'
         sh 'yarn test:e2e'
         sh 'yarn --cwd ./cli test'
       }
       post {
         always {
-          sh 'yarn stop:sample-stack --rmi local'
+          sh 'docker-compose down --rmi local'
         }
       }
     }
