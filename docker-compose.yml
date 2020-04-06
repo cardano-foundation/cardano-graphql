@@ -12,6 +12,7 @@ services:
       - postgres_db
       - postgres_password
       - postgres_user
+    shm_size: '2gb'
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: on-failure
