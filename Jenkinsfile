@@ -29,8 +29,8 @@ pipeline {
     stage('Test') {
       steps {
         sh 'docker-compose up --build -d'
-        sh 'yarn test:e2e'
-        sh 'yarn --cwd ./cli test'
+        sh 'yarn test:e2e --ci'
+        sh 'yarn --cwd ./cli test --ci'
       }
       post {
         always {

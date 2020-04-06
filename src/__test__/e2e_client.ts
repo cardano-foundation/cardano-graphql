@@ -17,8 +17,14 @@ export const createClient = async () => {
     'Checking GraphQL server is ready',
     async () => {
       await client.query({
-        query: gql`query { cardano { blockHeight }}`
+        query: gql`query { 
+          cardano { 
+            blockHeight
+            currentEpoch { 
+              number
+            }
+          }}`
       })
-    }, 50)
+    }, 20000)
   return client
 }
