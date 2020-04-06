@@ -10,7 +10,6 @@
     "preserveConstEnums": true,
     "outDir": "dist/",
     "sourceMap": true,
-    "composite": true,
     "rootDir": ".",
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
