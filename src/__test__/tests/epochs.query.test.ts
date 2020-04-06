@@ -14,6 +14,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
       const result = await client.query({
         query: gql`query {
             epochs( where: { number: { _eq: 1 }}) {
+                blocksCount
                 output
                 number
                 transactionsCount
@@ -30,7 +31,8 @@ export function epochTests (createClient: () => Promise<TestClient>) {
       const result = await client.query({
         query: gql`query {
             epochs( where: { number: { _eq: 1 }}) {
-                blocks_aggregate {
+                blocksCount
+                blocks_aggregate ( where: { slotNo: { _is_null: false }}) {
                     aggregate {
                         avg {
                             fees
@@ -56,6 +58,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
         }`
       })
       expect(result.data.epochs[0]).toEqual(epoch1.aggregated)
+      expect(result.data.epochs[0].blocksCount).toEqual(epoch1.aggregated.blocks_aggregate.aggregate.count)
       expect(result.data).toMatchSnapshot()
     })
 
@@ -85,6 +88,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
       const result = await client.query({
         query: gql`query {
             epochs( where: { number: { _in: [1] }}) {
+                blocksCount
                 output
                 number
                 transactionsCount
