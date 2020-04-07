@@ -16,8 +16,8 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh 'yarn'
-        sh 'yarn --cwd ./cli'
+        sh 'yarn && yarn build'
+        sh 'yarn --cwd ./cli && yarn --cwd ./cli build'
       }
     }
     stage('Validate Code Style') {
@@ -58,14 +58,14 @@ pipeline {
       environment {
         NPM_REGISTRY_AUTH = credentials('npm-registry-auth')
         NPM_REGISTRY_URI = credentials('npm-registry-uri')
-        NPM_REGISTRY_USER = credentials('npm-registry-user')
+        NPM_REGISTRY_EMAIL = credentials('npm-registry-email')
       }
       steps {
         sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.TAG_NAME}"
         sh "docker push inputoutput/cardano-graphql:${env.TAG_NAME}"
-        sh "npx npm-cli-login -u $NPM_REGISTRY_USER -e $NPM_REGISTRY_AUTH_USR -p $NPM_REGISTRY_AUTH_PSW -r $NPM_REGISTRY_URI"
+        sh "npx npm-cli-login -u $NPM_REGISTRY_AUTH_USR -e $NPM_REGISTRY_EMAIL -p $NPM_REGISTRY_AUTH_PSW -r $NPM_REGISTRY_URI"
         sh "npm publish --cwd ./cli"
-        sh "npm publish publish --cwd ./generated_packages/TypeScript"
+        sh "npm publish --cwd ./generated_packages/TypeScript"
       }
       post {
         always {
