@@ -9,7 +9,7 @@ export const createClient = async () => {
       addTypename: false
     }),
     link: createHttpLink({
-      uri: 'http://localhost:3100',
+      uri: process.env.CARDANO_GRAPHQL_URI || 'http://localhost:3100',
       fetch
     })
   })
@@ -25,6 +25,6 @@ export const createClient = async () => {
             }
           }}`
       })
-    }, 20000)
+    }, 50)
   return client
 }

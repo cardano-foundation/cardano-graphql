@@ -9,7 +9,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p .",
     "prepack": "yarn build && shx cp ../../src/schema.graphql .",
     "postpack": "shx rm schema.graphql && shx rm -rf dist"
   },

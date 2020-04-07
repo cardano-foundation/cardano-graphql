@@ -28,21 +28,14 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'docker-compose up --build -d'
-        sh 'yarn test:e2e --ci'
+        sh 'CARDANO_GRAPHQL_URI=https://cardano-graphql-mainnet.daedalus-operations.com NODE_ENV=test TEST_MODE=e2e npx jest suite --ci'
         sh 'yarn --cwd ./cli test --ci'
       }
-      post {
-        always {
-          sh 'docker-compose down --rmi local'
-        }
-      }
     }
-    stage('Build') {
-       steps {
-          sh 'yarn build'
-          sh "docker build -t inputoutput/cardano-graphql:${env.GIT_COMMIT} ."
-       }
+    stage('Build Docker image') {
+      steps {
+        sh "docker build -t inputoutput/cardano-graphql:${env.GIT_COMMIT} ."
+      }
     }
     stage('Publish: Git Revision') {
        steps {
