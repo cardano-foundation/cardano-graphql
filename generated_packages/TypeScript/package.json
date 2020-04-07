@@ -11,6 +11,7 @@
   "scripts": {
     "build": "tsc -p .",
     "prepack": "yarn build && shx cp ../../src/schema.graphql .",
+    "preinstall": "yarn build && shx cp ../../src/schema.graphql .",
     "postpack": "shx rm schema.graphql && shx rm -rf dist"
   },
   "keywords": [
