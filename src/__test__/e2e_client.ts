@@ -9,7 +9,7 @@ export const createClient = async () => {
       addTypename: false
     }),
     link: createHttpLink({
-      uri: 'http://localhost:3100',
+      uri: process.env.CARDANO_GRAPHQL_URI || 'http://localhost:3100',
       fetch
     })
   })
@@ -17,7 +17,13 @@ export const createClient = async () => {
     'Checking GraphQL server is ready',
     async () => {
       await client.query({
-        query: gql`query { cardano { blockHeight }}`
+        query: gql`query { 
+          cardano { 
+            blockHeight
+            currentEpoch { 
+              number
+            }
+          }}`
       })
     }, 50)
   return client

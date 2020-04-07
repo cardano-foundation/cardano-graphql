@@ -8,7 +8,7 @@
   },
   "scripts": {
     "add-global": "yarn global add file:$PWD",
-    "build": "tsc",
+    "build": "tsc -p .",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
     "lint": "eslint -c ../.eslintrc.json \"src/**/*.ts\"",
     "prepare": "yarn build",

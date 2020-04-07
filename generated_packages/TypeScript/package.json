@@ -9,8 +9,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rm -rf dist && tsc",
-    "prepublishOnly": "yarn build && cpx ../../src/schema.graphql ."
+    "build": "tsc -p .",
+    "prepack": "yarn build && shx cp ../../src/schema.graphql .",
+    "preinstall": "yarn build && shx cp ../../src/schema.graphql .",
+    "postpack": "shx rm schema.graphql && shx rm -rf dist"
   },
   "keywords": [
     "Cardano",
@@ -22,7 +24,7 @@
   ],
   "license": "Apache-2.0",
   "devDependencies": {
-    "cpx": "^1.5.0",
+    "shx": "^0.3.2",
     "typescript": "^3.8.3"
   },
   "files": [

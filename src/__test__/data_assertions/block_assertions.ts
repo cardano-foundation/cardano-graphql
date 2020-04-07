@@ -1,4 +1,4 @@
-import { tx05ad8b, txe68043 } from './transaction_assertions'
+// import { tx05ad8b, txe68043 } from './transaction_assertions'
 
 export const block29021 = {
   basic: {
@@ -23,7 +23,7 @@ export const block29021 = {
       number: 29022
     },
     size: 1349,
-    transactions: [tx05ad8b.basic, txe68043.basic],
+    // transactions: [tx05ad8b.basic, txe68043.basic],
     transactionsCount: '2'
   },
   aggregated: {
@@ -87,7 +87,7 @@ export const block29022 = {
     size: 631,
     slotNo: 29036,
     slotWithinEpoch: 7436,
-    transactions: [] as any,
+    // transactions: [] as any,
     transactionsCount: '0'
   }
 }

@@ -12,13 +12,14 @@ services:
       - postgres_db
       - postgres_password
       - postgres_user
+    shm_size: '2gb'
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: on-failure
   cardano-node:
     image: inputoutput/cardano-node:${CARDANO_NODE_VERSION}
     environment:
-      - NETWORK=${NETWORK:-testnet}
+      - NETWORK=${NETWORK:-mainnet}
     volumes:
       - node-data:/data
     logging:
@@ -27,14 +28,12 @@ services:
     image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION}
     environment:
       - EXTENDED=true
-      - NETWORK=${NETWORK:-testnet}
+      - NETWORK=${NETWORK:-mainnet}
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
     depends_on:
       - cardano-node
       - postgres
-    logging:
-      driver: none
     secrets:
       - postgres_password
       - postgres_user
@@ -55,7 +54,7 @@ services:
       - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
     volumes:
       - ./hasura/migrations:/hasura-migrations
-  http-server:
+  cardano-graphql:
     build:
       context: .
       target: server
@@ -71,8 +70,6 @@ secrets:
     file: ./config/secrets/postgres_password
   postgres_user:
     file: ./config/secrets/postgres_user
-  hasura_admin:
-    file: ./config/secrets/hasura_admin
 volumes:
   node-data:
   postgres-data:

@@ -85,7 +85,7 @@ program
       `A docker-compose file has been written into ${outDir}.
           While https://github.com/input-output-hk/cardano-graphql/issues/120 is open, you need to edit 
           HASURA_GRAPHQL_DATABASE_URL to match the newly created credentials, then run:
-          NETWORK=testnet or mainnet docker-compose up -d
+          docker-compose up
           `
     )
   })
