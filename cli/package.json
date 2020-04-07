@@ -11,7 +11,8 @@
     "build": "tsc -p .",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
     "lint": "eslint -c ../.eslintrc.json \"src/**/*.ts\"",
-    "prepare": "yarn build",
+    "prepack": "yarn build",
+    "postpack": "shx rm -rf dist",
     "test": "jest"
   },
   "repository": {
@@ -61,6 +62,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-watch": "^6.0.1",
     "jest": "^25.1.0",
+    "shx": "^0.3.2",
     "ts-node-dev": "^1.0.0-pre.40",
     "typescript": "3.5.3"
   },
