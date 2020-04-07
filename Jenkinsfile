@@ -16,8 +16,8 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh 'yarn'
-        sh 'yarn --cwd ./cli'
+        sh 'yarn && yarn build'
+        sh 'yarn --cwd ./cli && yarn --cwd ./cli build'
       }
     }
     stage('Validate Code Style') {
