@@ -70,8 +70,6 @@ secrets:
     file: ./config/secrets/postgres_password
   postgres_user:
     file: ./config/secrets/postgres_user
-  hasura_admin:
-    file: ./config/secrets/hasura_admin
 volumes:
   node-data:
   postgres-data:
