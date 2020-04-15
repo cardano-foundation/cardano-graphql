@@ -19,7 +19,6 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
 
         it('returns the same height', async () => {
             const restResult = await getDataFromAPI("https://explorer.awstest.iohkdev.io/api-new/blocks/pages")
-
             const graphQLResult = await client.query({
                 query: gql`query Blockheight {
                     cardano {
@@ -27,7 +26,8 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
                     }    
                 }`
             })
-            expect(restResult).toBe(graphQLResult)
+
+            expect(restResult["Right"][1][0]["cbeBlkHeight"]).toBe(graphQLResult["data"]["cardano"]["blockHeight"])
         })
     })
 }
