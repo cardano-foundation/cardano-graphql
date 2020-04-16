@@ -27,7 +27,15 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
                 }`
             })
 
-            expect(restResult["Right"][1][0]["cbeBlkHeight"]).toBe(graphQLResult["data"]["cardano"]["blockHeight"])
+            let restResultBlockHeight = restResult["Right"][1][0]["cbeBlkHeight"]
+            let graphQLBlockHeight = graphQLResult["data"]["cardano"]["blockHeight"]
+
+            // As we're calling an external API to check equality on something that changes every 20 seconds
+            // there is a small delta in the test condition to allow for this where the second API value can be
+            // equal to or one less than the first API value. 
+
+            expect(graphQLBlockHeight).toBeGreater(restResultBlockHeight - 1)
+            expect(graphQLBlockHeight).toBeLessThanOrEqual(restResultBlockHeight + 1);
         })
     })
 }
