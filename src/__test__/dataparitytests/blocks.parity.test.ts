@@ -18,7 +18,7 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
         }, 60000)
 
         it('returns the same height', async () => {
-            const restResult = await getDataFromAPI("https://explorer.awstest.iohkdev.io/api-new/blocks/pages")
+            const restResult = await getDataFromAPI("https://explorer.cardano.org/api/blocks/pages")
             const graphQLResult = await client.query({
                 query: gql`query Blockheight {
                     cardano {
@@ -34,7 +34,7 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
             // there is a small delta in the test condition to allow for this where the second API value can be
             // equal to or one less than the first API value. 
 
-            expect(graphQLBlockHeight).toBeGreater(restResultBlockHeight - 1)
+            expect(graphQLBlockHeight).toBeGreaterThan(restResultBlockHeight - 1)
             expect(graphQLBlockHeight).toBeLessThanOrEqual(restResultBlockHeight + 1);
         })
     })
