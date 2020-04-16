@@ -32,7 +32,7 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
 
             // As we're calling an external API to check equality on something that changes every 20 seconds
             // there is a small delta in the test condition to allow for this where the second API value can be
-            // equal to or one less than the first API value. 
+            // equal to or one more than the first API value. 
 
             expect(graphQLBlockHeight).toBeGreaterThan(restResultBlockHeight - 1)
             expect(graphQLBlockHeight).toBeLessThanOrEqual(restResultBlockHeight + 1);
