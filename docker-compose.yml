@@ -21,7 +21,8 @@ services:
     environment:
       - NETWORK=${NETWORK:-mainnet}
     volumes:
-      - node-data:/data
+      - node-db:/data/db
+      - node-ipc:/ipc
     logging:
       driver: none
   cardano-db-sync-extended:
@@ -39,7 +40,7 @@ services:
       - postgres_user
       - postgres_db
     volumes:
-      - node-data:/data
+      - node-ipc:/node-ipc
     restart: on-failure
   hasura:
     image: hasura/graphql-engine:${HASURA_VERSION}
@@ -71,5 +72,6 @@ secrets:
   postgres_user:
     file: ./config/secrets/postgres_user
 volumes:
-  node-data:
+  node-db:
+  node-ipc:
   postgres-data:
