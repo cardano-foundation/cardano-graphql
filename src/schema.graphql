@@ -164,11 +164,14 @@ type TransactionInput {
   sourceTxId: Hash32HexString!
   sourceTxIndex: Int!
   address: String!
+  index: Int!
+  txId: Hash32HexString!
   value: String!
 }
 
 input Coin_order_by {
   address: order_by
+  index: order_by
   txId: order_by
   value: order_by
 }

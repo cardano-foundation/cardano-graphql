@@ -13,6 +13,7 @@ Changelog
 - The aggregated and known very large numbers are now typed as String. Cardano JS has utilities to work with these return values, currently limited to currency conversion.
 - `cardano` query return value is accurately defined to always return an object of type `Cardano` 
 - `Transaction.fee` was a String, now a `BigInt`
+- Allow explicit ordering of `Transaction.input` and `Transaction.outputs` by their natural `index`
 
 ### Chores
 - The PostgreSQL views have been incorperated upstream, and are no longer managed in this codebase.
