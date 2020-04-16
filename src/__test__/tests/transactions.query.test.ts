@@ -23,11 +23,13 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                 }
                 fee
                 id
-                inputs {
+                inputs(order_by: { index: asc }) {
+                    index
                     address
                     value
                 }
-                outputs {
+                outputs(order_by: { index: asc }) {
+                    index
                     address
                     value
                 }
@@ -37,6 +39,8 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
         }`
       })
       expect(result.data.transactions.length).toBe(2)
+      expect(result.data.transactions[0].inputs[0].index).toBe(0)
+      expect(result.data.transactions[0].outputs[0].index).toBe(0)
       expect(result.data).toMatchSnapshot()
     })
 

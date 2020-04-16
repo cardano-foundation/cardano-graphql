@@ -28,7 +28,7 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'CARDANO_GRAPHQL_URI=https://cardano-graphql-mainnet.daedalus-operations.com NODE_ENV=test TEST_MODE=e2e npx jest suite --ci'
+        sh 'yarn test:e2e --ci'
         sh 'yarn --cwd ./cli test --ci'
       }
     }
