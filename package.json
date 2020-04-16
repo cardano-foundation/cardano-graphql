@@ -16,6 +16,7 @@
     "build": "yarn codegen:internal && yarn codegen:external && tsc -p . && shx cp src/schema.graphql dist/",
     "test:tdd": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose up -d && NODE_ENV=test TEST_MODE=integration jest suite",
     "test:e2e": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest suite",
+    "test:ci": "docker-compose -f ./test/docker-compose-ci.yml up -d && NODE_ENV=test TEST_MODE=e2e jest suite",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml"
   },
   "contributors": [

@@ -28,7 +28,7 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'yarn test:e2e --ci'
+        sh 'yarn test:ci --ci'
         sh 'yarn --cwd ./cli test --ci'
       }
     }

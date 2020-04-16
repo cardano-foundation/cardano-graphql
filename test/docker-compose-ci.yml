@@ -1,0 +1,73 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION}
+    environment:
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    shm_size: '2gb'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: on-failure
+  cardano-node:
+    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION}
+    environment:
+      - NETWORK=${NETWORK:-mainnet}
+    volumes:
+      - node-db:/data/db
+      - node-ipc:/ipc
+    logging:
+      driver: none
+  cardano-db-sync-extended:
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION}
+    environment:
+      - EXTENDED=true
+      - NETWORK=${NETWORK:-mainnet}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    depends_on:
+      - cardano-node
+      - postgres
+    secrets:
+      - postgres_password
+      - postgres_user
+      - postgres_db
+    volumes:
+      - node-ipc:/node-ipc
+    restart: on-failure
+  hasura:
+    image: hasura/graphql-engine:${HASURA_VERSION}
+    ports:
+      - "8090:8080"
+    depends_on:
+      - "postgres"
+    restart: always
+    environment:
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:doNoUseThisSecret!@postgres:5432/cexplorer
+    volumes:
+      - ./hasura/migrations:/hasura-migrations
+  cardano-graphql:
+    build:
+      context: ../
+      target: server
+    environment:
+      - HASURA_URI=http://hasura:8080/v1/graphql
+    ports:
+      - ${API_PORT:-3100}:3100
+secrets:
+  postgres_db:
+    file: ../config/secrets/postgres_db.example
+  postgres_password:
+    file: ../config/secrets/postgres_password.example
+  postgres_user:
+    file: ../config/secrets/postgres_user.example
+volumes:
+  node-db:
+  node-ipc:
+  postgres-data:
