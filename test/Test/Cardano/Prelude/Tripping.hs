@@ -21,7 +21,7 @@ where
 
 import Cardano.Prelude
 
-import Data.Aeson (FromJSON, ToJSON, decode, encode)
+import Data.Aeson (FromJSON, ToJSON, decode, fromJSON, encode, toJSON)
 import Data.String (String, unlines)
 import Data.Functor.Identity (Identity(..))
 import qualified Data.Map as Map
@@ -98,7 +98,7 @@ discoverPrefixThreadArg prefix = do
 
 roundTripsAesonShow
   :: (Eq a, MonadTest m, ToJSON a, FromJSON a, Show a) => a -> m ()
-roundTripsAesonShow a = tripping a encode decode
+roundTripsAesonShow a = tripping a toJSON fromJSON
 
 -- | Round trip any `a` with both `ToJSON` and `FromJSON` instances.
 roundTripsAesonBuildable
