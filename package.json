@@ -69,6 +69,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-watch": "^6.0.0",
+    "graphql-import": "^1.0.2",
     "graphql-tag": "^2.10.1",
     "jest": "^24.9.0",
     "shx": "^0.3.2",

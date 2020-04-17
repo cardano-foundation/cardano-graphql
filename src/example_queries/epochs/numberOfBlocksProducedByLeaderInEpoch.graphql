@@ -1,0 +1,18 @@
+query numberOfBlocksProducedByLeaderInEpoch (
+    $number: Int!
+    $slotLeader: String!
+) {
+    epochs( where: { number: { _eq: $number }}) {
+        blocks_aggregate ( where: {
+            _and: [{
+                slotNo: { _is_null: false },
+                createdBy: { _eq: $slotLeader },
+            }]
+        }){
+            aggregate {
+                count
+            }
+        }
+        number
+    }
+}

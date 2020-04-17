@@ -1,0 +1,22 @@
+query aggregatedEpochData (
+    $epochNumberLessThan: Int!
+){
+    epochs_aggregate ( where: { number: { _lt: $epochNumberLessThan }}) {
+        aggregate {
+            count
+            max {
+                number
+                output
+                transactionsCount
+            }
+            min {
+                output
+                transactionsCount
+            }
+            sum {
+                output
+                transactionsCount
+            }
+        }
+    }
+}

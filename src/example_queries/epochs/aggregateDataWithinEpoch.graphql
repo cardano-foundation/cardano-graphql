@@ -1,0 +1,29 @@
+query aggregatedDataWithinEpoch (
+    $number: Int!
+) {
+    epochs( where: { number: { _eq: $number }}) {
+        blocksCount
+        blocks_aggregate ( where: { slotNo: { _is_null: false }}) {
+            aggregate {
+                avg {
+                    fees
+                    size
+                }
+                count
+                max {
+                    fees
+                    size
+                }
+                min {
+                    fees
+                    size
+                }
+                sum {
+                    fees
+                    size
+                }
+            }
+        }
+        number
+    }
+}

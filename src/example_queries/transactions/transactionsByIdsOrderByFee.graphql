@@ -1,0 +1,26 @@
+query transactionsByIdsOrderByFee(
+    $ids: [Hash32HexString]!
+) {
+    transactions(
+        where: { id: { _in: $ids }},
+        order_by: { fee: desc }
+    ) {
+        block {
+            number
+        }
+        fee
+        id
+        inputs(order_by: { index: asc }) {
+            index
+            address
+            value
+        }
+        outputs(order_by: { index: asc }) {
+            index
+            address
+            value
+        }
+        size
+        totalOutput
+    }
+}

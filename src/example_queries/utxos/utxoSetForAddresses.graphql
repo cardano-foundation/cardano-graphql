@@ -1,0 +1,11 @@
+query utxoSetForAddresses (
+    $addresses: [String]!
+){
+    utxos( # Todo: Order by index
+        order_by: { address: asc }
+        where: { address: { _in: $addresses }}
+    ) {
+        address
+        value
+    }
+}
