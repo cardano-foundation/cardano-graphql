@@ -1,10 +1,9 @@
 query utxoSetForAddress (
     $address: String!
 ){
-    utxos( # Todo: Order by index
-        order_by: { address: asc }
-        where: { address: { _eq: $address }
-        }
+    utxos(
+        order_by: { value: desc }
+        where: { address: { _eq: $address }}
     ) {
         address
         value
