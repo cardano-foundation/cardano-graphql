@@ -29,6 +29,7 @@ pipeline {
     stage('Test') {
       steps {
         sh 'yarn test:ci --ci'
+        sh 'yarn test:dataparity --ci'
         sh 'yarn --cwd ./cli test --ci'
       }
     }
