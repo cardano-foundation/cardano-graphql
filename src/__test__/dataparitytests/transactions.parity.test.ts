@@ -43,8 +43,8 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
                         }`
             })
 
-            const restResultFee = Number(restResult['Right']['ctsFees']['getCoin'])
-            const graphQLFee = Number(graphQLResult['data']['transactions'][0]['fee'])
+            const restResultFee = restResult['Right']['ctsFees']['getCoin']
+            const graphQLFee = graphQLResult['data']['transactions'][0]['fee']
 
             expect(graphQLFee).toEqual(restResultFee)
         })
@@ -146,7 +146,7 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
                 graphQLAddresses.push(input['address'])
             }
 
-            expect(graphQLAddresses.sort()).toEqual(restResultAddresses.sort())
+            expect(graphQLAddresses).toEqual(restResultAddresses)
         })
 
         it('return the correct Input Values', async () => {
@@ -240,7 +240,7 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
                 graphQLAddresses.push(output['address'])
             }
 
-            expect(graphQLAddresses.sort()).toEqual(restResultAddresses.sort())
+            expect(graphQLAddresses).toEqual(restResultAddresses)
         })
 
         it('return the correct Output Values', async () => {
@@ -288,6 +288,78 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
             }
 
             expect(graphQLValues).toEqual(restResultValues)
+        })
+
+        it('have the same block creation time', async () => {
+            const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
+            const graphQLResult = await client.query({
+                query: gql`query TxById{
+                              transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+                              {
+                                id
+                                fee
+                                block{
+                                  number
+                                  createdAt
+                                }
+                                inputs {
+                                  address
+                                  value
+                                  sourceTxId
+                                  sourceTxIndex
+                                }
+                                outputs{
+                                  address
+                                  index
+                                  value
+                                }
+    
+                                totalOutput
+                                includedAt
+                              }
+                            }`
+            })
+
+            let restResultBlockTime = restResult['Right']['ctsBlockTimeIssued']
+            let graphQLBlockTime = graphQLResult['data']['transactions'][0]['block']['createdAt']
+
+            expect(graphQLBlockTime).toEqual(restResultBlockTime)
+        })
+
+        it('have the same transaction inclusion time', async () => {
+            const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
+            const graphQLResult = await client.query({
+                query: gql`query TxById{
+                              transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+                              {
+                                id
+                                fee
+                                block{
+                                  number
+                                  createdAt
+                                }
+                                inputs {
+                                  address
+                                  value
+                                  sourceTxId
+                                  sourceTxIndex
+                                }
+                                outputs{
+                                  address
+                                  index
+                                  value
+                                }
+    
+                                totalOutput
+                                includedAt
+                              }
+                            }`
+            })
+
+            let restResultTransactionTime = restResult['Right']['ctsTxTimeIssued']
+            let graphQLTransactionTime = graphQLResult['data']['transactions'][0]['includedAt']
+
+            expect(graphQLTransactionTime).toEqual(restResultTransactionTime)
         })
     })
 }
