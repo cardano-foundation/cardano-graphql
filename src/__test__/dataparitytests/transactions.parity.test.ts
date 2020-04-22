@@ -114,13 +114,13 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
                                   number
                                   createdAt
                                 }
-                                inputs {
+                                inputs(order_by: { index: asc }) {
                                   address
                                   value
                                   sourceTxId
                                   sourceTxIndex
                                 }
-                                outputs{
+                                outputs(order_by: { index: asc }){
                                   address
                                   index
                                   value
@@ -208,13 +208,13 @@ export function transactionTests(createClient: () => Promise<TestClient>) {
                                   number
                                   createdAt
                                 }
-                                inputs {
+                                inputs(order_by: { index: asc }) {
                                   address
                                   value
                                   sourceTxId
                                   sourceTxIndex
                                 }
-                                outputs{
+                                outputs(order_by: { index: asc }){
                                   address
                                   index
                                   value
