@@ -10,6 +10,6 @@ docker-compose up
 - Export the new metadata through the settings utility `hasura/metadata.json`
 
 ## 3. Test 
-``
+```
 yarn test:e2e
 ```
