@@ -71,7 +71,7 @@ type Cardano {
 
 type Transaction {
   block: Block
-  fee: String!
+  fee: BigInt!
   id: Hash32HexString!
   inputs (
     limit: Int
