@@ -49,7 +49,7 @@ $ cd cardano-graphql
 $ NETWORK=testnet docker-compose up
 ```
 
-3. Query the API :tada:
+3. Query the API once fully synced :tada:
 
 ```
 $ curl -X POST -H "Content-Type: application/json" -d '{"query": "{ cardano { blockHeight }}"}' http://localhost:3100/graphql
@@ -63,18 +63,10 @@ For more information, have a look at the [Wiki :book:](https://github.com/input-
 
 See [Using Docker](https://github.com/input-output-hk/cardano-graphql/wiki/Docker).
 
-### From Binaries 
+### From Source 
 
-See assets available for each [release](https://github.com/input-output-hk/cardano-graphql/releases).
+See [Building](https://github.com/input-output-hk/cardano-graphql/wiki/Building).
 
-## Documentation
-
-- [API Documentation](https://input-output-hk.github.io/cardano-graphql)
-- [API Consumer](./docs/api_consumer)
-- [Developer](./docs/developer)
-- [Maintainer](./docs/maintainer)
-- [Ops](./docs/ops)
-- [QA](./docs/qa)
 <hr/>
 
 <p align="center">
