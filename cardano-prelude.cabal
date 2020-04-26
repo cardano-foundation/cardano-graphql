@@ -60,7 +60,7 @@ library
                      , integer-gmp
                      , mtl
                      , nonempty-containers
-                     , protolude                  < 0.2.4
+                     , protolude
                      , serialise
                      , tagged
                      , text
