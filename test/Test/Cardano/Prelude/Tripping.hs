@@ -150,7 +150,7 @@ trippingBuildable x enc dec =
   in if mx == my
     then success
     else case valueDiff <$> buildValue mx <*> buildValue my of
-      Nothing -> withFrozenCallStack $ failWith Nothing $ unlines
+      Nothing -> withFrozenCallStack $ failWith Nothing $ Data.String.unlines
         [ "━━━ Original ━━━"
         , show $ buildValue mx
         , "━━━ Intermediate ━━━"
@@ -163,7 +163,7 @@ trippingBuildable x enc dec =
         withFrozenCallStack
           $ failWith
               (Just $ Diff "━━━ " "- Original" "/" "+ Roundtrip" " ━━━" dif)
-          $ unlines ["━━━ Intermediate ━━━", show i]
+          $ Data.String.unlines ["━━━ Intermediate ━━━", show i]
 
 instance (Buildable e, Buildable a) => Buildable (Either e a) where
   build (Left  e) = build e
