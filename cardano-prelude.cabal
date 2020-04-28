@@ -88,9 +88,6 @@ test-suite cardano-prelude-test
   main-is:             test.hs
   type:                exitcode-stdio-1.0
 
-  exposed-modules:
-                       Test.Cardano.Prelude
-
   other-modules:
                        Test.Cardano.Prelude
                        Test.Cardano.Prelude.Base16
