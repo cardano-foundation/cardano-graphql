@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import fetch from 'cross-fetch';
+import { Voyager } from 'graphql-voyager';
+import { getIntrospectionQuery } from 'graphql';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+function introspectionProvider() {
+  return fetch('https://cardano-graphql-mainnet.daedalus-operations.com/', {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({query: getIntrospectionQuery()}),
+  }).then(response => response.json());
+}
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDOM.render(<Voyager
+  introspection={introspectionProvider}
+  workerURI={process.env.PUBLIC_URL + '/voyager.worker.js'}
+/>, document.getElementById('root'));
