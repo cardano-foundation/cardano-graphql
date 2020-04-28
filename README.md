@@ -67,6 +67,13 @@ See [Using Docker](https://github.com/input-output-hk/cardano-graphql/wiki/Docke
 
 See [Building](https://github.com/input-output-hk/cardano-graphql/wiki/Building).
 
+## Documentation
+
+| Link                                                                                               | Audience                                                     |
+| ---                                                                                                | ---                                                          |
+| [API Documentation](https://input-output-hk.github.io/cardano-graphql)                             | Users of the Cardano GraphQL API                             |
+| [Wiki](https://github.com/input-output-hk/cardano-graphql/wiki)                                    | Anyone interested in the project and our development process |
+
 <hr/>
 
 <p align="center">
