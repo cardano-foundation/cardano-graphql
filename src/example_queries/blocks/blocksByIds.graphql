@@ -1,0 +1,38 @@
+query blocksByIds(
+    $ids: [Hash32HexString]!
+)  {
+    blocks (
+        where: {
+            id: {
+                _in: $ids
+            }
+        },
+        order_by: {
+            number: asc
+        }
+    ) {
+        epoch {
+            number
+        }
+        epochNo
+        fees
+        id
+        merkelRootHash
+        number
+        createdAt
+        createdBy
+        previousBlock {
+            id
+            number
+        }
+
+        nextBlock {
+            id
+            number
+        }
+        size
+        slotNo
+        slotWithinEpoch
+        transactionsCount
+    }
+}

@@ -1,0 +1,13 @@
+query utxoAggregateValueLessThan (
+    $boundary: String
+){
+    utxos_aggregate( where: { value: { _lt: $boundary }}) {
+        aggregate {
+            avg { value }
+            count
+            max { value }
+            min { value }
+            sum { value }
+        }
+    }
+}

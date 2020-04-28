@@ -1,0 +1,47 @@
+query aggregatedDataWithinBlock (
+    $number: Int!
+    $epochLessThan: Int!
+) {
+    blocks(
+        where: {
+            _and: [
+                {
+                    number: {
+                        _eq: $number
+                    }
+                }, {
+                    epoch: {
+                        number: {
+                            _lt: $epochLessThan
+                        }
+                    }
+                }
+    ]}) {
+        transactions_aggregate {
+            aggregate {
+                avg {
+                    fee
+                    size
+                    totalOutput
+                }
+                count
+                max {
+                    fee
+                    size
+                    totalOutput
+                }
+                min {
+                    fee
+                    size
+                    totalOutput
+                }
+                sum {
+                    fee
+                    size
+                    totalOutput
+                }
+            }
+        }
+        number
+    }
+}

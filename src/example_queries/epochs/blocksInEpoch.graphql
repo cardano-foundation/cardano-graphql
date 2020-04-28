@@ -1,0 +1,12 @@
+query blocksInEpoch (
+    $number: Int!
+    $blockLimit: Int
+){
+    epochs( where: { number: { _eq: $number }}) {
+        blocks(limit: $blockLimit ) {
+            epoch {
+                number
+            }
+        }
+    }
+}

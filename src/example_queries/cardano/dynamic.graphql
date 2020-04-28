@@ -1,0 +1,8 @@
+query cardanoDynamic {
+  cardano {
+    blockHeight
+    currentEpoch {
+      number
+    }
+  }
+}

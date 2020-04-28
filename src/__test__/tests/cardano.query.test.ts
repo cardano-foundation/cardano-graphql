@@ -1,5 +1,5 @@
-import gql from 'graphql-tag'
 import { TestClient } from '../TestClient'
+import { loadQueryNode } from '../../util'
 
 export function cardanoTests (createClient: () => Promise<TestClient>) {
   describe('cardano', () => {
@@ -11,27 +11,13 @@ export function cardanoTests (createClient: () => Promise<TestClient>) {
 
     it('Returns static information about the network', async () => {
       const result = await client.query({
-        query: gql`query {
-            cardano {
-                networkName
-                protocolConst
-                slotDuration
-                startTime
-            }
-        }`
+        query: await loadQueryNode('cardano', 'static')
       })
       expect(result.data).toMatchSnapshot()
     })
     it('Returns dynamic information about the network', async () => {
       const result = await client.query({
-        query: gql`query {
-            cardano {
-                blockHeight
-                currentEpoch {
-                    number
-                }
-            }
-        }`
+        query: await loadQueryNode('cardano', 'dynamic')
       })
       expect(result.data.cardano.blockHeight).toBeGreaterThan(3994551)
       expect(result.data.cardano.currentEpoch.number).toBeGreaterThan(184)
