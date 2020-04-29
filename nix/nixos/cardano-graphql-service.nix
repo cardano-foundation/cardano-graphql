@@ -24,6 +24,11 @@ in {
         default = 9999;
       };
 
+      port = lib.mkOption {
+        type = lib.types.int;
+        default = 3100;
+      };
+
       hasuraIp = lib.mkOption {
         type = lib.types.str;
         default = "127.0.0.1";
@@ -33,9 +38,29 @@ in {
         type = lib.types.str;
         default = "http";
       };
+
+      enablePrometheus = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+      };
+
+      enableTracing = lib.mkEnableOption "tracing";
+      enableCache = lib.mkEnableOption "cache";
+
+      queryDepthLimit = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
+        default = null;
+      };
+
+      allowedOrigins = lib.mkOption {
+        type = lib.types.nullOr (lib.types.separatedString " ");
+        default = null;
+      };
     };
   };
   config = let
+    # TODO: there has to be a better way to handle boolean env vars in nodejs???
+    boolToNodeJSEnv = bool: if bool then "true" else "false";
     frontend = (import ../../.).cardano-graphql;
     hasuraBaseUri = cfg.hasuraProtocol + "://" + cfg.hasuraIp + ":" + (toString cfg.enginePort) + "/";
     hasuraDbMetadata = ../../hasura/migrations/metadata.json;
@@ -45,7 +70,13 @@ in {
       requires = [ "graphql-engine.service" ];
       environment = {
         HASURA_URI = hasuraBaseUri + "v1/graphql";
-      };
+        PROMETHEUS_METRICS = boolToNodeJSEnv cfg.enablePrometheus;
+        TRACING = boolToNodeJSEnv (cfg.enableTracing || cfg.enablePrometheus);
+        CACHE_ENABLED = boolToNodeJSEnv cfg.enableCache;
+        API_PORT = toString cfg.port;
+      } //
+      (lib.optionalAttrs (cfg.allowedOrigins != null) { ALLOWED_ORIGINS = cfg.allowedOrigins; }) //
+      (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; });
       path = with pkgs; [ netcat curl postgresql nodejs-12_x ];
       preStart = ''
         for x in {1..10}; do
