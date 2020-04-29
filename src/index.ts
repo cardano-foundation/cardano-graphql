@@ -3,8 +3,9 @@ import { Server } from './Server'
 
 getConfig().then((config) => {
   const server = Server(config)
-  server.boot()
-    .then(({ url }) => console.log(`Server ready at ${url}`))
-    .catch((error) => console.error(error.message))
-}
-)
+  try {
+    server.listen({ port: config.apiPort }, () => console.log(`Server ready at http://localhost:${config.apiPort}`))
+  } catch (error) {
+    console.error(error.message)
+  }
+})
