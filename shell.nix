@@ -22,6 +22,7 @@ let
       tmux        # Terminal multiplexer
       git         # Distributed version control system
       yarn        # Dependency management for javascript
+      python
     ];
 
     shellHook = ''
