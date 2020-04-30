@@ -1,6 +1,6 @@
 {
   "name": "cardano-graphql-cli",
-  "version": "1.0.0-rc.8",
+  "version": "1.0.0-rc.9",
   "description": "Management tool for managing a Cardano GraphQL deployment",
   "main": "./bin/index.js",
   "bin": {
