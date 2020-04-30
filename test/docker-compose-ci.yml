@@ -17,7 +17,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: on-failure
   cardano-node:
-    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-latest}
+    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-1.11.0}
     environment:
       - NETWORK=${NETWORK:-mainnet}
     volumes:
@@ -26,7 +26,7 @@ services:
     logging:
       driver: none
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-latest}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-8fe44c55940470d061a279eaa3976f5b9d0be65e}
     environment:
       - EXTENDED=true
       - NETWORK=${NETWORK:-mainnet}
