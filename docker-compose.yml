@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   postgres:
-    image: postgres:${POSTGRES_VERSION}
+    image: postgres:${POSTGRES_VERSION:-11.5-alpine}
     environment:
       - POSTGRES_LOGGING=true
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
@@ -17,7 +17,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: on-failure
   cardano-node:
-    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION}
+    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-latest}
     environment:
       - NETWORK=${NETWORK:-mainnet}
     volumes:
@@ -26,7 +26,7 @@ services:
     logging:
       driver: none
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-latest}
     environment:
       - EXTENDED=true
       - NETWORK=${NETWORK:-mainnet}
@@ -43,7 +43,7 @@ services:
       - node-ipc:/node-ipc
     restart: on-failure
   hasura:
-    image: hasura/graphql-engine:${HASURA_VERSION}
+    image: hasura/graphql-engine:${HASURA_VERSION:-v1.1.1.cli-migrations}
     ports:
       - "8090:8080"
     depends_on:
@@ -68,11 +68,11 @@ services:
       - ${API_PORT:-3100}:3100
 secrets:
   postgres_db:
-    file: ./config/secrets/postgres_db
+    file: ./config/secrets/postgres_db.example
   postgres_password:
-    file: ./config/secrets/postgres_password
+    file: ./config/secrets/postgres_password.example
   postgres_user:
-    file: ./config/secrets/postgres_user
+    file: ./config/secrets/postgres_user.example
 volumes:
   node-db:
   node-ipc:
