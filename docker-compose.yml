@@ -68,11 +68,11 @@ services:
       - ${API_PORT:-3100}:3100
 secrets:
   postgres_db:
-    file: ./config/secrets/postgres_db
+    file: ./config/secrets/postgres_db.example
   postgres_password:
-    file: ./config/secrets/postgres_password
+    file: ./config/secrets/postgres_password.example
   postgres_user:
-    file: ./config/secrets/postgres_user
+    file: ./config/secrets/postgres_user.example
 volumes:
   node-db:
   node-ipc:
