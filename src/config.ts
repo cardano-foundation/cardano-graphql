@@ -1,9 +1,17 @@
-import { Config as ServerConfig } from './Server'
 import { MissingConfig, TracingRequired } from './lib/errors'
-import { buildHasuraSchema } from './lib/buildHasuraSchema'
-import { hasuraResolvers, scalarResolvers } from './resolvers'
+import { CorsOptions } from 'apollo-server-express'
 
-export async function getConfig (): Promise<ServerConfig> {
+export type Config = {
+  allowedOrigins: CorsOptions['origin']
+  apiPort: number
+  cacheEnabled: boolean
+  hasuraUri: string
+  prometheusMetrics: boolean
+  queryDepthLimit: number
+  tracing: boolean
+}
+
+export function getConfig (): Config {
   const {
     allowedOrigins,
     apiPort,
@@ -25,10 +33,9 @@ export async function getConfig (): Promise<ServerConfig> {
     allowedOrigins: allowedOrigins || true,
     apiPort: apiPort || 3100,
     cacheEnabled: cacheEnabled || false,
-    context: hasuraUri ? await buildContext(hasuraUri) : undefined,
+    hasuraUri,
     prometheusMetrics,
     queryDepthLimit: queryDepthLimit || 10,
-    resolvers: Object.assign({}, scalarResolvers, hasuraResolvers),
     tracing
   }
 }
@@ -52,9 +59,4 @@ function filterAndTypecastEnvs (env: any) {
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
     tracing: TRACING === 'true'
   }
-}
-
-async function buildContext (hasuraUri: string) {
-  const hasura = await buildHasuraSchema(hasuraUri)
-  return () => ({ hasura })
 }
