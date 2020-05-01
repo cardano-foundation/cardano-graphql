@@ -28,8 +28,8 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'docker-compose -p cardano-mainnet -f ./test/docker-compose-ci.yml up -d'
-        sh 'NODE_ENV=test TEST_MODE=e2e npx jest suite dataparity.test --ci'
+        sh 'docker-compose -p cardano-mainnet -f ./test/docker-compose-ci.yml up --build --force-recreate -d'
+        sh 'NODE_ENV=test TEST_MODE=e2e npx jest suite --ci'
         sh 'yarn --cwd ./cli test --ci'
       }
     }

@@ -6,8 +6,7 @@ import { buildContext, Context } from './Context'
 import { prometheusMetricsPlugin } from './apollo_server_plugins'
 import * as depthLimit from 'graphql-depth-limit'
 import { Server } from './Server'
-import { hasuraResolvers, scalarResolvers } from './resolvers'
-import { Resolvers } from './graphql_types'
+import resolvers from './resolvers'
 
 const config = getConfig()
 
@@ -28,7 +27,7 @@ buildContext(config.hasuraUri)
       context,
       introspection: true,
       plugins,
-      resolvers: Object.assign({}, scalarResolvers, hasuraResolvers) as Resolvers,
+      resolvers,
       validationRules,
       typeDefs: fs.readFileSync(path.join(__dirname, 'schema.graphql'), 'UTF8')
     }, {

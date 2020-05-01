@@ -7,7 +7,7 @@ export const hasuraResolvers: Resolvers = {
       return delegateToSchema({
         args,
         context,
-        fieldName: 'Block',
+        fieldName: 'blocks',
         info,
         operation: 'query',
         schema: context.hasura
@@ -17,7 +17,7 @@ export const hasuraResolvers: Resolvers = {
       return delegateToSchema({
         args,
         context,
-        fieldName: 'Block_aggregate',
+        fieldName: 'blocks_aggregate',
         info,
         operation: 'query',
         schema: context.hasura
@@ -27,7 +27,7 @@ export const hasuraResolvers: Resolvers = {
       return delegateToSchema({
         args,
         context,
-        fieldName: 'Epoch',
+        fieldName: 'epochs',
         info,
         operation: 'query',
         schema: context.hasura
@@ -37,7 +37,7 @@ export const hasuraResolvers: Resolvers = {
       return delegateToSchema({
         args,
         context,
-        fieldName: 'Epoch_aggregate',
+        fieldName: 'epochs_aggregate',
         info,
         operation: 'query',
         schema: context.hasura
@@ -46,7 +46,7 @@ export const hasuraResolvers: Resolvers = {
     cardano: async (_root, _args, context, info) => {
       const result = await delegateToSchema({
         context,
-        fieldName: 'Cardano',
+        fieldName: 'cardano',
         info,
         operation: 'query',
         schema: context.hasura
@@ -57,7 +57,7 @@ export const hasuraResolvers: Resolvers = {
       return delegateToSchema({
         args,
         context,
-        fieldName: 'Transaction',
+        fieldName: 'transactions',
         info,
         operation: 'query',
         schema: context.hasura
@@ -67,7 +67,7 @@ export const hasuraResolvers: Resolvers = {
       return delegateToSchema({
         args,
         context,
-        fieldName: 'Transaction_aggregate',
+        fieldName: 'transactions_aggregate',
         info,
         operation: 'query',
         schema: context.hasura
@@ -77,7 +77,7 @@ export const hasuraResolvers: Resolvers = {
       return delegateToSchema({
         args,
         context,
-        fieldName: 'Utxo',
+        fieldName: 'utxos',
         info,
         operation: 'query',
         schema: context.hasura
@@ -87,7 +87,7 @@ export const hasuraResolvers: Resolvers = {
       return delegateToSchema({
         args,
         context,
-        fieldName: 'Utxo_aggregate',
+        fieldName: 'utxos_aggregate',
         info,
         operation: 'query',
         schema: context.hasura

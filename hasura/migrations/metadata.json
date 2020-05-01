@@ -1,1 +1,431 @@
-{"functions":["utxo_set_at_block"],"remote_schemas":[],"query_collections":[],"allowlist":[],"tables":[{"table":"Block","is_enum":false,"configuration":{"custom_root_fields":{"select":null,"select_by_pk":null,"select_aggregate":null,"insert":null,"update":null,"delete":null},"custom_column_names":{}},"object_relationships":[{"using":{"manual_configuration":{"remote_table":"slot_leader","column_mapping":{"createdBy":"id"}}},"name":"creator","comment":null},{"using":{"manual_configuration":{"remote_table":"Epoch","column_mapping":{"epochNo":"number"}}},"name":"epoch","comment":null},{"using":{"manual_configuration":{"remote_table":"Block","column_mapping":{"nextBlockId":"id"}}},"name":"nextBlock","comment":null},{"using":{"manual_configuration":{"remote_table":"Block","column_mapping":{"previousBlockId":"id"}}},"name":"previousBlock","comment":null}],"array_relationships":[{"using":{"manual_configuration":{"remote_table":"Transaction","column_mapping":{"id":"blockId"}}},"name":"transactions","comment":null}],"insert_permissions":[],"select_permissions":[{"role":"cardano-graphql","comment":null,"permission":{"allow_aggregations":true,"computed_fields":[],"columns":["fees","id","merkelRootHash","number","previousBlockId","nextBlockId","createdBy","size","transactionsCount","epochNo","slotNo","slotWithinEpoch","createdAt"],"limit":100,"filter":{}}}],"update_permissions":[],"delete_permissions":[],"event_triggers":[],"computed_fields":[]},{"table":"Cardano","is_enum":false,"configuration":{"custom_root_fields":{"select":null,"select_by_pk":null,"select_aggregate":null,"insert":null,"update":null,"delete":null},"custom_column_names":{}},"object_relationships":[{"using":{"manual_configuration":{"remote_table":"Epoch","column_mapping":{"currentEpochNo":"number"}}},"name":"currentEpoch","comment":null}],"array_relationships":[],"insert_permissions":[],"select_permissions":[{"role":"cardano-graphql","comment":null,"permission":{"allow_aggregations":false,"computed_fields":[],"columns":["blockHeight","currentEpochNo","slotDuration","startTime","protocolConst","networkName"],"filter":{}}}],"update_permissions":[],"delete_permissions":[],"event_triggers":[],"computed_fields":[]},{"table":"Epoch","is_enum":false,"configuration":{"custom_root_fields":{"select":null,"select_by_pk":null,"select_aggregate":null,"insert":null,"update":null,"delete":null},"custom_column_names":{}},"object_relationships":[],"array_relationships":[{"using":{"manual_configuration":{"remote_table":"Block","column_mapping":{"number":"epochNo"}}},"name":"blocks","comment":null}],"insert_permissions":[],"select_permissions":[{"role":"cardano-graphql","comment":null,"permission":{"allow_aggregations":true,"computed_fields":[],"columns":["blocksCount","lastBlockTime","number","output","startedAt","transactionsCount"],"limit":100,"filter":{}}}],"update_permissions":[],"delete_permissions":[],"event_triggers":[],"computed_fields":[]},{"table":"Transaction","is_enum":false,"configuration":{"custom_root_fields":{"select":null,"select_by_pk":null,"select_aggregate":null,"insert":null,"update":null,"delete":null},"custom_column_names":{}},"object_relationships":[{"using":{"manual_configuration":{"remote_table":"Block","column_mapping":{"blockId":"id"}}},"name":"block","comment":null}],"array_relationships":[{"using":{"manual_configuration":{"remote_table":"TransactionInput","column_mapping":{"id":"txId"}}},"name":"inputs","comment":null},{"using":{"manual_configuration":{"remote_table":"TransactionOutput","column_mapping":{"id":"txId"}}},"name":"outputs","comment":null}],"insert_permissions":[],"select_permissions":[{"role":"cardano-graphql","comment":null,"permission":{"allow_aggregations":true,"computed_fields":[],"columns":["blockId","fee","id","totalOutput","size","includedAt"],"limit":100,"filter":{}}}],"update_permissions":[],"delete_permissions":[],"event_triggers":[],"computed_fields":[]},{"table":"TransactionInput","is_enum":false,"configuration":{"custom_root_fields":{"select":null,"select_by_pk":null,"select_aggregate":null,"insert":null,"update":null,"delete":null},"custom_column_names":{}},"object_relationships":[],"array_relationships":[],"insert_permissions":[],"select_permissions":[{"role":"cardano-graphql","comment":null,"permission":{"allow_aggregations":true,"computed_fields":[],"columns":["address","index","sourceTxId","sourceTxIndex","txId","value"],"limit":100,"filter":{}}}],"update_permissions":[],"delete_permissions":[],"event_triggers":[],"computed_fields":[]},{"table":"TransactionOutput","is_enum":false,"configuration":{"custom_root_fields":{"select":null,"select_by_pk":null,"select_aggregate":null,"insert":null,"update":null,"delete":null},"custom_column_names":{}},"object_relationships":[],"array_relationships":[],"insert_permissions":[],"select_permissions":[{"role":"cardano-graphql","comment":null,"permission":{"allow_aggregations":true,"computed_fields":[],"columns":["address","value","txId","index"],"filter":{}}}],"update_permissions":[],"delete_permissions":[],"event_triggers":[],"computed_fields":[]},{"table":"Utxo","is_enum":false,"configuration":{"custom_root_fields":{"select":null,"select_by_pk":null,"select_aggregate":null,"insert":null,"update":null,"delete":null},"custom_column_names":{}},"object_relationships":[],"array_relationships":[],"insert_permissions":[],"select_permissions":[{"role":"cardano-graphql","comment":null,"permission":{"allow_aggregations":true,"computed_fields":[],"columns":["address","value","txId","index"],"limit":100,"filter":{}}}],"update_permissions":[],"delete_permissions":[],"event_triggers":[],"computed_fields":[]},{"table":"slot_leader","is_enum":false,"configuration":{"custom_root_fields":{"select":null,"select_by_pk":null,"select_aggregate":null,"insert":null,"update":null,"delete":null},"custom_column_names":{}},"object_relationships":[],"array_relationships":[],"insert_permissions":[],"select_permissions":[{"role":"cardano-graphql","comment":null,"permission":{"allow_aggregations":true,"computed_fields":[],"columns":["id","hash","description"],"limit":100,"filter":{}}}],"update_permissions":[],"delete_permissions":[],"event_triggers":[],"computed_fields":[]}]}
+{
+  "version": 2,
+  "tables": [
+    {
+      "table": {
+        "schema": "public",
+        "name": "Block"
+      },
+      "configuration": {
+        "custom_root_fields": {
+          "insert": "insert_block",
+          "select_aggregate": "blocks_aggregate",
+          "select_by_pk": "blocks_by_pk",
+          "select": "blocks",
+          "delete": "delete_block",
+          "update": "update_block"
+        },
+        "custom_column_names": {}
+      },
+      "object_relationships": [
+        {
+          "name": "creator",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "slot_leader"
+              },
+              "column_mapping": {
+                "createdBy": "id"
+              }
+            }
+          }
+        },
+        {
+          "name": "epoch",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "Epoch"
+              },
+              "column_mapping": {
+                "epochNo": "number"
+              }
+            }
+          }
+        },
+        {
+          "name": "nextBlock",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "Block"
+              },
+              "column_mapping": {
+                "nextBlockId": "id"
+              }
+            }
+          }
+        },
+        {
+          "name": "previousBlock",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "Block"
+              },
+              "column_mapping": {
+                "previousBlockId": "id"
+              }
+            }
+          }
+        }
+      ],
+      "array_relationships": [
+        {
+          "name": "transactions",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "Transaction"
+              },
+              "column_mapping": {
+                "id": "blockId"
+              }
+            }
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "cardano-graphql",
+          "permission": {
+            "columns": [
+              "fees",
+              "id",
+              "merkelRootHash",
+              "number",
+              "previousBlockId",
+              "nextBlockId",
+              "createdBy",
+              "size",
+              "transactionsCount",
+              "epochNo",
+              "slotNo",
+              "slotWithinEpoch",
+              "createdAt"
+            ],
+            "filter": {},
+            "limit": 100,
+            "allow_aggregations": true
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "Cardano"
+      },
+      "configuration": {
+        "custom_root_fields": {
+          "insert": "insert_cardano",
+          "select_aggregate": "cardano_aggregate",
+          "select_by_pk": "cardano_by_pk",
+          "select": "cardano",
+          "delete": "delete_cardano",
+          "update": "update_cardano"
+        },
+        "custom_column_names": {}
+      },
+      "object_relationships": [
+        {
+          "name": "currentEpoch",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "Epoch"
+              },
+              "column_mapping": {
+                "currentEpochNo": "number"
+              }
+            }
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "cardano-graphql",
+          "permission": {
+            "columns": [
+              "blockHeight",
+              "currentEpochNo",
+              "slotDuration",
+              "startTime",
+              "protocolConst",
+              "networkName"
+            ],
+            "filter": {}
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "Epoch"
+      },
+      "configuration": {
+        "custom_root_fields": {
+          "insert": "insert_epoch",
+          "select_aggregate": "epochs_aggregate",
+          "select_by_pk": "epochs_by_pk",
+          "select": "epochs",
+          "delete": "delete_epoch",
+          "update": "update_epoch"
+        },
+        "custom_column_names": {}
+      },
+      "array_relationships": [
+        {
+          "name": "blocks",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "Block"
+              },
+              "column_mapping": {
+                "number": "epochNo"
+              }
+            }
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "cardano-graphql",
+          "permission": {
+            "columns": [
+              "blocksCount",
+              "lastBlockTime",
+              "number",
+              "output",
+              "startedAt",
+              "transactionsCount"
+            ],
+            "filter": {},
+            "limit": 100,
+            "allow_aggregations": true
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "Transaction"
+      },
+      "configuration": {
+        "custom_root_fields": {
+          "insert": "insert_transaction",
+          "select_aggregate": "transactions_aggregate",
+          "select_by_pk": "transactions_by_pk",
+          "select": "transactions",
+          "delete": "delete_transaction",
+          "update": "update_transaction"
+        },
+        "custom_column_names": {}
+      },
+      "object_relationships": [
+        {
+          "name": "block",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "Block"
+              },
+              "column_mapping": {
+                "blockId": "id"
+              }
+            }
+          }
+        }
+      ],
+      "array_relationships": [
+        {
+          "name": "inputs",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "TransactionInput"
+              },
+              "column_mapping": {
+                "id": "txId"
+              }
+            }
+          }
+        },
+        {
+          "name": "outputs",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "TransactionOutput"
+              },
+              "column_mapping": {
+                "id": "txId"
+              }
+            }
+          }
+        }
+      ],
+      "select_permissions": [
+        {
+          "role": "cardano-graphql",
+          "permission": {
+            "columns": [
+              "blockId",
+              "fee",
+              "id",
+              "totalOutput",
+              "size",
+              "includedAt"
+            ],
+            "filter": {},
+            "limit": 100,
+            "allow_aggregations": true
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "TransactionInput"
+      },
+      "configuration": {
+        "custom_root_fields": {
+          "insert": "insert_transaction_inputs",
+          "select_aggregate": "transaction_inputs_aggregate",
+          "select_by_pk": "transaction_inputs_by_pk",
+          "select": "transaction_inputs",
+          "delete": "delete_transaction_inputs",
+          "update": "update_transaction_inputs"
+        },
+        "custom_column_names": {}
+      },
+      "select_permissions": [
+        {
+          "role": "cardano-graphql",
+          "permission": {
+            "columns": [
+              "address",
+              "index",
+              "sourceTxId",
+              "sourceTxIndex",
+              "txId",
+              "value"
+            ],
+            "filter": {},
+            "limit": 100,
+            "allow_aggregations": true
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "TransactionOutput"
+      },
+      "configuration": {
+        "custom_root_fields": {
+          "insert": "insert_transaction_outputs",
+          "select_aggregate": "transaction_outputs_aggregate",
+          "select_by_pk": "transaction_outputs_by_pk",
+          "select": "transaction_outputs",
+          "delete": "delete_transaction_outputs",
+          "update": "update_transaction_outputs"
+        },
+        "custom_column_names": {}
+      },
+      "select_permissions": [
+        {
+          "role": "cardano-graphql",
+          "permission": {
+            "columns": [
+              "address",
+              "value",
+              "txId",
+              "index"
+            ],
+            "filter": {},
+            "allow_aggregations": true
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "Utxo"
+      },
+      "configuration": {
+        "custom_root_fields": {
+          "insert": "insert_utxos",
+          "select_aggregate": "utxos_aggregate",
+          "select_by_pk": "utxos_by_pk",
+          "select": "utxos",
+          "delete": "delete_utxos",
+          "update": "update_utxos"
+        },
+        "custom_column_names": {}
+      },
+      "select_permissions": [
+        {
+          "role": "cardano-graphql",
+          "permission": {
+            "columns": [
+              "address",
+              "value",
+              "txId",
+              "index"
+            ],
+            "filter": {},
+            "limit": 100,
+            "allow_aggregations": true
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "slot_leader"
+      },
+      "select_permissions": [
+        {
+          "role": "cardano-graphql",
+          "permission": {
+            "columns": [
+              "id",
+              "hash",
+              "description"
+            ],
+            "filter": {},
+            "limit": 100,
+            "allow_aggregations": true
+          }
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "function": {
+        "schema": "public",
+        "name": "utxo_set_at_block"
+      }
+    }
+  ]
+}
