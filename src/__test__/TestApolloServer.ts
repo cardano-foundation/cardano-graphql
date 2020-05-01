@@ -2,8 +2,7 @@ import { ApolloServerBase } from 'apollo-server-core'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as depthLimit from 'graphql-depth-limit'
-import { hasuraResolvers, scalarResolvers } from '../resolvers'
-import { Resolvers } from '../graphql_types'
+import resolvers from '../resolvers'
 import { buildContext } from '../Context'
 
 /**
@@ -19,7 +18,7 @@ export async function TestApolloServer (): Promise<ApolloServerBase> {
   return new ApolloServerBase({
     context,
     introspection: true,
-    resolvers: Object.assign({}, scalarResolvers, hasuraResolvers) as Resolvers,
+    resolvers,
     typeDefs: fs.readFileSync(path.join(__dirname, '../schema.graphql'), 'UTF8'),
     validationRules: [depthLimit(20)]
   })
