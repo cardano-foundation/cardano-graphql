@@ -37,7 +37,7 @@ export async function buildHasuraSchema (hasuraUri: string) {
                 transactions_aggregate { aggregate { count }}
             }}`
     }))
-    if (!result.data || result.data.Block[0].transactions_aggregate.aggregate.count === null) {
+    if (!result.data || result.data.blocks[0].transactions_aggregate.aggregate.count === null) {
       throw new Error('Hasura Metadata not applied')
     }
   }, 30)
