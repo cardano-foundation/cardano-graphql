@@ -33,7 +33,7 @@ export async function buildHasuraSchema (hasuraUri: string) {
   // when provisioning a new deployment we need to protect against.
   await RetryPromise.retryPromise('Checking Hasura metadata is applied', async () => {
     const result = await makePromise(execute(link, { query: gql`
-            query { Block(where: {number: {_eq: 1}}) {
+            query { blocks(where: {number: {_eq: 1}}) {
                 transactions_aggregate { aggregate { count }}
             }}`
     }))
