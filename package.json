@@ -98,6 +98,6 @@
     "!dist/__test__",
     "!dist/**/*.test.*",
     "LICENSE",
-    "LICENSE_NOTICE"
+    "NOTICE"
   ]
 }
