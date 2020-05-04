@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { epoch1 } from '../data_assertions'
 import { TestClient } from '../TestClient'
-import { loadQueryNode } from '../../util'
+import { loadExampleQueryNode } from '../../util'
 
 export function epochTests (createClient: () => Promise<TestClient>) {
   describe('epochs', () => {
@@ -13,7 +13,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
 
     it('Returns epoch details by number', async () => {
       const result = await client.query({
-        query: await loadQueryNode('epochs', 'epochDetailsByNumber'),
+        query: await loadExampleQueryNode('epochs', 'epochDetailsByNumber'),
         variables: { number: 1 }
       })
       expect(result.data.epochs[0]).toEqual(epoch1.basic)
@@ -22,7 +22,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
 
     it('Can return aggregated data', async () => {
       const result = await client.query({
-        query: await loadQueryNode('epochs', 'aggregateDataWithinEpoch'),
+        query: await loadExampleQueryNode('epochs', 'aggregateDataWithinEpoch'),
         variables: { number: 1 }
       })
       expect(result.data.epochs[0]).toEqual(epoch1.aggregated)
@@ -32,7 +32,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
 
     it('Can return filtered aggregated data', async () => {
       const result = await client.query({
-        query: await loadQueryNode('epochs', 'numberOfBlocksProducedByLeaderInEpoch'),
+        query: await loadExampleQueryNode('epochs', 'numberOfBlocksProducedByLeaderInEpoch'),
         variables: { number: 1, slotLeader: 'SlotLeader-6c9e14978b9d6629' }
       })
       expect(result.data).toMatchSnapshot()
@@ -41,7 +41,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
     it('Returns epoch details by number range', async () => {
       // Todo: Convert this into an actual ranged query now the performance issue is resolved.
       const result = await client.query({
-        query: await loadQueryNode('epochs', 'epochDetailsInRange'),
+        query: await loadExampleQueryNode('epochs', 'epochDetailsInRange'),
         variables: { numbers: [1] }
       })
       expect(result.data.epochs[0]).toEqual(epoch1.basic)
@@ -50,7 +50,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
 
     it('Can return aggregated Epoch data', async () => {
       const result = await client.query({
-        query: await loadQueryNode('epochs', 'aggregateEpochData'),
+        query: await loadExampleQueryNode('epochs', 'aggregateEpochData'),
         variables: { epochNumberLessThan: 185 }
       })
       expect(result.data).toMatchSnapshot()
@@ -58,7 +58,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
 
     it('Returns blocks scoped to epoch', async () => {
       const validQueryResult = await client.query({
-        query: await loadQueryNode('epochs', 'blocksInEpoch'),
+        query: await loadExampleQueryNode('epochs', 'blocksInEpoch'),
         variables: { number: 1, blockLimit: 1 }
       })
       const invalidQueryResult = await client.query({
