@@ -8,7 +8,7 @@ import { introspectSchema, makeRemoteExecutableSchema } from 'graphql-tools'
 
 export async function buildHasuraSchema (hasuraUri: string) {
   const httpLink = createHttpLink({
-    uri: hasuraUri,
+    uri: `${hasuraUri}/v1/graphql`,
     fetch,
     headers: { 'X-Hasura-Role': 'cardano-graphql' }
   })
