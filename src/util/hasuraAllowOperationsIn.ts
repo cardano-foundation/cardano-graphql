@@ -11,7 +11,7 @@ if (process.env.HASURA_URI === undefined) {
   throw new Error('HASURA_URI must be set')
 }
 
-const cardanoGraphQLOperations = path.resolve(__dirname, '..', '..', 'src', 'graphql_operations')
+const cardanoGraphQLOperations = path.resolve(__dirname, '..', 'graphql_operations')
 
 const message = (result: RunReport, body: string) => {
   const operationText = result.operationsFound > 1 ? 'operations were' : 'operation was'
