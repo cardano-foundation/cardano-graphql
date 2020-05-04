@@ -1,6 +1,6 @@
 {
   "name": "hasura-allow-operations-in",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Produce a Hasura allow-list based on found GraphQL operations in your codebase",
   "main": "dist/index.js",
   "bin": {

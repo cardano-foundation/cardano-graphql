@@ -16,7 +16,9 @@
     "test:tdd": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose up -d && NODE_ENV=test TEST_MODE=integration jest suite",
     "test:e2e": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest suite",
     "test:dataparity": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest dataparity.test",
-    "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml"
+    "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml",
+    "prehasura:allow-operations-in": "yarn build",
+    "hasura:allow-operations-in": "node dist/util/hasuraAllowOperationsIn.js"
   },
   "contributors": [
     "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
@@ -41,6 +43,7 @@
     "graphql-depth-limit": "^1.1.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-type-datetime": "^0.2.4",
+    "hasura-allow-operations-in": "^0.1.0",
     "lodash.isempty": "^4.4.0",
     "prom-client": "11.5.3",
     "promise-exponential-retry": "^1.0.3",
