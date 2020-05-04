@@ -7,7 +7,33 @@
     version = "0.4.0";
     packageJSON = cardano-graphql-src + "/package.json";
     yarnLock = cardano-graphql-src + "/yarn.lock";
-    src = cardano-graphql-src;
+    src = lib.cleanSourceWith {
+      filter = name: type: let
+        baseName = baseNameOf (toString name);
+        sansPrefix = lib.removePrefix (toString ../.) name;
+        in_blacklist =
+          lib.hasPrefix "/node_modules" sansPrefix ||
+          lib.hasPrefix "/build" sansPrefix;
+        in_whitelist =
+          (type == "directory") ||
+          (lib.hasSuffix ".yml" name) ||
+          #(lib.hasSuffix ".js" name) ||
+          (lib.hasSuffix ".ts" name) ||
+          #(lib.hasSuffix ".tsx" name) ||
+          (lib.hasSuffix ".json" name) ||
+          #(lib.hasSuffix ".graphql" name) ||
+          #(lib.hasPrefix "/source/public/assets" sansPrefix) ||
+          (lib.hasPrefix "/source" sansPrefix) ||
+          baseName == ".babelrc" ||
+          baseName == "package.json" ||
+          baseName == "next.config.js" ||
+          baseName == "yarn.lock" ||
+          (lib.hasPrefix "/deploy" sansPrefix);
+      in (
+        (!in_blacklist) && in_whitelist
+      );
+      src = cardano-graphql-src;
+    };
     yarnPreBuild = ''
       mkdir -p $HOME/.node-gyp/${nodejs.version}
       echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
