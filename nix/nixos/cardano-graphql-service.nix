@@ -89,7 +89,7 @@ in {
           echo loop $x: waiting for graphql-engine 2 sec...
           sleep 2
         done
-        curl -d'{"type":"replace_metadata", "args":'$(cat ${hasuraDbMetadata})'}' ${hasuraBaseUri}v1/query
+        curl -d'{"type":"replace_metadata", "args":'$(jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}v1/query
         ${lib.optionalString cfg.filterHasuraOperations ''
           echo "setting filter for allowed hasura operations"
           HASURA_URI=${hasuraBaseUri} ${frontend}/bin/hasura-allow-operations "${frontend}/**/*.graphql"
