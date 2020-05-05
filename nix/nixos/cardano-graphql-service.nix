@@ -90,7 +90,7 @@ in {
           echo loop $x: waiting for graphql-engine 2 sec...
           sleep 2
         done
-        curl -d'{"type":"replace_metadata", "args":'$(${pkgs.jq}/bin/jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}v1/query
+        curl -d'{"type":"replace_metadata", "args":'$(${pkgs.jq}/bin/jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}/v1/query
         ${lib.optionalString cfg.filterHasuraOperations ''
           echo "setting filter for allowed hasura operations"
           ${frontend}/bin/hasura-allow-operations-in "${frontend}/src/example_queries/**/*.graphql"
