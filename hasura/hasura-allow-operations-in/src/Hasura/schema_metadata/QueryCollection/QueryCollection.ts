@@ -7,9 +7,12 @@ export interface QueryCollection {
 }
 
 export function fromToolkitSource(source: Source): QueryCollection {
-  const typeDef = source.document.definitions[0] as TypeDefinitionNode;
+  const names = source.document.definitions.reduce(
+    (prev, curr: TypeDefinitionNode) => prev.concat(curr.name.value),
+    [] as string[]
+  );
   return {
-    name: typeDef.name.value,
+    name: names.join(' '),
     query: source.rawSDL,
   };
 }

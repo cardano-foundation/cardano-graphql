@@ -1,0 +1,11 @@
+query firstQuery {
+  three {
+    four
+  }
+}
+
+query secondQuery {
+  five {
+    six
+  }
+}

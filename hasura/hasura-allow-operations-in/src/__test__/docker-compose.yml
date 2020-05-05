@@ -1,0 +1,20 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:11.5-alpine
+    environment:
+      - POSTGRES_DB=test
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=postgres
+  hasura:
+    image: hasura/graphql-engine:v1.1.1
+    ports:
+      - "8091:8080"
+    depends_on:
+      - "postgres"
+    restart: on-failure
+    environment:
+      - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:password@postgres:5432/test
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+      - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, query-log

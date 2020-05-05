@@ -1,0 +1,745 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`e2e Hasura unavailable throws if the endpoint cannot be reached 1`] = `[Error: Network Error]`;
+
+exports[`e2e clean state finds GraphQL operations as SDL within .graphql files, and adds them to the Hasura allow list 1`] = `
+"{
+    \\"addedCount\\": 2,
+    \\"existingCount\\": 0,
+    \\"collectionCreated\\": true,
+    \\"operationDefinitionsFound\\": [
+        {
+            \\"kind\\": \\"OperationDefinition\\",
+            \\"operation\\": \\"query\\",
+            \\"name\\": {
+                \\"kind\\": \\"Name\\",
+                \\"value\\": \\"firstQuery\\",
+                \\"loc\\": {
+                    \\"start\\": 6,
+                    \\"end\\": 16
+                }
+            },
+            \\"variableDefinitions\\": [],
+            \\"directives\\": [],
+            \\"selectionSet\\": {
+                \\"kind\\": \\"SelectionSet\\",
+                \\"selections\\": [
+                    {
+                        \\"kind\\": \\"Field\\",
+                        \\"name\\": {
+                            \\"kind\\": \\"Name\\",
+                            \\"value\\": \\"three\\",
+                            \\"loc\\": {
+                                \\"start\\": 21,
+                                \\"end\\": 26
+                            }
+                        },
+                        \\"arguments\\": [],
+                        \\"directives\\": [],
+                        \\"selectionSet\\": {
+                            \\"kind\\": \\"SelectionSet\\",
+                            \\"selections\\": [
+                                {
+                                    \\"kind\\": \\"Field\\",
+                                    \\"name\\": {
+                                        \\"kind\\": \\"Name\\",
+                                        \\"value\\": \\"four\\",
+                                        \\"loc\\": {
+                                            \\"start\\": 33,
+                                            \\"end\\": 37
+                                        }
+                                    },
+                                    \\"arguments\\": [],
+                                    \\"directives\\": [],
+                                    \\"loc\\": {
+                                        \\"start\\": 33,
+                                        \\"end\\": 37
+                                    }
+                                }
+                            ],
+                            \\"loc\\": {
+                                \\"start\\": 27,
+                                \\"end\\": 41
+                            }
+                        },
+                        \\"loc\\": {
+                            \\"start\\": 21,
+                            \\"end\\": 41
+                        }
+                    }
+                ],
+                \\"loc\\": {
+                    \\"start\\": 17,
+                    \\"end\\": 43
+                }
+            },
+            \\"loc\\": {
+                \\"start\\": 0,
+                \\"end\\": 43
+            }
+        },
+        {
+            \\"kind\\": \\"OperationDefinition\\",
+            \\"operation\\": \\"query\\",
+            \\"name\\": {
+                \\"kind\\": \\"Name\\",
+                \\"value\\": \\"secondQuery\\",
+                \\"loc\\": {
+                    \\"start\\": 51,
+                    \\"end\\": 62
+                }
+            },
+            \\"variableDefinitions\\": [],
+            \\"directives\\": [],
+            \\"selectionSet\\": {
+                \\"kind\\": \\"SelectionSet\\",
+                \\"selections\\": [
+                    {
+                        \\"kind\\": \\"Field\\",
+                        \\"name\\": {
+                            \\"kind\\": \\"Name\\",
+                            \\"value\\": \\"five\\",
+                            \\"loc\\": {
+                                \\"start\\": 67,
+                                \\"end\\": 71
+                            }
+                        },
+                        \\"arguments\\": [],
+                        \\"directives\\": [],
+                        \\"selectionSet\\": {
+                            \\"kind\\": \\"SelectionSet\\",
+                            \\"selections\\": [
+                                {
+                                    \\"kind\\": \\"Field\\",
+                                    \\"name\\": {
+                                        \\"kind\\": \\"Name\\",
+                                        \\"value\\": \\"six\\",
+                                        \\"loc\\": {
+                                            \\"start\\": 78,
+                                            \\"end\\": 81
+                                        }
+                                    },
+                                    \\"arguments\\": [],
+                                    \\"directives\\": [],
+                                    \\"loc\\": {
+                                        \\"start\\": 78,
+                                        \\"end\\": 81
+                                    }
+                                }
+                            ],
+                            \\"loc\\": {
+                                \\"start\\": 72,
+                                \\"end\\": 85
+                            }
+                        },
+                        \\"loc\\": {
+                            \\"start\\": 67,
+                            \\"end\\": 85
+                        }
+                    }
+                ],
+                \\"loc\\": {
+                    \\"start\\": 63,
+                    \\"end\\": 87
+                }
+            },
+            \\"loc\\": {
+                \\"start\\": 45,
+                \\"end\\": 87
+            }
+        },
+        {
+            \\"kind\\": \\"OperationDefinition\\",
+            \\"operation\\": \\"query\\",
+            \\"name\\": {
+                \\"kind\\": \\"Name\\",
+                \\"value\\": \\"aSingleQuery\\",
+                \\"loc\\": {
+                    \\"start\\": 6,
+                    \\"end\\": 18
+                }
+            },
+            \\"variableDefinitions\\": [],
+            \\"directives\\": [],
+            \\"selectionSet\\": {
+                \\"kind\\": \\"SelectionSet\\",
+                \\"selections\\": [
+                    {
+                        \\"kind\\": \\"Field\\",
+                        \\"name\\": {
+                            \\"kind\\": \\"Name\\",
+                            \\"value\\": \\"one\\",
+                            \\"loc\\": {
+                                \\"start\\": 23,
+                                \\"end\\": 26
+                            }
+                        },
+                        \\"arguments\\": [],
+                        \\"directives\\": [],
+                        \\"selectionSet\\": {
+                            \\"kind\\": \\"SelectionSet\\",
+                            \\"selections\\": [
+                                {
+                                    \\"kind\\": \\"Field\\",
+                                    \\"name\\": {
+                                        \\"kind\\": \\"Name\\",
+                                        \\"value\\": \\"two\\",
+                                        \\"loc\\": {
+                                            \\"start\\": 33,
+                                            \\"end\\": 36
+                                        }
+                                    },
+                                    \\"arguments\\": [],
+                                    \\"directives\\": [],
+                                    \\"loc\\": {
+                                        \\"start\\": 33,
+                                        \\"end\\": 36
+                                    }
+                                }
+                            ],
+                            \\"loc\\": {
+                                \\"start\\": 27,
+                                \\"end\\": 40
+                            }
+                        },
+                        \\"loc\\": {
+                            \\"start\\": 23,
+                            \\"end\\": 40
+                        }
+                    }
+                ],
+                \\"loc\\": {
+                    \\"start\\": 19,
+                    \\"end\\": 42
+                }
+            },
+            \\"loc\\": {
+                \\"start\\": 0,
+                \\"end\\": 42
+            }
+        }
+    ]
+}"
+`;
+
+exports[`e2e clean state optionally includes the introspection query 1`] = `
+"{
+    \\"addedCount\\": 3,
+    \\"existingCount\\": 0,
+    \\"collectionCreated\\": true,
+    \\"introspectionAllowed\\": true,
+    \\"operationDefinitionsFound\\": [
+        {
+            \\"kind\\": \\"OperationDefinition\\",
+            \\"operation\\": \\"query\\",
+            \\"name\\": {
+                \\"kind\\": \\"Name\\",
+                \\"value\\": \\"firstQuery\\",
+                \\"loc\\": {
+                    \\"start\\": 6,
+                    \\"end\\": 16
+                }
+            },
+            \\"variableDefinitions\\": [],
+            \\"directives\\": [],
+            \\"selectionSet\\": {
+                \\"kind\\": \\"SelectionSet\\",
+                \\"selections\\": [
+                    {
+                        \\"kind\\": \\"Field\\",
+                        \\"name\\": {
+                            \\"kind\\": \\"Name\\",
+                            \\"value\\": \\"three\\",
+                            \\"loc\\": {
+                                \\"start\\": 21,
+                                \\"end\\": 26
+                            }
+                        },
+                        \\"arguments\\": [],
+                        \\"directives\\": [],
+                        \\"selectionSet\\": {
+                            \\"kind\\": \\"SelectionSet\\",
+                            \\"selections\\": [
+                                {
+                                    \\"kind\\": \\"Field\\",
+                                    \\"name\\": {
+                                        \\"kind\\": \\"Name\\",
+                                        \\"value\\": \\"four\\",
+                                        \\"loc\\": {
+                                            \\"start\\": 33,
+                                            \\"end\\": 37
+                                        }
+                                    },
+                                    \\"arguments\\": [],
+                                    \\"directives\\": [],
+                                    \\"loc\\": {
+                                        \\"start\\": 33,
+                                        \\"end\\": 37
+                                    }
+                                }
+                            ],
+                            \\"loc\\": {
+                                \\"start\\": 27,
+                                \\"end\\": 41
+                            }
+                        },
+                        \\"loc\\": {
+                            \\"start\\": 21,
+                            \\"end\\": 41
+                        }
+                    }
+                ],
+                \\"loc\\": {
+                    \\"start\\": 17,
+                    \\"end\\": 43
+                }
+            },
+            \\"loc\\": {
+                \\"start\\": 0,
+                \\"end\\": 43
+            }
+        },
+        {
+            \\"kind\\": \\"OperationDefinition\\",
+            \\"operation\\": \\"query\\",
+            \\"name\\": {
+                \\"kind\\": \\"Name\\",
+                \\"value\\": \\"secondQuery\\",
+                \\"loc\\": {
+                    \\"start\\": 51,
+                    \\"end\\": 62
+                }
+            },
+            \\"variableDefinitions\\": [],
+            \\"directives\\": [],
+            \\"selectionSet\\": {
+                \\"kind\\": \\"SelectionSet\\",
+                \\"selections\\": [
+                    {
+                        \\"kind\\": \\"Field\\",
+                        \\"name\\": {
+                            \\"kind\\": \\"Name\\",
+                            \\"value\\": \\"five\\",
+                            \\"loc\\": {
+                                \\"start\\": 67,
+                                \\"end\\": 71
+                            }
+                        },
+                        \\"arguments\\": [],
+                        \\"directives\\": [],
+                        \\"selectionSet\\": {
+                            \\"kind\\": \\"SelectionSet\\",
+                            \\"selections\\": [
+                                {
+                                    \\"kind\\": \\"Field\\",
+                                    \\"name\\": {
+                                        \\"kind\\": \\"Name\\",
+                                        \\"value\\": \\"six\\",
+                                        \\"loc\\": {
+                                            \\"start\\": 78,
+                                            \\"end\\": 81
+                                        }
+                                    },
+                                    \\"arguments\\": [],
+                                    \\"directives\\": [],
+                                    \\"loc\\": {
+                                        \\"start\\": 78,
+                                        \\"end\\": 81
+                                    }
+                                }
+                            ],
+                            \\"loc\\": {
+                                \\"start\\": 72,
+                                \\"end\\": 85
+                            }
+                        },
+                        \\"loc\\": {
+                            \\"start\\": 67,
+                            \\"end\\": 85
+                        }
+                    }
+                ],
+                \\"loc\\": {
+                    \\"start\\": 63,
+                    \\"end\\": 87
+                }
+            },
+            \\"loc\\": {
+                \\"start\\": 45,
+                \\"end\\": 87
+            }
+        },
+        {
+            \\"kind\\": \\"OperationDefinition\\",
+            \\"operation\\": \\"query\\",
+            \\"name\\": {
+                \\"kind\\": \\"Name\\",
+                \\"value\\": \\"aSingleQuery\\",
+                \\"loc\\": {
+                    \\"start\\": 6,
+                    \\"end\\": 18
+                }
+            },
+            \\"variableDefinitions\\": [],
+            \\"directives\\": [],
+            \\"selectionSet\\": {
+                \\"kind\\": \\"SelectionSet\\",
+                \\"selections\\": [
+                    {
+                        \\"kind\\": \\"Field\\",
+                        \\"name\\": {
+                            \\"kind\\": \\"Name\\",
+                            \\"value\\": \\"one\\",
+                            \\"loc\\": {
+                                \\"start\\": 23,
+                                \\"end\\": 26
+                            }
+                        },
+                        \\"arguments\\": [],
+                        \\"directives\\": [],
+                        \\"selectionSet\\": {
+                            \\"kind\\": \\"SelectionSet\\",
+                            \\"selections\\": [
+                                {
+                                    \\"kind\\": \\"Field\\",
+                                    \\"name\\": {
+                                        \\"kind\\": \\"Name\\",
+                                        \\"value\\": \\"two\\",
+                                        \\"loc\\": {
+                                            \\"start\\": 33,
+                                            \\"end\\": 36
+                                        }
+                                    },
+                                    \\"arguments\\": [],
+                                    \\"directives\\": [],
+                                    \\"loc\\": {
+                                        \\"start\\": 33,
+                                        \\"end\\": 36
+                                    }
+                                }
+                            ],
+                            \\"loc\\": {
+                                \\"start\\": 27,
+                                \\"end\\": 40
+                            }
+                        },
+                        \\"loc\\": {
+                            \\"start\\": 23,
+                            \\"end\\": 40
+                        }
+                    }
+                ],
+                \\"loc\\": {
+                    \\"start\\": 19,
+                    \\"end\\": 42
+                }
+            },
+            \\"loc\\": {
+                \\"start\\": 0,
+                \\"end\\": 42
+            }
+        }
+    ]
+}"
+`;
+
+exports[`e2e previous state allows new queries to be added from different source pointers 1`] = `
+"{
+    \\"addedCount\\": 2,
+    \\"existingCount\\": 0,
+    \\"collectionCreated\\": false,
+    \\"introspectionAllowed\\": true,
+    \\"operationDefinitionsFound\\": [
+        {
+            \\"kind\\": \\"OperationDefinition\\",
+            \\"operation\\": \\"query\\",
+            \\"name\\": {
+                \\"kind\\": \\"Name\\",
+                \\"value\\": \\"another\\",
+                \\"loc\\": {
+                    \\"start\\": 6,
+                    \\"end\\": 13
+                }
+            },
+            \\"variableDefinitions\\": [],
+            \\"directives\\": [],
+            \\"selectionSet\\": {
+                \\"kind\\": \\"SelectionSet\\",
+                \\"selections\\": [
+                    {
+                        \\"kind\\": \\"Field\\",
+                        \\"name\\": {
+                            \\"kind\\": \\"Name\\",
+                            \\"value\\": \\"seven\\",
+                            \\"loc\\": {
+                                \\"start\\": 18,
+                                \\"end\\": 23
+                            }
+                        },
+                        \\"arguments\\": [],
+                        \\"directives\\": [],
+                        \\"selectionSet\\": {
+                            \\"kind\\": \\"SelectionSet\\",
+                            \\"selections\\": [
+                                {
+                                    \\"kind\\": \\"Field\\",
+                                    \\"name\\": {
+                                        \\"kind\\": \\"Name\\",
+                                        \\"value\\": \\"eight\\",
+                                        \\"loc\\": {
+                                            \\"start\\": 30,
+                                            \\"end\\": 35
+                                        }
+                                    },
+                                    \\"arguments\\": [],
+                                    \\"directives\\": [],
+                                    \\"loc\\": {
+                                        \\"start\\": 30,
+                                        \\"end\\": 35
+                                    }
+                                }
+                            ],
+                            \\"loc\\": {
+                                \\"start\\": 24,
+                                \\"end\\": 39
+                            }
+                        },
+                        \\"loc\\": {
+                            \\"start\\": 18,
+                            \\"end\\": 39
+                        }
+                    }
+                ],
+                \\"loc\\": {
+                    \\"start\\": 14,
+                    \\"end\\": 41
+                }
+            },
+            \\"loc\\": {
+                \\"start\\": 0,
+                \\"end\\": 41
+            }
+        }
+    ]
+}"
+`;
+
+exports[`e2e previous state finds GraphQL operations as SDL within .graphql files, and adds new items to the Hasura allow list 1`] = `
+"{
+    \\"addedCount\\": 0,
+    \\"existingCount\\": 2,
+    \\"collectionCreated\\": false,
+    \\"operationDefinitionsFound\\": [
+        {
+            \\"kind\\": \\"OperationDefinition\\",
+            \\"operation\\": \\"query\\",
+            \\"name\\": {
+                \\"kind\\": \\"Name\\",
+                \\"value\\": \\"firstQuery\\",
+                \\"loc\\": {
+                    \\"start\\": 6,
+                    \\"end\\": 16
+                }
+            },
+            \\"variableDefinitions\\": [],
+            \\"directives\\": [],
+            \\"selectionSet\\": {
+                \\"kind\\": \\"SelectionSet\\",
+                \\"selections\\": [
+                    {
+                        \\"kind\\": \\"Field\\",
+                        \\"name\\": {
+                            \\"kind\\": \\"Name\\",
+                            \\"value\\": \\"three\\",
+                            \\"loc\\": {
+                                \\"start\\": 21,
+                                \\"end\\": 26
+                            }
+                        },
+                        \\"arguments\\": [],
+                        \\"directives\\": [],
+                        \\"selectionSet\\": {
+                            \\"kind\\": \\"SelectionSet\\",
+                            \\"selections\\": [
+                                {
+                                    \\"kind\\": \\"Field\\",
+                                    \\"name\\": {
+                                        \\"kind\\": \\"Name\\",
+                                        \\"value\\": \\"four\\",
+                                        \\"loc\\": {
+                                            \\"start\\": 33,
+                                            \\"end\\": 37
+                                        }
+                                    },
+                                    \\"arguments\\": [],
+                                    \\"directives\\": [],
+                                    \\"loc\\": {
+                                        \\"start\\": 33,
+                                        \\"end\\": 37
+                                    }
+                                }
+                            ],
+                            \\"loc\\": {
+                                \\"start\\": 27,
+                                \\"end\\": 41
+                            }
+                        },
+                        \\"loc\\": {
+                            \\"start\\": 21,
+                            \\"end\\": 41
+                        }
+                    }
+                ],
+                \\"loc\\": {
+                    \\"start\\": 17,
+                    \\"end\\": 43
+                }
+            },
+            \\"loc\\": {
+                \\"start\\": 0,
+                \\"end\\": 43
+            }
+        },
+        {
+            \\"kind\\": \\"OperationDefinition\\",
+            \\"operation\\": \\"query\\",
+            \\"name\\": {
+                \\"kind\\": \\"Name\\",
+                \\"value\\": \\"secondQuery\\",
+                \\"loc\\": {
+                    \\"start\\": 51,
+                    \\"end\\": 62
+                }
+            },
+            \\"variableDefinitions\\": [],
+            \\"directives\\": [],
+            \\"selectionSet\\": {
+                \\"kind\\": \\"SelectionSet\\",
+                \\"selections\\": [
+                    {
+                        \\"kind\\": \\"Field\\",
+                        \\"name\\": {
+                            \\"kind\\": \\"Name\\",
+                            \\"value\\": \\"five\\",
+                            \\"loc\\": {
+                                \\"start\\": 67,
+                                \\"end\\": 71
+                            }
+                        },
+                        \\"arguments\\": [],
+                        \\"directives\\": [],
+                        \\"selectionSet\\": {
+                            \\"kind\\": \\"SelectionSet\\",
+                            \\"selections\\": [
+                                {
+                                    \\"kind\\": \\"Field\\",
+                                    \\"name\\": {
+                                        \\"kind\\": \\"Name\\",
+                                        \\"value\\": \\"six\\",
+                                        \\"loc\\": {
+                                            \\"start\\": 78,
+                                            \\"end\\": 81
+                                        }
+                                    },
+                                    \\"arguments\\": [],
+                                    \\"directives\\": [],
+                                    \\"loc\\": {
+                                        \\"start\\": 78,
+                                        \\"end\\": 81
+                                    }
+                                }
+                            ],
+                            \\"loc\\": {
+                                \\"start\\": 72,
+                                \\"end\\": 85
+                            }
+                        },
+                        \\"loc\\": {
+                            \\"start\\": 67,
+                            \\"end\\": 85
+                        }
+                    }
+                ],
+                \\"loc\\": {
+                    \\"start\\": 63,
+                    \\"end\\": 87
+                }
+            },
+            \\"loc\\": {
+                \\"start\\": 45,
+                \\"end\\": 87
+            }
+        },
+        {
+            \\"kind\\": \\"OperationDefinition\\",
+            \\"operation\\": \\"query\\",
+            \\"name\\": {
+                \\"kind\\": \\"Name\\",
+                \\"value\\": \\"aSingleQuery\\",
+                \\"loc\\": {
+                    \\"start\\": 6,
+                    \\"end\\": 18
+                }
+            },
+            \\"variableDefinitions\\": [],
+            \\"directives\\": [],
+            \\"selectionSet\\": {
+                \\"kind\\": \\"SelectionSet\\",
+                \\"selections\\": [
+                    {
+                        \\"kind\\": \\"Field\\",
+                        \\"name\\": {
+                            \\"kind\\": \\"Name\\",
+                            \\"value\\": \\"one\\",
+                            \\"loc\\": {
+                                \\"start\\": 23,
+                                \\"end\\": 26
+                            }
+                        },
+                        \\"arguments\\": [],
+                        \\"directives\\": [],
+                        \\"selectionSet\\": {
+                            \\"kind\\": \\"SelectionSet\\",
+                            \\"selections\\": [
+                                {
+                                    \\"kind\\": \\"Field\\",
+                                    \\"name\\": {
+                                        \\"kind\\": \\"Name\\",
+                                        \\"value\\": \\"two\\",
+                                        \\"loc\\": {
+                                            \\"start\\": 33,
+                                            \\"end\\": 36
+                                        }
+                                    },
+                                    \\"arguments\\": [],
+                                    \\"directives\\": [],
+                                    \\"loc\\": {
+                                        \\"start\\": 33,
+                                        \\"end\\": 36
+                                    }
+                                }
+                            ],
+                            \\"loc\\": {
+                                \\"start\\": 27,
+                                \\"end\\": 40
+                            }
+                        },
+                        \\"loc\\": {
+                            \\"start\\": 23,
+                            \\"end\\": 40
+                        }
+                    }
+                ],
+                \\"loc\\": {
+                    \\"start\\": 19,
+                    \\"end\\": 42
+                }
+            },
+            \\"loc\\": {
+                \\"start\\": 0,
+                \\"end\\": 42
+            }
+        }
+    ]
+}"
+`;

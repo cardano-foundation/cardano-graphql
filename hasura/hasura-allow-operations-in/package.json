@@ -1,6 +1,6 @@
 {
   "name": "hasura-allow-operations-in",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Produce a Hasura allow-list based on found GraphQL operations in your codebase",
   "main": "dist/index.js",
   "bin": {
@@ -12,7 +12,8 @@
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/cli.ts",
     "lint": "eslint 'src/**/*.ts'",
     "prepare": "yarn build",
-    "postpack": "shx rm -rf dist"
+    "postpack": "shx rm -rf dist",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -37,12 +38,15 @@
     "@graphql-toolkit/core": "^0.10.6",
     "@graphql-toolkit/graphql-file-loader": "^0.10.6",
     "axios": "^0.19.2",
+    "delay": "^4.3.0",
     "graphql": "^14.0.0"
   },
   "devDependencies": {
+    "@types/jest": "^25.2.1",
     "@types/node": "^12.6.8",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
+    "docker-compose": "^0.23.4",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.1",
@@ -50,6 +54,7 @@
     "eslint-plugin-prettier": "^3.1.3",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-watch": "^6.0.1",
+    "jest": "^26.0.0",
     "prettier": "^2.0.5",
     "shx": "^0.3.2",
     "ts-node-dev": "^1.0.0-pre.40",
@@ -58,6 +63,7 @@
   "files": [
     "dist/*",
     "!dist/__test__",
+    "!dist/**/*.test.*",
     "LICENSE",
     "NOTICE",
     "README.md"

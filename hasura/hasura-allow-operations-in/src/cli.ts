@@ -14,11 +14,21 @@ if (hasuraUri === undefined) {
 }
 
 run(hasuraUri, sourcePath, allowIntrospection)
-  .then(result => {
-    const operationText =
-      result.operationsFound > 1 ? 'operations were' : 'operation was';
-    console.log(
-      `${result.operationsFound} ${operationText} found and included in the allow list`
-    );
-  })
+  .then(
+    ({
+      introspectionAllowed,
+      operationDefinitionsFound,
+      addedCount,
+      existingCount,
+    }) => {
+      console.log(
+        `Introspection allowed: ${introspectionAllowed} | Found: ${operationDefinitionsFound.length} | Added: ${addedCount} | Existing: ${existingCount}`
+      );
+      if (process.env.DEBUG) {
+        operationDefinitionsFound.forEach(def =>
+          console.log(`${def.operation}: ${def.name.value}`)
+        );
+      }
+    }
+  )
   .catch(error => console.error(error));
