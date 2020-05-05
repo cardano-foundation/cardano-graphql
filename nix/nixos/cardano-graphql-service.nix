@@ -92,7 +92,7 @@ in {
         curl -d'{"type":"replace_metadata", "args":'$(cat ${hasuraDbMetadata})'}' ${hasuraBaseUri}v1/query
         ${lib.optionalString cfg.filterHasuraOperations ''
           echo "setting filter for allowed hasura operations"
-          HASURA_URI=${hasuraBaseUrl} ${frontend}/bin/hasura-allow-operations "${frontend}/**/*.graphql"
+          HASURA_URI=${hasuraBaseUri} ${frontend}/bin/hasura-allow-operations "${frontend}/**/*.graphql"
           
         ''}
       '';
