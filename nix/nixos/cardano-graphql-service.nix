@@ -56,7 +56,7 @@ in {
         type = lib.types.nullOr (lib.types.separatedString " ");
         default = null;
       };
-      filterHasuraOperation = lib.mkOption {
+      filterHasuraOperations = lib.mkOption {
         type = lib.types.bool;
         default = true;
         description = "Filters hasura operations allowed to minimal set needed";
