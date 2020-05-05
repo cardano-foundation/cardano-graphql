@@ -42,6 +42,10 @@ in {
         type = lib.types.int;
         default = 9999;
       };
+      filterHasuraOperations = lib.mkOption {
+        type = lib.types.bool;
+        default = config.services.cardano-graphql.filterHasuraOperations;
+      };
     };
   };
   config = let
@@ -82,6 +86,7 @@ in {
           -d ${cfg.db} \
           --port ${toString cfg.dbPort} \
           serve \
+          ${lib.optionalString cfg.filterHasuraOperations "--enable-allowlist"} \
           --server-port ${toString cfg.enginePort}
       '';
     };
