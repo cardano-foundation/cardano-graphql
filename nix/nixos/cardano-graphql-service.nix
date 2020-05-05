@@ -84,12 +84,13 @@ in {
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; });
       path = with pkgs; [ netcat curl postgresql nodejs-12_x ];
       preStart = ''
+        set -euo pipefail
         for x in {1..10}; do
           nc -z ${cfg.hasuraIp} ${toString cfg.enginePort} && break
           echo loop $x: waiting for graphql-engine 2 sec...
           sleep 2
         done
-        curl -d'{"type":"replace_metadata", "args":'$(jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}v1/query
+        curl -d'{"type":"replace_metadata", "args":'$(${pkgs.jq}/bin/jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}v1/query
         ${lib.optionalString cfg.filterHasuraOperations ''
           echo "setting filter for allowed hasura operations"
           ${frontend}/bin/hasura-allow-operations-in "${frontend}/**/*.graphql"
@@ -97,7 +98,7 @@ in {
         ''}
       '';
       script = ''
-        ${frontend}/bin/cardano-graphql
+        exec ${frontend}/bin/cardano-graphql
 
       '';
     };
