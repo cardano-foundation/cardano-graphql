@@ -84,7 +84,7 @@ in {
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; });
       path = with pkgs; [ netcat curl postgresql nodejs-12_x ];
       preStart = ''
-        set -euo pipefail
+        set -exuo pipefail
         for x in {1..10}; do
           nc -z ${cfg.hasuraIp} ${toString cfg.enginePort} && break
           echo loop $x: waiting for graphql-engine 2 sec...
