@@ -61,7 +61,7 @@
       chmod +x $out/bin/cardano-graphql
       cat <<EOF > $out/bin/hasura-allow-operations-in
       #!${stdenv.shell}
-      exec ${nodejs}/bin/node $out/util/hasuraAllowOperationsIn.js \$@
+      exec ${nodejs}/bin/node $out/util/hasuraAllowOperationsIn.js "\$@"
       EOF
       chmod +x $out/bin/hasura-allow-operations-in
       ln -s $node_modules $out/node_modules
