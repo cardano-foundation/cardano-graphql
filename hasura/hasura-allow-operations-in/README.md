@@ -1,5 +1,5 @@
 # hasura-allow-operations-in
-Populate the Hasura allow-list from found GraphQL operations in a path, including queries, mutations, and subscriptions.
+Populate the [Hasura allow-list](https://hasura.io/docs/1.0/graphql/manual/deployment/allow-list.html) from found GraphQL operations in a path, including queries, mutations, and subscriptions.
 Optionally include the introspection query by passing `true` as the third argument.
 
 ## Run with [npx](https://nodejs.dev/the-npx-nodejs-package-runner)
@@ -18,12 +18,24 @@ npm uninstall -g hasura-allow-operations-in
 
 ## ECMAScript + `.d.ts`
 ```
-import { run, RunReport } from 'hasura-allow-operations-in'
+import { run } from 'hasura-allow-operations-in'
 
 run('http://localhost:8090', '**/*.graphql', true)
-  .then((result: RunReport) => {
-    console.log(`At least ${result.operationsFound} are in the allow list`);
-  })
+  .then(
+    ({
+      introspectionAllowed,
+      operationDefinitionsFound,
+      addedCount,
+      existingCount,
+    }) => {
+      console.log(
+        `Introspection allowed: ${introspectionAllowed}
+         Found: ${operationDefinitionsFound.length}
+         Added: ${addedCount}
+         Existing: ${existingCount}`
+      );
+    }
+  )
   .catch(error => console.error(error));
 ```
 
