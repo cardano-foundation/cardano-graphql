@@ -67,7 +67,7 @@ in {
     # TODO: there has to be a better way to handle boolean env vars in nodejs???
     boolToNodeJSEnv = bool: if bool then "true" else "false";
     frontend = (import ../../.).cardano-graphql;
-    hasuraBaseUri = cfg.hasuraProtocol + "://" + cfg.hasuraIp + ":" + (toString cfg.enginePort) + "/";
+    hasuraBaseUri = cfg.hasuraProtocol + "://" + cfg.hasuraIp + ":" + (toString cfg.enginePort);
     hasuraDbMetadata = ../../hasura/migrations/metadata.json;
   in lib.mkIf cfg.enable {
     systemd.services.cardano-graphql = {
