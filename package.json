@@ -42,6 +42,7 @@
     "graphql-bigint": "^1.0.0",
     "graphql-depth-limit": "^1.1.0",
     "graphql-iso-date": "^3.6.1",
+    "graphql-tools": "^5.0.0",
     "graphql-type-datetime": "^0.2.4",
     "hasura-allow-operations-in": "^0.1.0",
     "lodash.isempty": "^4.4.0",
