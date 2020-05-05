@@ -1,4 +1,4 @@
-import { run, RunReport } from 'hasura-allow-operations-in'
+import { run } from 'hasura-allow-operations-in'
 import * as path from 'path'
 
 const appSource = process.argv[2]
@@ -13,11 +13,22 @@ if (process.env.HASURA_URI === undefined) {
 
 const cardanoGraphQLOperations = path.resolve(__dirname, '..', 'graphql_operations')
 
-const message = (result: RunReport, body: string) => {
-  const operationText = result.operationsFound > 1 ? 'operations were' : 'operation was'
-  console.log(`${result.operationsFound} ${operationText} ${body}`)
-}
-
 run(process.env.HASURA_URI, [`${cardanoGraphQLOperations}/**/*.graphql`, appSource], true)
-  .then(result => message(result, 'found and included in the allow list'))
+  .then(
+    ({
+      introspectionAllowed,
+      operationDefinitionsFound,
+      addedCount,
+      existingCount
+    }) => {
+      console.log(
+        `Introspection allowed: ${introspectionAllowed} | Found: ${operationDefinitionsFound.length} | Added: ${addedCount} | Existing: ${existingCount}`
+      )
+      if (process.env.DEBUG) {
+        operationDefinitionsFound.forEach(def =>
+          console.log(`${def.operation}: ${def.name.value}`)
+        )
+      }
+    }
+  )
   .catch(error => console.error(error))
