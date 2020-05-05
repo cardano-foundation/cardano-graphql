@@ -74,7 +74,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       requires = [ "graphql-engine.service" ];
       environment = {
-        HASURA_URI = hasuraBaseUri + "v1/graphql";
+        HASURA_URI = hasuraBaseUri;
         PROMETHEUS_METRICS = boolToNodeJSEnv cfg.enablePrometheus;
         TRACING = boolToNodeJSEnv (cfg.enableTracing || cfg.enablePrometheus);
         CACHE_ENABLED = boolToNodeJSEnv cfg.enableCache;
@@ -92,7 +92,7 @@ in {
         curl -d'{"type":"replace_metadata", "args":'$(jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}v1/query
         ${lib.optionalString cfg.filterHasuraOperations ''
           echo "setting filter for allowed hasura operations"
-          HASURA_URI=${hasuraBaseUri} ${frontend}/bin/hasura-allow-operations "${frontend}/**/*.graphql"
+          ${frontend}/bin/hasura-allow-operations "${frontend}/**/*.graphql"
           
         ''}
       '';
