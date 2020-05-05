@@ -56,6 +56,11 @@ in {
         type = lib.types.nullOr (lib.types.separatedString " ");
         default = null;
       };
+      filterHasuraOperation = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Filters hasura operations allowed to minimal set needed";
+      };
     };
   };
   config = let
@@ -85,10 +90,15 @@ in {
           sleep 2
         done
         curl -d'{"type":"replace_metadata", "args":'$(cat ${hasuraDbMetadata})'}' ${hasuraBaseUri}v1/query
+        ${optionalString cfg.filterHasuraOperations ''
+          echo "setting filter for allowed hasura operations"
+          HASURA_URI=${hasuraBaseUrl} ${frontend}/bin/hasura-allow-operations "${frontend}/**/*.graphql"
+          
+        ''}
       '';
       script = ''
-        node --version
-        node ${frontend}/index.js
+        ${frontend}/bin/cardano-graphql
+
       '';
     };
   };
