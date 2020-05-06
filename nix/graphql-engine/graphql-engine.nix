@@ -13,17 +13,17 @@
 , text-builder, text-conversions, th-lift-instances, time
 , transformers, transformers-base, unix, unordered-containers, uuid
 , vector, wai, wai-websockets, warp, websockets, wreq, x509, yaml
-, zlib
+, zlib, dependent-map, dependent-sum, generic-arbitrary, these_0_7_6, uri-encode
 }:
 
 mkDerivation {
   pname = "graphql-engine";
-  version = "1.0.0";
+  version = "1.1.0";
   src = fetchFromGitHub {
     owner = "hasura";
     repo = "graphql-engine";
-    sha256 = "1g4xj9yx7i6nn5w23n0b0g3xsmgczza8rpggkcgs47v7wkp0ny6a";
-    rev = "e43be51dc6a57242f12816ce677733c9e8569909";
+    sha256 = "18nwrqpy5v0d0czcm7ca8lykbrj5l32zy4b1ks53dxzfnyp0b9qi";
+    rev = "d6805cc678825ff7c848c2173b6421c495e24ae2";
   };
   postUnpack = "sourceRoot+=/server; echo source root reset to $sourceRoot";
   isLibrary = true;
@@ -42,7 +42,8 @@ mkDerivation {
     template-haskell text text-builder text-conversions
     th-lift-instances time transformers transformers-base
     unordered-containers uuid vector wai wai-websockets warp websockets
-    wreq x509 yaml zlib
+    wreq x509 yaml zlib dependent-map dependent-sum generic-arbitrary
+    these_0_7_6 uri-encode
   ];
   executableHaskellDepends = [
     aeson base bytestring http-client http-client-tls lens mtl
@@ -52,7 +53,7 @@ mkDerivation {
   ];
   testHaskellDepends = [
     base hspec http-client http-client-tls optparse-applicative
-    pg-client time
+    pg-client
   ];
   homepage = "https://www.hasura.io";
   description = "GraphQL API over Postgres";

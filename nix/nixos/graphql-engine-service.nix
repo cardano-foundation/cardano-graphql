@@ -49,10 +49,7 @@ in {
     };
   };
   config = let
-    nixpkgsHasuraBaseSrc = sources.nixpkgs-hasura-base;
-    nixpkgsHasuraAttr = import nixpkgsHasuraBaseSrc {};
-    graphqlEngineAttr = nixpkgsHasuraAttr.pkgs.callPackage ./graphql-engine/default.nix {};
-    graphqlEngine = graphqlEngineAttr.graphql-engine;
+    graphqlEngine = import ../graphql-engine;
     hasuraDbPerms = pkgs.writeScript "hasuraDbPerms.sql" ''
       CREATE EXTENSION IF NOT EXISTS pgcrypto;
       CREATE SCHEMA IF NOT EXISTS hdb_catalog;
