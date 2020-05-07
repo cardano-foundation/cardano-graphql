@@ -13,17 +13,18 @@
 , text-builder, text-conversions, th-lift-instances, time
 , transformers, transformers-base, unix, unordered-containers, uuid
 , vector, wai, wai-websockets, warp, websockets, wreq, x509, yaml
-, zlib, dependent-map, dependent-sum, generic-arbitrary, these_0_7_6, uri-encode
+, zlib, dependent-map, dependent-sum, generic-arbitrary, these_0_7_6
+, ghc-heap-view, immortal, uri-encode
 }:
 
 mkDerivation {
   pname = "graphql-engine";
-  version = "1.1.0";
+  version = "1.1.1";
   src = fetchFromGitHub {
     owner = "hasura";
     repo = "graphql-engine";
-    sha256 = "18nwrqpy5v0d0czcm7ca8lykbrj5l32zy4b1ks53dxzfnyp0b9qi";
-    rev = "d6805cc678825ff7c848c2173b6421c495e24ae2";
+    sha256 = "0v5fs4ma2vxs1bygp45j62jg68bk4skvnf8g9j81b6jydda18lzs";
+    rev = "ad07c06e5037f0deb83a2d3ccf1703df6cad1d35";
   };
   postUnpack = "sourceRoot+=/server; echo source root reset to $sourceRoot";
   isLibrary = true;
@@ -43,7 +44,7 @@ mkDerivation {
     th-lift-instances time transformers transformers-base
     unordered-containers uuid vector wai wai-websockets warp websockets
     wreq x509 yaml zlib dependent-map dependent-sum generic-arbitrary
-    these_0_7_6 uri-encode
+    these_0_7_6 uri-encode ghc-heap-view immortal
   ];
   executableHaskellDepends = [
     aeson base bytestring http-client http-client-tls lens mtl

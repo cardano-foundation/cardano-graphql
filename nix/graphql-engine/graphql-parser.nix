@@ -8,8 +8,8 @@ mkDerivation {
   version = "0.1.0.0";
   src = fetchgit {
     url = "https://github.com/hasura/graphql-parser-hs.git";
-    sha256 = "1kar4fp6az0b9xr4zw3z4v5lhyq5nvh138zi6wbwyyds0d6h6bdc";
-    rev = "f3d9b645efd9adb143e2ad4c6b73bded1578a4e9";
+    sha256 = "0srz1f969ipbrm1mk4lr2cj7rf9h17mbimc8pjds8g4x0q9ym6mm";
+    rev = "2e8adedbb426d487df77bde244b7fe3cbd40a255";
     fetchSubmodules = true;
   };
   libraryHaskellDepends = [
