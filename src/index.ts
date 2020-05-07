@@ -29,7 +29,7 @@ buildContext(config.hasuraUri)
     const server = Server(app, {
       cacheControl: config.cacheEnabled ? { defaultMaxAge: 20 } : undefined,
       context,
-      introspection: true,
+      introspection: config.allowIntrospection,
       plugins,
       resolvers,
       validationRules,

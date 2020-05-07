@@ -1,7 +1,8 @@
-import { MissingConfig, TracingRequired } from './lib/errors'
+import { IntrospectionNotPermitted, MissingConfig, TracingRequired } from './lib/errors'
 import { CorsOptions } from 'apollo-server-express'
 
 export type Config = {
+  allowIntrospection: boolean
   allowedOrigins: CorsOptions['origin']
   apiPort: number
   cacheEnabled: boolean
@@ -14,6 +15,7 @@ export type Config = {
 
 export function getConfig (): Config {
   const {
+    allowIntrospection,
     allowedOrigins,
     apiPort,
     cacheEnabled,
@@ -30,8 +32,12 @@ export function getConfig (): Config {
   if (prometheusMetrics && process.env.TRACING === 'false') {
     throw new TracingRequired('Prometheus')
   }
+  if (whitelistPath && allowIntrospection) {
+    throw new IntrospectionNotPermitted('whitelist')
+  }
 
   return {
+    allowIntrospection: allowIntrospection || false,
     allowedOrigins: allowedOrigins || true,
     apiPort: apiPort || 3100,
     cacheEnabled: cacheEnabled || false,
@@ -45,6 +51,7 @@ export function getConfig (): Config {
 
 function filterAndTypecastEnvs (env: any) {
   const {
+    ALLOW_INTROSPECTION,
     ALLOWED_ORIGINS,
     API_PORT,
     CACHE_ENABLED,
@@ -55,6 +62,7 @@ function filterAndTypecastEnvs (env: any) {
     WHITELIST_PATH
   } = env
   return {
+    allowIntrospection: ALLOW_INTROSPECTION === 'true',
     allowedOrigins: ALLOWED_ORIGINS,
     apiPort: Number(API_PORT),
     cacheEnabled: CACHE_ENABLED === 'true',
