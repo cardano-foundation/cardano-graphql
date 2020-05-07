@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { getConfig } from './config'
 import { buildContext, Context } from './Context'
-import { prometheusMetricsPlugin } from './apollo_server_plugins'
+import { prometheusMetricsPlugin, whitelistPlugin } from './apollo_server_plugins'
 import * as depthLimit from 'graphql-depth-limit'
 import { Server } from './Server'
 import resolvers from './resolvers'
@@ -18,6 +18,10 @@ buildContext(config.hasuraUri)
 
     if (config.prometheusMetrics) {
       plugins.push(prometheusMetricsPlugin(app))
+    }
+    if (config.whitelistPath) {
+      const whitelist = JSON.parse(fs.readFileSync(config.whitelistPath, 'utf8'))
+      plugins.push(whitelistPlugin(whitelist))
     }
     if (config.queryDepthLimit) {
       validationRules.push(depthLimit(config.queryDepthLimit))

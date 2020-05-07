@@ -9,6 +9,7 @@ export type Config = {
   prometheusMetrics: boolean
   queryDepthLimit: number
   tracing: boolean
+  whitelistPath: string
 }
 
 export function getConfig (): Config {
@@ -19,7 +20,8 @@ export function getConfig (): Config {
     hasuraUri,
     prometheusMetrics,
     queryDepthLimit,
-    tracing
+    tracing,
+    whitelistPath
   } = filterAndTypecastEnvs(process.env)
 
   if (!hasuraUri) {
@@ -36,7 +38,8 @@ export function getConfig (): Config {
     hasuraUri,
     prometheusMetrics,
     queryDepthLimit: queryDepthLimit || 10,
-    tracing
+    tracing,
+    whitelistPath
   }
 }
 
@@ -48,7 +51,8 @@ function filterAndTypecastEnvs (env: any) {
     HASURA_URI,
     PROMETHEUS_METRICS,
     QUERY_DEPTH_LIMIT,
-    TRACING
+    TRACING,
+    WHITELIST_PATH
   } = env
   return {
     allowedOrigins: ALLOWED_ORIGINS,
@@ -57,6 +61,7 @@ function filterAndTypecastEnvs (env: any) {
     hasuraUri: HASURA_URI,
     prometheusMetrics: PROMETHEUS_METRICS === 'true',
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
-    tracing: TRACING === 'true'
+    tracing: TRACING === 'true',
+    whitelistPath: WHITELIST_PATH
   }
 }
