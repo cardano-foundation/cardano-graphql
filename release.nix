@@ -12,13 +12,15 @@ let
   pkgs = import sources.nixpkgs {
     config = {}; overlays = [];
   };
+  graphql-engine = import ./nix/graphql-engine;
 
 in
 
 pkgs.lib.fix (self: {
   inherit ( import ./default.nix ) cardano-graphql;
+  inherit graphql-engine;
   required = pkgs.releaseTools.aggregate {
     name = "required";
-    constituents = [ self.cardano-graphql ];
+    constituents = [ self.cardano-graphql self.graphql-engine ];
   };
 })
