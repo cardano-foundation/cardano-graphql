@@ -24,7 +24,7 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
-        "branch": "nixos-19.09",
+        "branch": "NixOS-19.09",
         "description": "A read-only mirror of NixOS/nixpkgs tracking the released channels. Send issues and PRs to",
         "homepage": "https://github.com/NixOS/nixpkgs",
         "owner": "NixOS",
@@ -39,12 +39,12 @@
         "branch": "master",
         "description": "Nix Packages collection",
         "homepage": null,
-        "owner": "nixos",
+        "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "933a5c89fdf0db2a41a1b3cf4a7e6538f91737b4",
         "sha256": "1h31jahfch250slqy8nz3kp5ywq231zcyx3a5i7bn8drkmx68gya",
         "type": "tarball",
-        "url": "https://github.com/nixos/nixpkgs/archive/933a5c89fdf0db2a41a1b3cf4a7e6538f91737b4.tar.gz",
+        "url": "https://github.com/NixOS/nixpkgs/archive/933a5c89fdf0db2a41a1b3cf4a7e6538f91737b4.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "yarn2nix": {
