@@ -56,14 +56,30 @@ in {
         type = lib.types.nullOr (lib.types.separatedString " ");
         default = null;
       };
+      allowIntrospection = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Allows introspection queries";
+      };
+      whitelistSource = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = ../../src/example_queries;
+        description = "Source directory or file to generate whitelist from";
+      };
     };
   };
   config = let
     # TODO: there has to be a better way to handle boolean env vars in nodejs???
     boolToNodeJSEnv = bool: if bool then "true" else "false";
     frontend = (import ../../.).cardano-graphql;
+    persistgraphql = (import ../../.).persistgraphql;
     hasuraBaseUri = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}/v1/graphql";
     hasuraDbMetadata = ../../hasura/migrations/metadata.json;
+    whitelistPath = let
+      whitelistJson = pkgs.runCommand "whitelist-json" { buildInputs = [ persistgraphql ]; } ''
+        persistgraphql ${cfg.whitelistSource} $out
+      '';
+    in if cfg.whitelistSource != null then whitelistJson else null;
   in lib.mkIf cfg.enable {
     systemd.services.cardano-graphql = {
       wantedBy = [ "multi-user.target" ];
@@ -72,12 +88,14 @@ in {
         HASURA_URI = hasuraBaseUri;
         PROMETHEUS_METRICS = boolToNodeJSEnv cfg.enablePrometheus;
         TRACING = boolToNodeJSEnv (cfg.enableTracing || cfg.enablePrometheus);
+        ALLOW_INTROSPECTION = boolToNodeJSEnv cfg.allowIntrospection;
         CACHE_ENABLED = boolToNodeJSEnv cfg.enableCache;
         API_PORT = toString cfg.port;
       } //
       (lib.optionalAttrs (cfg.allowedOrigins != null) { ALLOWED_ORIGINS = cfg.allowedOrigins; }) //
-      (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; });
-      path = with pkgs; [ netcat curl postgresql nodejs-12_x ];
+      (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; }) //
+      (lib.optionalAttrs (whitelistPath != null) { WHITELIST_PATH = whitelistPath; });
+      path = with pkgs; [ netcat curl postgresql jq frontend ];
       preStart = ''
         set -exuo pipefail
         for x in {1..10}; do
@@ -85,11 +103,10 @@ in {
           echo loop $x: waiting for graphql-engine 2 sec...
           sleep 2
         done
-        curl -d'{"type":"replace_metadata", "args":'$(${pkgs.jq}/bin/jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}
+        curl -d'{"type":"replace_metadata", "args":'$(jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}
       '';
       script = ''
-        exec ${frontend}/bin/cardano-graphql
-
+        exec cardano-graphql
       '';
     };
   };

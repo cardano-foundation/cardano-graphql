@@ -13,14 +13,15 @@ let
     config = {}; overlays = [];
   };
   graphql-engine = import ./nix/graphql-engine;
+  persistgraphql = (import ./nix/node-packages {}).persistgraphql;
 
 in
 
 pkgs.lib.fix (self: {
   inherit ( import ./default.nix ) cardano-graphql;
-  inherit graphql-engine;
+  inherit graphql-engine persistgraphql;
   required = pkgs.releaseTools.aggregate {
     name = "required";
-    constituents = [ self.cardano-graphql self.graphql-engine ];
+    constituents = [ self.cardano-graphql self.graphql-engine self.persistgraphql ];
   };
 })

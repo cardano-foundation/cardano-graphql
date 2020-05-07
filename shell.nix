@@ -23,6 +23,8 @@ let
       git         # Distributed version control system
       yarn        # Dependency management for javascript
       python
+      nodejs
+      pkgs.packages.cardano-graphql
     ];
 
     shellHook = ''
