@@ -11,7 +11,7 @@
     "dev": "stmux -w always -e ERROR -M -- [[ \"yarn service-dependencies up\" .. \"tsc --watch --noEmit\" .. \"yarn codegen:internal --watch\" ]]",
     "service-dependencies": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose",
     "test": "HASURA_URI=http://localhost:8090 stmux -w always -e ERROR -M -- [[ \"yarn dev\" .. \"tsc --watch --noEmit\" .. \"yarn test:tdd --watchAll\" ]]",
-    "build": "yarn codegen:internal && yarn codegen:external && tsc -p . && shx cp src/schema.graphql dist/",
+    "build": "yarn codegen:internal && yarn codegen:external && tsc -p . && shx cp src/schema.graphql dist/ && shx cp -R src/graphql_operations dist/graphql_operations",
     "prestart": "yarn build",
     "start": "HASURA_URI=http://localhost:8090 node dist/index.js",
     "test:tdd": "yarn service-dependencies up -d && NODE_ENV=test TEST_MODE=integration jest suite",
