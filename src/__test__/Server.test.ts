@@ -51,14 +51,19 @@ describe('Server', () => {
   })
 
   describe('Whitelisting', () => {
-    it('is optional', async () => {
-      try {
+    describe('Booting the server without providing a whitelist', () => {
+      beforeEach(async () => {
         Server(app, {
           context,
           resolvers,
           typeDefs: fs.readFileSync(schemaPath, 'UTF8')
         })
         httpServer = await listen(app, port)
+      })
+      afterEach(() => {
+        httpServer.close()
+      })
+      it('is returns data for all valid queries', async () => {
         const validQueryResult = await client.query({
           query: gql`query validButNotWhitelisted {
               cardano {
@@ -68,12 +73,7 @@ describe('Server', () => {
         })
         expect(validQueryResult.data.cardano.networkName).toBeDefined()
         expect(validQueryResult.errors).not.toBeDefined()
-      } catch (error) {
-        console.error(error)
-        return
-      } finally {
-        httpServer.close()
-      }
+      })
     })
 
     describe('Providing a whitelist produced by persistgraphql, intended to limit the API for specific application requirements', () => {
