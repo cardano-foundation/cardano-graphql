@@ -35,6 +35,7 @@
     "apollo-link-http": "^1.5.15",
     "apollo-link-retry": "^2.2.15",
     "apollo-metrics": "^1.0.1",
+    "apollo-server-errors": "^2.4.1",
     "apollo-server-express": "^2.12.0",
     "apollo-server-plugin-base": "^0.7.1",
     "cross-fetch": "^3.0.4",

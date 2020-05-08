@@ -76,7 +76,7 @@ describe('Server', () => {
       }
     })
 
-    describe('Providing a whitelist produced by persistgraphql, intended to lock the API for specific applications', () => {
+    describe('Providing a whitelist produced by persistgraphql, intended to limit the API for specific application requirements', () => {
       beforeEach(async () => {
         const whitelistPath = await tmp.tmpName({ postfix: '.json' })
         execSync(`npx persistgraphql ${clientPath} ${whitelistPath}`)
@@ -97,16 +97,22 @@ describe('Server', () => {
         const result = await client.query({
           query: whiteListedDocumentNode
         })
-        expect(result.data.cardano.networkName).toBeDefined()
+        expect(result.data.cardano.blockHeight).toBeDefined()
+        expect(result.errors).not.toBeDefined()
       })
-      it('Denies unlisted queries', async () => {
-        await expect(client.query({
-          query: gql`query validButNotWhitelisted {
-              cardano {
-                  networkName
-              }
-          }`
-        })).rejects
+      it('Returns a networkError if a valid but unlisted operation is sent', async () => {
+        expect.assertions(1)
+        try {
+          await client.query({
+            query: gql`query validButNotWhitelisted {
+                cardano {
+                    networkName
+                }
+            }`
+          })
+        } catch (e) {
+          expect(e.networkError.result.errors[0].message).toBe('Operation is forbidden')
+        }
       })
     })
   })
