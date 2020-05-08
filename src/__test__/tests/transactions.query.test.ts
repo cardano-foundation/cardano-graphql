@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { tx05ad8b, txe68043 } from '../data_assertions'
 import { TestClient } from '../TestClient'
-import { loadQueryNode } from '../../util'
+import { loadExampleQueryNode } from '../../util'
 
 export function transactionTests (createClient: () => Promise<TestClient>) {
   describe('transactions', () => {
@@ -13,7 +13,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
 
     it('Returns transactions by IDs', async () => {
       const result = await client.query({
-        query: await loadQueryNode('transactions', 'transactionsByIdsOrderByFee'),
+        query: await loadExampleQueryNode('transactions', 'transactionsByIdsOrderByFee'),
         variables: { ids: [txe68043.basic.id, tx05ad8b.basic.id] }
       })
       expect(result.data.transactions.length).toBe(2)
@@ -24,7 +24,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
 
     it('Can return aggregated data', async () => {
       const result = await client.query({
-        query: await loadQueryNode('transactions', 'aggregateDataWithinTransaction'),
+        query: await loadExampleQueryNode('transactions', 'aggregateDataWithinTransaction'),
         variables: { ids: [txe68043.aggregated.id, tx05ad8b.aggregated.id] }
       })
       expect(result.data.transactions.length).toBe(2)
@@ -36,7 +36,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     })
     it('Can return filtered aggregated data', async () => {
       const result = await client.query({
-        query: await loadQueryNode('transactions', 'filteredAggregateDataWithinTransaction'),
+        query: await loadExampleQueryNode('transactions', 'filteredAggregateDataWithinTransaction'),
         variables: { id: txe68043.aggregated_filtered.id }
       })
       expect(result.data).toMatchSnapshot()

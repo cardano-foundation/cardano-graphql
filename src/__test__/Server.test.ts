@@ -33,7 +33,7 @@ describe('Server', () => {
   let context: Context
 
   beforeAll(async () => {
-    context = await buildContext('http://localhost:8090/v1/graphql')
+    context = await buildContext('http://localhost:8090')
     whiteListedDocumentNode = await loadDocumentNode(path.resolve(clientPath, 'src', 'feature_1', 'cardanoDynamic.graphql'))
   })
 

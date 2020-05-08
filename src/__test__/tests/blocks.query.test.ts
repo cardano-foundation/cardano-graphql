@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import { block29021, block29022 } from '../data_assertions'
 import { TestClient } from '../TestClient'
-import { loadQueryNode } from '../../util'
+import { loadExampleQueryNode } from '../../util'
 
 export function blocksTests (makeClient: () => Promise<TestClient>) {
   describe('blocks', () => {
@@ -12,17 +12,17 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
 
     it('caps the response to 100 blocks', async () => {
       const result = await client.query({
-        query: await loadQueryNode('blocks', 'blockIdsNoArgs')
+        query: await loadExampleQueryNode('blocks', 'blockIdsNoArgs')
       })
       expect(result.data.blocks.length).toBe(100)
     })
 
     it('allows custom pagination size with a limit and offset', async () => {
       const page1 = await client.query({
-        query: await loadQueryNode('blocks', 'first20Blocks')
+        query: await loadExampleQueryNode('blocks', 'first20Blocks')
       })
       const page2 = await client.query({
-        query: await loadQueryNode('blocks', 'second20Blocks')
+        query: await loadExampleQueryNode('blocks', 'second20Blocks')
       })
       expect(page1.data.blocks.length).toBe(20)
       expect(page1.data.blocks[19].number).toBe(23)
@@ -32,7 +32,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
 
     it('Can return blocks by number', async () => {
       const result = await client.query({
-        query: await loadQueryNode('blocks', 'blockByNumber'),
+        query: await loadExampleQueryNode('blocks', 'blockByNumber'),
         variables: { number: 29022 }
       })
       expect(result.data.blocks.length).toBe(1)
@@ -42,7 +42,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
 
     it('Can return blocks by an array of IDs', async () => {
       const result = await client.query({
-        query: await loadQueryNode('blocks', 'blocksByIds'),
+        query: await loadExampleQueryNode('blocks', 'blocksByIds'),
         variables: { ids: [block29021.basic.id, block29022.basic.id] }
       })
       expect(result.data.blocks.length).toBe(2)
@@ -56,7 +56,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
 
     it('Can return aggregated data', async () => {
       const result = await client.query({
-        query: await loadQueryNode('blocks', 'aggregateDataWithinBlock'),
+        query: await loadExampleQueryNode('blocks', 'aggregateDataWithinBlock'),
         variables: { number: 29021, epochLessThan: 185 }
       })
       expect(result.data.blocks[0]).toEqual(block29021.aggregated)
@@ -88,7 +88,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
 
     it('are linked to their predecessor, and the chain can be traversed', async () => {
       const result = await client.query({
-        query: await loadQueryNode('blocks', 'selectGreatGrandparentBlock'),
+        query: await loadExampleQueryNode('blocks', 'selectGreatGrandparentBlock'),
         variables: { number: 29022 }
       })
       expect(result.data.blocks[0].previousBlock.previousBlock.previousBlock.number).toBe(29019)
@@ -97,7 +97,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
 
     it('are linked to their successor, and the chain can be traversed', async () => {
       const result = await client.query({
-        query: await loadQueryNode('blocks', 'selectGreatGrandchildBlock'),
+        query: await loadExampleQueryNode('blocks', 'selectGreatGrandchildBlock'),
         variables: { number: 29022 }
       })
       expect(result.data.blocks[0].nextBlock.nextBlock.nextBlock.number).toBe(29025)

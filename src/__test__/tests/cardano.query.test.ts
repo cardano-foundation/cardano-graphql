@@ -1,5 +1,5 @@
 import { TestClient } from '../TestClient'
-import { loadQueryNode } from '../../util'
+import { loadExampleQueryNode } from '../../util'
 
 export function cardanoTests (createClient: () => Promise<TestClient>) {
   describe('cardano', () => {
@@ -11,13 +11,13 @@ export function cardanoTests (createClient: () => Promise<TestClient>) {
 
     it('Returns static information about the network', async () => {
       const result = await client.query({
-        query: await loadQueryNode('cardano', 'static')
+        query: await loadExampleQueryNode('cardano', 'static')
       })
       expect(result.data).toMatchSnapshot()
     })
     it('Returns dynamic information about the network', async () => {
       const result = await client.query({
-        query: await loadQueryNode('cardano', 'dynamic')
+        query: await loadExampleQueryNode('cardano', 'dynamic')
       })
       expect(result.data.cardano.blockHeight).toBeGreaterThan(3994551)
       expect(result.data.cardano.currentEpoch.number).toBeGreaterThan(184)

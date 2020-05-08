@@ -30,6 +30,6 @@
     "dist/*",
     "schema.graphql",
     "LICENSE",
-    "LICENSE_NOTICE"
+    "NOTICE"
   ]
 }

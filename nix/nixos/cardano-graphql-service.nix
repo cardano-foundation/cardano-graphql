@@ -73,7 +73,7 @@ in {
     boolToNodeJSEnv = bool: if bool then "true" else "false";
     frontend = (import ../../.).cardano-graphql;
     persistgraphql = (import ../../.).persistgraphql;
-    hasuraBaseUri = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}/v1/graphql";
+    hasuraBaseUri = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}";
     hasuraDbMetadata = ../../hasura/migrations/metadata.json;
   in lib.mkIf cfg.enable {
     systemd.services.cardano-graphql = {

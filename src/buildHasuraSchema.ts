@@ -1,14 +1,15 @@
+import * as path from 'path'
 import { RetryPromise } from 'promise-exponential-retry'
 import { createHttpLink } from 'apollo-link-http'
 import { RetryLink } from 'apollo-link-retry'
 import { ApolloLink, execute, makePromise } from 'apollo-link'
 import { fetch } from 'cross-fetch'
-import gql from 'graphql-tag'
 import { introspectSchema, makeRemoteExecutableSchema } from 'graphql-tools'
+import { loadQueryNode } from './util'
 
 export async function buildHasuraSchema (hasuraUri: string) {
   const httpLink = createHttpLink({
-    uri: hasuraUri,
+    uri: `${hasuraUri}/v1/graphql`,
     fetch,
     headers: { 'X-Hasura-Role': 'cardano-graphql' }
   })
@@ -32,10 +33,8 @@ export async function buildHasuraSchema (hasuraUri: string) {
   // Hasura applies metadata after the server is booted, so there is a potential race condition
   // when provisioning a new deployment we need to protect against.
   await RetryPromise.retryPromise('Checking Hasura metadata is applied', async () => {
-    const result = await makePromise(execute(link, { query: gql`
-            query { blocks(where: {number: {_eq: 1}}) {
-                transactions_aggregate { aggregate { count }}
-            }}`
+    const result = await makePromise(execute(link, {
+      query: await loadQueryNode(path.resolve(__dirname, 'graphql_operations', 'hasuraStateCheck.graphql'))
     }))
     if (!result.data || result.data.blocks[0].transactions_aggregate.aggregate.count === null) {
       throw new Error('Hasura Metadata not applied')
