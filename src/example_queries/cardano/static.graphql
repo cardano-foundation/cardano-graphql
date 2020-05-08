@@ -2,7 +2,7 @@ query cardanoStatic {
   cardano {
     networkName
     protocolConst
-    startTime
     slotDuration
+    startTime
   }
 }
