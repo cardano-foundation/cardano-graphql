@@ -33,6 +33,11 @@ pipeline {
         sh 'npx jest Server --ci'
         sh 'yarn --cwd ./cli test --ci'
       }
+      post {
+        always {
+          sh 'docker-compose -p cardano-mainnet -f ./test/docker-compose-ci.yml down'
+        }
+      }
     }
     stage('Build Docker image') {
       steps {
