@@ -46,8 +46,8 @@
     "graphql-tools": "^5.0.0",
     "graphql-type-datetime": "^0.2.4",
     "lodash.isempty": "^4.4.0",
+    "p-retry": "^4.2.0",
     "prom-client": "11.5.3",
-    "promise-exponential-retry": "^1.0.3",
     "tmp-promise": "^2.1.1",
     "ts-custom-error": "^3.1.1"
   },
