@@ -7,14 +7,13 @@ import { Application } from 'express'
 import * as fs from 'fs'
 import * as http from 'http'
 import * as path from 'path'
+import * as tmp from 'tmp-promise'
 import { Server } from '../Server'
 import resolvers from '../resolvers'
 import { buildContext, Context } from '../Context'
 import { whitelistPlugin } from '../apollo_server_plugins'
 import { loadDocumentNode } from '../lib/loadDocumentNode'
 
-const whitelistPath = path.resolve(__dirname, './whitelist.json')
-const whitelist = JSON.parse(fs.readFileSync(whitelistPath, 'UTF8'))
 const clientPath = path.resolve(__dirname, 'app_with_graphql_operations')
 const schemaPath = path.resolve(__dirname, '..', 'schema.graphql')
 const port = 3100
@@ -45,7 +44,7 @@ describe('Server', () => {
         addTypename: false
       }),
       link: createHttpLink({
-        uri: process.env.CARDANO_GRAPHQL_URI || 'http://localhost:3100',
+        uri: `http://localhost:${port}`,
         fetch
       })
     })
@@ -72,7 +71,6 @@ describe('Server', () => {
         })
         expect(validQueryResult.data.cardano.networkName).toBeDefined()
         expect(validQueryResult.errors).not.toBeDefined()
-
       } catch (error) {
         console.error(error)
         return
@@ -83,7 +81,9 @@ describe('Server', () => {
 
     describe('Providing a whitelist produced by persistgraphql, intended to lock the API for specific applications', () => {
       beforeEach(async () => {
+        const whitelistPath = await tmp.tmpName({ postfix: '.json' })
         proc = exec(`npx persistgraphql ${clientPath} ${whitelistPath}`)
+        const whitelist = JSON.parse(fs.readFileSync(whitelistPath, 'UTF8'))
         Server(app, {
           context,
           plugins: [whitelistPlugin(whitelist)],
@@ -92,7 +92,9 @@ describe('Server', () => {
         })
         httpServer = await listen(app, port)
       })
-      afterEach(() => httpServer.close())
+      afterEach(() => {
+        httpServer.close()
+      })
 
       it('Accepts listed queries', async () => {
         const result = await client.query({

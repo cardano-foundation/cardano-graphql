@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/input-output-hk/cardano-graphql#README.md",
   "dependencies": {
+    "@types/tmp": "^0.2.0",
     "apollo-link-http": "^1.5.15",
     "apollo-link-retry": "^2.2.15",
     "apollo-metrics": "^1.0.1",
@@ -47,6 +48,7 @@
     "lodash.isempty": "^4.4.0",
     "prom-client": "11.5.3",
     "promise-exponential-retry": "^1.0.3",
+    "tmp-promise": "^2.1.1",
     "ts-custom-error": "^3.1.1"
   },
   "devDependencies": {
