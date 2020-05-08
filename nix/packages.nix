@@ -66,4 +66,5 @@
       cp -r . $out
     '';
   };
+  persistgraphql = (import ./node-packages {}).persistgraphql;
 }

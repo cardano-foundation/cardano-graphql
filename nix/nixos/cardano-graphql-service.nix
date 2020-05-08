@@ -61,9 +61,9 @@ in {
         default = false;
         description = "Allows introspection queries";
       };
-      whitelistSource = lib.mkOption {
+      whitelistPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = ../../src/example_queries;
+        default = null;
         description = "Source directory or file to generate whitelist from";
       };
     };
@@ -75,11 +75,6 @@ in {
     persistgraphql = (import ../../.).persistgraphql;
     hasuraBaseUri = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}/v1/graphql";
     hasuraDbMetadata = ../../hasura/migrations/metadata.json;
-    whitelistPath = let
-      whitelistJson = pkgs.runCommand "whitelist-json" { buildInputs = [ persistgraphql ]; } ''
-        persistgraphql ${cfg.whitelistSource} $out
-      '';
-    in if cfg.whitelistSource != null then whitelistJson else null;
   in lib.mkIf cfg.enable {
     systemd.services.cardano-graphql = {
       wantedBy = [ "multi-user.target" ];
@@ -94,7 +89,7 @@ in {
       } //
       (lib.optionalAttrs (cfg.allowedOrigins != null) { ALLOWED_ORIGINS = cfg.allowedOrigins; }) //
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; }) //
-      (lib.optionalAttrs (whitelistPath != null) { WHITELIST_PATH = whitelistPath; });
+      (lib.optionalAttrs (whitelistPath != null) { WHITELIST_PATH = cfg.whitelistPath; });
       path = with pkgs; [ netcat curl postgresql jq frontend ];
       preStart = ''
         set -exuo pipefail
