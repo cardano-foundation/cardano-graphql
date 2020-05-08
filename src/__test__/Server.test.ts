@@ -1,7 +1,7 @@
 import { ApolloClient, DocumentNode, gql, InMemoryCache } from 'apollo-boost'
 import { createHttpLink } from 'apollo-link-http'
 import fetch from 'cross-fetch'
-import { ChildProcess, exec } from 'child_process'
+import { execSync } from 'child_process'
 import * as express from 'express'
 import { Application } from 'express'
 import * as fs from 'fs'
@@ -27,7 +27,6 @@ function listen (app: Application, port: number): Promise<http.Server> {
 
 describe('Server', () => {
   let client: ApolloClient<any>
-  let proc: ChildProcess
   let whiteListedDocumentNode: DocumentNode
   let app: express.Application
   let httpServer: http.Server
@@ -50,8 +49,6 @@ describe('Server', () => {
     })
     app = express()
   })
-
-  afterAll(() => proc.kill())
 
   describe('Whitelisting', () => {
     it('is optional', async () => {
@@ -82,7 +79,7 @@ describe('Server', () => {
     describe('Providing a whitelist produced by persistgraphql, intended to lock the API for specific applications', () => {
       beforeEach(async () => {
         const whitelistPath = await tmp.tmpName({ postfix: '.json' })
-        proc = exec(`npx persistgraphql ${clientPath} ${whitelistPath}`)
+        execSync(`npx persistgraphql ${clientPath} ${whitelistPath}`)
         const whitelist = JSON.parse(fs.readFileSync(whitelistPath, 'UTF8'))
         Server(app, {
           context,
