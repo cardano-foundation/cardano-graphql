@@ -1,6 +1,6 @@
 import { ApolloClient, gql, InMemoryCache } from 'apollo-boost'
 import { createHttpLink } from 'apollo-link-http'
-import { RetryPromise } from 'promise-exponential-retry'
+import pRetry, { FailedAttemptError } from 'p-retry'
 import fetch from 'cross-fetch'
 
 export const createClient = async () => {
@@ -13,18 +13,26 @@ export const createClient = async () => {
       fetch
     })
   })
-  await RetryPromise.retryPromise(
-    'Checking GraphQL server is ready',
-    async () => {
-      await client.query({
-        query: gql`query { 
-          cardano { 
-            blockHeight
-            currentEpoch { 
-              number
-            }
+  const retries = 10
+  await pRetry(async () => {
+    await client.query({
+      query: gql`query {
+          cardano {
+              blockHeight
+              currentEpoch {
+                  number
+              }
           }}`
-      })
-    }, 50)
+    })
+  }, {
+    retries,
+    onFailedAttempt: (error: FailedAttemptError) => {
+      console.log(`Hasura schema introspection: Attempt ${error.attemptNumber} of ${retries}, retying...`)
+      if (error.retriesLeft === 0) {
+        console.error(error)
+        process.exit(0)
+      }
+    }
+  })
   return client
 }
