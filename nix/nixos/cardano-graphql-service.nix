@@ -89,7 +89,7 @@ in {
       } //
       (lib.optionalAttrs (cfg.allowedOrigins != null) { ALLOWED_ORIGINS = cfg.allowedOrigins; }) //
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; }) //
-      (lib.optionalAttrs (whitelistPath != null) { WHITELIST_PATH = cfg.whitelistPath; });
+      (lib.optionalAttrs (cfg.whitelistPath != null) { WHITELIST_PATH = cfg.whitelistPath; });
       path = with pkgs; [ netcat curl postgresql jq frontend ];
       preStart = ''
         set -exuo pipefail
