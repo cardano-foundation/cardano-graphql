@@ -16,7 +16,7 @@ import { loadDocumentNode } from '../lib/loadDocumentNode'
 
 const clientPath = path.resolve(__dirname, 'app_with_graphql_operations')
 const schemaPath = path.resolve(__dirname, '..', 'schema.graphql')
-const port = 3100
+const port = 3101
 
 function listen (app: Application, port: number): Promise<http.Server> {
   return new Promise(function (resolve, reject) {
