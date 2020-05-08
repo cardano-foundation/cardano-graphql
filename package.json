@@ -11,12 +11,13 @@
     "codegen:external": "graphql-codegen --config ./codegen.external.yml",
     "codegen:internal": "graphql-codegen",
     "lint": "eslint \"src/**/*.ts\"",
-    "dev": "stmux -w always -e ERROR -M -- [[ \"docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose up\" .. \"tsc --watch --noEmit\" .. \"yarn codegen:internal --watch\" ]]",
+    "dev": "stmux -w always -e ERROR -M -- [[ \"yarn service-dependencies up\" .. \"tsc --watch --noEmit\" .. \"yarn codegen:internal --watch\" ]]",
+    "service-dependencies": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose",
     "test": "HASURA_URI=http://localhost:8090/v1/graphql stmux -w always -e ERROR -M -- [[ \"yarn dev\" .. \"tsc --watch --noEmit\" .. \"yarn test:tdd --watchAll\" ]]",
     "build": "yarn codegen:internal && yarn codegen:external && tsc -p . && shx cp src/schema.graphql dist/",
     "prestart": "yarn build",
     "start": "HASURA_URI=http://localhost:8090/v1/graphql node dist/index.js",
-    "test:tdd": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose up -d && NODE_ENV=test TEST_MODE=integration jest suite",
+    "test:tdd": "yarn service-dependencies up -d && NODE_ENV=test TEST_MODE=integration jest suite",
     "test:e2e": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest suite",
     "test:dataparity": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest dataparity.test",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml"
@@ -31,9 +32,11 @@
   },
   "homepage": "https://github.com/input-output-hk/cardano-graphql#README.md",
   "dependencies": {
+    "@types/tmp": "^0.2.0",
     "apollo-link-http": "^1.5.15",
     "apollo-link-retry": "^2.2.15",
     "apollo-metrics": "^1.0.1",
+    "apollo-server-errors": "^2.4.1",
     "apollo-server-express": "^2.12.0",
     "apollo-server-plugin-base": "^0.7.1",
     "cross-fetch": "^3.0.4",
@@ -47,6 +50,7 @@
     "lodash.isempty": "^4.4.0",
     "prom-client": "11.5.3",
     "promise-exponential-retry": "^1.0.3",
+    "tmp-promise": "^2.1.1",
     "ts-custom-error": "^3.1.1"
   },
   "devDependencies": {

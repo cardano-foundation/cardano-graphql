@@ -5,7 +5,7 @@ import corsMiddleware from 'cors'
 export function Server (
   app: express.Application,
   apolloServerExpressConfig: ApolloServerExpressConfig,
-  cors: corsMiddleware.CorsOptions
+  cors?: corsMiddleware.CorsOptions
 ): ApolloServer {
   const apolloServer = new ApolloServer(apolloServerExpressConfig)
   apolloServer.applyMiddleware({

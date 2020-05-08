@@ -21,7 +21,8 @@ Cross-platform, _typed_, and **queryable** API service for Cardano, powered by
 The [schema](src/schema.graphql) is defined in native `.graphql`, and used to generate 
 [packages](generated_packages/README.md) for internal and client-side static typing. 
 [Apollo Server](https://www.apollographql.com/docs/apollo-server/) exposes the NodeJS execution 
-engine over a HTTP endpoint.
+engine over a HTTP endpoint, and includes support for open source metrics via Prometheus, 
+and operation whitelisting.
 
 A [CLI](./cli/README.md) aims to streamline the setup and deployment process.
 
