@@ -2,7 +2,7 @@ import { IntrospectionNotPermitted, MissingConfig, TracingRequired } from './lib
 import { CorsOptions } from 'apollo-server-express'
 
 export type Config = {
-  allowIntrospection: boolean
+  allowIntrospection?: boolean
   allowedOrigins: CorsOptions['origin']
   apiPort: number
   cacheEnabled: boolean
@@ -35,9 +35,8 @@ export function getConfig (): Config {
   if (whitelistPath && allowIntrospection) {
     throw new IntrospectionNotPermitted('whitelist')
   }
-
   return {
-    allowIntrospection: allowIntrospection || false,
+    allowIntrospection,
     allowedOrigins: allowedOrigins || true,
     apiPort: apiPort || 3100,
     cacheEnabled: cacheEnabled || false,
@@ -62,14 +61,14 @@ function filterAndTypecastEnvs (env: any) {
     WHITELIST_PATH
   } = env
   return {
-    allowIntrospection: ALLOW_INTROSPECTION === 'true',
+    allowIntrospection: ALLOW_INTROSPECTION === 'true' ? true : undefined,
     allowedOrigins: ALLOWED_ORIGINS,
     apiPort: Number(API_PORT),
-    cacheEnabled: CACHE_ENABLED === 'true',
+    cacheEnabled: CACHE_ENABLED === 'true' ? true : undefined,
     hasuraUri: HASURA_URI,
-    prometheusMetrics: PROMETHEUS_METRICS === 'true',
+    prometheusMetrics: PROMETHEUS_METRICS === 'true' ? true : undefined,
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
-    tracing: TRACING === 'true',
+    tracing: TRACING === 'true' ? true : undefined,
     whitelistPath: WHITELIST_PATH
   }
 }

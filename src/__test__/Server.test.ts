@@ -63,7 +63,7 @@ describe('Server', () => {
       afterEach(() => {
         httpServer.close()
       })
-      it('is returns data for all valid queries', async () => {
+      it('returns data for all valid queries', async () => {
         const validQueryResult = await client.query({
           query: gql`query validButNotWhitelisted {
               cardano {

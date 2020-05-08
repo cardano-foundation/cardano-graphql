@@ -30,6 +30,7 @@ buildContext(config.hasuraUri)
       cacheControl: config.cacheEnabled ? { defaultMaxAge: 20 } : undefined,
       context,
       introspection: config.allowIntrospection,
+      playground: config.allowIntrospection,
       plugins,
       resolvers,
       validationRules,
@@ -42,6 +43,9 @@ buildContext(config.hasuraUri)
       app.listen({ port: config.apiPort }, () => {
         const serverUri = `http://localhost:${config.apiPort}`
         console.log(`GraphQL HTTP server at ${serverUri}${server.graphqlPath}`)
+        if (process.env.NODE_ENV !== 'production' && config.whitelistPath) {
+          console.warn('As a whitelist is in effect, the GraphQL Playground is available, but will not allow schema exploration')
+        }
         if (config.prometheusMetrics) {
           console.log(`Prometheus metrics at ${serverUri}/metrics`)
         }
