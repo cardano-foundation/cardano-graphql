@@ -6,22 +6,22 @@
 # them to all supported build platforms.
 #
 ############################################################################
+{
+  rev ? null
+}:
 
 let
   sources = import ./nix/sources.nix;
-  pkgs = import sources.nixpkgs {
-    config = {}; overlays = [];
-  };
+  pkgs = import ./nix/pkgs.nix {};
   graphql-engine = import ./nix/graphql-engine;
-  persistgraphql = (import ./nix/node-packages {}).persistgraphql;
-
 in
 
 pkgs.lib.fix (self: {
-  inherit ( import ./default.nix ) cardano-graphql;
-  inherit graphql-engine persistgraphql;
+  inherit ( import ./default.nix ) cardano-graphql persistgraphql;
+  inherit graphql-engine;
+  build-version = pkgs.writeText "version.json" (builtins.toJSON { inherit rev; });
   required = pkgs.releaseTools.aggregate {
     name = "required";
-    constituents = [ self.cardano-graphql self.graphql-engine self.persistgraphql ];
+    constituents = with self; [ cardano-graphql graphql-engine persistgraphql build-version ];
   };
 })
