@@ -13,7 +13,8 @@
         sansPrefix = lib.removePrefix (toString ../.) name;
         in_blacklist =
           lib.hasPrefix "/node_modules" sansPrefix ||
-          lib.hasPrefix "/build" sansPrefix;
+          lib.hasPrefix "/build" sansPrefix ||
+          lib.hasPrefix "/.git" sansPrefix;
         in_whitelist =
           (type == "directory") ||
           (lib.hasSuffix ".yml" name) ||
@@ -65,4 +66,5 @@
       cp -r . $out
     '';
   };
+  persistgraphql = (import ./node-packages {}).persistgraphql;
 }

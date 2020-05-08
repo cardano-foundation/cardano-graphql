@@ -23,6 +23,9 @@ let
       git         # Distributed version control system
       yarn        # Dependency management for javascript
       python
+      nodejs
+      pkgs.packages.cardano-graphql
+      pkgs.packages.persistgraphql
     ];
 
     shellHook = ''
@@ -33,6 +36,7 @@ let
       echo "NOTE: you may need to export GITHUB_TOKEN if you hit rate limits with niv"
       echo "Commands:
         * niv update <package> - update package
+        * persistgraphql <src> whitelist.json - generates a whitelist.json to limit graphql queries
 
       "
     '';
