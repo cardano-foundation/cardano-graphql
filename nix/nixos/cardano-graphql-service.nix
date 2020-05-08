@@ -98,7 +98,7 @@ in {
           echo loop $x: waiting for graphql-engine 2 sec...
           sleep 2
         done
-        curl -d'{"type":"replace_metadata", "args":'$(jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}
+        curl -d'{"type":"replace_metadata", "args":'$(jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}/v1/query
       '';
       script = ''
         exec cardano-graphql

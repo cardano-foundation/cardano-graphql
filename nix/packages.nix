@@ -1,4 +1,4 @@
-{ mkYarnPackage, stdenv, lib, python, nodejs, cardano-graphql-src }:
+{ pkgs, mkYarnPackage, stdenv, lib, python, nodejs, cardano-graphql-src }:
 
 {
   cardano-graphql = mkYarnPackage {
@@ -66,5 +66,5 @@
       cp -r . $out
     '';
   };
-  persistgraphql = (import ./node-packages {}).persistgraphql;
+  persistgraphql = (pkgs.callPackage ./node-packages {}).persistgraphql;
 }
