@@ -59,7 +59,7 @@ services:
       context: ../
       target: server
     environment:
-      - HASURA_URI=http://hasura:8080/v1/graphql
+      - HASURA_URI=http://hasura:8080
     ports:
       - ${API_PORT:-3100}:3100
 secrets:

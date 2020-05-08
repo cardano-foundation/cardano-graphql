@@ -14,7 +14,7 @@ import { buildContext } from '../Context'
  */
 
 export async function TestApolloServer (): Promise<ApolloServerBase> {
-  const context = await buildContext('http://localhost:8090/v1/graphql')
+  const context = await buildContext('http://localhost:8090')
   return new ApolloServerBase({
     context,
     introspection: true,

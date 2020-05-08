@@ -61,7 +61,7 @@ services:
       target: server
     environment:
       - CACHE_ENABLED=true
-      - HASURA_URI=http://hasura:8080/v1/graphql
+      - HASURA_URI=http://hasura:8080
     expose:
       - 3100
     ports:
