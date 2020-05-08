@@ -43,6 +43,7 @@
     "graphql-bigint": "^1.0.0",
     "graphql-depth-limit": "^1.1.0",
     "graphql-iso-date": "^3.6.1",
+    "graphql-tools": "^5.0.0",
     "graphql-type-datetime": "^0.2.4",
     "lodash.isempty": "^4.4.0",
     "prom-client": "11.5.3",
