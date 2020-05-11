@@ -7,6 +7,10 @@ async function getDataFromAPI (path: string) {
   return response.json()
 }
 
+function timestampToIsoStringWithoutTimezone (timestamp: number): string {
+  return new Date(timestamp * 1000).toISOString().substr(0, 19)
+}
+
 export function transactionTests (createClient: () => Promise<TestClient>) {
   describe('transactions', () => {
     let client: TestClient
@@ -46,7 +50,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
       const restResultFee = restResult['Right']['ctsFees']['getCoin']
       const graphQLFee = graphQLResult['data']['transactions'][0]['fee']
 
-      expect(graphQLFee).toEqual(restResultFee)
+      expect(graphQLFee).toEqual(parseInt(restResultFee))
     })
 
     it('return the correct Total Output', async () => {
@@ -323,7 +327,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
       const restResultBlockTime = restResult['Right']['ctsBlockTimeIssued']
       const graphQLBlockTime = graphQLResult['data']['transactions'][0]['block']['createdAt']
 
-      expect(graphQLBlockTime).toEqual(restResultBlockTime)
+      expect(graphQLBlockTime).toEqual(timestampToIsoStringWithoutTimezone(restResultBlockTime))
     })
 
     it('have the same transaction inclusion time', async () => {
@@ -359,7 +363,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
       const restResultTransactionTime = restResult['Right']['ctsTxTimeIssued']
       const graphQLTransactionTime = graphQLResult['data']['transactions'][0]['includedAt']
 
-      expect(graphQLTransactionTime).toEqual(restResultTransactionTime)
+      expect(graphQLTransactionTime).toEqual(timestampToIsoStringWithoutTimezone(restResultTransactionTime))
     })
   })
 }
