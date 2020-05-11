@@ -1,0 +1,12 @@
+query epochDetailsInRange (
+    $numbers: [Int!]
+) {
+    epochs( where: { number: { _in: $numbers }}) {
+        blocksCount
+        output
+        number
+        transactionsCount
+        startedAt
+        lastBlockTime
+    }
+}

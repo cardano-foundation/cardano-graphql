@@ -1,0 +1,16 @@
+query selectGreatGrandparentBlock (
+    $number: Int!
+) {
+    blocks (where: { number: { _eq: $number}}) {
+        id
+        previousBlock {
+            number
+            previousBlock {
+                number
+                previousBlock {
+                    number
+                }
+            }
+        }
+    }
+}

@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "declaration": true,
+    "declarationMap": true,
     "target": "es2016",
     "noEmitOnError": true,
     "noImplicitAny": true,

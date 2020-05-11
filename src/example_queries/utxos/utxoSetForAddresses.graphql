@@ -1,0 +1,11 @@
+query utxoSetForAddresses (
+    $addresses: [String]!
+){
+    utxos(
+        order_by: { value: desc }
+        where: { address: { _in: $addresses }}
+    ) {
+        address
+        value
+    }
+}

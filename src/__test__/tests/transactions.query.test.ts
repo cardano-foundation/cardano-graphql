@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
-import gql from 'graphql-tag'
 import { tx05ad8b, txe68043 } from '../data_assertions'
 import { TestClient } from '../TestClient'
+import { loadExampleQueryNode } from '../../util'
 
 export function transactionTests (createClient: () => Promise<TestClient>) {
   describe('transactions', () => {
@@ -13,30 +13,8 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
 
     it('Returns transactions by IDs', async () => {
       const result = await client.query({
-        query: gql`query {
-            transactions(
-                where: { id: { _in: [\"${txe68043.basic.id}\", \"${tx05ad8b.basic.id}\"]}},
-                order_by: { fee: desc }
-            ) {
-                block {
-                    number
-                }
-                fee
-                id
-                inputs(order_by: { index: asc }) {
-                    index
-                    address
-                    value
-                }
-                outputs(order_by: { index: asc }) {
-                    index
-                    address
-                    value
-                }
-                size
-                totalOutput
-            }
-        }`
+        query: await loadExampleQueryNode('transactions', 'transactionsByIdsOrderByFee'),
+        variables: { ids: [txe68043.basic.id, tx05ad8b.basic.id] }
       })
       expect(result.data.transactions.length).toBe(2)
       expect(result.data.transactions[0].inputs[0].index).toBe(0)
@@ -46,49 +24,8 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
 
     it('Can return aggregated data', async () => {
       const result = await client.query({
-        query: gql`query {
-            transactions(
-                where: { id: { _in: [\"${txe68043.aggregated.id}\", \"${tx05ad8b.aggregated.id}\"]}},
-                order_by: { fee: desc }
-            ) {
-                fee
-                id
-                inputs_aggregate {
-                    aggregate {
-                        avg {
-                            value
-                        }
-                        count
-                        max {
-                            value
-                        }
-                        min {
-                            value
-                        }
-                        sum {
-                            value
-                        }
-                    }
-                }
-                outputs_aggregate {
-                    aggregate {
-                        avg {
-                            value
-                        }
-                        count
-                        max {
-                            value
-                        }
-                        min {
-                            value
-                        }
-                        sum {
-                            value
-                        }
-                    }
-                }
-            }
-        }`
+        query: await loadExampleQueryNode('transactions', 'aggregateDataWithinTransaction'),
+        variables: { ids: [txe68043.aggregated.id, tx05ad8b.aggregated.id] }
       })
       expect(result.data.transactions.length).toBe(2)
       const { transactions: txs } = result.data
@@ -99,23 +36,8 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     })
     it('Can return filtered aggregated data', async () => {
       const result = await client.query({
-        query: gql`query {
-            transactions(
-                where: { id: { _eq: \"${txe68043.aggregated_filtered.id}\"}}
-            ) {
-                id
-                inputs_aggregate ( where: { value: { _gt: "3842014" }}) {
-                    aggregate {
-                        count
-                    }
-                }
-                outputs_aggregate ( where: { address: { _eq: "DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8"}}) {
-                    aggregate {
-                        count
-                    }
-                }
-            }
-        }`
+        query: await loadExampleQueryNode('transactions', 'filteredAggregateDataWithinTransaction'),
+        variables: { id: txe68043.aggregated_filtered.id }
       })
       expect(result.data).toMatchSnapshot()
     })

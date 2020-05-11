@@ -1,0 +1,12 @@
+query epochDetailsByNumber (
+    $number: Int!
+){
+    epochs( where: { number: { _eq: $number }}) {
+        blocksCount
+        output
+        number
+        transactionsCount
+        startedAt
+        lastBlockTime
+    }
+}

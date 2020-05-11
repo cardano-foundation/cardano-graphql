@@ -1,0 +1,19 @@
+query filteredAggregatedDataWithinTransaction(
+    $id: Hash32HexString!
+){
+    transactions(
+        where: { id: { _eq: $id }}
+            ) {
+        id
+        inputs_aggregate ( where: { value: { _gt: "3842014" }}) {
+            aggregate {
+                count
+            }
+        }
+        outputs_aggregate ( where: { address: { _eq: "DdzFFzCqrhsuz652nVpjktdtiV44uWJLHv83m61S33gzfB4TBx7SKp3DgM18fBJznMrbUdsEFEvXW4LYqVKFE9fjMgVhmJP2LBhUvEe8"}}) {
+            aggregate {
+                count
+            }
+        }
+    }
+}

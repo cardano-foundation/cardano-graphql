@@ -28,9 +28,15 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'docker-compose -p cardano-mainnet -f ./test/docker-compose-ci.yml up -d'
-        sh 'NODE_ENV=test TEST_MODE=e2e npx jest suite dataparity.test --ci'
+        sh 'docker-compose -p cardano-mainnet -f ./test/docker-compose-ci.yml up --build --force-recreate -d'
+        sh 'NODE_ENV=test TEST_MODE=e2e npx jest suite --ci'
+        sh 'npx jest Server --ci'
         sh 'yarn --cwd ./cli test --ci'
+      }
+      post {
+        always {
+          sh 'docker-compose -p cardano-mainnet -f ./test/docker-compose-ci.yml down'
+        }
       }
     }
     stage('Build Docker image') {
@@ -64,6 +70,8 @@ pipeline {
       steps {
         sh "docker tag inputoutput/cardano-graphql:${env.GIT_COMMIT} inputoutput/cardano-graphql:${env.TAG_NAME}"
         sh "docker push inputoutput/cardano-graphql:${env.TAG_NAME}"
+        sh "docker tag inputoutput/cardano-graphql:${env.TAG_NAME} inputoutput/cardano-graphql:latest"
+        sh "docker push inputoutput/cardano-graphql:latest"
         sh "npx npm-cli-login -u $NPM_REGISTRY_AUTH_USR -e $NPM_REGISTRY_EMAIL -p $NPM_REGISTRY_AUTH_PSW -r $NPM_REGISTRY_URI"
         sh "npm publish --cwd ./cli"
         sh "npm publish --cwd ./generated_packages/TypeScript"

@@ -1,20 +1,20 @@
 {
   "name": "cardano-graphql",
-  "version": "1.0.0-rc.8",
+  "version": "1.0.0-rc.9",
   "description": "GraphQL API for Cardano with client-consumable types generated",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "bin": {
-    "cardano-graphql-server": "./bin/cardano-graphql-server"
-  },
   "scripts": {
     "codegen:external": "graphql-codegen --config ./codegen.external.yml",
     "codegen:internal": "graphql-codegen",
     "lint": "eslint \"src/**/*.ts\"",
-    "dev": "stmux -w always -e ERROR -M -- [[ \"docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose up\" .. \"tsc --watch --noEmit\" .. \"yarn codegen:internal --watch\" ]]",
-    "test": "HASURA_URI=http://localhost:8090/v1/graphql stmux -w always -e ERROR -M -- [[ \"yarn dev\" .. \"tsc --watch --noEmit\" .. \"yarn test:tdd --watchAll\" ]]",
-    "build": "yarn codegen:internal && yarn codegen:external && tsc -p . && shx cp src/schema.graphql dist/",
-    "test:tdd": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose up -d && NODE_ENV=test TEST_MODE=integration jest suite",
+    "dev": "stmux -w always -e ERROR -M -- [[ \"yarn service-dependencies up\" .. \"tsc --watch --noEmit\" .. \"yarn codegen:internal --watch\" ]]",
+    "service-dependencies": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose",
+    "test": "HASURA_URI=http://localhost:8090 stmux -w always -e ERROR -M -- [[ \"yarn dev\" .. \"tsc --watch --noEmit\" .. \"yarn test:tdd --watchAll\" ]]",
+    "build": "yarn codegen:internal && yarn codegen:external && tsc -p . && shx cp src/schema.graphql dist/ && shx cp -R src/graphql_operations dist/graphql_operations",
+    "prestart": "yarn build",
+    "start": "HASURA_URI=http://localhost:8090 node dist/index.js",
+    "test:tdd": "yarn service-dependencies up -d && NODE_ENV=test TEST_MODE=integration jest suite",
     "test:e2e": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest suite",
     "test:dataparity": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest dataparity.test",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml"
@@ -29,18 +29,26 @@
   },
   "homepage": "https://github.com/input-output-hk/cardano-graphql#README.md",
   "dependencies": {
+    "@types/tmp": "^0.2.0",
     "apollo-link-http": "^1.5.15",
     "apollo-link-retry": "^2.2.15",
-    "apollo-server": "^2.8.0",
+    "apollo-metrics": "^1.0.1",
+    "apollo-server-errors": "^2.4.1",
+    "apollo-server-express": "^2.12.0",
+    "apollo-server-plugin-base": "^0.7.1",
     "cross-fetch": "^3.0.4",
     "eslint-plugin-jest": "^22.15.2",
+    "express": "^4.17.1",
     "graphql": "^14.4.2",
     "graphql-bigint": "^1.0.0",
     "graphql-depth-limit": "^1.1.0",
     "graphql-iso-date": "^3.6.1",
+    "graphql-tools": "^5.0.0",
     "graphql-type-datetime": "^0.2.4",
     "lodash.isempty": "^4.4.0",
-    "promise-exponential-retry": "^1.0.3",
+    "p-retry": "^4.2.0",
+    "prom-client": "11.5.3",
+    "tmp-promise": "^2.1.1",
     "ts-custom-error": "^3.1.1"
   },
   "devDependencies": {
@@ -69,6 +77,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-watch": "^6.0.0",
+    "graphql-import": "^1.0.2",
     "graphql-tag": "^2.10.1",
     "jest": "^24.9.0",
     "shx": "^0.3.2",
@@ -78,11 +87,15 @@
     "ts-node-dev": "^1.0.0-pre.40",
     "typescript": "3.5.3"
   },
+  "resolutions": {
+    "apollo-metrics/apollo-server-plugin-base": "^0.7.1",
+    "apollo-metrics/apollo-tracing": "^0.9.1"
+  },
   "files": [
     "dist/*",
     "!dist/__test__",
     "!dist/**/*.test.*",
     "LICENSE",
-    "LICENSE_NOTICE"
+    "NOTICE"
   ]
 }

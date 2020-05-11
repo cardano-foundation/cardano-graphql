@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   postgres:
-    image: postgres:${POSTGRES_VERSION}
+    image: postgres:${POSTGRES_VERSION:-11.5-alpine}
     environment:
       - POSTGRES_LOGGING=true
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
@@ -17,7 +17,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: on-failure
   cardano-node:
-    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION}
+    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-1.11.0}
     environment:
       - NETWORK=${NETWORK:-mainnet}
     volumes:
@@ -26,7 +26,7 @@ services:
     logging:
       driver: none
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-8fe44c55940470d061a279eaa3976f5b9d0be65e}
     environment:
       - EXTENDED=true
       - NETWORK=${NETWORK:-mainnet}
@@ -43,7 +43,7 @@ services:
       - node-ipc:/node-ipc
     restart: on-failure
   hasura:
-    image: hasura/graphql-engine:${HASURA_VERSION}
+    image: hasura/graphql-engine:${HASURA_VERSION:-v1.1.1.cli-migrations}
     ports:
       - "8090:8080"
     depends_on:
@@ -59,7 +59,7 @@ services:
       context: ../
       target: server
     environment:
-      - HASURA_URI=http://hasura:8080/v1/graphql
+      - HASURA_URI=http://hasura:8080
     ports:
       - ${API_PORT:-3100}:3100
 secrets:

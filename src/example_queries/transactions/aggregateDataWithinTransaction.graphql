@@ -1,0 +1,45 @@
+query aggregatedDataWithinTransaction(
+    $ids: [Hash32HexString]!
+){
+    transactions(
+        where: { id: { _in: $ids }},
+        order_by: { fee: desc }
+    ) {
+        fee
+        id
+        inputs_aggregate {
+            aggregate {
+                avg {
+                    value
+                }
+                count
+                max {
+                    value
+                }
+                min {
+                    value
+                }
+                sum {
+                    value
+                }
+            }
+        }
+        outputs_aggregate {
+            aggregate {
+                avg {
+                    value
+                }
+                count
+                max {
+                    value
+                }
+                min {
+                    value
+                }
+                sum {
+                    value
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+
+query cardanoDynamic {
+  cardano {
+    blockHeight
+    currentEpoch {
+      blocks (
+        limit:1,
+        order_by: {
+          number: desc_nulls_last
+        }
+      ) {
+        slotWithinEpoch
+      }
+      lastBlockTime
+      number
+    }
+  }
+}

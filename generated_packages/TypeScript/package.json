@@ -1,6 +1,6 @@
 {
   "name": "cardano-graphql-ts",
-  "version": "1.0.0-rc.8",
+  "version": "1.0.0-rc.9",
   "description": "A client package for Cardano GraphQL, including a TypeScript type definitions for the schema, also included",
   "repository": {
     "type": "git",
@@ -30,6 +30,6 @@
     "dist/*",
     "schema.graphql",
     "LICENSE",
-    "LICENSE_NOTICE"
+    "NOTICE"
   ]
 }
