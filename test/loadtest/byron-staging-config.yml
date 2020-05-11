@@ -8,11 +8,11 @@ scenarios:
     - post:
         url: "/"
         json:
-          query: "{blocks(limit: 20, where: {number: {_is_null: false}}) {id, fees, transactions { id, fee, inputs { address }, outputs { address }}}}"
+          query: "{blocks(limit: 20, where: {number: {_is_null: false}}) {hash, fees, transactions { id, fee, inputs { address }, outputs { address }}}}"
     - post:
         url: "/"
         json:
-          query: "{transactions(limit: 20, where: {block: { number: {_is_null: false}}}) {id, fee, inputs { address }, outputs { address }}}"
+          query: "{transactions(limit: 20, where: {block: { number: {_is_null: false}}}) {hash, fee, inputs { address }, outputs { address }}}"
     - post:
         url: "/"
         json:

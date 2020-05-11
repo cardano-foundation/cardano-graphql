@@ -1,15 +1,15 @@
-query transactionsByIdsOrderByFee(
-    $ids: [Hash32HexString]!
+query transactionsByHashesOrderByFee(
+    $hashes: [Hash32HexString]!
 ) {
     transactions(
-        where: { id: { _in: $ids }},
+        where: { hash: { _in: $hashes }},
         order_by: { fee: desc }
     ) {
         block {
             number
         }
         fee
-        id
+        hash
         inputs(order_by: { index: asc }) {
             index
             address

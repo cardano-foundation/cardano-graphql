@@ -43,7 +43,7 @@ services:
       - node-ipc:/node-ipc
     restart: on-failure
   hasura:
-    image: hasura/graphql-engine:${HASURA_VERSION:-v1.1.1.cli-migrations}
+    image: hasura/graphql-engine:${HASURA_VERSION:-v1.2.1.cli-migrations-v2}
     ports:
       - "8090:8080"
     depends_on:
@@ -54,6 +54,7 @@ services:
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
       - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
     volumes:
+      - ./hasura/metadata:/hasura-metadata
       - ./hasura/migrations:/hasura-migrations
   cardano-graphql:
     build:

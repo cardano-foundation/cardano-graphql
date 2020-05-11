@@ -1,0 +1,220 @@
+- table:
+    schema: public
+    name: Block
+  configuration:
+    custom_root_fields:
+      select_aggregate: blocks_aggregate
+      select: blocks
+    custom_column_names: {}
+  object_relationships:
+  - name: epoch
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Epoch
+        column_mapping:
+          epochNo: number
+  - name: nextBlock
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Block
+        column_mapping:
+          nextBlockHash: hash
+  - name: previousBlock
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Block
+        column_mapping:
+          previousBlockHash: hash
+  array_relationships:
+  - name: transactions
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          hash: blockHash
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - fees
+      - hash
+      - merkelRoot
+      - number
+      - previousBlockHash
+      - nextBlockHash
+      - createdBy
+      - size
+      - transactionsCount
+      - epochNo
+      - slotNo
+      - slotWithinEpoch
+      - createdAt
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: Cardano
+  configuration:
+    custom_root_fields:
+      select: cardano
+    custom_column_names: {}
+  object_relationships:
+  - name: currentEpoch
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Epoch
+        column_mapping:
+          currentEpochNo: number
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - blockHeight
+      - currentEpochNo
+      - slotDuration
+      - startTime
+      - protocolConst
+      - networkName
+      filter: {}
+      limit: 1
+- table:
+    schema: public
+    name: Epoch
+  configuration:
+    custom_root_fields:
+      select_aggregate: epochs_aggregate
+      select: epochs
+    custom_column_names: {}
+  array_relationships:
+  - name: blocks
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Block
+        column_mapping:
+          number: epochNo
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - output
+      - number
+      - transactionsCount
+      - startedAt
+      - lastBlockTime
+      - blocksCount
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: Transaction
+  configuration:
+    custom_root_fields:
+      select_aggregate: transactions_aggregate
+      select: transactions
+    custom_column_names: {}
+  object_relationships:
+  - name: block
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Block
+        column_mapping:
+          blockHash: hash
+  array_relationships:
+  - name: inputs
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: TransactionInput
+        column_mapping:
+          hash: txHash
+  - name: outputs
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: TransactionOutput
+        column_mapping:
+          hash: txHash
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - blockHash
+      - fee
+      - hash
+      - totalOutput
+      - size
+      - includedAt
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: TransactionInput
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - address
+      - value
+      - txHash
+      - index
+      - sourceTxHash
+      - sourceTxIndex
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: TransactionOutput
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - address
+      - value
+      - txHash
+      - index
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: Utxo
+  configuration:
+    custom_root_fields:
+      select_aggregate: utxos_aggregate
+      select: utxos
+    custom_column_names: {}
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - address
+      - value
+      - txHash
+      - index
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+functions:
+- function:
+    schema: public
+    name: utxo_set_at_block
