@@ -3,5 +3,5 @@ module.exports = {
     "^.+\\.test.ts?$": "ts-jest"
   },
   preset: 'ts-jest',
-  testTimeout: 10000
+  testTimeout: 30000
 }
