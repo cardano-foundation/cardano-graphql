@@ -30,9 +30,9 @@ export async function buildHasuraSchema (hasuraUri: string) {
 
   await pRetry(async () => {
     const schema = await introspectSchema(link)
-    const coreTypes = ['Cardano', 'Epoch', 'Slot', 'Block', 'Transaction']
+    const coreTypes = ['Cardano', 'Epoch', 'Block', 'Transaction']
     coreTypes.forEach(t => {
-      const gqlType = schema.getType('Block')
+      const gqlType = schema.getType(t)
       if (!gqlType) {
         throw new Error(`Remote schema is missing ${t}`)
       }
@@ -43,7 +43,6 @@ export async function buildHasuraSchema (hasuraUri: string) {
   })
 
   // Hasura applies metadata after the server is booted, so there is a potential race condition
-  // when provisioning a new deployment we need to protect against.
   await pRetry(async () => {
     const result = await makePromise(execute(link, {
       query: await loadQueryNode(path.resolve(__dirname, 'graphql_operations', 'hasuraStateCheck.graphql'))
