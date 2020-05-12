@@ -214,7 +214,3 @@
       filter: {}
       limit: 100
       allow_aggregations: true
-functions:
-- function:
-    schema: public
-    name: utxo_set_at_block
