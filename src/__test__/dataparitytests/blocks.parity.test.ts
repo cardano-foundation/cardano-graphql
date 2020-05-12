@@ -1,11 +1,6 @@
 import gql from 'graphql-tag'
 import { TestClient } from '../TestClient'
-import fetch from 'node-fetch'
-
-async function getDataFromAPI (path: string) {
-  const response = await fetch(`https://explorer.cardano.org/api/${path}`)
-  return response.json()
-}
+import { getDataFromAPI } from '../util'
 
 export function blocksTests (createClient: () => Promise<TestClient>) {
   describe('blocks', () => {
@@ -21,7 +16,7 @@ export function blocksTests (createClient: () => Promise<TestClient>) {
         query: gql`query Blockheight {
                     cardano {
                         blockHeight
-                    }    
+                    }
                 }`
       })
 

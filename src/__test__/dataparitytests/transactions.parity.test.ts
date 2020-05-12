@@ -1,15 +1,6 @@
 import gql from 'graphql-tag'
 import { TestClient } from '../TestClient'
-import fetch from 'node-fetch'
-
-async function getDataFromAPI (path: string) {
-  const response = await fetch(`https://explorer.cardano.org/api/${path}`)
-  return response.json()
-}
-
-function timestampToIsoStringWithoutTimezone (timestamp: number): string {
-  return new Date(timestamp * 1000).toISOString().substr(0, 19)
-}
+import { getDataFromAPI, timestampToIsoStringWithoutTimezone } from '../util'
 
 export function transactionTests (createClient: () => Promise<TestClient>) {
   describe('transactions', () => {
@@ -93,7 +84,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                   index
                                   value
                                 }
-    
+
                                 totalOutput
                                 includedAt
                               }
@@ -129,7 +120,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                   index
                                   value
                                 }
-    
+
                                 totalOutput
                                 includedAt
                               }
@@ -176,7 +167,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                   index
                                   value
                                 }
-    
+
                                 totalOutput
                                 includedAt
                               }
@@ -270,7 +261,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                   index
                                   value
                                 }
-    
+
                                 totalOutput
                                 includedAt
                               }
@@ -317,7 +308,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                   index
                                   value
                                 }
-    
+
                                 totalOutput
                                 includedAt
                               }
@@ -353,7 +344,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                   index
                                   value
                                 }
-    
+
                                 totalOutput
                                 includedAt
                               }
