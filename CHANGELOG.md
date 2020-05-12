@@ -9,17 +9,19 @@ Changelog
     - `Epoch.blocksCount`
 - `Cardano.networkName`
 - `Transaction.size`
-## Fixes
-- The aggregated and known very large numbers are now typed as String. Cardano JS has utilities to work with these return values, currently limited to currency conversion.
-- `cardano` query return value is accurately defined to always return an object of type `Cardano` 
-- `Transaction.fee` was a String, now a `BigInt`
 - Allow explicit ordering of `Transaction.input` and `Transaction.outputs` by their natural `index`
+- `Cardano` now matches the postgres view, and is an improvement over the previous version which performed two queries.
+
+## Breaking changes
+- Transaction and Block IDs are now labelled as `hash`, aligning with the domain terminology.
+- `Block.merkelRootHash` -> `Block.merkelRoot`
+- The aggregated and known very large numbers are now typed as String. Cardano JS has utilities to work with these return values, currently limited to currency conversion.
+- `Transaction.fee` previously `String`, now `BigInt`
 
 ### Chores
-- The PostgreSQL views have been incorperated upstream, and are no longer managed in this codebase.
-- Updates to Hasura 1.0.0-beta.10
+- Updates to Hasura 1.2.1
+- PostgreSQL views are now managed using the Hasura CLI
 - Improves CI process by consolidating the Jest snapshot files.
-- `Cardano` now matches the postgres view, and is an improvement over the previous version which performed two queries.
 
 ## 0.4.0
 ### Features
