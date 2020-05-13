@@ -82,9 +82,9 @@
       columns:
       - blockHeight
       - currentEpochNo
+      - protocolConst
       - slotDuration
       - startTime
-      - protocolConst
       - networkName
       filter: {}
       limit: 1

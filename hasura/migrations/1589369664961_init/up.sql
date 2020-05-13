@@ -1,4 +1,3 @@
-
 create view "Block" as
 select
   CAST(COALESCE((select sum(tx.fee) from tx where tx.block = block.id), 0) as integer) as "fees",
