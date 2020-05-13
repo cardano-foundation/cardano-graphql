@@ -1,7 +1,8 @@
 import { ApolloClient, gql, InMemoryCache } from 'apollo-boost'
 import { createHttpLink } from 'apollo-link-http'
-import pRetry, { FailedAttemptError } from 'p-retry'
+import pRetry from 'p-retry'
 import fetch from 'cross-fetch'
+import { onFailedAttemptFor } from '../util'
 
 export const createClient = async () => {
   const client = new ApolloClient({
@@ -13,7 +14,6 @@ export const createClient = async () => {
       fetch
     })
   })
-  const retries = 10
   await pRetry(async () => {
     await client.query({
       query: gql`query {
@@ -25,14 +25,8 @@ export const createClient = async () => {
           }}`
     })
   }, {
-    retries,
-    onFailedAttempt: (error: FailedAttemptError) => {
-      console.log(`Hasura schema introspection: Attempt ${error.attemptNumber} of ${retries}, retying...`)
-      if (error.retriesLeft === 0) {
-        console.error(error)
-        process.exit(0)
-      }
-    }
+    retries: 9,
+    onFailedAttempt: onFailedAttemptFor('Hasura readiness')
   })
   return client
 }

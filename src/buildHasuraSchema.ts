@@ -1,20 +1,11 @@
 import * as path from 'path'
-import pRetry, { FailedAttemptError } from 'p-retry'
+import pRetry from 'p-retry'
 import { createHttpLink } from 'apollo-link-http'
 import { RetryLink } from 'apollo-link-retry'
 import { ApolloLink, execute, makePromise } from 'apollo-link'
 import { fetch } from 'cross-fetch'
 import { introspectSchema, makeRemoteExecutableSchema } from 'graphql-tools'
-import { loadQueryNode } from './util'
-
-const retries = 3
-const onFailedAttemptFor = (message: string) => (error: FailedAttemptError) => {
-  console.log(`${message}: Attempt ${error.attemptNumber} of ${retries}, retying...`)
-  if (error.retriesLeft === 0) {
-    console.error(error)
-    process.exit(0)
-  }
-}
+import { loadQueryNode, onFailedAttemptFor } from './util'
 
 export async function buildHasuraSchema (hasuraUri: string) {
   const httpLink = createHttpLink({
@@ -38,7 +29,7 @@ export async function buildHasuraSchema (hasuraUri: string) {
       }
     })
   }, {
-    retries,
+    retries: 9,
     onFailedAttempt: onFailedAttemptFor('Hasura schema introspection')
   })
 
@@ -51,7 +42,7 @@ export async function buildHasuraSchema (hasuraUri: string) {
       throw new Error('Hasura Metadata not applied')
     }
   }, {
-    retries,
+    retries: 9,
     onFailedAttempt: onFailedAttemptFor('Checking Hasura metadata is applied')
   })
 
