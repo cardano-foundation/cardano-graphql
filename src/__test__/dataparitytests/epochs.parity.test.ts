@@ -3,7 +3,7 @@ import { TestClient } from '../TestClient'
 import { getDataFromAPI, timestampToIsoStringWithoutTimezone } from '../util'
 
 export function epochsTests (createClient: () => Promise<TestClient>) {
-  describe('epochs', () => {
+  describe('epochs ', () => {
     let client: TestClient
     let restData: any
     let graphQLData: any
@@ -42,35 +42,35 @@ export function epochsTests (createClient: () => Promise<TestClient>) {
       graphQLData = graphQLResult.data.epochs[0].blocks[0]
     }, 30000)
 
-    it('Returns the same epoch number', async () => {
+    it('return the same epoch number', async () => {
       const restResultEpochNumber = restData.cbeEpoch
       const graphQLEpochNumber = graphQLData.epochNo
 
       expect(restResultEpochNumber).toEqual(graphQLEpochNumber)
     })
 
-    it('Returns the same slot number', async () => {
+    it('return the same slot number', async () => {
       const restResultSlotNumber = restData.cbeSlot
       const graphQLSlotNumber = graphQLData.slotWithinEpoch
 
       expect(restResultSlotNumber).toEqual(graphQLSlotNumber)
     })
 
-    it('Returns the same block height', async () => {
+    it('return the same block height', async () => {
       const restResultBlockHeight = restData.cbeBlkHeight
       const graphQLBlockHeight = graphQLData.number
 
       expect(restResultBlockHeight).toEqual(graphQLBlockHeight)
     })
 
-    it('Returns the same block hash', async () => {
+    it('return the same block hash', async () => {
       const restResultBlockHash = restData.cbeBlkHash
       const graphQLBlockHash = graphQLData.id
 
       expect(restResultBlockHash).toEqual(graphQLBlockHash)
     })
 
-    it('Returns the same block creation time', async () => {
+    it('return the same block creation time', async () => {
       const restResultBlockCreationUnixEpochTime = restData.cbeTimeIssued
       const graphQLBlockCreationDateTime = graphQLData.createdAt
       const restResultBlockCreationDateTime = timestampToIsoStringWithoutTimezone(restResultBlockCreationUnixEpochTime);
@@ -78,14 +78,14 @@ export function epochsTests (createClient: () => Promise<TestClient>) {
       expect(restResultBlockCreationDateTime).toEqual(graphQLBlockCreationDateTime)
     })
 
-    it('Returns the same transactions count', async () => {
+    it('return the same transactions count', async () => {
       const restResultTxCount = restData.cbeTxNum
       const graphQLTxCount = parseInt(graphQLData.transactionsCount)
 
       expect(restResultTxCount).toEqual(graphQLTxCount)
     })
 
-    it('Returns the same total output', async () => {
+    it('return the same total output', async () => {
       const restResultTotalSent = parseInt(restData.cbeTotalSent.getCoin)
       let graphQLTotalSent = 0;
 
@@ -98,21 +98,21 @@ export function epochsTests (createClient: () => Promise<TestClient>) {
       expect(restResultTotalSent).toEqual(graphQLTotalSent)
     })
 
-    it('Returns the same block size', async () => {
+    it('return the same block size', async () => {
       const restResultBlockSize = restData.cbeSize
       const graphQLBlockSize = graphQLData.size
 
       expect(restResultBlockSize).toEqual(graphQLBlockSize)
     })
 
-    it('Returns the same block leader', async () => {
+    it('return the same block leader', async () => {
       const restResultBlockLeader = restData.cbeBlockLead
       const graphQLBlockLeader = graphQLData.createdBy.split("-")[1]
 
       expect(restResultBlockLeader).toMatch(graphQLBlockLeader)
     })
 
-    it('Returns the same fee', async () => {
+    it('return the same fee', async () => {
       const restResultFee = parseInt(restData.cbeFees.getCoin)
       const graphQLFee = graphQLData.fees
 
