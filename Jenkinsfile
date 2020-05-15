@@ -18,6 +18,7 @@ pipeline {
       steps {
         sh 'yarn && yarn build'
         sh 'yarn --cwd ./cli && yarn --cwd ./cli build'
+        sh 'yarn --cwd ./generated_packages/TypeScript'
       }
     }
     stage('Validate Code Style') {
