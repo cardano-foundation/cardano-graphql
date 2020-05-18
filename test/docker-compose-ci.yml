@@ -26,7 +26,7 @@ services:
     logging:
       driver: none
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-c1b9fbb367b4a78de7479f16616da3a7ccfeaf40}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-c3842bc47e5c1dce8b4845c5e6489786b7655b08}
     environment:
       - EXTENDED=true
       - NETWORK=${NETWORK:-mainnet}
