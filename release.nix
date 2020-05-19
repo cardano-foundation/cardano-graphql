@@ -7,21 +7,26 @@
 #
 ############################################################################
 {
-  rev ? null
+  cardano-graphql ? { rev = null; }
 }:
 
 let
   sources = import ./nix/sources.nix;
   pkgs = import ./nix/pkgs.nix {};
-  graphql-engine = import ./nix/graphql-engine;
 in
 
 pkgs.lib.fix (self: {
-  inherit ( import ./default.nix ) cardano-graphql persistgraphql;
-  inherit graphql-engine;
-  build-version = pkgs.writeText "version.json" (builtins.toJSON { inherit rev; });
+  inherit ( import ./. ) cardano-graphql hasura-cli hasura-cli-ext persistgraphql graphql-engine;
+  build-version = pkgs.writeText "version.json" (builtins.toJSON { inherit (cardano-graphql) rev; });
   required = pkgs.releaseTools.aggregate {
     name = "required";
-    constituents = with self; [ cardano-graphql graphql-engine persistgraphql build-version ];
+    constituents = with self; [
+      cardano-graphql
+      graphql-engine
+      hasura-cli
+      hasura-cli-ext
+      persistgraphql
+      build-version
+    ];
   };
 })

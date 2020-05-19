@@ -9,7 +9,7 @@ mkDerivation {
   pname = "pg-client";
   version = "0.1.0";
   src = fetchgit {
-    url = "https://github.com/hasura/pg-client-hs.git";
+    url = "https://github.com/hasura/pg-client-hs";
     sha256 = "1941gj5yp24kx0xb1nd774nwp5vnpsp6m83isqkwpyz9spl4sq7l";
     rev = "70a849d09bea9461e72c5a5bbde06df65aab61c0";
     fetchSubmodules = true;
