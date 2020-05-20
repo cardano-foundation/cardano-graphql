@@ -14,5 +14,6 @@ packages:
   # Waiting on Stackage release
   - hedgehog-1.0.2
   - micro-recursion-schemes-5.0.2.2
+  - quiet-0.2
   - streaming-binary-0.3.0.1
   - canonical-json-0.6.0.0
