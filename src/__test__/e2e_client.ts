@@ -26,7 +26,7 @@ export const createClient = async () => {
     })
   }, {
     retries: 9,
-    onFailedAttempt: onFailedAttemptFor('Hasura readiness')
+    onFailedAttempt: onFailedAttemptFor('Cardano GraphQL Server readiness')
   })
   return client
 }
