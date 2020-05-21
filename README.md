@@ -74,6 +74,7 @@ See [Building](https://github.com/input-output-hk/cardano-graphql/wiki/Building)
 | ---                                                                                                | ---                                                          |
 | [API Documentation](https://input-output-hk.github.io/cardano-graphql)                             | Users of the Cardano GraphQL API                             |
 | [Wiki](https://github.com/input-output-hk/cardano-graphql/wiki)                                    | Anyone interested in the project and our development process |
+| [Example Queries](./src/example_queries)                                                           | Users of the Cardano GraphQL API
 
 <hr/>
 
