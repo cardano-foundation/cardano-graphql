@@ -13,6 +13,13 @@ Changelog
 - `Cardano` now matches the postgres view, and is an improvement over the previous version which performed two queries.
 
 ## Breaking changes
+- PostgreSQL views are now being managed in this codebase, so either switch to the
+ [new Docker image](./hasura/Dockerfile) `inputoutput/cardano-graphql-hasura`, 
+ or use the Hasura CLI as demonstrated in the [entrypoint](./hasura/docker-entrypoint.sh)
+ This change was needed to be compatible with the migration strategy determind by `cardano-db-sync`,
+ where the migrations need to be applied on each start of the service. The custom Docker image makes it
+ possible to check your own docker-compose file into source control, as it supports Docker secrets, and
+ also removes the requirement to clone this source repo to get data for mounting at runtime.
 - Transaction and Block IDs are now labelled as `hash`, aligning with the domain terminology.
 - `Block.merkelRootHash` -> `Block.merkelRoot`
 - The aggregated and known very large numbers are now typed as String. Cardano JS has utilities to work with these return values, currently limited to currency conversion.
@@ -20,7 +27,6 @@ Changelog
 
 ### Chores
 - Updates to Hasura 1.2.1
-- PostgreSQL views are now managed using the Hasura CLI
 - Improves CI process by consolidating the Jest snapshot files.
 
 ## 0.4.0
