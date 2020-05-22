@@ -44,7 +44,7 @@ services:
     restart: on-failure
   hasura:
     build:
-      context: ./hasura
+      context: ../hasura
     ports:
       - "8090:8080"
     depends_on:
