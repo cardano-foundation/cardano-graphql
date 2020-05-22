@@ -26,7 +26,7 @@ services:
     logging:
       driver: none
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-bb868af056efb3d6b1029e2c95eb8d58fdfb77a4}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-latest}
     environment:
       - EXTENDED=true
       - NETWORK=${NETWORK:-mainnet}
@@ -43,19 +43,25 @@ services:
       - node-ipc:/node-ipc
     restart: on-failure
   hasura:
-    image: hasura/graphql-engine:${HASURA_VERSION:-v1.2.1.cli-migrations-v2}
+    build:
+      context: ./hasura
     ports:
       - "8090:8080"
     depends_on:
       - "postgres"
     restart: always
     environment:
-      - HASURA_GRAPHQL_DATABASE_URL=postgres://postgres:doNoUseThisSecret!@postgres:5432/cexplorer
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
       - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
-    volumes:
-      - ./hasura/metadata:/hasura-metadata
-      - ./hasura/migrations:/hasura-migrations
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
   cardano-graphql:
     build:
       context: .
