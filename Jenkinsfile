@@ -29,14 +29,14 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'docker-compose -p cardano-mainnet -f ./test/docker-compose-ci.yml up --build --force-recreate -d'
+        sh 'docker-compose -p cardano-graphql -f ./test/docker-compose-ci.yml up --build --force-recreate -d'
         sh 'NODE_ENV=test TEST_MODE=e2e npx jest suite --ci'
         sh 'yarn jest Server --ci'
         sh 'yarn --cwd ./cli test --ci'
       }
 //       post {
 //         always {
-//           sh 'docker-compose -p cardano-mainnet -f ./test/docker-compose-ci.yml down'
+//           sh 'docker-compose -p cardano-graphql -f ./test/docker-compose-ci.yml down'
 //         }
 //       }
     }
