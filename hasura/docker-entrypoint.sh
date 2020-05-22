@@ -74,7 +74,6 @@ hasura-cli migrate apply --down all
 hasura-cli migrate apply --up all
 hasura-cli metadata clear
 hasura-cli metadata apply
-rm -rf "$TEMP_PROJECT_DIR"
 
 # kill graphql engine that we started earlier
 log "killing temporary server"
