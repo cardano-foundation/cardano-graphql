@@ -29,7 +29,7 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'CARDANO_DB_SYNC_VERSION=bf1b61be25802b69191ac3de04ed377a972cc809 docker-compose pull && docker-compose -p cardano-mainnet -f ./test/docker-compose-ci.yml up --build --force-recreate -d'
+        sh 'CARDANO_DB_SYNC_VERSION=master docker-compose pull && docker-compose -p cardano-mainnet -f ./test/docker-compose-ci.yml up --build --force-recreate -d'
         sh 'NODE_ENV=test TEST_MODE=e2e npx jest suite --ci'
         sh 'yarn jest Server --ci'
         sh 'yarn --cwd ./cli test --ci'
