@@ -70,9 +70,9 @@ echo "version: 2" > config.yaml
 echo "endpoint: http://localhost:$HASURA_GRAPHQL_MIGRATIONS_SERVER_PORT" >> config.yaml
 echo "metadata_directory: metadata" >> config.yaml
 # cardano-db-sync drops all views on start, so we need to follow the same process for consistency
-hasura-cli metadata clear
 hasura-cli migrate apply --down all
 hasura-cli migrate apply --up all
+hasura-cli metadata clear
 hasura-cli metadata apply
 rm -rf "$TEMP_PROJECT_DIR"
 
