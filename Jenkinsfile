@@ -34,11 +34,11 @@ pipeline {
         sh 'yarn jest Server --ci'
         sh 'yarn --cwd ./cli test --ci'
       }
-//       post {
-//         always {
-//           sh 'docker-compose -p cardano-graphql -f ./test/docker-compose-ci.yml down'
-//         }
-//       }
+      post {
+        always {
+          sh 'docker-compose -p cardano-graphql -f ./test/docker-compose-ci.yml down'
+        }
+      }
     }
     stage('Build Docker image') {
       steps {
