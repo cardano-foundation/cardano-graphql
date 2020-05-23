@@ -17,6 +17,6 @@ export const onFailedAttemptFor = (operation: string) => ({ attemptNumber, messa
   console.log(`${operation}: Attempt ${attemptNumber} of ${attemptNumber + retriesLeft}, ${nextAction}`)
   if (retriesLeft === 0) {
     console.error(message)
-    process.exit(0)
+    process.exit(1)
   }
 }
