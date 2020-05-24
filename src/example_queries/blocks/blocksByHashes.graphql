@@ -1,10 +1,10 @@
-query blocksByIds(
-    $ids: [Hash32HexString]!
+query blocksByHashes(
+    $hashes: [Hash32HexString]!
 )  {
     blocks (
         where: {
-            id: {
-                _in: $ids
+            hash: {
+                _in: $hashes
             }
         },
         order_by: {
@@ -16,18 +16,18 @@ query blocksByIds(
         }
         epochNo
         fees
-        id
-        merkelRootHash
+        hash
+        merkelRoot
         number
         createdAt
         createdBy
         previousBlock {
-            id
+            hash
             number
         }
 
         nextBlock {
-            id
+            hash
             number
         }
         size

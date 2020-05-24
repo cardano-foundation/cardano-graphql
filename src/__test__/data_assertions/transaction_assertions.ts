@@ -5,7 +5,7 @@ export const txe68043 = {
       number: 29021
     },
     fee: 171070,
-    id: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
+    hash: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
     includedAt: '2017-09-30T15:03:11',
     inputs: [{
       address: 'DdzFFzCqrhsggyaAMAUTjGtjBr1CTp8tTcHYWbqtoyQBZcaYHM16rjbUDawTwoVaEPawAMPLJmpJVXHBNxZnTgmQzqAcNDe6XvMe5BkB',
@@ -23,7 +23,7 @@ export const txe68043 = {
   },
   aggregated: {
     fee: 171070,
-    id: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
+    hash: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
     inputs_aggregate: {
       aggregate: {
         avg: {
@@ -60,7 +60,7 @@ export const txe68043 = {
     }
   },
   aggregated_filtered: {
-    id: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
+    hash: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
     inputs_aggregate: {
       aggregate: {
         count: '0'
@@ -80,7 +80,7 @@ export const tx05ad8b = {
       number: 29021
     },
     fee: 171246,
-    id: '05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102',
+    hash: '05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102',
     includedAt: '2017-09-30T15:03:11',
     inputs: [{
       address: 'DdzFFzCqrht5ExAdoZVExXoZTpoMYGKxva3thvvvHapsLZQzSX3kCqwgqi5NSM2oUtHYYDqsSnvSGbqkarB6cSgDZohUhLWZ9KFdDWsa',
@@ -98,7 +98,7 @@ export const tx05ad8b = {
   },
   aggregated: {
     fee: 171246,
-    id: '05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102',
+    hash: '05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102',
     inputs_aggregate: {
       aggregate: {
         avg: {

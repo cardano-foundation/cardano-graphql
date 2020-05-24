@@ -12,7 +12,7 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
 
     it('caps the response to 100 blocks', async () => {
       const result = await client.query({
-        query: await loadExampleQueryNode('blocks', 'blockIdsNoArgs')
+        query: await loadExampleQueryNode('blocks', 'blockHashesNoArgs')
       })
       expect(result.data.blocks.length).toBe(100)
     })
@@ -36,14 +36,14 @@ export function blocksTests (makeClient: () => Promise<TestClient>) {
         variables: { number: 29022 }
       })
       expect(result.data.blocks.length).toBe(1)
-      expect(result.data.blocks[0]).toEqual({ id: block29022.basic.id })
+      expect(result.data.blocks[0]).toEqual({ hash: block29022.basic.hash })
       expect(result.data).toMatchSnapshot()
     })
 
-    it('Can return blocks by an array of IDs', async () => {
+    it('Can return blocks by an array of hashes', async () => {
       const result = await client.query({
-        query: await loadExampleQueryNode('blocks', 'blocksByIds'),
-        variables: { ids: [block29021.basic.id, block29022.basic.id] }
+        query: await loadExampleQueryNode('blocks', 'blocksByHashes'),
+        variables: { hashes: [block29021.basic.hash, block29022.basic.hash] }
       })
       expect(result.data.blocks.length).toBe(2)
       expect(result.data.blocks).toEqual(

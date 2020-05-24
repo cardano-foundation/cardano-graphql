@@ -1,12 +1,12 @@
 query aggregatedDataWithinTransaction(
-    $ids: [Hash32HexString]!
+    $hashes: [Hash32HexString]!
 ){
     transactions(
-        where: { id: { _in: $ids }},
+        where: { hash: { _in: $hashes }},
         order_by: { fee: desc }
     ) {
         fee
-        id
+        hash
         inputs_aggregate {
             aggregate {
                 avg {

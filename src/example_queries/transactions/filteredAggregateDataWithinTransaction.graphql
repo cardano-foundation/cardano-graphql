@@ -1,10 +1,10 @@
 query filteredAggregatedDataWithinTransaction(
-    $id: Hash32HexString!
+    $hash: Hash32HexString!
 ){
     transactions(
-        where: { id: { _eq: $id }}
+        where: { hash: { _eq: $hash }}
             ) {
-        id
+        hash
         inputs_aggregate ( where: { value: { _gt: "3842014" }}) {
             aggregate {
                 count

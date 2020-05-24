@@ -72,7 +72,7 @@ type Cardano {
 type Transaction {
   block: Block
   fee: BigInt!
-  id: Hash32HexString!
+  hash: Hash32HexString!
   inputs (
     limit: Int
     order_by: [Coin_order_by]
@@ -116,7 +116,7 @@ input Transaction_bool_exp {
   _or: [Transaction_bool_exp]
   block: Block_bool_exp
   fee: BigInt_comparison_exp
-  id: Hash32HexString_comparison_exp
+  hash: Hash32HexString_comparison_exp
   includedAt: Date_comparison_exp
   inputs: Coin_bool_exp
   outputs: Coin_bool_exp
@@ -161,18 +161,18 @@ type Transaction_sum_fields {
 }
 
 type TransactionInput {
-  sourceTxId: Hash32HexString!
+  sourceTxHash: Hash32HexString!
   sourceTxIndex: Int!
   address: String!
   index: Int!
-  txId: Hash32HexString!
+  txHash: Hash32HexString!
   value: String!
 }
 
 input Coin_order_by {
   address: order_by
   index: order_by
-  txId: order_by
+  txHash: order_by
   value: order_by
 }
 
@@ -215,7 +215,7 @@ type Coin_sum_fields {
 type TransactionOutput {
   address: String!
   index: Int!
-  txId: Hash32HexString!
+  txHash: Hash32HexString!
   value: String!
 }
 
@@ -255,9 +255,9 @@ type Block {
   epoch: Epoch
   epochNo: Int
   fees: BigInt!
-  id: Hash32HexString!
+  hash: Hash32HexString!
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a merkel root
-  merkelRootHash: Hash32HexString
+  merkelRoot: Hash32HexString
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a block number
   number: Int
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
@@ -290,7 +290,7 @@ input Block_bool_exp {
   createdBy: text_comparison_exp
   epoch: Epoch_bool_exp
   fees: BigInt_comparison_exp
-  id: Hash32HexString_comparison_exp
+  hash: Hash32HexString_comparison_exp
   number: Int_comparison_exp
   previousBlock: Block_bool_exp
   nextBlock: Block_bool_exp
