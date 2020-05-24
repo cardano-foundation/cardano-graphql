@@ -65,7 +65,7 @@ export function epochTests (createClient: () => Promise<TestClient>) {
         query: gql`query {
             epochs( where: { number: { _eq: 1 }}) {
                 blocks(limit: 20, where: { epoch: { number: { _eq: 0 } }}) {
-                    id
+                    hash
                 }
             }
         }`

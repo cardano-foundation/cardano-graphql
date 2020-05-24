@@ -1,6 +1,6 @@
 query first20Blocks {
     blocks (limit: 20, offset: 3, order_by: { number: asc }) {
-        id
+        hash
         number
     }
 }

@@ -7,10 +7,10 @@ on:
 jobs:
   publish-docs:
     runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - uses: actions/setup-node@v1
-          with:
-            node-version: 12
-        - run: yarn install --frozen-lockfile --cwd ./docs
-        - run: yarn deploy --cwd ./docs
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn install --frozen-lockfile --cwd ./docs
+      - run: yarn deploy --cwd ./docs

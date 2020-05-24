@@ -39,7 +39,7 @@ exports[`blocks Can return blocks by number 1`] = `
 Object {
   "blocks": Array [
     Object {
-      "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "hash": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
     },
   ],
 }
@@ -64,7 +64,7 @@ exports[`blocks are linked to their predecessor, and the chain can be traversed 
 Object {
   "blocks": Array [
     Object {
-      "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "hash": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
       "previousBlock": Object {
         "number": 29021,
         "previousBlock": Object {
@@ -83,7 +83,7 @@ exports[`blocks are linked to their successor, and the chain can be traversed 1`
 Object {
   "blocks": Array [
     Object {
-      "id": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "hash": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
       "nextBlock": Object {
         "nextBlock": Object {
           "nextBlock": Object {
@@ -214,7 +214,7 @@ Object {
   "transactions": Array [
     Object {
       "fee": 171246,
-      "id": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
+      "hash": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
       "inputs_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
@@ -252,7 +252,7 @@ Object {
     },
     Object {
       "fee": 171070,
-      "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+      "hash": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
       "inputs_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
@@ -296,7 +296,7 @@ exports[`transactions Can return filtered aggregated data 1`] = `
 Object {
   "transactions": Array [
     Object {
-      "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+      "hash": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
       "inputs_aggregate": Object {
         "aggregate": Object {
           "count": "1",
@@ -312,7 +312,7 @@ Object {
 }
 `;
 
-exports[`transactions Returns transactions by IDs 1`] = `
+exports[`transactions Returns transactions by hashes 1`] = `
 Object {
   "transactions": Array [
     Object {
@@ -320,7 +320,7 @@ Object {
         "number": 29021,
       },
       "fee": 171246,
-      "id": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
+      "hash": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
       "inputs": Array [
         Object {
           "address": "DdzFFzCqrht5ExAdoZVExXoZTpoMYGKxva3thvvvHapsLZQzSX3kCqwgqi5NSM2oUtHYYDqsSnvSGbqkarB6cSgDZohUhLWZ9KFdDWsa",
@@ -348,7 +348,7 @@ Object {
         "number": 29021,
       },
       "fee": 171070,
-      "id": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
+      "hash": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
       "inputs": Array [
         Object {
           "address": "DdzFFzCqrhsggyaAMAUTjGtjBr1CTp8tTcHYWbqtoyQBZcaYHM16rjbUDawTwoVaEPawAMPLJmpJVXHBNxZnTgmQzqAcNDe6XvMe5BkB",

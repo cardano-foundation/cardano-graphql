@@ -2,7 +2,7 @@ query selectGreatGrandchildBlock (
     $number: Int!
 ) {
     blocks (where: { number: { _eq: $number}}) {
-        id
+        hash
         nextBlock {
             number
             nextBlock {

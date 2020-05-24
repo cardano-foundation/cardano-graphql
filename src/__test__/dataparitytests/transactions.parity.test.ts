@@ -19,28 +19,28 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
       client = await createClient()
     }, 60000)
 
-    it('return the correct ID', async () => {
+    it('return the correct hash', async () => {
       const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
       const graphQLResult = await client.query({
-        query: gql`query TxById{
-                          transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+        query: gql`query TxByHash{
+                          transactions (where: {hash: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
                           {
-                            id
+                            hash
                           }
                         }`
       })
 
-      const restResultId = restResult['Right']['ctsId']
-      const graphQLId = graphQLResult['data']['transactions'][0]['id']
+      const restResultHash = restResult['Right']['ctsId']
+      const graphQLHash = graphQLResult['data']['transactions'][0]['hash']
 
-      expect(graphQLId).toEqual(restResultId)
+      expect(graphQLHash).toEqual(restResultHash)
     })
 
     it('return the correct Result Fee', async () => {
       const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
       const graphQLResult = await client.query({
-        query: gql`query TxById{
-                          transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+        query: gql`query TxByHash{
+                          transactions (where: {hash: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
                           {
                             fee
                           }
@@ -56,8 +56,8 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('return the correct Total Output', async () => {
       const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
       const graphQLResult = await client.query({
-        query: gql`query TxById{
-                          transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+        query: gql`query TxByHash{
+                          transactions (where: {hash: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
                           {
                             totalOutput
                           }
@@ -73,10 +73,10 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('return the correct Block Height', async () => {
       const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
       const graphQLResult = await client.query({
-        query: gql`query TxById{
-                              transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+        query: gql`query TxByHash{
+                              transactions (where: {hash: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
                               {
-                                id
+                                hash
                                 fee
                                 block{
                                   number
@@ -85,7 +85,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                 inputs {
                                   address
                                   value
-                                  sourceTxId
+                                  sourceTxHash
                                   sourceTxIndex
                                 }
                                 outputs{
@@ -109,10 +109,10 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('return the correct Input Addresses', async () => {
       const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
       const graphQLResult = await client.query({
-        query: gql`query TxById{
-                              transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+        query: gql`query TxByHash{
+                              transactions (where: {hash: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
                               {
-                                id
+                                hash
                                 fee
                                 block{
                                   number
@@ -121,7 +121,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                 inputs(order_by: { index: asc }) {
                                   address
                                   value
-                                  sourceTxId
+                                  sourceTxHash
                                   sourceTxIndex
                                 }
                                 outputs(order_by: { index: asc }){
@@ -156,10 +156,10 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('return the correct Input Values', async () => {
       const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
       const graphQLResult = await client.query({
-        query: gql`query TxById{
-                              transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+        query: gql`query TxByHash{
+                              transactions (where: {hash: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
                               {
-                                id
+                                hash
                                 fee
                                 block{
                                   number
@@ -168,7 +168,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                 inputs {
                                   address
                                   value
-                                  sourceTxId
+                                  sourceTxHash
                                   sourceTxIndex
                                 }
                                 outputs{
@@ -203,10 +203,10 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('return the correct Output Addresses', async () => {
       const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
       const graphQLResult = await client.query({
-        query: gql`query TxById{
-                              transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+        query: gql`query TxByHash{
+                              transactions (where: {hash: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
                               {
-                                id
+                                hash
                                 fee
                                 block{
                                   number
@@ -215,7 +215,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                 inputs(order_by: { index: asc }) {
                                   address
                                   value
-                                  sourceTxId
+                                  sourceTxHash
                                   sourceTxIndex
                                 }
                                 outputs(order_by: { index: asc }){
@@ -250,10 +250,10 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('return the correct Output Values', async () => {
       const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
       const graphQLResult = await client.query({
-        query: gql`query TxById{
-                              transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+        query: gql`query TxByHash{
+                              transactions (where: {hash: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
                               {
-                                id
+                                hash
                                 fee
                                 block{
                                   number
@@ -262,7 +262,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                 inputs {
                                   address
                                   value
-                                  sourceTxId
+                                  sourceTxHash
                                   sourceTxIndex
                                 }
                                 outputs{
@@ -297,10 +297,10 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('have the same block creation time', async () => {
       const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
       const graphQLResult = await client.query({
-        query: gql`query TxById{
-                              transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+        query: gql`query TxByHash{
+                              transactions (where: {hash: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
                               {
-                                id
+                                hash
                                 fee
                                 block{
                                   number
@@ -309,7 +309,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                 inputs {
                                   address
                                   value
-                                  sourceTxId
+                                  sourceTxHash
                                   sourceTxIndex
                                 }
                                 outputs{
@@ -333,10 +333,10 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('have the same transaction inclusion time', async () => {
       const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
       const graphQLResult = await client.query({
-        query: gql`query TxById{
-                              transactions (where: {id: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
+        query: gql`query TxByHash{
+                              transactions (where: {hash: {_eq:"1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762"}})
                               {
-                                id
+                                hash
                                 fee
                                 block{
                                   number
@@ -345,7 +345,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                 inputs {
                                   address
                                   value
-                                  sourceTxId
+                                  sourceTxHash
                                   sourceTxIndex
                                 }
                                 outputs{

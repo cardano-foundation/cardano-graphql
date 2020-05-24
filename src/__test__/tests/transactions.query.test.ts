@@ -11,10 +11,10 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
       client = await createClient()
     }, 60000)
 
-    it('Returns transactions by IDs', async () => {
+    it('Returns transactions by hashes', async () => {
       const result = await client.query({
-        query: await loadExampleQueryNode('transactions', 'transactionsByIdsOrderByFee'),
-        variables: { ids: [txe68043.basic.id, tx05ad8b.basic.id] }
+        query: await loadExampleQueryNode('transactions', 'transactionsByHashesOrderByFee'),
+        variables: { hashes: [txe68043.basic.hash, tx05ad8b.basic.hash] }
       })
       expect(result.data.transactions.length).toBe(2)
       expect(result.data.transactions[0].inputs[0].index).toBe(0)
@@ -25,7 +25,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('Can return aggregated data', async () => {
       const result = await client.query({
         query: await loadExampleQueryNode('transactions', 'aggregateDataWithinTransaction'),
-        variables: { ids: [txe68043.aggregated.id, tx05ad8b.aggregated.id] }
+        variables: { hashes: [txe68043.aggregated.hash, tx05ad8b.aggregated.hash] }
       })
       expect(result.data.transactions.length).toBe(2)
       const { transactions: txs } = result.data
@@ -37,7 +37,7 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('Can return filtered aggregated data', async () => {
       const result = await client.query({
         query: await loadExampleQueryNode('transactions', 'filteredAggregateDataWithinTransaction'),
-        variables: { id: txe68043.aggregated_filtered.id }
+        variables: { hash: txe68043.aggregated_filtered.hash }
       })
       expect(result.data).toMatchSnapshot()
     })

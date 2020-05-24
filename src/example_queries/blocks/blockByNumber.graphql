@@ -3,6 +3,6 @@ query blockByNumber(
 ) {
     blocks (
         where: { number: { _eq: $number}}) {
-        id
+        hash
     }
 }
