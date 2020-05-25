@@ -1,6 +1,6 @@
 {
   "name": "cardano-graphql",
-  "version": "1.0.0-rc.10",
+  "version": "1.0.0-rc.11",
   "description": "GraphQL API for Cardano with client-consumable types generated",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
