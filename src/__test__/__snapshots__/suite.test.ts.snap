@@ -319,6 +319,7 @@ Object {
       "block": Object {
         "number": 29021,
       },
+      "blockIndex": 0,
       "fee": 171246,
       "hash": "05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102",
       "inputs": Array [
@@ -347,6 +348,7 @@ Object {
       "block": Object {
         "number": 29021,
       },
+      "blockIndex": 1,
       "fee": 171070,
       "hash": "e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae",
       "inputs": Array [
