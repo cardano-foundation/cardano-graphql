@@ -16,16 +16,16 @@ export function epochsTests (createClient: () => Promise<TestClient>) {
       restData = restResult.Right[0]
       const graphQLResult = await client.query({
         query: gql`query EpochDetails{
-			epochs(where: {number:{_eq:${epoch}}}){
+            epochs(where: {number:{_eq:${epoch}}}){
                             number
                             startedAt
                             lastBlockTime
-			    blocks (where: {slotWithinEpoch:{_eq:${slot}}}){
+                blocks (where: {slotWithinEpoch:{_eq:${slot}}}){
                               slotNo
                               epochNo
                               slotWithinEpoch
                               number
-                              id
+                              hash
                               createdAt
                               transactionsCount
                               transactions{
@@ -73,7 +73,7 @@ export function epochsTests (createClient: () => Promise<TestClient>) {
     it('return the same block creation time', async () => {
       const restResultBlockCreationUnixEpochTime = restData.cbeTimeIssued
       const graphQLBlockCreationDateTime = graphQLData.createdAt
-      const restResultBlockCreationDateTime = timestampToIsoStringWithoutTimezone(restResultBlockCreationUnixEpochTime);
+      const restResultBlockCreationDateTime = timestampToIsoStringWithoutTimezone(restResultBlockCreationUnixEpochTime)
 
       expect(restResultBlockCreationDateTime).toEqual(graphQLBlockCreationDateTime)
     })
@@ -87,13 +87,13 @@ export function epochsTests (createClient: () => Promise<TestClient>) {
 
     it('return the same total output', async () => {
       const restResultTotalSent = parseInt(restData.cbeTotalSent.getCoin)
-      let graphQLTotalSent = 0;
+      let graphQLTotalSent = 0
 
       graphQLData.transactions.forEach(
         (tx: any) => {
-            graphQLTotalSent += parseInt(tx.totalOutput)
+          graphQLTotalSent += parseInt(tx.totalOutput)
         }
-      );
+      )
 
       expect(restResultTotalSent).toEqual(graphQLTotalSent)
     })
@@ -107,7 +107,7 @@ export function epochsTests (createClient: () => Promise<TestClient>) {
 
     it('return the same block leader', async () => {
       const restResultBlockLeader = restData.cbeBlockLead
-      const graphQLBlockLeader = graphQLData.createdBy.split("-")[1]
+      const graphQLBlockLeader = graphQLData.createdBy.split('-')[1]
 
       expect(restResultBlockLeader).toMatch(graphQLBlockLeader)
     })

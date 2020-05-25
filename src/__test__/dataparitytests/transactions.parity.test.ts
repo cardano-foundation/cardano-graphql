@@ -38,9 +38,9 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
                                 includedAt
                               }
                             }`
-        })
-        graphQLData = graphQLResult.data.transactions[0]
-      }, 30000)
+      })
+      graphQLData = graphQLResult.data.transactions[0]
+    }, 30000)
 
     it('return the correct hash', async () => {
       const restResultId = restData.ctsId
