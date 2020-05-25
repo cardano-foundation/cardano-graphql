@@ -28,7 +28,7 @@ select
   (select slot_duration from meta) as "slotDuration",
   (select start_time from meta) as "startTime",
   (select protocol_const from meta) as "protocolConst",
-	(select network_name from meta) as "networkName"
+  (select network_name from meta) as "networkName"
 from "Block"
 where number is not null
 order by number desc
@@ -50,7 +50,7 @@ select
   COALESCE(tx.fee, 0) as fee,
   tx.hash as hash,
   cast((select sum("value") from tx_out where tx_id = tx.id) as bigint) as "totalOutput",
-	tx.size,
+  tx.size,
   block.time as "includedAt"
 from
   tx

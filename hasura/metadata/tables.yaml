@@ -157,11 +157,12 @@
     permission:
       columns:
       - blockHash
+      - blockIndex
       - fee
       - hash
-      - totalOutput
-      - size
       - includedAt
+      - size
+      - totalOutput
       filter: {}
       limit: 100
       allow_aggregations: true

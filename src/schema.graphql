@@ -71,6 +71,7 @@ type Cardano {
 
 type Transaction {
   block: Block
+  blockIndex: Int!
   fee: BigInt!
   hash: Hash32HexString!
   inputs (
@@ -104,6 +105,7 @@ type Transaction {
 
 input Transaction_order_by {
   block: order_by
+  blockIndex: order_by
   fee: order_by
   includedAt: order_by
   size: order_by
@@ -115,6 +117,7 @@ input Transaction_bool_exp {
   _not: Transaction_bool_exp
   _or: [Transaction_bool_exp]
   block: Block_bool_exp
+  blockIndex: Int_comparison_exp
   fee: BigInt_comparison_exp
   hash: Hash32HexString_comparison_exp
   includedAt: Date_comparison_exp

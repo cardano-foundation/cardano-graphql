@@ -14,7 +14,7 @@
     "build": "yarn codegen:internal && yarn codegen:external && tsc -p . && shx cp src/schema.graphql dist/ && shx cp -R src/graphql_operations dist/graphql_operations",
     "prestart": "yarn build",
     "start": "HASURA_URI=http://localhost:8090 node dist/index.js",
-    "test:tdd": "yarn service-dependencies up -d && NODE_ENV=test TEST_MODE=integration jest suite",
+    "test:tdd": "NODE_ENV=test TEST_MODE=integration jest suite",
     "test:e2e": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest suite",
     "test:dataparity": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest dataparity.test",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml"

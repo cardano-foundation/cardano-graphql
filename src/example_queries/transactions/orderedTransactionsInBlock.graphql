@@ -1,0 +1,14 @@
+query orderedTransactionsInBlock(
+    $blockNumber: Int!
+) {
+    transactions(
+        where: { block: { number: { _eq: $blockNumber }} },
+        order_by: { blockIndex: asc }
+    ) {
+        blockIndex
+        fee
+        hash
+        size
+        totalOutput
+    }
+}
