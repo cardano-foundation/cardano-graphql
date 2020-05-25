@@ -51,7 +51,6 @@ select
   tx.hash as hash,
   cast((select sum("value") from tx_out where tx_id = tx.id) as bigint) as "totalOutput",
   tx.size,
-  tx.block_index AS "blockIndex",
   block.time as "includedAt"
 from
   tx
