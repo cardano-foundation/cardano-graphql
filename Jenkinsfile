@@ -78,7 +78,7 @@ pipeline {
         sh "docker push inputoutput/cardano-graphql:${env.TAG_NAME}"
         sh "docker push rhyslbw/cardano-graphql-hasura:${env.TAG_NAME}"
         sh "docker tag inputoutput/cardano-graphql:${env.TAG_NAME} inputoutput/cardano-graphql:latest"
-        sh "docker tag rhyslbw/cardano-graphql-hasura:${env.TAG_NAME} inputoutput/cardano-graphql:latest"
+        sh "docker tag rhyslbw/cardano-graphql-hasura:${env.TAG_NAME} rhyslbw/cardano-graphql-hasura:latest"
         sh "docker push inputoutput/cardano-graphql:latest"
         sh "docker push rhyslbw/cardano-graphql-hasura:latest"
         sh "npx npm-cli-login -u $NPM_REGISTRY_AUTH_USR -e $NPM_REGISTRY_EMAIL -p $NPM_REGISTRY_AUTH_PSW -r $NPM_REGISTRY_URI"
