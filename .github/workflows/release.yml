@@ -12,5 +12,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: yarn install --frozen-lockfile --cwd ./docs
-      - run: yarn deploy --cwd ./docs
+      - run: yarn --cwd ./docs install --frozen-lockfile
+      - run: yarn --cwd ./docs deploy
