@@ -12,6 +12,7 @@ import Cardano.Prelude.Base
 
 import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8 as BS
+import qualified Data.Text.Encoding as Text
 import Formatting (bprint, shown)
 import Formatting.Buildable (Buildable(build))
 
@@ -26,6 +27,6 @@ instance Buildable Base16ParseError where
 
 parseBase16 :: Text -> Either Base16ParseError ByteString
 parseBase16 s = do
-  let (bs, suffix) = B16.decode $ toS s
+  let (bs, suffix) = B16.decode $ Text.encodeUtf8 s
   unless (BS.null suffix) . Left $ Base16IncorrectSuffix suffix
   pure bs
