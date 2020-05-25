@@ -25,12 +25,13 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
     it('Can return ordered by block index', async () => {
       const result = await client.query({
         query: await loadExampleQueryNode('transactions', 'orderedTransactionsInBlock'),
-        variables: { blockNumber: 4206900 }
+        variables: { blockNumber: 3979532 }
       })
-      expect(result.data.transactions.length).toBe(3)
+      expect(result.data.transactions.length).toBe(8)
       expect(result.data.transactions[0].blockIndex).toBe(0)
       expect(result.data.transactions[1].blockIndex).toBe(1)
       expect(result.data.transactions[2].blockIndex).toBe(2)
+      expect(result.data.transactions[7].blockIndex).toBe(7)
     })
 
     it('Can return aggregated data', async () => {
