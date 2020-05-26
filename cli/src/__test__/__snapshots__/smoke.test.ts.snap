@@ -11,14 +11,12 @@ exports[`Smoke Test Shows the program help if no arguments are passed 1`] = `
 Usage: cgql [options] [command]
 
 Options:
-  -V, --version                  output the version number
-  -h, --help                     display help for command
+  -V, --version   output the version number
+  -h, --help      display help for command
 
 Commands:
-  create-secrets                 Create secrets used for PostgreSQL. You will
-                                 be prompted
-  init-docker-compose [options]  Access the latest version of docker-compose
-                                 to use as boilerplate
-  help [command]                 display help for command
+  init            Initialize a Docker stack with secrets using a boilerplate
+                  compose file.
+  help [command]  display help for command
 "
 `;

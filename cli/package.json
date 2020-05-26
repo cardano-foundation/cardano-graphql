@@ -13,6 +13,7 @@
     "lint": "eslint -c ../.eslintrc.json \"src/**/*.ts\"",
     "prepack": "yarn build",
     "postpack": "shx rm -rf dist",
+    "pretest": "yarn build",
     "test": "jest"
   },
   "repository": {
