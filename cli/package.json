@@ -7,14 +7,13 @@
     "cgql": "./bin/index.js"
   },
   "scripts": {
-    "add-global": "yarn global add file:$PWD",
+    "add-global": "yarn build && yarn global add file:$PWD",
     "build": "tsc -p .",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
     "lint": "eslint -c ../.eslintrc.json \"src/**/*.ts\"",
     "prepack": "yarn build",
     "postpack": "shx rm -rf dist",
-    "pretest": "yarn build",
-    "test": "jest"
+    "test": "yarn build && jest"
   },
   "repository": {
     "type": "git",
