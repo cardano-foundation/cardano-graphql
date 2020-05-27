@@ -8,12 +8,13 @@
   },
   "scripts": {
     "add-global": "yarn build && yarn global add file:$PWD",
+    "remove-global": "yarn global remove cardano-graphql-cli",
     "build": "tsc -p .",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
     "lint": "eslint -c ../.eslintrc.json \"src/**/*.ts\"",
     "prepack": "yarn build",
     "postpack": "shx rm -rf dist",
-    "test": "yarn build && jest"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
