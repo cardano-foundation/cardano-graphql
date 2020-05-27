@@ -43,7 +43,8 @@ services:
       - node-ipc:/node-ipc
     restart: on-failure
   hasura:
-    image: rhyslbw/cardano-graphql-hasura:v1.0.0-rc.11
+    build:
+      context: ./hasura
     ports:
       - "8090:8080"
     depends_on:
@@ -63,7 +64,9 @@ services:
       - postgres_password
       - postgres_user
   cardano-graphql:
-    image: inputoutput/cardano-graphql:v1.0.0-rc.11
+    build:
+      context: .
+      target: server
     environment:
       - CACHE_ENABLED=true
       - HASURA_URI=http://hasura:8080
@@ -73,11 +76,11 @@ services:
       - ${API_PORT:-3100}:3100
 secrets:
   postgres_db:
-    file: ./config/secrets/postgres_db.example
+    file: ./config/secrets/postgres_db
   postgres_password:
-    file: ./config/secrets/postgres_password.example
+    file: ./config/secrets/postgres_password
   postgres_user:
-    file: ./config/secrets/postgres_user.example
+    file: ./config/secrets/postgres_user
 volumes:
   node-db:
   node-ipc:
