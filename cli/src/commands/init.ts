@@ -26,7 +26,8 @@ export const init = createCommand('init')
         name: 'password',
         default: () => generatePassword(16, false),
         message: 'Password for the database user',
-        type: 'input',
+        type: 'password',
+        mask: '*',
         validate: ensureValue
       }, {
         name: 'secretsDirPath',
