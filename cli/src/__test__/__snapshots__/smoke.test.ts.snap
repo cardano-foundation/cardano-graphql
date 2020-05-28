@@ -20,13 +20,3 @@ Commands:
   help [command]  display help for command
 "
 `;
-
-exports[`Smoke Test init Can initialise a stack 1`] = `
-"test_hasura_1
-test_cardano-db-sync-extended_1
-test_cardano-node_1
-test_postgres_1
-test_cardano-graphql_1
-5
-"
-`;

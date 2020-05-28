@@ -8,4 +8,4 @@ docker ps \
   -f name="$PROJECT_NAME_cardano-db-sync-extended" \
   -f name="$PROJECT_NAME_hasura" \
   -f name="$PROJECT_NAME_cardano-graphql" \
-  --format '{{.Names}}' | tee >(wc -l)
+  --format '{{.Names}}' | wc -l

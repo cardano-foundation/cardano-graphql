@@ -49,7 +49,7 @@ describe('Smoke Test', () => {
           if (error) return done(error)
           exec('./scripts/count_running_docker_containers.sh test', (error, stdout) => {
             if (error) return done(error)
-            expect(stdout.toString()).toMatchSnapshot()
+            expect(parseInt(stdout.toString())).toBe(5)
             done()
           })
         })
