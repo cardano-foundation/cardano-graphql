@@ -11,12 +11,16 @@ exports[`Smoke Test Shows the program help if no arguments are passed 1`] = `
 Usage: cgql [options] [command]
 
 Options:
-  -V, --version   output the version number
-  -h, --help      display help for command
+  -V, --version              output the version number
+  -h, --help                 display help for command
 
 Commands:
-  init            Initialize a Docker stack with secrets using a boilerplate
-                  compose file.
-  help [command]  display help for command
+  init                       Initialize a Docker stack with secrets using a
+                             boilerplate compose file.
+  backup                     Make and restore backups of the stateful
+                             services
+  rebuild-service [options]  Drop and rebuild data volumes for the specified
+                             service
+  help [command]             display help for command
 "
 `;

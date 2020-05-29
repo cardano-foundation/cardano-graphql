@@ -6,6 +6,8 @@ import * as path from 'path'
 import { ensureValue } from '../util'
 import fetch from 'cross-fetch'
 
+const ui = new inquirer.ui.BottomBar()
+
 export const init = createCommand('init')
   .description('Initialize a Docker stack with secrets using a boilerplate compose file.')
   .action(async () => {
@@ -14,7 +16,7 @@ export const init = createCommand('init')
       'https://raw.githubusercontent.com/input-output-hk/cardano-graphql/master/docker-compose.yml'
     )
     await dockerComposeFile.write(await response.text())
-    console.log(`docker-compose.yml created`)
+    ui.log.write('docker-compose.yml created')
     return inquirer
       .prompt([{
         name: 'user',
@@ -44,6 +46,6 @@ export const init = createCommand('init')
           writeFile(path.join(secretsDirPath, 'postgres_password'), password),
           writeFile(path.join(secretsDirPath, 'postgres_user'), user)
         ])
-        console.log('PostgreSQL credentials created')
+        ui.log.write('PostgreSQL credentials created')
       })
   })
