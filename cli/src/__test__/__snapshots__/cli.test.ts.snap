@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CLI Test Shows the program help if no arguments are passed 1`] = `
+"[2J[0f                      _ 
+                     | |
+  ____   ____   ____ | |
+ / ___) / _  | / _  || |
+( (___ ( ( | || | | || |
+ \\\\____) \\\\_|| | \\\\_|| ||_|
+       (_____|    |_|   
+Usage: cgql [options] [command]
+
+Options:
+  -V, --version   output the version number
+  -h, --help      display help for command
+
+Commands:
+  docker
+  system-info     Return useful information about the current system
+  help [command]  display help for command
+"
+`;
+
+exports[`CLI Test docker command Shows the program help if no arguments are passed 1`] = `
+"[2J[0f                      _ 
+                     | |
+  ____   ____   ____ | |
+ / ___) / _  | / _  || |
+( (___ ( ( | || | | || |
+ \\\\____) \\\\_|| | \\\\_|| ||_|
+       (_____|    |_|   
+Usage: cgql docker [options] [command]
+
+Options:
+  -h, --help                 display help for command
+
+Commands:
+  init [options]             Initialize a Docker stack with secrets using a
+                             boilerplate compose file.
+  snapshot                   Make and restore snapshots of the stateful
+                             services
+  rebuild-service [options]  Drop and rebuild data volumes for the specified
+                             service
+  cleanup [options]          Return the host to a clean state
+  help [command]             display help for command
+"
+`;
+
+exports[`CLI Test docker command init can be used in automated processes using command arguments 1`] = `
+"[2J[0f                      _ 
+                     | |
+  ____   ____   ____ | |
+ / ___) / _  | / _  || |
+( (___ ( ( | || | | || |
+ \\\\____) \\\\_|| | \\\\_|| ||_|
+       (_____|    |_|   
+[2K[Gdocker-compose.yml created 
+[2K[GSecrets created 
+"
+`;

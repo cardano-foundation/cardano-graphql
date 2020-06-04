@@ -35,9 +35,11 @@
   },
   "homepage": "https://github.com/input-output-hk/cardano-graphql/cli#README.md",
   "dependencies": {
+    "appdirectory": "^0.1.0",
     "chalk": "^3.0.0",
     "clear": "^0.1.0",
     "commander": "^5.0.0",
+    "conf": "^6.2.4",
     "cross-fetch": "^3.0.4",
     "docker-compose": "^0.23.4",
     "dockerode": "^3.2.0",
@@ -45,7 +47,11 @@
     "fs-extra": "^9.0.0",
     "inquirer": "^7.1.0",
     "js-yaml": "^3.13.1",
-    "password-generator": "^2.2.3"
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "password-generator": "^2.2.3",
+    "ts-log": "^2.1.4",
+    "write-json-file": "^4.3.0"
   },
   "devDependencies": {
     "@types/clear": "^0.1.0",
@@ -55,9 +61,12 @@
     "@types/inquirer": "^6.5.0",
     "@types/jest": "^25.1.4",
     "@types/js-yaml": "^3.12.2",
+    "@types/lodash.get": "^4.4.6",
+    "@types/lodash.set": "^4.3.6",
     "@types/node": "^12.6.8",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
+    "env-paths": "^2.2.0",
     "eslint": "^6.8.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.1",
@@ -72,6 +81,7 @@
   },
   "files": [
     "dist/*",
+    "src/docker-compose.yml",
     "!dist/__test__",
     "!dist/**/*.test.*",
     "LICENSE",

@@ -1,16 +1,12 @@
 #!/usr/bin/env node
 
-import * as chalk from 'chalk'
+import chalk from 'chalk'
+import figlet from 'figlet'
 import { Command } from 'commander'
-import * as figlet from 'figlet'
+import { dockerCommand } from './Docker'
+import { CliLogger } from './CliLogger'
+import { systemInfoCommand } from './System'
 
-import {
-  init,
-  backup,
-  rebuildService
-} from './commands'
-import { DockerComposeStack } from './docker'
-import * as inquirer from 'inquirer'
 const clear = require('clear')
 const packageJson = require('../package.json')
 
@@ -26,21 +22,22 @@ console.log(
       })
   )
 )
-const bottomBar = new inquirer.ui.BottomBar()
+
+const logger = new CliLogger()
+
 const program = new Command('cgql')
 
-const stack = new DockerComposeStack({ log: bottomBar.log.write })
-
 program
-  .addCommand(init)
-  .addCommand(backup(stack))
-  .addCommand(rebuildService(stack))
+  .addCommand(dockerCommand(logger))
+  .addCommand(systemInfoCommand(packageJson.version))
 
 program.version(packageJson.version)
-
 if (!process.argv.slice(2).length) {
   program.outputHelp()
   process.exit(1)
 } else {
-  program.parseAsync(process.argv)
+  program.parseAsync(process.argv).catch(error => {
+    console.error(error)
+    process.exit(0)
+  })
 }
