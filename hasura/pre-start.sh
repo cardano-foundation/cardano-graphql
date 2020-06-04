@@ -1,10 +1,23 @@
 #!/bin/sh
-OPTS=$(getopt --long db-url:,graphql-engine-path:,hasura-cli-path:,server-port:,server-timeout: -n 'parse-options' -- "$@")
+
+# This script should be run after starting cardano-db-sync-extended, before starting the Hasura graphql-engine.
+# cardano-db-sync-extended drops all views on startup, so migrations must be rolled back and re-applied to mirror the behaviour
+# A Hasura CLI config.yml must be in the current directory
+
+OPTS=$(getopt --long db-url:,\
+  graphql-engine-path:,\
+  hasura-cli-path:,\
+  project-path:,\
+  server-port:,\
+  server-timeout:\
+   -n 'parse-options' -- "$@")
+
 if [ $? != 0 ] ; then echo "Failed parsing options." >&2 ; exit 1 ; fi
 
 GRAPHQL_ENGINE=graphql-engine
 HASURA_CLI=hasura
-SERVER_PORT=9691
+PROJECT_PATH=$PWD
+SERVER_PORT=8090
 TIMEOUT=30
 
 while true; do
@@ -12,6 +25,7 @@ while true; do
     --db-url              ) DATABASE_URL="$2"; shift 2;;
     --graphql-engine-path ) GRAPHQL_ENGINE="$2"; shift 2;;
     --hasura-cli-path     ) HASURA_CLI="$2"; shift 2;;
+    --project-path        ) PROJECT_PATH="$2"; shift 2;;
     --server-port         ) SERVER_PORT="$2"; shift 2;;
     --server-timeout      ) TIMEOUT="$2"; shift 2;;
     -- ) shift; break ;;
@@ -40,25 +54,17 @@ wait_for_port() {
 log "Starting graphql-engine to perform setup on port $SERVER_PORT. Inconsistent metadata is expected"
 
 $GRAPHQL_ENGINE --database-url "$DATABASE_URL" \
-               serve --enabled-apis="metadata" \
-               --server-port="${SERVER_PORT}"  &
+  serve --enabled-apis="metadata" \
+  --server-port=${SERVER_PORT} &
 PID=$!
 
 wait_for_port "$SERVER_PORT"
 
-# Migrations & metadata
-TEMP_PROJECT_DIR="/tmp/hasura-project"
 log "Applying migrations and metadata"
-cd "$TEMP_PROJECT_DIR" || exit
-echo "version: 2" > config.yaml
-echo "endpoint: http://localhost:$SERVER_PORT" >> config.yaml
-echo "metadata_directory: metadata" >> config.yaml
-
-# cardano-db-sync drops all views on startup, so all schema migrations need to be applied each time to mirror the behaviour
-$HASURA_CLI migrate apply --down all
-$HASURA_CLI migrate apply --up all
-$HASURA_CLI metadata clear
-$HASURA_CLI metadata apply
+$HASURA_CLI --project "$PROJECT_PATH" migrate apply --down all
+$HASURA_CLI --project "$PROJECT_PATH" migrate apply --up all
+$HASURA_CLI --project "$PROJECT_PATH" metadata clear
+$HASURA_CLI --project "$PROJECT_PATH" metadata apply
 
 log "Killing server used to perform the setup"
 kill $PID
