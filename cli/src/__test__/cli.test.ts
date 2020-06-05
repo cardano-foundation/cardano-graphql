@@ -1,6 +1,7 @@
 import { exec, spawn } from 'child_process'
 import path from 'path'
 import envPaths from 'env-paths'
+import DoneCallback = jest.DoneCallback;
 
 const projectName = 'cardano-graphql-test'
 const paths = envPaths(projectName)
@@ -38,15 +39,19 @@ describe('CLI Test', () => {
   })
 
   describe('docker command', () => {
-    afterEach((done) => {
+
+    function dockerCleanup (done: DoneCallback) {
       const cgqlCleanup = spawn('cgql', ['docker', 'cleanup', '-f'])
       cgqlCleanup.stderr.on('error', (error) => {
         console.error(error)
         if (error) return done(error)
       })
-      cgqlCleanup.stdout.pipe(process.stdout)
       done()
-    })
+    }
+
+    beforeAll(dockerCleanup)
+
+    afterEach(dockerCleanup)
 
     it('Shows the program help if no arguments are passed', (done) => {
       exec('cgql docker', (error, stdout, stderr) => {
