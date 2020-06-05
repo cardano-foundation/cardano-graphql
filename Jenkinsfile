@@ -39,11 +39,6 @@ pipeline {
         }
       }
     }
-    stage('Test - CLI') {
-      steps {
-        sh 'yarn --cwd ./cli test --ci'
-      }
-    }
     stage('Build Docker image') {
       steps {
         sh "docker build -t inputoutput/cardano-graphql:${env.GIT_COMMIT} ."
