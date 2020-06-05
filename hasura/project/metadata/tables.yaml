@@ -176,7 +176,6 @@
       - address
       - value
       - txHash
-      - index
       - sourceTxHash
       - sourceTxIndex
       filter: {}

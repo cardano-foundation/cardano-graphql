@@ -325,7 +325,8 @@ Object {
       "inputs": Array [
         Object {
           "address": "DdzFFzCqrht5ExAdoZVExXoZTpoMYGKxva3thvvvHapsLZQzSX3kCqwgqi5NSM2oUtHYYDqsSnvSGbqkarB6cSgDZohUhLWZ9KFdDWsa",
-          "index": 0,
+          "sourceTxHash": "f6aa5241cdabb2ca461d1644d56023033b6d32b70afb7a48b224ec3d82ae4a4f",
+          "sourceTxIndex": 0,
           "value": "4924799649906",
         },
       ],
@@ -354,7 +355,8 @@ Object {
       "inputs": Array [
         Object {
           "address": "DdzFFzCqrhsggyaAMAUTjGtjBr1CTp8tTcHYWbqtoyQBZcaYHM16rjbUDawTwoVaEPawAMPLJmpJVXHBNxZnTgmQzqAcNDe6XvMe5BkB",
-          "index": 0,
+          "sourceTxHash": "74a10f4a5de09a393ef8b8f749c50e6938aa4f57908bbdaaefdf5e814fed281a",
+          "sourceTxIndex": 0,
           "value": "768403000000",
         },
       ],
