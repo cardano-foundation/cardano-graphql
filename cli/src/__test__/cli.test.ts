@@ -74,7 +74,7 @@ describe('CLI Test', () => {
           expect(dockerConf).toHaveProperty('workingDirectory')
           exec(`docker-compose -p ${projectName} up -d`, (error) => {
             if (error) return done(error)
-            exec('./scripts/count_running_docker_containers.sh test', (error, stdout) => {
+            exec(`./scripts/count_running_docker_containers.sh ${projectName}`, (error, stdout) => {
               if (error) return done(error)
               expect(parseInt(stdout.toString())).toBe(5)
               exec(`docker-compose -p ${projectName} down -v`, (error) => {
