@@ -52,7 +52,7 @@ export class DockerComposeStack {
     }
     // await fs.copyFile(path.resolve(__dirname, '..', '..', 'docker-compose.yml'), this.store.dockerComposeFilePath)
     await fs.copyFile(path.resolve(__dirname, '..', '..', 'src', 'docker-compose.yml'), this.store.dockerComposeFilePath)
-    await this.store.set('compose', { createdAt: Date.now() } as DockerState['compose'])
+    await this.store.set('compose', { createdAt: Date.now() })
     this.logger.info('docker-compose.yml created')
   }
 

@@ -67,23 +67,23 @@ export class DockerStore {
 
   public async cleanup (): Promise<void> {
     try {
-      const dirStat = await fs.stat(this.secretsDir)
-      if (dirStat.isDirectory()) {
+      if ((await fs.stat(this.secretsDir)).isDirectory()) {
         await fs.remove(this.localConfigDir)
         this.logger.info('Secrets removed')
+      } else {
+        this.logger.debug('No secrets to remove')
       }
       if (this.get('compose') !== undefined) {
-        const fileStat = await fs.stat(this.dockerComposeFilePath)
-        if (fileStat.isFile()) {
+        if ((await fs.stat(this.dockerComposeFilePath)).isFile()) {
           await fs.remove(this.dockerComposeFilePath)
           this.logger.info('docker-compose.yml removed')
+        } else {
+          this.logger.debug('No docker-compose.yml to remove')
         }
       }
-    } catch (error) {
-      this.logger.debug('No secrets to remove')
     } finally {
       await fs.remove(path.dirname(this.conf.path))
-      this.logger.info('Config removed')
+      this.logger.info('Host is clean')
     }
   }
 

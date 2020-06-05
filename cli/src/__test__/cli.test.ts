@@ -39,7 +39,6 @@ describe('CLI Test', () => {
   })
 
   describe('docker command', () => {
-
     function dockerCleanup (done: DoneCallback) {
       const cgqlCleanup = spawn('cgql', ['docker', 'cleanup', '-f'])
       cgqlCleanup.stderr.on('error', (error) => {
