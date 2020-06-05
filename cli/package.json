@@ -9,7 +9,7 @@
   "scripts": {
     "add-global": "yarn build && yarn global add file:$PWD",
     "remove-global": "yarn global remove cardano-graphql-cli",
-    "build": "tsc -p .",
+    "build": "tsc -p . && shx cp src/Docker/docker-compose.yml bin/Docker/",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
     "lint": "eslint -c ../.eslintrc.json \"src/**/*.ts\"",
     "prepack": "yarn build",
@@ -81,7 +81,7 @@
   },
   "files": [
     "dist/*",
-    "src/docker-compose.yml",
+    "src/Docker/docker-compose.yml",
     "!dist/__test__",
     "!dist/**/*.test.*",
     "LICENSE",
