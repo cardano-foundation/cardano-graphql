@@ -66,7 +66,7 @@
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "apollo-boost": "^0.4.4",
-    "apollo-server-core": "^2.8.1",
+    "apollo-server-core": "^2.14.2",
     "apollo-server-testing": "^2.8.1",
     "artillery": "^1.6.0-29",
     "bignumber.js": "9.0.0",
