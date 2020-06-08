@@ -17,7 +17,8 @@ export function transactionTests (createClient: () => Promise<TestClient>) {
         variables: { hashes: [txe68043.basic.hash, tx05ad8b.basic.hash] }
       })
       expect(result.data.transactions.length).toBe(2)
-      expect(result.data.transactions[0].inputs[0].index).toBe(0)
+      expect(result.data.transactions[0].inputs[0].sourceTxHash).toBe(txe68043.basic.sourceTxHash)
+      expect(result.data.transactions[1].inputs[0].sourceTxHash).toBe(tx05ad8b.basic.sourceTxHash)
       expect(result.data.transactions[0].outputs[0].index).toBe(0)
       expect(result.data).toMatchSnapshot()
     })

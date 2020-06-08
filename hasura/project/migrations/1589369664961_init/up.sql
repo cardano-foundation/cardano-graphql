@@ -75,7 +75,6 @@ select
   source_tx_out.address,
   source_tx_out.value,
   tx.hash as "txHash",
-  tx_out_index as "index",
   source_tx.hash as "sourceTxHash",
   tx_in.tx_out_index as "sourceTxIndex"
 from
