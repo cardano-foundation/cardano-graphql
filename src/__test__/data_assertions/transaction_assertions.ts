@@ -19,6 +19,7 @@ export const txe68043 = {
       value: '1000000'
     }],
     size: 216,
+    sourceTxHash: 'f6aa5241cdabb2ca461d1644d56023033b6d32b70afb7a48b224ec3d82ae4a4f',
     totalOutput: '768402828930'
   },
   aggregated: {
@@ -94,6 +95,7 @@ export const tx05ad8b = {
       value: '100000000000'
     }],
     size: 220,
+    sourceTxHash: '74a10f4a5de09a393ef8b8f749c50e6938aa4f57908bbdaaefdf5e814fed281a',
     totalOutput: '4924799478660'
   },
   aggregated: {

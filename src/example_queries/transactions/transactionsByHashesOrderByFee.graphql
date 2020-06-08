@@ -11,9 +11,10 @@ query transactionsByHashesOrderByFee(
         blockIndex
         fee
         hash
-        inputs(order_by: { index: asc }) {
-            index
+        inputs(order_by: { sourceTxHash: asc }) {
             address
+            sourceTxIndex
+            sourceTxHash
             value
         }
         outputs(order_by: { index: asc }) {

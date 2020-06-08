@@ -48,16 +48,16 @@ type Query {
   ): Transaction_aggregate!
   utxos (
     limit: Int
-    order_by: [Utxo_order_by!]
+    order_by: [TransactionOutput_order_by!]
     offset: Int
-    where: Utxo_bool_exp
+    where: TransactionOutput_bool_exp
   ): [TransactionOutput]!
   utxos_aggregate (
     limit: Int
-    order_by: [Utxo_order_by!]
+    order_by: [TransactionOutput_order_by!]
     offset: Int
-    where: Utxo_bool_exp
-  ): Utxo_aggregate!
+    where: TransactionOutput_bool_exp
+  ): TransactionOutput_aggregate!
 }
 
 type Cardano {
@@ -76,28 +76,28 @@ type Transaction {
   hash: Hash32HexString!
   inputs (
     limit: Int
-    order_by: [Coin_order_by]
+    order_by: [TransactionInput_order_by]
     offset: Int
-    where: Coin_bool_exp
+    where: TransactionInput_bool_exp
   ): [TransactionInput!]!
   inputs_aggregate (
     limit: Int
-    order_by: [Coin_order_by]
+    order_by: [TransactionInput_order_by]
     offset: Int
-    where: Coin_bool_exp
-  ): Coin_aggregate
+    where: TransactionInput_bool_exp
+  ): TransactionInput_aggregate
   outputs (
     limit: Int
-    order_by: [Coin_order_by]
+    order_by: [TransactionOutput_order_by]
     offset: Int
-    where: Coin_bool_exp
+    where: TransactionOutput_bool_exp
   ): [TransactionOutput!]!
   outputs_aggregate(
     limit: Int
-    order_by: [Coin_order_by]
+    order_by: [TransactionOutput_order_by]
     offset: Int
-    where: Coin_bool_exp
-  ): Coin_aggregate
+    where: TransactionOutput_bool_exp
+  ): TransactionOutput_aggregate
   size: BigInt!
   totalOutput: String!
   includedAt: DateTime!
@@ -121,8 +121,8 @@ input Transaction_bool_exp {
   fee: BigInt_comparison_exp
   hash: Hash32HexString_comparison_exp
   includedAt: Date_comparison_exp
-  inputs: Coin_bool_exp
-  outputs: Coin_bool_exp
+  inputs: TransactionInput_bool_exp
+  outputs: TransactionOutput_bool_exp
   size: BigInt_comparison_exp
   totalOutput: text_comparison_exp
 }
@@ -167,51 +167,50 @@ type TransactionInput {
   sourceTxHash: Hash32HexString!
   sourceTxIndex: Int!
   address: String!
-  index: Int!
   txHash: Hash32HexString!
   value: String!
 }
 
-input Coin_order_by {
+input TransactionInput_order_by {
   address: order_by
-  index: order_by
+  sourceTxHash: order_by
   txHash: order_by
   value: order_by
 }
 
-input Coin_bool_exp {
-  _and: [Coin_bool_exp]
-  _not: Coin_bool_exp
-  _or: [Coin_bool_exp]
+input TransactionInput_bool_exp {
+  _and: [TransactionInput_bool_exp]
+  _not: TransactionInput_bool_exp
+  _or: [TransactionInput_bool_exp]
   address: text_comparison_exp
   value: text_comparison_exp
 }
 
-type Coin_aggregate {
-  aggregate: Coin_aggregate_fields
+type TransactionInput_aggregate {
+  aggregate: TransactionInput_aggregate_fields
 }
 
-type Coin_aggregate_fields {
-  avg: Coin_avg_fields!
+type TransactionInput_aggregate_fields {
+  avg: TransactionInput_avg_fields!
   count: String!
-  max: Coin_max_fields!
-  min: Coin_min_fields!
-  sum: Coin_sum_fields!
+  max: TransactionInput_max_fields!
+  min: TransactionInput_min_fields!
+  sum: TransactionInput_sum_fields!
 }
 
-type Coin_avg_fields {
+type TransactionInput_avg_fields {
   value: String
 }
 
-type Coin_max_fields {
+type TransactionInput_max_fields {
   value: String
 }
 
-type Coin_min_fields {
+type TransactionInput_min_fields {
   value: String
 }
 
-type Coin_sum_fields {
+type TransactionInput_sum_fields {
   value: String
 }
 
@@ -222,34 +221,48 @@ type TransactionOutput {
   value: String!
 }
 
-type Utxo_aggregate {
-  aggregate: Utxo_aggregate_fields
+input TransactionOutput_order_by {
+  address: order_by
+  index: order_by
+  txHash: order_by
+  value: order_by
 }
 
-type Utxo_aggregate_fields {
-  avg: Uxto_avg_fields!
+input TransactionOutput_bool_exp {
+  _and: [TransactionOutput_bool_exp]
+  _not: TransactionOutput_bool_exp
+  _or: [TransactionOutput_bool_exp]
+  address: text_comparison_exp
+  value: text_comparison_exp
+}
+
+type TransactionOutput_aggregate {
+  aggregate: TransactionOutput_aggregate_fields
+}
+
+type TransactionOutput_aggregate_fields {
+  avg: TransactionOutput_avg_fields!
   count: String!
-  max: Uxto_max_fields!
-  min: Uxto_min_fields!
-  sum: Uxto_sum_fields!
+  max: TransactionOutput_max_fields!
+  min: TransactionOutput_min_fields!
+  sum: TransactionOutput_sum_fields!
 }
 
-type Uxto_avg_fields {
+type TransactionOutput_avg_fields {
   value: String
 }
 
-type Uxto_max_fields {
+type TransactionOutput_max_fields {
   value: String
 }
 
-type Uxto_min_fields {
+type TransactionOutput_min_fields {
   value: String
 }
 
-type Uxto_sum_fields {
+type TransactionOutput_sum_fields {
   value: String
 }
-
 
 type Block {
   createdAt: DateTime!
@@ -415,20 +428,6 @@ type Epoch_sum_fields {
   blocksCount: String!
   output: String!
   transactionsCount: String!
-}
-
-input Utxo_bool_exp {
-  _and: [Utxo_bool_exp]
-  _not: Utxo_bool_exp
-  _or: [Utxo_bool_exp]
-  address: text_comparison_exp
-  value: text_comparison_exp
-}
-
-input Utxo_order_by {
-  address: order_by
-  value: order_by
-  index: order_by
 }
 
 # expression to compare data of type date. All fields are combined with logical 'AND'.
