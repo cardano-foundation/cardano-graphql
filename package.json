@@ -15,8 +15,8 @@
     "prestart": "yarn build",
     "start": "HASURA_URI=http://localhost:8090 node dist/index.js",
     "test:tdd": "NODE_ENV=test TEST_MODE=integration jest suite",
-    "test:e2e": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest suite",
-    "test:dataparity": "docker-compose up -d && NODE_ENV=test TEST_MODE=e2e jest dataparity.test",
+    "test:e2e": "docker-compose -f docker-compose.build.yml up -d && NODE_ENV=test TEST_MODE=e2e jest suite",
+    "test:dataparity": "docker-compose up -f docker-compose.build.yml -d && NODE_ENV=test TEST_MODE=e2e jest dataparity.test",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml"
   },
   "contributors": [
