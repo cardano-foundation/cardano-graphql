@@ -490,6 +490,15 @@ let
         sha1 = "6219a85616520491f35788bdbf1447a99c7e6b0e";
       };
     };
+    "supports-color-5.5.0" = {
+      name = "supports-color";
+      packageName = "supports-color";
+      version = "5.5.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/supports-color/-/supports-color-5.5.0.tgz";
+        sha512 = "QjVjwdXIt408MIiAqCX4oUKsgU2EqAGzs2Ppkm4aQYbjm+ZEWEcW4SfFNTr4uMNZma0ey4f5lgLrkB0aX0QMow==";
+      };
+    };
     "symbol-observable-1.2.0" = {
       name = "symbol-observable";
       packageName = "symbol-observable";
