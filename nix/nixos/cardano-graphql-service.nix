@@ -4,6 +4,15 @@
 let
   cfg = config.services.cardano-graphql;
   sources = import ../sources.nix;
+  hasuraConfigFile = __toFile "config.yaml" (__toJSON {
+    version = 2;
+    endpoint = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}";
+    metadata_directory = "metadata";
+    actions = {
+      kind = "synchronous";
+      handler_webhook_baseurl = "http://localhost:${toString cfg.port}";
+    };
+  });
 in {
   options = {
     services.cardano-graphql = {
@@ -66,6 +75,11 @@ in {
         default = null;
         description = "Source directory or file to generate whitelist from";
       };
+      projectPath = lib.mkOption {
+        type = lib.types.path;
+        default = ../../hasura/project;
+        description = "Source directory for project";
+      };
     };
   };
   config = let
@@ -73,8 +87,19 @@ in {
     boolToNodeJSEnv = bool: if bool then "true" else "false";
     frontend = (import ../../.).cardano-graphql;
     persistgraphql = (import ../../.).persistgraphql;
+    hasura-cli = (import ../../.).hasura-cli;
+    hasura-cli-ext = (import ../../.).hasura-cli-ext;
     hasuraBaseUri = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}";
-    hasuraDbMetadata = ../../hasura/migrations/metadata.json;
+    pluginLibPath = pkgs.lib.makeLibraryPath [
+      pkgs.stdenv.cc.cc.lib
+    ];
+    installHasuraCLI = ''
+      # always start with no plugins so future upgrades will work
+      rm -rf ~/.hasura/plugins
+      # TODO: identify how to get what's needed without the install of the broken plugin
+      hasura plugin install cli-ext
+      cp ${hasura-cli-ext}/bin/cli-ext-hasura-linux ~/.hasura/plugins/bin/hasura-cli_ext
+    '';
   in lib.mkIf cfg.enable {
     systemd.services.cardano-graphql = {
       wantedBy = [ "multi-user.target" ];
@@ -90,7 +115,7 @@ in {
       (lib.optionalAttrs (cfg.allowedOrigins != null) { ALLOWED_ORIGINS = cfg.allowedOrigins; }) //
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; }) //
       (lib.optionalAttrs (cfg.whitelistPath != null) { WHITELIST_PATH = cfg.whitelistPath; });
-      path = with pkgs; [ netcat curl postgresql jq frontend ];
+      path = with pkgs; [ netcat curl postgresql jq frontend hasura-cli glibc.bin patchelf ];
       preStart = ''
         set -exuo pipefail
         for x in {1..10}; do
@@ -98,7 +123,14 @@ in {
           echo loop $x: waiting for graphql-engine 2 sec...
           sleep 2
         done
-        curl -d'{"type":"replace_metadata", "args":'$(jq -c < ${hasuraDbMetadata})'}' ${hasuraBaseUri}/v1/query
+        rm -rf project
+        cp -a ${cfg.projectPath} project
+        cp ${hasuraConfigFile} project/config.yaml
+        ${installHasuraCLI}
+        hasura --project project migrate apply --down all
+        hasura --project project migrate apply --up all
+        hasura --project project metadata clear
+        hasura --project project metadata apply
       '';
       script = ''
         exec cardano-graphql

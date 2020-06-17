@@ -45,7 +45,7 @@ in {
     };
   };
   config = let
-    graphqlEngine = import ../graphql-engine;
+    graphqlEngine = (import ../..).hasuraHaskellPackages.graphql-engine;
     hasuraDbPerms = pkgs.writeScript "hasuraDbPerms.sql" ''
       CREATE EXTENSION IF NOT EXISTS pgcrypto;
       CREATE SCHEMA IF NOT EXISTS hdb_catalog;
