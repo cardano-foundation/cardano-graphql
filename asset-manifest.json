@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/cardano-graphql/static/js/main.2320cfb0.chunk.js",
-    "main.js.map": "/cardano-graphql/static/js/main.2320cfb0.chunk.js.map",
+    "main.js": "/cardano-graphql/static/js/main.55f5faf1.chunk.js",
+    "main.js.map": "/cardano-graphql/static/js/main.55f5faf1.chunk.js.map",
     "runtime-main.js": "/cardano-graphql/static/js/runtime-main.cf8d782f.js",
     "runtime-main.js.map": "/cardano-graphql/static/js/runtime-main.cf8d782f.js.map",
-    "static/js/2.1e0215e6.chunk.js": "/cardano-graphql/static/js/2.1e0215e6.chunk.js",
-    "static/js/2.1e0215e6.chunk.js.map": "/cardano-graphql/static/js/2.1e0215e6.chunk.js.map",
+    "static/js/2.fffeeaea.chunk.js": "/cardano-graphql/static/js/2.fffeeaea.chunk.js",
+    "static/js/2.fffeeaea.chunk.js.map": "/cardano-graphql/static/js/2.fffeeaea.chunk.js.map",
     "index.html": "/cardano-graphql/index.html",
-    "precache-manifest.db8844158847c880ceaf544d9fa7c2ca.js": "/cardano-graphql/precache-manifest.db8844158847c880ceaf544d9fa7c2ca.js",
+    "precache-manifest.88958b9b98589d25b0a38d3fdf9d2fd3.js": "/cardano-graphql/precache-manifest.88958b9b98589d25b0a38d3fdf9d2fd3.js",
     "service-worker.js": "/cardano-graphql/service-worker.js",
-    "static/js/2.1e0215e6.chunk.js.LICENSE.txt": "/cardano-graphql/static/js/2.1e0215e6.chunk.js.LICENSE.txt"
+    "static/js/2.fffeeaea.chunk.js.LICENSE.txt": "/cardano-graphql/static/js/2.fffeeaea.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.cf8d782f.js",
-    "static/js/2.1e0215e6.chunk.js",
-    "static/js/main.2320cfb0.chunk.js"
+    "static/js/2.fffeeaea.chunk.js",
+    "static/js/main.55f5faf1.chunk.js"
   ]
 }
