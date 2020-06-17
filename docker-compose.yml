@@ -43,6 +43,8 @@ services:
       - node-ipc:/node-ipc
     restart: on-failure
   hasura:
+    build:
+      context: ./hasura
     image: rhyslbw/cardano-graphql-hasura:v1.0.0-rc.11
     ports:
       - "8090:8080"
@@ -63,6 +65,9 @@ services:
       - postgres_password
       - postgres_user
   cardano-graphql:
+    build:
+      context: .
+      target: server
     image: inputoutput/cardano-graphql:v1.0.0-rc.11
     environment:
       - CACHE_ENABLED=true
