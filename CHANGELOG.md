@@ -10,8 +10,9 @@ Changelog
 - `Cardano.networkName`
 - `Transaction.size`
 - `Transaction.blockIndex`
-- Allow explicit ordering of `Transaction.input` and `Transaction.outputs` by their natural `index`
+- Allow explicit ordering of `Transaction.outputs` by their natural `index`
 - `Cardano` now matches the postgres view, and is an improvement over the previous version which performed two queries.
+- CLI tool `cgql` with commands to assist with Docker-based deployments, including init, snapshotting, and db rebuild.
 
 ## Breaking changes
 - PostgreSQL views are now being managed in this codebase, so either switch to the
