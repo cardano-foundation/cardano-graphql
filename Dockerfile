@@ -18,4 +18,5 @@ RUN mkdir /application
 COPY --from=builder /application/dist /application
 COPY --from=production_deps /application/node_modules /application/node_modules
 WORKDIR /application
+EXPOSE 3100
 CMD ["node", "index.js"]
