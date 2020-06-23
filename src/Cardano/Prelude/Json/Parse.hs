@@ -13,7 +13,6 @@ where
 import Cardano.Prelude.Base
 
 import Data.String (String)
-import Data.Typeable (typeRep)
 import Formatting (Format, build, formatToString, string)
 import Formatting.Buildable (Buildable)
 import Text.JSON.Canonical

@@ -41,9 +41,6 @@ module Cardano.Prelude.GHC.Heap.NormalForm.Classy (
 
 import Cardano.Prelude.Base
 
-import Data.Foldable (toList)
-import Data.Sequence (Seq)
-import Data.List.NonEmpty (NonEmpty)
 import Data.Time
 import GHC.Exts.Heap (asBox, getBoxedClosureData)
 import GHC.TypeLits (CmpSymbol)

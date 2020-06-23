@@ -76,6 +76,12 @@ library
                        -fno-warn-missing-import-lists
                        -fno-warn-unsafe
                        -fno-warn-safe
+  if impl(ghc >=8.8)
+    ghc-options:       -Wno-missing-deriving-strategies
+  if impl(ghc >=8.10)
+    ghc-options:       -Wno-prepositive-qualified-module
+                       -Wno-missing-safe-haskell-mode
+
   cc-options:          -Wall
 
   if (!flag(development))

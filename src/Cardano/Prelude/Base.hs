@@ -21,7 +21,6 @@ import Protolude as X
   )
 import qualified Protolude as Y
 
-import Data.Foldable (Foldable)
 import Data.Map.Strict as X (Map)
 import qualified Data.Text as T
 

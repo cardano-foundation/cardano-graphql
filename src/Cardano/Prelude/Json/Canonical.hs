@@ -21,7 +21,6 @@ where
 
 import Cardano.Prelude.Base
 
-import Control.Monad.Except (MonadError(throwError))
 import qualified Data.ByteString.Lazy as LB
 import Data.Fixed (E12, resolution)
 import qualified Data.Text.Lazy.Builder as Builder (fromText)
