@@ -203,6 +203,15 @@
       select_aggregate: utxos_aggregate
       select: utxos
     custom_column_names: {}
+  object_relationships:
+  - name: utxo_tx
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          txHash: hash
   select_permissions:
   - role: cardano-graphql
     permission:

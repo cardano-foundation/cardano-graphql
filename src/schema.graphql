@@ -218,6 +218,7 @@ type TransactionOutput {
   address: String!
   index: Int!
   txHash: Hash32HexString!
+  utxo_tx: Transaction
   value: String!
 }
 
