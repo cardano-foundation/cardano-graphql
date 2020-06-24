@@ -12,6 +12,10 @@ export async function loadExampleQueryNode (queryType: string, name: string): Pr
   return loadQueryNode(path.resolve(__dirname, 'example_queries', queryType, `${name}.graphql`))
 }
 
+export async function loadOperationQueryNode (name: string): Promise<DocumentNode> {
+  return loadQueryNode(path.resolve(__dirname, 'graphql_operations', `${name}.graphql`))
+}
+
 export const onFailedAttemptFor = (operation: string) => ({ attemptNumber, message, retriesLeft }: FailedAttemptError) => {
   const nextAction = retriesLeft > 0 ? 'retying...' : 'exiting'
   console.log(`${operation}: Attempt ${attemptNumber} of ${attemptNumber + retriesLeft}, ${nextAction}`)

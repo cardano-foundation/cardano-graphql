@@ -1,5 +1,5 @@
 import { TestClient } from '../TestClient'
-import { loadExampleQueryNode } from '../../util'
+import { loadExampleQueryNode, loadOperationQueryNode } from '../../util'
 
 export function utxosTests (createClient: () => Promise<TestClient>) {
   describe('utxos', () => {
@@ -10,19 +10,30 @@ export function utxosTests (createClient: () => Promise<TestClient>) {
     }, 60000)
 
     it('Can be scoped by address', async () => {
+      // Get a addresses to run tests against
+      const anyUtxoResult = await client.query({
+        query: await loadOperationQueryNode('getAnyUtxoAddress'),
+        variables: { qty: 1 }
+      })
+      const address = anyUtxoResult.data.utxos[0].address
       const result = await client.query({
         query: await loadExampleQueryNode('utxos', 'utxoSetForAddress'),
-        variables: { address: 'DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s' }
+        variables: { address }
       })
+      expect(result.data.utxos[0].transaction.block.number).toBeDefined()
       expect(result.data.utxos.length).toBeDefined()
     })
     it('Can be scoped by list of addresses', async () => {
+      // Get a addresses to run tests against
+      const anyUtxoResult = await client.query({
+        query: await loadOperationQueryNode('getAnyUtxoAddress'),
+        variables: { qty: 2 }
+      })
+      const address1 = anyUtxoResult.data.utxos[0].address
+      const address2 = anyUtxoResult.data.utxos[1].address
       const result = await client.query({
         query: await loadExampleQueryNode('utxos', 'utxoSetForAddresses'),
-        variables: { addresses: [
-          'DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s',
-          'Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt'
-        ] }
+        variables: { addresses: [address1, address2] }
       })
       expect(result.data.utxos.length).toBeDefined()
     })

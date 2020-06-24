@@ -6,6 +6,11 @@ query utxoSetForAddress (
         where: { address: { _eq: $address }}
     ) {
         address
+        transaction {
+            block {
+                number
+            }
+        }
         value
     }
 }
