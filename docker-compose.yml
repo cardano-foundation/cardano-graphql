@@ -45,7 +45,7 @@ services:
   hasura:
     build:
       context: ./hasura
-    image: rhyslbw/cardano-graphql-hasura:v1.0.0-rc.11
+    image: inputoutput/cardano-graphql-hasura:v1.0.0-rc.12
     ports:
       - "8090:8080"
     depends_on:
@@ -68,7 +68,7 @@ services:
     build:
       context: .
       target: server
-    image: inputoutput/cardano-graphql:v1.0.0-rc.11
+    image: inputoutput/cardano-graphql:v1.0.0-rc.12
     environment:
       - CACHE_ENABLED=true
       - HASURA_URI=http://hasura:8080
