@@ -1,0 +1,46 @@
+{
+  "name": "@cardano-graphql/server",
+  "version": "1.0.0-rc.12",
+  "description": "Serve the Cardano GraphQL API over HTTP",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b ./src",
+    "cleanup": "shx rm -rf dist node_modules",
+    "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
+    "prestart": "yarn build",
+    "start": "HASURA_URI=http://localhost:8090 node dist/index.js",
+    "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
+  },
+  "author": "Rhys Bartels-Waller",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/input-output-hk/cardano-graphql/issues"
+  },
+  "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/server/README.md",
+  "dependencies": {
+    "@cardano-graphql/api-cardano-db-hasura": "1.0.0-rc.12",
+    "@graphql-tools/merge": "^6.0.10",
+    "apollo-metrics": "^1.0.1",
+    "apollo-server-core": "^2.14.3",
+    "apollo-server-errors": "^2.4.1",
+    "apollo-server-express": "^2.14.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "graphql": "14.5.8",
+    "graphql-depth-limit": "^1.1.0",
+    "prom-client": "^11.5.3",
+    "ts-custom-error": "^3.1.1"
+  },
+  "devDependencies": {
+    "@cardano-graphql/util-dev": "1.0.0-rc.12"
+  },
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  }
+}

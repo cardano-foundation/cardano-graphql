@@ -44,11 +44,11 @@ services:
     restart: on-failure
   hasura:
     build:
-      context: ../hasura
-    ports:
-      - "8090:8080"
+      context: ../packages/api-cardano-db-hasura/hasura
     depends_on:
       - "postgres"
+    ports:
+      - "8090:8080"
     restart: always
     environment:
       - POSTGRES_HOST=postgres

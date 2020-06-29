@@ -1,6 +1,0 @@
-query hasuraStateCheck {
-    blocks(where: {number: {_eq: 1}}) {
-        transactions_aggregate {
-            aggregate { count }
-        }
-    }}

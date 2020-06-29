@@ -1,0 +1,40 @@
+{
+  "name": "@cardano-graphql/client-ts",
+  "version": "1.0.0-rc.12",
+  "description": "A client package for Cardano GraphQL, including the GraphQL schema and TypeScript definitions generated from it",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
+  },
+  "main": "api/index.js",
+  "typings": "api/index.d.ts",
+  "scripts": {
+    "build": "graphql-codegen && tsc",
+    "cleanup": "shx rm -rf api/index.d.ts \"api/cardano-db-hasura/graphql_types*\"",
+    "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
+    "prepack": "yarn build && shx cp ../api-cardano-db-hasura/schema.graphql ./api/cardano-db-hasura/",
+    "postpack": "yarn cleanup",
+    "test": "shx echo No tests in this package"
+  },
+  "keywords": [
+    "Cardano",
+    "GraphQL",
+    "TypeScript"
+  ],
+  "contributors": [
+    "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/input-output-hk/cardano-graphql/issues"
+  },
+  "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/client-ts/README.md",
+  "files": [
+    "api",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "directories": {
+    "lib": "src"
+  }
+}

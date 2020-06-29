@@ -16,22 +16,19 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh 'yarn && yarn build'
-        sh 'yarn --cwd ./cli && yarn --cwd ./cli build'
-        sh 'yarn --cwd ./generated_packages/TypeScript'
+        sh 'yarn --pure-lockfile'
+        sh 'yarn build'
       }
     }
     stage('Validate Code Style') {
       steps {
         sh 'yarn lint'
-        sh 'yarn --cwd ./cli lint'
       }
     }
     stage('Test') {
       steps {
         sh 'docker-compose -p cardano-graphql -f ./test/docker-compose-ci.yml up --build --force-recreate -d'
-        sh 'NODE_ENV=test TEST_MODE=e2e npx jest suite --ci'
-        sh 'yarn jest Server --ci'
+        sh 'TEST_MODE=e2e yarn test --ci'
       }
       post {
         always {

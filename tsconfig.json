@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
+    "composite": true,
     "module": "commonjs",
     "target": "es2016",
+    "esModuleInterop": true,
     "declaration": true,
     "declarationMap": true,
     "noEmitOnError": true,
@@ -10,18 +12,8 @@
     "noUnusedLocals": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "outDir": "dist/",
     "sourceMap": true,
-    "rootDir": "src",
-    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/__test__"
-  ]
+  }
 }

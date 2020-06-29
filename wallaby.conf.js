@@ -1,13 +1,12 @@
 module.exports = function () {
   return {
     files: [
-      'src/**/*.ts',
-      'src/**/*.graphql',
-      '!src/**/suite.test.ts'
+      'packages/api-cardano-db-hasura/src/**/*.ts',
+      'packages/api-cardano-db-hasura/**/*.graphql',
+      '!packages/api-cardano-db-hasura/src/**/*.test.ts'
     ],
-
     tests: [
-      'src/**/suite.test.ts'
+      'packages/api-cardano-db-hasura/src/**/*.test.ts'
     ],
     env: {
       params: {
@@ -18,6 +17,6 @@ module.exports = function () {
     workers: {
       restart: true
     },
-    testFramework: 'jest',
+    testFramework: 'jest'
   }
 }

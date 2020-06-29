@@ -1,0 +1,11 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../dist/",
+    "rootDir": "./"
+  },
+  "references": [
+    { "path": "../../api-cardano-db-hasura/src" },
+    { "path": "../../util/src" }
+  ]
+}

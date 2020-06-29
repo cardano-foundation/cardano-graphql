@@ -1,0 +1,5 @@
+schema: ../api-cardano-db-hasura/schema.graphql
+generates:
+  ./api/cardano-db-hasura/graphql_types.ts:
+    plugins:
+      - typescript

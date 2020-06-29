@@ -57,7 +57,7 @@ services:
         max-file: "10"
   hasura:
     build:
-      context: ./hasura
+      context: ./packages/api-cardano-db-hasura/hasura
     image: inputoutput/cardano-graphql-hasura:v1.0.0-rc.12
     ports:
       - "8090:8080"
