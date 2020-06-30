@@ -16,33 +16,30 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh 'yarn && yarn build'
-        sh 'yarn --cwd ./cli && yarn --cwd ./cli build'
-        sh 'yarn --cwd ./generated_packages/TypeScript'
+        sh 'yarn --pure-lockfile'
+        sh 'yarn build'
       }
     }
     stage('Validate Code Style') {
       steps {
         sh 'yarn lint'
-        sh 'yarn --cwd ./cli lint'
       }
     }
     stage('Test') {
       steps {
-        sh 'docker-compose -p cardano-graphql -f ./test/docker-compose-ci.yml up --build --force-recreate -d'
-        sh 'NODE_ENV=test TEST_MODE=e2e npx jest suite --ci'
-        sh 'yarn jest Server --ci'
+        sh 'docker-compose -p cardano-graphql up --build --force-recreate -d'
+        sh 'TEST_MODE=e2e yarn test --ci'
       }
       post {
         always {
-          sh 'docker-compose -p cardano-graphql -f ./test/docker-compose-ci.yml down'
+          sh 'docker-compose -p cardano-graphql down'
         }
       }
     }
-    stage('Build Docker image') {
+    stage('Build Docker Images') {
       steps {
         sh "docker build -t inputoutput/cardano-graphql:${env.GIT_COMMIT} ."
-        sh "docker build -t inputoutput/cardano-graphql-hasura:${env.GIT_COMMIT} ./hasura"
+        sh "docker build -t inputoutput/cardano-graphql-hasura:${env.GIT_COMMIT} ./packages/api-cardano-db-hasura/hasura"
       }
     }
     stage('Publish: Git Revision') {
@@ -81,8 +78,7 @@ pipeline {
         sh "docker push inputoutput/cardano-graphql:latest"
         sh "docker push inputoutput/cardano-graphql-hasura:latest"
         sh "npx npm-cli-login -u $NPM_REGISTRY_AUTH_USR -e $NPM_REGISTRY_EMAIL -p $NPM_REGISTRY_AUTH_PSW -r $NPM_REGISTRY_URI"
-        sh "npm publish --cwd ./cli"
-        sh "npm publish --cwd ./generated_packages/TypeScript"
+        sh "./scripts/publish_packages.sh"
       }
       post {
         always {

@@ -51,7 +51,7 @@ in mkYarnPackage {
 
     ls -hal
 
-    cp -r deps/cardano-graphql/dist $out
+    cp -r deps/cardano-graphql/packages/server/dist $out
 
     mkdir -p $out/bin
     cat <<EOF > $out/bin/cardano-graphql

@@ -1,2 +1,4 @@
-src/graphql_types.ts
-src/generated_packages/TypeScript/index.ts
+.eslintrc.js
+*.d.ts
+graphql_types.ts
+*jest.config.js

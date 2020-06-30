@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "rootDir": "."
+  },
+  "include": ["./api/**/*.ts"]
+}

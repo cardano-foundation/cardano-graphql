@@ -14,17 +14,16 @@
 
 ## Overview
 
-Cross-platform, _typed_, and **queryable** API service for Cardano, powered by 
-[Hasura](https://hasura.io/) to precisely query projected Cardano state from 
-[PostgreSQL](https://www.postgresql.org/).
-
-The [schema](src/schema.graphql) is defined in native `.graphql`, and used to generate 
-[packages](generated_packages/README.md) for internal and client-side static typing. 
-[Apollo Server](https://www.apollographql.com/docs/apollo-server/) exposes the NodeJS execution 
-engine over a HTTP endpoint, and includes support for open source metrics via Prometheus, 
-and operation whitelisting.
-
-A [CLI](./cli/README.md) aims to streamline the setup and deployment process.
+Cross-platform, _typed_, and **queryable** API for Cardano. The project contains multiple
+ [packages](./packages) for composing GraphQL services to meet specific application demands, 
+ and a [docker-compose stack](./docker-compose.yml) serving the included [cardano-graphql-server Dockerfile](./Dockerfile) 
+ and the extended [hasura Dockerfile](./packages/api-cardano-db-hasura/hasura/Dockerfile).
+ The [schema](src/packages/api-cardano-db-hasura/schema.graphql) is defined in native `.graphql`,
+ and used to generate a TypeScript [package](packages/client-ts/README.md) for client-side static typing.
+ 
+  [Apollo Server](https://www.apollographql.com/docs/apollo-server/) 
+  exposes the NodeJS execution engine over a HTTP endpoint, and includes support for open source metrics 
+  via Prometheus, and implementing operation filtering to deny unexpected queries.
 
 **GraphQL** is a query language and execution environment with server and client implementations
  across many programming languages. The language can be serialized for network transmission, 
@@ -60,7 +59,7 @@ For more information, have a look at the [Wiki :book:](https://github.com/input-
 
 ## How to install (Linux / Docker)
 
-### Docker (recommended)
+### Docker
 
 See [Using Docker](https://github.com/input-output-hk/cardano-graphql/wiki/Docker).
 
@@ -74,7 +73,7 @@ See [Building](https://github.com/input-output-hk/cardano-graphql/wiki/Building)
 | ---                                                                                                | ---                                                          |
 | [API Documentation](https://input-output-hk.github.io/cardano-graphql)                             | Users of the Cardano GraphQL API                             |
 | [Wiki](https://github.com/input-output-hk/cardano-graphql/wiki)                                    | Anyone interested in the project and our development process |
-| [Example Queries](./src/example_queries)                                                           | Users of the Cardano GraphQL API                             |
+| [Example Queries - Cardano DB Hasura](./packages/api-cardano-db-hasura/src/example_queries)        | Users of the Cardano DB Hasura API                             |
 
 <hr/>
 

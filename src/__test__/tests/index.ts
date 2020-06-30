@@ -1,5 +1,0 @@
-export * from './blocks.query.test'
-export * from './cardano.query.test'
-export * from './epochs.query.test'
-export * from './transactions.query.test'
-export * from './utxos.query.test'

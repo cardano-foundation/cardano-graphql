@@ -1,0 +1,74 @@
+{
+  "name": "@cardano-graphql/cli",
+  "version": "1.0.0-rc.12",
+  "description": "Management tool for managing a Cardano GraphQL deployment",
+  "main": "./dist/index.js",
+  "bin": {
+    "cgql": "./dist/index.js"
+  },
+  "typings": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "add-global": "yarn build && yarn global add file:$PWD",
+    "remove-global": "yarn global remove @cardano-graphql/cli",
+    "build": "tsc -b ./src && shx cp src/Docker/docker-compose.yml dist/Docker/",
+    "cleanup": "shx rm -rf dist node_modules",
+    "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
+    "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
+    "prepack": "yarn build",
+    "postpack": "shx rm -rf dist",
+    "test": "NODE_ENV=test jest -c ./test/jest.config.js cli.test.ts",
+    "test:docker-compose": "NODE_ENV=test jest -c ./test/jest.config.js docker-compose.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
+  },
+  "keywords": [
+    "Cardano",
+    "Blockchain",
+    "GraphQL",
+    "CLI"
+  ],
+  "contributors": [
+    "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/input-output-hk/cardano-graphql/issues"
+  },
+  "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/cli/README.md",
+  "dependencies": {
+    "appdirectory": "^0.1.0",
+    "chalk": "^3.0.0",
+    "clear": "^0.1.0",
+    "commander": "^5.0.0",
+    "conf": "^6.2.4",
+    "cross-fetch": "^3.0.4",
+    "docker-compose": "^0.23.4",
+    "dockerode": "^3.2.0",
+    "figlet": "^1.3.0",
+    "fs-extra": "^9.0.0",
+    "inquirer": "^7.1.0",
+    "js-yaml": "^3.13.1",
+    "lodash.get": "^4.4.2",
+    "lodash.set": "^4.3.2",
+    "password-generator": "^2.2.3",
+    "ts-log": "^2.1.4",
+    "write-json-file": "^4.3.0"
+  },
+  "directories": {
+    "lib": "src",
+    "test": "test"
+  },
+  "files": [
+    "dist/*",
+    "src/Docker/docker-compose.yml",
+    "!dist/__test__",
+    "!dist/**/*.test.*",
+    "LICENSE",
+    "NOTICE"
+  ]
+}

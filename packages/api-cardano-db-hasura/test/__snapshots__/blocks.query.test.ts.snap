@@ -1,0 +1,99 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`blocks Can return aggregated data 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "number": 29021,
+      "transactions_aggregate": Object {
+        "aggregate": Object {
+          "avg": Object {
+            "fee": 171158,
+            "size": 218,
+            "totalOutput": 2846601153795,
+          },
+          "count": "2",
+          "max": Object {
+            "fee": "171246",
+            "size": "220",
+            "totalOutput": "4924799478660",
+          },
+          "min": Object {
+            "fee": "171070",
+            "size": "216",
+            "totalOutput": "768402828930",
+          },
+          "sum": Object {
+            "fee": "342316",
+            "size": "436",
+            "totalOutput": "5693202307590",
+          },
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`blocks Can return blocks by number 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "hash": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+    },
+  ],
+}
+`;
+
+exports[`blocks Can return filtered aggregated data 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "number": 29021,
+      "transactions_aggregate": Object {
+        "aggregate": Object {
+          "count": "2",
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`blocks are linked to their predecessor, and the chain can be traversed 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "hash": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "previousBlock": Object {
+        "number": 29021,
+        "previousBlock": Object {
+          "number": 29020,
+          "previousBlock": Object {
+            "number": 29019,
+          },
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`blocks are linked to their successor, and the chain can be traversed 1`] = `
+Object {
+  "blocks": Array [
+    Object {
+      "hash": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "nextBlock": Object {
+        "nextBlock": Object {
+          "nextBlock": Object {
+            "number": 29025,
+          },
+          "number": 29024,
+        },
+        "number": 29023,
+      },
+    },
+  ],
+}
+`;
