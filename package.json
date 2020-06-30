@@ -12,6 +12,7 @@
     "dev": "yarn service-dependencies up --build",
     "lint": "yarn workspaces run lint",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml",
+    "publish-packages": "yarn workspaces run publish",
     "service-dependencies": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose",
     "start": "yarn workspace @cardano-graphql/server start",
     "test": "yarn workspaces run test"
@@ -65,7 +66,6 @@
     "graphql-depth-limit": "^1.1.0",
     "graphql-tag": "^2.10.3",
     "jest": "^26.0.1",
-    "lerna": "^3.22.1",
     "node-fetch": "^2.6.0",
     "p-retry": "^4.2.0",
     "shx": "^0.3.2",
