@@ -27,12 +27,12 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'docker-compose -p cardano-graphql -f ./test/docker-compose-ci.yml up --build --force-recreate -d'
+        sh 'docker-compose -p cardano-graphql up --build --force-recreate -d'
         sh 'TEST_MODE=e2e yarn test --ci'
       }
       post {
         always {
-          sh 'docker-compose -p cardano-graphql -f ./test/docker-compose-ci.yml down'
+          sh 'docker-compose -p cardano-graphql down'
         }
       }
     }

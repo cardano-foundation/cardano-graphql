@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "build": "yarn workspaces run build",
-    "cleanup": "yarn workspaces run cleanup",
+    "cleanup": "yarn workspaces run cleanup && shx rm -rf node_modules",
     "dev": "yarn service-dependencies up --build",
     "lint": "yarn workspaces run lint",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml",
