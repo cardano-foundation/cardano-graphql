@@ -2,15 +2,15 @@ import { exec, spawn } from 'child_process'
 import fs from 'fs'
 import path from 'path'
 import envPaths from 'env-paths'
-import { dockerCommandCleanup, yarnAddGlobal, yarnRemoveGlobal } from './util'
+import { dockerCommandCleanup, setup, teardown } from './util'
 
 const projectName = 'cardano-graphql-test'
 const paths = envPaths(projectName)
 const acceptDefault = '\u000d'
 
 describe('CLI Test', () => {
-  beforeAll(yarnAddGlobal)
-  afterAll(yarnRemoveGlobal)
+  beforeAll(setup)
+  afterAll(teardown)
 
   it('Shows the program help if no arguments are passed', (done) => {
     exec('cgql', (error, stdout, stderr) => {

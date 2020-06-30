@@ -1,14 +1,14 @@
 import { exec, spawn } from 'child_process'
 import path from 'path'
-import { dockerCommandCleanup, yarnAddGlobal, yarnRemoveGlobal } from './util'
+import { dockerCommandCleanup, setup, teardown } from './util'
 
 const projectName = 'cardano-graphql-cli-test'
 const acceptDefault = '\u000d'
 const countRunningContainersScript = path.resolve(__dirname, 'scripts', 'count_running_docker_containers.sh')
 
 describe('Docker Compose Test', () => {
-  beforeAll(yarnAddGlobal)
-  afterAll(yarnRemoveGlobal)
+  beforeAll(setup)
+  afterAll(teardown)
 
   describe('booting the docker-compose stack after initialising via docker command', () => {
     beforeAll(dockerCommandCleanup)
