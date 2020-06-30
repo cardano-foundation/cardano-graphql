@@ -4,10 +4,6 @@
 npm i -g cardano-graphql-cli
 cgql --help
 ```
-## Execute without installing using [npx](https://nodejs.dev/the-npx-nodejs-package-runner)
-```
-npx cardano-graphql-cli --help
-```
 ## Build from source using yarn
 ```
 yarn & yarn add-global
