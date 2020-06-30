@@ -164,9 +164,11 @@ type Transaction_sum_fields {
 }
 
 type TransactionInput {
+  address: String!
+  sourceTransaction: Transaction!
   sourceTxHash: Hash32HexString!
   sourceTxIndex: Int!
-  address: String!
+  transaction: Transaction!
   txHash: Hash32HexString!
   value: String!
 }
@@ -183,6 +185,8 @@ input TransactionInput_bool_exp {
   _not: TransactionInput_bool_exp
   _or: [TransactionInput_bool_exp]
   address: text_comparison_exp
+  sourceTransaction: Transaction_bool_exp
+  transaction: Transaction_bool_exp
   value: text_comparison_exp
 }
 
@@ -217,6 +221,7 @@ type TransactionInput_sum_fields {
 type TransactionOutput {
   address: String!
   index: Int!
+  transaction: Transaction!
   txHash: Hash32HexString!
   value: String!
 }
@@ -233,6 +238,7 @@ input TransactionOutput_bool_exp {
   _not: TransactionOutput_bool_exp
   _or: [TransactionOutput_bool_exp]
   address: text_comparison_exp
+  transaction: Transaction_bool_exp
   value: text_comparison_exp
 }
 

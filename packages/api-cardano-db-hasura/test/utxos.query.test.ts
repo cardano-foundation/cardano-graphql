@@ -8,6 +8,11 @@ import { buildSchema } from '@src/index'
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'utxos'), name)
 }
+
+function loadTestOperationDocument (name: string): Promise<DocumentNode> {
+  return util.loadQueryNode(path.resolve(__dirname, 'graphql_operations'), name)
+}
+
 describe('utxos', () => {
   let client: TestClient
   beforeAll(async () => {
@@ -20,21 +25,30 @@ describe('utxos', () => {
   }, 60000)
 
   it('Can be scoped by address', async () => {
+    // Get a addresses to run tests against
+    const anyUtxoResult = await client.query({
+      query: await loadTestOperationDocument('getAnyUtxoAddress'),
+      variables: { qty: 1 }
+    })
+    const address = anyUtxoResult.data.utxos[0].address
     const result = await client.query({
       query: await loadQueryNode('utxoSetForAddress'),
-      variables: { address: 'DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s' }
+      variables: { address }
     })
+    expect(result.data.utxos[0].transaction.block.number).toBeDefined()
     expect(result.data.utxos.length).toBeDefined()
   })
   it('Can be scoped by list of addresses', async () => {
+    // Get a addresses to run tests against
+    const anyUtxoResult = await client.query({
+      query: await loadTestOperationDocument('getAnyUtxoAddress'),
+      variables: { qty: 2 }
+    })
+    const address1 = anyUtxoResult.data.utxos[0].address
+    const address2 = anyUtxoResult.data.utxos[1].address
     const result = await client.query({
       query: await loadQueryNode('utxoSetForAddresses'),
-      variables: {
-        addresses: [
-          'DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s',
-          'Ae2tdPwUPEZGvXJ3ebp4LDgBhbxekAH2oKZgfahKq896fehv8oCJxmGJgLt'
-        ]
-      }
+      variables: { addresses: [address1, address2] }
     })
     expect(result.data.utxos.length).toBeDefined()
   })

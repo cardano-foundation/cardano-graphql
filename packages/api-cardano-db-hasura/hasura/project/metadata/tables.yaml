@@ -169,6 +169,23 @@
 - table:
     schema: public
     name: TransactionInput
+  object_relationships:
+  - name: sourceTransaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          sourceTxHash: hash
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          txHash: hash
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -184,6 +201,15 @@
 - table:
     schema: public
     name: TransactionOutput
+  object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          txHash: hash
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -203,6 +229,15 @@
       select_aggregate: utxos_aggregate
       select: utxos
     custom_column_names: {}
+  object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          txHash: hash
   select_permissions:
   - role: cardano-graphql
     permission:
