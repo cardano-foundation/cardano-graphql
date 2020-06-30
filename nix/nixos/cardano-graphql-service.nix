@@ -77,7 +77,7 @@ in {
       };
       projectPath = lib.mkOption {
         type = lib.types.path;
-        default = ../../hasura/project;
+        default = ../../packages/api-cardano-db-hasura/hasura/project;
         description = "Source directory for project";
       };
     };
