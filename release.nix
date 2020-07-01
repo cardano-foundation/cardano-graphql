@@ -21,7 +21,7 @@ pkgs.lib.fix (self: {
   required = pkgs.releaseTools.aggregate {
     name = "required";
     constituents = with self; [
-      cardano-graphql
+      self.cardano-graphql
       graphql-engine
       hasura-cli
       hasura-cli-ext
