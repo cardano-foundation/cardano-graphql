@@ -2,8 +2,8 @@ import path from 'path'
 
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
-import utilDev, { TestClient } from '@cardano-graphql/util-dev'
-import { buildSchema } from '@src/index'
+import { TestClient } from '@cardano-graphql/util-dev'
+import { buildClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'utxos'), name)
@@ -16,12 +16,7 @@ function loadTestOperationDocument (name: string): Promise<DocumentNode> {
 describe('utxos', () => {
   let client: TestClient
   beforeAll(async () => {
-    if (process.env.TEST_MODE === 'e2e') {
-      client = await utilDev.createE2EClient()
-    } else {
-      const schema = await buildSchema('http://localhost:8090')
-      client = await utilDev.createIntegrationClient(schema)
-    }
+    client = await buildClient()
   }, 60000)
 
   it('Can be scoped by address', async () => {
