@@ -3,9 +3,9 @@ import path from 'path'
 
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
-import utilDev, { TestClient } from '@cardano-graphql/util-dev'
+import { TestClient } from '@cardano-graphql/util-dev'
 import { epoch1 } from './data_assertions'
-import { buildSchema } from '../src'
+import { buildClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'epochs'), name)
@@ -14,12 +14,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('epochs', () => {
   let client: TestClient
   beforeAll(async () => {
-    if (process.env.TEST_MODE === 'e2e') {
-      client = await utilDev.createE2EClient()
-    } else {
-      const schema = await buildSchema('http://localhost:8090')
-      client = await utilDev.createIntegrationClient(schema)
-    }
+    client = await buildClient()
   }, 60000)
 
   it('Returns epoch details by number', async () => {

@@ -3,9 +3,9 @@ import path from 'path'
 
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
-import utilDev, { TestClient } from '@cardano-graphql/util-dev'
+import { TestClient } from '@cardano-graphql/util-dev'
 import { tx05ad8b, txe68043 } from './data_assertions'
-import { buildSchema } from '@src/index'
+import { buildClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'transactions'), name)
@@ -14,12 +14,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('transactions', () => {
   let client: TestClient
   beforeAll(async () => {
-    if (process.env.TEST_MODE === 'e2e') {
-      client = await utilDev.createE2EClient()
-    } else {
-      const schema = await buildSchema('http://localhost:8090')
-      client = await utilDev.createIntegrationClient(schema)
-    }
+    client = await buildClient()
   }, 60000)
 
   it('Returns transactions by hashes', async () => {

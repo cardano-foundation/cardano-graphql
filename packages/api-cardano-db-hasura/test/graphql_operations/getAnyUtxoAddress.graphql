@@ -1,0 +1,7 @@
+query getAnyUtxoAddress (
+    $qty: Int!
+){
+    utxos (limit: $qty, where: { transaction: { block: { number: { _is_null: false }}}}) {
+        address
+    }
+}

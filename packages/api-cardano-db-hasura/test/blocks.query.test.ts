@@ -1,11 +1,10 @@
 import path from 'path'
-
 import { DocumentNode } from 'graphql'
-import util from '@cardano-graphql/util'
-import utilDev, { TestClient } from '@cardano-graphql/util-dev'
-import { buildSchema } from '../src'
-import { block29021, block29022 } from './data_assertions'
 import gql from 'graphql-tag'
+import util from '@cardano-graphql/util'
+import { TestClient } from '@cardano-graphql/util-dev'
+import { block29021, block29022 } from './data_assertions'
+import { buildClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'blocks'), name)
@@ -14,12 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('blocks', () => {
   let client: TestClient
   beforeAll(async () => {
-    if (process.env.TEST_MODE === 'e2e') {
-      client = await utilDev.createE2EClient()
-    } else {
-      const schema = await buildSchema('http://localhost:8090')
-      client = await utilDev.createIntegrationClient(schema)
-    }
+    client = await buildClient()
   }, 60000)
 
   it('caps the response to 100 blocks', async () => {
