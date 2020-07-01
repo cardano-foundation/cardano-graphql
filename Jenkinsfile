@@ -28,7 +28,7 @@ pipeline {
     stage('Test') {
       steps {
         sh 'docker-compose -p cardano-graphql up --build --force-recreate -d'
-        sh 'echo "Warming up the stack" && sleep 10'
+        sh 'sleep 10'
         sh 'TEST_MODE=e2e yarn test --ci'
       }
       post {
