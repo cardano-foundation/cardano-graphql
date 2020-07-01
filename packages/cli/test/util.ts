@@ -7,7 +7,7 @@ export function setup (done: DoneCallback) {
     const yarnAddGlobal = spawn('yarn', ['add-global'])
     yarnAddGlobal.stderr.on('error', (error) => done(error))
     yarnAddGlobal.on('close', done)
-  }, 4000)
+  }, 6000)
 }
 
 export function teardown (done?: DoneCallback) {
