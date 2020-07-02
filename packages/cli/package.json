@@ -59,6 +59,9 @@
     "ts-log": "^2.1.4",
     "write-json-file": "^4.3.0"
   },
+  "devDependencies": {
+    "typescript": "^3.9.5"
+  },
   "directories": {
     "lib": "src",
     "test": "test"

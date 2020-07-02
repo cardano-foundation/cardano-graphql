@@ -20,10 +20,8 @@
     "url": "https://github.com/input-output-hk/cardano-graphql/issues"
   },
   "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/util-dev/README.md",
-  "dependencies": {
-    "graphql": "14.5.8",
-    "graphql-tag": "^2.10.3",
-    "p-retry": "^4.2.0"
+  "devDependencies": {
+    "@cardano-graphql/util": "1.0.0-rc.12"
   },
   "directories": {
     "lib": "src",
