@@ -1,67 +1,59 @@
-{ mkYarnPackage
-, lib
-, cardano-graphql-src
-, runtimeShell
+{ stdenv
+, nix-inclusive
 , nodejs
-, python
+, nodePackages
+, runtimeShell
+, sources
+, yarn
 }:
 
 let
-  packageJSON = cardano-graphql-src + "/package.json";
-  version = (__fromJSON (__readFile packageJSON)).version;
+  packageJSON = builtins.fromJSON (builtins.readFile ../package.json);
 
-in mkYarnPackage {
-  pname = "cardano-graphql";
-  inherit packageJSON version;
-  yarnLock = cardano-graphql-src + "/yarn.lock";
-  src = lib.cleanSourceWith {
-    filter = name: type: let
-      baseName = baseNameOf (toString name);
-      sansPrefix = lib.removePrefix (toString ../.) name;
-      in_blacklist =
-        lib.hasPrefix "/node_modules" sansPrefix ||
-        lib.hasPrefix "/build" sansPrefix ||
-        lib.hasPrefix "/.git" sansPrefix;
-      in_whitelist =
-        (type == "directory") ||
-        (lib.hasSuffix ".yml" name) ||
-        (lib.hasSuffix ".ts" name) ||
-        (lib.hasSuffix ".json" name) ||
-        (lib.hasSuffix ".graphql" name) ||
-        baseName == "package.json" ||
-        baseName == "yarn.lock" ||
-        (lib.hasPrefix "/deploy" sansPrefix);
-    in (
-      (!in_blacklist) && in_whitelist
-    );
-    src = cardano-graphql-src;
+  src = stdenv.mkDerivation {
+    pname = "${packageJSON.name}-src";
+    version = packageJSON.version;
+    buildInputs = [ yarn nodejs ];
+    src = nix-inclusive ./.. [
+      ../yarn.lock
+      ../.yarnrc
+      ../package.json
+      ../packages
+      ../packages-cache
+      ../tsconfig.json
+      ../docker-compose.yml
+    ];
+    buildCommand = ''
+      mkdir -p $out
+      cp -r $src/. $out/
+      cd $out
+      chmod -R u+w .
+      yarn --offline --frozen-lockfile --non-interactive
+    '';
   };
-  yarnPreBuild = ''
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-  '';
 
-  installPhase = ''
-    export PATH="$PATH:$node_modules/.bin"
+in stdenv.mkDerivation {
+  pname = packageJSON.name;
+  version = packageJSON.version;
+  inherit src;
+  buildInputs = [ nodejs yarn ];
+  buildCommand = ''
+    mkdir -p $out
+    cp -r $src/. $out/
+    chmod -R u+w $out
+    patchShebangs $out
 
-    yarn run build
+    cd $out
 
-    pwd
-
-    ls -hal
-
-    cp -r deps/cardano-graphql/packages/server/dist $out
+    yarn build
+    find . -name node_modules -type d -print0 | xargs -0 rm -rf
+    yarn --production --offline --frozen-lockfile --non-interactive
 
     mkdir -p $out/bin
     cat <<EOF > $out/bin/cardano-graphql
     #!${runtimeShell}
-    exec ${nodejs}/bin/node $out/index.js
+    exec ${nodejs}/bin/node $out/packages/server/dist/index.js
     EOF
     chmod +x $out/bin/cardano-graphql
-  '';
-
-  distPhase = ''
-    cp -r . $out
   '';
 }
