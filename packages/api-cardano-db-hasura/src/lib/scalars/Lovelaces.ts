@@ -1,6 +1,6 @@
 import { GraphQLScalarType, Kind } from 'graphql'
 
-export const LoveLaces = new GraphQLScalarType({
+export const Lovelaces = new GraphQLScalarType({
   name: 'LoveLaces',
   description: 'LoveLaces, the atomic unit of ADA',
   serialize (value) {
