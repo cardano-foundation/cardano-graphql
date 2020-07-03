@@ -17,7 +17,7 @@ if [ $? != 0 ] ; then echo "Failed parsing options." >&2 ; exit 1 ; fi
 GRAPHQL_ENGINE=graphql-engine
 HASURA_CLI=hasura
 PROJECT_PATH=$PWD
-SERVER_PORT=8090
+SERVER_PORT=8091
 TIMEOUT=30
 
 while true; do
@@ -36,7 +36,7 @@ done
 log() {
     TIMESTAMP=$(date -u "+%Y-%m-%dT%H:%M:%S.000+0000")
     MESSAGE=$1
-    echo "{\"timestamp\":\"$TIMESTAMP\",\"level\":\"info\",\"type\":\"startup\",\"detail\":{\"kind\":\"migration-apply\",\"info\":\"$MESSAGE\"}}"
+    echo "{\"timestamp\":\"$TIMESTAMP\",\"level\":\"info\",\"type\":\"startup\",\"detail\":{\"kind\":\"db-migration-metadata-apply\",\"info\":\"$MESSAGE\"}}"
 }
 
 # wait for a port to be ready
@@ -60,11 +60,11 @@ PID=$!
 
 wait_for_port "$SERVER_PORT"
 
-log "Applying migrations and metadata"
-$HASURA_CLI --project "$PROJECT_PATH" migrate apply --down all
-$HASURA_CLI --project "$PROJECT_PATH" migrate apply --up all
-$HASURA_CLI --project "$PROJECT_PATH" metadata clear
-$HASURA_CLI --project "$PROJECT_PATH" metadata apply
+log "Applying migrations and metadata- migrate apply"
+$HASURA_CLI --project "$PROJECT_PATH" --endpoint http://localhost:"$SERVER_PORT" migrate apply --down all
+$HASURA_CLI --project "$PROJECT_PATH" --endpoint http://localhost:"$SERVER_PORT" migrate apply --up all
+$HASURA_CLI --project "$PROJECT_PATH" --endpoint http://localhost:"$SERVER_PORT" metadata clear
+$HASURA_CLI --project "$PROJECT_PATH" --endpoint http://localhost:"$SERVER_PORT" metadata apply
 
 log "Killing server used to perform the setup"
 kill $PID
