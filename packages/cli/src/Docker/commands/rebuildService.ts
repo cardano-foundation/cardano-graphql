@@ -10,7 +10,7 @@ export function rebuildServiceCommand (stack: DockerComposeStack) {
     .option('--no-backup', 'Rebuild without making a backup')
     .action(async (cmd) => {
       const { backup, services } = cmd
-      if (services.length > 0) {
+      if (services?.length > 0) {
         await stack.rebuildService(services, backup)
       } else {
         await inquirer

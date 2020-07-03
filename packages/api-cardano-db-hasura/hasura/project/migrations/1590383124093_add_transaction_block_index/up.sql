@@ -1,7 +1,8 @@
-create or replace view "Transaction" as
+drop view "Transaction";
+create view "Transaction" as
 select
   block.hash as "blockHash",
-  COALESCE(tx.fee, 0) as fee,
+  coalesce(tx.fee, 0) as fee,
   tx.hash as hash,
   cast((select sum("value") from tx_out where tx_id = tx.id) as bigint) as "totalOutput",
   tx.size,
