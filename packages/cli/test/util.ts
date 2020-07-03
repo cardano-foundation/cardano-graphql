@@ -4,14 +4,14 @@ import DoneCallback = jest.DoneCallback
 export function setup (done: DoneCallback) {
   teardown()
   setTimeout(() => {
-    const yarnAddGlobal = spawn('yarn', ['add-global'])
+    const yarnAddGlobal = spawn('yarn', ['global:add'])
     yarnAddGlobal.stderr.on('error', (error) => done(error))
     yarnAddGlobal.on('close', done)
   }, 6000)
 }
 
 export function teardown (done?: DoneCallback) {
-  const yarnRemoveGlobal = spawn('yarn', ['remove-global'])
+  const yarnRemoveGlobal = spawn('yarn', ['global:remove'])
   yarnRemoveGlobal.stderr.on('error', (error) => {
     if (done !== undefined) done(error)
   })
