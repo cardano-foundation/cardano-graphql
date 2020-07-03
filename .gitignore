@@ -4,6 +4,7 @@
 *coverage
 *d.ts
 *dist/
+build
 lerna-debug.log
 *node_modules/
 result*

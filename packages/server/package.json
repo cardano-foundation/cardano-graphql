@@ -2,6 +2,7 @@
   "name": "@cardano-graphql/server",
   "version": "1.0.0-rc.12",
   "description": "Serve the Cardano GraphQL API over HTTP",
+  "bin": "dist/index.js",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
@@ -45,5 +46,13 @@
   "directories": {
     "lib": "src",
     "test": "test"
+  },
+  "pkg": {
+    "targets": [
+      "node12.18.1-alpine-x64",
+      "node12.18.1-linux-x64",
+      "node12.18.1-macos-x64",
+      "node12.18.1-win-x64"
+    ]
   }
 }
