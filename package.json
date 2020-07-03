@@ -9,6 +9,8 @@
   "scripts": {
     "build": "yarn workspaces run build",
     "cleanup": "yarn workspaces run cleanup && shx rm -rf node_modules",
+    "cli:install": "yarn workspace @cardano-graphql/cli global:add",
+    "cli:uninstall": "yarn workspace @cardano-graphql/cli global:remove",
     "dev": "yarn service-dependencies up --build",
     "lint": "yarn workspaces run lint",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml",
@@ -36,7 +38,6 @@
     "@types/figlet": "^1.2.0",
     "@types/fs-extra": "^9.0.1",
     "@types/graphql-depth-limit": "^1.1.2",
-    "@types/graphql-iso-date": "^3.3.3",
     "@types/inquirer": "^6.5.0",
     "@types/jest": "^26.0.3",
     "@types/js-yaml": "^3.12.5",
@@ -73,5 +74,8 @@
     "ts-jest": "^26.1.1",
     "ts-node-dev": "^1.0.0-pre.49",
     "typescript": "^3.9.5"
+  },
+  "resolutions": {
+    "**/graphql": "14.5.8"
   }
 }

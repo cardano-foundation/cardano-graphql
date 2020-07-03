@@ -1,8 +1,8 @@
 import { GraphQLScalarType, Kind } from 'graphql'
 
-export const Lovelaces = new GraphQLScalarType({
-  name: 'LoveLaces',
-  description: 'LoveLaces, the atomic unit of ADA',
+export const DateTime = new GraphQLScalarType({
+  name: 'DateTime',
+  description: 'SQL timestamp without timezone',
   serialize (value) {
     return value
   },
@@ -12,8 +12,6 @@ export const Lovelaces = new GraphQLScalarType({
   parseLiteral (ast) {
     switch (ast.kind) {
       case Kind.STRING :
-        return parseInt(ast.value)
-      case Kind.INT :
         return ast.value
     }
   }

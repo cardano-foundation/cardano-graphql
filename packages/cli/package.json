@@ -11,11 +11,11 @@
     "access": "public"
   },
   "scripts": {
-    "add-global": "yarn build && yarn global add file:$PWD",
-    "remove-global": "yarn global remove @cardano-graphql/cli",
     "build": "tsc -b ./src && shx cp src/Docker/docker-compose.yml dist/Docker/",
     "cleanup": "shx rm -rf dist node_modules",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
+    "global:add": "yarn build && yarn global add file:$PWD",
+    "global:remove": "yarn global remove @cardano-graphql/cli",
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
     "prepack": "yarn build",
     "postpack": "shx rm -rf dist",

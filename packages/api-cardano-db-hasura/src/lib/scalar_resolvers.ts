@@ -1,16 +1,16 @@
 import {
+  DateTime,
   Hash32HexString,
-  LoveLaces,
+  Lovelaces,
   Percentage
 } from './scalars'
 
 const GraphQLBigInt = require('graphql-bigint')
-const GraphQLDateTime = require('graphql-iso-date')
 
 export const scalarResolvers = {
   Hash32HexString: Hash32HexString,
   BigInt: GraphQLBigInt,
-  DateTime: GraphQLDateTime,
-  Lovelaces: LoveLaces,
+  DateTime,
+  Lovelaces,
   Percentage: Percentage
 } as any
