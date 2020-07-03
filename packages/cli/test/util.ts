@@ -26,5 +26,7 @@ export function dockerCommandCleanup (done: DoneCallback) {
     console.error(error)
     if (error) return done(error)
   })
-  done()
+  cgqlCleanup.on('close', () => {
+    done()
+  })
 }
