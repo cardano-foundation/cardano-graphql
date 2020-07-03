@@ -1,6 +1,6 @@
 create view "Block" as
 select
-  CAST(COALESCE((select sum(tx.fee) from tx where tx.block = block.id), 0) as integer) as "fees",
+  cast(coalesce((select sum(tx.fee) from tx where tx.block = block.id), 0) as integer) as "fees",
   block.hash as hash,
   block.merkel_root as "merkelRoot",
   block.block_no as number,
@@ -47,7 +47,7 @@ from epoch;
 create view "Transaction" as
 select
   block.hash as "blockHash",
-  COALESCE(tx.fee, 0) as fee,
+  coalesce(tx.fee, 0) as fee,
   tx.hash as hash,
   cast((select sum("value") from tx_out where tx_id = tx.id) as bigint) as "totalOutput",
   tx.size,
@@ -97,8 +97,8 @@ from tx
 join tx_out
   on tx.id = tx_out.tx_id;
 
-CREATE FUNCTION utxo_set_at_block("hash" hash32type)
-RETURNS SETOF "TransactionOutput" AS $$
+create function utxo_set_at_block("hash" hash32type)
+returns setof "TransactionOutput" AS $$
   select
     "TransactionOutput".address,
     "TransactionOutput".value,
@@ -114,4 +114,4 @@ RETURNS SETOF "TransactionOutput" AS $$
     and tx_out.index = tx_in.tx_out_index
   where tx_in.tx_in_id is null
   and tx.block <= (select id from block where hash = "hash")
-$$ LANGUAGE sql STABLE;
+$$ language sql stable;
