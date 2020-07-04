@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { ApolloError } from 'apollo-error'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { delegateToSchema } from '@graphql-tools/delegate'
 import { Resolvers } from './graphql_types'
@@ -61,14 +62,17 @@ export async function buildSchema (hasuraUri: string) {
           })
         },
         cardano: async (_root, _args, context, info) => {
-          const result = await delegateToSchema({
+          const result = (await delegateToSchema({
             context,
             fieldName: 'cardano',
             info,
             operation: 'query',
             schema: hasuraSchema
-          })
-          return result[0]
+          }))[0]
+          if (result.currentEpoch === null) {
+            return new ApolloError('currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.')
+          }
+          return result
         },
         transactions: (_root, args, context, info) => {
           return delegateToSchema({
