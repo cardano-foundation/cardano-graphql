@@ -31,10 +31,10 @@ services:
     logging:
       driver: "json-file"
       options:
-        max-size: "200k"
-        max-file: "10"
+        max-size: "400k"
+        max-file: "20"
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-2.0.0}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-2.1.0}
     environment:
       - EXTENDED=true
       - NETWORK=${NETWORK:-mainnet}
