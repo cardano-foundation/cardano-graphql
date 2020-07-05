@@ -9,6 +9,7 @@ scalar Lovelaces
 scalar Percentage
 
 type Query {
+  meta: Meta!
   blocks (
     limit: Int
     order_by: [Block_order_by!]
@@ -61,12 +62,17 @@ type Query {
 }
 
 type Cardano {
-  blockHeight: Int!
+  tip: Block!
   currentEpoch: Epoch!
   networkName: String!
   protocolConst: Int!
   slotDuration: Int!
+  slotsPerEpoch: Int!
   startTime: DateTime!
+}
+
+type Meta {
+  isFullySynced: Boolean!
 }
 
 type Transaction {

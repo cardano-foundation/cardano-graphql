@@ -18,7 +18,9 @@ export const createE2EClient = async () => {
     await client.query({
       query: gql`query {
           cardano {
-              blockHeight
+              tip { 
+                  number
+              }
               currentEpoch {
                   number
               }

@@ -19,13 +19,13 @@ describe('blocks ', () => {
     const graphQLResult = await client.query({
       query: gql`query Blockheight {
                   cardano {
-                      blockHeight
+                      tip { number }
                   }
               }`
     })
 
     const restResultBlockHeight = restResult.Right[1][0].cbeBlkHeight
-    const graphQLBlockHeight = graphQLResult.data.cardano.blockHeight
+    const graphQLBlockHeight = graphQLResult.data.cardano.tip.number
 
     // As we're calling an external API to check equality on something that changes every 20 seconds
     // there is a small delta in the test condition to allow for this where the second API value can be

@@ -52,7 +52,7 @@ $ NETWORK=testnet docker-compose up
 3. Query the API once fully synced :tada:
 
 ```
-$ curl -X POST -H "Content-Type: application/json" -d '{"query": "{ cardano { blockHeight }}"}' http://localhost:3100/graphql
+$ curl -X POST -H "Content-Type: application/json" -d '{"query": "{ cardano { tip: { number }"}' http://localhost:3100/graphql
 ```
 
 For more information, have a look at the [Wiki :book:](https://github.com/input-output-hk/cardano-graphql/wiki).

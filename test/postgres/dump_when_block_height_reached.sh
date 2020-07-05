@@ -9,7 +9,7 @@ OUT_PATH="test/postgres/init/${FILE_NAME}"
 printf "\nPolling $HTTP_SERVER_URI until block height exceeds $TARGET_BLOCK_HEIGHT\n"
 while true;
 do
-	blockheight=$(curl -s -X POST -H "Content-Type: application/json" -d '{"query": "{ cardano { blockHeight }}"}' "$HTTP_SERVER_URI" | jq ".data.cardano.blockHeight");
+	blockheight=$(curl -s -X POST -H "Content-Type: application/json" -d '{"query": "{ cardano { tip: { number }}"}' "$HTTP_SERVER_URI" | jq ".data.cardano.tip.number");
 	if [ ! $blockheight = 'null' ]; then
 	  printf "\r$(date +%H:%M:%S): $blockheight";
     if [ "${blockheight}" -gt "${TARGET_BLOCK_HEIGHT}" ]; then

@@ -1,4 +1,4 @@
-drop view "Block" cascade;
+drop view "Block";
 create view "Block" as
 select
   cast(coalesce((select sum(tx.fee) from tx where tx.block = block.id), 0) as bigint) as "fees",
@@ -21,16 +21,3 @@ left outer join block as next_block
   on next_block.previous = block.id
 left outer join slot_leader
   on block.slot_leader = slot_leader.id;
-
-create view "Cardano" as
-select
-  number as "blockHeight",
-  "epochNo" as "currentEpochNo",
-  (select slot_duration from meta) as "slotDuration",
-  (select start_time from meta) as "startTime",
-  (select protocol_const from meta) as "protocolConst",
-  (select network_name from meta) as "networkName"
-from "Block"
-where number is not null
-order by number desc
-limit 1;

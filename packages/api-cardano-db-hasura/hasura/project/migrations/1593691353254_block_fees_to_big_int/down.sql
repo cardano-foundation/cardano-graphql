@@ -1,4 +1,4 @@
-drop view if exists "Block" cascade;
+drop view if exists "Block";
 create view "Block" as
 select
   cast(coalesce((select sum(tx.fee) from tx where tx.block = block.id), 0) as integer) as "fees",

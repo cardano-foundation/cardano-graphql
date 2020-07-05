@@ -9,6 +9,9 @@ import { buildHasuraSchema } from './buildHasuraSchema'
 import pRetry from 'p-retry'
 import util from '@cardano-graphql/util'
 import { GraphQLSchema } from 'graphql'
+import { ApolloClient, gql, InMemoryCache } from 'apollo-boost'
+import { createHttpLink } from 'apollo-link-http'
+import fetch from 'cross-fetch'
 
 export async function buildSchema (hasuraUri: string) {
   let hasuraSchema: GraphQLSchema
@@ -18,9 +21,38 @@ export async function buildSchema (hasuraUri: string) {
     retries: 9,
     onFailedAttempt: util.onFailedAttemptFor('Hasura schema introspection')
   })
+  const client = new ApolloClient({
+    cache: new InMemoryCache({
+      addTypename: false
+    }),
+    link: createHttpLink({
+      uri: hasuraUri,
+      fetch,
+      headers: {
+        'X-Hasura-Role': 'cardano-graphql'
+      }
+    })
+  })
   return makeExecutableSchema({
     resolvers: Object.assign({}, scalarResolvers, {
       Query: {
+        meta: async () => {
+          const result = await client.query({
+            query: gql`query {
+                cardano {
+                    tip {
+                        slotNo
+                    }
+                    slotDuration
+                    startTime
+                }}`
+          })
+          const { tip, slotDuration, startTime } = result.data?.cardano
+          const expectedTip = (Date.now() - startTime) * 1000 / slotDuration
+          return {
+            isFullySynced: (expectedTip - tip.slotNo) < 20
+          }
+        },
         blocks: (_root, args, context, info) => {
           return delegateToSchema({
             args,
