@@ -40,9 +40,17 @@ describe('Server', () => {
       cache: new InMemoryCache({
         addTypename: false
       }),
+      defaultOptions: {
+        query: {
+          fetchPolicy: 'network-only'
+        }
+      },
       link: createHttpLink({
         uri: `http://localhost:${port}`,
-        fetch
+        fetch,
+        fetchOptions: {
+          fetchPolicy: 'no-cache'
+        }
       })
     })
     app = express()

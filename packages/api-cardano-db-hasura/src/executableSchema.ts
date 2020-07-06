@@ -2,55 +2,41 @@ import fs from 'fs'
 import { ApolloError } from 'apollo-error'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { delegateToSchema } from '@graphql-tools/delegate'
-import { Resolvers } from './graphql_types'
-import path from 'path'
-import { scalarResolvers } from './lib/scalar_resolvers'
-import { buildHasuraSchema } from './buildHasuraSchema'
-import pRetry from 'p-retry'
-import util from '@cardano-graphql/util'
 import { GraphQLSchema } from 'graphql'
-import { ApolloClient, gql, InMemoryCache } from 'apollo-boost'
-import { createHttpLink } from 'apollo-link-http'
-import fetch from 'cross-fetch'
+import pRetry from 'p-retry'
+import path from 'path'
+import util from '@cardano-graphql/util'
+import { buildHasuraSchema } from './buildHasuraSchema'
+import { DB } from './DB'
+import { Resolvers } from './graphql_types'
+
+import { BigIntResolver } from 'graphql-scalars'
+
+export const scalarResolvers = {
+  Hash32HexString: util.scalars.Hash32HexString,
+  BigInt: BigIntResolver,
+  DateTime: util.scalars.DateTimeUtcToIso,
+  Percentage: util.scalars.Percentage
+} as any
 
 export async function buildSchema (hasuraUri: string) {
   let hasuraSchema: GraphQLSchema
   await pRetry(async () => {
     hasuraSchema = await buildHasuraSchema(hasuraUri)
   }, {
+    factor: 1.75,
     retries: 9,
-    onFailedAttempt: util.onFailedAttemptFor('Hasura schema introspection')
+    onFailedAttempt: util.onFailedAttemptFor('Fetching Hasura schema via introspection')
   })
-  const client = new ApolloClient({
-    cache: new InMemoryCache({
-      addTypename: false
-    }),
-    link: createHttpLink({
-      uri: hasuraUri,
-      fetch,
-      headers: {
-        'X-Hasura-Role': 'cardano-graphql'
-      }
-    })
-  })
+  const db = new DB(hasuraUri)
   return makeExecutableSchema({
     resolvers: Object.assign({}, scalarResolvers, {
       Query: {
         meta: async () => {
-          const result = await client.query({
-            query: gql`query {
-                cardano {
-                    tip {
-                        slotNo
-                    }
-                    slotDuration
-                    startTime
-                }}`
-          })
-          const { tip, slotDuration, startTime } = result.data?.cardano
-          const expectedTip = (Date.now() - startTime) * 1000 / slotDuration
-          return {
-            isFullySynced: (expectedTip - tip.slotNo) < 20
+          try {
+            return db.getMeta()
+          } catch (error) {
+            throw new ApolloError(error)
           }
         },
         blocks: (_root, args, context, info) => {

@@ -27,6 +27,7 @@ export const createE2EClient = async () => {
           }}`
     })
   }, {
+    factor: 1.75,
     retries: 9,
     onFailedAttempt: util.onFailedAttemptFor('Cardano GraphQL Server readiness')
   })

@@ -36,12 +36,15 @@
     "@graphql-tools/delegate": "^6.0.10",
     "@graphql-tools/schema": "^6.0.9",
     "@graphql-tools/wrap": "^6.0.9",
+    "apollo-boost": "^0.4.9",
+    "apollo-error": "^1.0.2",
     "apollo-link": "^1.2.14",
     "apollo-link-http": "^1.5.17",
     "apollo-link-retry": "^2.2.16",
     "cross-fetch": "^3.0.4",
     "graphql": "14.5.8",
     "graphql-bigint": "^1.0.0",
+    "graphql-scalars": "^1.2.1",
     "p-retry": "^4.2.0"
   },
   "devDependencies": {
