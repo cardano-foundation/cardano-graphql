@@ -8,7 +8,6 @@ scalar DateTime
 scalar Percentage
 
 type Query {
-  meta: Meta!
   blocks (
     limit: Int
     order_by: [Block_order_by!]
@@ -34,6 +33,7 @@ type Query {
     where: Epoch_bool_exp
   ): Epoch_aggregate!
   cardano: Cardano!
+  cardanoDBMeta: CardanoDBMeta!
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
@@ -70,7 +70,7 @@ type Cardano {
   startTime: DateTime!
 }
 
-type Meta {
+type CardanoDBMeta {
   isFullySynced: Boolean!
   slotDiffFromNetworkTip: Int!
   syncPercentage: Percentage!
