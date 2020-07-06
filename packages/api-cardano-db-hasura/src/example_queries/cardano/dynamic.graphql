@@ -1,6 +1,8 @@
 query cardanoDynamic {
   cardano {
-    blockHeight
+    tip {
+      number
+    }
     currentEpoch {
       number
     }

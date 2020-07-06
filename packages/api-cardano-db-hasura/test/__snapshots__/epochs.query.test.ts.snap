@@ -61,7 +61,7 @@ Object {
     Object {
       "blocks_aggregate": Object {
         "aggregate": Object {
-          "count": "3075",
+          "count": "3123",
         },
       },
       "number": 1,
@@ -75,10 +75,10 @@ Object {
   "epochs": Array [
     Object {
       "blocksCount": "21589",
-      "lastBlockTime": "2017-10-03T21:43:51",
+      "lastBlockTime": "2017-10-03T21:43:51.000Z",
       "number": 1,
       "output": "101402912214214220",
-      "startedAt": "2017-09-28T21:45:51",
+      "startedAt": "2017-09-28T21:45:51.000Z",
       "transactionsCount": "12870",
     },
   ],
@@ -90,10 +90,10 @@ Object {
   "epochs": Array [
     Object {
       "blocksCount": "21589",
-      "lastBlockTime": "2017-10-03T21:43:51",
+      "lastBlockTime": "2017-10-03T21:43:51.000Z",
       "number": 1,
       "output": "101402912214214220",
-      "startedAt": "2017-09-28T21:45:51",
+      "startedAt": "2017-09-28T21:45:51.000Z",
       "transactionsCount": "12870",
     },
   ],

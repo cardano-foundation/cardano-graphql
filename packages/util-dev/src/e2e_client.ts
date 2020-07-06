@@ -9,6 +9,11 @@ export const createE2EClient = async () => {
     cache: new InMemoryCache({
       addTypename: false
     }),
+    defaultOptions: {
+      query: {
+        fetchPolicy: 'network-only'
+      }
+    },
     link: createHttpLink({
       uri: process.env.CARDANO_GRAPHQL_URI || 'http://localhost:3100',
       fetch
@@ -18,13 +23,16 @@ export const createE2EClient = async () => {
     await client.query({
       query: gql`query {
           cardano {
-              blockHeight
+              tip { 
+                  number
+              }
               currentEpoch {
                   number
               }
           }}`
     })
   }, {
+    factor: 1.75,
     retries: 9,
     onFailedAttempt: util.onFailedAttemptFor('Cardano GraphQL Server readiness')
   })

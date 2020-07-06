@@ -5,7 +5,6 @@ schema {
 scalar Hash32HexString
 scalar BigInt
 scalar DateTime
-scalar Lovelaces
 scalar Percentage
 
 type Query {
@@ -34,6 +33,7 @@ type Query {
     where: Epoch_bool_exp
   ): Epoch_aggregate!
   cardano: Cardano!
+  cardanoDbMeta: CardanoDbMeta!
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
@@ -61,12 +61,19 @@ type Query {
 }
 
 type Cardano {
-  blockHeight: Int!
+  tip: Block!
   currentEpoch: Epoch!
   networkName: String!
   protocolConst: Int!
   slotDuration: Int!
+  slotsPerEpoch: Int!
   startTime: DateTime!
+}
+
+type CardanoDbMeta {
+  initialized: Boolean!
+  slotDiffFromNetworkTip: Int!
+  syncPercentage: Percentage!
 }
 
 type Transaction {
@@ -472,18 +479,6 @@ input BigInt_comparison_exp {
   _lte: BigInt
   _neq: BigInt
   _nin: [BigInt!]
-}
-
-# expression to compare data of type Lovelaces. All fields are combined with logical 'AND'.
-input Lovelaces_comparison_exp {
-  _eq: Lovelaces
-  _gt: Lovelaces
-  _gte: Lovelaces
-  _in: [Lovelaces!]
-  _lt: Lovelaces
-  _lte: Lovelaces
-  _neq: Lovelaces
-  _nin: [Lovelaces!]
 }
 
 # expression to compare data of type Percentage. All fields are combined with logical 'AND'.

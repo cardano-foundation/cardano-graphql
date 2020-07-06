@@ -76,16 +76,25 @@
           name: Epoch
         column_mapping:
           currentEpochNo: number
+  - name: tip
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Block
+        column_mapping:
+          tipBlockNo: number
   select_permissions:
   - role: cardano-graphql
     permission:
       columns:
-      - blockHeight
       - currentEpochNo
+      - networkName
       - protocolConst
       - slotDuration
+      - slotsPerEpoch
       - startTime
-      - networkName
+      - tipBlockNo
       filter: {}
       limit: 1
 - table:
