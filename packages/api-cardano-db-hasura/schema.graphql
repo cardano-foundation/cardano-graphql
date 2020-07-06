@@ -33,7 +33,7 @@ type Query {
     where: Epoch_bool_exp
   ): Epoch_aggregate!
   cardano: Cardano!
-  cardanoDBMeta: CardanoDBMeta!
+  cardanoDbMeta: CardanoDbMeta!
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
@@ -70,7 +70,7 @@ type Cardano {
   startTime: DateTime!
 }
 
-type CardanoDBMeta {
+type CardanoDbMeta {
   initialized: Boolean!
   slotDiffFromNetworkTip: Int!
   syncPercentage: Percentage!
