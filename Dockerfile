@@ -1,7 +1,8 @@
 FROM node:10.15.3-alpine as builder
 RUN apk add --update python make g++ yarn
 RUN mkdir /application
-COPY package.json yarn.lock /application/
+COPY package.json yarn.lock .yarnrc /application/
+COPY packages-cache /application/packages-cache
 WORKDIR /application
 RUN mkdir /application/packages
 COPY tsconfig.json /application/
@@ -9,19 +10,20 @@ COPY packages/api-cardano-db-hasura /application/packages/api-cardano-db-hasura
 COPY packages/server /application/packages/server
 COPY packages/util /application/packages/util
 COPY packages/util-dev /application/packages/util-dev
-RUN yarn --pure-lockfile --non-interactive
-RUN yarn workspaces run build
+RUN yarn --offline --frozen-lockfile --non-interactive
+RUN yarn build
 
 FROM node:10.15.3-alpine as production_deps
 RUN mkdir -p application/packages
-COPY package.json yarn.lock /application/
+COPY package.json yarn.lock .yarnrc /application/
+COPY --from=builder /application/packages-cache /application/packages-cache
 WORKDIR /application/packages
 RUN mkdir api-cardano-db-hasura util server
 COPY packages/api-cardano-db-hasura/package.json api-cardano-db-hasura/
 COPY packages/server/package.json server/
 COPY packages/util/package.json util/
 WORKDIR /application
-RUN yarn --production --pure-lockfile --non-interactive
+RUN yarn --production --offline --frozen-lockfile --non-interactive
 
 FROM node:10.15.3-alpine as server
 RUN mkdir /application
@@ -34,8 +36,6 @@ COPY --from=builder /application/packages/util/dist /application/packages/util/d
 COPY --from=builder /application/packages/util/package.json /application/packages/util/package.json
 COPY --from=production_deps /application/node_modules /application/node_modules
 WORKDIR /application
-COPY --from=production_deps /application/packages/api-cardano-db-hasura/node_modules /application/packages/api-cardano-db-hasura/node_modules
-COPY --from=production_deps /application/packages/server/node_modules /application/packages/server/node_modules
 WORKDIR /application/packages/server/dist
 EXPOSE 3100
 CMD ["node", "index.js"]
