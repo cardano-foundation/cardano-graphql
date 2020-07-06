@@ -32,7 +32,7 @@ export async function buildSchema (hasuraUri: string) {
   return makeExecutableSchema({
     resolvers: Object.assign({}, scalarResolvers, {
       Query: {
-        meta: async () => {
+        cardanoDBMeta: async () => {
           try {
             return db.getMeta()
           } catch (error) {
