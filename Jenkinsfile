@@ -16,7 +16,7 @@ pipeline {
   stages {
     stage('Install') {
       steps {
-        sh 'yarn --offline --frozen-lockfile'
+        sh 'yarn --offline --frozen-lockfile --non-interactive'
         sh 'yarn build'
       }
     }
