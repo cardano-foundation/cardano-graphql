@@ -1,10 +1,6 @@
 pipeline {
   agent any
 
-  environment {
-    PACKAGE_JSON = readJSON file: 'package.json'
-  }
-
   tools {nodejs 'Node 10'}
 
    // Lock concurrent builds due to the docker dependency
@@ -27,7 +23,7 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh 'docker-compose -p cardano-graphql up --build --force-recreate -d'
+        sh "CARDANO_GRAPHQL_VERSION=${env.GIT_COMMIT} docker-compose -p cardano-graphql up --build --force-recreate -d"
         sh 'sleep 10'
         sh 'TEST_MODE=e2e yarn test --ci'
       }
@@ -38,12 +34,10 @@ pipeline {
       }
     }
     stage('Publish: Git Revision') {
-       steps {
-         sh "docker tag inputoutput/cardano-graphql:${PACKAGE_JSON.version} inputoutput/cardano-graphql:${env.GIT_COMMIT}"
-         sh "docker tag inputoutput/cardano-graphql-hasura:${PACKAGE_JSON.version} inputoutput/cardano-graphql-hasura:${env.GIT_COMMIT}"
-         sh "docker push inputoutput/cardano-graphql:${env.GIT_COMMIT}"
-         sh "docker push inputoutput/cardano-graphql-hasura:${env.GIT_COMMIT}"
-       }
+      steps {
+        sh "docker push inputoutput/cardano-graphql:${env.GIT_COMMIT}"
+        sh "docker push inputoutput/cardano-graphql-hasura:${env.GIT_COMMIT}"
+      }
     }
     stage('Publish: Master Branch') {
       when {
