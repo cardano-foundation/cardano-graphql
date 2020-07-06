@@ -99,7 +99,7 @@ describe('Server', () => {
         const result = await client.query({
           query: whiteListedDocumentNode
         })
-        expect(result.data.cardano.blockHeight).toBeDefined()
+        expect(result.data.cardano.tip.number).toBeDefined()
         expect(result.errors).not.toBeDefined()
       })
       it('Returns a networkError if a valid but unlisted operation is sent', async () => {
