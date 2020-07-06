@@ -31,11 +31,11 @@ pipeline {
         sh 'sleep 10'
         sh 'TEST_MODE=e2e yarn test --ci'
       }
-      post {
-        always {
-          sh 'docker-compose -p cardano-graphql down'
-        }
-      }
+//       post {
+//         always {
+//           sh 'docker-compose -p cardano-graphql down'
+//         }
+//       }
     }
     stage('Build Docker Images') {
       steps {
