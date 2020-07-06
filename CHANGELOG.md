@@ -13,6 +13,25 @@ Changelog
 - Allow explicit ordering of `Transaction.outputs` by their natural `index`
 - `Cardano` now matches the postgres view, and is an improvement over the previous version which performed two queries.
 - CLI tool `cgql` with commands to assist with Docker-based deployments, including init, snapshotting, and db rebuild.
+- Establish relationships to easily access transaction and block information from inputs and outputs
+  - `TransactionInput.transaction`
+  - `TransactionInput.sourceTransaction` (where it was an output)
+  - `TransactionOutput.transaction`
+- `CardanoDbMeta` via `Query.cardanoDbMeta` exposes information to understand if the dataset is complete including:
+ `initialized`, `syncPercentage`, and `slotDiffFromNetworkTip`. The `epoch` data is incomplete until `initialized = true`
+ , which takes around 2 hours for the initial sync as of block number `4388632`. `syncPercentage` or
+  `slotDiffFromNetworkTip` provides progress.
+- The codebase is now modularized to enable new API segments to be added alongside as an extension, composition of services
+ for more use-cases, ability to import the executable schema and host on a different server. The packages are published,
+ to npm, or can be built from source:
+  - @cardano-graphql/server
+  - @cardano-graphql/api-cardano-db-hasura
+  - @cardano-graphql/client-ts
+  - @cardano-graphql/cli
+  - @cardano-graphql/util-dev
+  - @cardano-graphql/util
+  
+
 
 ## Breaking changes
 - PostgreSQL views are now being managed in this codebase, so either switch to the
@@ -26,6 +45,11 @@ Changelog
 - `Block.merkelRootHash` -> `Block.merkelRoot`
 - The aggregated and known very large numbers are now typed as String. Cardano JS has utilities to work with these return values, currently limited to currency conversion.
 - `Transaction.fee` previously `String`, now `BigInt`
+-  Entrypoint for the service previously found in `./dist/index.js` is now `./packages/server/dist/index.js` after building.
+- `Cardano.blockHeight` removed in favour of `Cardano.tip.number`, where `tip` = the most recent `Block`. This unlocks 
+more information such as `slotNo`, and capability to traverse the chain etc.
+- Dates are now coerced to RFC 3339 UTC date-time strings 
+
 
 ### Chores
 - Updates to Hasura 1.2.1

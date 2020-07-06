@@ -1,6 +1,6 @@
 {
   "name": "@cardano-graphql/cli",
-  "version": "1.0.0-rc.12",
+  "version": "1.0.0-rc.13",
   "description": "Management tool for managing a Cardano GraphQL deployment",
   "main": "./dist/index.js",
   "bin": {
@@ -11,7 +11,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc -b ./src && shx cp src/Docker/docker-compose.yml dist/Docker/",
+    "build": "tsc -b ./src && shx cp ../../docker-compose.yml dist/Docker/",
     "cleanup": "shx rm -rf dist node_modules",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly  src/index.ts",
     "global:add": "yarn build && yarn global add file:$PWD",
