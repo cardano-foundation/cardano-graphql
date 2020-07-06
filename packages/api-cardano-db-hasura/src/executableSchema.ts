@@ -10,11 +10,11 @@ import { buildHasuraSchema } from './buildHasuraSchema'
 import { DB } from './DB'
 import { Resolvers } from './graphql_types'
 
-import { BigIntResolver } from 'graphql-scalars'
+const GraphQLBigInt = require('graphql-bigint')
 
 export const scalarResolvers = {
   Hash32HexString: util.scalars.Hash32HexString,
-  BigInt: BigIntResolver,
+  BigInt: GraphQLBigInt,
   DateTime: util.scalars.DateTimeUtcToIso,
   Percentage: util.scalars.Percentage
 } as any
@@ -32,7 +32,7 @@ export async function buildSchema (hasuraUri: string) {
   return makeExecutableSchema({
     resolvers: Object.assign({}, scalarResolvers, {
       Query: {
-        cardanoDBMeta: async () => {
+        cardanoDbMeta: async () => {
           try {
             return db.getMeta()
           } catch (error) {

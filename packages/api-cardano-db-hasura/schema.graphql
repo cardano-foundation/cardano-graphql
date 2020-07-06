@@ -126,7 +126,7 @@ input Transaction_bool_exp {
   block: Block_bool_exp
   blockIndex: Int_comparison_exp
   fee: BigInt_comparison_exp
-  hash: text_comparison_exp
+  hash: Hash32HexString_comparison_exp
   includedAt: Date_comparison_exp
   inputs: TransactionInput_bool_exp
   outputs: TransactionOutput_bool_exp
@@ -319,7 +319,7 @@ input Block_bool_exp {
   createdBy: text_comparison_exp
   epoch: Epoch_bool_exp
   fees: BigInt_comparison_exp
-  hash: text_comparison_exp
+  hash: Hash32HexString_comparison_exp
   number: Int_comparison_exp
   previousBlock: Block_bool_exp
   nextBlock: Block_bool_exp
@@ -489,6 +489,14 @@ input Percentage_comparison_exp {
   _lt: Percentage
   _lte: Percentage
   _neq: Percentage
+}
+
+# All fields are combined with logical 'AND'.
+input Hash32HexString_comparison_exp {
+  _eq: Hash32HexString
+  _in: [Hash32HexString]
+  _neq: Hash32HexString
+  _nin: [Hash32HexString]
 }
 
 input text_comparison_exp {
