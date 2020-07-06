@@ -9,6 +9,11 @@ export const createE2EClient = async () => {
     cache: new InMemoryCache({
       addTypename: false
     }),
+    defaultOptions: {
+      query: {
+        fetchPolicy: 'network-only'
+      }
+    },
     link: createHttpLink({
       uri: process.env.CARDANO_GRAPHQL_URI || 'http://localhost:3100',
       fetch

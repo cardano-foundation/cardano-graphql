@@ -10,7 +10,7 @@ export const DateTimeUtcToIso = new GraphQLScalarType({
   name: 'DateTime',
   description: 'UTC DateTime to ISO RFC 3339',
   serialize (value) {
-    return DateTimeResolver.serialize.call(this, `${value}Z`)
+    return DateTimeResolver.serialize.call(this, `${value}Z`).toISOString()
   },
   parseValue (value) {
     // Trim .000Z

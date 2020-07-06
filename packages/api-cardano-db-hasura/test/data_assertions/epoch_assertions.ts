@@ -1,8 +1,8 @@
 export const epoch1 = {
   basic: {
-    startedAt: new Date('2017-09-28T21:45:51.000Z'),
+    startedAt: '2017-09-28T21:45:51.000Z',
     blocksCount: '21589',
-    lastBlockTime: new Date('2017-10-03T21:43:51.000Z'),
+    lastBlockTime: '2017-10-03T21:43:51.000Z',
     output: '101402912214214220',
     number: 1,
     transactionsCount: '12870'
