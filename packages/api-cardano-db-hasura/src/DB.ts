@@ -40,7 +40,7 @@ export class DB {
     const networkTipSlotNo = Math.round((Date.now() - new Date(`${startTime}Z`).getTime()) / slotDuration)
     const slotDiffFromNetworkTip = tip.slotNo - networkTipSlotNo
     return {
-      isFullySynced: slotDiffFromNetworkTip >= -20,
+      initialized: slotDiffFromNetworkTip >= -20,
       slotDiffFromNetworkTip,
       syncPercentage: (tip.slotNo / networkTipSlotNo) * 100
     }

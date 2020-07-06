@@ -71,7 +71,7 @@ type Cardano {
 }
 
 type CardanoDBMeta {
-  isFullySynced: Boolean!
+  initialized: Boolean!
   slotDiffFromNetworkTip: Int!
   syncPercentage: Percentage!
 }
