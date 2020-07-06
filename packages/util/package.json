@@ -8,6 +8,7 @@
     "build": "tsc -b ./src",
     "cleanup": "shx rm -rf dist node_modules",
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
+    "prepack": "yarn build",
     "test": "shx echo No tests in this package"
   },
   "repository": {
@@ -33,5 +34,11 @@
   "directories": {
     "lib": "src",
     "test": "test"
-  }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ]
 }
