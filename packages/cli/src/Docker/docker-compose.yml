@@ -16,6 +16,11 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
   cardano-node:
     image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-1.13.0}
     environment:
@@ -24,9 +29,12 @@ services:
       - node-db:/data/db
       - node-ipc:/ipc
     logging:
-      driver: none
+      driver: "json-file"
+      options:
+        max-size: "400k"
+        max-file: "20"
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-2.0.0}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-2.1.0}
     environment:
       - EXTENDED=true
       - NETWORK=${NETWORK:-mainnet}
@@ -42,13 +50,20 @@ services:
     volumes:
       - node-ipc:/node-ipc
     restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
   hasura:
-    image: inputoutput/cardano-graphql-hasura:v1.0.0-rc.12
+    build:
+      context: ./packages/api-cardano-db-hasura/hasura
+    image: inputoutput/cardano-graphql-hasura:v1.0.0-rc.13
     ports:
       - "8090:8080"
     depends_on:
       - "postgres"
-    restart: always
+    restart: on-failure
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
@@ -62,8 +77,16 @@ services:
       - postgres_db
       - postgres_password
       - postgres_user
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
   cardano-graphql:
-    image: inputoutput/cardano-graphql:v1.0.0-rc.12
+    build:
+      context: .
+      target: server
+    image: inputoutput/cardano-graphql:v1.0.0-rc.13
     environment:
       - CACHE_ENABLED=true
       - HASURA_URI=http://hasura:8080
@@ -71,6 +94,11 @@ services:
       - 3100
     ports:
       - ${API_PORT:-3100}:3100
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 secrets:
   postgres_db:
     file: ./config/secrets/postgres_db

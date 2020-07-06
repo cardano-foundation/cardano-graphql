@@ -1,6 +1,6 @@
 {
   "name": "@cardano-graphql/server",
-  "version": "1.0.0-rc.12",
+  "version": "1.0.0-rc.13",
   "description": "Serve the Cardano GraphQL API over HTTP",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/server/README.md",
   "dependencies": {
-    "@cardano-graphql/api-cardano-db-hasura": "1.0.0-rc.12",
+    "@cardano-graphql/api-cardano-db-hasura": "1.0.0-rc.13",
     "@graphql-tools/merge": "^6.0.10",
     "apollo-metrics": "^1.0.1",
     "apollo-server-core": "^2.14.3",
@@ -37,7 +37,7 @@
     "ts-custom-error": "^3.1.1"
   },
   "devDependencies": {
-    "@cardano-graphql/util-dev": "1.0.0-rc.12",
+    "@cardano-graphql/util-dev": "1.0.0-rc.13",
     "@types/graphql-depth-limit": "^1.1.2",
     "@types/node": "^14.0.13",
     "typescript": "^3.9.5"
