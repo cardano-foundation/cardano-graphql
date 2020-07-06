@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { ApolloError } from 'apollo-error'
+import { ApolloError } from 'apollo-server'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { delegateToSchema } from '@graphql-tools/delegate'
 import { GraphQLSchema } from 'graphql'
