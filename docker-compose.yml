@@ -63,7 +63,7 @@ services:
       - "8090:8080"
     depends_on:
       - "postgres"
-    restart: always
+    restart: on-failure
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
