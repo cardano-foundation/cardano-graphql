@@ -37,14 +37,10 @@ pipeline {
         }
       }
     }
-    stage('Build Docker Images') {
-      steps {
-        sh "docker build -t inputoutput/cardano-graphql:${env.GIT_COMMIT} ."
-        sh "docker build -t inputoutput/cardano-graphql-hasura:${env.GIT_COMMIT} ./packages/api-cardano-db-hasura/hasura"
-      }
-    }
     stage('Publish: Git Revision') {
        steps {
+         sh "docker tag inputoutput/cardano-graphql:${PACKAGE_JSON.version} inputoutput/cardano-graphql:${env.GIT_COMMIT}"
+         sh "docker tag inputoutput/cardano-graphql-hasura:${PACKAGE_JSON.version} inputoutput/cardano-graphql-hasura:${env.GIT_COMMIT}"
          sh "docker push inputoutput/cardano-graphql:${env.GIT_COMMIT}"
          sh "docker push inputoutput/cardano-graphql-hasura:${env.GIT_COMMIT}"
        }
