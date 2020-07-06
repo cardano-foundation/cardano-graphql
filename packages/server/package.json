@@ -8,6 +8,7 @@
     "build": "tsc -b ./src",
     "cleanup": "shx rm -rf dist node_modules",
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
+    "prepack": "yarn build",
     "prestart": "yarn build",
     "start": "HASURA_URI=http://localhost:8090 node dist/index.js",
     "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js"
@@ -45,5 +46,11 @@
   "directories": {
     "lib": "src",
     "test": "test"
-  }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ]
 }
