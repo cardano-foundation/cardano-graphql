@@ -34,8 +34,6 @@ COPY --from=builder /application/packages/util/dist /application/packages/util/d
 COPY --from=builder /application/packages/util/package.json /application/packages/util/package.json
 COPY --from=production_deps /application/node_modules /application/node_modules
 WORKDIR /application
-COPY --from=production_deps /application/packages/api-cardano-db-hasura/node_modules /application/packages/api-cardano-db-hasura/node_modules
-COPY --from=production_deps /application/packages/server/node_modules /application/packages/server/node_modules
 WORKDIR /application/packages/server/dist
 EXPOSE 3100
 CMD ["node", "index.js"]
