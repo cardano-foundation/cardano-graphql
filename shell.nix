@@ -54,18 +54,23 @@ let
       nodePackages.node2nix       # Generates a set of Nix expressions from a NPM package's package.json
       packages.vgo2nix            # Convert go.mod files to nixpkgs buildGoPackage compatible deps.nix files
       yarn2nix-moretea.yarn2nix   # Converts yarn.lock files into nix expression
+      packages.localCluster.start
+      packages.localCluster.stop
+      python3Packages.supervisor
     ];
     shellHook = ''
       echo "DevOps Tools" \
       | ${figlet}/bin/figlet -f banner -c \
       | ${lolcat}/bin/lolcat
 
+      export CARDANO_NODE_SOCKET_PATH=$PWD/${packages.localCluster.baseEnvConfig.stateDir}/bft1.socket
       echo "NOTE: you may need to export GITHUB_TOKEN if you hit rate limits with niv"
       echo "Commands:
         * niv update <package> - update package
         * export GOPATH="\$\(pwd\)/.go" - enable vgo2nix to use the pwd as it's source
         * node2nix -l - update node packages, -l if there's a lock file
-
+        * start-cluster - start a development cluster
+        * stop-cluster - stop a development cluster
       "
     '';
   };

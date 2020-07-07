@@ -3,6 +3,7 @@
 let
   packages = self: {
     sources = import ./sources.nix;
+    localCluster = self.callPackage ./local-cluster {};
     nodejs = pkgs.nodejs-12_x;
     inherit (import self.sources.niv {}) niv;
     nix-inclusive = pkgs.callPackage "${self.sources.nix-inclusive}/inclusive.nix" {};

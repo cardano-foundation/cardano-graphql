@@ -1,4 +1,28 @@
 {
+    "cardano-db-sync": {
+        "branch": "master",
+        "description": "A component that follows the Cardano chain and stores blocks and transactions in PostgreSQL",
+        "homepage": "",
+        "owner": "input-output-hk",
+        "repo": "cardano-db-sync",
+        "rev": "f23bd7987de8cb2618e010bc75946f03ff474338",
+        "sha256": "00y0xj5p2lwxm5wrprk64f8fa1ny05z97rxd04ndi3639j5zr6cr",
+        "type": "tarball",
+        "url": "https://github.com/input-output-hk/cardano-db-sync/archive/f23bd7987de8cb2618e010bc75946f03ff474338.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "cardano-node": {
+        "branch": "cluster-extra-services-1.14",
+        "description": "The core component that is used to participate in a Cardano decentralised blockchain.",
+        "homepage": "https://cardano.org",
+        "owner": "input-output-hk",
+        "repo": "cardano-node",
+        "rev": "f253cf87efb7b44a9a06f85ae999de4fe1bf44da",
+        "sha256": "0p56q9qmvlvyqnviwrprna2pa0dyrzjwh9l7c2gk3w60cc6qfcfc",
+        "type": "tarball",
+        "url": "https://github.com/input-output-hk/cardano-node/archive/f253cf87efb7b44a9a06f85ae999de4fe1bf44da.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "gitignore": {
         "branch": "master",
         "description": "Nix function for filtering local git sources",
@@ -22,6 +46,18 @@
         "sha256": "0hg44zl3gqa8lq7kggwgmgbsgdc7zrv5cxs507vilg11xklsbz4l",
         "type": "tarball",
         "url": "https://github.com/hasura/graphql-engine/archive/27b0b59361cebecd074bd59123f602e7b013bac1.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "iohk-nix": {
+        "branch": "master",
+        "description": "nix scripts shared across projects",
+        "homepage": null,
+        "owner": "input-output-hk",
+        "repo": "iohk-nix",
+        "rev": "0de0af2ed1b2d8f563e4f10e4e1fb386a5ffe683",
+        "sha256": "04pndv5vmhd2qhlrv086cz6dblzkr0nbxrq3k99n970121hjbi0k",
+        "type": "tarball",
+        "url": "https://github.com/input-output-hk/iohk-nix/archive/0de0af2ed1b2d8f563e4f10e4e1fb386a5ffe683.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
