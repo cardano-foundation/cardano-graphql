@@ -19,7 +19,7 @@ let
       nix                    # Purely Functional Package Manager
       nodePackages.node2nix  # Generates a set of Nix expressions from a NPM package's package.json
       packages.nodejs        # Event-driven I/O framework for the V8 JavaScript engine
-      packages.cardano-graphql.cardano-graphql-server
+      packages.cardano-graphql
       pkgconfig              # Allows packages to find out information about other packages
       pkgs.packages.persistgraphql
       pkgs.packages.hasura-cli
