@@ -30,6 +30,8 @@ Changelog
   - @cardano-graphql/cli
   - @cardano-graphql/util-dev
   - @cardano-graphql/util
+- Packages are now managed via an offline npm package cache, to facilitate reproducible builds when the --offline flag 
+is passed to yarn install
   
 
 
