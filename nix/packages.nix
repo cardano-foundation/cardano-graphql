@@ -1,14 +1,11 @@
 { pkgs, lib }:
 
 let
-  # TODO: filter src to just the files needed to build
-  src = ../.;
   packages = self: {
     sources = import ./sources.nix;
-    cardano-graphql-src = src;
     nodejs = pkgs.nodejs-12_x;
-    inherit (self.callPackage self.sources.yarn2nix {}) yarn2nix mkYarnModules mkYarnPackage;
     inherit (import self.sources.niv {}) niv;
+    nix-inclusive = pkgs.callPackage "${self.sources.nix-inclusive}/inclusive.nix" {};
     cardano-graphql = self.callPackage ./cardano-graphql.nix {};
     hasura-cli-ext = self.callPackage ./hasura-cli-ext/impure.nix {};
     persistgraphql = (self.callPackage ./persistgraphql {}).persistgraphql;
