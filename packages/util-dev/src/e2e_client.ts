@@ -20,17 +20,17 @@ export const createE2EClient = async () => {
     })
   })
   await pRetry(async () => {
-    await client.query({
+    const result = await client.query({
       query: gql`query {
-          cardano {
-              tip { 
-                  number
-              }
-              currentEpoch {
-                  number
-              }
+          cardanoDbMeta {
+              initialized
+              slotDiffFromNetworkTip
+              syncPercentage
           }}`
     })
+    if (result.data?.cardanoDbMeta.initialized === false) {
+      throw new Error(`Cardano DB is not initialized: ${JSON.stringify(result.data)}`)
+    }
   }, {
     factor: 1.75,
     retries: 9,
