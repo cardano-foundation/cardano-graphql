@@ -41,6 +41,7 @@
     "@cardano-graphql/util-dev": "1.0.0",
     "@types/graphql-depth-limit": "^1.1.2",
     "@types/node": "^14.0.13",
+    "shx": "^0.3.2",
     "typescript": "^3.9.5"
   },
   "directories": {

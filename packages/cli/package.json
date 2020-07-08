@@ -60,6 +60,7 @@
     "write-json-file": "^4.3.0"
   },
   "devDependencies": {
+    "shx": "^0.3.2",
     "typescript": "^3.9.5"
   },
   "directories": {

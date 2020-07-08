@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/util-dev/README.md",
   "devDependencies": {
-    "@cardano-graphql/util": "1.0.0"
+    "@cardano-graphql/util": "1.0.0",
+    "shx": "^0.3.2"
   },
   "directories": {
     "lib": "src",
