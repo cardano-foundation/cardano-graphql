@@ -36,5 +36,8 @@
   ],
   "directories": {
     "lib": "src"
+  },
+  "devDependencies": {
+    "shx": "^0.3.2"
   }
 }
