@@ -8,3 +8,4 @@ lerna-debug.log
 *node_modules/
 result*
 *yarn-error.log
+./node-ipc

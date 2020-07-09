@@ -8,6 +8,7 @@ import { mergeSchemas } from '@graphql-tools/merge'
 import { PluginDefinition } from 'apollo-server-core'
 import { buildSchema as buildCardanoDbHasuraSchema, Db } from '@cardano-graphql/api-cardano-db-hasura'
 import { buildSchema as buildGenesisSchema } from '@cardano-graphql/api-genesis'
+import { buildSchema as buildCardanoNodeSchema } from '@cardano-graphql/api-cardano-node'
 export * from './config'
 export { apolloServerPlugins }
 
@@ -40,7 +41,8 @@ getConfig().then((config: Config) => {
         schema: mergeSchemas({
           schemas: [
             cardanoDbHasuraSchema,
-            genesisSchema
+            genesisSchema,
+            buildCardanoNodeSchema()
           ]
         })
       }, {

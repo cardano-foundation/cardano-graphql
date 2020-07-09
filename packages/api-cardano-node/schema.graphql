@@ -1,0 +1,25 @@
+schema {
+  mutation: Mutation
+  query: Query
+}
+
+scalar Upload
+
+type Mutation {
+  # Submit a serialized transaction to the network
+  submitTransaction (file: Upload!): SubmitResponse!
+}
+
+type Query {
+  node: NodeTip!
+}
+
+type NodeTip {
+  hash: String!
+  number: Int!
+  slotNo: Int!
+}
+
+type SubmitResponse {
+  id: String!
+}

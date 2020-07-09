@@ -7,6 +7,7 @@
   "references": [
     { "path": "../../api-cardano-db-hasura/src" },
     { "path": "../../api-genesis/src" },
+    { "path": "../../api-cardano-node/src" },
     { "path": "../../util/src" }
   ]
 }

@@ -1,0 +1,12 @@
+schema: ./schema.graphql
+overwrite: true
+generates:
+  ./src/graphql_types.ts:
+      config:
+        useIndexSignature: true
+        scalars:
+          Upload: "Promise<FileUpload>"
+      plugins:
+        - add: 'import { FileUpload } from "graphql-upload";'
+        - typescript
+        - typescript-resolvers

@@ -92,6 +92,7 @@ services:
       - CACHE_ENABLED=true
       - GENESIS_FILE=/configuration/genesis.json
       - HASURA_URI=http://hasura:8080
+      - CARDANO_NODE_SOCKET_PATH=/node-ipc/node.socket
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
@@ -99,6 +100,8 @@ services:
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
     expose:
       - 3100
+    volumes:
+      - node-ipc:/node-ipc
     ports:
       - ${API_PORT:-3100}:3100
     restart: on-failure

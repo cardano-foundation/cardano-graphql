@@ -1,0 +1,56 @@
+{
+  "name": "@cardano-graphql/api-cardano-node",
+  "version": "1.0.0",
+  "description": "Module for interfacing with Cardano Node",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "yarn codegen && tsc -b ./src",
+    "codegen": "graphql-codegen",
+    "cleanup": "shx rm -rf dist node_modules src/graphql_types.ts",
+    "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
+    "prepack": "yarn build",
+    "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js submit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
+  },
+  "author": "Rhys Bartels-Waller",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/input-output-hk/cardano-graphql/issues"
+  },
+  "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/api-cardano-node/README.md",
+  "files": [
+    "dist/*",
+    "!dist/__test__",
+    "!dist/**/*.test.*",
+    "hasura",
+    "LICENSE",
+    "NOTICE",
+    "schema.graphql"
+  ],
+  "dependencies": {
+    "@cardano-graphql/util": "1.0.0",
+    "@graphql-tools/delegate": "^6.0.10",
+    "@graphql-tools/schema": "^6.0.9",
+    "@graphql-tools/wrap": "^6.0.9",
+    "apollo-link": "^1.2.14",
+    "apollo-link-http": "^1.5.17",
+    "apollo-link-retry": "^2.2.16",
+    "apollo-server-errors": "^2.4.2",
+    "cross-fetch": "^3.0.4",
+    "graphql": "14.5.8",
+    "graphql-bigint": "^1.0.0",
+    "graphql-iso-date": "^3.6.1",
+    "graphql-tools": "^6.0.11",
+    "graphql-upload": "^11.0.0",
+    "p-retry": "^4.2.0",
+    "tmp-promise": "^3.0.2"
+  },
+  "devDependencies": {
+    "@cardano-graphql/util-dev": "1.0.0",
+    "@graphql-codegen/add": "^1.16.0"
+  }
+}

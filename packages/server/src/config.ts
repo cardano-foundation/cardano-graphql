@@ -6,6 +6,7 @@ export type Config = {
   allowedOrigins: CorsOptions['origin']
   apiPort: number
   cacheEnabled: boolean
+  cardanoNodeSocketPath: string
   genesisFile: string
   hasuraUri: string
   prometheusMetrics: boolean
@@ -20,6 +21,7 @@ export async function getConfig (): Promise<Config> {
     allowedOrigins,
     apiPort,
     cacheEnabled,
+    cardanoNodeSocketPath,
     genesisFile,
     hasuraUri,
     prometheusMetrics,
@@ -27,7 +29,9 @@ export async function getConfig (): Promise<Config> {
     tracing,
     whitelistPath
   } = filterAndTypecastEnvs(process.env)
-
+  if (!cardanoNodeSocketPath) {
+    throw new MissingConfig('CARDANO_NODE_SOCKET_PATH env not set')
+  }
   if (!genesisFile) {
     throw new MissingConfig('GENESIS_FILE env not set')
   }
@@ -45,6 +49,7 @@ export async function getConfig (): Promise<Config> {
     allowedOrigins: allowedOrigins || true,
     apiPort: apiPort || 3100,
     cacheEnabled: cacheEnabled || false,
+    cardanoNodeSocketPath,
     genesisFile,
     hasuraUri,
     prometheusMetrics,
@@ -60,6 +65,7 @@ function filterAndTypecastEnvs (env: any) {
     ALLOWED_ORIGINS,
     API_PORT,
     CACHE_ENABLED,
+    CARDANO_NODE_SOCKET_PATH,
     GENESIS_FILE,
     HASURA_URI,
     PROMETHEUS_METRICS,
@@ -72,6 +78,7 @@ function filterAndTypecastEnvs (env: any) {
     allowedOrigins: ALLOWED_ORIGINS,
     apiPort: Number(API_PORT),
     cacheEnabled: CACHE_ENABLED === 'true' ? true : undefined,
+    cardanoNodeSocketPath: CARDANO_NODE_SOCKET_PATH,
     genesisFile: GENESIS_FILE,
     hasuraUri: HASURA_URI,
     prometheusMetrics: PROMETHEUS_METRICS === 'true' ? true : undefined,

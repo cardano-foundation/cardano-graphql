@@ -1,0 +1,5 @@
+mutation submitTransaction(
+    $file: Upload!
+) {
+    submitTransaction(file: $file)
+}
