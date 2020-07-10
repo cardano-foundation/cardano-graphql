@@ -55,7 +55,7 @@
       - transactionsCount
       - epochNo
       - slotNo
-      - slotWithinEpoch
+      - slotInEpoch
       - createdAt
       filter: {}
       limit: 100

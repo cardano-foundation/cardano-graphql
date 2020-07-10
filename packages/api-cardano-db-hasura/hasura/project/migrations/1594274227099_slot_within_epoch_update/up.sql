@@ -13,7 +13,7 @@ CREATE VIEW "public"."Block" AS
     block.tx_count AS "transactionsCount",
     block.epoch_no AS "epochNo",
     block.slot_no AS "slotNo",
-    block.slot_no % (SELECT slots_per_epoch FROM meta) AS "slotWithinEpoch",
+    block.slot_no % (SELECT slots_per_epoch FROM meta) AS "slotInEpoch",
     block."time" AS "createdAt"
    FROM (((block
      LEFT JOIN block previous_block ON ((block.previous = previous_block.id)))
