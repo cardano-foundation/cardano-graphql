@@ -4,15 +4,6 @@
 let
   cfg = config.services.cardano-graphql;
   sources = import ../sources.nix;
-  hasuraConfigFile = __toFile "config.yaml" (__toJSON {
-    version = 2;
-    endpoint = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}";
-    metadata_directory = "metadata";
-    actions = {
-      kind = "synchronous";
-      handler_webhook_baseurl = "http://localhost:${toString cfg.port}";
-    };
-  });
 in {
   options = {
     services.cardano-graphql = {
@@ -118,19 +109,7 @@ in {
       path = with pkgs; [ netcat curl postgresql jq frontend hasura-cli glibc.bin patchelf ];
       preStart = ''
         set -exuo pipefail
-        for x in {1..10}; do
-          nc -z ${cfg.hasuraIp} ${toString cfg.enginePort} && break
-          echo loop $x: waiting for graphql-engine 2 sec...
-          sleep 2
-        done
-        rm -rf project
-        cp -a ${cfg.projectPath} project
-        cp ${hasuraConfigFile} project/config.yaml
         ${installHasuraCLI}
-        hasura --project project migrate apply --down all
-        hasura --project project migrate apply --up all
-        hasura --project project metadata clear
-        hasura --project project metadata apply
       '';
       script = ''
         exec cardano-graphql

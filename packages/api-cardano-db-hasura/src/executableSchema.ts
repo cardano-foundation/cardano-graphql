@@ -7,7 +7,7 @@ import pRetry from 'p-retry'
 import path from 'path'
 import util from '@cardano-graphql/util'
 import { buildHasuraSchema } from './buildHasuraSchema'
-import { DB } from './DB'
+import { Db } from './Db'
 import { Resolvers } from './graphql_types'
 
 const GraphQLBigInt = require('graphql-bigint')
@@ -19,7 +19,7 @@ export const scalarResolvers = {
   Percentage: util.scalars.Percentage
 } as any
 
-export async function buildSchema (hasuraUri: string) {
+export async function buildSchema (hasuraUri: string, db: Db) {
   let hasuraSchema: GraphQLSchema
   await pRetry(async () => {
     hasuraSchema = await buildHasuraSchema(hasuraUri)
@@ -28,7 +28,6 @@ export async function buildSchema (hasuraUri: string) {
     retries: 9,
     onFailedAttempt: util.onFailedAttemptFor('Fetching Hasura schema via introspection')
   })
-  const db = new DB(hasuraUri)
   return makeExecutableSchema({
     resolvers: Object.assign({}, scalarResolvers, {
       Query: {

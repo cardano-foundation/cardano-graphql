@@ -28,6 +28,7 @@ services:
     volumes:
       - node-db:/data/db
       - node-ipc:/ipc
+    restart: on-failure
     logging:
       driver: "json-file"
       options:
@@ -90,10 +91,16 @@ services:
     environment:
       - CACHE_ENABLED=true
       - HASURA_URI=http://hasura:8080
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
     expose:
       - 3100
     ports:
       - ${API_PORT:-3100}:3100
+    restart: on-failure
     logging:
       driver: "json-file"
       options:

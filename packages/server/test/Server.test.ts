@@ -9,12 +9,13 @@ import http from 'http'
 import path from 'path'
 import tmp from 'tmp-promise'
 import util from '@cardano-graphql/util'
-import { buildSchema as buildLedgerSchema } from '@cardano-graphql/api-cardano-db-hasura'
+import { buildSchema as buildCardanoDbHasuraSchema, Db } from '@cardano-graphql/api-cardano-db-hasura'
 import { Server } from '@src/Server'
 import { whitelistPlugin } from '@src/apollo_server_plugins'
 
 const clientPath = path.resolve(__dirname, 'app_with_graphql_operations')
 const port = 3101
+const hasuraUri = 'http://localhost:8090'
 
 function listen (app: Application, port: number): Promise<http.Server> {
   return new Promise(function (resolve, reject) {
@@ -27,11 +28,14 @@ describe('Server', () => {
   let client: ApolloClient<any>
   let whiteListedDocumentNode: DocumentNode
   let app: express.Application
+  let db: Db
   let httpServer: http.Server
-  let ledgerSchema: GraphQLSchema
+  let cardanoDbHasuraSchema: GraphQLSchema
 
   beforeAll(async () => {
-    ledgerSchema = await buildLedgerSchema('http://localhost:8090')
+    db = new Db(hasuraUri)
+    await db.init()
+    cardanoDbHasuraSchema = await buildCardanoDbHasuraSchema(hasuraUri, db)
     whiteListedDocumentNode = await util.loadQueryNode(path.resolve(clientPath, 'src', 'feature_1'), 'cardanoDynamic')
   })
 
@@ -60,7 +64,7 @@ describe('Server', () => {
     describe('Booting the server without providing a whitelist', () => {
       beforeEach(async () => {
         Server(app, {
-          schema: ledgerSchema
+          schema: cardanoDbHasuraSchema
         })
         httpServer = await listen(app, port)
       })
@@ -87,7 +91,7 @@ describe('Server', () => {
         const whitelist = JSON.parse(fs.readFileSync(whitelistPath, 'utf-8'))
         Server(app, {
           plugins: [whitelistPlugin(whitelist)],
-          schema: ledgerSchema
+          schema: cardanoDbHasuraSchema
         })
         httpServer = await listen(app, port)
       })
