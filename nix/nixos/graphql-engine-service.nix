@@ -79,7 +79,8 @@ in {
           -d ${cfg.db} \
           --port ${toString cfg.dbPort} \
           serve \
-          --server-port ${toString cfg.enginePort}
+          --server-port ${toString cfg.enginePort} \
+          --enable-telemetry=false
       '';
     };
   };
