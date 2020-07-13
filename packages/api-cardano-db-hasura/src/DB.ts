@@ -1,6 +1,9 @@
 import { ApolloClient, gql, InMemoryCache, NormalizedCacheObject } from 'apollo-boost'
 import { createHttpLink } from 'apollo-link-http'
 import fetch from 'cross-fetch'
+import utc from 'dayjs/plugin/utc'
+import dayjs from 'dayjs'
+dayjs.extend(utc)
 
 export class DB {
   hasuraClient: ApolloClient<NormalizedCacheObject>
@@ -37,7 +40,9 @@ export class DB {
           }}`
     })
     const { tip, slotDuration, startTime } = result.data?.cardano[0]
-    const networkTipSlotNo = Math.round((Date.now() - new Date(`${startTime}Z`).getTime()) / slotDuration)
+    const currentTimestamp = dayjs().utc().valueOf()
+    const startTimestamp = dayjs.utc(startTime).valueOf()
+    const networkTipSlotNo = Math.round((currentTimestamp - startTimestamp) / slotDuration)
     const slotDiffFromNetworkTip = tip.slotNo - networkTipSlotNo
     return {
       initialized: slotDiffFromNetworkTip >= -20,
