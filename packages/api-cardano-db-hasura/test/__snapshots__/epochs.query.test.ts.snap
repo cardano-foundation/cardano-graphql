@@ -27,17 +27,17 @@ exports[`epochs Can return aggregated data 1`] = `
 Object {
   "epochs": Array [
     Object {
-      "blocksCount": "21589",
+      "blocksCount": "21590",
       "blocks_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "fees": 47848.56538051786,
-            "size": 838.0591968131919,
+            "fees": 47846.34914312181,
+            "size": 868.0383047707272,
           },
-          "count": "21589",
+          "count": "21590",
           "max": Object {
             "fees": "1377042",
-            "size": "4787",
+            "size": "648087",
           },
           "min": Object {
             "fees": "0",
@@ -45,7 +45,7 @@ Object {
           },
           "sum": Object {
             "fees": "1033002678",
-            "size": "18092860",
+            "size": "18740947",
           },
         },
       },
@@ -74,11 +74,11 @@ exports[`epochs Returns epoch details by number 1`] = `
 Object {
   "epochs": Array [
     Object {
-      "blocksCount": "21589",
-      "lastBlockTime": "2017-10-03T21:43:51Z",
+      "blocksCount": "21590",
+      "lastBlockTime": "2017-10-03T21:44:31Z",
       "number": 1,
       "output": "101402912214214220",
-      "startedAt": "2017-09-28T21:45:51Z",
+      "startedAt": "2017-09-28T21:44:51Z",
       "transactionsCount": "12870",
     },
   ],
@@ -89,11 +89,11 @@ exports[`epochs Returns epoch details by number range 1`] = `
 Object {
   "epochs": Array [
     Object {
-      "blocksCount": "21589",
-      "lastBlockTime": "2017-10-03T21:43:51Z",
+      "blocksCount": "21590",
+      "lastBlockTime": "2017-10-03T21:44:31Z",
       "number": 1,
       "output": "101402912214214220",
-      "startedAt": "2017-09-28T21:45:51Z",
+      "startedAt": "2017-09-28T21:44:51Z",
       "transactionsCount": "12870",
     },
   ],

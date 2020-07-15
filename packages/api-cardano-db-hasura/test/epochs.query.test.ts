@@ -14,7 +14,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('epochs', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await buildClient('http://localhost:3100', 'http://localhost:8090')
+    client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442)
   }, 60000)
 
   it('Returns epoch details by number', async () => {

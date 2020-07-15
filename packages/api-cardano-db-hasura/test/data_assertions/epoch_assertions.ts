@@ -1,24 +1,24 @@
 export const epoch1 = {
   basic: {
-    startedAt: '2017-09-28T21:45:51Z',
-    blocksCount: '21589',
-    lastBlockTime: '2017-10-03T21:43:51Z',
+    startedAt: '2017-09-28T21:44:51Z',
+    blocksCount: '21590',
+    lastBlockTime: '2017-10-03T21:44:31Z',
     output: '101402912214214220',
     number: 1,
     transactionsCount: '12870'
   },
   aggregated: {
-    blocksCount: '21589',
+    blocksCount: '21590',
     blocks_aggregate: {
       aggregate: {
         avg: {
-          fees: 47848.56538051786,
-          size: 838.0591968131919
+          fees: 47846.34914312181,
+          size: 868.0383047707272
         },
-        count: '21589',
+        count: '21590',
         max: {
           fees: '1377042',
-          size: '4787'
+          size: '648087'
         },
         min: {
           fees: '0',
@@ -26,7 +26,7 @@ export const epoch1 = {
         },
         sum: {
           fees: '1033002678',
-          size: '18092860'
+          size: '18740947'
         }
       }
     },

@@ -1,6 +1,6 @@
 import { Config } from './config'
 import { Server } from './Server'
-import { buildSchema as buildCardanoDbHasuraSchema, Db } from '@cardano-graphql/api-cardano-db-hasura'
+import { buildSchema as buildCardanoDbHasuraSchema, Db, HasuraClient } from '@cardano-graphql/api-cardano-db-hasura'
 import { buildSchema as buildGenesisSchema } from '@cardano-graphql/api-genesis'
 import { GraphQLSchema } from 'graphql'
 
@@ -15,9 +15,12 @@ export async function CompleteApiServer (config: Config): Promise<Server> {
     }))
   }
   if (config.hasuraUri !== undefined) {
-    const db = new Db(config.hasuraUri)
-    await db.init()
-    schemas.push(await buildCardanoDbHasuraSchema(config.hasuraUri, db))
+    const hasuraClient = new HasuraClient(config.hasuraUri)
+    const db = new Db(config.db)
+    await db.init({
+      onDbSetup: hasuraClient.applySchemaAndMetadata.bind(hasuraClient)
+    })
+    schemas.push(await buildCardanoDbHasuraSchema(hasuraClient))
   }
   return new Server(schemas, config)
 }

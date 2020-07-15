@@ -1,113 +1,48 @@
-import { ApolloClient, gql, InMemoryCache, NormalizedCacheObject } from 'apollo-boost'
-import { createHttpLink } from 'apollo-link-http'
-import fetch from 'cross-fetch'
-import utc from 'dayjs/plugin/utc'
-import dayjs from 'dayjs'
-import { exec } from 'child_process'
-import { clearIntervalAsync, setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic'
-import path from 'path'
-import pRetry from 'p-retry'
-import util from '@cardano-graphql/util'
-
-dayjs.extend(utc)
+import { ClientConfig } from 'pg'
+import createSubscriber, { Subscriber } from 'pg-listen'
 
 export class Db {
-  hasuraClient: ApolloClient<NormalizedCacheObject>
-  hasuraUri: string
-  monitorTimer: SetIntervalAsyncTimer
+  pgSubscriber: Subscriber
 
-  constructor (hasuraUri: string) {
-    this.hasuraUri = hasuraUri
-    this.hasuraClient = new ApolloClient({
-      cache: new InMemoryCache({
-        addTypename: false
-      }),
-      defaultOptions: {
-        query: {
-          fetchPolicy: 'network-only'
-        }
-      },
-      link: createHttpLink({
-        uri: `${this.hasuraUri}/v1/graphql`,
-        fetch,
-        headers: {
-          'X-Hasura-Role': 'cardano-graphql'
-        }
-      })
+  constructor (pgClientConfig: ClientConfig) {
+    this.pgSubscriber = createSubscriber(pgClientConfig, {
+      parse: (value) => value
     })
   }
 
-  public async init (): Promise<void> {
-    // Todo: optimal solution dependent on https://github.com/input-output-hk/cardano-db-sync/issues/182
-    await this.applySchemaAndMetadata()
-    this.monitorDbState()
-  }
-
-  public async shutdown () {
-    await clearIntervalAsync(this.monitorTimer)
-  }
-
-  private monitorDbState () {
-    this.monitorTimer = setIntervalAsync(
-      async () => {
-        try {
-          await this.getMeta()
-        } catch (error) {
-          if (error.message === 'GraphQL error: field "cardano" not found in type: \'query_root\'' || error.message === 'GraphQL error: database query error') {
-            console.warn('Re-applying PostgreSQL migrations and Hasura metadata')
-            await this.applySchemaAndMetadata()
-          } else {
-            console.error(error)
-          }
-        }
-      },
-      10000
-    )
-  }
-
-  async getMeta () {
-    const result = await this.hasuraClient.query({
-      query: gql`query {
-          cardano {
-              tip {
-                  forgedAt
-              }
-          }}`
+  public async init ({ onDbSetup }: { onDbSetup: Function }): Promise<void> {
+    this.pgSubscriber.events.on('connected', async () => {
+      console.log('DbClient.pgSubscriber: Connected')
+      await onDbSetup()
     })
-    const { tip } = result.data?.cardano[0]
-    const currentUtc = dayjs().utc()
-    const tipUtc = dayjs.utc(tip.forgedAt)
-    return {
-      initialized: tipUtc.isAfter(currentUtc.subtract(120, 'second')),
-      syncPercentage: (tipUtc.valueOf() / currentUtc.valueOf()) * 100
+    this.pgSubscriber.events.on('reconnect', (attempt) => {
+      console.warn(`DbClient.pgSubscriber: Reconnecting attempt ${attempt}`)
+    })
+    this.pgSubscriber.events.on('error', (error) => {
+      console.error('DbClient.pgSubscriber: Fatal database connection error:', error)
+      process.exit(1)
+    })
+    this.pgSubscriber.notifications.on('cardano_db_sync_startup', async payload => {
+      switch (payload) {
+        case 'init' :
+          console.log('DbClient.pgSubscriber: cardano-db-sync-extended starting, schema will be reset')
+          break
+        case 'db-setup' :
+          await onDbSetup()
+          break
+        default :
+          console.error(`DbClient.pgSubscriber: Unknown message payload ${payload}`)
+      }
+    })
+    try {
+      await this.pgSubscriber.connect()
+      await this.pgSubscriber.listenTo('cardano_db_sync_startup')
+    } catch (error) {
+      console.error(error)
     }
   }
 
-  public async applySchemaAndMetadata () {
-    await pRetry(async () => {
-      await this.hasuraCli('migrate apply --down all')
-      await this.hasuraCli('migrate apply --up all')
-      await this.hasuraCli('metadata clear')
-      await this.hasuraCli('metadata apply')
-    }, {
-      factor: 1.75,
-      retries: 9,
-      onFailedAttempt: util.onFailedAttemptFor('Applying PostgreSQL schema and Hasura metadata')
-    })
-  }
-
-  private hasuraCli (command: string) {
-    return new Promise((resolve, reject) => {
-      exec(
-        `hasura --skip-update-check --project ${path.resolve(__dirname, '..', 'hasura', 'project')} --endpoint ${this.hasuraUri} ${command}`,
-        (error, stdout) => {
-          if (error) {
-            reject(error)
-          }
-          console.log(stdout)
-          resolve()
-        }
-      )
-    })
+  public async shutdown () {
+    await this.pgSubscriber.close()
   }
 }

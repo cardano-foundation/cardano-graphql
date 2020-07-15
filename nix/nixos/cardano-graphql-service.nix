@@ -9,6 +9,20 @@ in {
     services.cardano-graphql = {
       enable = lib.mkEnableOption "cardano-explorer graphql service";
 
+      dbHost = lib.mkOption {
+        type = lib.types.str;
+        default = "127.0.0.1";
+      };
+
+      dbPassword = lib.mkOption {
+        type = lib.types.str;
+      };
+
+      dbPort = lib.mkOption {
+        type = lib.types.int;
+        default = 5432;
+      };
+
       dbUser = lib.mkOption {
         type = lib.types.str;
         default = "cexplorer";
@@ -116,8 +130,12 @@ in {
         POOL_METADATA_PROXY = cfg.smashUrl;
         GENESIS_FILE_BYRON = cfg.genesisByron;
         GENESIS_FILE_SHELLEY = cfg.genesisShelley;
-
         HASURA_URI = hasuraBaseUri;
+        POSTGRES_DB = cfg.db;
+        POSTGRES_HOST = cfg.dbHost;
+        POSTGRES_PASSWORD = cfg.dbPassword;
+        POSTGRES_PORT = cfg.dbPort;
+        POSTGRES_USER = cfg.dbUser;
         PROMETHEUS_METRICS = boolToNodeJSEnv cfg.enablePrometheus;
         TRACING = boolToNodeJSEnv (cfg.enableTracing || cfg.enablePrometheus);
         ALLOW_INTROSPECTION = boolToNodeJSEnv cfg.allowIntrospection;

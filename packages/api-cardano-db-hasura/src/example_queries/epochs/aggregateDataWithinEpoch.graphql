@@ -3,7 +3,7 @@ query aggregatedDataWithinEpoch (
 ) {
     epochs( where: { number: { _eq: $number }}) {
         blocksCount
-        blocks_aggregate ( where: { slotNo: { _is_null: false }}) {
+        blocks_aggregate {
             aggregate {
                 avg {
                     fees

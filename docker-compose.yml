@@ -8,6 +8,8 @@ services:
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
     secrets:
       - postgres_db
       - postgres_password
@@ -22,7 +24,7 @@ services:
         max-size: "200k"
         max-file: "10"
   cardano-node:
-    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-1.18.0}
+    image: rhyslbw/cardano-node:${CARDANO_NODE_VERSION:-a4b6dae699fa21dc3c025c8a83d1718475cb3afc}
     command: [
       "run",
       "--config", "/config/config.json",
@@ -42,7 +44,7 @@ services:
         max-size: "400k"
         max-file: "20"
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-3.1.0}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-36e7621fa5ecb4be923569f735b74d60a26da6c1}
     command: [
       "--config", "/config/config.json",
       "--socket-path", "/node-ipc/node.socket"
@@ -101,6 +103,7 @@ services:
       target: server
     image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-2.0.0}
     environment:
+      - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
       - GENESIS_FILE_BYRON=/genesis/byron.json
       - GENESIS_FILE_SHELLEY=/genesis/shelley.json
@@ -115,6 +118,10 @@ services:
     ports:
       - ${API_PORT:-3100}:3100
     restart: on-failure
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
     logging:
       driver: "json-file"
       options:

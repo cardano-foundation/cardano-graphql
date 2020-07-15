@@ -15,8 +15,8 @@ describe('transactions', () => {
   let mainnetClient: TestClient
   let mc4Client: TestClient
   beforeAll(async () => {
-    mainnetClient = await buildClient('http://localhost:3100', 'http://localhost:8090')
-    mc4Client = await buildClient('http://localhost:3102', 'http://localhost:8092')
+    mainnetClient = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442)
+    mc4Client = await buildClient('http://localhost:3102', 'http://localhost:8092', 5444)
   }, 60000)
 
   it('Returns transactions by hashes', async () => {
