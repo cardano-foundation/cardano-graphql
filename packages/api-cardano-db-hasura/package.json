@@ -46,7 +46,8 @@
     "graphql": "14.5.8",
     "graphql-bigint": "^1.0.0",
     "graphql-scalars": "^1.2.1",
-    "p-retry": "^4.2.0"
+    "p-retry": "^4.2.0",
+    "set-interval-async": "^1.0.33"
   },
   "devDependencies": {
     "@cardano-graphql/util-dev": "1.0.0",

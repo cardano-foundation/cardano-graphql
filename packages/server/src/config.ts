@@ -1,5 +1,5 @@
-import { IntrospectionNotPermitted, MissingConfig, TracingRequired } from './errors'
 import { CorsOptions } from 'apollo-server-express'
+import { IntrospectionNotPermitted, MissingConfig, TracingRequired } from './errors'
 
 export type Config = {
   allowIntrospection?: boolean
@@ -13,7 +13,7 @@ export type Config = {
   whitelistPath: string
 }
 
-export function getConfig (): Config {
+export async function getConfig (): Promise<Config> {
   const {
     allowIntrospection,
     allowedOrigins,
