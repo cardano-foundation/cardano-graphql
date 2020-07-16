@@ -25,8 +25,13 @@ COPY packages/util/package.json util/
 WORKDIR /application
 RUN yarn --production --offline --frozen-lockfile --non-interactive
 
+FROM frolvlad/alpine-glibc:alpine-3.11_glibc-2.30 as downloader
+RUN apk add curl
+RUN curl --proto '=https' --tlsv1.2 -sSf -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | sh
+RUN hasura --skip-update-check update-cli --version v1.2.1
+
 FROM frolvlad/alpine-glibc:alpine-3.11_glibc-2.30 as server
-RUN apk add curl nodejs
+RUN apk add nodejs
 RUN mkdir /application
 COPY --from=builder /application/packages/api-cardano-db-hasura/dist /application/packages/api-cardano-db-hasura/dist
 COPY --from=builder /application/packages/api-cardano-db-hasura/hasura/project /application/packages/api-cardano-db-hasura/hasura/project
@@ -37,8 +42,7 @@ COPY --from=builder /application/packages/server/package.json /application/packa
 COPY --from=builder /application/packages/util/dist /application/packages/util/dist
 COPY --from=builder /application/packages/util/package.json /application/packages/util/package.json
 COPY --from=production_deps /application/node_modules /application/node_modules
-RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | sh
-RUN hasura update-cli --version v1.2.1
+COPY --from=downloader /usr/local/bin/hasura /usr/local/bin/hasura
 WORKDIR /application
 WORKDIR /application/packages/server/dist
 EXPOSE 3100
