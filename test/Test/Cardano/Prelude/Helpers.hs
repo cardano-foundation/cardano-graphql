@@ -13,7 +13,6 @@ import Cardano.Prelude
 
 import Data.Data (Data, Constr, toConstr)
 import Formatting (Buildable, build, sformat)
-import GHC.Stack (HasCallStack, withFrozenCallStack)
 
 import Hedgehog (MonadTest, success, (===))
 import Hedgehog.Internal.Property (failWith)

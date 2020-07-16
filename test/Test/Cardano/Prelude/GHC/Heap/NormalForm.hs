@@ -7,7 +7,6 @@ where
 
 import Cardano.Prelude
 
-import Control.Applicative ((<$>))
 import GHC.Exts.Heap
 import Hedgehog
   ( Property

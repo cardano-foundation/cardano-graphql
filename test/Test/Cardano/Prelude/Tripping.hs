@@ -23,12 +23,10 @@ import Cardano.Prelude
 
 import Data.Aeson (FromJSON, ToJSON, decode, fromJSON, encode, toJSON)
 import Data.String (String, unlines)
-import Data.Functor.Identity (Identity(..))
 import qualified Data.Map as Map
-import Data.Ord (comparing)
 import Data.Text.Internal.Builder (toLazyText)
 import Formatting.Buildable (Buildable(..))
-import System.IO (hSetEncoding, stderr, stdout, utf8)
+import System.IO (hSetEncoding, utf8)
 import Text.Show.Pretty (Value(..), parseValue)
 import qualified Text.JSON.Canonical as CanonicalJSON
 
