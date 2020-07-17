@@ -20,16 +20,11 @@ let
 
   # This creates the Haskell package set.
   # https://input-output-hk.github.io/haskell.nix/user-guide/projects/
-  pkgSet = haskell-nix.cabalProject  (lib.optionalAttrs stdenv.hostPlatform.isWindows {
-    # FIXME: without this deprecated attribute, db-converter fails to compile directory with:
-    # Encountered missing dependencies: unix >=2.5.1 && <2.9
-    ghc = buildPackages.haskell-nix.compiler.${compiler};
-  } // {
+  pkgSet = haskell-nix.cabalProject {
     inherit src;
     compiler-nix-name = compiler;
     #ghc = buildPackages.haskell-nix.compiler.${compiler};
     modules = [
-      { compiler.nix-name = compiler; }
       # Allow reinstallation of Win32
       { nonReinstallablePkgs =
         [ "rts" "ghc-heap" "ghc-prim" "integer-gmp" "integer-simple" "base"
@@ -51,6 +46,6 @@ let
           enableLibraryProfiling = profiling;
       }
     ];
-  });
+  };
 in
   pkgSet
