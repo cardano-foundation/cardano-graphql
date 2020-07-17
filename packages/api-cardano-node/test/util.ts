@@ -5,7 +5,7 @@ export async function buildClient () {
   if (process.env.TEST_MODE === 'e2e') {
     return utilDev.createE2EClient()
   } else {
-    const schema = await buildSchema('/ipc/node.socket')
+    const schema = await buildSchema()
     return utilDev.createIntegrationClient(schema)
   }
 }

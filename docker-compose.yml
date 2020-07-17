@@ -102,6 +102,7 @@ services:
       - 3100
     volumes:
       - node-ipc:/node-ipc
+      - ./app:/app
     ports:
       - ${API_PORT:-3100}:3100
     restart: on-failure

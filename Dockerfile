@@ -30,7 +30,7 @@ WORKDIR /application
 RUN yarn --production --offline --frozen-lockfile --non-interactive
 
 FROM debian:buster-slim as cardano_haskell_builder
-ARG CARDANO_NODE_TAG=1.13.0
+ARG CARDANO_NODE_TAG=1.15.1
 WORKDIR /build
 RUN apt -yq update && apt -yq upgrade
 
