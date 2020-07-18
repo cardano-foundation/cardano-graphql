@@ -55,7 +55,7 @@
       - transactionsCount
       - epochNo
       - slotNo
-      - slotWithinEpoch
+      - slotInEpoch
       - createdAt
       filter: {}
       limit: 100
@@ -90,8 +90,6 @@
       columns:
       - currentEpochNo
       - networkName
-      - protocolConst
-      - slotDuration
       - slotsPerEpoch
       - startTime
       - tipBlockNo

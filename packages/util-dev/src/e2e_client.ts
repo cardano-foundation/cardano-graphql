@@ -24,7 +24,6 @@ export const createE2EClient = async () => {
       query: gql`query {
           cardanoDbMeta {
               initialized
-              slotDiffFromNetworkTip
               syncPercentage
           }}`
     })

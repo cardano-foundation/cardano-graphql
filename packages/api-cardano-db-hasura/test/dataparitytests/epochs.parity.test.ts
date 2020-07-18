@@ -25,10 +25,10 @@ describe('epochs ', () => {
                           number
                           startedAt
                           lastBlockTime
-              blocks (where: {slotWithinEpoch:{_eq:${slot}}}){
+              blocks (where: {slotInEpoch:{_eq:${slot}}}){
                             slotNo
                             epochNo
-                            slotWithinEpoch
+                            slotInEpoch
                             number
                             hash
                             createdAt
@@ -56,7 +56,7 @@ describe('epochs ', () => {
 
   it('return the same slot number', async () => {
     const restResultSlotNumber = restData.cbeSlot
-    const graphQLSlotNumber = graphQLData.slotWithinEpoch
+    const graphQLSlotNumber = graphQLData.slotInEpoch
 
     expect(restResultSlotNumber).toEqual(graphQLSlotNumber)
   })

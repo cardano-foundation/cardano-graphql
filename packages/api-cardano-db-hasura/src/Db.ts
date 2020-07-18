@@ -70,21 +70,16 @@ export class Db {
       query: gql`query {
           cardano {
               tip {
-                  slotNo
+                  createdAt
               }
-              slotDuration
-              startTime
           }}`
     })
-    const { tip, slotDuration, startTime } = result.data?.cardano[0]
-    const currentTimestamp = dayjs().utc().valueOf()
-    const startTimestamp = dayjs.utc(startTime).valueOf()
-    const networkTipSlotNo = Math.round((currentTimestamp - startTimestamp) / slotDuration)
-    const slotDiffFromNetworkTip = tip.slotNo - networkTipSlotNo
+    const { tip } = result.data?.cardano[0]
+    const currentUtc = dayjs().utc()
+    const tipUtc = dayjs.utc(tip.createdAt)
     return {
-      initialized: slotDiffFromNetworkTip >= -20,
-      slotDiffFromNetworkTip,
-      syncPercentage: (tip.slotNo / networkTipSlotNo) * 100
+      initialized: tipUtc.isAfter(currentUtc.subtract(120, 'second')),
+      syncPercentage: (tipUtc.valueOf() / currentUtc.valueOf()) * 100
     }
   }
 

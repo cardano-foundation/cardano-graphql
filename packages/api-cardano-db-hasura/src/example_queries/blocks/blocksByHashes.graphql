@@ -32,7 +32,7 @@ query blocksByHashes(
         }
         size
         slotNo
-        slotWithinEpoch
+        slotInEpoch
         transactionsCount
     }
 }

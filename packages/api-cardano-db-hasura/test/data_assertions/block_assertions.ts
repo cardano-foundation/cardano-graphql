@@ -13,7 +13,7 @@ export const block29021 = {
     createdBy: 'SlotLeader-8e8a7b0f4a23f07a',
     number: 29021,
     slotNo: 29035,
-    slotWithinEpoch: 7435,
+    slotInEpoch: 7435,
     previousBlock: {
       hash: '663c25ee1434e6d29f8bd08bd52ddbb16a30bb54ca3c69c815e3de7bc4c42770',
       number: 29020
@@ -86,7 +86,7 @@ export const block29022 = {
     },
     size: 631,
     slotNo: 29036,
-    slotWithinEpoch: 7436,
+    slotInEpoch: 7436,
     // transactions: [] as any,
     transactionsCount: '0'
   }

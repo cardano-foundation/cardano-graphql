@@ -1,8 +1,7 @@
 query cardanoStatic {
   cardano {
     networkName
-    protocolConst
-    slotDuration
+    slotsPerEpoch
     startTime
   }
 }

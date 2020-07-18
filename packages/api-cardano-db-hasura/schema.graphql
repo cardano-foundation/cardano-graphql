@@ -64,15 +64,12 @@ type Cardano {
   tip: Block!
   currentEpoch: Epoch!
   networkName: String!
-  protocolConst: Int!
-  slotDuration: Int!
   slotsPerEpoch: Int!
   startTime: DateTime!
 }
 
 type CardanoDbMeta {
   initialized: Boolean!
-  slotDiffFromNetworkTip: Int!
   syncPercentage: Percentage!
 }
 
@@ -292,7 +289,7 @@ type Block {
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
   slotNo: Int
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
-  slotWithinEpoch: Int
+  slotInEpoch: Int
   previousBlock: Block
   nextBlock: Block
   size: BigInt!
@@ -325,7 +322,7 @@ input Block_bool_exp {
   nextBlock: Block_bool_exp
   size: BigInt_comparison_exp
   slotNo: Int_comparison_exp
-  slotWithinEpoch: Int_comparison_exp
+  slotInEpoch: Int_comparison_exp
   transactions: Transaction_bool_exp
   transactionsCount: text_comparison_exp
 }
@@ -338,7 +335,7 @@ input Block_order_by {
   number: order_by_with_nulls
   size: order_by
   slotNo: order_by_with_nulls
-  slotWithinEpoch: order_by_with_nulls
+  slotInEpoch: order_by_with_nulls
   transactionsCount: order_by
 }
 
