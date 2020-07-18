@@ -64,15 +64,12 @@ type Cardano {
   tip: Block!
   currentEpoch: Epoch!
   networkName: String!
-  protocolConst: Int!
-  slotDuration: Int!
   slotsPerEpoch: Int!
   startTime: DateTime!
 }
 
 type CardanoDbMeta {
   initialized: Boolean!
-  slotDiffFromNetworkTip: Int!
   syncPercentage: Percentage!
 }
 

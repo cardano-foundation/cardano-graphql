@@ -4,8 +4,7 @@ exports[`cardano Returns static information about the network 1`] = `
 Object {
   "cardano": Object {
     "networkName": "mainnet",
-    "protocolConst": 2160,
-    "slotDuration": 20000,
+    "slotsPerEpoch": 21600,
     "startTime": "2017-09-23T21:44:51.000Z",
   },
 }
