@@ -22,7 +22,7 @@ services:
         max-size: "200k"
         max-file: "10"
   cardano-node:
-    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-1.14.2}
+    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-83ba7dba184d3634af78e2879013cf4cc99227d1}
     environment:
       - NETWORK=${NETWORK:-mainnet}
     volumes:
@@ -35,7 +35,7 @@ services:
         max-size: "400k"
         max-file: "20"
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-2.1.0}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-74b329d63c876f8e9fd774e09e071c546cf76980}
     environment:
       - EXTENDED=true
       - NETWORK=${NETWORK:-mainnet}
