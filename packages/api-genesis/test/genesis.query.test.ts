@@ -24,7 +24,6 @@ describe('genesis', () => {
     it('Returns key information about the network', async () => {
       const query = { query: await loadQueryNode('keyNetworkInfo') }
       const shelleyTestnetResult = await shelleyTestnetClient.query(query)
-      console.log(shelleyTestnetResult)
       expect(shelleyTestnetResult.data).toMatchSnapshot()
       const mainnetCandidateResult = await mainnetCandidateClient.query(query)
       expect(mainnetCandidateResult.data).toMatchSnapshot()

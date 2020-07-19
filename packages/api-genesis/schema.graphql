@@ -2,10 +2,7 @@ schema {
   query: Query
 }
 
-scalar Hash32HexString
-scalar BigInt
 scalar DateTime
-scalar Percentage
 scalar JSONObject
 
 type Query {
@@ -15,10 +12,10 @@ type Query {
 type Genesis {
   activeSlotsCoeff: Float!
   epochLength: Int!
-  genDelegs: JSONObject!
+  genDelegs: JSONObject
   initialFunds: JSONObject!
   maxKESEvolutions: Int!
-  maxLovelaceSupply: String
+  maxLovelaceSupply: String!
   networkId: String!
   networkMagic: Int!
   protocolMagicId: Int!
@@ -26,16 +23,16 @@ type Genesis {
   securityParam: Int!
   slotLength: Int!
   slotsPerKESPeriod: Int!
-  staking: Staking!
-  systemStart: DateTime
-  updateQuorum: Int
+  staking: Staking
+  systemStart: DateTime!
+  updateQuorum: Int!
 }
 
 type ProtocolParams {
   a0: Float!
   decentralisationParam: Int!
   eMax: Int!
-  extraEntropy: ExtraEntropy
+  extraEntropy: ExtraEntropy!
   keyDeposit: Int!
   maxBlockBodySize: Int!
   maxBlockHeaderSize: Int!
@@ -61,6 +58,6 @@ type ExtraEntropy {
 }
 
 type Staking {
-  pools: JSONObject
-  stake: JSONObject
+  pools: JSONObject!
+  stake: JSONObject!
 }
