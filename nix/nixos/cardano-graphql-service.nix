@@ -66,11 +66,6 @@ in {
         default = null;
         description = "Source directory or file to generate whitelist from";
       };
-      projectPath = lib.mkOption {
-        type = lib.types.path;
-        default = ../../packages/api-cardano-db-hasura/hasura/project;
-        description = "Source directory for project";
-      };
     };
   };
   config = let
@@ -96,6 +91,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       requires = [ "graphql-engine.service" ];
       environment = {
+        # CARDANO_NODE_SOCKET_PATH = ;
+        # GENESIS_FILE = ;
         HASURA_URI = hasuraBaseUri;
         PROMETHEUS_METRICS = boolToNodeJSEnv cfg.enablePrometheus;
         TRACING = boolToNodeJSEnv (cfg.enableTracing || cfg.enablePrometheus);

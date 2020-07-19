@@ -1,31 +1,36 @@
 import { GraphQLScalarType, Kind } from 'graphql'
-import { DateTimeResolver } from 'graphql-scalars'
-import { validateDateTime } from '../dateTimeValidation'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
-function isoToUtc (isoString: string) {
-  return isoString.substring(0, isoString.length - 5)
+function isIsoDateString (string: string) {
+  const isoDateRegExp = new RegExp(/(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/)
+  return isoDateRegExp.test(string)
 }
 
 export const DateTimeUtcToIso = new GraphQLScalarType({
   name: 'DateTime',
-  description: 'UTC DateTime to ISO RFC 3339',
+  description: 'DateTime ISO 8601',
   serialize (value) {
-    return DateTimeResolver.serialize.call(this, `${value}Z`).toISOString()
+    if (isIsoDateString(value)) {
+      return value
+    }
+    return dayjs.utc(value).format('YYYY-MM-DDTHH:mm:ss[Z]')
   },
   parseValue (value) {
-    // Trim .000Z
+    // Convert to UTC string
     if (!(typeof value === 'string')) {
       throw new TypeError(
         `DateTime cannot represent non string type ${JSON.stringify(value)}`
       )
     }
 
-    if (!validateDateTime(value)) {
+    if (!isIsoDateString(value)) {
       throw new TypeError(
         `DateTime cannot represent an invalid date-time-string ${value}.`
       )
     }
-    return isoToUtc(value)
+    return dayjs.utc(value).format('YYYY-MM-DDTHH:mm:ss')
   },
   parseLiteral (ast) {
     if (ast.kind !== Kind.STRING) {
@@ -36,11 +41,11 @@ export const DateTimeUtcToIso = new GraphQLScalarType({
       )
     }
     const { value } = ast
-    if (!validateDateTime(value)) {
+    if (!isIsoDateString(value)) {
       throw new TypeError(
         `DateTime cannot represent an invalid date-time-string ${String(value)}.`
       )
     }
-    return isoToUtc(value)
+    return dayjs.utc(value).format('YYYY-MM-DDTHH:mm:ss')
   }
 })

@@ -1,0 +1,66 @@
+schema {
+  query: Query
+}
+
+scalar Hash32HexString
+scalar BigInt
+scalar DateTime
+scalar Percentage
+scalar JSONObject
+
+type Query {
+  genesis: Genesis!
+}
+
+type Genesis {
+  activeSlotsCoeff: Float!
+  epochLength: Int!
+  genDelegs: JSONObject!
+  initialFunds: JSONObject!
+  maxKESEvolutions: Int!
+  maxLovelaceSupply: String
+  networkId: String!
+  networkMagic: Int!
+  protocolMagicId: Int!
+  protocolParams: ProtocolParams!
+  securityParam: Int!
+  slotLength: Int!
+  slotsPerKESPeriod: Int!
+  staking: Staking!
+  systemStart: DateTime
+  updateQuorum: Int
+}
+
+type ProtocolParams {
+  a0: Float!
+  decentralisationParam: Int!
+  eMax: Int!
+  extraEntropy: ExtraEntropy
+  keyDeposit: Int!
+  maxBlockBodySize: Int!
+  maxBlockHeaderSize: Int!
+  maxTxSize: Int!
+  minFeeA: Int!
+  minFeeB: Int!
+  minPoolCost: Int!
+  minUTxOValue: Int!
+  nOpt: Int!
+  poolDeposit: Int!
+  protocolVersion: ProtocolVersion!
+  rho: Float!
+  tau: Float!
+}
+
+type ProtocolVersion {
+  major: Int!
+  minor: Int!
+}
+
+type ExtraEntropy {
+  tag: String!
+}
+
+type Staking {
+  pools: JSONObject
+  stake: JSONObject
+}

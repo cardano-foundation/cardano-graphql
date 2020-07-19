@@ -1,0 +1,12 @@
+query keyNetworkInfo {
+  genesis {
+    epochLength
+    maxLovelaceSupply
+    networkId
+    networkMagic
+    securityParam
+    slotLength
+    slotsPerKESPeriod
+    systemStart
+  }
+}

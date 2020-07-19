@@ -90,6 +90,7 @@ services:
     image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-1.0.0}
     environment:
       - CACHE_ENABLED=true
+      - GENESIS_FILE=/configuration/genesis.json
       - HASURA_URI=http://hasura:8080
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
@@ -106,6 +107,8 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+    volumes:
+      - ./config/network/shelley_testnet:/configuration
 secrets:
   postgres_db:
     file: ./config/secrets/postgres_db

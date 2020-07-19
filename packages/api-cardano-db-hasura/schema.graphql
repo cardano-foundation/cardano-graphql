@@ -63,9 +63,6 @@ type Query {
 type Cardano {
   tip: Block!
   currentEpoch: Epoch!
-  networkName: String!
-  slotsPerEpoch: Int!
-  startTime: DateTime!
 }
 
 type CardanoDbMeta {

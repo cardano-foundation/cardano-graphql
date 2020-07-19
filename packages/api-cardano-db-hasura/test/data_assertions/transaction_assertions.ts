@@ -6,7 +6,7 @@ export const txe68043 = {
     },
     fee: 171070,
     hash: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
-    includedAt: '2017-09-30T15:03:11',
+    includedAt: '2017-09-30T15:03:11Z',
     inputs: [{
       address: 'DdzFFzCqrhsggyaAMAUTjGtjBr1CTp8tTcHYWbqtoyQBZcaYHM16rjbUDawTwoVaEPawAMPLJmpJVXHBNxZnTgmQzqAcNDe6XvMe5BkB',
       value: '768403000000'
@@ -82,7 +82,7 @@ export const tx05ad8b = {
     },
     fee: 171246,
     hash: '05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102',
-    includedAt: '2017-09-30T15:03:11',
+    includedAt: '2017-09-30T15:03:11Z',
     inputs: [{
       address: 'DdzFFzCqrht5ExAdoZVExXoZTpoMYGKxva3thvvvHapsLZQzSX3kCqwgqi5NSM2oUtHYYDqsSnvSGbqkarB6cSgDZohUhLWZ9KFdDWsa',
       value: '4924799649906'

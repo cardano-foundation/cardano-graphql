@@ -7,6 +7,7 @@ import depthLimit from 'graphql-depth-limit'
 import { mergeSchemas } from '@graphql-tools/merge'
 import { PluginDefinition } from 'apollo-server-core'
 import { buildSchema as buildCardanoDbHasuraSchema, Db } from '@cardano-graphql/api-cardano-db-hasura'
+import { buildSchema as buildGenesisSchema } from '@cardano-graphql/api-genesis'
 export * from './config'
 export { apolloServerPlugins }
 
@@ -14,6 +15,7 @@ getConfig().then((config: Config) => {
   const { prometheusMetricsPlugin, whitelistPlugin } = apolloServerPlugins
   const db = new Db(config.hasuraUri)
   db.init().then(() => {
+    const genesisSchema = buildGenesisSchema(require(config.genesisFile))
     buildCardanoDbHasuraSchema(config.hasuraUri, db).then((cardanoDbHasuraSchema) => {
       const app = express()
       let plugins: PluginDefinition[]
@@ -35,7 +37,12 @@ getConfig().then((config: Config) => {
         playground: config.allowIntrospection,
         plugins,
         validationRules,
-        schema: mergeSchemas({ schemas: [cardanoDbHasuraSchema] })
+        schema: mergeSchemas({
+          schemas: [
+            cardanoDbHasuraSchema,
+            genesisSchema
+          ]
+        })
       }, {
         origin: config.allowedOrigins
       })
