@@ -1,0 +1,5 @@
+schema: ../api-genesis/schema.graphql
+generates:
+  ./api/genesis/graphql_types.ts:
+    plugins:
+      - typescript

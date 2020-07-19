@@ -9,10 +9,10 @@
   "main": "api/index.js",
   "typings": "api/index.d.ts",
   "scripts": {
-    "build": "graphql-codegen && tsc",
-    "cleanup": "shx rm -rf api/index.d.ts \"api/cardano-db-hasura/graphql_types*\"",
+    "build": "graphql-codegen -c codegen.cardano-db-hasura.yml && graphql-codegen -c codegen.genesis.yml && tsc",
+    "cleanup": "./scripts/cleanup.sh",
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
-    "prepack": "yarn build && shx cp ../api-cardano-db-hasura/schema.graphql ./api/cardano-db-hasura/",
+    "prepack": "yarn build && ./scripts/embed_schema.sh",
     "postpack": "yarn cleanup",
     "test": "shx echo No tests in this package"
   },
