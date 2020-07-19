@@ -1,117 +1,199 @@
-create view "Block" as
-select
-  cast(coalesce((select sum(tx.fee) from tx where tx.block = block.id), 0) as integer) as "fees",
-  block.hash as hash,
-  block.merkel_root as "merkelRoot",
-  block.block_no as number,
-  previous_block."hash" as "previousBlockHash",
-  next_block."hash" as "nextBlockHash",
-  slot_leader."description" as "createdBy",
-  block.size as size,
-  block.tx_count as "transactionsCount",
-  block.epoch_no as "epochNo",
-  block.slot_no as "slotNo",
-  block.slot_no - (block.epoch_no * (10 * (select protocol_const from meta))) as "slotWithinEpoch",
-  block.time as "createdAt"
-from block
-left outer join block as previous_block
-  on block.previous = previous_block.id
-left outer join block as next_block
-  on next_block.previous = block.id
-left outer join slot_leader
-  on block.slot_leader = slot_leader.id;
+CREATE VIEW "Block" AS
+ SELECT (COALESCE(( SELECT sum((tx.fee)::bigint) AS sum
+           FROM tx
+          WHERE (tx.block = block.id)), (0)::NUMERIC))::bigint AS fees,
+    block.hash,
+    block.merkel_root AS "merkelRoot",
+    block.block_no AS "number",
+    block.op_cert AS "opCert",
+    previous_block.hash AS "previousBlockHash",
+    next_block.hash AS "nextBlockHash",
+    block.proto_version AS "protocolVersion",
+    slot_leader.id AS "slot_leader_id",
+    block.size,
+    block.tx_count AS "transactionsCount",
+    block.epoch_no AS "epochNo",
+    block.slot_no AS "slotNo",
+    block.slot_no % (SELECT slots_per_epoch FROM meta) AS "slotInEpoch",
+    block."time" AS "createdAt",
+    block.vrf_key As "vrfKey"
+   FROM (((block
+     LEFT JOIN block previous_block ON ((block.previous = previous_block.id)))
+     LEFT JOIN block next_block ON ((next_block.previous = block.id)))
+     LEFT JOIN slot_leader ON ((block.slot_leader = slot_leader.id)));
 
-create view "Cardano" as
-select
-  block_no as "tipBlockNo",
-  epoch_no as "currentEpochNo",
-  (select slot_duration from meta) as "slotDuration",
-  (select start_time from meta) as "startTime",
-  (select protocol_const from meta) as "protocolConst",
-  (select network_name from meta) as "networkName"
-from block
-where block_no is not null
-order by block_no desc
-limit 1;
+CREATE OR REPLACE VIEW "Cardano" AS
+ SELECT block.block_no AS "tipBlockNo",
+    block.epoch_no AS "currentEpochNo"
+   FROM block
+  WHERE (block.block_no IS NOT NULL)
+  ORDER BY block.block_no DESC
+ LIMIT 1;
+ 
+CREATE VIEW "Delegation" AS
+SELECT
+  delegation.id AS "id",
+  (
+	  SELECT stake_address.hash
+	  FROM stake_address
+	  WHERE stake_address.id = delegation.addr_id
+  ) AS "address",
+  delegation.tx_id AS "tx_id",
+  delegation.update_id AS "update_id"
+FROM delegation; 
 
-create view "Epoch" as
-select
-  epoch.out_sum as "output",
-  epoch.no as "number",
-  epoch.tx_count as "transactionsCount",
-  epoch.start_time as "startedAt",
-  epoch.end_time as "lastBlockTime",
-  epoch.blk_count as "blocksCount"
-from epoch;
+CREAT VIEW "Epoch" AS
+SELECT
+  epoch.out_sum AS "output",
+  epoch.no AS "number",
+  epoch.tx_count AS "transactionsCount",
+  epoch.start_time AS "startedAt",
+  epoch.end_time AS "lastBlockTime",
+  epoch.blk_count AS "blocksCount"
+FROM epoch;
 
-create view "Transaction" as
-select
-  block.hash as "blockHash",
-  coalesce(tx.fee, 0) as fee,
-  tx.hash as hash,
-  cast((select sum("value") from tx_out where tx_id = tx.id) as bigint) as "totalOutput",
+CREATE VIEW "Reward" AS
+SELECT
+  reward.amount AS "amount",
+  reward.id AS "id",
+  (
+	  SELECT stake_address.hash
+	  FROM stake_address
+	  WHERE stake_address.id = reward.addr_id
+  ) AS "address",
+  reward.tx_id AS "tx_id"
+FROM reward;
+
+CREATE VIEW "StakeDeregistration" AS
+SELECT
+  stake_deregistration.id AS "id",
+  (
+	  SELECT stake_address.hash
+	  FROM stake_address
+	  WHERE stake_address.id = stake_deregistration.addr_id
+  ) AS "address",
+  stake_deregistration.tx_id AS "tx_id"
+FROM stake_deregistration;
+
+CREATE VIEW "StakePool" AS
+WITH
+  latest_block_times AS (
+    SELECT pool.hash_id, max(block.time) AS blockTime
+    FROM pool_update AS pool
+    JOIN tx ON pool.registered_tx_id = tx.id
+    JOIN block ON tx.block = block.id
+    group by pool.hash_id
+)
+SELECT
+  pool.fixed_cost AS "fixedCost",
+  ( SELECT pool_hash.hash FROM pool_hash WHERE pool_hash.id = pool.hash_id ) AS "hash",
+  pool.id AS "id",
+  pool.margin AS "margin",
+  pool_meta_data.hash AS "metadataHash",
+  block.block_no AS "blockNo",
+  pool.registered_tx_id AS "updated_in_tx_id",
+  pool.pledge AS "pledge",
+  ( SELECT stake_address.hash FROM stake_address WHERE stake_address.id = pool.reward_addr_id) AS "rewardAddress",
+  pool_meta_data.url AS "url"
+FROM pool_update AS pool
+  INNER JOIN pool_meta_data ON pool.meta = pool_meta_data.id
+  INNER JOIN tx ON pool.registered_tx_id = tx.id
+  INNER JOIN latest_block_times ON latest_block_times.hash_id = pool.hash_id
+  INNER JOIN block ON tx.block = block.id AND latest_block_times.blockTime = block.time;
+
+CREATE VIEW "StakeRegistration" AS
+SELECT
+  stake_registration.id AS "id",
+  (
+	  SELECT stake_address.hash
+	  FROM stake_address
+	  WHERE stake_address.id = stake_registration.addr_id
+  ) AS "address",
+  stake_registration.tx_id AS "tx_id"
+FROM stake_registration;
+
+CREATE VIEW "Transaction" AS
+SELECT
+  block.hash AS "blockHash",
+  tx.block_index AS "blockIndex",
+  COALESCE(tx.fee, 0) AS fee,
+  tx.hash,
+  tx.id,
+  block.time AS "includedAt",
   tx.size,
-  block.time as "includedAt"
-from
+  CAST((SELECT SUM("value") FROM tx_out WHERE tx_id = tx.id) AS bigint) AS "totalOutput"
+FROM
   tx
-inner join block
-  on block.id = tx.block;
+INNER JOIN block
+  ON block.id = tx.block;
 
-create view "Utxo" as select
-  address,
-  value,
-  tx.hash as "txHash",
-  index
-from tx
-join tx_out
-  on tx.id = tx_out.tx_id
-left outer join tx_in
-  on tx_out.tx_id = tx_in.tx_out_id
-  and tx_out.index = tx_in.tx_out_index
-where tx_in.tx_in_id is null;
-
-create view "TransactionInput" as
-select
+create view "TransactionInput" AS
+SELECT
   source_tx_out.address,
   source_tx_out.value,
-  tx.hash as "txHash",
-  source_tx.hash as "sourceTxHash",
-  tx_in.tx_out_index as "sourceTxIndex"
-from
+  tx.hash AS "txHash",
+  source_tx.hash AS "sourceTxHash",
+  tx_in.tx_out_index AS "sourceTxIndex"
+FROM
   tx
-join tx_in
-  on tx_in.tx_in_id = tx.id
-join tx_out as source_tx_out
-  on tx_in.tx_out_id = source_tx_out.tx_id
-  and tx_in.tx_out_index = source_tx_out.index
-join tx as source_tx
-  on source_tx_out.tx_id = source_tx.id;
+JOIN tx_in
+  ON tx_in.tx_in_id = tx.id
+JOIN tx_out AS source_tx_out
+  ON tx_in.tx_out_id = source_tx_out.tx_id
+  AND tx_in.tx_out_index = source_tx_out.index
+JOIN tx AS source_tx
+  ON source_tx_out.tx_id = source_tx.id;
 
-create view "TransactionOutput" as
-select
+create view "TransactionOutput" AS
+SELECT
   address,
   value,
-  tx.hash as "txHash",
+  tx.hash AS "txHash",
   index
-from tx
-join tx_out
-  on tx.id = tx_out.tx_id;
+FROM tx
+JOIN tx_out
+  ON tx.id = tx_out.tx_id;
 
-create function utxo_set_at_block("hash" hash32type)
-returns setof "TransactionOutput" AS $$
-  select
+create view "Utxo" AS SELECT
+  address,
+  value,
+  tx.hash AS "txHash",
+  index
+FROM tx
+JOIN tx_out
+  ON tx.id = tx_out.tx_id
+LEFT OUTER JOIN tx_in
+  ON tx_out.tx_id = tx_in.tx_out_id
+  AND tx_out.index = tx_in.tx_out_index
+WHERE tx_in.tx_in_id IS NULL;
+
+CREATE VIEW "Withdrawal" AS
+SELECT
+  withdrawal.amount AS "amount",
+  withdrawal.id AS "id",
+  (
+	  SELECT stake_address.hash
+	  FROM stake_address
+	  WHERE stake_address.id = withdrawal.addr_id
+  ) AS "address",
+  withdrawal.tx_id AS "tx_id"
+FROM withdrawal;
+
+CREATE FUNCTION utxo_set_at_block("hash" hash32type)
+RETURNS SETOF "TransactionOutput" AS $$
+  SELECT
     "TransactionOutput".address,
     "TransactionOutput".value,
     "TransactionOutput"."txHash",
     "TransactionOutput".index
-  from tx
-  join tx_out
-    on tx.id = tx_out.tx_id
-  join "TransactionOutput"
-    on tx.hash = "TransactionOutput"."txHash"
-  left outer join tx_in
-    on tx_out.tx_id = tx_in.tx_out_id
-    and tx_out.index = tx_in.tx_out_index
-  where tx_in.tx_in_id is null
-  and tx.block <= (select id from block where hash = "hash")
-$$ language sql stable;
+  FROM tx
+  JOIN tx_out
+    ON tx.id = tx_out.tx_id
+  JOIN "TransactionOutput"
+    ON tx.hash = "TransactionOutput"."txHash"
+  LEFT OUTER JOIN tx_in
+    ON tx_out.tx_id = tx_in.tx_out_id
+    AND tx_out.index = tx_in.tx_out_index
+  WHERE tx_in.tx_in_id IS NULL
+  AND tx.block <= (SELECT id FROM block WHERE hash = "hash")
+$$ LANGUAGE SQL stable;

@@ -1,0 +1,9 @@
+{
+  "Producers": [
+    {
+      "addr": "relays-new.mainnet-candidate-3.dev.cardano.org",
+      "port": 3001,
+      "valency": 2
+    }
+  ]
+}

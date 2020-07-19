@@ -44,19 +44,21 @@
   - role: cardano-graphql
     permission:
       columns:
+      - createdAt
+      - epochNo
       - fees
       - hash
       - merkelRoot
-      - number
-      - previousBlockHash
       - nextBlockHash
-      - createdBy
+      - number
+      - opCert
+      - previousBlockHash
+      - protocolVersion
       - size
-      - transactionsCount
-      - epochNo
-      - slotNo
       - slotInEpoch
-      - createdAt
+      - slotNo
+      - transactionsCount
+      - vrfKey
       filter: {}
       limit: 100
       allow_aggregations: true
@@ -94,6 +96,39 @@
       limit: 1
 - table:
     schema: public
+    name: Delegation
+  configuration:
+    custom_root_fields:
+      select_aggregate: delegations_aggregate
+      select: delegations
+    custom_column_names: {}
+  object_relationships:
+  - name: stakePool
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: StakePool
+        column_mapping:
+          update_id: id
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - address
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
     name: Epoch
   configuration:
     custom_root_fields:
@@ -119,6 +154,124 @@
       - startedAt
       - lastBlockTime
       - blocksCount
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: Reward
+  configuration:
+    custom_root_fields:
+      select_aggregate: rewards_aggregate
+      select: rewards
+    custom_column_names: {}
+  object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - address
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: StakeDeregistration
+  object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - address
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: StakePool
+  configuration:
+    custom_root_fields:
+      select_aggregate: stakePools_aggregate
+      select: stakePools
+    custom_column_names: {}
+  object_relationships:
+  - name: updatedIn
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          updated_in_tx_id: id
+  array_relationships:
+  - name: owners
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: pool_owner
+        column_mapping:
+          id: pool_id
+  - name: relays
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: pool_relay
+        column_mapping:
+          id: update_id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - fixedCost
+      - hash
+      - margin
+      - metadataHash
+      - pledge
+      - rewardAddress
+      - url
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: StakeRegistration
+  configuration:
+    custom_root_fields:
+      select_aggregate: stakeRegistrations_aggregate
+      select: stakeRegistrations
+    custom_column_names: {}
+  object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - address
       filter: {}
       limit: 100
       allow_aggregations: true
@@ -253,3 +406,93 @@
       filter: {}
       limit: 100
       allow_aggregations: true
+- table:
+    schema: public
+    name: Withdrawal
+  configuration:
+    custom_root_fields:
+      select_aggregate: withdrawals_aggregate
+      select: withdrawals
+    custom_column_names: {}
+  object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - amount
+      - address
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: pool_owner
+  object_relationships:
+  - name: stakePool
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: StakePool
+        column_mapping:
+          pool_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - hash
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: pool_relay
+  object_relationships:
+  - name: stakePool
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: StakePool
+        column_mapping:
+          update_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - dns_name
+      - dns_srv_name
+      - ipv4
+      - ipv6
+      - port
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: pool_retire
+  object_relationships:
+  - name: announcedIn
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          announced_tx_id: id
+  - name: inEffectFrom
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Epoch
+        column_mapping:
+          retiring_epoch: number

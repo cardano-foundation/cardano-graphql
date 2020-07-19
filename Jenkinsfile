@@ -23,10 +23,13 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh "CARDANO_GRAPHQL_VERSION=${env.GIT_COMMIT} docker-compose -p cardano-graphql up --build --force-recreate -d"
+        sh "NETWORK=mainnet_candidate_3 CARDANO_GRAPHQL_VERSION=${env.GIT_COMMIT} docker-compose -p cardano-graphql up --build --force-recreate -d"
 //         sh 'TEST_MODE=e2e yarn workspaces run test --ci'
-        sh 'sleep 15'
+//         sh 'TEST_MODE=e2e yarn workspace @cardano-graphql/api-caradno-db-hasura run test --ci'
         sh 'TEST_MODE=e2e yarn workspace @cardano-graphql/api-genesis run test --ci'
+        sh 'TEST_MODE=e2e yarn workspace @cardano-graphql/cli run test --ci'
+        sh 'TEST_MODE=e2e yarn workspace @cardano-graphql/server run test --ci'
+        sh 'sleep 15'
       }
     }
     stage('Publish: Git Revision') {
