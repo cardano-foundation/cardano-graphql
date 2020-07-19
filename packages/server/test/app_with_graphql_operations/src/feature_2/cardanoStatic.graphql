@@ -1,8 +1,0 @@
-
-query cardanoStatic {
-  cardano {
-    networkName
-    slotsPerEpoch
-    startTime
-  }
-}

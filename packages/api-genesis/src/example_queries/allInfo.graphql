@@ -1,0 +1,46 @@
+query allInfo {
+  genesis {
+    activeSlotsCoeff
+    epochLength
+    genDelegs
+    initialFunds
+    maxKESEvolutions
+    maxLovelaceSupply
+    networkId
+    networkMagic
+    protocolMagicId
+    protocolParams {
+      a0
+      decentralisationParam
+      eMax
+      extraEntropy {
+        tag
+      }
+      keyDeposit
+      maxBlockBodySize
+      maxBlockHeaderSize
+      maxTxSize
+      minFeeA
+      minFeeB
+      minPoolCost
+      minUTxOValue
+      nOpt
+      poolDeposit
+      protocolVersion {
+        major
+        minor
+      }
+      rho
+      tau
+    }
+    securityParam
+    slotLength
+    slotsPerKESPeriod
+    staking {
+      pools
+      stake
+    }
+    systemStart
+    updateQuorum
+  }
+}

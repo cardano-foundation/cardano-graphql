@@ -1,7 +1,6 @@
 query cardanoDbSyncProgress {
     cardanoDbMeta {
         initialized
-        slotDiffFromNetworkTip
         syncPercentage
     }
 }

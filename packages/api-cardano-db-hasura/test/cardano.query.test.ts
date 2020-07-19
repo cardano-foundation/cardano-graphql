@@ -15,15 +15,9 @@ describe('cardano', () => {
     client = await buildClient()
   }, 60000)
 
-  it('Returns static information about the network', async () => {
+  it('Returns core information about the current state of the network', async () => {
     const result = await client.query({
-      query: await loadQueryNode('static')
-    })
-    expect(result.data).toMatchSnapshot()
-  })
-  it('Returns dynamic information about the network', async () => {
-    const result = await client.query({
-      query: await loadQueryNode('dynamic')
+      query: await loadQueryNode('chainTipAndCurrentEpochNumber')
     })
     expect(result.data.cardano.tip.number).toBeGreaterThan(3994551)
     expect(result.data.cardano.currentEpoch.number).toBeGreaterThan(184)

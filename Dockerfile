@@ -7,6 +7,7 @@ WORKDIR /application
 RUN mkdir /application/packages
 COPY tsconfig.json /application/
 COPY packages/api-cardano-db-hasura /application/packages/api-cardano-db-hasura
+COPY packages/api-genesis /application/packages/api-genesis
 COPY packages/server /application/packages/server
 COPY packages/util /application/packages/util
 COPY packages/util-dev /application/packages/util-dev
@@ -18,8 +19,9 @@ RUN mkdir -p application/packages
 COPY package.json yarn.lock .yarnrc /application/
 COPY --from=builder /application/packages-cache /application/packages-cache
 WORKDIR /application/packages
-RUN mkdir api-cardano-db-hasura util server
+RUN mkdir api-cardano-db-hasura api-genesis util server
 COPY packages/api-cardano-db-hasura/package.json api-cardano-db-hasura/
+COPY packages/api-genesis/package.json api-genesis/
 COPY packages/server/package.json server/
 COPY packages/util/package.json util/
 WORKDIR /application
@@ -37,6 +39,9 @@ COPY --from=builder /application/packages/api-cardano-db-hasura/dist /applicatio
 COPY --from=builder /application/packages/api-cardano-db-hasura/hasura/project /application/packages/api-cardano-db-hasura/hasura/project
 COPY --from=builder /application/packages/api-cardano-db-hasura/package.json /application/packages/api-cardano-db-hasura/package.json
 COPY --from=builder /application/packages/api-cardano-db-hasura/schema.graphql /application/packages/api-cardano-db-hasura/schema.graphql
+COPY --from=builder /application/packages/api-genesis/dist /application/packages/api-genesis/dist
+COPY --from=builder /application/packages/api-genesis/package.json /application/packages/api-genesis/package.json
+COPY --from=builder /application/packages/api-genesis/schema.graphql /application/packages/api-genesis/schema.graphql
 COPY --from=builder /application/packages/server/dist /application/packages/server/dist
 COPY --from=builder /application/packages/server/package.json /application/packages/server/package.json
 COPY --from=builder /application/packages/util/dist /application/packages/util/dist

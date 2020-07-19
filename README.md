@@ -51,11 +51,11 @@ docker-compose up -d --build && docker-compose logs -f
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
 ``` graphql 
-{ cardanoDbMeta { initialized syncPercentage slotDiffFromNetworkTip }}
+{ cardanoDbMeta { initialized syncPercentage }}
 ```
 or via command line:
 ``` console
-curl -X POST -H "Content-Type: application/json" -d '{"query": "{ cardanoDbMeta { initialized syncPercentage slotDiffFromNetworkTip }}"}' http://localhost:3100/graphql
+curl -X POST -H "Content-Type: application/json" -d '{"query": "{ cardanoDbMeta { initialized syncPercentage }}"}' http://localhost:3100/graphql
 ```
 :information_source: Wait for `initialized` to be `true` to ensure the epoch dataset is complete.
 ### Query the full dataset

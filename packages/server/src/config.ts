@@ -6,6 +6,7 @@ export type Config = {
   allowedOrigins: CorsOptions['origin']
   apiPort: number
   cacheEnabled: boolean
+  genesisFile: string
   hasuraUri: string
   prometheusMetrics: boolean
   queryDepthLimit: number
@@ -19,6 +20,7 @@ export async function getConfig (): Promise<Config> {
     allowedOrigins,
     apiPort,
     cacheEnabled,
+    genesisFile,
     hasuraUri,
     prometheusMetrics,
     queryDepthLimit,
@@ -26,6 +28,9 @@ export async function getConfig (): Promise<Config> {
     whitelistPath
   } = filterAndTypecastEnvs(process.env)
 
+  if (!genesisFile) {
+    throw new MissingConfig('GENESIS_FILE env not set')
+  }
   if (!hasuraUri) {
     throw new MissingConfig('HASURA_URI env not set')
   }
@@ -40,6 +45,7 @@ export async function getConfig (): Promise<Config> {
     allowedOrigins: allowedOrigins || true,
     apiPort: apiPort || 3100,
     cacheEnabled: cacheEnabled || false,
+    genesisFile,
     hasuraUri,
     prometheusMetrics,
     queryDepthLimit: queryDepthLimit || 10,
@@ -54,6 +60,7 @@ function filterAndTypecastEnvs (env: any) {
     ALLOWED_ORIGINS,
     API_PORT,
     CACHE_ENABLED,
+    GENESIS_FILE,
     HASURA_URI,
     PROMETHEUS_METRICS,
     QUERY_DEPTH_LIMIT,
@@ -65,6 +72,7 @@ function filterAndTypecastEnvs (env: any) {
     allowedOrigins: ALLOWED_ORIGINS,
     apiPort: Number(API_PORT),
     cacheEnabled: CACHE_ENABLED === 'true' ? true : undefined,
+    genesisFile: GENESIS_FILE,
     hasuraUri: HASURA_URI,
     prometheusMetrics: PROMETHEUS_METRICS === 'true' ? true : undefined,
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),

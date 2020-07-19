@@ -1,0 +1,50 @@
+{
+  "name": "@cardano-graphql/api-genesis",
+  "version": "1.0.0",
+  "description": "Query the network genesis",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "yarn codegen && tsc -b ./src",
+    "codegen": "graphql-codegen",
+    "cleanup": "shx rm -rf dist node_modules src/graphql_types.ts",
+    "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
+    "prepack": "yarn build",
+    "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js query"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
+  },
+  "author": "Rhys Bartels-Waller",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/input-output-hk/cardano-graphql/issues"
+  },
+  "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/api-genesis/README.md",
+  "files": [
+    "dist/*",
+    "!dist/__test__",
+    "!dist/**/*.test.*",
+    "hasura",
+    "LICENSE",
+    "NOTICE",
+    "schema.graphql"
+  ],
+  "dependencies": {
+    "@graphql-tools/schema": "^6.0.9",
+    "graphql": "14.5.8",
+    "graphql-bigint": "^1.0.0",
+    "graphql-scalars": "^1.2.2"
+  },
+  "devDependencies": {
+    "@cardano-graphql/util-dev": "1.0.0",
+    "@graphql-codegen/cli": "^1.15.2",
+    "@graphql-codegen/typescript": "^1.15.2",
+    "@graphql-codegen/typescript-graphql-files-modules": "^1.15.2",
+    "@graphql-codegen/typescript-resolvers": "^1.15.2",
+    "@types/node": "^14.0.13",
+    "shx": "^0.3.2",
+    "typescript": "^3.9.5"
+  }
+}

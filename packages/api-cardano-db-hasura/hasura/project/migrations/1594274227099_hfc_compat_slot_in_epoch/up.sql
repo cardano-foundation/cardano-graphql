@@ -22,13 +22,7 @@ CREATE VIEW "public"."Block" AS
 
 CREATE OR REPLACE VIEW "public"."Cardano" AS
  SELECT block.block_no AS "tipBlockNo",
-    block.epoch_no AS "currentEpochNo",
-    ( SELECT meta.slots_per_epoch
-           FROM meta) AS "slotsPerEpoch",
-    ( SELECT meta.start_time
-           FROM meta) AS "startTime",
-    ( SELECT meta.network_name
-           FROM meta) AS "networkName"
+    block.epoch_no AS "currentEpochNo"
    FROM block
   WHERE (block.block_no IS NOT NULL)
   ORDER BY block.block_no DESC
