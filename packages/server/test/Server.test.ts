@@ -9,13 +9,13 @@ import http from 'http'
 import path from 'path'
 import tmp from 'tmp-promise'
 import util from '@cardano-graphql/util'
-import { buildSchema as buildCardanoDbHasuraSchema, Db } from '@cardano-graphql/api-cardano-db-hasura'
+import { buildSchema as buildGenesisSchema } from '@cardano-graphql/api-genesis'
 import { Server } from '@src/Server'
 import { whitelistPlugin } from '@src/apollo_server_plugins'
 
+const shelleyTestnetGenesis = '../../../config/network/shelley_testnet/genesis.json'
 const clientPath = path.resolve(__dirname, 'app_with_graphql_operations')
 const port = 3101
-const hasuraUri = 'http://localhost:8090'
 
 function listen (app: Application, port: number): Promise<http.Server> {
   return new Promise(function (resolve, reject) {
@@ -28,15 +28,12 @@ describe('Server', () => {
   let client: ApolloClient<any>
   let whiteListedDocumentNode: DocumentNode
   let app: express.Application
-  let db: Db
   let httpServer: http.Server
-  let cardanoDbHasuraSchema: GraphQLSchema
+  let genesisSchema: GraphQLSchema
 
   beforeAll(async () => {
-    db = new Db(hasuraUri)
-    await db.init()
-    cardanoDbHasuraSchema = await buildCardanoDbHasuraSchema(hasuraUri, db)
-    whiteListedDocumentNode = await util.loadQueryNode(path.resolve(clientPath, 'src', 'feature_1'), 'cardanoDynamic')
+    genesisSchema = buildGenesisSchema(require(shelleyTestnetGenesis))
+    whiteListedDocumentNode = await util.loadQueryNode(path.resolve(clientPath, 'src', 'feature_1'), 'maxLovelaceSupply')
   })
 
   beforeEach(async () => {
@@ -64,7 +61,7 @@ describe('Server', () => {
     describe('Booting the server without providing a whitelist', () => {
       beforeEach(async () => {
         Server(app, {
-          schema: cardanoDbHasuraSchema
+          schema: genesisSchema
         })
         httpServer = await listen(app, port)
       })
@@ -73,13 +70,14 @@ describe('Server', () => {
       })
       it('returns data for all valid queries', async () => {
         const validQueryResult = await client.query({
-          query: gql`query validButNotWhitelisted {
-              cardano {
-                  networkName
+          query: gql`query valid {
+              genesis {
+                  maxLovelaceSupply
+                  systemStart
               }
           }`
         })
-        expect(validQueryResult.data.cardano.networkName).toBeDefined()
+        expect(validQueryResult.data.genesis.maxLovelaceSupply).toBeDefined()
         expect(validQueryResult.errors).not.toBeDefined()
       })
     })
@@ -91,7 +89,7 @@ describe('Server', () => {
         const whitelist = JSON.parse(fs.readFileSync(whitelistPath, 'utf-8'))
         Server(app, {
           plugins: [whitelistPlugin(whitelist)],
-          schema: cardanoDbHasuraSchema
+          schema: genesisSchema
         })
         httpServer = await listen(app, port)
       })
@@ -103,7 +101,7 @@ describe('Server', () => {
         const result = await client.query({
           query: whiteListedDocumentNode
         })
-        expect(result.data.cardano.tip.number).toBeDefined()
+        expect(result.data.genesis.maxLovelaceSupply).toBeDefined()
         expect(result.errors).not.toBeDefined()
       })
       it('Returns a networkError if a valid but unlisted operation is sent', async () => {
@@ -111,8 +109,9 @@ describe('Server', () => {
         try {
           await client.query({
             query: gql`query validButNotWhitelisted {
-                cardano {
-                    networkName
+                genesis {
+                    maxLovelaceSupply
+                    systemStart
                 }
             }`
           })

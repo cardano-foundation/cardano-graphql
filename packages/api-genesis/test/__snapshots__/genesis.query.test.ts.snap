@@ -150,12 +150,12 @@ Object {
   "genesis": Object {
     "epochLength": 21600,
     "maxLovelaceSupply": "45000000000000000",
-    "networkId": "Mainnet",
+    "networkId": "Testnet",
     "networkMagic": 42,
     "securityParam": 108,
     "slotLength": 1,
     "slotsPerKESPeriod": 3600,
-    "systemStart": "2020-07-17T19:00:00Z",
+    "systemStart": "2020-07-13T11:00:00Z",
   },
 }
 `;

@@ -1,0 +1,6 @@
+
+query maxLovelaceSupply {
+  genesis {
+    maxLovelaceSupply
+  }
+}
