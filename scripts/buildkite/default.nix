@@ -17,6 +17,6 @@ let
 in
   writeScript "stack-rebuild-wrapped" ''
     #!${stdenv.shell}
-    export PATH=${lib.makeBinPath ([ cache-s3 stack gnused coreutils gnutar ] ++ buildTools)}
+    export PATH=${lib.makeBinPath ([ cache-s3 stack gnused coreutils gnutar gzip ] ++ buildTools)}
     exec ${stackRebuild} "$@"
   ''
