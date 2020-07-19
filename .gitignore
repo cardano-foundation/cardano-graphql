@@ -6,6 +6,9 @@ dist-newstyle/
 cabal.project.local
 .ghc.environment.*
 
+# Stack
+/stack.yaml.lock
+
 # Editors
 TAGS
 
@@ -16,3 +19,7 @@ TAGS
 auto/
 .stack-to-nix.cache
 result*
+
+# Visual Studio Code
+/.vscode
+

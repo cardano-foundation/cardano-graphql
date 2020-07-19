@@ -8,7 +8,7 @@ with pkgs.lib;
 with pkgs;
 
 let
-  inherit (iohkNix) cache-s3;
+  cache-s3 = callPackage ./cache-s3.nix {};
 
   stackRebuild = runCommand "stack-rebuild" {} ''
     ${haskellPackages.ghcWithPackages (ps: [ps.turtle ps.safe ps.transformers])}/bin/ghc -o $out ${./rebuild.hs}
@@ -17,6 +17,6 @@ let
 in
   writeScript "stack-rebuild-wrapped" ''
     #!${stdenv.shell}
-    export PATH=${lib.makeBinPath ([ cache-s3 stack gnused coreutils gnutar ] ++ buildTools)}
+    export PATH=${lib.makeBinPath ([ cache-s3 stack gnused coreutils gnutar gzip ] ++ buildTools)}
     exec ${stackRebuild} "$@"
   ''
