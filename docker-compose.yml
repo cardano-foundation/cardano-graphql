@@ -100,9 +100,6 @@ services:
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
     expose:
       - 3100
-    volumes:
-      - node-ipc:/node-ipc
-      - ./app:/app
     ports:
       - ${API_PORT:-3100}:3100
     restart: on-failure
@@ -112,6 +109,8 @@ services:
         max-size: "200k"
         max-file: "10"
     volumes:
+      - node-ipc:/node-ipc
+      - ./app:/app
       - ./config/network/shelley_testnet:/configuration
 secrets:
   postgres_db:

@@ -2,6 +2,7 @@
 
 import fs from 'fs'
 import { execSync } from 'child_process'
+import { getTipSync, Tip } from '@src/cli'
 
 const cardanoCli = process.env.CARDANO_CLI_CMD ? process.env.CARDANO_CLI_CMD : 'cardano-cli'
 
@@ -9,12 +10,6 @@ type Address = String
 
 interface ISlotRate {
   rate: number
-}
-
-type Tip = {
-  blockNo: number,
-  headerHash: String,
-  slotNo: number
 }
 
 type UTXO = {
@@ -38,11 +33,6 @@ function txInString (utxo: UTXO): String {
 
 function createProtocolParams (outFile: string) {
   execSync(`${cardanoCli} shelley query protocol-parameters --testnet-magic 42  --out-file ${outFile}`).toString()
-}
-
-function getTip (): Tip {
-  const stdout = execSync(`${cardanoCli} shelley query tip --testnet-magic 42`).toString()
-  return JSON.parse(stdout)
 }
 
 function calculateTTL (tip: Tip, slotRate: ISlotRate, limit: number): number {
@@ -98,7 +88,7 @@ function createAndSubmitTransaction (settings: Settings) {
   const paymentAmount = 10
   const protocolFile = 'protocol.json'
   createProtocolParams(protocolFile)
-  const tip = getTip()
+  const tip = getTipSync()
   const slotRate = { rate: 1 } // I don't currently know where to get this number from
   const ttl = calculateTTL(tip, slotRate, settings.timeLimit)
   const fromUtxo = getUTXO(settings.fromAddr)[0]
