@@ -3,7 +3,7 @@
 import fs from 'fs'
 import { execSync } from 'child_process'
 
-const cardanoCli = 'docker exec -t d8b90c90e08b cardano-cli'
+const cardanoCli = process.env.CARDANO_CLI_CMD ? process.env.CARDANO_CLI_CMD : 'cardano-cli'
 
 type Address = String
 
@@ -33,17 +33,11 @@ function txOutString (txOut: TxOut): String {
 }
 
 function txInString (utxo: UTXO): String {
-  return utxo.TxHash + '#' + utxo.Lovelace
+  return utxo.TxHash + '#' + utxo.TxIx.toString()
 }
 
-function createProtocolParams (outFile: string): ISlotRate {
-  // const stdout = execSync(`${cardanoCli} shelley query protocol-parameters --testnet-magic 42`).toString()
-  // we do this only because we are running locally against docker in dev, normally we could write the result to a file
+function createProtocolParams (outFile: string) {
   execSync(`${cardanoCli} shelley query protocol-parameters --testnet-magic 42  --out-file ${outFile}`).toString()
-  // console.log(stdout)
-  // console.log(outFile)
-  // fs.writeFileSync(outFile, stdout)
-  return { rate: 1 } // JSON.parse(stdout)  // supposed to be form protocolParams but it doesn't seem to have it
 }
 
 function getTip (): Tip {
@@ -57,8 +51,6 @@ function calculateTTL (tip: Tip, slotRate: ISlotRate, limit: number): number {
 
 function getUTXO (address: Address): Array<UTXO> {
   const stdout = execSync(`${cardanoCli} shelley query utxo --address ${address} --testnet-magic 42`).toString()
-  console.log(address)
-  console.log(stdout)
   const rowToUtxo = function (row: string) {
     const fields = row.trim().split(/\W+/)
     return {
@@ -105,25 +97,20 @@ type Settings = {
 function createAndSubmitTransaction (settings: Settings) {
   const paymentAmount = 10
   const protocolFile = 'protocol.json'
-  const protocolParams = createProtocolParams(protocolFile)
+  createProtocolParams(protocolFile)
   const tip = getTip()
-  const ttl = calculateTTL(tip, protocolParams, settings.timeLimit)
+  const slotRate = { rate: 1 } // I don't currently know where to get this number from
+  const ttl = calculateTTL(tip, slotRate, settings.timeLimit)
   const fromUtxo = getUTXO(settings.fromAddr)[0]
-  const toUtxos = getUTXO(settings.toAddr)
-  const toLovelace = toUtxos[0] ? toUtxos[0].Lovelace : 0
   const balanceWithoutFee = calculateChange(fromUtxo, paymentAmount, 0)
   const txOutFrom = { address: settings.fromAddr, change: balanceWithoutFee }
-  const txOutTo = { address: settings.toAddr, change: toLovelace + paymentAmount }
+  const txOutTo = { address: settings.toAddr, change: paymentAmount }
   const txNoFeeFile = 'tx-no-fee.raw'
-  console.log("TX From: ", txOutFrom)
-  console.log("TX To: ", txOutTo)
   buildTransaction(fromUtxo, txOutFrom, txOutTo, ttl, 0, txNoFeeFile)
   const fee = calculateFee(txNoFeeFile, protocolFile)
   const txWithFeeFile = 'tx.raw'
   const balanceWithFee = calculateChange(fromUtxo, paymentAmount, fee)
   const txOutFromWithFee = { address: settings.fromAddr, change: balanceWithFee }
-  console.log('fee: ', fee)
-  console.log("TX From: ", txOutFromWithFee)
   buildTransaction(fromUtxo, txOutFromWithFee, txOutTo, ttl, fee, txWithFeeFile)
   const txSignedFile = 'tx.signed'
   signTransaction(txWithFeeFile, settings.signingKeyFile, txSignedFile)
@@ -134,16 +121,14 @@ function test () {
   const fromAddr = fs.readFileSync('/Users/davidsmith/tweag/cardano/cardano-graphql/app/payment.addr').toString().trim()
   const toAddr = fs.readFileSync('/Users/davidsmith/tweag/cardano/cardano-graphql/app/payment2.addr').toString().trim()
   const settings = {
-    timeLimit: 30,
+    timeLimit: 300, // I can't find out how to work this out but it seems if you set it to 30 it's too low
     fromAddr,
     toAddr,
     signingKeyFile: '/app/payment.skey'
   }
   createAndSubmitTransaction(settings)
-  // wait for 30 seconds
+  // wait for some time because it seems if you run the test again too soon it will fail, not sure how long though!
   // execSync(`sleep {settings.timeLimit}`)
-  const finalUtxo = getUTXO(settings.fromAddr)
-  console.log(finalUtxo)
 }
 
 describe('CLI', () => {
