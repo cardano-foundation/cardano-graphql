@@ -36,7 +36,6 @@ where
 
 import Cardano.Prelude.Base
 
-import Data.ByteString (ByteString)
 import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text.Lazy as LT

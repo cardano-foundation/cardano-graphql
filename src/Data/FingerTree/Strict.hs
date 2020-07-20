@@ -53,8 +53,6 @@ import           Prelude hiding (null, reverse)
 import           Data.FingerTree (Measured (..), ViewL (..), ViewR (..))
 import qualified Data.FingerTree as FT
 import           Data.Foldable (foldl', toList)
-import           Data.Monoid (Monoid (..))
-import           Data.Semigroup (Semigroup (..))
 import           GHC.Generics (Generic)
 
 import           Cardano.Prelude (NoUnexpectedThunks (..),
