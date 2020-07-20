@@ -2,7 +2,7 @@
 
 import fs from 'fs'
 import { execSync } from 'child_process'
-import { getTipSync, Tip } from '@src/cli'
+import { getTipSync, Tip, submitTransactionSync } from '@src/cli'
 
 const cardanoCli = process.env.CARDANO_CLI_CMD ? process.env.CARDANO_CLI_CMD : 'cardano-cli'
 
@@ -73,10 +73,6 @@ function signTransaction (txBodyFile: String, signingKeyFile: String, txOutFile:
   execSync(`${cardanoCli} shelley transaction sign --tx-body-file ${txBodyFile} --signing-key-file ${signingKeyFile} --testnet-magic 42 --out-file ${txOutFile}`).toString()
 }
 
-function submitTransaction (txBodyFile: String) {
-  execSync(`${cardanoCli} shelley transaction submit --tx-file ${txBodyFile} --testnet-magic 42`).toString()
-}
-
 type Settings = {
   timeLimit: number
   fromAddr: string
@@ -104,7 +100,7 @@ function createAndSubmitTransaction (settings: Settings) {
   buildTransaction(fromUtxo, txOutFromWithFee, txOutTo, ttl, fee, txWithFeeFile)
   const txSignedFile = 'tx.signed'
   signTransaction(txWithFeeFile, settings.signingKeyFile, txSignedFile)
-  submitTransaction(txSignedFile)
+  submitTransactionSync(txSignedFile)
 }
 
 function test () {

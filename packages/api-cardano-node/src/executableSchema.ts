@@ -1,15 +1,13 @@
 import fs from 'fs'
 import path from 'path'
-import { execSync } from 'child_process'
 import { makeExecutableSchema } from 'graphql-tools'
 import { Resolvers } from './graphql_types'
-import { throwIfInvalidContentType } from './validation'
-import tmp from 'tmp-promise'
-import { getTip, Tip } from './cli'
+import { throwIfInvalidContentType, saveReadStream } from './uploads'
+import { getTip, Tip, submitTransaction } from './cli'
 
 export function buildSchema () {
   console.log(process.env.CARDANO_NODE_SOCKET_PATH)
-  const networkArg = '--testnet-magic 42' // shelley_testnet
+  // const networkArg = '--testnet-magic 42' // shelley_testnet
   // const networkArg = cardano.network === 'mainnet' ? '--mainnet' : `--testnet-magic ${cardano.networkMagic}`
   return makeExecutableSchema({
     resolvers: {
@@ -19,21 +17,9 @@ export function buildSchema () {
           console.log(`Submitting ${filename}, which has ${encoding} encoding`)
           throwIfInvalidContentType(mimetype)
           // cardano-cli submits a tx from disk, so pipe the multi-part upload to a tmp file
-          const txFile = await tmp.file()
-          return new Promise((resolve, reject) => {
-            const writeStream = fs.createWriteStream(txFile.path)
-            const readStream = createReadStream()
-            readStream.pipe(writeStream)
-            readStream.on('end', () => {
-              // Todo: Make async, just simplifying initially
-              try {
-                const stdout = execSync(`cardano-cli shelley transaction submit --tx-file ${txFile.path} ${networkArg}`)
-                // Todo: parse result (shape is unknown)
-                return resolve({ id: stdout.toString() })
-              } catch (error) {
-                return reject(error)
-              }
-            })
+          const txFile = await saveReadStream(createReadStream())
+          return submitTransaction(txFile.path).then((stdout: String) => {
+            return { id: stdout }
           })
         }
       },
@@ -46,46 +32,6 @@ export function buildSchema () {
           }
         })
       }
-      // }) new Promise((resolve, reject) => {
-      //   try {
-      //     const tip = getTip()
-      //     return resolve({
-      //       hash: tip.headerHash.toString(),
-      //       number: tip.blockNo,
-      //       slotNo: tip.slotNo
-      //     })
-      //   } catch (error) {
-      //     reject(error)
-      //   }
-      // return exec(
-      //   `cardano-cli shelley query tip ${networkArg}`,
-      //   (error, stdout, stderr) => {
-      //     if (error !== undefined) {
-      //       reject(error)
-      //     } else if (stderr.toString() !== '') {
-      //       reject(new Error(stderr.toString()))
-      //     }
-      //     console.log(stdout)
-      //     // const valueLines = stdout.split('\n')
-      //     // if (valueLines.length < 7) {
-      //     //   return reject(new Error('Unexpected response from the node'))
-      //     // }
-      //     // const [hash, slotNo, number] = valueLines
-      //     //   .slice(3, 6)
-      //     //   .map((line) => line.split(':')[1].trim())
-
-      //     // Return static values to keep tsc happy
-      //     return resolve({
-      //       hash: '123',
-      //       // number: parseInt(number),
-      //       number: 456,
-      //       // slotNo: parseInt(slotNo)
-      //       slotNo: 789
-      //     })
-      //   }
-      // )
-      // })
-      // }
     } as Resolvers,
     typeDefs: fs.readFileSync(path.resolve(__dirname, '..', 'schema.graphql'), 'utf-8')
   })

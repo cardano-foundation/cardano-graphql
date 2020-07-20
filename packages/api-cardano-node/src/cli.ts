@@ -16,16 +16,30 @@ export function getTipSync (): Tip {
 export function getTip (): Promise<Tip> {
   return new Promise((resolve, reject) => {
     exec(`${cardanoCli} shelley query tip --testnet-magic 42`, (error, stdout, stderr) => {
-      console.log(error, stdout, stderr)
       if (error) {
-        console.log('error: ', error)
         reject(error)
       } else if (stderr.toString() !== '') {
-        console.log('stderr: ', stderr.toString())
         reject(new Error(stderr.toString()))
       } else {
-        console.log('stdout: ', stdout)
         resolve(JSON.parse(stdout))
+      }
+    })
+  })
+}
+
+export function submitTransactionSync (txBodyFile: String) {
+  execSync(`${cardanoCli} shelley transaction submit --tx-file ${txBodyFile} --testnet-magic 42`).toString()
+}
+
+export function submitTransaction (txBodyFile: String): Promise<String> {
+  return new Promise((resolve, reject) => {
+    exec(`${cardanoCli} shelley transaction submit --tx-file ${txBodyFile} --testnet-magic 42`, (error, stdout, stderr) => {
+      if (error) {
+        reject(error)
+      } else if (stderr.toString() !== '') {
+        reject(new Error(stderr.toString()))
+      } else {
+        resolve(stdout)
       }
     })
   })
