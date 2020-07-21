@@ -98,6 +98,7 @@ services:
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
+      - CARDANO_MAGIC=42
     expose:
       - 3100
     ports:

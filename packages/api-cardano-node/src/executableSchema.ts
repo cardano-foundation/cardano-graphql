@@ -3,12 +3,10 @@ import path from 'path'
 import { makeExecutableSchema } from 'graphql-tools'
 import { Resolvers } from './graphql_types'
 import { throwIfInvalidContentType, saveReadStream } from './uploads'
-import { getTip, Tip, submitTransaction } from './cli'
+import { Tip, Settings, Client } from './cli'
 
-export function buildSchema () {
-  console.log(process.env.CARDANO_NODE_SOCKET_PATH)
-  // const networkArg = '--testnet-magic 42' // shelley_testnet
-  // const networkArg = cardano.network === 'mainnet' ? '--mainnet' : `--testnet-magic ${cardano.networkMagic}`
+export function buildSchema (settings: Settings) {
+  const client = new Client(settings)
   return makeExecutableSchema({
     resolvers: {
       Mutation: {
@@ -18,13 +16,13 @@ export function buildSchema () {
           throwIfInvalidContentType(mimetype)
           // cardano-cli submits a tx from disk, so pipe the multi-part upload to a tmp file
           const txFile = await saveReadStream(createReadStream())
-          return submitTransaction(txFile.path).then((stdout: String) => {
+          return client.submitTransaction(txFile.path).then((stdout: String) => {
             return { id: stdout }
           })
         }
       },
       Query: {
-        node: () => getTip().then((tip: Tip) => {
+        node: () => client.getTip().then((tip: Tip) => {
           return {
             hash: tip.headerHash.toString(),
             number: tip.blockNo,

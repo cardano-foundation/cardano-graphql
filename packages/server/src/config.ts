@@ -13,6 +13,8 @@ export type Config = {
   queryDepthLimit: number
   tracing: boolean
   whitelistPath: string
+  testnet: string
+  cardanoCli: string
 }
 
 export async function getConfig (): Promise<Config> {
@@ -27,7 +29,9 @@ export async function getConfig (): Promise<Config> {
     prometheusMetrics,
     queryDepthLimit,
     tracing,
-    whitelistPath
+    whitelistPath,
+    testnet,
+    cardanoCli
   } = filterAndTypecastEnvs(process.env)
   if (!cardanoNodeSocketPath) {
     throw new MissingConfig('CARDANO_NODE_SOCKET_PATH env not set')
@@ -55,7 +59,9 @@ export async function getConfig (): Promise<Config> {
     prometheusMetrics,
     queryDepthLimit: queryDepthLimit || 10,
     tracing,
-    whitelistPath
+    whitelistPath,
+    testnet,
+    cardanoCli
   }
 }
 
@@ -71,7 +77,9 @@ function filterAndTypecastEnvs (env: any) {
     PROMETHEUS_METRICS,
     QUERY_DEPTH_LIMIT,
     TRACING,
-    WHITELIST_PATH
+    WHITELIST_PATH,
+    CARDANO_CLI_CMD,
+    CARDANO_MAGIC
   } = env
   return {
     allowIntrospection: ALLOW_INTROSPECTION === 'true' ? true : undefined,
@@ -84,6 +92,8 @@ function filterAndTypecastEnvs (env: any) {
     prometheusMetrics: PROMETHEUS_METRICS === 'true' ? true : undefined,
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
     tracing: TRACING === 'true' ? true : undefined,
-    whitelistPath: WHITELIST_PATH
+    whitelistPath: WHITELIST_PATH,
+    testnet: CARDANO_MAGIC ? `--testnet-magic ${CARDANO_MAGIC}` : '--mainnet',
+    cardanoCli: CARDANO_CLI_CMD || 'cardano-cli'
   }
 }

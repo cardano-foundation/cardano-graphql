@@ -42,7 +42,7 @@ getConfig().then((config: Config) => {
           schemas: [
             cardanoDbHasuraSchema,
             genesisSchema,
-            buildCardanoNodeSchema()
+            buildCardanoNodeSchema(config)
           ]
         })
       }, {
