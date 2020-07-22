@@ -1,4 +1,16 @@
 {
+    "cardano-node": {
+        "branch": "master",
+        "description": "The core component that is used to participate in a Cardano decentralised blockchain.",
+        "homepage": "https://cardano.org",
+        "owner": "input-output-hk",
+        "repo": "cardano-node",
+        "rev": "a0eb63646c35e33192aa99a73672757d7f25f246",
+        "sha256": "1jiyd4ihqvn9ngskr8rgpyi793ypxbp57prj8f80idyzjdkf2n6z",
+        "type": "tarball",
+        "url": "https://github.com/input-output-hk/cardano-node/archive/a0eb63646c35e33192aa99a73672757d7f25f246.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "gitignore": {
         "branch": "master",
         "description": "Nix function for filtering local git sources",

@@ -6,6 +6,7 @@ let
     nodejs = pkgs.nodejs-12_x;
     inherit (import self.sources.niv {}) niv;
     nix-inclusive = pkgs.callPackage "${self.sources.nix-inclusive}/inclusive.nix" {};
+    inherit (import self.sources.cardano-node {}) cardano-cli;
     cardano-graphql = self.callPackage ./cardano-graphql.nix {};
     hasura-cli-ext = self.callPackage ./hasura-cli-ext/impure.nix {};
     persistgraphql = (self.callPackage ./persistgraphql {}).persistgraphql;

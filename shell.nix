@@ -21,6 +21,7 @@ let
       packages.nodejs        # Event-driven I/O framework for the V8 JavaScript engine
       packages.cardano-graphql
       pkgconfig              # Allows packages to find out information about other packages
+      pkgs.packages.cardano-cli
       pkgs.packages.persistgraphql
       pkgs.packages.hasura-cli
       python                 # The Python Programming language
