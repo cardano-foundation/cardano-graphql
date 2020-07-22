@@ -29,6 +29,27 @@ in {
         default = 3100;
       };
 
+      # Used if you tx submission is allowed
+      cardanoNodeSocketPath = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+      };
+
+      genesisByron = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+      };
+
+      genesisShelley = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+      };
+
+      smashUrl = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+      };
+
       hasuraIp = lib.mkOption {
         type = lib.types.str;
         default = "127.0.0.1";
@@ -90,9 +111,12 @@ in {
     systemd.services.cardano-graphql = {
       wantedBy = [ "multi-user.target" ];
       requires = [ "graphql-engine.service" ];
-      environment = {
-        # CARDANO_NODE_SOCKET_PATH = ;
-        # GENESIS_FILE = ;
+      environment = lib.filterAttrs (k: v: v != null) {
+        CARDANO_NODE_SOCKET_PATH = cfg.cardanoNodeSocketPath;
+        POOL_METADATA_PROXY = cfg.smashUrl;
+        GENESIS_FILE_BYRON = cfg.genesisByron;
+        GENESIS_FILE_SHELLEY = cfg.genesisShelley;
+
         HASURA_URI = hasuraBaseUri;
         PROMETHEUS_METRICS = boolToNodeJSEnv cfg.enablePrometheus;
         TRACING = boolToNodeJSEnv (cfg.enableTracing || cfg.enablePrometheus);
