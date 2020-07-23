@@ -6,8 +6,10 @@ export type Config = {
   allowedOrigins: CorsOptions['origin']
   apiPort: number
   cacheEnabled: boolean
-  genesisFile: string
+  genesisFileByron: string
+  genesisFileShelley: string
   hasuraUri: string
+  poolMetadataProxy: string
   prometheusMetrics: boolean
   queryDepthLimit: number
   tracing: boolean
@@ -20,19 +22,18 @@ export async function getConfig (): Promise<Config> {
     allowedOrigins,
     apiPort,
     cacheEnabled,
-    genesisFile,
+    genesisFileByron,
+    genesisFileShelley,
     hasuraUri,
+    poolMetadataProxy,
     prometheusMetrics,
     queryDepthLimit,
     tracing,
     whitelistPath
   } = filterAndTypecastEnvs(process.env)
 
-  if (!genesisFile) {
-    throw new MissingConfig('GENESIS_FILE env not set')
-  }
-  if (!hasuraUri) {
-    throw new MissingConfig('HASURA_URI env not set')
+  if (!hasuraUri && !genesisFileShelley) {
+    throw new MissingConfig('You have not provided configuration to load an API segment. Either set HASURA_URI or GENESIS_FILE_SHELLEY')
   }
   if (prometheusMetrics && process.env.TRACING === 'false') {
     throw new TracingRequired('Prometheus')
@@ -45,8 +46,10 @@ export async function getConfig (): Promise<Config> {
     allowedOrigins: allowedOrigins || true,
     apiPort: apiPort || 3100,
     cacheEnabled: cacheEnabled || false,
-    genesisFile,
+    genesisFileByron,
+    genesisFileShelley,
     hasuraUri,
+    poolMetadataProxy,
     prometheusMetrics,
     queryDepthLimit: queryDepthLimit || 10,
     tracing,
@@ -60,8 +63,10 @@ function filterAndTypecastEnvs (env: any) {
     ALLOWED_ORIGINS,
     API_PORT,
     CACHE_ENABLED,
-    GENESIS_FILE,
+    GENESIS_FILE_BYRON,
+    GENESIS_FILE_SHELLEY,
     HASURA_URI,
+    POOL_METADATA_PROXY,
     PROMETHEUS_METRICS,
     QUERY_DEPTH_LIMIT,
     TRACING,
@@ -72,8 +77,10 @@ function filterAndTypecastEnvs (env: any) {
     allowedOrigins: ALLOWED_ORIGINS,
     apiPort: Number(API_PORT),
     cacheEnabled: CACHE_ENABLED === 'true' ? true : undefined,
-    genesisFile: GENESIS_FILE,
+    genesisFileByron: GENESIS_FILE_BYRON,
+    genesisFileShelley: GENESIS_FILE_SHELLEY,
     hasuraUri: HASURA_URI,
+    poolMetadataProxy: POOL_METADATA_PROXY,
     prometheusMetrics: PROMETHEUS_METRICS === 'true' ? true : undefined,
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
     tracing: TRACING === 'true' ? true : undefined,
