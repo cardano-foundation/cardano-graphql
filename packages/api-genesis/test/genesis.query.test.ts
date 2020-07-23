@@ -4,8 +4,8 @@ import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
 import { buildClient } from './util'
 
-const shelleyTestnetGenesis = require('../../../config/network/shelley_testnet/genesis.json')
-const mainnetCandidateGenesis = require('../../../config/network/mainnet_candidate/genesis.json')
+const shelleyTestnetGenesis = require('../../../config/network/shelley_testnet/genesis_shelley.json')
+const mainnetCandidateGenesis = require('../../../config/network/mainnet_candidate/genesis_shelley.json')
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries'), name)
@@ -33,7 +33,7 @@ describe('genesis', () => {
       const query = { query: await loadQueryNode('allInfo') }
       const shelleyTestnetResult = await shelleyTestnetClient.query(query)
       expect(shelleyTestnetResult.data).toMatchSnapshot()
-      const mainnetCandidateResult = await shelleyTestnetClient.query(query)
+      const mainnetCandidateResult = await mainnetCandidateClient.query(query)
       expect(mainnetCandidateResult.data).toMatchSnapshot()
     })
   })
