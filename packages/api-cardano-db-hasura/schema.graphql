@@ -49,6 +49,7 @@ type Query {
   utxos (
     limit: Int
     order_by: [TransactionOutput_order_by!]
+    distinct_on: [TransactionOutput_distinct_on!]
     offset: Int
     where: TransactionOutput_bool_exp
   ): [TransactionOutput]!
@@ -225,6 +226,10 @@ type TransactionOutput {
   transaction: Transaction!
   txHash: Hash32HexString!
   value: String!
+}
+
+enum TransactionOutput_distinct_on {
+  address
 }
 
 input TransactionOutput_order_by {
