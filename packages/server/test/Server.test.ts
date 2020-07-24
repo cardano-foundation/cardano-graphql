@@ -72,12 +72,14 @@ describe('Server', () => {
         const validQueryResult = await client.query({
           query: gql`query valid {
               genesis {
-                  maxLovelaceSupply
-                  systemStart
+                  shelley {
+                      maxLovelaceSupply
+                      systemStart
+                  }
               }
           }`
         })
-        expect(validQueryResult.data.genesis.maxLovelaceSupply).toBeDefined()
+        expect(validQueryResult.data.genesis.shelley.maxLovelaceSupply).toBeDefined()
         expect(validQueryResult.errors).not.toBeDefined()
       })
     })
@@ -110,8 +112,10 @@ describe('Server', () => {
           await client.query({
             query: gql`query validButNotWhitelisted {
                 genesis {
-                    maxLovelaceSupply
-                    systemStart
+                    shelley {
+                        maxLovelaceSupply
+                        systemStart                        
+                    }
                 }
             }`
           })

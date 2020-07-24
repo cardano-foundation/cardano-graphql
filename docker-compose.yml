@@ -108,7 +108,7 @@ services:
         max-size: "200k"
         max-file: "10"
     volumes:
-      - ./config/network/${NETWORK:-mainnet}:/configuration
+      - ./config/network/shelley_testnet:/configuration
 secrets:
   postgres_db:
     file: ./config/secrets/postgres_db
