@@ -10,6 +10,10 @@ type Query {
 }
 
 type Genesis {
+  shelley: ShelleyGenesis
+}
+
+type ShelleyGenesis {
   activeSlotsCoeff: Float!
   epochLength: Int!
   genDelegs: JSONObject

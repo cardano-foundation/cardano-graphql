@@ -22,8 +22,8 @@
     "publish-packages": "yarn workspaces run publish",
     "service-dependencies": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose",
     "start:mainnet": "HASURA_URI=http://localhost:8090 yarn workspace @cardano-graphql/server start",
-    "start:shelley": "GENESIS_FILE_SHELLEY=${PWD}/config/network/shelley_testnet/genesis.json yarn workspace @cardano-graphql/server start",
-    "start:mainnet-c": "GENESIS_FILE_SHELLEY=${PWD}/config/network/mainnet_candidate/genesis.json yarn workspace @cardano-graphql/server start",
+    "start:shelley": "GENESIS_FILE_SHELLEY=${PWD}/config/network/shelley_testnet/genesis_shelley.json yarn workspace @cardano-graphql/server start",
+    "start:mainnet-c": "GENESIS_FILE_SHELLEY=${PWD}/config/network/mainnet_candidate/genesis_shelley.json yarn workspace @cardano-graphql/server start",
     "test": "yarn workspaces run test"
   },
   "contributors": [

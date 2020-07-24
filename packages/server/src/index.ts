@@ -22,7 +22,7 @@ async function boot () {
   const app = express()
 
   if (config.genesisFileShelley !== undefined) {
-    schemas.push(buildGenesisSchema(require(config.genesisFileShelley)))
+    schemas.push(buildGenesisSchema({ shelley: require(config.genesisFileShelley) }))
   }
   if (config.hasuraUri !== undefined) {
     const db = new Db(config.hasuraUri)
