@@ -47,12 +47,14 @@ type Query {
     where: Transaction_bool_exp
   ): Transaction_aggregate!
   utxos (
+    distinct_on: [TransactionOutput_distinct_on!]
     limit: Int
     order_by: [TransactionOutput_order_by!]
     offset: Int
     where: TransactionOutput_bool_exp
   ): [TransactionOutput]!
   utxos_aggregate (
+    distinct_on: [TransactionOutput_distinct_on!]
     limit: Int
     order_by: [TransactionOutput_order_by!]
     offset: Int
@@ -225,6 +227,10 @@ type TransactionOutput {
   transaction: Transaction!
   txHash: Hash32HexString!
   value: String!
+}
+
+enum TransactionOutput_distinct_on {
+  address
 }
 
 input TransactionOutput_order_by {
