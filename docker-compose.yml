@@ -22,7 +22,7 @@ services:
         max-size: "200k"
         max-file: "10"
   cardano-node:
-    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-83ba7dba184d3634af78e2879013cf4cc99227d1}
+    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-0191ff56d194b6ac074af0d51e67493c14e08ffa}
     environment:
       - NETWORK=${NETWORK:-mainnet}
     volumes:
@@ -35,7 +35,7 @@ services:
         max-size: "400k"
         max-file: "20"
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-74b329d63c876f8e9fd774e09e071c546cf76980}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-a5afe87fa9d344e23a9df230f2f1ff81b779c0e2}
     environment:
       - EXTENDED=true
       - NETWORK=${NETWORK:-mainnet}
@@ -108,7 +108,7 @@ services:
         max-size: "200k"
         max-file: "10"
     volumes:
-      - ./config/network/shelley_testnet:/configuration
+      - ./config/network/${NETWORK:-mainnet}:/configuration
 secrets:
   postgres_db:
     file: ./config/secrets/postgres_db

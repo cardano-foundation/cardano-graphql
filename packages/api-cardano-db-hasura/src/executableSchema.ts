@@ -31,13 +31,6 @@ export async function buildSchema (hasuraUri: string, db: Db) {
   return makeExecutableSchema({
     resolvers: Object.assign({}, scalarResolvers, {
       Query: {
-        cardanoDbMeta: async () => {
-          try {
-            return db.getMeta()
-          } catch (error) {
-            throw new ApolloError(error)
-          }
-        },
         blocks: (_root, args, context, info) => {
           return delegateToSchema({
             args,
@@ -53,6 +46,46 @@ export async function buildSchema (hasuraUri: string, db: Db) {
             args,
             context,
             fieldName: 'blocks_aggregate',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
+        cardano: async (_root, _args, context, info) => {
+          const result = (await delegateToSchema({
+            context,
+            fieldName: 'cardano',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          }))[0]
+          if (result.currentEpoch === null) {
+            return new ApolloError('currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.')
+          }
+          return result
+        },
+        cardanoDbMeta: async () => {
+          try {
+            return db.getMeta()
+          } catch (error) {
+            throw new ApolloError(error)
+          }
+        },
+        delegations: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'delegations',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
+        delegations_aggregate: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'delegations_aggregate',
             info,
             operation: 'query',
             schema: hasuraSchema
@@ -78,18 +111,65 @@ export async function buildSchema (hasuraUri: string, db: Db) {
             schema: hasuraSchema
           })
         },
-        cardano: async (_root, _args, context, info) => {
-          const result = (await delegateToSchema({
+        stakeDeregistrations: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
             context,
-            fieldName: 'cardano',
+            fieldName: 'stakeDeregistrations',
             info,
             operation: 'query',
             schema: hasuraSchema
-          }))[0]
-          if (result.currentEpoch === null) {
-            return new ApolloError('currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.')
-          }
-          return result
+          })
+        },
+        stakeDeregistrations_aggregate: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'stakeDeregistrations_aggregate',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
+        stakePools: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'stakePools',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
+        stakePools_aggregate: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'stakePools_aggregate',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
+        stakeRegistrations: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'stakeRegistrations',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
+        stakeRegistrations_aggregate: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'stakeRegistrations_aggregate',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
         },
         transactions: (_root, args, context, info) => {
           return delegateToSchema({
@@ -126,6 +206,26 @@ export async function buildSchema (hasuraUri: string, db: Db) {
             args,
             context,
             fieldName: 'utxos_aggregate',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
+        withdrawals: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'withdrawals',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
+        withdrawals_aggregate: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'withdrawals_aggregate',
             info,
             operation: 'query',
             schema: hasuraSchema

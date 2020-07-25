@@ -70,13 +70,13 @@ export class Db {
       query: gql`query {
           cardano {
               tip {
-                  createdAt
+                  forgedAt
               }
           }}`
     })
     const { tip } = result.data?.cardano[0]
     const currentUtc = dayjs().utc()
-    const tipUtc = dayjs.utc(tip.createdAt)
+    const tipUtc = dayjs.utc(tip.forgedAt)
     return {
       initialized: tipUtc.isAfter(currentUtc.subtract(120, 'second')),
       syncPercentage: (tipUtc.valueOf() / currentUtc.valueOf()) * 100

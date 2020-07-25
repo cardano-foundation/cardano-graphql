@@ -19,7 +19,7 @@ query blocksByHashes(
         hash
         merkelRoot
         number
-        createdAt
+        forgedAt
         createdBy
         previousBlock {
             hash
@@ -32,7 +32,6 @@ query blocksByHashes(
         }
         size
         slotNo
-        slotInEpoch
         transactionsCount
     }
 }

@@ -25,7 +25,7 @@ describe('transactions', () => {
                               fee
                               block{
                                 number
-                                createdAt
+                                forgedAt
                               }
                               inputs(order_by: { sourceTxHash: asc }) {
                                 address
@@ -149,7 +149,7 @@ describe('transactions', () => {
 
   it('have the same block creation time', async () => {
     const restResultBlockTime = restData.ctsBlockTimeIssued
-    const graphQLBlockTime = graphQLData.block.createdAt
+    const graphQLBlockTime = graphQLData.block.forgedAt
 
     expect(graphQLBlockTime).toEqual(utilDev.timestampToIsoStringWithoutTimezone(restResultBlockTime))
   })

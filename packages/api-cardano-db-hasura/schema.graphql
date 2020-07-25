@@ -3,9 +3,12 @@ schema {
 }
 
 scalar Hash32HexString
+scalar IPv4
+scalar IPv6
 scalar BigInt
 scalar DateTime
 scalar Percentage
+scalar URL
 
 type Query {
   blocks (
@@ -20,6 +23,20 @@ type Query {
     offset: Int
     where: Block_bool_exp
   ): Block_aggregate!
+  cardano: Cardano!
+  cardanoDbMeta: CardanoDbMeta!
+  delegations (
+    limit: Int
+    order_by: [Delegation_order_by!]
+    offset: Int
+    where: Delegation_bool_exp
+  ): [Delegation]!
+  delegations_aggregate (
+    limit: Int
+    order_by: [Delegation_order_by!]
+    offset: Int
+    where: Delegation_bool_exp
+  ): Delegation_aggregate!
   epochs (
     limit: Int
     order_by: [Epoch_order_by!]
@@ -32,8 +49,42 @@ type Query {
     offset: Int
     where: Epoch_bool_exp
   ): Epoch_aggregate!
-  cardano: Cardano!
-  cardanoDbMeta: CardanoDbMeta!
+  stakeDeregistrations (
+    limit: Int
+    order_by: [StakeRegistration_order_by!]
+    offset: Int
+    where: StakeRegistration_bool_exp
+  ): [StakeRegistration]!
+  stakeDeregistrations_aggregate (
+    limit: Int
+    order_by: [StakeRegistration_order_by!]
+    offset: Int
+    where: StakeRegistration_bool_exp
+  ): StakeRegistration_aggregate!
+  stakePools (
+    limit: Int
+    order_by: [StakePool_order_by!]
+    offset: Int
+    where: StakePool_bool_exp
+  ): [StakePool]!
+  stakePools_aggregate (
+    limit: Int
+    order_by: [StakePool_order_by!]
+    offset: Int
+    where: StakePool_bool_exp
+  ): StakePool_aggregate!
+  stakeRegistrations (
+    limit: Int
+    order_by: [StakeRegistration_order_by!]
+    offset: Int
+    where: StakeRegistration_bool_exp
+  ): [StakeRegistration]!
+  stakeRegistrations_aggregate (
+    limit: Int
+    order_by: [StakeRegistration_order_by!]
+    offset: Int
+    where: StakeRegistration_bool_exp
+  ): StakeRegistration_aggregate!
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
@@ -60,6 +111,18 @@ type Query {
     offset: Int
     where: TransactionOutput_bool_exp
   ): TransactionOutput_aggregate!
+  withdrawals (
+    limit: Int
+    order_by: [Withdrawal_order_by!]
+    offset: Int
+    where: Withdrawal_bool_exp
+  ): [Withdrawal]!
+  withdrawals_aggregate (
+    limit: Int
+    order_by: [Withdrawal_order_by!]
+    offset: Int
+    where: Withdrawal_bool_exp
+  ): Withdrawal_aggregate!
 }
 
 type Cardano {
@@ -70,6 +133,224 @@ type Cardano {
 type CardanoDbMeta {
   initialized: Boolean!
   syncPercentage: Percentage!
+}
+
+type Delegation {
+  address: String!
+  stakePool: StakePool!
+}
+
+input Delegation_order_by {
+  address: text_comparison_exp
+  stakePool: StakePool_order_by
+}
+
+input Delegation_bool_exp {
+  _and: [Delegation_bool_exp]
+  _not: Delegation_bool_exp
+  _or: [Delegation_bool_exp]
+  address: text_comparison_exp
+  stakePool: StakePool_bool_exp
+}
+
+type Delegation_aggregate {
+  aggregate: Delegation_aggregate_fields
+}
+
+type Delegation_aggregate_fields {
+  avg: Delegation_avg_fields!
+  count: String!
+  max: Delegation_max_fields!
+  min: Delegation_min_fields!
+  sum: Delegation_sum_fields!
+}
+
+type Delegation_avg_fields {
+  stakePool: StakePool_avg_fields
+}
+
+type Delegation_max_fields {
+  stakePool: StakePool_avg_fields
+}
+
+type Delegation_min_fields {
+  stakePool: StakePool_avg_fields
+}
+
+type Delegation_sum_fields {
+  stakePool: StakePool_avg_fields
+}
+
+type Relay {
+  ipv4: IPv4
+  ipv6: IPv6
+  dnsName: URL
+  dnsSrvName: String
+}
+
+input Relay_bool_exp {
+  ipv4: text_comparison_exp
+  ipv6: text_comparison_exp
+  dnsName: text_comparison_exp
+  dnsSrvName: text_comparison_exp
+}
+
+type SlotLeader {
+  description: String!
+  hash: Hash32HexString!
+  stakePool: StakePool
+}
+
+input SlotLeader_bool_exp {
+  description: text_comparison_exp
+  hash: Hash32HexString_comparison_exp
+  stakePool: StakePool_bool_exp
+}
+
+type StakePool {
+  fixedCost: String!
+  hash: Hash32HexString!
+  margin: Float!
+  metadataHash: Hash32HexString
+  owners: [StakePoolOwner!]!
+  pledge: String!
+  relays: [Relay]
+  retirement: StakePoolRetirement
+  rewardAddress: String!
+  updatedIn: Transaction!
+  url: URL
+  withdrawals: [Withdrawal]!
+}
+
+input StakePoolOwner_bool_exp {
+  hash: Hash32HexString_comparison_exp
+}
+
+input StakePool_order_by {
+  fixedCost: order_by
+  hash: order_by
+  margin: order_by
+  pledge: order_by
+  updatedIn: Transaction_order_by
+  url: order_by
+}
+
+input StakePool_bool_exp {
+  _and: [StakePool_bool_exp]
+  _not: StakePool_bool_exp
+  _or: [StakePool_bool_exp]
+  hash: Hash32HexString_comparison_exp
+  margin: Float_comparison_exp
+  metadataHash: Hash32HexString_comparison_exp
+  owners: StakePoolOwner_bool_exp
+  pledge: text_comparison_exp
+  registrationTransaction: Transaction_bool_exp
+  relays: Relay_bool_exp
+  retirement: Relay_bool_exp
+  rewardAddress: text_comparison_exp
+  url: text_comparison_exp
+  withdrawals: Withdrawal_bool_exp
+}
+
+type StakePool_aggregate {
+  aggregate: StakePool_aggregate_fields
+}
+
+type StakePool_aggregate_fields {
+  avg: StakePool_avg_fields!
+  count: String!
+  max: StakePool_max_fields!
+  min: StakePool_min_fields!
+  sum: StakePool_sum_fields!
+}
+
+type StakePool_avg_fields {
+  fixedCost: String
+  margin: Float
+  pledge: String
+}
+
+type StakePool_max_fields {
+  fixedCost: String
+  margin: Float
+  pledge: String
+}
+
+type StakePool_min_fields {
+  fixedCost: String
+  margin: Float
+  pledge: String
+}
+
+type StakePool_sum_fields {
+  fixedCost: String
+  margin: Float
+  pledge: String
+}
+
+type StakeDeregistration {
+  address: String!
+  transaction: Transaction!
+}
+
+type StakeRegistration {
+  address: String!
+  transaction: Transaction!
+}
+
+input StakeRegistration_order_by {
+  address: text_comparison_exp
+  transaction: Transaction_order_by
+}
+
+input StakeRegistration_bool_exp {
+  _and: [StakeRegistration_bool_exp]
+  _not: StakeRegistration_bool_exp
+  _or: [StakeRegistration_bool_exp]
+  address: text_comparison_exp
+  transaction: Transaction_bool_exp
+}
+
+type StakeRegistration_aggregate {
+  aggregate: StakeRegistration_aggregate_fields
+}
+
+type StakeRegistration_aggregate_fields {
+  avg: StakeRegistration_avg_fields!
+  count: String!
+  max: StakeRegistration_max_fields!
+  min: StakeRegistration_min_fields!
+  sum: StakeRegistration_sum_fields!
+}
+
+type StakeRegistration_avg_fields {
+  transaction: Transaction_avg_fields
+}
+
+type StakeRegistration_max_fields {
+  transaction: Transaction_max_fields
+}
+
+type StakeRegistration_min_fields {
+  transaction: Transaction_min_fields
+}
+
+type StakeRegistration_sum_fields {
+  transaction: Transaction_sum_fields
+}
+
+type StakePoolRetirement {
+  announcedIn: Transaction!
+  inEffectFrom: Epoch!
+}
+
+input StakePoolRetirement_bool_exp {
+  announcedIn: Transaction_bool_exp
+  inEffectFrom: Epoch_bool_exp
+}
+
+type StakePoolOwner {
+  hash: Hash32HexString!
 }
 
 type Transaction {
@@ -278,22 +559,22 @@ type TransactionOutput_sum_fields {
 }
 
 type Block {
-  createdAt: DateTime!
-  createdBy: String!
   # Genesis block does not belong to the 0th epoch, therefore it could be null
   epoch: Epoch
   epochNo: Int
   fees: BigInt!
+  forgedAt: DateTime!
+  slotLeader: SlotLeader!
   hash: Hash32HexString!
-  # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a merkel root
-  merkelRoot: Hash32HexString
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a block number
+  merkelRoot: Hash32HexString
   number: Int
+  opCert: Hash32HexString
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
   slotNo: Int
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
-  slotInEpoch: Int
   previousBlock: Block
+  protocolVersion: String
   nextBlock: Block
   size: BigInt!
   transactions(
@@ -309,14 +590,15 @@ type Block {
     where: Transaction_bool_exp
   ): Transaction_aggregate!
   transactionsCount: String!
+  vrfKey: Hash32HexString
 }
 
 input Block_bool_exp {
   _and: [Block_bool_exp]
   _not: Block_bool_exp
   _or: [Block_bool_exp]
-  createdAt: Date_comparison_exp
-  createdBy: text_comparison_exp
+  forgedAt: Date_comparison_exp
+  slotLeader: SlotLeader_bool_exp
   epoch: Epoch_bool_exp
   fees: BigInt_comparison_exp
   hash: Hash32HexString_comparison_exp
@@ -325,20 +607,18 @@ input Block_bool_exp {
   nextBlock: Block_bool_exp
   size: BigInt_comparison_exp
   slotNo: Int_comparison_exp
-  slotInEpoch: Int_comparison_exp
   transactions: Transaction_bool_exp
   transactionsCount: text_comparison_exp
 }
 
 input Block_order_by {
-  createdAt: order_by
-  createdBy: order_by
+  forgedAt: order_by
+  slotLeader: order_by
   epoch: Epoch_order_by
   fees: order_by
   number: order_by_with_nulls
   size: order_by
   slotNo: order_by_with_nulls
-  slotInEpoch: order_by_with_nulls
   transactionsCount: order_by
 }
 
@@ -443,6 +723,50 @@ type Epoch_sum_fields {
   transactionsCount: String!
 }
 
+type Withdrawal {
+  address: String!
+  amount: String!
+  transaction: Transaction!
+}
+
+input Withdrawal_bool_exp {
+  _and: [Withdrawal_bool_exp]
+  _not: Withdrawal_bool_exp
+  _or: [Withdrawal_bool_exp]
+  address: text_comparison_exp
+  amount: text_comparison_exp
+  transaction: Transaction_bool_exp
+}
+
+input Withdrawal_order_by {
+  address: order_by
+  amount: order_by
+  transaction: Transaction_order_by
+}
+
+type Withdrawal_aggregate {
+  aggregate: Withdrawal_aggregate_fields!
+}
+
+type Withdrawal_aggregate_fields {
+  count: String!
+  max: Withdrawal_max_fields!
+  min: Withdrawal_min_fields!
+  sum: Withdrawal_sum_fields!
+}
+
+type Withdrawal_max_fields {
+  amount: String!
+}
+
+type Withdrawal_min_fields {
+  amount: String!
+}
+
+type Withdrawal_sum_fields {
+  amount: String!
+}
+
 # expression to compare data of type date. All fields are combined with logical 'AND'.
 input Date_comparison_exp {
   _eq: DateTime
@@ -453,6 +777,19 @@ input Date_comparison_exp {
   _lte: DateTime
   _neq: DateTime
   _nin: [DateTime]
+}
+
+# expression to compare data of type Float. All fields are combined with logical 'AND'.
+input Float_comparison_exp {
+  _eq: Float
+  _gt: Float
+  _gte: Float
+  _in: [Float!]
+  _is_null: Boolean
+  _lt: Float
+  _lte: Float
+  _neq: Float
+  _nin: [Float!]
 }
 
 # expression to compare data of type Int. All fields are combined with logical 'AND'.
