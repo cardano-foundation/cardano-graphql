@@ -195,6 +195,18 @@ input Relay_bool_exp {
   dnsSrvName: text_comparison_exp
 }
 
+type SlotLeader {
+  description: String!
+  hash: Hash32HexString!
+  stakePool: StakePool
+}
+
+input SlotLeader_bool_exp {
+  description: text_comparison_exp
+  hash: Hash32HexString_comparison_exp
+  stakePool: StakePool_bool_exp
+}
+
 type StakePool {
   fixedCost: String!
   hash: Hash32HexString!
@@ -547,20 +559,20 @@ type TransactionOutput_sum_fields {
 }
 
 type Block {
-  createdAt: DateTime!
-  createdBy: String!
   # Genesis block does not belong to the 0th epoch, therefore it could be null
   epoch: Epoch
   epochNo: Int
   fees: BigInt!
+  forgedAt: DateTime!
+  slotLeader: SlotLeader!
   hash: Hash32HexString!
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a block number
+  merkelRoot: Hash32HexString
   number: Int
   opCert: Hash32HexString
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
   slotNo: Int
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
-  slotInEpoch: Int
   previousBlock: Block
   protocolVersion: String
   nextBlock: Block
@@ -585,8 +597,8 @@ input Block_bool_exp {
   _and: [Block_bool_exp]
   _not: Block_bool_exp
   _or: [Block_bool_exp]
-  createdAt: Date_comparison_exp
-  createdBy: text_comparison_exp
+  forgedAt: Date_comparison_exp
+  slotLeader: SlotLeader_bool_exp
   epoch: Epoch_bool_exp
   fees: BigInt_comparison_exp
   hash: Hash32HexString_comparison_exp
@@ -595,20 +607,18 @@ input Block_bool_exp {
   nextBlock: Block_bool_exp
   size: BigInt_comparison_exp
   slotNo: Int_comparison_exp
-  slotInEpoch: Int_comparison_exp
   transactions: Transaction_bool_exp
   transactionsCount: text_comparison_exp
 }
 
 input Block_order_by {
-  createdAt: order_by
-  createdBy: order_by
+  forgedAt: order_by
+  slotLeader: order_by
   epoch: Epoch_order_by
   fees: order_by
   number: order_by_with_nulls
   size: order_by
   slotNo: order_by_with_nulls
-  slotInEpoch: order_by_with_nulls
   transactionsCount: order_by
 }
 

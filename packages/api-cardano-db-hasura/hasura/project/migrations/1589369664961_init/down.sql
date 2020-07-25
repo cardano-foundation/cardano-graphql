@@ -4,11 +4,13 @@ DROP VIEW if EXISTS
   "Delegation",
   "Epoch",
   "Reward",
+  "SlotLeader",
   "StakeDeregistration",
   "StakePool",
   "StakeRegistration",
   "Transaction",
   "TransactionInput",
-  "TransactionOutput"
-  "Withdrawal";
+  "TransactionOutput",
+  "Utxo",
+  "Withdrawal" CASCADE;
 DROP FUNCTION IF EXISTS utxo_set_at_block CASCADE;

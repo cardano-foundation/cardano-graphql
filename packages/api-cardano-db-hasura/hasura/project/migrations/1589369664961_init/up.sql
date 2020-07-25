@@ -9,13 +9,12 @@ CREATE VIEW "Block" AS
     previous_block.hash AS "previousBlockHash",
     next_block.hash AS "nextBlockHash",
     block.proto_version AS "protocolVersion",
-    slot_leader.id AS "slot_leader_id",
     block.size,
     block.tx_count AS "transactionsCount",
     block.epoch_no AS "epochNo",
+    block."time" AS "forgedAt",
     block.slot_no AS "slotNo",
-    block.slot_no % (SELECT slots_per_epoch FROM meta) AS "slotInEpoch",
-    block."time" AS "createdAt",
+    slot_leader.id AS "slot_leader_id",
     block.vrf_key As "vrfKey"
    FROM (((block
      LEFT JOIN block previous_block ON ((block.previous = previous_block.id)))
@@ -42,7 +41,7 @@ SELECT
   delegation.update_id AS "update_id"
 FROM delegation; 
 
-CREAT VIEW "Epoch" AS
+CREATE VIEW "Epoch" AS
 SELECT
   epoch.out_sum AS "output",
   epoch.no AS "number",
@@ -63,6 +62,14 @@ SELECT
   ) AS "address",
   reward.tx_id AS "tx_id"
 FROM reward;
+
+CREATE VIEW "SlotLeader" AS
+SELECT
+  slot_leader.hash AS "hash",
+  slot_leader.id AS "id",
+  slot_leader.description AS "description",
+  ( SELECT pool_hash.hash FROM pool_hash WHERE pool_hash.id = slot_leader.pool_hash_id ) AS "pool_hash"
+FROM slot_leader;
 
 CREATE VIEW "StakeDeregistration" AS
 SELECT
@@ -127,7 +134,7 @@ FROM
 INNER JOIN block
   ON block.id = tx.block;
 
-create view "TransactionInput" AS
+CREATE VIEW "TransactionInput" AS
 SELECT
   source_tx_out.address,
   source_tx_out.value,
@@ -144,7 +151,7 @@ JOIN tx_out AS source_tx_out
 JOIN tx AS source_tx
   ON source_tx_out.tx_id = source_tx.id;
 
-create view "TransactionOutput" AS
+CREATE VIEW "TransactionOutput" AS
 SELECT
   address,
   value,
@@ -154,7 +161,7 @@ FROM tx
 JOIN tx_out
   ON tx.id = tx_out.tx_id;
 
-create view "Utxo" AS SELECT
+CREATE VIEW "Utxo" AS SELECT
   address,
   value,
   tx.hash AS "txHash",
@@ -179,7 +186,7 @@ SELECT
   withdrawal.tx_id AS "tx_id"
 FROM withdrawal;
 
-CREATE FUNCTION utxo_set_at_block("hash" hash32type)
+CREATE function utxo_set_at_block("hash" hash32type)
 RETURNS SETOF "TransactionOutput" AS $$
   SELECT
     "TransactionOutput".address,

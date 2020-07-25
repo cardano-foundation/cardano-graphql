@@ -31,6 +31,14 @@
           name: Block
         column_mapping:
           previousBlockHash: hash
+  - name: slotLeader
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: SlotLeader
+        column_mapping:
+          slot_leader_id: id
   array_relationships:
   - name: transactions
     using:
@@ -44,9 +52,9 @@
   - role: cardano-graphql
     permission:
       columns:
-      - createdAt
       - epochNo
       - fees
+      - forgedAt
       - hash
       - merkelRoot
       - nextBlockHash
@@ -55,7 +63,6 @@
       - previousBlockHash
       - protocolVersion
       - size
-      - slotInEpoch
       - slotNo
       - transactionsCount
       - vrfKey
@@ -179,6 +186,27 @@
     permission:
       columns:
       - address
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: SlotLeader
+  object_relationships:
+  - name: stakePool
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: StakePool
+        column_mapping:
+          pool_hash: hash
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - description
+      - hash
       filter: {}
       limit: 100
       allow_aggregations: true

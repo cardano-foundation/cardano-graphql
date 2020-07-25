@@ -31,7 +31,7 @@ describe('epochs ', () => {
                             slotInEpoch
                             number
                             hash
-                            createdAt
+                            forgedAt
                             transactionsCount
                             transactions{
                               totalOutput
@@ -77,7 +77,7 @@ describe('epochs ', () => {
 
   it('return the same block creation time', async () => {
     const restResultBlockCreationUnixEpochTime = restData.cbeTimeIssued
-    const graphQLBlockCreationDateTime = graphQLData.createdAt
+    const graphQLBlockCreationDateTime = graphQLData.forgedAt
     const restResultBlockCreationDateTime = utilDev.timestampToIsoStringWithoutTimezone(restResultBlockCreationUnixEpochTime)
 
     expect(restResultBlockCreationDateTime).toEqual(graphQLBlockCreationDateTime)
