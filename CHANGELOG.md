@@ -1,6 +1,53 @@
 Changelog
 =========
 
+## 2.0.0-beta.0
+This new major version brings the first round of Shelley-era features to the API, 
+introduces a new genesis file API package, and hardens the migrations and metadata handling. 
+This version is required for transitioning through the upcoming Shelley hard fork.
+
+### Compatible with:
+
+- [`cardano-node`: `1.18.0`](https://github.com/input-output-hk/cardano-node/releases/tag/1.18.0)
+- [`cardano-db-sync`: `3.0.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/3.0.0) - Note: The database must be recreated using the new version.
+
+## Features
+### New Queries
+- `stakePools`, `stakePools_aggregate`
+- `delegations`, `delegations_aggregate`
+- `stakeRegistrations`, `stakeRegistrations_aggregate`
+- `stakeDeregistrations`, `stakeDeregistrations_aggregate`
+- `withdrawals`, `withdrawals_aggregate`
+- `genesis`
+- Metadata and SQL migrations are now performed within the application layer, and make the service immune to schema
+being removed should `cardano-db-sync` restart. using the 
+[Hasura CLI](https://hasura.io/docs/1.0/graphql/manual/hasura-cli/install-hasura-cli.html), which
+is included in the [Dockerfile](./Dockerfile) and [NixOS](./nix/nixos/cardano-graphql-service.nix) 
+service, however outside of this you must install and place `hasura` on PATH. 
+- A new API package [`@cardano-graphql/api-genesis`](./packages/api-genesis/README.md) allows 
+access to the network genesis files. It's integrated into the server, with the config exposed 
+as environment variables. As usual, the docker-compose.yaml serves as a good reference.
+
+## Breaking Changes :warning:
+### Removed fields
+- `cardanoDbSync.slotDiffFromNetworkTip` **removed** in reponse to a change in strategy for determining 
+sync status with `cardano-db-sync` determining sync status relies on a chain
+that has produce
+- `Block.slotWithinEpoch` **removed** due to complexity with variation across eras. The Genesis API has information
+for calculations based on context.
+
+### Changed fields
+Dates we're previously formatted to ISO 3339, however ISO 8601 is being adopted with this release for 
+alignment with the Shelley genesis file format and simplification when the precision is not required. 
+- `2017-10-03T21:43:51.000Z` -> `2017-10-03T21:43:51Z` 
+- `Block.createdAt` -> `Block.forgedAt`
+- `Block.createdBy` -> `Block.slotLeader` links to an object, with a nullable `stakePool` field. For 
+previous behaviour, `Block.slotLeader.description` can be used, however the description prefixes have
+changed upstream from `SlotLeader` to `ByronGenesis`
+
+## Chores
+- Migrations have been squashed into a single step.
+
 ## 1.0.0
 ## Features
 -  Optimised versions of some key aggregated queries: 

@@ -1,7 +1,7 @@
 {
   "name": "cardano-graphql",
   "description": "A TypeScript monorepo. Includes a server package and API modules for flexible implementation",
-  "version": "1.0.0",
+  "version": "2.0.0-beta.0",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -23,7 +23,7 @@
     "service-dependencies": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose",
     "start:mainnet": "GENESIS_FILE_BYRON=${PWD}/config/network/mainnet/genesis_byron.json GENESIS_FILE_SHELLEY=${PWD}/config/network/mainnet/genesis_shelley.json HASURA_URI=http://localhost:8090 yarn workspace @cardano-graphql/server start",
     "start:shelley_testnet": "GENESIS_FILE_SHELLEY=${PWD}/config/network/shelley_testnet/genesis_shelley.json yarn workspace @cardano-graphql/server start",
-    "start:mainnet_candidate_3": "GENESIS_FILE_BYRON=${PWD}/config/network/mainnet_candidate_3/genesis_byron.json GENESIS_FILE_SHELLEY=${PWD}/config/network/mainnet_candidate_3/genesis_shelley.json yarn workspace @cardano-graphql/server start",
+    "start:mainnet_candidate_3": "GENESIS_FILE_BYRON=${PWD}/config/network/mainnet_candidate_3/genesis_byron.json GENESIS_FILE_SHELLEY=${PWD}/config/network/mainnet_candidate_3/genesis_shelley.json HASURA_URI=http://localhost:8090 yarn workspace @cardano-graphql/server start",
     "test": "yarn workspaces run test"
   },
   "contributors": [
