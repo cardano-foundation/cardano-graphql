@@ -1,0 +1,29 @@
+query keyNetworkInfo {
+  genesis {
+    byron {
+      blockVersionData {
+        scriptVersion
+        slotDuration
+        maxBlockSize
+        maxHeaderSize
+        maxProposalSize
+        maxTxSize
+      }
+      startTime
+      protocolConsts {
+        k
+        protocolMagic
+      }
+    }
+    shelley {
+      epochLength
+      maxLovelaceSupply
+      networkId
+      networkMagic
+      securityParam
+      slotLength
+      slotsPerKESPeriod
+      systemStart
+    }
+  }
+}
