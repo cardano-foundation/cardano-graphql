@@ -23,9 +23,16 @@ services:
         max-file: "10"
   cardano-node:
     image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-1.18.0}
-    environment:
-      - NETWORK=${NETWORK:-mainnet}
+    command: [
+      "run",
+      "--config", "/config/config.json",
+      "--database-path", "/data/db",
+      "--socket-path", "/ipc/node.socket",
+      "--topology", "/config/topology.json"
+    ]
     volumes:
+      - ./config/network/${NETWORK:-mainnet}/cardano-node:/config
+      - ./config/network/${NETWORK:-mainnet}/genesis:/genesis
       - node-db:/data/db
       - node-ipc:/ipc
     restart: on-failure
@@ -36,9 +43,12 @@ services:
         max-file: "20"
   cardano-db-sync-extended:
     image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-3.0.0}
+    command: [
+      "--config", "/config/config.json",
+      "--socket-path", "/node-ipc/node.socket"
+    ]
     environment:
       - EXTENDED=true
-      - NETWORK=${NETWORK:-mainnet}
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
     depends_on:
@@ -49,6 +59,8 @@ services:
       - postgres_user
       - postgres_db
     volumes:
+      - ./config/network/${NETWORK:-mainnet}/cardano-db-sync:/config
+      - ./config/network/${NETWORK:-mainnet}/genesis:/genesis
       - node-ipc:/node-ipc
     restart: on-failure
     logging:
@@ -90,8 +102,8 @@ services:
     image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-2.0.0-beta.0}
     environment:
       - CACHE_ENABLED=true
-      - GENESIS_FILE_BYRON=/configuration/genesis_byron.json
-      - GENESIS_FILE_SHELLEY=/configuration/genesis_shelley.json
+      - GENESIS_FILE_BYRON=/genesis/byron.json
+      - GENESIS_FILE_SHELLEY=/genesis/shelley.json
       - HASURA_URI=http://hasura:8080
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
@@ -109,7 +121,7 @@ services:
         max-size: "200k"
         max-file: "10"
     volumes:
-      - ./config/network/${NETWORK:-mainnet}:/configuration
+      - ./config/network/${NETWORK:-mainnet}/genesis:/genesis
 secrets:
   postgres_db:
     file: ./config/secrets/postgres_db

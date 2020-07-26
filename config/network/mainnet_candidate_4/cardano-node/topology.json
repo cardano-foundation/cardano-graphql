@@ -1,7 +1,7 @@
 {
   "Producers": [
     {
-      "addr": "relays-new.shelley-testnet.dev.cardano.org",
+      "addr": "relays-new.mainnet-candidate-4.dev.cardano.org",
       "port": 3001,
       "valency": 2
     }
