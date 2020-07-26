@@ -3,13 +3,58 @@ schema {
 }
 
 scalar JSONObject
+scalar Timestamp
 
 type Query {
   genesis: Genesis!
 }
 
 type Genesis {
+  byron: ByronGenesis
   shelley: ShelleyGenesis
+}
+
+type ByronBlockVersionData {
+  scriptVersion: Int!
+  slotDuration: Int!
+  maxBlockSize: Int!
+  maxHeaderSize: Int!
+  maxTxSize: Int!
+  maxProposalSize: Int!
+  mpcThd: String!
+  heavyDelThd: String!
+  updateVoteThd: String!
+  updateProposalThd: String!
+  updateImplicit: String!
+  softforkRule: ByronSoftForkRule!
+  txFeePolicy: ByronTxFeePolicy!
+  unlockStakeEpoch: String!
+}
+
+type ByronGenesis {
+  bootStakeholders: JSONObject!
+  heavyDelegation: JSONObject!
+  startTime: Timestamp!
+  nonAvvmBalances: JSONObject!
+  blockVersionData: ByronBlockVersionData!
+  protocolConsts: ByronProtocolConsts!
+  avvmDistr: JSONObject!
+}
+
+type ByronProtocolConsts {
+  k: Int!
+  protocolMagic: Int
+}
+
+type ByronSoftForkRule {
+  initThd: String!
+  minThd: String!
+  thdDecrement: String!
+}
+
+type ByronTxFeePolicy {
+  summand: String!
+  multiplier: String!
 }
 
 type ShelleyGenesis {
@@ -22,7 +67,7 @@ type ShelleyGenesis {
   networkId: String!
   networkMagic: Int!
   protocolMagicId: Int!
-  protocolParams: ProtocolParams!
+  protocolParams: ShelleyProtocolParams!
   securityParam: Int!
   slotLength: Int!
   slotsPerKESPeriod: Int!
@@ -31,7 +76,7 @@ type ShelleyGenesis {
   updateQuorum: Int!
 }
 
-type ProtocolParams {
+type ShelleyProtocolParams {
   a0: Float!
   decentralisationParam: Int!
   eMax: Int!

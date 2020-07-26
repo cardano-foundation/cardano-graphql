@@ -21,9 +21,13 @@ async function boot () {
   const plugins: PluginDefinition[] = []
   const app = express()
 
-  if (config.genesisFileShelley !== undefined) {
-    schemas.push(buildGenesisSchema({ shelley: require(config.genesisFileShelley) }))
+  if (config.genesisFileByron !== undefined || config.genesisFileShelley !== undefined) {
+    schemas.push(buildGenesisSchema({
+      ...config.genesisFileByron !== undefined ? { byron: require(config.genesisFileByron) } : {},
+      ...config.genesisFileShelley !== undefined ? { shelley: require(config.genesisFileShelley) } : {}
+    }))
   }
+
   if (config.hasuraUri !== undefined) {
     const db = new Db(config.hasuraUri)
     await db.init()

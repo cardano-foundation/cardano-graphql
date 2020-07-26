@@ -1,11 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 import { makeExecutableSchema } from '@graphql-tools/schema'
-import { JSONObjectResolver } from 'graphql-scalars'
+import { JSONObjectResolver, TimestampResolver } from 'graphql-scalars'
 import { Resolvers, Genesis } from './graphql_types'
 
 export const scalarResolvers = {
-  JSONObject: JSONObjectResolver
+  JSONObject: JSONObjectResolver,
+  Timestamp: TimestampResolver
 } as any
 
 export function buildSchema (genesis: Genesis) {

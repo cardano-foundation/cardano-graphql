@@ -4,37 +4,50 @@ import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
 import { buildClient } from './util'
 
-const shelleyTestnetGenesis = require('../../../config/network/shelley_testnet/genesis_shelley.json')
-const mainnetCandidateGenesis = require('../../../config/network/mainnet_candidate/genesis_shelley.json')
+const genesisFiles = {
+  mainnet: {
+    byron: require('../../../config/network/mainnet/genesis_byron.json'),
+    shelley: require('../../../config/network/mainnet/genesis_shelley.json')
+  },
+  shelley_testnet: {
+    shelley: require('../../../config/network/shelley_testnet/genesis_shelley.json')
+  }
+}
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries'), name)
 }
 
 describe('genesis', () => {
-  let shelleyTestnetClient: TestClient
-  let mainnetCandidateClient: TestClient
+  let client: TestClient
 
-  describe('Shelley testnet', () => {
+  describe('Single-era', () => {
     beforeAll(async () => {
-      shelleyTestnetClient = await buildClient(shelleyTestnetGenesis)
-      mainnetCandidateClient = await buildClient(mainnetCandidateGenesis)
+      client = await buildClient(genesisFiles.shelley_testnet)
     })
 
     it('Returns key information about the network', async () => {
-      const query = { query: await loadQueryNode('keyNetworkInfo') }
-      const shelleyTestnetResult = await shelleyTestnetClient.query(query)
-      expect(shelleyTestnetResult.data).toMatchSnapshot()
-      const mainnetCandidateResult = await mainnetCandidateClient.query(query)
-      expect(mainnetCandidateResult.data).toMatchSnapshot()
+      const query = { query: await loadQueryNode('keyNetworkInfoShelley') }
+      const result = await client.query(query)
+      expect(result.data).toMatchSnapshot()
     })
 
     it('Returns all information from genesis.json', async () => {
-      const query = { query: await loadQueryNode('allInfo') }
-      const shelleyTestnetResult = await shelleyTestnetClient.query(query)
-      expect(shelleyTestnetResult.data).toMatchSnapshot()
-      const mainnetCandidateResult = await mainnetCandidateClient.query(query)
-      expect(mainnetCandidateResult.data).toMatchSnapshot()
+      const query = { query: await loadQueryNode('allInfoShelley') }
+      const result = await client.query(query)
+      expect(result.data).toMatchSnapshot()
+    })
+  })
+
+  describe('Spanning-eras', () => {
+    beforeAll(async () => {
+      client = await buildClient(genesisFiles.mainnet)
+    })
+
+    it('Returns key information about the network', async () => {
+      const query = { query: await loadQueryNode('keyNetworkInfoByronShelley') }
+      const result = await client.query(query)
+      expect(result.data).toMatchSnapshot()
     })
   })
 })
