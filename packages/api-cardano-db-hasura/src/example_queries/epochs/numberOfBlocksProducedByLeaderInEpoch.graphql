@@ -6,7 +6,7 @@ query numberOfBlocksProducedByLeaderInEpoch (
         blocks_aggregate ( where: {
             _and: [{
                 slotNo: { _is_null: false },
-                createdBy: { _eq: $slotLeader },
+                slotLeader: { description: { _eq: $slotLeader }},
             }]
         }){
             aggregate {
