@@ -13,7 +13,7 @@ import { buildSchema as buildGenesisSchema } from '@cardano-graphql/api-genesis'
 import { Server } from '@src/Server'
 import { whitelistPlugin } from '@src/apollo_server_plugins'
 
-const shelleyTestnetGenesis = '../../../config/network/shelley_testnet/genesis.json'
+const shelleyTestnetGenesis = '../../../config/network/shelley_testnet/genesis_shelley.json'
 const clientPath = path.resolve(__dirname, 'app_with_graphql_operations')
 const port = 3101
 
@@ -32,7 +32,7 @@ describe('Server', () => {
   let genesisSchema: GraphQLSchema
 
   beforeAll(async () => {
-    genesisSchema = buildGenesisSchema(require(shelleyTestnetGenesis))
+    genesisSchema = buildGenesisSchema({ shelley: require(shelleyTestnetGenesis) })
     whiteListedDocumentNode = await util.loadQueryNode(path.resolve(clientPath, 'src', 'feature_1'), 'maxLovelaceSupply')
   })
 
@@ -103,7 +103,7 @@ describe('Server', () => {
         const result = await client.query({
           query: whiteListedDocumentNode
         })
-        expect(result.data.genesis.maxLovelaceSupply).toBeDefined()
+        expect(result.data.genesis.shelley.maxLovelaceSupply).toBeDefined()
         expect(result.errors).not.toBeDefined()
       })
       it('Returns a networkError if a valid but unlisted operation is sent', async () => {

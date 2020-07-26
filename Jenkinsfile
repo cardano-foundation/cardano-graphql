@@ -24,8 +24,8 @@ pipeline {
     stage('Test') {
       steps {
         sh "CARDANO_GRAPHQL_VERSION=${env.GIT_COMMIT} docker-compose -p mainnet up --build --force-recreate -d"
-        sh 'TEST_MODE=e2e yarn workspaces run test --ci'
         sh 'sleep 15'
+        sh 'TEST_MODE=e2e yarn workspaces run test --ci'
       }
     }
     stage('Publish: Git Revision') {
