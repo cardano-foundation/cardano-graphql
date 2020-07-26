@@ -1,7 +1,6 @@
 import gql from 'graphql-tag'
 import utilDev, { TestClient } from '@cardano-graphql/util-dev'
-import { buildSchema } from '@src/index'
-import { getDataFromAPI } from './getDataFromApi'
+import { getDataFromAPI } from '@src/util'
 
 describe('transactions', () => {
   let client: TestClient
@@ -9,12 +8,8 @@ describe('transactions', () => {
   let graphQLData: any
 
   beforeAll(async () => {
-    if (process.env.TEST_MODE === 'e2e') {
-      client = await utilDev.createE2EClient()
-    } else {
-      const schema = await buildSchema('http://localhost:8090')
-      client = await utilDev.createIntegrationClient(schema)
-    }
+    process.env.CARDANO_GRAPHQL_URI = '3201'
+    client = await utilDev.createE2EClient()
     const restResult = await getDataFromAPI('txs/summary/1ac36644733c367ee4c551413d799d2e395d6ddfe14bebf1c281e6e826901762')
     restData = restResult.Right
     const graphQLResult = await client.query({

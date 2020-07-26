@@ -1,0 +1,143 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-11.5-alpine}
+    environment:
+      - POSTGRES_LOGGING=true
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    shm_size: '2gb'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  cardano-node:
+    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-1.18.0}
+    environment:
+      - NETWORK=${NETWORK:-mainnet}
+    volumes:
+      - node-db:/data/db
+      - node-ipc:/ipc
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "400k"
+        max-file: "20"
+  cardano-db-sync-extended:
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-3.0.0}
+    environment:
+      - EXTENDED=true
+      - NETWORK=${NETWORK:-mainnet}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    depends_on:
+      - cardano-node
+      - postgres
+    secrets:
+      - postgres_password
+      - postgres_user
+      - postgres_db
+    volumes:
+      - node-ipc:/node-ipc
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  hasura:
+    build:
+      context: ../..
+    image: inputoutput/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-1.0.0}
+    ports:
+      - "8090:8080"
+    depends_on:
+      - "postgres"
+    restart: on-failure
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+      - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
+      - HASURA_GRAPHQL_ENABLE_TELEMETRY=false
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  cardano-graphql-server:
+    build:
+      context: ../..
+      target: server
+    image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-1.0.0}
+    environment:
+      - CACHE_ENABLED=true
+      - GENESIS_FILE_SHELLEY=/configuration/genesis_shelley.json
+      - HASURA_URI=http://hasura:8080
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+    expose:
+      - 3201
+    ports:
+      - ${API_PORT:-3201}:3100
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    volumes:
+      - ../../config/network/${NETWORK:-mainnet}:/configuration
+  cardano-explorer-api:
+    image: inputoutput/cardano-explorer-api:${CARDANO_EXPLORER_API_VERSION:-2.1.0}
+    depends_on:
+      - postgres
+      - cardano-db-sync-extended
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    secrets:
+      - postgres_password
+      - postgres_user
+      - postgres_db
+    ports:
+      - 8201:8100
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+secrets:
+  postgres_db:
+    file: ../../config/secrets/postgres_db
+  postgres_password:
+    file: ../../config/secrets/postgres_password
+  postgres_user:
+    file: ../../config/secrets/postgres_user
+volumes:
+  node-db:
+  node-ipc:
+  postgres-data:

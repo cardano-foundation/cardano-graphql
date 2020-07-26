@@ -1,0 +1,22 @@
+{
+  "name": "@cardano-graphql/data-parity-tests",
+  "version": "1.0.0",
+  "description": "An e2e test suite to ensure data parity across comparable services",
+  "scripts": {
+    "build": "tsc -b src/.",
+    "cleanup": "shx rm -rf dist node_modules dist",
+    "lint": "eslint --ignore-path ../../.eslintignore \\\"**/*.ts\\\"",
+    "test:run": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js query",
+    "services": "docker-compose -p data-parity-test",
+    "services:down": "yarn services down",
+    "services:up": "yarn services up -d && yarn services logs -f",
+    "test": "shx echo No tests in this package"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@cardano-graphql/util-dev": "1.0.0",
+    "@types/node": "^14.0.13",
+    "shx": "^0.3.2",
+    "typescript": "^3.9.5"
+  }
+}
