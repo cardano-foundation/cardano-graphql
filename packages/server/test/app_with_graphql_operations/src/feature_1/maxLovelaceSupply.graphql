@@ -1,6 +1,8 @@
 
 query maxLovelaceSupply {
   genesis {
-    maxLovelaceSupply
+    shelley {
+      maxLovelaceSupply
+    }
   }
 }

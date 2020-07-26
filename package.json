@@ -21,7 +21,7 @@
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml",
     "publish-packages": "yarn workspaces run publish",
     "service-dependencies": "docker-compose config --services | grep -v \"cardano-graphql\" | xargs docker-compose",
-    "start:mainnet": "HASURA_URI=http://localhost:8090 yarn workspace @cardano-graphql/server start",
+    "start:mainnet": "GENESIS_FILE_SHELLEY=${PWD}/config/network/mainnet/genesis_shelley.json HASURA_URI=http://localhost:8090 yarn workspace @cardano-graphql/server start",
     "start:shelley_testnet": "GENESIS_FILE_SHELLEY=${PWD}/config/network/shelley_testnet/genesis_shelley.json yarn workspace @cardano-graphql/server start",
     "start:mainnet_candidate_3": "GENESIS_FILE_SHELLEY=${PWD}/config/network/mainnet_candidate_3/genesis_shelley.json yarn workspace @cardano-graphql/server start",
     "test": "yarn workspaces run test"

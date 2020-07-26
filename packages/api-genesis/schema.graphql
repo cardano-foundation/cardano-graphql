@@ -2,7 +2,6 @@ schema {
   query: Query
 }
 
-scalar DateTime
 scalar JSONObject
 
 type Query {
@@ -28,7 +27,7 @@ type ShelleyGenesis {
   slotLength: Int!
   slotsPerKESPeriod: Int!
   staking: Staking
-  systemStart: DateTime!
+  systemStart: String!
   updateQuorum: Int!
 }
 

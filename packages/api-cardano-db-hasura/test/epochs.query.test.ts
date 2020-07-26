@@ -39,7 +39,7 @@ describe('epochs', () => {
   it('Can return filtered aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('numberOfBlocksProducedByLeaderInEpoch'),
-      variables: { number: 1, slotLeader: 'SlotLeader-be09d88f50165c5c' }
+      variables: { number: 1, slotLeader: 'ByronGenesis-be09d88f50165c5c' }
     })
     expect(result.data).toMatchSnapshot()
   })
