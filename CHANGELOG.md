@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 2.0.0-beta.0
+## 2.0.0
 This new major version brings the first round of Shelley-era features to the API, 
 introduces a new genesis file API package, and hardens the migrations and metadata handling. 
 This version is required for transitioning through the upcoming Shelley hard fork.
