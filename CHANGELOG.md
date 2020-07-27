@@ -29,7 +29,15 @@ access to the network genesis files. It's integrated into the server, with the c
 as environment variables. As usual, the docker-compose.yaml serves as a good reference.
 
 ## Breaking Changes :warning:
+- The docker-compose file now mounts configuration managed in the repository, restoring the usual 
+separation of concerns with service configuration. The Docker images still have the 
+configuration included at build time, however in practice, being ready to managing your own 
+configuration if required is a good strategy. Simply copying the top level `config` and committing
+ to source control gives you full control over the services using their native interface.  
 ### Removed fields
+- `Cardano.networkName` **removed**. Use network magic from the genesis API identify networks.
+- `Cardano.protocolConst`, `Cardano.slotDuration`, `Cardano.startTime`, `Cardano.slotsPerEpoch`
+**removed**. Access this info from the Genesis API.
 - `cardanoDbSync.slotDiffFromNetworkTip` **removed** in reponse to a change in strategy for determining 
 sync status with `cardano-db-sync` determining sync status relies on a chain
 that has produce
