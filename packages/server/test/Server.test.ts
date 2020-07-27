@@ -13,9 +13,10 @@ import { buildSchema as buildGenesisSchema } from '@cardano-graphql/api-genesis'
 import { Server } from '@src/Server'
 import { whitelistPlugin } from '@src/apollo_server_plugins'
 
-const shelleyTestnetGenesis = '../../../config/network/shelley_testnet/genesis_shelley.json'
+const byronTestnetGenesis = '../../../config/network/testnet/genesis/byron.json'
+const shelleyTestnetGenesis = '../../../config/network/testnet/genesis/shelley.json'
 const clientPath = path.resolve(__dirname, 'app_with_graphql_operations')
-const port = 3101
+const port = 3301
 
 function listen (app: Application, port: number): Promise<http.Server> {
   return new Promise(function (resolve, reject) {
@@ -32,7 +33,7 @@ describe('Server', () => {
   let genesisSchema: GraphQLSchema
 
   beforeAll(async () => {
-    genesisSchema = buildGenesisSchema({ shelley: require(shelleyTestnetGenesis) })
+    genesisSchema = buildGenesisSchema({ byron: require(byronTestnetGenesis), shelley: require(shelleyTestnetGenesis) })
     whiteListedDocumentNode = await util.loadQueryNode(path.resolve(clientPath, 'src', 'feature_1'), 'maxLovelaceSupply')
   })
 

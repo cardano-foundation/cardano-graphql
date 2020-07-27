@@ -6,8 +6,8 @@ import { buildClient } from './util'
 
 const genesisFiles = {
   mainnet: {
-    byron: require('../../../config/network/mainnet/genesis_byron.json'),
-    shelley: require('../../../config/network/mainnet/genesis_shelley.json')
+    byron: require('../../../config/network/mainnet/genesis/byron.json'),
+    shelley: require('../../../config/network/mainnet/genesis/shelley.json')
   },
   shelley_testnet: {
     shelley: require('../../../config/network/shelley_testnet/genesis_shelley.json')
