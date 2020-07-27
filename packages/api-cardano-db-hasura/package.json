@@ -1,6 +1,6 @@
 {
   "name": "@cardano-graphql/api-cardano-db-hasura",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0",
   "description": "Module for interfacing with the Cardano DB, populated by cardano-db-sync-extended that utilises Hasura for a powerful query interface",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -32,7 +32,7 @@
     "schema.graphql"
   ],
   "dependencies": {
-    "@cardano-graphql/util": "2.0.0-beta.0",
+    "@cardano-graphql/util": "2.0.0",
     "@graphql-tools/delegate": "^6.0.10",
     "@graphql-tools/schema": "^6.0.9",
     "@graphql-tools/wrap": "^6.0.9",
@@ -50,7 +50,7 @@
     "set-interval-async": "^1.0.33"
   },
   "devDependencies": {
-    "@cardano-graphql/util-dev": "2.0.0-beta.0",
+    "@cardano-graphql/util-dev": "2.0.0",
     "@graphql-codegen/cli": "^1.15.2",
     "@graphql-codegen/typescript": "^1.15.2",
     "@graphql-codegen/typescript-graphql-files-modules": "^1.15.2",

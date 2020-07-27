@@ -1,7 +1,7 @@
 {
   "name": "cardano-graphql",
   "description": "A TypeScript monorepo. Includes a server package and API modules for flexible implementation",
-  "version": "2.0.0-beta.0",
+  "version": "2.0.0",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -14,7 +14,7 @@
     "mainnet:up": "NETWORK=mainnet docker-compose -p mainnet up --build -d && docker-compose -p mainnet logs -f",
     "mainnet:dev": "NETWORK=mainnet yarn service-dependencies -p mainnet up --build",
     "mainnet:down": "docker-compose -p mainnet down",
-    "testnet:up": "API_PORT=3101 HASURA_PORT=8091 NETWORK=testnet docker-compose -p testnet up --build && docker-compose -p testnet logs -f",
+    "testnet:up": "API_PORT=3101 HASURA_PORT=8091 NETWORK=testnet docker-compose -p testnet up --build -d && docker-compose -p testnet logs -f",
     "testnet:dev": "API_PORT=3101 HASURA_PORT=8091 NETWORK=testnet yarn service-dependencies -p testnet up --build",
     "testnet:down": "docker-compose -p testnet down",
     "mainnet_candidate_4:up": "API_PORT=3102 HASURA_PORT=8092 NETWORK=mainnet_candidate_4 docker-compose -p mainnet_candidate_4 up --build -d && docker-compose -p mainnet_candidate_4 logs -f",
