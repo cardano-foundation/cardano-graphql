@@ -1,123 +1,121 @@
 {
-  "ByronGenesisFile":"../genesis/byron.json",
-  "ByronGenesisHash":"406bd7edfa14db46edb367d18f5b3dba8d0c626b7c1c19f283867a70d05945c9",
-  "EnableLogMetrics":false,
-  "EnableLogging":true,
-  "NetworkName":"mainnet_candidate_4",
-  "Protocol":"Cardano",
-  "RequiresNetworkMagic":"RequiresNoMagic",
+  "ByronGenesisFile": "../genesis/byron.json",
+  "ByronGenesisHash": "406bd7edfa14db46edb367d18f5b3dba8d0c626b7c1c19f283867a70d05945c9",
+  "EnableLogMetrics": false,
+  "EnableLogging": true,
+  "NetworkName": "mainnet_candidate_4",
+  "Protocol": "Cardano",
+  "RequiresNetworkMagic": "RequiresNoMagic",
   "ShelleyGenesisFile": "../genesis/shelley.json",
-  "ShelleyGenesisHash":"ef8a74ab8587db4c95a7b98cd15406faf7044d9ff47b977f54053f7ad4fd9e59",
-  "defaultBackends":[
+  "ShelleyGenesisHash": "ef8a74ab8587db4c95a7b98cd15406faf7044d9ff47b977f54053f7ad4fd9e59",
+  "defaultBackends": [
     "KatipBK"
   ],
-  "defaultScribes":[
+  "defaultScribes": [
     [
       "StdoutSK",
       "stdout"
     ]
   ],
-  "hasPrometheus":[
-    "172.31.3.243",
+  "hasPrometheus": [
+    "127.0.0.1",
     12698
   ],
-  "minSeverity":"Info",
-  "options":{
-    "cfokey":{
-      "value":"Release-1.0.0"
+  "minSeverity": "Info",
+  "options": {
+    "cfokey": {
+      "value": "Release-1.0.0"
     },
-    "mapBackends":{
-
+    "mapBackends": {},
+    "mapSeverity": {
+      "db-sync-node": "Info",
+      "db-sync-node.Mux": "Error",
+      "db-sync-node.Subscription": "Error"
     },
-    "mapSeverity":{
-      "db-sync-node":"Info",
-      "db-sync-node.Mux":"Error",
-      "db-sync-node.Subscription":"Error"
-    },
-    "mapSubtrace":{
-      "#ekgview":{
-        "contents":[
+    "mapSubtrace": {
+      "#ekgview": {
+        "contents": [
           [
             {
-              "contents":"cardano.epoch-validation.benchmark",
-              "tag":"Contains"
+              "contents": "cardano.epoch-validation.benchmark",
+              "tag": "Contains"
             },
             [
               {
-                "contents":".monoclock.basic.",
-                "tag":"Contains"
+                "contents": ".monoclock.basic.",
+                "tag": "Contains"
               }
             ]
           ],
           [
             {
-              "contents":"cardano.epoch-validation.benchmark",
-              "tag":"Contains"
+              "contents": "cardano.epoch-validation.benchmark",
+              "tag": "Contains"
             },
             [
               {
-                "contents":"diff.RTS.cpuNs.timed.",
-                "tag":"Contains"
+                "contents": "diff.RTS.cpuNs.timed.",
+                "tag": "Contains"
               }
             ]
           ],
           [
             {
-              "contents":"#ekgview.#aggregation.cardano.epoch-validation.benchmark",
-              "tag":"StartsWith"
+              "contents": "#ekgview.#aggregation.cardano.epoch-validation.benchmark",
+              "tag": "StartsWith"
             },
             [
               {
-                "contents":"diff.RTS.gcNum.timed.",
-                "tag":"Contains"
+                "contents": "diff.RTS.gcNum.timed.",
+                "tag": "Contains"
               }
             ]
           ]
         ],
-        "subtrace":"FilterTrace"
+        "subtrace": "FilterTrace"
       },
-      "#messagecounters.aggregation":{
-        "subtrace":"NoTrace"
+      "#messagecounters.aggregation": {
+        "subtrace": "NoTrace"
       },
-      "#messagecounters.ekgview":{
-        "subtrace":"NoTrace"
+      "#messagecounters.ekgview": {
+        "subtrace": "NoTrace"
       },
-      "#messagecounters.katip":{
-        "subtrace":"NoTrace"
+      "#messagecounters.katip": {
+        "subtrace": "NoTrace"
       },
-      "#messagecounters.monitoring":{
-        "subtrace":"NoTrace"
+      "#messagecounters.monitoring": {
+        "subtrace": "NoTrace"
       },
-      "#messagecounters.switchboard":{
-        "subtrace":"NoTrace"
+      "#messagecounters.switchboard": {
+        "subtrace": "NoTrace"
       },
-      "benchmark":{
-        "contents":[
+      "benchmark": {
+        "contents": [
           "GhcRtsStats",
           "MonotonicClock"
         ],
-        "subtrace":"ObservableTrace"
+        "subtrace": "ObservableTrace"
       },
-      "cardano.epoch-validation.utxo-stats":{
-        "subtrace":"NoTrace"
+      "cardano.epoch-validation.utxo-stats": {
+        "subtrace": "NoTrace"
       }
     }
   },
-  "rotation":{
-    "rpKeepFilesNum":10,
-    "rpLogLimitBytes":5000000,
-    "rpMaxAgeHours":24
+  "rotation": {
+    "rpKeepFilesNum": 10,
+    "rpLogLimitBytes": 5000000,
+    "rpMaxAgeHours": 24
   },
-  "setupBackends":[
+  "setupBackends": [
     "AggregationBK",
     "KatipBK"
   ],
-  "setupScribes":[
+  "setupScribes": [
     {
-      "scFormat":"ScText",
-      "scKind":"StdoutSK",
-      "scName":"stdout",
-      "scRotation":null
+      "scFormat": "ScText",
+      "scKind": "StdoutSK",
+      "scName": "stdout",
+      "scRotation": null
     }
   ]
 }
