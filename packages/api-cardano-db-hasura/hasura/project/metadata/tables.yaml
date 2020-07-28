@@ -117,7 +117,7 @@
           schema: public
           name: StakePool
         column_mapping:
-          update_id: id
+          pool_hash: hash
   - name: transaction
     using:
       manual_configuration:
@@ -213,6 +213,11 @@
 - table:
     schema: public
     name: StakeDeregistration
+  configuration:
+    custom_root_fields:
+      select_aggregate: stakeDeregistrations_aggregate
+      select: stakeDeregistrations
+    custom_column_names: {}
   object_relationships:
   - name: transaction
     using:

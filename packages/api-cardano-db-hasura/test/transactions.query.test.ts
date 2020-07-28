@@ -45,7 +45,7 @@ describe('transactions', () => {
 
   it('returns an empty array when the transactions has no outputs', async () => {
     const result = await mc4Client.query({
-      query: gql`query orderedTransactionsInBlock(
+      query: gql`query transactionWithNoOutputs(
           $hash: Hash32HexString!
       ) {
           transactions(
