@@ -369,7 +369,7 @@ type Transaction {
     order_by: [TransactionInput_order_by]
     offset: Int
     where: TransactionInput_bool_exp
-  ): TransactionInput_aggregate
+  ): TransactionInput_aggregate!
   outputs (
     limit: Int
     order_by: [TransactionOutput_order_by]
@@ -381,7 +381,7 @@ type Transaction {
     order_by: [TransactionOutput_order_by]
     offset: Int
     where: TransactionOutput_bool_exp
-  ): TransactionOutput_aggregate
+  ): TransactionOutput_aggregate!
   size: BigInt!
   totalOutput: String!
   includedAt: DateTime!
