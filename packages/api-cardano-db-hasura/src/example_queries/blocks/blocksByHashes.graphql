@@ -20,7 +20,9 @@ query blocksByHashes(
         merkelRoot
         number
         forgedAt
-        createdBy
+        slotLeader {
+            description
+        }
         previousBlock {
             hash
             number
