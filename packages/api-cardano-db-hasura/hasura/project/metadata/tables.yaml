@@ -63,6 +63,7 @@
       - previousBlockHash
       - protocolVersion
       - size
+      - slotInEpoch
       - slotNo
       - transactionsCount
       - vrfKey

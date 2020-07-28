@@ -9,7 +9,7 @@ This version is required for transitioning through the upcoming Shelley hard for
 ### Compatible with:
 
 - [`cardano-node`: `1.18.0`](https://github.com/input-output-hk/cardano-node/releases/tag/1.18.0)
-- [`cardano-db-sync`: `3.0.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/3.0.0) - Note: The database must be recreated using the new version.
+- [`cardano-db-sync`: `3.1.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/3.1.0) - Note: The database must be recreated using the new version.
 
 ## Features
 ### New Queries
@@ -41,17 +41,17 @@ configuration if required is a good strategy. Simply copying the top level `conf
 - `cardanoDbSync.slotDiffFromNetworkTip` **removed** in reponse to a change in strategy for determining 
 sync status with `cardano-db-sync` determining sync status relies on a chain
 that has produce
-- `Block.slotWithinEpoch` **removed** due to complexity with variation across eras. The Genesis API has information
-for calculations based on context.
 
 ### Changed fields
 Dates we're previously formatted to ISO 3339, however ISO 8601 is being adopted with this release for 
 alignment with the Shelley genesis file format and simplification when the precision is not required. 
 - `2017-10-03T21:43:51.000Z` -> `2017-10-03T21:43:51Z` 
-- `Block.createdAt` -> `Block.forgedAt`
 - `Block.createdBy` -> `Block.slotLeader` links to an object, with a nullable `stakePool` field. For 
 previous behaviour, `Block.slotLeader.description` can be used, however the description prefixes have
 changed upstream from `SlotLeader` to `ByronGenesis`
+- `Block.createdAt` -> `Block.forgedAt`
+- `Block.slotWithinEpoch` -> `Block.slotInEpoch`
+
 
 ## Chores
 - Migrations have been squashed into a single step.

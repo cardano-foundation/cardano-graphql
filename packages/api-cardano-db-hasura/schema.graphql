@@ -570,6 +570,7 @@ type Block {
   merkelRoot: Hash32HexString
   number: Int
   opCert: Hash32HexString
+  slotInEpoch: Int
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
   slotNo: Int
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
@@ -606,6 +607,7 @@ input Block_bool_exp {
   previousBlock: Block_bool_exp
   nextBlock: Block_bool_exp
   size: BigInt_comparison_exp
+  slotInEpoch: Int_comparison_exp
   slotNo: Int_comparison_exp
   transactions: Transaction_bool_exp
   transactionsCount: text_comparison_exp
