@@ -375,7 +375,7 @@ type Transaction {
     order_by: [TransactionOutput_order_by]
     offset: Int
     where: TransactionOutput_bool_exp
-  ): [TransactionOutput!]!
+  ): [TransactionOutput]!
   outputs_aggregate(
     limit: Int
     order_by: [TransactionOutput_order_by]
