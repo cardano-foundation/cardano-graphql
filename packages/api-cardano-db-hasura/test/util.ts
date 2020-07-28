@@ -5,15 +5,14 @@ import pRetry from 'p-retry'
 import { gql } from 'apollo-boost'
 import util from '@cardano-graphql/util'
 
-export async function buildClient () {
+export async function buildClient (apiUri: string, hasuraUri: string) {
   if (process.env.TEST_MODE === 'e2e') {
-    const client = await utilDev.createE2EClient()
+    const client = await utilDev.createE2EClient(apiUri)
     await pRetry(async () => {
       const result = await client.query({
         query: gql`query {
             cardanoDbMeta {
                 initialized
-                syncPercentage
             }}`
       })
       if (result.data?.cardanoDbMeta.initialized === false) {
@@ -26,7 +25,6 @@ export async function buildClient () {
     })
     return client
   } else {
-    const hasuraUri = 'http://localhost:8090'
     const db = new Db(hasuraUri)
     await db.init()
     const schema = await buildSchema(hasuraUri, db)

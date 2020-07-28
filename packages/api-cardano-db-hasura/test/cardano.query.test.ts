@@ -12,7 +12,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('cardano', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await buildClient()
+    client = await buildClient('http://localhost:3100', 'http://localhost:8090')
   }, 60000)
 
   it('Returns core information about the current state of the network', async () => {
