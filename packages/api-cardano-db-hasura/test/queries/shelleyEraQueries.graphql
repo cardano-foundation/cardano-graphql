@@ -1,0 +1,137 @@
+query shelleyEraQueries {
+    delegations (limit: 10) {
+        address
+        stakePool {
+            fixedCost
+        }
+    }
+    delegations_aggregate {
+        aggregate {
+            count
+            sum {
+                stakePool {
+                    fixedCost
+                }
+            }
+            avg {
+                stakePool {
+                    fixedCost
+                }
+            }
+            max {
+                stakePool {
+                    fixedCost
+                }
+            }
+        }
+    }
+    stakeDeregistrations (limit:10) {
+        address
+        transaction {
+            hash
+        }
+    }
+    stakeDeregistrations_aggregate {
+        aggregate {
+            count
+            avg {
+                transaction {
+                    totalOutput
+                }
+            }
+            max {
+                transaction {
+                    totalOutput
+                }
+            }
+            sum {
+                transaction {
+                    totalOutput
+                }
+            }
+        }
+    }
+    stakePools (limit:10) {
+        fixedCost
+        hash
+        margin
+        metadataHash
+        owners {
+            hash
+        }
+        pledge
+        relays {
+            ipv4
+            ipv6
+            dnsName
+            dnsSrvName
+        }
+        retirement {
+            announcedIn {
+                hash
+            }
+            inEffectFrom {
+                number
+            }
+        }
+        rewardAddress
+        updatedIn {
+            hash
+        }
+        url
+        withdrawals {
+            address
+            amount
+            transaction {
+                hash
+            }
+        }
+    }
+    stakePools_aggregate {
+        aggregate {
+            count
+            avg {
+                margin
+            }
+            max {
+                margin
+            }
+            sum {
+                margin
+            }
+        }
+    }
+    stakeRegistrations (limit:10) {
+        address
+        transaction {
+            hash
+        }
+    }
+    stakeRegistrations_aggregate {
+        aggregate {
+            count
+            avg {
+                transaction {
+                    totalOutput
+                }
+            }
+            max {
+                transaction {
+                    totalOutput
+                }
+            }
+            sum {
+                transaction {
+                    totalOutput
+                }
+            }
+        }
+    }
+    withdrawals (limit:10) {
+        address
+        amount
+        transaction {
+            hash
+        }
+    }
+}

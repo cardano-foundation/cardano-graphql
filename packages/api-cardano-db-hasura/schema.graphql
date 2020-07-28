@@ -30,13 +30,13 @@ type Query {
     order_by: [Delegation_order_by!]
     offset: Int
     where: Delegation_bool_exp
-  ): [Delegation]!
+  ): [Delegation]
   delegations_aggregate (
     limit: Int
     order_by: [Delegation_order_by!]
     offset: Int
     where: Delegation_bool_exp
-  ): Delegation_aggregate!
+  ): Delegation_aggregate
   epochs (
     limit: Int
     order_by: [Epoch_order_by!]
@@ -54,37 +54,37 @@ type Query {
     order_by: [StakeRegistration_order_by!]
     offset: Int
     where: StakeRegistration_bool_exp
-  ): [StakeRegistration]!
+  ): [StakeRegistration]
   stakeDeregistrations_aggregate (
     limit: Int
     order_by: [StakeRegistration_order_by!]
     offset: Int
     where: StakeRegistration_bool_exp
-  ): StakeRegistration_aggregate!
+  ): StakeRegistration_aggregate
   stakePools (
     limit: Int
     order_by: [StakePool_order_by!]
     offset: Int
     where: StakePool_bool_exp
-  ): [StakePool]!
+  ): [StakePool]
   stakePools_aggregate (
     limit: Int
     order_by: [StakePool_order_by!]
     offset: Int
     where: StakePool_bool_exp
-  ): StakePool_aggregate!
+  ): StakePool_aggregate
   stakeRegistrations (
     limit: Int
     order_by: [StakeRegistration_order_by!]
     offset: Int
     where: StakeRegistration_bool_exp
-  ): [StakeRegistration]!
+  ): [StakeRegistration]
   stakeRegistrations_aggregate (
     limit: Int
     order_by: [StakeRegistration_order_by!]
     offset: Int
     where: StakeRegistration_bool_exp
-  ): StakeRegistration_aggregate!
+  ): StakeRegistration_aggregate
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
@@ -116,13 +116,13 @@ type Query {
     order_by: [Withdrawal_order_by!]
     offset: Int
     where: Withdrawal_bool_exp
-  ): [Withdrawal]!
+  ): [Withdrawal]
   withdrawals_aggregate (
     limit: Int
     order_by: [Withdrawal_order_by!]
     offset: Int
     where: Withdrawal_bool_exp
-  ): Withdrawal_aggregate!
+  ): Withdrawal_aggregate
 }
 
 type Cardano {
@@ -158,11 +158,11 @@ type Delegation_aggregate {
 }
 
 type Delegation_aggregate_fields {
-  avg: Delegation_avg_fields!
-  count: String!
-  max: Delegation_max_fields!
-  min: Delegation_min_fields!
-  sum: Delegation_sum_fields!
+  avg: Delegation_avg_fields
+  count: String
+  max: Delegation_max_fields
+  min: Delegation_min_fields
+  sum: Delegation_sum_fields
 }
 
 type Delegation_avg_fields {
@@ -219,7 +219,7 @@ type StakePool {
   rewardAddress: String!
   updatedIn: Transaction!
   url: URL
-  withdrawals: [Withdrawal]!
+  withdrawals: [Withdrawal]
 }
 
 input StakePoolOwner_bool_exp {
@@ -316,11 +316,11 @@ type StakeRegistration_aggregate {
 }
 
 type StakeRegistration_aggregate_fields {
-  avg: StakeRegistration_avg_fields!
-  count: String!
-  max: StakeRegistration_max_fields!
-  min: StakeRegistration_min_fields!
-  sum: StakeRegistration_sum_fields!
+  avg: StakeRegistration_avg_fields
+  count: String
+  max: StakeRegistration_max_fields
+  min: StakeRegistration_min_fields
+  sum: StakeRegistration_sum_fields
 }
 
 type StakeRegistration_avg_fields {

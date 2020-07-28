@@ -38,8 +38,14 @@ SELECT
 	  WHERE stake_address.id = delegation.addr_id
   ) AS "address",
   delegation.tx_id AS "tx_id",
-  delegation.update_id AS "update_id"
-FROM delegation; 
+  delegation.update_id AS "update_id",
+  pool_hash.hash AS "pool_hash"
+FROM
+  delegation
+JOIN pool_update
+  ON delegation.update_id = pool_update.id
+LEFT OUTER JOIN pool_hash
+  ON pool_update.hash_id = pool_hash.id;
 
 CREATE VIEW "Epoch" AS
 SELECT
