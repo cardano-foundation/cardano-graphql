@@ -13,6 +13,7 @@ CREATE VIEW "Block" AS
     block.tx_count AS "transactionsCount",
     block.epoch_no AS "epochNo",
     block."time" AS "forgedAt",
+    block.epoch_slot_no AS "slotInEpoch",
     block.slot_no AS "slotNo",
     slot_leader.id AS "slot_leader_id",
     block.vrf_key As "vrfKey"
