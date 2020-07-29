@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "08fa32c593ced54a0cce1c77ddfe965a",
+    "revision": "af5061c5ccc56386e24741506a7baa20",
     "url": "/cardano-graphql/index.html"
   },
   {
