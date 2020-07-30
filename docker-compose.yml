@@ -101,12 +101,14 @@ services:
     build:
       context: .
       target: server
+      args:
+        - NETWORK=${NETWORK:-mainnet}
     image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-2.0.0}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
-      - GENESIS_FILE_BYRON=/genesis/byron.json
-      - GENESIS_FILE_SHELLEY=/genesis/shelley.json
+      - GENESIS_FILE_BYRON=/config/genesis/byron.json
+      - GENESIS_FILE_SHELLEY=/config/genesis/shelley.json
       - HASURA_URI=http://hasura:8080
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
@@ -127,8 +129,6 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-    volumes:
-      - ./config/network/${NETWORK:-mainnet}/genesis:/genesis
 secrets:
   postgres_db:
     file: ./config/secrets/postgres_db
