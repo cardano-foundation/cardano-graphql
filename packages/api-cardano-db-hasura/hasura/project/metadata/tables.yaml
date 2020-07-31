@@ -270,6 +270,14 @@
           name: pool_relay
         column_mapping:
           id: update_id
+  - name: retirements
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: pool_retire
+        column_mapping:
+          id: update_id
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -513,6 +521,10 @@
 - table:
     schema: public
     name: pool_retire
+  configuration:
+    custom_root_fields: {}
+    custom_column_names:
+      retiring_epoch: inEffectFrom
   object_relationships:
   - name: announcedIn
     using:
@@ -522,7 +534,7 @@
           name: Transaction
         column_mapping:
           announced_tx_id: id
-  - name: inEffectFrom
+  - name: retiredInEpoch
     using:
       manual_configuration:
         remote_table:
@@ -530,3 +542,19 @@
           name: Epoch
         column_mapping:
           retiring_epoch: number
+  - name: stakePool
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: StakePool
+        column_mapping:
+          update_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - retiring_epoch
+      filter: {}
+      limit: 100
+      allow_aggregations: true

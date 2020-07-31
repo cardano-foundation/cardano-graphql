@@ -16,17 +16,17 @@ describe('Shelley era queries', () => {
   }, 15000)
 
   it('will not throw errors during the Byron era', async () => {
-    const result = await client.query({
+    await client.query({
       query: await loadQueryNode('shelleyEraQueries')
     })
-    console.log(result)
+    // console.log(result)
     // expect(result.data).toMatchSnapshot()
   })
   it('Shelley era smoke test', async () => {
-    const result = await client.query({
+    await client.query({
       query: await loadQueryNode('shelleyEraQueries')
     })
-    console.log(result)
+    // console.log(result)
     // expect(result.data).toMatchSnapshot()
   })
 })

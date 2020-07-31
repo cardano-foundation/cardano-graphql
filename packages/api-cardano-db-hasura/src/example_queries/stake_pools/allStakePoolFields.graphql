@@ -1,0 +1,32 @@
+query allStakePoolFields (
+    $limit: Int!
+    $where: StakePool_bool_exp
+)  {
+    stakePools (limit: $limit, where: $where) {
+        fixedCost
+        hash
+        margin
+        metadataHash
+        owners {
+            hash
+        }
+        pledge
+        relays {
+            ipv4
+            ipv6
+            dnsName
+            dnsSrvName
+        }
+        retirements {
+            announcedIn {
+                hash
+            }
+            inEffectFrom
+        }
+        rewardAddress
+        updatedIn {
+            hash
+        }
+        url
+    }
+}

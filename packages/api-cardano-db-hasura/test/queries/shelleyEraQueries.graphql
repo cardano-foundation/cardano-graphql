@@ -51,56 +51,6 @@ query shelleyEraQueries {
             }
         }
     }
-    stakePools (limit:10) {
-        fixedCost
-        hash
-        margin
-        metadataHash
-        owners {
-            hash
-        }
-        pledge
-        relays {
-            ipv4
-            ipv6
-            dnsName
-            dnsSrvName
-        }
-        retirement {
-            announcedIn {
-                hash
-            }
-            inEffectFrom {
-                number
-            }
-        }
-        rewardAddress
-        updatedIn {
-            hash
-        }
-        url
-        withdrawals {
-            address
-            amount
-            transaction {
-                hash
-            }
-        }
-    }
-    stakePools_aggregate {
-        aggregate {
-            count
-            avg {
-                margin
-            }
-            max {
-                margin
-            }
-            sum {
-                margin
-            }
-        }
-    }
     stakeRegistrations (limit:10) {
         address
         transaction {

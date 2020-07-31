@@ -195,6 +195,11 @@ input Relay_bool_exp {
   dnsSrvName: text_comparison_exp
 }
 
+type StakeDeregistration {
+  address: String!
+  transaction: Transaction!
+}
+
 type SlotLeader {
   description: String!
   hash: Hash32HexString!
@@ -215,16 +220,13 @@ type StakePool {
   owners: [StakePoolOwner!]!
   pledge: String!
   relays: [Relay]
-  retirement: StakePoolRetirement
+  retirements: [StakePoolRetirement]
   rewardAddress: String!
   updatedIn: Transaction!
   url: URL
   withdrawals: [Withdrawal]
 }
 
-input StakePoolOwner_bool_exp {
-  hash: Hash32HexString_comparison_exp
-}
 
 input StakePool_order_by {
   fixedCost: order_by
@@ -246,7 +248,7 @@ input StakePool_bool_exp {
   pledge: text_comparison_exp
   registrationTransaction: Transaction_bool_exp
   relays: Relay_bool_exp
-  retirement: Relay_bool_exp
+  retirements: StakePoolRetirement_bool_exp
   rewardAddress: text_comparison_exp
   url: text_comparison_exp
   withdrawals: Withdrawal_bool_exp
@@ -288,10 +290,25 @@ type StakePool_sum_fields {
   pledge: String
 }
 
-type StakeDeregistration {
-  address: String!
-  transaction: Transaction!
+input StakePoolOwner_bool_exp {
+  hash: Hash32HexString_comparison_exp
 }
+
+type StakePoolRetirement {
+  announcedIn: Transaction
+  inEffectFrom: Int!
+  retiredInEpoch: Epoch
+}
+
+input StakePoolRetirement_bool_exp {
+  announcedIn: Transaction_bool_exp
+  inEffectFrom: Epoch_bool_exp
+}
+
+type StakePoolOwner {
+  hash: Hash32HexString!
+}
+
 
 type StakeRegistration {
   address: String!
@@ -337,20 +354,6 @@ type StakeRegistration_min_fields {
 
 type StakeRegistration_sum_fields {
   transaction: Transaction_sum_fields
-}
-
-type StakePoolRetirement {
-  announcedIn: Transaction!
-  inEffectFrom: Epoch!
-}
-
-input StakePoolRetirement_bool_exp {
-  announcedIn: Transaction_bool_exp
-  inEffectFrom: Epoch_bool_exp
-}
-
-type StakePoolOwner {
-  hash: Hash32HexString!
 }
 
 type Transaction {
