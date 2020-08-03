@@ -18,7 +18,7 @@ Cross-platform, _typed_, and **queryable** API for Cardano. The project contains
  [packages](./packages) for composing GraphQL services to meet specific application demands, 
  and a [docker-compose stack](./docker-compose.yml) serving the included [cardano-graphql-server Dockerfile](./Dockerfile) 
  and the extended [hasura Dockerfile](./packages/api-cardano-db-hasura/hasura/Dockerfile).
- The [schema](src/packages/api-cardano-db-hasura/schema.graphql) is defined in native `.graphql`,
+ The [schema](packages/api-cardano-db-hasura/schema.graphql) is defined in native `.graphql`,
  and used to generate a TypeScript [package](packages/client-ts/README.md) for client-side static typing.
  
   [Apollo Server](https://www.apollographql.com/docs/apollo-server/) 
