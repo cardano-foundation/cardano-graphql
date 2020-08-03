@@ -23,7 +23,10 @@ export async function getConfig (): Promise<Config> {
   } = filterAndTypecastEnvs(process.env)
 
   if (!hasuraUri && !genesisFileShelley) {
-    throw new MissingConfig('You have not provided configuration to load an API segment. Either set HASURA_URI or GENESIS_FILE_SHELLEY')
+    throw new MissingConfig(
+      `You have not provided configuration to load an API segment. Either set HASURA_URI or 
+      GENESIS_FILE_SHELLEY`
+    )
   }
   if (prometheusMetrics && process.env.TRACING === 'false') {
     throw new TracingRequired('Prometheus')
@@ -56,6 +59,7 @@ function filterAndTypecastEnvs (env: any) {
     GENESIS_FILE_BYRON,
     GENESIS_FILE_SHELLEY,
     HASURA_URI,
+    NODE_ENV,
     PROMETHEUS_METRICS,
     QUERY_DEPTH_LIMIT,
     TRACING,
@@ -66,16 +70,16 @@ function filterAndTypecastEnvs (env: any) {
     Please update your configuration to use ALLOW_LIST_PATH instead.`)
   }
   return {
-    allowIntrospection: ALLOW_INTROSPECTION === 'true' ? true : undefined,
+    allowIntrospection: ALLOW_INTROSPECTION === 'true' || NODE_ENV !== 'production',
     allowedOrigins: ALLOWED_ORIGINS,
     allowListPath: ALLOW_LIST_PATH || WHITELIST_PATH,
     apiPort: Number(API_PORT),
-    cacheEnabled: CACHE_ENABLED === 'true' ? true : undefined,
+    cacheEnabled: CACHE_ENABLED === 'true',
     genesisFileByron: GENESIS_FILE_BYRON,
     genesisFileShelley: GENESIS_FILE_SHELLEY,
     hasuraUri: HASURA_URI,
-    prometheusMetrics: PROMETHEUS_METRICS === 'true' ? true : undefined,
+    prometheusMetrics: PROMETHEUS_METRICS === 'true',
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
-    tracing: TRACING === 'true' ? true : undefined
+    tracing: TRACING === 'true'
   }
 }
