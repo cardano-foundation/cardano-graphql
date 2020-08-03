@@ -11,7 +11,7 @@ import tmp from 'tmp-promise'
 import util from '@cardano-graphql/util'
 import { buildSchema as buildGenesisSchema } from '@cardano-graphql/api-genesis'
 import { Server } from '@src/Server'
-import { whitelistPlugin } from '@src/apollo_server_plugins'
+import { allowListPlugin } from '@src/apollo_server_plugins'
 
 const byronTestnetGenesis = '../../../config/network/testnet/genesis/byron.json'
 const shelleyTestnetGenesis = '../../../config/network/testnet/genesis/shelley.json'
@@ -27,14 +27,14 @@ function listen (app: Application, port: number): Promise<http.Server> {
 
 describe('Server', () => {
   let client: ApolloClient<any>
-  let whiteListedDocumentNode: DocumentNode
+  let allowedDocumentNode: DocumentNode
   let app: express.Application
   let httpServer: http.Server
   let genesisSchema: GraphQLSchema
 
   beforeAll(async () => {
     genesisSchema = buildGenesisSchema({ byron: require(byronTestnetGenesis), shelley: require(shelleyTestnetGenesis) })
-    whiteListedDocumentNode = await util.loadQueryNode(path.resolve(clientPath, 'src', 'feature_1'), 'maxLovelaceSupply')
+    allowedDocumentNode = await util.loadQueryNode(path.resolve(clientPath, 'src', 'feature_1'), 'maxLovelaceSupply')
   })
 
   beforeEach(async () => {
@@ -58,8 +58,8 @@ describe('Server', () => {
     app = express()
   })
 
-  describe('Whitelisting', () => {
-    describe('Booting the server without providing a whitelist', () => {
+  describe('Allowing specific queries', () => {
+    describe('Booting the server without providing an allow-list', () => {
       beforeEach(async () => {
         Server(app, {
           schema: genesisSchema
@@ -85,13 +85,13 @@ describe('Server', () => {
       })
     })
 
-    describe('Providing a whitelist produced by persistgraphql, intended to limit the API for specific application requirements', () => {
+    describe('Providing an allow-list produced by persistgraphql, intended to limit the API for specific application requirements', () => {
       beforeEach(async () => {
-        const whitelistPath = await tmp.tmpName({ postfix: '.json' })
-        execSync(`npx persistgraphql ${clientPath} ${whitelistPath}`)
-        const whitelist = JSON.parse(fs.readFileSync(whitelistPath, 'utf-8'))
+        const allowlistPath = await tmp.tmpName({ postfix: '.json' })
+        execSync(`npx persistgraphql ${clientPath} ${allowlistPath}`)
+        const allowList = JSON.parse(fs.readFileSync(allowlistPath, 'utf-8'))
         Server(app, {
-          plugins: [whitelistPlugin(whitelist)],
+          plugins: [allowListPlugin(allowList)],
           schema: genesisSchema
         })
         httpServer = await listen(app, port)
@@ -100,14 +100,14 @@ describe('Server', () => {
         httpServer.close()
       })
 
-      it('Accepts listed queries', async () => {
+      it('Accepts allowed queries', async () => {
         const result = await client.query({
-          query: whiteListedDocumentNode
+          query: allowedDocumentNode
         })
         expect(result.data.genesis.shelley.maxLovelaceSupply).toBeDefined()
         expect(result.errors).not.toBeDefined()
       })
-      it('Returns a networkError if a valid but unlisted operation is sent', async () => {
+      it('Returns a networkError if a valid but disallowed operation is sent', async () => {
         expect.assertions(1)
         try {
           await client.query({

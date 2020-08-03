@@ -12,7 +12,7 @@ import { GraphQLSchema } from 'graphql'
 export * from './config'
 export { apolloServerPlugins }
 
-const { prometheusMetricsPlugin, whitelistPlugin } = apolloServerPlugins
+const { prometheusMetricsPlugin, allowListPlugin } = apolloServerPlugins
 
 async function boot () {
   const config = await getConfig()
@@ -37,9 +37,9 @@ async function boot () {
   if (config.prometheusMetrics) {
     plugins.push(prometheusMetricsPlugin(app))
   }
-  if (config.whitelistPath) {
-    const whitelist = JSON.parse(fs.readFileSync(config.whitelistPath, 'utf8'))
-    plugins.push(whitelistPlugin(whitelist))
+  if (config.allowListPath) {
+    const allowList = JSON.parse(fs.readFileSync(config.allowListPath, 'utf8'))
+    plugins.push(allowListPlugin(allowList))
   }
   if (config.queryDepthLimit) {
     validationRules.push(depthLimit(config.queryDepthLimit))
@@ -61,8 +61,8 @@ async function boot () {
     app.listen({ port: config.apiPort }, () => {
       const serverUri = `http://localhost:${config.apiPort}`
       console.log(`GraphQL HTTP server at ${serverUri}${server.graphqlPath}`)
-      if (process.env.NODE_ENV !== 'production' && config.whitelistPath) {
-        console.warn('As a whitelist is in effect, the GraphQL Playground is available, but will not allow schema exploration')
+      if (process.env.NODE_ENV !== 'production' && config.allowListPath) {
+        console.warn('As an allow-list is in effect, the GraphQL Playground is available, but will not allow schema exploration')
       }
       if (config.prometheusMetrics) {
         console.log(`Prometheus metrics at ${serverUri}/metrics`)
