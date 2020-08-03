@@ -1,19 +1,10 @@
-import { CorsOptions } from 'apollo-server-express'
 import { IntrospectionNotPermitted, MissingConfig, TracingRequired } from './errors'
+import { Config as ServerConfig } from './Server'
 
-export type Config = {
-  allowIntrospection?: boolean
-  allowedOrigins: CorsOptions['origin']
-  allowListPath: string
-  apiPort: number
-  cacheEnabled: boolean
+export type Config = ServerConfig & {
   genesisFileByron: string
   genesisFileShelley: string
   hasuraUri: string
-  poolMetadataProxy: string
-  prometheusMetrics: boolean
-  queryDepthLimit: number
-  tracing: boolean
 }
 
 export async function getConfig (): Promise<Config> {
@@ -26,7 +17,6 @@ export async function getConfig (): Promise<Config> {
     genesisFileByron,
     genesisFileShelley,
     hasuraUri,
-    poolMetadataProxy,
     prometheusMetrics,
     queryDepthLimit,
     tracing
@@ -50,7 +40,6 @@ export async function getConfig (): Promise<Config> {
     genesisFileByron,
     genesisFileShelley,
     hasuraUri,
-    poolMetadataProxy,
     prometheusMetrics,
     queryDepthLimit: queryDepthLimit || 10,
     tracing
@@ -67,7 +56,6 @@ function filterAndTypecastEnvs (env: any) {
     GENESIS_FILE_BYRON,
     GENESIS_FILE_SHELLEY,
     HASURA_URI,
-    POOL_METADATA_PROXY,
     PROMETHEUS_METRICS,
     QUERY_DEPTH_LIMIT,
     TRACING,
@@ -86,7 +74,6 @@ function filterAndTypecastEnvs (env: any) {
     genesisFileByron: GENESIS_FILE_BYRON,
     genesisFileShelley: GENESIS_FILE_SHELLEY,
     hasuraUri: HASURA_URI,
-    poolMetadataProxy: POOL_METADATA_PROXY,
     prometheusMetrics: PROMETHEUS_METRICS === 'true' ? true : undefined,
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
     tracing: TRACING === 'true' ? true : undefined
