@@ -1,12 +1,10 @@
 import { Config as ApiCardanoDbHasuraConfig } from '@cardano-graphql/api-cardano-db-hasura'
+import { Config as ApiGenesisConfig } from '@cardano-graphql/api-genesis'
 import { MissingConfig } from './errors'
 import fs from 'fs-extra'
 import { Config as ServerConfig } from './Server'
 
-export type Config = ServerConfig & ApiCardanoDbHasuraConfig & {
-  genesisFileByron: string
-  genesisFileShelley: string
-}
+export type Config = ServerConfig & ApiCardanoDbHasuraConfig & ApiGenesisConfig
 
 export async function getConfig (): Promise<Config> {
   const {
