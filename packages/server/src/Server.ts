@@ -1,17 +1,94 @@
-import { ApolloServer, ApolloServerExpressConfig } from 'apollo-server-express'
+import { ApolloServer, CorsOptions } from 'apollo-server-express'
 import express from 'express'
-import corsMiddleware from 'cors'
+import { GraphQLSchema } from 'graphql'
+import { mergeSchemas } from '@graphql-tools/merge'
+import { prometheusMetricsPlugin } from './apollo_server_plugins'
+import { allowListMiddleware } from './express_middleware'
+import depthLimit from 'graphql-depth-limit'
+import { PluginDefinition } from 'apollo-server-core'
+import { AllowList } from './AllowList'
+import { json } from 'body-parser'
+import fs from 'fs-extra'
+import { listenPromise } from './util'
+import http from 'http'
 
-export function Server (
-  app: express.Application,
-  apolloServerExpressConfig: ApolloServerExpressConfig,
-  cors?: corsMiddleware.CorsOptions
-): ApolloServer {
-  const apolloServer = new ApolloServer(apolloServerExpressConfig)
-  apolloServer.applyMiddleware({
-    app,
-    cors,
-    path: '/'
-  })
-  return apolloServer
+export type Config = {
+  allowIntrospection?: boolean
+  allowListPath?: string
+  allowedOrigins?: CorsOptions['origin']
+  apiPort: number
+  cacheEnabled?: boolean
+  prometheusMetrics?: boolean
+  queryDepthLimit?: number
+  tracing?: boolean
+}
+
+export class Server {
+  public app: express.Application
+  private apolloServer: ApolloServer
+  private config: Config
+  private httpServer: http.Server
+  private schemas: GraphQLSchema[]
+
+  constructor (schemas: GraphQLSchema[], config?: Config) {
+    this.app = express()
+    this.config = config
+    this.schemas = schemas
+  }
+
+  async init () {
+    let allowList: AllowList
+    const plugins: PluginDefinition[] = []
+    const validationRules = []
+    if (this.config?.allowListPath) {
+      try {
+        const file = await fs.readFile(this.config.allowListPath, 'utf8')
+        allowList = JSON.parse(file)
+        this.app.use('/', json(), allowListMiddleware(allowList))
+        console.log('The server will only allow only operations from the provided list')
+      } catch (error) {
+        console.error(`Cannot read or parse allow-list JSON file at ${this.config.allowListPath}`)
+        throw error
+      }
+    }
+    if (this.config?.prometheusMetrics) {
+      plugins.push(prometheusMetricsPlugin(this.app))
+      console.log('Prometheus metrics will be served at /metrics')
+    }
+    if (this.config?.queryDepthLimit) {
+      validationRules.push(depthLimit(this.config?.queryDepthLimit))
+    }
+    this.apolloServer = new ApolloServer({
+      cacheControl: this.config?.cacheEnabled ? { defaultMaxAge: 20 } : undefined,
+      introspection: !!this.config?.allowIntrospection,
+      playground: !!this.config?.allowIntrospection,
+      plugins,
+      validationRules,
+      schema: mergeSchemas({
+        schemas: this.schemas
+      })
+    })
+    this.apolloServer.applyMiddleware({
+      app: this.app,
+      cors: this.config?.allowedOrigins ? {
+        origin: this.config?.allowedOrigins
+      } : undefined,
+      path: '/'
+    })
+  }
+
+  async start () {
+    this.httpServer = await listenPromise(this.app, { port: this.config.apiPort })
+    console.log(
+      `GraphQL HTTP server at http://localhost:${this.config.apiPort}${this.apolloServer.graphqlPath}`
+    )
+  }
+
+  shutdown () {
+    this.httpServer.close()
+    console.log(
+      `GraphQL HTTP server at http://localhost:${this.config.apiPort}${this.apolloServer.graphqlPath} 
+      shutting down`
+    )
+  }
 }

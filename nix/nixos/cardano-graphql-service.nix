@@ -82,10 +82,10 @@ in {
         default = false;
         description = "Allows introspection queries";
       };
-      whitelistPath = lib.mkOption {
+      allowListPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
-        description = "Source directory or file to generate whitelist from";
+        description = "Source directory or file to generate allow-list from";
       };
     };
   };
@@ -126,7 +126,7 @@ in {
       } //
       (lib.optionalAttrs (cfg.allowedOrigins != null) { ALLOWED_ORIGINS = cfg.allowedOrigins; }) //
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; }) //
-      (lib.optionalAttrs (cfg.whitelistPath != null) { WHITELIST_PATH = cfg.whitelistPath; });
+      (lib.optionalAttrs (cfg.allowListPath != null) { ALLOW_LIST_PATH = cfg.allowListPath; });
       path = with pkgs; [ netcat curl postgresql jq frontend hasura-cli glibc.bin patchelf ];
       preStart = ''
         set -exuo pipefail
