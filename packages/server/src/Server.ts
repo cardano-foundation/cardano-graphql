@@ -1,26 +1,27 @@
-import { ApolloServer, CorsOptions } from 'apollo-server-express'
-import express from 'express'
-import { GraphQLSchema } from 'graphql'
-import { mergeSchemas } from '@graphql-tools/merge'
-import { prometheusMetricsPlugin } from './apollo_server_plugins'
-import { allowListMiddleware } from './express_middleware'
-import depthLimit from 'graphql-depth-limit'
 import { PluginDefinition } from 'apollo-server-core'
-import { AllowList } from './AllowList'
+import { ApolloServer, CorsOptions } from 'apollo-server-express'
 import { json } from 'body-parser'
+import express from 'express'
 import fs from 'fs-extra'
-import { listenPromise } from './util'
+import { GraphQLSchema } from 'graphql'
+import depthLimit from 'graphql-depth-limit'
+import { mergeSchemas } from '@graphql-tools/merge'
 import http from 'http'
+import { listenPromise } from './util'
+import { AllowList } from './AllowList'
+import { prometheusMetricsPlugin } from './apollo_server_plugins'
+import { IntrospectionNotPermitted, TracingRequired } from './errors'
+import { allowListMiddleware } from './express_middleware'
 
 export type Config = {
-  allowIntrospection?: boolean
+  allowIntrospection: boolean
   allowListPath?: string
   allowedOrigins?: CorsOptions['origin']
   apiPort: number
-  cacheEnabled?: boolean
-  prometheusMetrics?: boolean
+  cacheEnabled: boolean
+  prometheusMetrics: boolean
   queryDepthLimit?: number
-  tracing?: boolean
+  tracing: boolean
 }
 
 export class Server {
@@ -30,7 +31,7 @@ export class Server {
   private httpServer: http.Server
   private schemas: GraphQLSchema[]
 
-  constructor (schemas: GraphQLSchema[], config?: Config) {
+  constructor (schemas: GraphQLSchema[], config: Config) {
     this.app = express()
     this.config = config
     this.schemas = schemas
@@ -40,7 +41,10 @@ export class Server {
     let allowList: AllowList
     const plugins: PluginDefinition[] = []
     const validationRules = []
-    if (this.config?.allowListPath) {
+    if (this.config.allowListPath) {
+      if (this.config.allowIntrospection === true) {
+        throw new IntrospectionNotPermitted('allowListPath')
+      }
       try {
         const file = await fs.readFile(this.config.allowListPath, 'utf8')
         allowList = JSON.parse(file)
@@ -51,27 +55,31 @@ export class Server {
         throw error
       }
     }
-    if (this.config?.prometheusMetrics) {
+    if (this.config.prometheusMetrics) {
+      if (this.config.tracing === false) {
+        throw new TracingRequired('Prometheus')
+      }
       plugins.push(prometheusMetricsPlugin(this.app))
       console.log('Prometheus metrics will be served at /metrics')
     }
-    if (this.config?.queryDepthLimit) {
-      validationRules.push(depthLimit(this.config?.queryDepthLimit))
+    if (this.config.queryDepthLimit) {
+      validationRules.push(depthLimit(this.config.queryDepthLimit))
     }
     this.apolloServer = new ApolloServer({
-      cacheControl: this.config?.cacheEnabled ? { defaultMaxAge: 20 } : undefined,
-      introspection: !!this.config?.allowIntrospection,
-      playground: !!this.config?.allowIntrospection,
+      cacheControl: this.config.cacheEnabled ? { defaultMaxAge: 20 } : undefined,
+      introspection: this.config.allowIntrospection,
+      playground: this.config.allowIntrospection,
       plugins,
       validationRules,
       schema: mergeSchemas({
         schemas: this.schemas
-      })
+      }),
+      tracing: this.config.tracing
     })
     this.apolloServer.applyMiddleware({
       app: this.app,
-      cors: this.config?.allowedOrigins ? {
-        origin: this.config?.allowedOrigins
+      cors: this.config.allowedOrigins ? {
+        origin: this.config.allowedOrigins
       } : undefined,
       path: '/'
     })
@@ -85,10 +93,12 @@ export class Server {
   }
 
   shutdown () {
-    this.httpServer.close()
-    console.log(
-      `GraphQL HTTP server at http://localhost:${this.config.apiPort}${this.apolloServer.graphqlPath} 
+    if (this.httpServer !== undefined) {
+      this.httpServer.close()
+      console.log(
+        `GraphQL HTTP server at http://localhost:${this.config.apiPort}${this.apolloServer.graphqlPath}
       shutting down`
-    )
+      )
+    }
   }
 }

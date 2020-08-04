@@ -1,4 +1,4 @@
-import { IntrospectionNotPermitted, MissingConfig, TracingRequired } from './errors'
+import { MissingConfig } from './errors'
 import { Config as ServerConfig } from './Server'
 
 export type Config = ServerConfig & {
@@ -25,17 +25,13 @@ export async function getConfig (): Promise<Config> {
   if (!hasuraUri && !genesisFileShelley) {
     throw new MissingConfig(
       `You have not provided configuration to load an API segment. Either set HASURA_URI or 
-      GENESIS_FILE_SHELLEY`
+      GENESIS_FILE_SHELLEY and GENESIS_FILE_SHELLEY`
     )
   }
-  if (prometheusMetrics && process.env.TRACING === 'false') {
-    throw new TracingRequired('Prometheus')
-  }
-  if (allowListPath && allowIntrospection) {
-    throw new IntrospectionNotPermitted('allowList')
-  }
   return {
-    allowIntrospection,
+    allowIntrospection:
+      (process.env.NODE_ENV === 'production' && allowIntrospection) ||
+      (process.env.NODE_ENV !== 'production' && allowIntrospection !== false),
     allowedOrigins: allowedOrigins || true,
     allowListPath,
     apiPort: apiPort || 3100,
@@ -59,18 +55,17 @@ function filterAndTypecastEnvs (env: any) {
     GENESIS_FILE_BYRON,
     GENESIS_FILE_SHELLEY,
     HASURA_URI,
-    NODE_ENV,
     PROMETHEUS_METRICS,
     QUERY_DEPTH_LIMIT,
     TRACING,
     WHITELIST_PATH
   } = env
   if (WHITELIST_PATH) {
-    console.log(`WHITELIST_PATH is deprecated and will be removed in 3.0.0.
+    console.warn(`WHITELIST_PATH is deprecated and will be removed in 3.0.0.
     Please update your configuration to use ALLOW_LIST_PATH instead.`)
   }
   return {
-    allowIntrospection: ALLOW_INTROSPECTION === 'true' || NODE_ENV !== 'production',
+    allowIntrospection: ALLOW_INTROSPECTION === 'true',
     allowedOrigins: ALLOWED_ORIGINS,
     allowListPath: ALLOW_LIST_PATH || WHITELIST_PATH,
     apiPort: Number(API_PORT),
