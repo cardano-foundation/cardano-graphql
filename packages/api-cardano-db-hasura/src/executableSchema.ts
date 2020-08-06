@@ -51,17 +51,21 @@ export async function buildSchema (hasuraClient: HasuraClient) {
           })
         },
         cardano: async (_root, _args, context, info) => {
-          const result = (await delegateToSchema({
-            context,
-            fieldName: 'cardano',
-            info,
-            operation: 'query',
-            schema: hasuraSchema
-          }))[0]
-          if (result.currentEpoch === null) {
-            return new ApolloError('currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.')
+          try {
+            const result = await delegateToSchema({
+              context,
+              fieldName: 'cardano',
+              info,
+              operation: 'query',
+              schema: hasuraSchema
+            })
+            if (result[0].currentEpoch === null) {
+              return new ApolloError('currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.')
+            }
+            return result[0]
+          } catch (error) {
+            throw new ApolloError(error)
           }
-          return result
         },
         cardanoDbMeta: async () => {
           try {
