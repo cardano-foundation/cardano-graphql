@@ -10,7 +10,7 @@
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
     "prepack": "yarn build",
     "prestart": "yarn build",
-    "start": "POSTGRES_DB_FILE=../../config/secrets/postgres_db POSTGRES_HOST=localhost POSTGRES_USER_FILE=../../config/secrets/postgres_user POSTGRES_PASSWORD_FILE=../../config/secrets/postgres_password node dist/index.js",
+    "start": "node dist/index.js",
     "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js"
   },
   "repository": {
