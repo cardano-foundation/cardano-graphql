@@ -63,6 +63,7 @@ describe('transactions', () => {
                       count
                   }
               }
+              totalOutput
           }
       }`,
       variables: { hash: 'b4caa8ed7bbcffb945bfcb7e61bce574cc15822d06c5ac0a74694b232361d09b' }
