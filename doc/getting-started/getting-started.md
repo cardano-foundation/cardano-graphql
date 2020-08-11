@@ -10,7 +10,7 @@ Builds `@cardano-graphql/server` and starts it along with `cardano-node`, `carda
 ``` console
 docker-compose up -d --build && docker-compose logs -f
 ```
-:information_source: _Omit the `--build` to use a pre-built image from Dockerhub (or locally cached from previous build)_
+> NOTE:  _Omit the `--build` to use a pre-built image from Dockerhub (or locally cached from previous build)_
 
 ### Check Cardano DB sync progress
 
@@ -22,7 +22,7 @@ or via command line:
 ``` console
 curl -X POST -H "Content-Type: application/json" -d '{"query": "{ cardanoDbMeta { initialized syncPercentage }}"}' http://localhost:3100/graphql
 ```
-:information_source: Wait for `initialized` to be `true` to ensure the epoch dataset is complete.
+> NOTE:  Wait for `initialized` to be `true` to ensure the epoch dataset is complete.
 
 ### Query the full dataset
 
