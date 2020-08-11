@@ -2,13 +2,12 @@ import fs from 'fs'
 import { ApolloError } from 'apollo-server'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { delegateToSchema } from '@graphql-tools/delegate'
-import { GraphQLSchema } from 'graphql'
 import pRetry from 'p-retry'
 import path from 'path'
 import util from '@cardano-graphql/util'
-import { buildHasuraSchema } from './buildHasuraSchema'
-import { Db } from './Db'
 import { Resolvers } from './graphql_types'
+import { HasuraClient } from './HasuraClient'
+import { GraphQLSchema } from 'graphql'
 
 const GraphQLBigInt = require('graphql-bigint')
 
@@ -19,10 +18,10 @@ export const scalarResolvers = {
   Percentage: util.scalars.Percentage
 } as any
 
-export async function buildSchema (hasuraUri: string, db: Db) {
+export async function buildSchema (hasuraClient: HasuraClient) {
   let hasuraSchema: GraphQLSchema
   await pRetry(async () => {
-    hasuraSchema = await buildHasuraSchema(hasuraUri)
+    hasuraSchema = await hasuraClient.buildHasuraSchema()
   }, {
     factor: 1.75,
     retries: 9,
@@ -52,21 +51,25 @@ export async function buildSchema (hasuraUri: string, db: Db) {
           })
         },
         cardano: async (_root, _args, context, info) => {
-          const result = (await delegateToSchema({
-            context,
-            fieldName: 'cardano',
-            info,
-            operation: 'query',
-            schema: hasuraSchema
-          }))[0]
-          if (result.currentEpoch === null) {
-            return new ApolloError('currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.')
+          try {
+            const result = await delegateToSchema({
+              context,
+              fieldName: 'cardano',
+              info,
+              operation: 'query',
+              schema: hasuraSchema
+            })
+            if (result[0].currentEpoch === null) {
+              return new ApolloError('currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.')
+            }
+            return result[0]
+          } catch (error) {
+            throw new ApolloError(error)
           }
-          return result
         },
         cardanoDbMeta: async () => {
           try {
-            return db.getMeta()
+            return hasuraClient.getMeta()
           } catch (error) {
             throw new ApolloError(error)
           }

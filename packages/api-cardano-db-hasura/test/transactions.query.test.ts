@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import path from 'path'
-import { gql } from 'apollo-boost'
+// import { gql } from 'apollo-boost'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
@@ -12,15 +12,13 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 }
 
 describe('transactions', () => {
-  let mainnetClient: TestClient
-  let mc4Client: TestClient
+  let client: TestClient
   beforeAll(async () => {
-    mainnetClient = await buildClient('http://localhost:3100', 'http://localhost:8090')
-    mc4Client = await buildClient('http://localhost:3102', 'http://localhost:8092')
+    client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442)
   }, 60000)
 
   it('Returns transactions by hashes', async () => {
-    const result = await mainnetClient.query({
+    const result = await client.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: { hashes: [txe68043.basic.hash, tx05ad8b.basic.hash] }
     })
@@ -32,7 +30,7 @@ describe('transactions', () => {
   })
 
   it('Can return ordered by block index', async () => {
-    const result = await mainnetClient.query({
+    const result = await client.query({
       query: await loadQueryNode('orderedTransactionsInBlock'),
       variables: { blockNumber: 3979532 }
     })
@@ -43,40 +41,40 @@ describe('transactions', () => {
     expect(result.data.transactions[7].blockIndex).toBe(7)
   })
 
-  it('returns an empty array when the transactions has no outputs', async () => {
-    const result = await mc4Client.query({
-      query: gql`query transactionWithNoOutputs(
-          $hash: Hash32HexString!
-      ) {
-          transactions(
-              where: { hash: { _eq: $hash } },
-          ) {
-              outputs {
-                  address
-                  value
-              }
-              outputs_aggregate {
-                  aggregate {
-                      count
-                  }
-              }
-              inputs_aggregate {
-                  aggregate {
-                      count
-                  }
-              }
-          }
-      }`,
-      variables: { hash: '05e5bb869d0a71e3689d7a7d2bcde70494e370df0e8958fb338562d94a7dddb6' }
-    })
-    expect(result.data.transactions.length).toBe(1)
-    expect(result.data.transactions[0].outputs_aggregate.aggregate.count).toBe('0')
-    expect(result.data.transactions[0].outputs).toEqual([])
-    expect(result.data.transactions[0].inputs_aggregate.aggregate.count).toBe('1')
-  })
+  // it('returns an empty array when the transactions has no outputs', async () => {
+  //   const result = await client.query({
+  //     query: gql`query transactionWithNoOutputs(
+  //         $hash: Hash32HexString!
+  //     ) {
+  //         transactions(
+  //             where: { hash: { _eq: $hash } },
+  //         ) {
+  //             outputs {
+  //                 address
+  //                 value
+  //             }
+  //             outputs_aggregate {
+  //                 aggregate {
+  //                     count
+  //                 }
+  //             }
+  //             inputs_aggregate {
+  //                 aggregate {
+  //                     count
+  //                 }
+  //             }
+  //         }
+  //     }`,
+  //     variables: { hash: '05e5bb869d0a71e3689d7a7d2bcde70494e370df0e8958fb338562d94a7dddb6' }
+  //   })
+  //   expect(result.data.transactions.length).toBe(1)
+  //   expect(result.data.transactions[0].outputs_aggregate.aggregate.count).toBe('0')
+  //   expect(result.data.transactions[0].outputs).toEqual([])
+  //   expect(result.data.transactions[0].inputs_aggregate.aggregate.count).toBe('1')
+  // })
 
   it('Can return aggregated data', async () => {
-    const result = await mainnetClient.query({
+    const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinTransaction'),
       variables: { hashes: [txe68043.aggregated.hash, tx05ad8b.aggregated.hash] }
     })
@@ -88,7 +86,7 @@ describe('transactions', () => {
     expect(result.data).toMatchSnapshot()
   })
   it('Can return filtered aggregated data', async () => {
-    const result = await mainnetClient.query({
+    const result = await client.query({
       query: await loadQueryNode('filteredAggregateDataWithinTransaction'),
       variables: { hash: txe68043.aggregated_filtered.hash }
     })

@@ -10,22 +10,20 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 }
 
 describe('Shelley era queries', () => {
-  let mainnetClient: TestClient
-  let mc4Client: TestClient
+  let client: TestClient
   beforeAll(async () => {
-    mainnetClient = await buildClient('http://localhost:3100', 'http://localhost:8090')
-    mc4Client = await buildClient('http://localhost:3102', 'http://localhost:8092')
+    client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442)
   }, 15000)
 
   it('will not throw errors during the Byron era', async () => {
-    const result = await mainnetClient.query({
+    const result = await client.query({
       query: await loadQueryNode('shelleyEraQueries')
     })
     console.log(result)
     // expect(result.data).toMatchSnapshot()
   })
   it('Shelley era smoke test', async () => {
-    const result = await mc4Client.query({
+    const result = await client.query({
       query: await loadQueryNode('shelleyEraQueries')
     })
     console.log(result)

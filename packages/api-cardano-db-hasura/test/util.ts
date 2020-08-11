@@ -4,8 +4,12 @@ import { Db } from '@src/Db'
 import pRetry from 'p-retry'
 import { gql } from 'apollo-boost'
 import util from '@cardano-graphql/util'
+import { HasuraClient } from '@src/HasuraClient'
+import path from 'path'
+import { readSecrets } from '@src/util'
+import { Config } from '@src/Config'
 
-export async function buildClient (apiUri: string, hasuraUri: string) {
+export async function buildClient (apiUri: string, hasuraUri: Config['hasuraUri'], dbPort: Config['db']['port']) {
   if (process.env.TEST_MODE === 'e2e') {
     const client = await utilDev.createE2EClient(apiUri)
     await pRetry(async () => {
@@ -25,9 +29,15 @@ export async function buildClient (apiUri: string, hasuraUri: string) {
     })
     return client
   } else {
-    const db = new Db(hasuraUri)
-    await db.init()
-    const schema = await buildSchema(hasuraUri, db)
+    const hasuraClient = new HasuraClient(hasuraUri)
+    const db = new Db({
+      ...{ host: 'localhost', port: dbPort },
+      ...await readSecrets(path.resolve(__dirname, '..', '..', '..', 'config', 'secrets'))
+    })
+    await db.init({
+      onDbSetup: hasuraClient.applySchemaAndMetadata.bind(hasuraClient)
+    })
+    const schema = await buildSchema(hasuraClient)
     return utilDev.createIntegrationClient(schema)
   }
 }
