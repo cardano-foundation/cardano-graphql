@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import path from 'path'
-// import { gql } from 'apollo-boost'
+import { gql } from 'apollo-boost'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
@@ -41,37 +41,38 @@ describe('transactions', () => {
     expect(result.data.transactions[7].blockIndex).toBe(7)
   })
 
-  // it('returns an empty array when the transactions has no outputs', async () => {
-  //   const result = await client.query({
-  //     query: gql`query transactionWithNoOutputs(
-  //         $hash: Hash32HexString!
-  //     ) {
-  //         transactions(
-  //             where: { hash: { _eq: $hash } },
-  //         ) {
-  //             outputs {
-  //                 address
-  //                 value
-  //             }
-  //             outputs_aggregate {
-  //                 aggregate {
-  //                     count
-  //                 }
-  //             }
-  //             inputs_aggregate {
-  //                 aggregate {
-  //                     count
-  //                 }
-  //             }
-  //         }
-  //     }`,
-  //     variables: { hash: '05e5bb869d0a71e3689d7a7d2bcde70494e370df0e8958fb338562d94a7dddb6' }
-  //   })
-  //   expect(result.data.transactions.length).toBe(1)
-  //   expect(result.data.transactions[0].outputs_aggregate.aggregate.count).toBe('0')
-  //   expect(result.data.transactions[0].outputs).toEqual([])
-  //   expect(result.data.transactions[0].inputs_aggregate.aggregate.count).toBe('1')
-  // })
+  it('returns an empty array when the transactions has no outputs', async () => {
+    const result = await client.query({
+      query: gql`query transactionWithNoOutputs(
+          $hash: Hash32HexString!
+      ) {
+          transactions(
+              where: { hash: { _eq: $hash } },
+          ) {
+              outputs {
+                  address
+                  value
+              }
+              outputs_aggregate {
+                  aggregate {
+                      count
+                  }
+              }
+              inputs_aggregate {
+                  aggregate {
+                      count
+                  }
+              }
+          }
+      }`,
+      variables: { hash: 'b4caa8ed7bbcffb945bfcb7e61bce574cc15822d06c5ac0a74694b232361d09b' }
+    })
+    expect(result.data.transactions.length).toBe(1)
+    expect(result.data.transactions[0].outputs_aggregate.aggregate.count).toBe('0')
+    expect(result.data.transactions[0].outputs).toEqual([])
+    expect(result.data.transactions[0].totalOutput).toEqual('0')
+    expect(result.data.transactions[0].inputs_aggregate.aggregate.count).toBe('1')
+  })
 
   it('Can return aggregated data', async () => {
     const result = await client.query({
