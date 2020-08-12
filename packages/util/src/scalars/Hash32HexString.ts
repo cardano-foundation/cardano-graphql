@@ -18,6 +18,6 @@ export const Hash32HexString = new GraphQLScalarType({
 })
 
 function validateInput (input: string) {
-  if (input.length !== 64) throw new GraphQLError(`${input} is not a valid hash`)
+  if (input.length !== 64 && input.length !== 56) throw new GraphQLError(`${input} is not a valid hash`)
   return `\\x${input}`
 }
