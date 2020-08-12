@@ -135,7 +135,7 @@ SELECT
   tx.id,
   block.time AS "includedAt",
   tx.size,
-  CAST((SELECT SUM("value") FROM tx_out WHERE tx_id = tx.id) AS bigint) AS "totalOutput"
+  CAST(COALESCE((SELECT SUM("value") FROM tx_out WHERE tx_id = tx.id), 0) AS bigint) AS "totalOutput"
 FROM
   tx
 INNER JOIN block
