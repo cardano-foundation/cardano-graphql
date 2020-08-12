@@ -31,7 +31,7 @@ describe('stakePools', () => {
     expect(stakePools[0].pledge).toBeDefined()
     expect(stakePools[0].relays).toBeDefined()
     expect(stakePools[0].retirements).toBeDefined()
-    expect(stakePools[0].rewardAddress.slice(0, 6)).toBe('stake1')
+    expect(stakePools[0].rewardAddress.slice(0, 5)).toBe('stake')
     expect(stakePools[0].updatedIn.hash).toBeDefined()
     expect(stakePools[0].url).toBeDefined()
   })
