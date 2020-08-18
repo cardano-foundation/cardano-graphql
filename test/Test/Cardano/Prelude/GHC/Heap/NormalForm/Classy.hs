@@ -24,8 +24,6 @@ import GHC.Types (IO (..), Int (..))
 import Prelude (String)
 import System.Random (randomRIO)
 import qualified Data.Text as Text
-
-import Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
 import qualified Data.Sequence.Internal as SI
 

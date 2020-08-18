@@ -9,7 +9,6 @@ where
 
 import Cardano.Prelude
 
-import Control.Applicative ((<$>))
 import Data.Text (unpack)
 import Hedgehog
   ( Gen

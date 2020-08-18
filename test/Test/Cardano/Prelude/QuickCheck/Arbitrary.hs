@@ -24,7 +24,6 @@ import Cardano.Prelude
 
 import Data.ByteString (pack)
 import qualified Data.ByteString.Lazy as BL (ByteString, pack)
-import Data.List.NonEmpty (NonEmpty((:|)))
 import Formatting (build, sformat)
 import Test.QuickCheck (Arbitrary(..), Gen, listOf, scale, shuffle, vector)
 import Test.QuickCheck.Gen (unGen)

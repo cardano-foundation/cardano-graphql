@@ -1,8 +1,9 @@
-{-# LANGUAGE DeriveFoldable    #-}
-{-# LANGUAGE DeriveFunctor     #-}
-{-# LANGUAGE DeriveTraversable #-}
-{-# LANGUAGE PolyKinds         #-}
-{-# LANGUAGE TypeFamilies      #-}
+{-# LANGUAGE DeriveFoldable     #-}
+{-# LANGUAGE DeriveFunctor      #-}
+{-# LANGUAGE DerivingStrategies #-}
+{-# LANGUAGE DeriveTraversable  #-}
+{-# LANGUAGE PolyKinds          #-}
+{-# LANGUAGE TypeFamilies       #-}
 
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
@@ -21,7 +22,7 @@ import qualified Test.QuickCheck as QC
 
 
 data Five a = Five a a a a a
-    deriving (Functor, Foldable, Traversable)
+    deriving stock (Functor, Foldable, Traversable)
 
 five :: a -> Five a
 five a = Five a a a a a
