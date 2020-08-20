@@ -7,7 +7,7 @@
 , buildPackages
 , config ? {}
 # GHC attribute name
-, compiler ? config.haskellNix.compiler or "ghc865"
+, compiler ? config.haskellNix.compiler or "ghc8102"
 # Enable profiling
 , profiling ? config.haskellNix.profiling or false
 }:
@@ -23,10 +23,10 @@ let
   pkgSet = haskell-nix.cabalProject {
     inherit src;
     compiler-nix-name = compiler;
-    #ghc = buildPackages.haskell-nix.compiler.${compiler};
     modules = [
       # Allow reinstallation of Win32
-      { nonReinstallablePkgs =
+      ({ pkgs, ... }: lib.mkIf pkgs.stdenv.hostPlatform.isWindows {
+       nonReinstallablePkgs =
         [ "rts" "ghc-heap" "ghc-prim" "integer-gmp" "integer-simple" "base"
           "deepseq" "array" "ghc-boot-th" "pretty" "template-haskell"
           # ghcjs custom packages
@@ -40,7 +40,7 @@ let
           "xhtml"
           # "stm" "terminfo"
         ];
-      }
+      })
       {
           packages.cardano-prelude.configureFlags = [ "--ghc-option=-Werror" ];
           enableLibraryProfiling = profiling;

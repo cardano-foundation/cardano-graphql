@@ -54,11 +54,10 @@ let
 
   # musl64 disabled for now: https://github.com/NixOS/nixpkgs/issues/43795
   #inherit (systems.examples) mingwW64 musl64;
-  inherit (systems.examples) mingwW64 musl64;
 
   jobs = {
     native = mapTestOn (__trace (__toJSON (packagePlatforms project)) (packagePlatforms project));
-    "${mingwW64.config}" = mapTestOnCross mingwW64 (packagePlatformsCross project);
+    #"${mingwW64.config}" = mapTestOnCross mingwW64 (packagePlatformsCross project);
     # musl64 disabled for now: https://github.com/NixOS/nixpkgs/issues/43795
     #musl64 = mapTestOnCross musl64 (packagePlatformsCross project);
   } // (mkRequiredJob (
