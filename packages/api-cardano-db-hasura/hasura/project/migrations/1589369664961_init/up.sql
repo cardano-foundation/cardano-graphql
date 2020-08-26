@@ -34,19 +34,16 @@ CREATE VIEW "Delegation" AS
 SELECT
   delegation.id AS "id",
   (
-	  SELECT stake_address.hash
+	  SELECT stake_address.hash_raw
 	  FROM stake_address
 	  WHERE stake_address.id = delegation.addr_id
   ) AS "address",
   delegation.tx_id AS "tx_id",
-  delegation.update_id AS "update_id",
   pool_hash.hash AS "pool_hash"
 FROM
   delegation
-JOIN pool_update
-  ON delegation.update_id = pool_update.id
 LEFT OUTER JOIN pool_hash
-  ON pool_update.hash_id = pool_hash.id;
+  ON delegation.pool_id = pool_hash.id;
 
 CREATE VIEW "Epoch" AS
 SELECT
@@ -63,7 +60,7 @@ SELECT
   reward.amount AS "amount",
   reward.id AS "id",
   (
-	  SELECT stake_address.hash
+	  SELECT stake_address.hash_raw
 	  FROM stake_address
 	  WHERE stake_address.id = reward.addr_id
   ) AS "address",
@@ -82,7 +79,7 @@ CREATE VIEW "StakeDeregistration" AS
 SELECT
   stake_deregistration.id AS "id",
   (
-	  SELECT stake_address.hash
+	  SELECT stake_address.hash_raw
 	  FROM stake_address
 	  WHERE stake_address.id = stake_deregistration.addr_id
   ) AS "address",
@@ -107,7 +104,7 @@ SELECT
   block.block_no AS "blockNo",
   pool.registered_tx_id AS "updated_in_tx_id",
   pool.pledge AS "pledge",
-  ( SELECT stake_address.hash FROM stake_address WHERE stake_address.id = pool.reward_addr_id) AS "rewardAddress",
+  ( SELECT stake_address.hash_raw FROM stake_address WHERE stake_address.id = pool.reward_addr_id) AS "rewardAddress",
   pool_meta_data.url AS "url"
 FROM pool_update AS pool
   INNER JOIN pool_meta_data ON pool.meta = pool_meta_data.id
@@ -119,7 +116,7 @@ CREATE VIEW "StakeRegistration" AS
 SELECT
   stake_registration.id AS "id",
   (
-	  SELECT stake_address.hash
+	  SELECT stake_address.hash_raw
 	  FROM stake_address
 	  WHERE stake_address.id = stake_registration.addr_id
   ) AS "address",
@@ -186,7 +183,7 @@ SELECT
   withdrawal.amount AS "amount",
   withdrawal.id AS "id",
   (
-	  SELECT stake_address.hash
+	  SELECT stake_address.hash_raw
 	  FROM stake_address
 	  WHERE stake_address.id = withdrawal.addr_id
   ) AS "address",
