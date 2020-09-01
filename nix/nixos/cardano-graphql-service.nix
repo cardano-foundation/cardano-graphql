@@ -11,11 +11,12 @@ in {
 
       dbHost = lib.mkOption {
         type = lib.types.str;
-        default = "127.0.0.1";
+        default = "/run/postgresql";
       };
 
       dbPassword = lib.mkOption {
         type = lib.types.str;
+        default = ''""'';
       };
 
       dbPort = lib.mkOption {
