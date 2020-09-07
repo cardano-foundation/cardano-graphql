@@ -48,7 +48,6 @@ COPY --from=builder /application/packages/util/dist /application/packages/util/d
 COPY --from=builder /application/packages/util/package.json /application/packages/util/package.json
 COPY --from=production_deps /application/node_modules /application/node_modules
 COPY --from=downloader /usr/local/bin/hasura /usr/local/bin/hasura
-WORKDIR /application
 WORKDIR /application/packages/server/dist
 EXPOSE 3100
 CMD ["node", "index.js"]
