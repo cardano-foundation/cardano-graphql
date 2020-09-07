@@ -42,7 +42,7 @@ describe('stakePools', () => {
     })
     const { stakePools_aggregate } = result.data
     expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(900)
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(1000)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(1500)
   })
 
   it('can return aggregated data on active stake pools', async () => {
@@ -52,7 +52,7 @@ describe('stakePools', () => {
     })
     const { stakePools_aggregate } = result.data
     expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(800)
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(1000)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(1500)
   })
 
   it('can return aggregated data on retiring stake pools', async () => {
@@ -62,6 +62,6 @@ describe('stakePools', () => {
     })
     const { stakePools_aggregate } = result.data
     expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(0)
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(100)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(200)
   })
 })

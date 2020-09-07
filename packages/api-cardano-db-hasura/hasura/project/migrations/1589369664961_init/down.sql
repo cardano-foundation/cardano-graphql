@@ -8,6 +8,7 @@ DROP VIEW if EXISTS
   "StakeDeregistration",
   "StakePool",
   "StakeRegistration",
+  "StakePoolRetirement",
   "Transaction",
   "TransactionInput",
   "TransactionOutput",

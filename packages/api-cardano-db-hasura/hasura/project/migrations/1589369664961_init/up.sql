@@ -115,6 +115,13 @@ FROM pool_update AS pool
   INNER JOIN latest_block_times ON latest_block_times.hash_id = pool.hash_id
   INNER JOIN block ON tx.block = block.id AND latest_block_times.blockTime = block.time;
 
+CREATE VIEW "StakePoolRetirement" AS
+SELECT
+  retiring_epoch as "inEffectFrom",
+  announced_tx_id as "tx_id",
+  ( SELECT pool_hash.hash FROM pool_hash WHERE pool_hash.id = hash_id ) AS "pool_hash"
+FROM pool_retire;
+
 CREATE VIEW "StakeRegistration" AS
 SELECT
   stake_registration.id AS "id",

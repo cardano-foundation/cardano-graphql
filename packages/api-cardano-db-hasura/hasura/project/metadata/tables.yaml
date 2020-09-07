@@ -275,9 +275,9 @@
       manual_configuration:
         remote_table:
           schema: public
-          name: pool_retire
+          name: StakePoolRetirement
         column_mapping:
-          id: update_id
+          hash: pool_hash
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -289,6 +289,42 @@
       - pledge
       - rewardAddress
       - url
+      filter: {}
+      limit: 100
+      allow_aggregations: true
+- table:
+    schema: public
+    name: StakePoolRetirement
+  object_relationships:
+  - name: announcedIn
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
+  - name: retiredInEpoch
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Epoch
+        column_mapping:
+          inEffectFrom: transactionsCount
+  - name: stakePool
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: StakePool
+        column_mapping:
+          pool_hash: hash
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - inEffectFrom
       filter: {}
       limit: 100
       allow_aggregations: true
@@ -515,46 +551,6 @@
       - ipv4
       - ipv6
       - port
-      filter: {}
-      limit: 100
-      allow_aggregations: true
-- table:
-    schema: public
-    name: pool_retire
-  configuration:
-    custom_root_fields: {}
-    custom_column_names:
-      retiring_epoch: inEffectFrom
-  object_relationships:
-  - name: announcedIn
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: Transaction
-        column_mapping:
-          announced_tx_id: id
-  - name: retiredInEpoch
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: Epoch
-        column_mapping:
-          retiring_epoch: number
-  - name: stakePool
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: StakePool
-        column_mapping:
-          update_id: id
-  select_permissions:
-  - role: cardano-graphql
-    permission:
-      columns:
-      - retiring_epoch
       filter: {}
       limit: 100
       allow_aggregations: true
