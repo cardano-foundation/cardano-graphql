@@ -39,14 +39,11 @@ SELECT
 	  WHERE stake_address.id = delegation.addr_id
   ) AS "address",
   delegation.tx_id AS "tx_id",
-  delegation.update_id AS "update_id",
   pool_hash.hash AS "pool_hash"
 FROM
   delegation
-JOIN pool_update
-  ON delegation.update_id = pool_update.id
 LEFT OUTER JOIN pool_hash
-  ON pool_update.hash_id = pool_hash.id;
+  ON delegation.pool_id = pool_hash.id;
 
 CREATE VIEW "Epoch" AS
 SELECT
@@ -114,6 +111,13 @@ FROM pool_update AS pool
   INNER JOIN tx ON pool.registered_tx_id = tx.id
   INNER JOIN latest_block_times ON latest_block_times.hash_id = pool.hash_id
   INNER JOIN block ON tx.block = block.id AND latest_block_times.blockTime = block.time;
+
+CREATE VIEW "StakePoolRetirement" AS
+SELECT
+  retiring_epoch as "inEffectFrom",
+  announced_tx_id as "tx_id",
+  ( SELECT pool_hash.hash FROM pool_hash WHERE pool_hash.id = hash_id ) AS "pool_hash"
+FROM pool_retire;
 
 CREATE VIEW "StakeRegistration" AS
 SELECT

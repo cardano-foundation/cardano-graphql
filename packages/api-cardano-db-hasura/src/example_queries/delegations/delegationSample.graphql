@@ -1,0 +1,11 @@
+query delegationSample (
+    $limit: Int!
+    $where: Delegation_bool_exp
+) {
+    delegations (limit: $limit, where: $where) {
+        address
+        stakePool {
+            hash
+        }
+    }
+}

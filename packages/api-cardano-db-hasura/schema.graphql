@@ -51,16 +51,16 @@ type Query {
   ): Epoch_aggregate!
   stakeDeregistrations (
     limit: Int
-    order_by: [StakeRegistration_order_by!]
+    order_by: [StakeDeregistration_order_by!]
     offset: Int
-    where: StakeRegistration_bool_exp
-  ): [StakeRegistration]
+    where: StakeDeregistration_bool_exp
+  ): [StakeDeregistration]
   stakeDeregistrations_aggregate (
     limit: Int
-    order_by: [StakeRegistration_order_by!]
+    order_by: [StakeDeregistration_order_by!]
     offset: Int
-    where: StakeRegistration_bool_exp
-  ): StakeRegistration_aggregate
+    where: StakeDeregistration_bool_exp
+  ): StakeDeregistration_aggregate
   stakePools (
     limit: Int
     order_by: [StakePool_order_by!]
@@ -158,27 +158,7 @@ type Delegation_aggregate {
 }
 
 type Delegation_aggregate_fields {
-  avg: Delegation_avg_fields
   count: String
-  max: Delegation_max_fields
-  min: Delegation_min_fields
-  sum: Delegation_sum_fields
-}
-
-type Delegation_avg_fields {
-  stakePool: StakePool_avg_fields
-}
-
-type Delegation_max_fields {
-  stakePool: StakePool_avg_fields
-}
-
-type Delegation_min_fields {
-  stakePool: StakePool_avg_fields
-}
-
-type Delegation_sum_fields {
-  stakePool: StakePool_avg_fields
 }
 
 type Relay {
@@ -193,6 +173,32 @@ input Relay_bool_exp {
   ipv6: text_comparison_exp
   dnsName: text_comparison_exp
   dnsSrvName: text_comparison_exp
+}
+
+type StakeDeregistration {
+  address: String!
+  transaction: Transaction!
+}
+
+type StakeDeregistration_aggregate {
+  aggregate: StakeDeregistration_aggregate_fields
+}
+
+type StakeDeregistration_aggregate_fields {
+  count: String
+}
+
+input StakeDeregistration_order_by {
+  address: text_comparison_exp
+  transaction: Transaction_order_by
+}
+
+input StakeDeregistration_bool_exp {
+  _and: [StakeDeregistration_bool_exp]
+  _not: StakeDeregistration_bool_exp
+  _or: [StakeDeregistration_bool_exp]
+  address: text_comparison_exp
+  transaction: Transaction_bool_exp
 }
 
 type SlotLeader {
@@ -215,16 +221,13 @@ type StakePool {
   owners: [StakePoolOwner!]!
   pledge: String!
   relays: [Relay]
-  retirement: StakePoolRetirement
+  retirements: [StakePoolRetirement]
   rewardAddress: String!
   updatedIn: Transaction!
   url: URL
   withdrawals: [Withdrawal]
 }
 
-input StakePoolOwner_bool_exp {
-  hash: Hash32HexString_comparison_exp
-}
 
 input StakePool_order_by {
   fixedCost: order_by
@@ -246,7 +249,7 @@ input StakePool_bool_exp {
   pledge: text_comparison_exp
   registrationTransaction: Transaction_bool_exp
   relays: Relay_bool_exp
-  retirement: Relay_bool_exp
+  retirements: StakePoolRetirement_bool_exp
   rewardAddress: text_comparison_exp
   url: text_comparison_exp
   withdrawals: Withdrawal_bool_exp
@@ -288,10 +291,25 @@ type StakePool_sum_fields {
   pledge: String
 }
 
-type StakeDeregistration {
-  address: String!
-  transaction: Transaction!
+input StakePoolOwner_bool_exp {
+  hash: Hash32HexString_comparison_exp
 }
+
+type StakePoolRetirement {
+  announcedIn: Transaction
+  inEffectFrom: Int!
+  retiredInEpoch: Epoch
+}
+
+input StakePoolRetirement_bool_exp {
+  announcedIn: Transaction_bool_exp
+  inEffectFrom: Epoch_bool_exp
+}
+
+type StakePoolOwner {
+  hash: Hash32HexString!
+}
+
 
 type StakeRegistration {
   address: String!
@@ -316,41 +334,7 @@ type StakeRegistration_aggregate {
 }
 
 type StakeRegistration_aggregate_fields {
-  avg: StakeRegistration_avg_fields
   count: String
-  max: StakeRegistration_max_fields
-  min: StakeRegistration_min_fields
-  sum: StakeRegistration_sum_fields
-}
-
-type StakeRegistration_avg_fields {
-  transaction: Transaction_avg_fields
-}
-
-type StakeRegistration_max_fields {
-  transaction: Transaction_max_fields
-}
-
-type StakeRegistration_min_fields {
-  transaction: Transaction_min_fields
-}
-
-type StakeRegistration_sum_fields {
-  transaction: Transaction_sum_fields
-}
-
-type StakePoolRetirement {
-  announcedIn: Transaction!
-  inEffectFrom: Epoch!
-}
-
-input StakePoolRetirement_bool_exp {
-  announcedIn: Transaction_bool_exp
-  inEffectFrom: Epoch_bool_exp
-}
-
-type StakePoolOwner {
-  hash: Hash32HexString!
 }
 
 type Transaction {

@@ -1,0 +1,16 @@
+query aggregateWithdrawals {
+    withdrawals_aggregate {
+        aggregate {
+            count
+            max {
+                amount
+            }
+            min {
+                amount
+            }
+            sum {
+                amount
+            }
+        }
+    }
+}
