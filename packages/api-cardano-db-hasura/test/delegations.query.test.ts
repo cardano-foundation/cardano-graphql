@@ -25,6 +25,7 @@ describe('delegations', () => {
     expect(delegations.length).toBe(5)
     expect(delegations[0].address.slice(0, 5)).toBe('stake')
     expect(delegations[0].stakePool.hash).toBeDefined()
+    expect(delegations[0].transaction.block.number).toBeDefined()
   })
 
   it('can return aggregated data on all delegations', async () => {

@@ -138,11 +138,13 @@ type CardanoDbMeta {
 type Delegation {
   address: String!
   stakePool: StakePool!
+  transaction: Transaction
 }
 
 input Delegation_order_by {
   address: text_comparison_exp
   stakePool: StakePool_order_by
+  transaction: Transaction_order_by
 }
 
 input Delegation_bool_exp {
@@ -151,6 +153,7 @@ input Delegation_bool_exp {
   _or: [Delegation_bool_exp]
   address: text_comparison_exp
   stakePool: StakePool_bool_exp
+  transaction: Transaction_bool_exp
 }
 
 type Delegation_aggregate {
