@@ -1,0 +1,24 @@
+query stakePoolsSummary (
+    $where: StakePool_bool_exp
+)  {
+    stakePools_aggregate (where: $where){
+        aggregate {
+            count
+            avg {
+                fixedCost
+                margin
+                pledge
+            }
+            max {
+                fixedCost
+                margin
+                pledge
+            }
+            sum {
+                fixedCost
+                margin
+                pledge
+            }
+        }
+    }
+}
