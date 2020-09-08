@@ -7,5 +7,12 @@ query delegationSample (
         stakePool {
             hash
         }
+        transaction {
+            fee
+            totalOutput
+            block {
+                number
+            }
+        }
     }
 }
