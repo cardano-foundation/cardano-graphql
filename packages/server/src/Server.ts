@@ -19,6 +19,7 @@ export type Config = {
   allowedOrigins?: CorsOptions['origin']
   apiPort: number
   cacheEnabled: boolean
+  listenAddress: string
   prometheusMetrics: boolean
   queryDepthLimit?: number
   tracing: boolean
@@ -86,18 +87,17 @@ export class Server {
   }
 
   async start () {
-    this.httpServer = await listenPromise(this.app, { port: this.config.apiPort })
-    console.log(
-      `GraphQL HTTP server at http://localhost:${this.config.apiPort}${this.apolloServer.graphqlPath}`
+    this.httpServer = await listenPromise(this.app, this.config.apiPort, this.config.listenAddress)
+    console.log(`GraphQL HTTP server at http://${this.config.listenAddress}:` +
+      `${this.config.apiPort}${this.apolloServer.graphqlPath} started`
     )
   }
 
   shutdown () {
     if (this.httpServer !== undefined) {
       this.httpServer.close()
-      console.log(
-        `GraphQL HTTP server at http://localhost:${this.config.apiPort}${this.apolloServer.graphqlPath}
-      shutting down`
+      console.log(`GraphQL HTTP server at http://${this.config.listenAddress}:` +
+        `${this.config.apiPort}${this.apolloServer.graphqlPath} shutting down`
       )
     }
   }
