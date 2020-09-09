@@ -29,7 +29,7 @@ CREATE OR REPLACE VIEW "Cardano" AS
   WHERE (block.block_no IS NOT NULL)
   ORDER BY block.block_no DESC
  LIMIT 1;
- 
+
 CREATE VIEW "Delegation" AS
 SELECT
   delegation.id AS "id",
@@ -43,7 +43,7 @@ SELECT
 FROM
   delegation
 LEFT OUTER JOIN pool_hash
-  ON delegation.pool_id = pool_hash.id;
+  ON delegation.pool_hash_id = pool_hash.id;
 
 CREATE VIEW "Epoch" AS
 SELECT
