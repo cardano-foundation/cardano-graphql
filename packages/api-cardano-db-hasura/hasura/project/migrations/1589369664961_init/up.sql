@@ -43,7 +43,7 @@ SELECT
 FROM
   delegation
 LEFT OUTER JOIN pool_hash
-  ON delegation.pool_id = pool_hash.id;
+  ON delegation.pool_hash_id = pool_hash.id;
 
 CREATE VIEW "Epoch" AS
 SELECT
@@ -197,6 +197,18 @@ SELECT
   withdrawal.tx_id AS "tx_id"
 FROM withdrawal;
 
+CREATE INDEX idx_block_hash
+    ON block(hash);
+
+CREATE INDEX idx_tx_hash
+    ON tx(hash);
+
+ CREATE INDEX idx_tx_in_consuming_tx
+    ON tx_in(tx_out_id);
+
+CREATE INDEX idx_tx_out_tx
+    ON tx_out(tx_id);
+
 CREATE function utxo_set_at_block("hash" hash32type)
 RETURNS SETOF "TransactionOutput" AS $$
   SELECT
@@ -215,3 +227,4 @@ RETURNS SETOF "TransactionOutput" AS $$
   WHERE tx_in.tx_in_id IS NULL
   AND tx.block <= (SELECT id FROM block WHERE hash = "hash")
 $$ LANGUAGE SQL stable;
+

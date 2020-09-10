@@ -261,7 +261,7 @@
           schema: public
           name: pool_owner
         column_mapping:
-          id: pool_id
+          id: pool_hash_id
   - name: relays
     using:
       manual_configuration:
@@ -521,7 +521,7 @@
           schema: public
           name: StakePool
         column_mapping:
-          pool_id: id
+          pool_hash_id: id
   select_permissions:
   - role: cardano-graphql
     permission:
