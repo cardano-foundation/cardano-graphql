@@ -24,7 +24,7 @@ services:
         max-size: "200k"
         max-file: "10"
   cardano-node:
-    image: rhyslbw/cardano-node:${CARDANO_NODE_VERSION:-a4b6dae699fa21dc3c025c8a83d1718475cb3afc}
+    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-1.19.1}
     command: [
       "run",
       "--config", "/config/config.json",
@@ -44,7 +44,7 @@ services:
         max-size: "400k"
         max-file: "20"
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-36e7621fa5ecb4be923569f735b74d60a26da6c1}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-master}
     command: [
       "--config", "/config/config.json",
       "--socket-path", "/node-ipc/node.socket"
@@ -101,12 +101,14 @@ services:
     build:
       context: .
       target: server
+      args:
+        - NETWORK=${NETWORK:-mainnet}
     image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-2.0.0}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
-      - GENESIS_FILE_BYRON=/genesis/byron.json
-      - GENESIS_FILE_SHELLEY=/genesis/shelley.json
+      - GENESIS_FILE_BYRON=/config/genesis/byron.json
+      - GENESIS_FILE_SHELLEY=/config/genesis/shelley.json
       - HASURA_URI=http://hasura:8080
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
@@ -127,8 +129,6 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-    volumes:
-      - ./config/network/${NETWORK:-mainnet}/genesis:/genesis
 secrets:
   postgres_db:
     file: ./config/secrets/postgres_db

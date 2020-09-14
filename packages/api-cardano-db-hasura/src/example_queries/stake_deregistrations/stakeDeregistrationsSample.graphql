@@ -1,0 +1,11 @@
+query stakeDeregistrationsSample (
+    $limit: Int!
+    $where: StakeDeregistration_bool_exp
+) {
+    stakeDeregistrations (limit: $limit, where: $where) {
+        address
+        transaction {
+            hash
+        }
+    }
+}
