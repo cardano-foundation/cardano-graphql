@@ -45,6 +45,7 @@ export const block29021 = {
           totalOutput: '768402828930'
         },
         sum: {
+          deposit: '0',
           fee: '342316',
           size: '436',
           totalOutput: '5693202307590'

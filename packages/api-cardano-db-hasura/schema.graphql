@@ -343,6 +343,7 @@ type StakeRegistration_aggregate_fields {
 type Transaction {
   block: Block
   blockIndex: Int!
+  deposit: BigInt!
   fee: BigInt!
   hash: Hash32HexString!
   inputs (
@@ -377,6 +378,7 @@ type Transaction {
 input Transaction_order_by {
   block: order_by
   blockIndex: order_by
+  deposit: order_by
   fee: order_by
   includedAt: order_by
   size: order_by
@@ -389,6 +391,7 @@ input Transaction_bool_exp {
   _or: [Transaction_bool_exp]
   block: Block_bool_exp
   blockIndex: Int_comparison_exp
+  deposit: BigInt_comparison_exp
   fee: BigInt_comparison_exp
   hash: Hash32HexString_comparison_exp
   includedAt: Date_comparison_exp
@@ -411,24 +414,28 @@ type Transaction_aggregate_fields {
 }
 
 type Transaction_avg_fields {
+  deposit: Float
   fee: Float
   size: Float
   totalOutput: Float
 }
 
 type Transaction_max_fields {
+  deposit: String
   fee: String
   size: String
   totalOutput: String
 }
 
 type Transaction_min_fields {
+  deposit: String
   fee: String
   size: String
   totalOutput: String
 }
 
 type Transaction_sum_fields {
+  deposit: String
   fee: String
   size: String
   totalOutput: String

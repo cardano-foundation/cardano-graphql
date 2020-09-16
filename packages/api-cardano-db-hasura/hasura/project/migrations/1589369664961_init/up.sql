@@ -134,6 +134,7 @@ CREATE VIEW "Transaction" AS
 SELECT
   block.hash AS "blockHash",
   tx.block_index AS "blockIndex",
+  tx.deposit AS "deposit",
   COALESCE(tx.fee, 0) AS fee,
   tx.hash,
   tx.id,

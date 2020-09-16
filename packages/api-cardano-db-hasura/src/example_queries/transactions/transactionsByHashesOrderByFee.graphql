@@ -9,6 +9,7 @@ query transactionsByHashesOrderByFee(
             number
         }
         blockIndex
+        deposit
         fee
         hash
         inputs(order_by: { sourceTxHash: asc }) {
