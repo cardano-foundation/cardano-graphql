@@ -2,6 +2,7 @@ export const epoch1 = {
   basic: {
     startedAt: '2017-09-28T21:44:51Z',
     blocksCount: '21590',
+    fees: 1033002678,
     lastBlockTime: '2017-10-03T21:44:31Z',
     output: '101402912214214220',
     number: 1,
@@ -30,6 +31,7 @@ export const epoch1 = {
         }
       }
     },
+    fees: 1033002678,
     number: 1
   }
 }

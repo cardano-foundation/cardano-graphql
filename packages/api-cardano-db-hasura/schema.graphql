@@ -664,6 +664,7 @@ type Epoch {
     where: Block_bool_exp
   ): Block_aggregate!
   blocksCount: String!
+  fees: BigInt!
   output: String!
   number: Int!
   transactionsCount: String!
@@ -677,6 +678,7 @@ input Epoch_bool_exp {
   _or: [Epoch_bool_exp]
   blocks: Block_bool_exp
   blocksCount: text_comparison_exp
+  fees: BigInt_comparison_exp
   number: Int_comparison_exp
   output: text_comparison_exp
   transactionsCount: text_comparison_exp
@@ -684,6 +686,7 @@ input Epoch_bool_exp {
 
 input Epoch_order_by {
   blocksCount: order_by
+  fees: order_by
   number: order_by
   output: order_by
   transactionsCount: order_by
@@ -702,6 +705,7 @@ type Epoch_aggregate_fields {
 
 type Epoch_max_fields {
   blocksCount: String!
+  fees: String!
   number: Int!
   output: String!
   transactionsCount: String!
@@ -709,12 +713,14 @@ type Epoch_max_fields {
 
 type Epoch_min_fields {
   blocksCount: String!
+  fees: String!
   output: String!
   transactionsCount: String!
 }
 
 type Epoch_sum_fields {
   blocksCount: String!
+  fees: String!
   output: String!
   transactionsCount: String!
 }

@@ -3,6 +3,7 @@ query epochDetailsInRange (
 ) {
     epochs( where: { number: { _in: $numbers }}) {
         blocksCount
+        fees
         output
         number
         transactionsCount

@@ -3,6 +3,7 @@ query epochDetailsByNumber (
 ){
     epochs( where: { number: { _eq: $number }}) {
         blocksCount
+        fees
         output
         number
         transactionsCount
