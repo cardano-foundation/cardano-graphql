@@ -68,11 +68,24 @@ export class HasuraClient {
         throw error
       }
     }
-
-    return wrapSchema({
+    const coreTypes = [
+      'Block',
+      'Cardano',
+      'Epoch',
+      'Block',
+      'Transaction'
+    ]
+    const schema = wrapSchema({
       schema: await introspectSchema(executor),
       executor
     })
+    for (const t of coreTypes) {
+      const gqlType = schema.getType(t)
+      if (!gqlType) {
+        throw new Error(`Remote schema is missing ${t}`)
+      }
+    }
+    return schema
   }
 
   public async getMeta () {
