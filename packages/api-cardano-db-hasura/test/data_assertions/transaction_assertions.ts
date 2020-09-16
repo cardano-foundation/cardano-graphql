@@ -4,6 +4,7 @@ export const txe68043 = {
     block: {
       number: 29021
     },
+    deposit: 0,
     fee: 171070,
     hash: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
     includedAt: '2017-09-30T15:03:11Z',
@@ -23,6 +24,7 @@ export const txe68043 = {
     totalOutput: '768402828930'
   },
   aggregated: {
+    deposit: 0,
     fee: 171070,
     hash: 'e680432562b3b71fe44ca4eb8e29cb181d3a0858b3e2a643a55f7513d901bcae',
     inputs_aggregate: {
@@ -80,6 +82,7 @@ export const tx05ad8b = {
     block: {
       number: 29021
     },
+    deposit: 0,
     fee: 171246,
     hash: '05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102',
     includedAt: '2017-09-30T15:03:11Z',
@@ -99,6 +102,7 @@ export const tx05ad8b = {
     totalOutput: '4924799478660'
   },
   aggregated: {
+    deposit: 0,
     fee: 171246,
     hash: '05ad8b467095e0886713a38231ab9fe84e4031a433a9400ebf70ec9415e20102',
     inputs_aggregate: {

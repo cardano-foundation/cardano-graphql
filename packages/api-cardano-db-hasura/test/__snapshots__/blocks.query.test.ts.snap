@@ -24,6 +24,7 @@ Object {
             "totalOutput": "768402828930",
           },
           "sum": Object {
+            "deposit": "0",
             "fee": "342316",
             "size": "436",
             "totalOutput": "5693202307590",

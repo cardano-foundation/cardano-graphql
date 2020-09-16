@@ -393,6 +393,7 @@
       columns:
       - blockHash
       - blockIndex
+      - deposit
       - fee
       - hash
       - includedAt
