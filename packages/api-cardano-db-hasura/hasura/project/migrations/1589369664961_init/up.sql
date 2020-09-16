@@ -47,6 +47,7 @@ LEFT OUTER JOIN pool_hash
 
 CREATE VIEW "Epoch" AS
 SELECT
+  epoch.fees AS "fees",
   epoch.out_sum AS "output",
   epoch.no AS "number",
   epoch.tx_count AS "transactionsCount",
