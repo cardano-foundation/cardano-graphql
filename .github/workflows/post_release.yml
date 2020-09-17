@@ -1,0 +1,31 @@
+name: Post-release
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  publish-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+        run: |
+          yarn --cwd ./docs install --frozen-lockfile
+          yarn --cwd ./docs build
+        env:
+          SKIP_PREFLIGHT_CHECK: true
+       - name: Deploy
+         uses: JamesIves/github-pages-deploy-action@3.6.1
+         with:
+           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+           BRANCH: gh-pages
+           FOLDER: ./docs/build
+           CLEAN: true
