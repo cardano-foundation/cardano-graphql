@@ -36,6 +36,7 @@ query aggregatedDataWithinBlock (
                     totalOutput
                 }
                 sum {
+                    deposit
                     fee
                     size
                     totalOutput

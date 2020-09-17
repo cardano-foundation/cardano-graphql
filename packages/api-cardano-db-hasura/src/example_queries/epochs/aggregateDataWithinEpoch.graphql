@@ -24,6 +24,7 @@ query aggregatedDataWithinEpoch (
                 }
             }
         }
+        fees
         number
     }
 }

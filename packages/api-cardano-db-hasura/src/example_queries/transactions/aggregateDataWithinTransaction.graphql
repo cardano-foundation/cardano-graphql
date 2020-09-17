@@ -5,6 +5,7 @@ query aggregatedDataWithinTransaction(
         where: { hash: { _in: $hashes }},
         order_by: { fee: desc }
     ) {
+        deposit
         fee
         hash
         inputs_aggregate {

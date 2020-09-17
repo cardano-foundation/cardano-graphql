@@ -6,6 +6,7 @@ query orderedTransactionsInBlock(
         order_by: { blockIndex: asc }
     ) {
         blockIndex
+        deposit
         fee
         hash
         size

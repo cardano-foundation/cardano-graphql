@@ -343,6 +343,7 @@ type StakeRegistration_aggregate_fields {
 type Transaction {
   block: Block
   blockIndex: Int!
+  deposit: BigInt!
   fee: BigInt!
   hash: Hash32HexString!
   inputs (
@@ -377,6 +378,7 @@ type Transaction {
 input Transaction_order_by {
   block: order_by
   blockIndex: order_by
+  deposit: order_by
   fee: order_by
   includedAt: order_by
   size: order_by
@@ -389,6 +391,7 @@ input Transaction_bool_exp {
   _or: [Transaction_bool_exp]
   block: Block_bool_exp
   blockIndex: Int_comparison_exp
+  deposit: BigInt_comparison_exp
   fee: BigInt_comparison_exp
   hash: Hash32HexString_comparison_exp
   includedAt: Date_comparison_exp
@@ -411,24 +414,28 @@ type Transaction_aggregate_fields {
 }
 
 type Transaction_avg_fields {
+  deposit: Float
   fee: Float
   size: Float
   totalOutput: Float
 }
 
 type Transaction_max_fields {
+  deposit: String
   fee: String
   size: String
   totalOutput: String
 }
 
 type Transaction_min_fields {
+  deposit: String
   fee: String
   size: String
   totalOutput: String
 }
 
 type Transaction_sum_fields {
+  deposit: String
   fee: String
   size: String
   totalOutput: String
@@ -657,6 +664,7 @@ type Epoch {
     where: Block_bool_exp
   ): Block_aggregate!
   blocksCount: String!
+  fees: BigInt!
   output: String!
   number: Int!
   transactionsCount: String!
@@ -670,6 +678,7 @@ input Epoch_bool_exp {
   _or: [Epoch_bool_exp]
   blocks: Block_bool_exp
   blocksCount: text_comparison_exp
+  fees: BigInt_comparison_exp
   number: Int_comparison_exp
   output: text_comparison_exp
   transactionsCount: text_comparison_exp
@@ -677,6 +686,7 @@ input Epoch_bool_exp {
 
 input Epoch_order_by {
   blocksCount: order_by
+  fees: order_by
   number: order_by
   output: order_by
   transactionsCount: order_by
@@ -695,6 +705,7 @@ type Epoch_aggregate_fields {
 
 type Epoch_max_fields {
   blocksCount: String!
+  fees: String!
   number: Int!
   output: String!
   transactionsCount: String!
@@ -702,12 +713,14 @@ type Epoch_max_fields {
 
 type Epoch_min_fields {
   blocksCount: String!
+  fees: String!
   output: String!
   transactionsCount: String!
 }
 
 type Epoch_sum_fields {
   blocksCount: String!
+  fees: String!
   output: String!
   transactionsCount: String!
 }

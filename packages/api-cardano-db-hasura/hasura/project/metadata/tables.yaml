@@ -156,12 +156,13 @@
   - role: cardano-graphql
     permission:
       columns:
-      - output
-      - number
-      - transactionsCount
-      - startedAt
-      - lastBlockTime
       - blocksCount
+      - fees
+      - lastBlockTime
+      - number
+      - output
+      - startedAt
+      - transactionsCount
       filter: {}
       limit: 100
       allow_aggregations: true
@@ -393,6 +394,7 @@
       columns:
       - blockHash
       - blockIndex
+      - deposit
       - fee
       - hash
       - includedAt

@@ -47,6 +47,7 @@ LEFT OUTER JOIN pool_hash
 
 CREATE VIEW "Epoch" AS
 SELECT
+  epoch.fees AS "fees",
   epoch.out_sum AS "output",
   epoch.no AS "number",
   epoch.tx_count AS "transactionsCount",
@@ -134,6 +135,7 @@ CREATE VIEW "Transaction" AS
 SELECT
   block.hash AS "blockHash",
   tx.block_index AS "blockIndex",
+  tx.deposit AS "deposit",
   COALESCE(tx.fee, 0) AS fee,
   tx.hash,
   tx.id,
