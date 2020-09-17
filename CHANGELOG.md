@@ -1,5 +1,40 @@
-Changelog
-=========
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [2.1.0](https://github.com/input-output-hk/cardano-graphql/compare/2.0.0...2.1.0) (2020-09-17)
+
+### Compatible with:
+
+- [`cardano-node`: `1.19.1`](https://github.com/input-output-hk/cardano-node/releases/tag/1.19.1)
+- [`cardano-db-sync`: `5.0.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/5.0.0) - Note: The database must be recreated using the new version.
+
+### Features
+
+* **api-cardano-db-hasura:** add custom $SECRET_DIR support for docker image ([ff79b10](https://github.com/input-output-hk/cardano-graphql/commit/ff79b10e9a14ec457c5515fe68c2ec27cd2207ba))
+* **api-cardano-db-hasura:** add Epoch.fees ([4482338](https://github.com/input-output-hk/cardano-graphql/commit/4482338138b417eccb4cff9dd75d0bf9bd9e36af))
+* **api-cardano-db-hasura:** add Transaction.deposit ([2726d80](https://github.com/input-output-hk/cardano-graphql/commit/2726d8052760aa4ccba8f679d4c938754887f61f))
+* Add build arg to include genesis files ([c06912d](https://github.com/input-output-hk/cardano-graphql/commit/c06912d3203e9592e3b707c3919056acdef5a6a7))
+* Improve logging during retry attempts ([e24df95](https://github.com/input-output-hk/cardano-graphql/commit/e24df95dabad423f925ca061ffd668a7f1d05be2))
+* replace DB polling with postgres notification listener for migrations ([e42eb3d](https://github.com/input-output-hk/cardano-graphql/commit/e42eb3d331c9a28c71e9e1bbd1fb9aebdad35eb6))
+
+### Bug Fixes
+
+* add missing GraphQL model for Delegation.transaction ([3ac55b1](https://github.com/input-output-hk/cardano-graphql/commit/3ac55b13cddb1bffe7c6335a3e80f4ec96dd2b3d))
+* address ordering type mismatch in GraphQL schema ([45f3c73](https://github.com/input-output-hk/cardano-graphql/commit/45f3c737b3316e87fbb5482b7f415b195f3b796a))
+* ensure migration is run before introspection ([079a248](https://github.com/input-output-hk/cardano-graphql/commit/079a248eaa10de9a31f193c420988ada49661c30))
+* include @types/* packages in workspace devDependencies ([6c5f075](https://github.com/input-output-hk/cardano-graphql/commit/6c5f075de8541c7983f01cc3194bcc04664b375c))
+* include pools without metadata in StakePool view ([d978094](https://github.com/input-output-hk/cardano-graphql/commit/d978094dda3b504205e468822e6f42141214fd99))
+* **api-cardano-db-hasura:** harden schema introspection ([3ca88b4](https://github.com/input-output-hk/cardano-graphql/commit/3ca88b4dd126ba0400ddb04e4cb0ef1fdb053b7a)), closes [#281](https://github.com/input-output-hk/cardano-graphql/issues/281)
+* scope allow list to graphql path ([bee2005](https://github.com/input-output-hk/cardano-graphql/commit/bee2005730f8058d8f5363501e361b84b1ab79d8)), closes [#303](https://github.com/input-output-hk/cardano-graphql/issues/303)
+* **api-cardano-db-hasura:** improve error handling with Cardano query delegation ([4e532a3](https://github.com/input-output-hk/cardano-graphql/commit/4e532a357b084b82b2a35aa7f021ba14e2744a37))
+* **api-cardano-db-hasura:** Move each query to separate test ([3b29f48](https://github.com/input-output-hk/cardano-graphql/commit/3b29f484c6bb6e7b876cdce7e879d7e41037600b))
+* **api-cardano-db-hasura:** Properly model and relate StakePoolRetirements ([a5fef40](https://github.com/input-output-hk/cardano-graphql/commit/a5fef4073cc3cb9f6424856e5f90aa39a31c8cf9))
+* **api-cardano-db-hasura:** Support 28 byte hex encoded hashes ([9e28ffa](https://github.com/input-output-hk/cardano-graphql/commit/9e28ffa6686fd28ea72a374c4eb45b0aa7b5efe9))
+* **server:** better align server config options ([30a7534](https://github.com/input-output-hk/cardano-graphql/commit/30a753435c06a06cd6fe6725bb40e9a74682010a))
+* **server:** rename whitelist to allow-list ([eeeafa9](https://github.com/input-output-hk/cardano-graphql/commit/eeeafa9acb30e480e1f9cb73495eeee6574b9c5a))
+* **server:** return HTTP 403 errors when rejecting disallowed queries ([b8892ca](https://github.com/input-output-hk/cardano-graphql/commit/b8892ca171164271d04018d2e039b333c74f40ee))
+
 
 ## 2.0.0
 This new major version brings the first round of Shelley-era features to the API, 
