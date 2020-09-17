@@ -2,7 +2,7 @@
 
 set -e
 
-SECRET_DIR="/run/secrets"
+SECRET_DIR=${SECRET_DIR:-/run/secrets}
 POSTGRES_DB=${POSTGRES_DB:-$(cat ${SECRET_DIR}/postgres_db)}
 POSTGRES_USER=${POSTGRES_USER:-$(cat ${SECRET_DIR}/postgres_user)}
 POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-$(cat ${SECRET_DIR}/postgres_password)}
