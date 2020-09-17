@@ -142,7 +142,7 @@ type Delegation {
 }
 
 input Delegation_order_by {
-  address: text_comparison_exp
+  address: order_by
   stakePool: StakePool_order_by
   transaction: Transaction_order_by
 }
@@ -320,7 +320,7 @@ type StakeRegistration {
 }
 
 input StakeRegistration_order_by {
-  address: text_comparison_exp
+  address: order_by
   transaction: Transaction_order_by
 }
 
