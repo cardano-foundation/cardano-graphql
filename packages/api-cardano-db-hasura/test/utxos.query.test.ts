@@ -17,7 +17,7 @@ describe('utxos', () => {
   let client: TestClient
   beforeAll(async () => {
     client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442)
-  }, 60000)
+  })
 
   it('Can be scoped by address', async () => {
     // Get a addresses to run tests against
