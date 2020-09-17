@@ -108,7 +108,7 @@ SELECT
   ( SELECT stake_address.view FROM stake_address WHERE stake_address.id = pool.reward_addr_id) AS "rewardAddress",
   pool_meta_data.url AS "url"
 FROM pool_update AS pool
-  INNER JOIN pool_meta_data ON pool.meta = pool_meta_data.id
+  LEFT JOIN pool_meta_data ON pool.meta = pool_meta_data.id
   INNER JOIN tx ON pool.registered_tx_id = tx.id
   INNER JOIN latest_block_times ON latest_block_times.hash_id = pool.hash_id
   INNER JOIN block ON tx.block = block.id AND latest_block_times.blockTime = block.time;
