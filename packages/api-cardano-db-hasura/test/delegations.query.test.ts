@@ -14,7 +14,7 @@ describe('delegations', () => {
   let client: TestClient
   beforeAll(async () => {
     client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442)
-  }, 15000)
+  })
 
   it('can return details for stake delegation', async () => {
     const result = await client.query({

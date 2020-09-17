@@ -14,7 +14,7 @@ describe('stakePools', () => {
   let client: TestClient
   beforeAll(async () => {
     client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442)
-  }, 15000)
+  })
 
   it('can return details on active stake pools', async () => {
     const result = await client.query({

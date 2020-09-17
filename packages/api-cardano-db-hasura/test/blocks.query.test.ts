@@ -14,7 +14,7 @@ describe('blocks', () => {
   let client: TestClient
   beforeAll(async () => {
     client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442)
-  }, 60000)
+  })
 
   it('caps the response to 100 blocks', async () => {
     const result = await client.query({

@@ -24,7 +24,7 @@ pipeline {
     stage('Test') {
       steps {
         sh "CARDANO_GRAPHQL_VERSION=${env.GIT_COMMIT} yarn mainnet:stack"
-        sh 'sleep 30'
+        sh 'sleep 10'
         sh 'TEST_MODE=e2e yarn workspaces run test --ci'
       }
     }

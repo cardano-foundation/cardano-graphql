@@ -15,6 +15,7 @@ dayjs.extend(utc)
 export class HasuraClient {
   private client: ApolloClient<NormalizedCacheObject>
   readonly hasuraUri: string
+  private applyingSchemaAndMetadata: boolean
 
   constructor (hasuraUri: string) {
     this.hasuraUri = hasuraUri
@@ -37,7 +38,9 @@ export class HasuraClient {
     })
   }
 
-  public async applySchemaAndMetadata () {
+  public async applySchemaAndMetadata (): Promise<void> {
+    if (this.applyingSchemaAndMetadata) return
+    this.applyingSchemaAndMetadata = true
     await pRetry(async () => {
       await this.hasuraCli('migrate apply --down all')
       await this.hasuraCli('migrate apply --up all')
@@ -48,9 +51,11 @@ export class HasuraClient {
       retries: 9,
       onFailedAttempt: util.onFailedAttemptFor('Applying PostgreSQL schema and Hasura metadata')
     })
+    this.applyingSchemaAndMetadata = false
   }
 
   public async buildHasuraSchema () {
+    await this.applySchemaAndMetadata()
     const executor = async ({ document, variables }: { document: DocumentNode, variables?: Object }) => {
       const query = print(document)
       try {
