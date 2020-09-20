@@ -57,7 +57,7 @@ library
                      , hashable
                      , integer-gmp
                      , mtl
-                     , nonempty-containers
+                     , nonempty-containers    >= 0.3.4
                      , protolude
                      , serialise
                      , tagged
