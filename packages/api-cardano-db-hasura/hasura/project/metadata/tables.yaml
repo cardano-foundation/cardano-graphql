@@ -388,6 +388,14 @@
           name: TransactionOutput
         column_mapping:
           hash: txHash
+  - name: withdrawals
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Withdrawal
+        column_mapping:
+          id: tx_id
   select_permissions:
   - role: cardano-graphql
     permission:

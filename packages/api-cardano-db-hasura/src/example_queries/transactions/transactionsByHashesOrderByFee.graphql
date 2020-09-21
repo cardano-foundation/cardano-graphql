@@ -1,9 +1,9 @@
-query transactionsByHashesOrderByFee(
+query transactionsByHashes(
     $hashes: [Hash32HexString]!
 ) {
     transactions(
         where: { hash: { _in: $hashes }},
-        order_by: { fee: desc }
+        order_by: { hash: desc }
     ) {
         block {
             number
@@ -18,12 +18,33 @@ query transactionsByHashesOrderByFee(
             sourceTxHash
             value
         }
+        inputs_aggregate {
+            aggregate {
+                sum {
+                    value
+                }
+            }
+        }
         outputs(order_by: { index: asc }) {
             index
             address
             value
         }
+        outputs_aggregate {
+            aggregate {
+                sum {
+                    value
+                }
+            }
+        }
         size
         totalOutput
+        withdrawals_aggregate {
+            aggregate {
+                sum {
+                    amount
+                }
+            }
+        }
     }
 }
