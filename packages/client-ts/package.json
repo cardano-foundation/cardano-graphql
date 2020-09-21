@@ -11,8 +11,9 @@
   "scripts": {
     "build": "graphql-codegen -c codegen.cardano-db-hasura.yml && graphql-codegen -c codegen.genesis.yml && tsc",
     "cleanup": "./scripts/cleanup.sh",
+    "combine-schema": "node ./util/combineGraphQLSchema.js",
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
-    "prepack": "yarn build && ./scripts/embed_schema.sh",
+    "prepack": "yarn build && ./scripts/embed_schema.sh && node ./util/combineGraphQLSchema.js",
     "postpack": "yarn cleanup",
     "test": "shx echo No tests in this package"
   },
@@ -38,6 +39,10 @@
     "lib": "src"
   },
   "devDependencies": {
+    "@graphql-tools/load-files": "^6.2.3",
+    "@graphql-tools/merge": "^6.2.3",
+    "@graphql-tools/schema": "^6.2.3",
+    "@graphql-tools/utils": "^6.2.3",
     "shx": "^0.3.2"
   }
 }
