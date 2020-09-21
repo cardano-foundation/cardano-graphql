@@ -1,6 +1,6 @@
 {
   "name": "@cardano-graphql/api-genesis",
-  "version": "2.1.0",
+  "version": "2.2.0-beta",
   "description": "Query the network genesis",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -38,7 +38,7 @@
     "graphql-scalars": "^1.2.2"
   },
   "devDependencies": {
-    "@cardano-graphql/util-dev": "2.1.0",
+    "@cardano-graphql/util-dev": "2.2.0-beta",
     "@graphql-codegen/cli": "^1.15.2",
     "@graphql-codegen/typescript": "^1.15.2",
     "@graphql-codegen/typescript-graphql-files-modules": "^1.15.2",
