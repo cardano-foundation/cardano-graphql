@@ -4,7 +4,7 @@ import { gql } from 'apollo-boost'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { tx05ad8b, txe68043 } from './data_assertions'
+import { tx05ad8b, txe68043, tx0b8c5b } from './data_assertions'
 import { buildClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
@@ -20,12 +20,27 @@ describe('transactions', () => {
   it('Returns transactions by hashes', async () => {
     const result = await client.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
-      variables: { hashes: [txe68043.basic.hash, tx05ad8b.basic.hash] }
+      variables: {
+        hashes: [
+          txe68043.basic.hash,
+          tx0b8c5b.basic.hash,
+          tx05ad8b.basic.hash
+        ]
+      }
     })
-    expect(result.data.transactions.length).toBe(2)
-    expect(result.data.transactions[0].inputs[0].sourceTxHash).toBe(txe68043.basic.sourceTxHash)
-    expect(result.data.transactions[1].inputs[0].sourceTxHash).toBe(tx05ad8b.basic.sourceTxHash)
+    expect(result.data.transactions.length).toBe(3)
+    expect(result.data.transactions[0].inputs[0].sourceTxHash).toBe(txe68043.basic.inputs[0].sourceTxHash)
     expect(result.data.transactions[0].outputs[0].index).toBe(0)
+    expect(result.data.transactions[2].inputs[0].sourceTxHash).toBe(tx05ad8b.basic.inputs[0].sourceTxHash)
+
+    const txWithWithdrawals = {
+      fee: result.data.transactions[1].fee,
+      totalOutput: result.data.transactions[1].totalOutput,
+      inputsTotal: new BigNumber(result.data.transactions[1].inputs_aggregate.aggregate.sum.value),
+      totalWithdrawals: new BigNumber(result.data.transactions[1].withdrawals_aggregate.aggregate.sum.amount)
+    }
+    const combinedInputs = txWithWithdrawals.inputsTotal.plus(txWithWithdrawals.totalWithdrawals)
+    expect(txWithWithdrawals.totalOutput).toBe(combinedInputs.minus(txWithWithdrawals.fee).toString())
     expect(result.data).toMatchSnapshot()
   })
 

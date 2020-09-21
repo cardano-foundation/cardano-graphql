@@ -373,6 +373,13 @@ type Transaction {
   size: BigInt!
   totalOutput: String!
   includedAt: DateTime!
+  withdrawals: [Withdrawal!]
+  withdrawals_aggregate(
+    limit: Int
+    order_by: [Withdrawal_order_by]
+    offset: Int
+    where: Withdrawal_bool_exp
+  ): Withdrawal_aggregate!
 }
 
 input Transaction_order_by {
@@ -380,9 +387,11 @@ input Transaction_order_by {
   blockIndex: order_by
   deposit: order_by
   fee: order_by
+  hash: order_by
   includedAt: order_by
   size: order_by
   totalOutput: order_by
+  withdrawals: order_by
 }
 
 input Transaction_bool_exp {
@@ -399,6 +408,7 @@ input Transaction_bool_exp {
   outputs: TransactionOutput_bool_exp
   size: BigInt_comparison_exp
   totalOutput: text_comparison_exp
+  withdrawals: Withdrawal_bool_exp
 }
 
 type Transaction_aggregate {
@@ -418,6 +428,7 @@ type Transaction_avg_fields {
   fee: Float
   size: Float
   totalOutput: Float
+  withdrawals: Withdrawal_ave_fields
 }
 
 type Transaction_max_fields {
@@ -425,6 +436,7 @@ type Transaction_max_fields {
   fee: String
   size: String
   totalOutput: String
+  withdrawals: Withdrawal_max_fields
 }
 
 type Transaction_min_fields {
@@ -432,6 +444,7 @@ type Transaction_min_fields {
   fee: String
   size: String
   totalOutput: String
+  withdrawals: Withdrawal_min_fields
 }
 
 type Transaction_sum_fields {
@@ -439,6 +452,7 @@ type Transaction_sum_fields {
   fee: String
   size: String
   totalOutput: String
+  withdrawals: Withdrawal_sum_fields
 }
 
 type TransactionInput {
@@ -612,6 +626,7 @@ input Block_order_by {
   slotLeader: order_by
   epoch: Epoch_order_by
   fees: order_by
+  hash: order_by
   number: order_by_with_nulls
   size: order_by
   slotNo: order_by_with_nulls
@@ -752,21 +767,26 @@ type Withdrawal_aggregate {
 
 type Withdrawal_aggregate_fields {
   count: String!
+  ave: Withdrawal_ave_fields!
   max: Withdrawal_max_fields!
   min: Withdrawal_min_fields!
   sum: Withdrawal_sum_fields!
 }
 
+type Withdrawal_ave_fields {
+  amount: String
+}
+
 type Withdrawal_max_fields {
-  amount: String!
+  amount: String
 }
 
 type Withdrawal_min_fields {
-  amount: String!
+  amount: String
 }
 
 type Withdrawal_sum_fields {
-  amount: String!
+  amount: String
 }
 
 # expression to compare data of type date. All fields are combined with logical 'AND'.
