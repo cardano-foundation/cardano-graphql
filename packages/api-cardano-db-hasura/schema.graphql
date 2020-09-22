@@ -116,7 +116,7 @@ type Query {
     order_by: [Withdrawal_order_by!]
     offset: Int
     where: Withdrawal_bool_exp
-  ): [Withdrawal]
+  ): [Withdrawal]!
   withdrawals_aggregate (
     limit: Int
     order_by: [Withdrawal_order_by!]
@@ -373,7 +373,7 @@ type Transaction {
   size: BigInt!
   totalOutput: String!
   includedAt: DateTime!
-  withdrawals: [Withdrawal!]
+  withdrawals: [Withdrawal]!
   withdrawals_aggregate(
     limit: Int
     order_by: [Withdrawal_order_by]
