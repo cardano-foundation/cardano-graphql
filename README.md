@@ -95,3 +95,15 @@ See [Building](https://github.com/input-output-hk/cardano-graphql/wiki/Building)
 <p align="center">
   <a href="https://github.com/input-output-hk/cardano-graphql/blob/master/LICENSE"><img src="https://img.shields.io/github/license/input-output-hk/cardano-graphql.svg?style=for-the-badge" /></a>
 </p>
+
+## Deployments
+
+### Graph QL
+
+[Mainnet](https://cardano-graphql-mainnet.daedalus-operations.com/)
+[Testnet](https://cardano-graphql-testnet.daedalus-operations.com/)
+
+### Explorer App
+
+[QA](https://explorer.shelley-qa.dev.cardano.org/en.html)
+[Testnet](https://explorer.cardano-testnet.iohkdev.io/en.html)
