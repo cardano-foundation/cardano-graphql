@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/input-output-hk/cardano-graphql/compare/2.1.0...2.2.0) (2020-09-24)
+
+### Compatible with:
+
+- [`cardano-node`: `1.20.0`](https://github.com/input-output-hk/cardano-node/releases/tag/1.20.0)
+- [`cardano-db-sync`: `5.0.1`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/5.0.1)
+
+### Features
+* **api-cardano-db-hasura:** add Transaction.withdrawals ([b608cc8](https://github.com/input-output-hk/cardano-graphql/commit/b608cc8475859a36e5b7deb729617e08b8a251d5))
+* **client-ts:** combine graphql schemas in client package ([bd52a16](https://github.com/input-output-hk/cardano-graphql/commit/bd52a16912b7bd92de7645cca985c6157c41975a)), closes [#273](https://github.com/input-output-hk/cardano-graphql/issues/273)
+
 ## [2.1.0](https://github.com/input-output-hk/cardano-graphql/compare/2.0.0...2.1.0) (2020-09-17)
 
 ### Compatible with:
