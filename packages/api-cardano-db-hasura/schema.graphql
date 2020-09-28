@@ -167,15 +167,17 @@ type Delegation_aggregate_fields {
 type Relay {
   ipv4: IPv4
   ipv6: IPv6
-  dnsName: URL
-  dnsSrvName: String
+  dns_name: URL
+  dns_srv_name: String
+  port: String
 }
 
 input Relay_bool_exp {
   ipv4: text_comparison_exp
   ipv6: text_comparison_exp
-  dnsName: text_comparison_exp
-  dnsSrvName: text_comparison_exp
+  dns_name: text_comparison_exp
+  dns_srv_name: text_comparison_exp
+  port: text_comparison_exp
 }
 
 type StakeDeregistration {
