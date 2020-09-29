@@ -11,6 +11,5 @@ module Cardano.Prelude.GHC.Heap
 where
 
 import Cardano.Prelude.GHC.Heap.NormalForm as X
-import Cardano.Prelude.GHC.Heap.NormalForm.Classy as X
 import Cardano.Prelude.GHC.Heap.Size as X
 import Cardano.Prelude.GHC.Heap.Tree as X

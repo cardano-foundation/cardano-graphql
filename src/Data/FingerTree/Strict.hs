@@ -55,8 +55,7 @@ import qualified Data.FingerTree as FT
 import           Data.Foldable (foldl', toList)
 import           GHC.Generics (Generic)
 
-import           Cardano.Prelude (NoUnexpectedThunks (..),
-                     noUnexpectedThunksInValues)
+import           NoThunks.Class (NoThunks (..), noThunksInValues)
 
 infixr 5 ><
 infixr 5 <|
@@ -75,9 +74,9 @@ newtype StrictFingerTree v a = SFT (FT.FingerTree v a)
 deriving newtype instance Foldable (StrictFingerTree v)
 deriving newtype instance (Measured v a) => Measured v (StrictFingerTree v a)
 
-instance NoUnexpectedThunks a => NoUnexpectedThunks (StrictFingerTree v a) where
+instance NoThunks a => NoThunks (StrictFingerTree v a) where
   showTypeOf _ = "StrictFingerTree"
-  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInValues ctxt . toList
+  wNoThunks ctxt = noThunksInValues ctxt . toList
 
 {-------------------------------------------------------------------------------
   Construction
