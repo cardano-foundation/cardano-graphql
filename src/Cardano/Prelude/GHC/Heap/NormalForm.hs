@@ -74,13 +74,8 @@ isHeadNormalForm c = do
 -- | The function 'isNormalForm' checks whether its argument is fully evaluated
 -- and deeply evaluated.
 --
--- NOTE 1: If you want to override the behaviour of 'isNormalForm' for specific
--- types (in particular, for specific types that may be /nested/ somewhere
--- inside the @a@), consider using
--- 'Cardano.Prelude.GHC.Heap.NormalForm.Classy.noUnexpectedThunks' instead.
---
--- NOTE 2: The normal form check can be quite brittle, especially with @-O0@.
--- For example, writing something like
+-- NOTE: The normal form check can be quite brittle, especially with @-O0@. For
+-- example, writing something like
 --
 -- > let !(Value x) = ... in ....
 --

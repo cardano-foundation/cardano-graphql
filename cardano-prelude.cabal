@@ -33,7 +33,6 @@ library
                        Cardano.Prelude.Formatting
                        Cardano.Prelude.GHC.Heap
                        Cardano.Prelude.GHC.Heap.NormalForm
-                       Cardano.Prelude.GHC.Heap.NormalForm.Classy
                        Cardano.Prelude.GHC.Heap.Size
                        Cardano.Prelude.GHC.Heap.Tree
                        Cardano.Prelude.HeapWords
@@ -58,6 +57,7 @@ library
                      , integer-gmp
                      , mtl
                      , nonempty-containers    >= 0.3.4
+                     , nothunks
                      , protolude
                      , serialise
                      , tagged
@@ -98,7 +98,6 @@ test-suite cardano-prelude-test
                        Test.Cardano.Prelude.Base16
                        Test.Cardano.Prelude.Gen
                        Test.Cardano.Prelude.GHC.Heap.NormalForm
-                       Test.Cardano.Prelude.GHC.Heap.NormalForm.Classy
                        Test.Cardano.Prelude.GHC.Heap.Size
                        Test.Cardano.Prelude.GHC.Heap.Tree
                        Test.Cardano.Prelude.Golden

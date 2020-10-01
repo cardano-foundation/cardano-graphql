@@ -17,3 +17,4 @@ packages:
   - quiet-0.2
   - streaming-binary-0.3.0.1
   - canonical-json-0.6.0.0
+  - nothunks-0.1.1.0

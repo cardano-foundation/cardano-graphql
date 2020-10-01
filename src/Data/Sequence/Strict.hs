@@ -55,8 +55,7 @@ module Data.Sequence.Strict
   , findIndicesR
   ) where
 
-import           Cardano.Prelude (NoUnexpectedThunks (..), forceElemsToWHNF,
-                     noUnexpectedThunksInValues)
+import           Cardano.Prelude (forceElemsToWHNF)
 import           Prelude hiding (drop, length, lookup, null, scanl, splitAt,
                      take)
 
@@ -64,6 +63,7 @@ import           Codec.Serialise (Serialise)
 import           Data.Foldable (foldl', toList)
 import           Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
+import           NoThunks.Class (NoThunks (..), noThunksInValues)
 
 infixr 5 ><
 infixr 5 <|
@@ -96,9 +96,9 @@ instance Traversable StrictSeq where
 --
 -- The internal fingertree in 'Seq' might have thunks, which is essential for
 -- its asymptotic complexity.
-instance NoUnexpectedThunks a => NoUnexpectedThunks (StrictSeq a) where
+instance NoThunks a => NoThunks (StrictSeq a) where
   showTypeOf _ = "StrictSeq"
-  whnfNoUnexpectedThunks ctxt = noUnexpectedThunksInValues ctxt . toList
+  wNoThunks ctxt = noThunksInValues ctxt . toList
 
 -- | A helper function for the ':<|' pattern.
 --
