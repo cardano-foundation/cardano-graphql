@@ -44,7 +44,7 @@ library
   build-depends:       base
                      , aeson
                      , array
-                     , base16-bytestring
+                     , base16-bytestring      < 1
                      , bytestring
                      , canonical-json
                      , cborg
