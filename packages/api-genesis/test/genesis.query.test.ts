@@ -8,9 +8,6 @@ const genesisFiles = {
   mainnet: {
     byron: require('../../../config/network/mainnet/genesis/byron.json'),
     shelley: require('../../../config/network/mainnet/genesis/shelley.json')
-  },
-  shelley_testnet: {
-    shelley: require('../../../config/network/shelley_testnet/genesis_shelley.json')
   }
 }
 
@@ -21,33 +18,13 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('genesis', () => {
   let client: TestClient
 
-  describe('Single-era', () => {
-    beforeAll(async () => {
-      client = await buildClient(genesisFiles.shelley_testnet)
-    })
-
-    it('Returns key information about the network', async () => {
-      const query = { query: await loadQueryNode('keyNetworkInfoShelley') }
-      const result = await client.query(query)
-      expect(result.data).toMatchSnapshot()
-    })
-
-    it('Returns all information from genesis.json', async () => {
-      const query = { query: await loadQueryNode('allInfoShelley') }
-      const result = await client.query(query)
-      expect(result.data).toMatchSnapshot()
-    })
+  beforeAll(async () => {
+    client = await buildClient(genesisFiles.mainnet)
   })
 
-  describe('Spanning-eras', () => {
-    beforeAll(async () => {
-      client = await buildClient(genesisFiles.mainnet)
-    })
-
-    it('Returns key information about the network', async () => {
-      const query = { query: await loadQueryNode('keyNetworkInfoByronShelley') }
-      const result = await client.query(query)
-      expect(result.data).toMatchSnapshot()
-    })
+  it('Returns key information about the network genesis', async () => {
+    const query = { query: await loadQueryNode('keyNetworkInfo') }
+    const result = await client.query(query)
+    expect(result.data).toMatchSnapshot()
   })
 })

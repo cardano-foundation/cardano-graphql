@@ -1,5 +1,20 @@
-query allInfo {
+query keyNetworkInfo {
   genesis {
+    byron {
+      blockVersionData {
+        scriptVersion
+        slotDuration
+        maxBlockSize
+        maxHeaderSize
+        maxProposalSize
+        maxTxSize
+      }
+      startTime
+      protocolConsts {
+        k
+        protocolMagic
+      }
+    }
     shelley {
       activeSlotsCoeff
       epochLength
@@ -9,7 +24,6 @@ query allInfo {
       maxLovelaceSupply
       networkId
       networkMagic
-      protocolMagicId
       protocolParams {
         a0
         decentralisationParam
