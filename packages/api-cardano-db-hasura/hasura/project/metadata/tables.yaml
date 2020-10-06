@@ -543,6 +543,11 @@
 - table:
     schema: public
     name: pool_relay
+  configuration:
+    custom_root_fields: {}
+    custom_column_names:
+      dns_srv_name: dnsSrvName
+      dns_name: dnsName
   object_relationships:
   - name: stakePool
     using:

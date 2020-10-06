@@ -169,6 +169,7 @@ type Relay {
   ipv6: IPv6
   dnsName: URL
   dnsSrvName: String
+  port: Int
 }
 
 input Relay_bool_exp {
@@ -176,6 +177,7 @@ input Relay_bool_exp {
   ipv6: text_comparison_exp
   dnsName: text_comparison_exp
   dnsSrvName: text_comparison_exp
+  port: Int_comparison_exp
 }
 
 type StakeDeregistration {
