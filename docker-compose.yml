@@ -44,10 +44,11 @@ services:
         max-size: "400k"
         max-file: "20"
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-5.0.1}
+    image: rhyslbw/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-3e02b9370a122cef068e55ac2887b41acc7587ed}
     command: [
-      "--config", "/config/config.json",
-      "--socket-path", "/node-ipc/node.socket"
+      "--config", "/config/cardano-db-sync/config.json",
+      "--socket-path", "/node-ipc/node.socket",
+      "--state-dir", "/data"
     ]
     environment:
       - EXTENDED=true
@@ -61,8 +62,8 @@ services:
       - postgres_user
       - postgres_db
     volumes:
-      - ./config/network/${NETWORK:-mainnet}/cardano-db-sync:/config
-      - ./config/network/${NETWORK:-mainnet}/genesis:/genesis
+      - ./config/network/${NETWORK:-mainnet}:/config
+      - db-sync-data:/data
       - node-ipc:/node-ipc
     restart: on-failure
     logging:
@@ -73,7 +74,7 @@ services:
   hasura:
     build:
       context: ./packages/api-cardano-db-hasura/hasura
-    image: inputoutput/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-2.1.0}
+    image: inputoutput/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-2.2.0}
     ports:
       - ${HASURA_PORT:-8090}:8080
     depends_on:
@@ -103,7 +104,7 @@ services:
       target: server
       args:
         - NETWORK=${NETWORK:-mainnet}
-    image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-2.1.0}
+    image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-2.2.0}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
@@ -137,6 +138,7 @@ secrets:
   postgres_user:
     file: ./config/secrets/postgres_user
 volumes:
+  db-sync-data:
   node-db:
   node-ipc:
   postgres-data:
