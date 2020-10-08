@@ -49,6 +49,18 @@ type Query {
     offset: Int
     where: Epoch_bool_exp
   ): Epoch_aggregate!
+  rewards (
+    limit: Int
+    order_by: [Reward_order_by!]
+    offset: Int
+    where: Reward_bool_exp
+  ): [Reward]!
+  rewards_aggregate (
+    limit: Int
+    order_by: [Reward_order_by!]
+    offset: Int
+    where: Reward_bool_exp
+  ): Reward_aggregate!
   stakeDeregistrations (
     limit: Int
     order_by: [StakeDeregistration_order_by!]
@@ -180,6 +192,55 @@ input Relay_bool_exp {
   port: Int_comparison_exp
 }
 
+type Reward {
+  address: String!
+  amount: String!
+  earnedIn: Epoch!
+  stakePool: StakePool!
+}
+
+type Reward_aggregate {
+  aggregate: Reward_aggregate_fields
+}
+
+type Reward_aggregate_fields {
+  avg: Reward_avg_fields!
+  count: String!
+  max: Reward_max_fields!
+  min: Reward_min_fields!
+  sum: Reward_sum_fields!
+}
+
+type Reward_avg_fields {
+  amount: Float
+}
+
+type Reward_max_fields {
+  amount: String
+}
+
+type Reward_min_fields {
+  amount: String
+}
+
+type Reward_sum_fields {
+  amount: String
+}
+
+input Reward_bool_exp {
+  address: text_comparison_exp
+  amount: text_comparison_exp
+  earnedIn: Epoch_bool_exp
+  stakePool: StakePool_bool_exp
+}
+
+input Reward_order_by {
+  address: text_comparison_exp
+  amount: text_comparison_exp
+  earnedIn: Epoch_order_by
+  stakePool: StakePool_order_by
+}
+
 type StakeDeregistration {
   address: String!
   transaction: Transaction!
@@ -228,6 +289,13 @@ type StakePool {
   relays: [Relay]
   retirements: [StakePoolRetirement]
   rewardAddress: String!
+  rewards: [Reward]!
+  rewards_aggregate (
+    limit: Int
+    order_by: [Reward_order_by!]
+    offset: Int
+    where: Reward_bool_exp
+  ): Reward_aggregate!
   updatedIn: Transaction!
   url: URL
 }
@@ -255,6 +323,7 @@ input StakePool_bool_exp {
   relays: Relay_bool_exp
   retirements: StakePoolRetirement_bool_exp
   rewardAddress: text_comparison_exp
+  rewards: Relay_bool_exp
   url: text_comparison_exp
 }
 

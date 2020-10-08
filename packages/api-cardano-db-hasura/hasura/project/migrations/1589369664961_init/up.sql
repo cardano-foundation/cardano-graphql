@@ -59,13 +59,13 @@ FROM epoch;
 CREATE VIEW "Reward" AS
 SELECT
   reward.amount AS "amount",
-  reward.id AS "id",
   (
 	  SELECT stake_address.view
 	  FROM stake_address
 	  WHERE stake_address.id = reward.addr_id
   ) AS "address",
-  reward.tx_id AS "tx_id"
+  reward.epoch_no AS "epochNo",
+  ( SELECT pool_hash.hash FROM pool_hash WHERE pool_hash.id = reward.pool_id ) AS "pool_hash"
 FROM reward;
 
 CREATE VIEW "SlotLeader" AS

@@ -175,19 +175,28 @@
       select: rewards
     custom_column_names: {}
   object_relationships:
-  - name: transaction
+  - name: earnedIn
     using:
       manual_configuration:
         remote_table:
           schema: public
-          name: Transaction
+          name: Epoch
         column_mapping:
-          tx_id: id
+          epochNo: number
+  - name: stakePool
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: StakePool
+        column_mapping:
+          pool_hash: hash
   select_permissions:
   - role: cardano-graphql
     permission:
       columns:
       - address
+      - amount
       filter: {}
       limit: 100
       allow_aggregations: true
@@ -277,6 +286,14 @@
         remote_table:
           schema: public
           name: StakePoolRetirement
+        column_mapping:
+          hash: pool_hash
+  - name: rewards
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Reward
         column_mapping:
           hash: pool_hash
   select_permissions:
