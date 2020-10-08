@@ -230,7 +230,6 @@ type StakePool {
   rewardAddress: String!
   updatedIn: Transaction!
   url: URL
-  withdrawals: [Withdrawal]
 }
 
 
@@ -257,7 +256,6 @@ input StakePool_bool_exp {
   retirements: StakePoolRetirement_bool_exp
   rewardAddress: text_comparison_exp
   url: text_comparison_exp
-  withdrawals: Withdrawal_bool_exp
 }
 
 type StakePool_aggregate {
