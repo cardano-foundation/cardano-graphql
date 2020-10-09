@@ -11,6 +11,12 @@ scalar Percentage
 scalar URL
 
 type Query {
+  activeStake (
+    limit: Int
+    order_by: [ActiveStake_order_by!]
+    offset: Int
+    where: ActiveStake_bool_exp
+  ): [ActiveStake]!
   blocks (
     limit: Int
     order_by: [Block_order_by!]
@@ -135,6 +141,58 @@ type Query {
     offset: Int
     where: Withdrawal_bool_exp
   ): Withdrawal_aggregate
+}
+
+type ActiveStake {
+  address: String!
+  amount: String!
+  epoch: Epoch
+  epochNo: Int!
+  registeredWith: StakePool!
+}
+
+input ActiveStake_bool_exp {
+  address: text_comparison_exp
+  amount: text_comparison_exp
+  epoch: Epoch_bool_exp
+  epochNo: Int_comparison_exp
+  registeredWith: StakePool_bool_exp
+}
+
+input ActiveStake_order_by {
+  address: order_by
+  amount: order_by
+  epoch: Epoch_order_by
+  epochNo: order_by
+  registeredWith: StakePool_order_by
+}
+
+type ActiveStake_aggregate {
+  aggregate: ActiveStake_aggregate_fields
+}
+
+type ActiveStake_aggregate_fields {
+  avg: ActiveStake_avg_fields!
+  count: String!
+  max: ActiveStake_max_fields!
+  min: ActiveStake_min_fields!
+  sum: ActiveStake_sum_fields!
+}
+
+type ActiveStake_avg_fields {
+  amount: Float
+}
+
+type ActiveStake_max_fields {
+  amount: String
+}
+
+type ActiveStake_min_fields {
+  amount: String
+}
+
+type ActiveStake_sum_fields {
+  amount: String
 }
 
 type Cardano {
@@ -738,8 +796,11 @@ type Block_sum_fields {
 }
 
 type Epoch {
+  activeStake: [ActiveStake]
+  activeStake_aggregate: ActiveStake_aggregate
   blocks (
     limit: Int
+    order_by: [Block_order_by!]
     order_by: [Block_order_by!]
     offset: Int
     where: Block_bool_exp

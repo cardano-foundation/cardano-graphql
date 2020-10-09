@@ -27,6 +27,13 @@ exports[`epochs Can return aggregated data 1`] = `
 Object {
   "epochs": Array [
     Object {
+      "activeStake_aggregate": Object {
+        "aggregate": Object {
+          "sum": Object {
+            "amount": null,
+          },
+        },
+      },
       "blocksCount": "21590",
       "blocks_aggregate": Object {
         "aggregate": Object {
@@ -51,6 +58,39 @@ Object {
       },
       "fees": 1033002678,
       "number": 1,
+    },
+    Object {
+      "activeStake_aggregate": Object {
+        "aggregate": Object {
+          "sum": Object {
+            "amount": "15657991508072960",
+          },
+        },
+      },
+      "blocksCount": "21627",
+      "blocks_aggregate": Object {
+        "aggregate": Object {
+          "avg": Object {
+            "fees": 237477.9113145605,
+            "size": 491.35959680029595,
+          },
+          "count": "21627",
+          "max": Object {
+            "fees": "498861647",
+            "size": "19292",
+          },
+          "min": Object {
+            "fees": "0",
+            "size": "3",
+          },
+          "sum": Object {
+            "fees": "5135934788",
+            "size": "10626634",
+          },
+        },
+      },
+      "fees": 5135934788,
+      "number": 220,
     },
   ],
 }

@@ -1,8 +1,15 @@
 query aggregatedDataWithinEpoch (
-    $number: Int!
+    $where: Epoch_bool_exp
 ) {
-    epochs( where: { number: { _eq: $number }}) {
+    epochs( where: $where) {
         blocksCount
+        activeStake_aggregate {
+            aggregate {
+                sum {
+                    amount
+                }
+            }
+        }
         blocks_aggregate {
             aggregate {
                 avg {
