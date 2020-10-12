@@ -32,8 +32,8 @@ export async function getConfig (): Promise<Config> {
 
   if (!hasuraUri && !genesisFileShelley) {
     throw new MissingConfig(
-      `You have not provided configuration to load an API segment. Either set HASURA_URI or 
-      GENESIS_FILE_SHELLEY and GENESIS_FILE_SHELLEY`
+      `You have not provided configuration to load an API segment. Set HASURA_URI and/or 
+      GENESIS_FILE_BYRON and GENESIS_FILE_SHELLEY`
     )
   }
   if (!postgresDbFile && !postgresDb) {
