@@ -2,10 +2,9 @@
 {-# LANGUAGE DeriveGeneric     #-}
 {-# LANGUAGE TemplateHaskell   #-}
 
-module Test.Cardano.Prelude.GHC.Heap.Tree
+module Test.Cardano.Prelude.GHC.Heap.TreeSpec
   ( tests
-  )
-where
+  ) where
 
 import Cardano.Prelude
 
@@ -75,7 +74,7 @@ prop_ClosureTreeHasSpecifiedDepth = withTests 500 $ property $ do
     Just ct -> do
       annotate $ unpack (renderTree ct renderClosure)
       if depth ct < maxDepth
-        then depth ct === (length xs) + 1
+        then depth ct === length xs + 1
         else depth ct === maxDepth
 
 tests :: IO Bool

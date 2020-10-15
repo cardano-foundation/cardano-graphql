@@ -1,8 +1,8 @@
 resolver: ./snapshot.yaml
 
 packages:
-  - .
-  - test
+  - cardano-prelude
+  - cardano-prelude-test
 
 extra-deps:
   - nonempty-containers-0.3.4.0

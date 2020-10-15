@@ -11,7 +11,9 @@
 {-# OPTIONS_GHC -fno-full-laziness #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
 
-module Test.Cardano.Prelude.GHC.Heap.Size (tests) where
+module Test.Cardano.Prelude.GHC.Heap.SizeSpec
+  ( tests
+  ) where
 
 import Cardano.Prelude hiding (diff)
 
