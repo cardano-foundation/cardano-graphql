@@ -1,9 +1,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Test.Cardano.Prelude.GHC.Heap.NormalForm
+module Test.Cardano.Prelude.GHC.Heap.NormalFormSpec
   ( tests
-  )
-where
+  ) where
 
 import Cardano.Prelude
 

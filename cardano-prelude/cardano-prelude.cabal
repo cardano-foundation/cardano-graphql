@@ -1,3 +1,5 @@
+cabal-version: 2.2
+
 name:                cardano-prelude
 version:             0.1.0.0
 synopsis:            A Prelude replacement for the Cardano project
@@ -10,24 +12,19 @@ copyright:           2018-2020 IOHK
 category:            Currency
 build-type:          Simple
 extra-source-files:  ChangeLog.md, README.md cbits/hashset.h cbits/worklist.h
-cabal-version:       >=1.10
 
 flag development
-    description: Disable `-Werror`
-    default: False
-    manual: True
+  description: Disable `-Werror`
+  default: False
+  manual: True
 
 library
   hs-source-dirs:      src
-
-  exposed-modules:
-                       Cardano.Prelude
+  exposed-modules:     Cardano.Prelude
                        Data.FingerTree.Strict
                        Data.Sequence.Strict
                        Data.Semigroup.Action
-
-  other-modules:
-                       Cardano.Prelude.Base
+  other-modules:       Cardano.Prelude.Base
                        Cardano.Prelude.Base16
                        Cardano.Prelude.Error
                        Cardano.Prelude.Formatting
@@ -53,10 +50,8 @@ library
                      , formatting
                      , ghc-heap
                      , ghc-prim
-                     , hashable
                      , integer-gmp
                      , mtl
-                     , nonempty-containers    >= 0.3.4
                      , nothunks
                      , protolude
                      , serialise
@@ -64,14 +59,11 @@ library
                      , text
                      , time
                      , vector
-
   default-language:    Haskell2010
   default-extensions:  NoImplicitPrelude
-
   c-sources:           cbits/hashset.c
                        cbits/worklist.c
                        cbits/closure_size.c
-
   ghc-options:         -Weverything
                        -fno-warn-missing-import-lists
                        -fno-warn-unsafe
@@ -81,70 +73,8 @@ library
   if impl(ghc >=8.10)
     ghc-options:       -fno-warn-missing-safe-haskell-mode
                        -fno-warn-prepositive-qualified-module
-                       -fno-warn-unused-packages
 
   cc-options:          -Wall
 
   if (!flag(development))
-    ghc-options:         -Werror
-
-test-suite cardano-prelude-test
-  hs-source-dirs:      test
-  main-is:             test.hs
-  type:                exitcode-stdio-1.0
-
-  other-modules:
-                       Test.Cardano.Prelude
-                       Test.Cardano.Prelude.Base16
-                       Test.Cardano.Prelude.Gen
-                       Test.Cardano.Prelude.GHC.Heap.NormalForm
-                       Test.Cardano.Prelude.GHC.Heap.Size
-                       Test.Cardano.Prelude.GHC.Heap.Tree
-                       Test.Cardano.Prelude.Golden
-                       Test.Cardano.Prelude.Helpers
-                       Test.Cardano.Prelude.Orphans
-                       Test.Cardano.Prelude.QuickCheck.Arbitrary
-                       Test.Cardano.Prelude.QuickCheck.Property
-                       Test.Cardano.Prelude.Tripping
-
-  build-depends:       base
-                     , aeson
-                     , aeson-pretty >= 0.8.5
-                     , attoparsec
-                     , base16-bytestring
-                     , bytestring
-                     , canonical-json
-                     , cardano-prelude
-                     , containers
-                     , cryptonite
-                     , formatting
-                     , ghc-heap
-                     , ghc-prim
-                     , hedgehog
-                     , hspec
-                     , pretty-show
-                     , QuickCheck
-                     , quickcheck-instances
-                     , random
-                     , template-haskell
-                     , text
-                     , time
-
-  default-language:    Haskell2010
-  default-extensions:  NoImplicitPrelude
-
-  ghc-options:         -Weverything
-                       -fno-warn-missing-import-lists
-                       -fno-warn-unsafe
-                       -fno-warn-safe
-                       -threaded
-                       -rtsopts
-  if impl(ghc >=8.8)
-    ghc-options:       -fno-warn-missing-deriving-strategies
-  if impl(ghc >=8.10)
-    ghc-options:       -fno-warn-missing-safe-haskell-mode
-                       -fno-warn-prepositive-qualified-module
-                       -fno-warn-unused-packages
-
-  if (!flag(development))
-    ghc-options:         -Werror
+    ghc-options:       -Werror
