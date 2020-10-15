@@ -21,6 +21,7 @@ flag development
 library
   hs-source-dirs:      src
   exposed-modules:     Cardano.Prelude
+                       Cardano.Prelude.Base16.Internal
                        Data.FingerTree.Strict
                        Data.Sequence.Strict
                        Data.Semigroup.Action
