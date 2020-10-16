@@ -282,6 +282,7 @@ input SlotLeader_bool_exp {
 type StakePool {
   fixedCost: String!
   hash: Hash32HexString!
+  id: String!
   margin: Float!
   metadataHash: Hash32HexString
   owners: [StakePoolOwner!]!
@@ -304,6 +305,7 @@ type StakePool {
 input StakePool_order_by {
   fixedCost: order_by
   hash: order_by
+  id: order_by
   margin: order_by
   pledge: order_by
   updatedIn: Transaction_order_by
@@ -315,6 +317,7 @@ input StakePool_bool_exp {
   _not: StakePool_bool_exp
   _or: [StakePool_bool_exp]
   hash: Hash32HexString_comparison_exp
+  id: text_comparison_exp
   margin: Float_comparison_exp
   metadataHash: Hash32HexString_comparison_exp
   owners: StakePoolOwner_bool_exp

@@ -39,11 +39,8 @@ SELECT
 	  WHERE stake_address.id = delegation.addr_id
   ) AS "address",
   delegation.tx_id AS "tx_id",
-  pool_hash.hash AS "pool_hash"
-FROM
-  delegation
-LEFT OUTER JOIN pool_hash
-  ON delegation.pool_hash_id = pool_hash.id;
+  pool_hash_id AS "pool_hash_id"
+FROM delegation;
 
 CREATE VIEW "Epoch" AS
 SELECT
@@ -65,7 +62,7 @@ SELECT
 	  WHERE stake_address.id = reward.addr_id
   ) AS "address",
   reward.epoch_no AS "epochNo",
-  ( SELECT pool_hash.hash FROM pool_hash WHERE pool_hash.id = reward.pool_id ) AS "pool_hash"
+  reward.pool_id AS "pool_hash_id"
 FROM reward;
 
 CREATE VIEW "SlotLeader" AS
@@ -73,7 +70,7 @@ SELECT
   slot_leader.hash AS "hash",
   slot_leader.id AS "id",
   slot_leader.description AS "description",
-  ( SELECT pool_hash.hash FROM pool_hash WHERE pool_hash.id = slot_leader.pool_hash_id ) AS "pool_hash"
+  slot_leader.pool_hash_id AS "pool_hash_id"
 FROM slot_leader;
 
 CREATE VIEW "StakeDeregistration" AS
@@ -98,8 +95,10 @@ WITH
 )
 SELECT
   pool.fixed_cost AS "fixedCost",
-  ( SELECT pool_hash.hash FROM pool_hash WHERE pool_hash.id = pool.hash_id ) AS "hash",
-  pool.id AS "id",
+  ( SELECT pool_hash.hash_raw FROM pool_hash WHERE pool_hash.id = pool.hash_id ) AS "hash",
+  ( SELECT pool_hash.view FROM pool_hash WHERE pool_hash.id = pool.hash_id ) AS "id",
+  pool.hash_id AS "hash_id",
+  pool.id AS "update_id",
   pool.margin AS "margin",
   pool_meta_data.hash AS "metadataHash",
   block.block_no AS "blockNo",
@@ -117,7 +116,7 @@ CREATE VIEW "StakePoolRetirement" AS
 SELECT
   retiring_epoch as "inEffectFrom",
   announced_tx_id as "tx_id",
-  ( SELECT pool_hash.hash FROM pool_hash WHERE pool_hash.id = hash_id ) AS "pool_hash"
+  hash_id AS "pool_hash_id"
 FROM pool_retire;
 
 CREATE VIEW "StakeRegistration" AS
