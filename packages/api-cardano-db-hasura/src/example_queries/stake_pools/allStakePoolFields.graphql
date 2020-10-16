@@ -24,6 +24,21 @@ query allStakePoolFields (
             inEffectFrom
         }
         rewardAddress
+        rewards {
+            address
+            amount
+            earnedIn {
+                number
+            }
+        }
+        rewards_aggregate {
+            aggregate {
+                count
+                sum {
+                    amount
+                }
+            }
+        }
         updatedIn {
             hash
         }

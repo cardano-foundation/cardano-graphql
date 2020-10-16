@@ -114,6 +114,26 @@ export async function buildSchema (hasuraClient: HasuraClient) {
             schema: hasuraSchema
           })
         },
+        rewards: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'rewards',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
+        rewards_aggregate: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'rewards_aggregate',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
         stakeDeregistrations: (_root, args, context, info) => {
           return delegateToSchema({
             args,
