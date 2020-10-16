@@ -25,6 +25,7 @@ describe('stakePools', () => {
     expect(stakePools.length).toBe(5)
     expect(stakePools[0].fixedCost).toBeDefined()
     expect(stakePools[0].hash).toBeDefined()
+    expect(stakePools[0].id.slice(0, 4)).toBe('pool')
     expect(stakePools[0].margin).toBeDefined()
     expect(stakePools[0].metadataHash).toBeDefined()
     expect(stakePools[0].owners).toBeDefined()
@@ -65,6 +66,6 @@ describe('stakePools', () => {
     })
     const { stakePools_aggregate } = result.data
     expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(0)
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(200)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(600)
   })
 })

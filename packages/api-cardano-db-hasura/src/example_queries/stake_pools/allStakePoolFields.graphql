@@ -5,6 +5,7 @@ query allStakePoolFields (
     stakePools (limit: $limit, where: $where) {
         fixedCost
         hash
+        id
         margin
         metadataHash
         owners {

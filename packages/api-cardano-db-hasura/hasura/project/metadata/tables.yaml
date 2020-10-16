@@ -118,7 +118,7 @@
           schema: public
           name: StakePool
         column_mapping:
-          pool_hash: hash
+          pool_hash_id: hash_id
   - name: transaction
     using:
       manual_configuration:
@@ -190,7 +190,7 @@
           schema: public
           name: StakePool
         column_mapping:
-          pool_hash: hash
+          pool_hash_id: hash_id
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -211,7 +211,7 @@
           schema: public
           name: StakePool
         column_mapping:
-          pool_hash: hash
+          pool_hash_id: hash_id
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -271,7 +271,7 @@
           schema: public
           name: pool_owner
         column_mapping:
-          id: pool_hash_id
+          hash_id: pool_hash_id
   - name: relays
     using:
       manual_configuration:
@@ -279,7 +279,7 @@
           schema: public
           name: pool_relay
         column_mapping:
-          id: update_id
+          update_id: update_id
   - name: retirements
     using:
       manual_configuration:
@@ -287,7 +287,7 @@
           schema: public
           name: StakePoolRetirement
         column_mapping:
-          hash: pool_hash
+          hash_id: pool_hash_id
   - name: rewards
     using:
       manual_configuration:
@@ -295,13 +295,14 @@
           schema: public
           name: Reward
         column_mapping:
-          hash: pool_hash
+          hash_id: pool_hash_id
   select_permissions:
   - role: cardano-graphql
     permission:
       columns:
       - fixedCost
       - hash
+      - id
       - margin
       - metadataHash
       - pledge
@@ -337,7 +338,7 @@
           schema: public
           name: StakePool
         column_mapping:
-          pool_hash: hash
+          pool_hash_id: hash_id
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -548,7 +549,7 @@
           schema: public
           name: StakePool
         column_mapping:
-          pool_hash_id: id
+          pool_hash_id: hash_id
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -573,7 +574,7 @@
           schema: public
           name: StakePool
         column_mapping:
-          update_id: id
+          update_id: update_id
   select_permissions:
   - role: cardano-graphql
     permission:
