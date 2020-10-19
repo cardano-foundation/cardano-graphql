@@ -1,8 +1,7 @@
 # This file is used by nix-shell.
-# It just takes the shell attribute from default.nix.
 { config ? {}
 , sourcesOverride ? {}
-, withHoogle ? true
+, withHoogle ? false
 , pkgs ? import ./nix {
     inherit config sourcesOverride;
   }
@@ -14,19 +13,35 @@ let
   shell = cardanoPreludeHaskellPackages.shellFor {
     name = "cabal-dev-shell";
 
-    # If shellFor local packages selection is wrong,
+    # If shellFor default local packages selection is wrong,
     # then list all local packages then include source-repository-package that cabal complains about:
-    # packages = ps: with ps; [ ];
+    packages = ps: with ps; [
+       cardano-prelude
+       cardano-prelude-test
+    ];
 
     # These programs will be available inside the nix-shell.
     buildInputs = with haskellPackages; [
-      cabal-install
+      ghcid
+      gitAndTools.git
+      hlint
+      weeder
+      nix
       niv
+      pkgconfig
+      sqlite-interactive
     ];
+
+    tools = {
+      cabal = "3.2.0.0";
+    };
 
     # Prevents cabal from choosing alternate plans, so that
     # *all* dependencies are provided by Nix.
-    exactDeps = true;
+    exactDeps = false;
+
+    NIX_SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
+    SSL_CERT_FILE = "/etc/ssl/certs/ca-bundle.crt";
 
     inherit withHoogle;
   };
