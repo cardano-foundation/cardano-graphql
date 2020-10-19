@@ -1,4 +1,5 @@
 DROP VIEW IF EXISTS
+  "ActiveStake",
   "Block",
   "Cardano",
   "Delegation",

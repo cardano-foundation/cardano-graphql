@@ -130,6 +130,19 @@ SELECT
   stake_registration.tx_id AS "tx_id"
 FROM stake_registration;
 
+CREATE VIEW "ActiveStake" AS
+SELECT
+  (
+  	SELECT stake_address.view
+  	FROM stake_address
+  	WHERE stake_address.id = epoch_stake.addr_id
+  ) AS "address",
+  amount AS "amount",
+  epoch_no as "epochNo",
+  id AS "id",
+  ( SELECT pool_hash.hash_raw FROM pool_hash WHERE pool_hash.id = pool_id ) AS "pool_hash"
+FROM epoch_stake;
+
 CREATE VIEW "Transaction" AS
 SELECT
   block.hash AS "blockHash",

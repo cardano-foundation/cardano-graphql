@@ -4,7 +4,7 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { epoch1 } from './data_assertions'
+import { epoch1, epoch220 } from './data_assertions'
 import { buildClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
@@ -29,9 +29,10 @@ describe('epochs', () => {
   it('Can return aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinEpoch'),
-      variables: { number: 1 }
+      variables: { where: { number: { _in: [1, 220] } } }
     })
     expect(result.data.epochs[0]).toEqual(epoch1.aggregated)
+    expect(result.data.epochs[1]).toEqual(epoch220.aggregated)
     expect(result.data.epochs[0].blocksCount).toEqual(epoch1.aggregated.blocks_aggregate.aggregate.count)
     expect(result.data).toMatchSnapshot()
   })
