@@ -41,6 +41,11 @@ Object {
   "blocks": Array [
     Object {
       "hash": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "vrfKey": null,
+    },
+    Object {
+      "hash": "ab1df510b2fc22a2731212937f532894c474ddccf6240047b38b4a3c14c1895c",
+      "vrfKey": "vrf_vk1ytuuajlv7wvxj57qr6j5ycx69l54ks5nzswqwyn4fhhec6dtdjgsqmzku7",
     },
   ],
 }

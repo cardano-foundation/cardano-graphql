@@ -1,3 +1,4 @@
+import { Block } from '@src/graphql_types'
 
 export const block29021 = {
   basic: {
@@ -88,4 +89,30 @@ export const block29022 = {
     slotNo: 29036,
     transactionsCount: '0'
   }
+}
+
+export const block4490600 = {
+  basic: {
+    epoch: {
+      number: 208
+    },
+    epochNo: 208,
+    fees: 3700733,
+    hash: 'ab1df510b2fc22a2731212937f532894c474ddccf6240047b38b4a3c14c1895c',
+    number: 4490510,
+    forgedAt: '2020-07-29T22:14:51Z',
+    previousBlock: {
+      hash: '02d698482b56b7345e3e0cb8938f6b22f12d1370231457eaa0d991bea3327f5c',
+      number: 4490599
+    },
+    nextBlock: {
+      hash: '9fb51dab84fa0e9ae97c6ee48af4e655a330e25d7b96a236d8684761f54eca75',
+      number: 4490601
+    },
+    size: 14476,
+    slotInEpoch: 1800,
+    slotNo: 4494600,
+    transactionsCount: '17',
+    vrfKey: 'vrf_vk1ytuuajlv7wvxj57qr6j5ycx69l54ks5nzswqwyn4fhhec6dtdjgsqmzku7'
+  } as Partial<Block>
 }
