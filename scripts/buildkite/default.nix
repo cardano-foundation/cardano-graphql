@@ -1,22 +1,40 @@
 { system ? builtins.currentSystem
+, crossSystem ? null
+# allows to customize haskellNix (ghc and profiling, see ./nix/haskell.nix)
 , config ? {}
-, pkgs ? import ../../nix { inherit system config; }
-, buildTools ? with pkgs; [ git nix gnumake ]
+# allows to override dependencies of the project without modifications,
+# eg. to test build against local checkout of iohk-nix:
+# nix build -f default.nix cardano-prelude --arg sourcesOverride '{
+#   iohk-nix = ../iohk-nix;
+# }'
+, sourcesOverride ? {}
+# pinned version of nixpkgs augmented with overlays (iohk-nix and our packages).
+, pkgs ? import ./nix { inherit system crossSystem config sourcesOverride; }
+, gitrev ? pkgs.iohkNix.commitIdFromGitRepoOrZero ./.git
 }:
-
-with pkgs.lib;
-with pkgs;
-
+with pkgs; with commonLib;
 let
-  cache-s3 = callPackage ./cache-s3.nix {};
 
-  stackRebuild = runCommand "stack-rebuild" {} ''
-    ${haskellPackages.ghcWithPackages (ps: [ps.turtle ps.safe ps.transformers])}/bin/ghc -o $out ${./rebuild.hs}
-  '';
+  haskellPackages = recRecurseIntoAttrs
+    # we are only interested in listing the project packages:
+    (selectProjectPackages cardanoPreludeHaskellPackages);
 
-in
-  writeScript "stack-rebuild-wrapped" ''
-    #!${stdenv.shell}
-    export PATH=${lib.makeBinPath ([ cache-s3 stack gnused coreutils gnutar gzip ] ++ buildTools)}
-    exec ${stackRebuild} "$@"
-  ''
+  self = {
+    inherit haskellPackages;
+
+    # `tests` are the test suites which have been built.
+    tests = collectComponents' "tests" haskellPackages;
+    # `benchmarks` (only built, not run).
+    benchmarks = collectComponents' "benchmarks" haskellPackages;
+
+    checks = recurseIntoAttrs {
+      # `checks.tests` collect results of executing the tests:
+      tests = collectChecks haskellPackages;
+    };
+
+    shell = import ./shell.nix {
+      inherit pkgs;
+      withHoogle = true;
+    };
+};
+in self
