@@ -1,4 +1,4 @@
-resolver: lts-13.26
+resolver: lts-14.27
 compiler: ghc-8.6.5
 
 name: cardano-snapshot
@@ -12,7 +12,7 @@ packages:
 
   - base58-bytestring-0.1.0
   # Waiting on Stackage release
-  - hedgehog-1.0.2
+  - hedgehog-1.0.3
   - micro-recursion-schemes-5.0.2.2
   - quiet-0.2
   - streaming-binary-0.3.0.1
