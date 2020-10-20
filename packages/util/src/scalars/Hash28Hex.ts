@@ -1,8 +1,8 @@
 import { GraphQLError, GraphQLScalarType, Kind } from 'graphql'
 
-export const Hash32HexString = new GraphQLScalarType({
-  name: 'Hash32HexString',
-  description: 'Hex encoded hash32 string, 64 characters',
+export const Hash28Hex = new GraphQLScalarType({
+  name: 'Hash28Hex',
+  description: 'Hex encoded 28 byte hash, 56 characters',
   serialize (value: string) {
     return value.substring(2)
   },
@@ -18,6 +18,6 @@ export const Hash32HexString = new GraphQLScalarType({
 })
 
 function validateInput (input: string) {
-  if (input.length !== 64 && input.length !== 56) throw new GraphQLError(`${input} is not a valid hash`)
+  if (input.length !== 56) throw new GraphQLError(`${input} is not a valid 28 byte hash`)
   return `\\x${input}`
 }

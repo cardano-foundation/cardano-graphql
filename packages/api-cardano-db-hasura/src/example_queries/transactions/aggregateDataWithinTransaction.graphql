@@ -1,5 +1,5 @@
 query aggregatedDataWithinTransaction(
-    $hashes: [Hash32HexString]!
+    $hashes: [Hash32Hex]!
 ){
     transactions(
         where: { hash: { _in: $hashes }},

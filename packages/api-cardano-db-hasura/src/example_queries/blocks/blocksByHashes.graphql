@@ -1,5 +1,5 @@
 query blocksByHashes(
-    $hashes: [Hash32HexString]!
+    $hashes: [Hash32Hex]!
 )  {
     blocks (
         where: {
