@@ -2,7 +2,8 @@ schema {
   query: Query
 }
 
-scalar Hash32HexString
+scalar Hash28Hex
+scalar Hash32Hex
 scalar IPv4
 scalar IPv6
 scalar BigInt
@@ -327,22 +328,22 @@ input StakeDeregistration_bool_exp {
 
 type SlotLeader {
   description: String!
-  hash: Hash32HexString!
+  hash: Hash28Hex!
   stakePool: StakePool
 }
 
 input SlotLeader_bool_exp {
   description: text_comparison_exp
-  hash: Hash32HexString_comparison_exp
+  hash: Hash28Hex_comparison_exp
   stakePool: StakePool_bool_exp
 }
 
 type StakePool {
   fixedCost: String!
-  hash: Hash32HexString!
+  hash: Hash28Hex!
   id: String!
   margin: Float!
-  metadataHash: Hash32HexString
+  metadataHash: Hash32Hex
   owners: [StakePoolOwner!]!
   pledge: String!
   relays: [Relay]
@@ -374,10 +375,10 @@ input StakePool_bool_exp {
   _and: [StakePool_bool_exp]
   _not: StakePool_bool_exp
   _or: [StakePool_bool_exp]
-  hash: Hash32HexString_comparison_exp
+  hash: Hash28Hex_comparison_exp
   id: text_comparison_exp
   margin: Float_comparison_exp
-  metadataHash: Hash32HexString_comparison_exp
+  metadataHash: Hash32Hex_comparison_exp
   owners: StakePoolOwner_bool_exp
   pledge: text_comparison_exp
   registrationTransaction: Transaction_bool_exp
@@ -425,7 +426,7 @@ type StakePool_sum_fields {
 }
 
 input StakePoolOwner_bool_exp {
-  hash: Hash32HexString_comparison_exp
+  hash: Hash28Hex_comparison_exp
 }
 
 type StakePoolRetirement {
@@ -440,7 +441,7 @@ input StakePoolRetirement_bool_exp {
 }
 
 type StakePoolOwner {
-  hash: Hash32HexString!
+  hash: Hash28Hex!
 }
 
 
@@ -475,7 +476,7 @@ type Transaction {
   blockIndex: Int!
   deposit: BigInt!
   fee: BigInt!
-  hash: Hash32HexString!
+  hash: Hash32Hex!
   inputs (
     limit: Int
     order_by: [TransactionInput_order_by]
@@ -532,7 +533,7 @@ input Transaction_bool_exp {
   blockIndex: Int_comparison_exp
   deposit: BigInt_comparison_exp
   fee: BigInt_comparison_exp
-  hash: Hash32HexString_comparison_exp
+  hash: Hash32Hex_comparison_exp
   includedAt: Date_comparison_exp
   inputs: TransactionInput_bool_exp
   outputs: TransactionOutput_bool_exp
@@ -588,10 +589,10 @@ type Transaction_sum_fields {
 type TransactionInput {
   address: String!
   sourceTransaction: Transaction!
-  sourceTxHash: Hash32HexString!
+  sourceTxHash: Hash32Hex!
   sourceTxIndex: Int!
   transaction: Transaction!
-  txHash: Hash32HexString!
+  txHash: Hash32Hex!
   value: String!
 }
 
@@ -644,7 +645,7 @@ type TransactionOutput {
   address: String!
   index: Int!
   transaction: Transaction!
-  txHash: Hash32HexString!
+  txHash: Hash32Hex!
   value: String!
 }
 
@@ -703,11 +704,11 @@ type Block {
   fees: BigInt!
   forgedAt: DateTime!
   slotLeader: SlotLeader!
-  hash: Hash32HexString!
+  hash: Hash32Hex!
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a block number
-  merkelRoot: Hash32HexString
+  merkelRoot: Hash32Hex
   number: Int
-  opCert: Hash32HexString
+  opCert: Hash32Hex
   slotInEpoch: Int
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
   slotNo: Int
@@ -740,7 +741,7 @@ input Block_bool_exp {
   slotLeader: SlotLeader_bool_exp
   epoch: Epoch_bool_exp
   fees: BigInt_comparison_exp
-  hash: Hash32HexString_comparison_exp
+  hash: Hash32Hex_comparison_exp
   number: Int_comparison_exp
   previousBlock: Block_bool_exp
   nextBlock: Block_bool_exp
@@ -986,11 +987,18 @@ input Percentage_comparison_exp {
 }
 
 # All fields are combined with logical 'AND'.
-input Hash32HexString_comparison_exp {
-  _eq: Hash32HexString
-  _in: [Hash32HexString]
-  _neq: Hash32HexString
-  _nin: [Hash32HexString]
+input Hash28Hex_comparison_exp {
+  _eq: Hash28Hex
+  _in: [Hash28Hex]
+  _neq: Hash28Hex
+  _nin: [Hash28Hex]
+}
+
+input Hash32Hex_comparison_exp {
+  _eq: Hash32Hex
+  _in: [Hash32Hex]
+  _neq: Hash32Hex
+  _nin: [Hash32Hex]
 }
 
 input text_comparison_exp {

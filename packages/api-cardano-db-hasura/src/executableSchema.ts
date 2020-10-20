@@ -12,7 +12,8 @@ import { GraphQLSchema } from 'graphql'
 const GraphQLBigInt = require('graphql-bigint')
 
 export const scalarResolvers = {
-  Hash32HexString: util.scalars.Hash32HexString,
+  Hash28Hex: util.scalars.Hash28Hex,
+  Hash32Hex: util.scalars.Hash32Hex,
   BigInt: GraphQLBigInt,
   DateTime: util.scalars.DateTimeUtcToIso,
   Percentage: util.scalars.Percentage

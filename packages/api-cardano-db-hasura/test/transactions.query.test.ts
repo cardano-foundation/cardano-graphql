@@ -59,7 +59,7 @@ describe('transactions', () => {
   it('returns an empty array when the transactions has no outputs', async () => {
     const result = await client.query({
       query: gql`query transactionWithNoOutputs(
-          $hash: Hash32HexString!
+          $hash: Hash32Hex!
       ) {
           transactions(
               where: { hash: { _eq: $hash } },
