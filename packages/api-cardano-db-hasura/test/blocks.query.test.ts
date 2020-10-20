@@ -3,7 +3,7 @@ import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { block29021, block29022 } from './data_assertions'
+import { block29021, block29022, block4490600 } from './data_assertions'
 import { buildClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
@@ -38,11 +38,18 @@ describe('blocks', () => {
 
   it('Can return blocks by number', async () => {
     const result = await client.query({
-      query: await loadQueryNode('blockByNumber'),
-      variables: { number: 29022 }
+      query: await loadQueryNode('blockByNumbers'),
+      variables: { numbers: [29022, 4490600] }
     })
-    expect(result.data.blocks.length).toBe(1)
-    expect(result.data.blocks[0]).toEqual({ hash: block29022.basic.hash })
+    expect(result.data.blocks.length).toBe(2)
+    expect(result.data.blocks[0]).toEqual({
+      hash: block29022.basic.hash,
+      vrfKey: null
+    })
+    expect(result.data.blocks[1]).toEqual({
+      hash: block4490600.basic.hash,
+      vrfKey: block4490600.basic.vrfKey
+    })
     expect(result.data).toMatchSnapshot()
   })
 
