@@ -8,7 +8,7 @@ CREATE VIEW "Block" AS
     block.op_cert AS "opCert",
     previous_block.hash AS "previousBlockHash",
     next_block.hash AS "nextBlockHash",
-    block.proto_version AS "protocolVersion",
+    CONCAT_WS('.', block.proto_major, block.proto_minor) AS "protocolVersion",
     block.size,
     block.tx_count AS "transactionsCount",
     block.epoch_no AS "epochNo",
@@ -29,7 +29,7 @@ CREATE OR REPLACE VIEW "Cardano" AS
   WHERE (block.block_no IS NOT NULL)
   ORDER BY block.block_no DESC
  LIMIT 1;
- 
+
 CREATE VIEW "Delegation" AS
 SELECT
   delegation.id AS "id",
