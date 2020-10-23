@@ -59,7 +59,7 @@ export const epoch220 = {
     activeStake_aggregate: {
       aggregate: {
         sum: {
-          amount: '15657991508072960'
+          amount: '15859988643309526'
         }
       }
     },

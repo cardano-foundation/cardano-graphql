@@ -1,14 +1,14 @@
 CREATE VIEW "Block" AS
  SELECT (COALESCE(( SELECT sum((tx.fee)::bigint) AS sum
            FROM tx
-          WHERE (tx.block = block.id)), (0)::NUMERIC))::bigint AS fees,
+          WHERE (tx.block_id = block.id)), (0)::NUMERIC))::bigint AS fees,
     block.hash,
     block.merkel_root AS "merkelRoot",
     block.block_no AS "number",
     block.op_cert AS "opCert",
     previous_block.hash AS "previousBlockHash",
     next_block.hash AS "nextBlockHash",
-    block.proto_version AS "protocolVersion",
+    jsonb_build_object('major', block.proto_major, 'minor', block.proto_minor) AS "protocolVersion",
     block.size,
     block.tx_count AS "transactionsCount",
     block.epoch_no AS "epochNo",
@@ -18,9 +18,9 @@ CREATE VIEW "Block" AS
     slot_leader.id AS "slot_leader_id",
     block.vrf_key As "vrfKey"
    FROM (((block
-     LEFT JOIN block previous_block ON ((block.previous = previous_block.id)))
-     LEFT JOIN block next_block ON ((next_block.previous = block.id)))
-     LEFT JOIN slot_leader ON ((block.slot_leader = slot_leader.id)));
+     LEFT JOIN block previous_block ON ((block.previous_id = previous_block.id)))
+     LEFT JOIN block next_block ON ((next_block.previous_id = block.id)))
+     LEFT JOIN slot_leader ON ((block.slot_leader_id = slot_leader.id)));
 
 CREATE OR REPLACE VIEW "Cardano" AS
  SELECT block.block_no AS "tipBlockNo",
@@ -90,7 +90,7 @@ WITH
     SELECT pool.hash_id, max(block.time) AS blockTime
     FROM pool_update AS pool
     JOIN tx ON pool.registered_tx_id = tx.id
-    JOIN block ON tx.block = block.id
+    JOIN block ON tx.block_id = block.id
     group by pool.hash_id
 )
 SELECT
@@ -107,10 +107,10 @@ SELECT
   ( SELECT stake_address.view FROM stake_address WHERE stake_address.id = pool.reward_addr_id) AS "rewardAddress",
   pool_meta_data.url AS "url"
 FROM pool_update AS pool
-  LEFT JOIN pool_meta_data ON pool.meta = pool_meta_data.id
+  LEFT JOIN pool_meta_data ON pool.meta_id = pool_meta_data.id
   INNER JOIN tx ON pool.registered_tx_id = tx.id
   INNER JOIN latest_block_times ON latest_block_times.hash_id = pool.hash_id
-  INNER JOIN block ON tx.block = block.id AND latest_block_times.blockTime = block.time;
+  INNER JOIN block ON tx.block_id = block.id AND latest_block_times.blockTime = block.time;
 
 CREATE VIEW "StakePoolRetirement" AS
 SELECT
@@ -157,7 +157,7 @@ SELECT
 FROM
   tx
 INNER JOIN block
-  ON block.id = tx.block;
+  ON block.id = tx.block_id;
 
 CREATE VIEW "TransactionInput" AS
 SELECT
@@ -239,6 +239,6 @@ RETURNS SETOF "TransactionOutput" AS $$
     ON tx_out.tx_id = tx_in.tx_out_id
     AND tx_out.index = tx_in.tx_out_index
   WHERE tx_in.tx_in_id IS NULL
-  AND tx.block <= (SELECT id FROM block WHERE hash = "hash")
+  AND tx.block_id <= (SELECT id FROM block WHERE hash = "hash")
 $$ LANGUAGE SQL stable;
 
