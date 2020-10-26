@@ -6,6 +6,7 @@ scalar Hash28Hex
 scalar Hash32Hex
 scalar IPv4
 scalar IPv6
+scalar JSONObject
 scalar BigInt
 scalar DateTime
 scalar Percentage
@@ -714,7 +715,7 @@ type Block {
   slotNo: Int
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
   previousBlock: Block
-  protocolVersion: String
+  protocolVersion: JSONObject
   nextBlock: Block
   size: BigInt!
   transactions(

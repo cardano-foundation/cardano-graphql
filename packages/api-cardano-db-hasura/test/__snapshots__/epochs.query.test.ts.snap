@@ -63,7 +63,7 @@ Object {
       "activeStake_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "amount": "15657991508072960",
+            "amount": "15859988643309526",
           },
         },
       },
