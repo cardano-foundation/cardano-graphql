@@ -117,4 +117,11 @@ describe('transactions', () => {
     })
     expect(result.data).toMatchSnapshot()
   })
+  it('Can return transaction metadata if present', async () => {
+    const result = await client.query({
+      query: await loadQueryNode('transactionByIdWithMetadataIfPresent'),
+      variables: { hash: 'f910021138e553c65b96cf3e4647927fcd9f634e06544251f83cffb1891876e8' }
+    })
+    expect(result.data).toMatchSnapshot()
+  })
 })

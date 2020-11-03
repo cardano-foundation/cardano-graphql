@@ -8,8 +8,13 @@ import util from '@cardano-graphql/util'
 import { Resolvers, Genesis } from './graphql_types'
 import { HasuraClient } from './HasuraClient'
 import { GraphQLSchema } from 'graphql'
-import { JSONObjectResolver, TimestampResolver } from 'graphql-scalars'
-
+import {
+  IPv4Resolver,
+  IPv6Resolver,
+  JSONObjectResolver,
+  TimestampResolver,
+  URLResolver
+} from 'graphql-scalars'
 const GraphQLBigInt = require('graphql-bigint')
 
 export const scalarResolvers = {
@@ -17,9 +22,12 @@ export const scalarResolvers = {
   DateTime: util.scalars.DateTimeUtcToIso,
   Hash28Hex: util.scalars.Hash28Hex,
   Hash32Hex: util.scalars.Hash32Hex,
+  IPv4: IPv4Resolver,
+  IPv6: IPv6Resolver,
   JSONObject: JSONObjectResolver,
   Percentage: util.scalars.Percentage,
-  Timestamp: TimestampResolver
+  Timestamp: TimestampResolver,
+  URL: URLResolver
 } as any
 
 export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis) {
