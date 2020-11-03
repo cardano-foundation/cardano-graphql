@@ -476,6 +476,14 @@
           name: TransactionInput
         column_mapping:
           hash: txHash
+  - name: metadata
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: tx_metadata
+        column_mapping:
+          id: tx_id
   - name: outputs
     using:
       manual_configuration:
@@ -665,3 +673,27 @@
       filter: {}
       limit: 100
       allow_aggregations: true
+- table:
+    schema: public
+    name: tx_metadata
+  configuration:
+    custom_root_fields: {}
+    custom_column_names:
+      json: value
+  object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - json
+      - key
+      filter: {}
+      limit: 100

@@ -105,6 +105,54 @@ Object {
 }
 `;
 
+exports[`transactions Can return transaction metadata if present 1`] = `
+Object {
+  "transactions": Array [
+    Object {
+      "metadata": Array [
+        Object {
+          "key": "0",
+          "value": Object {
+            "La_RepsistancE": "Was here",
+          },
+        },
+        Object {
+          "key": "1",
+          "value": Object {
+            "Choices": Array [
+              Object {
+                "CandidateId": "aaa9503a-6fc5-46ea-9aa0-b4c90f361a4c",
+                "VoteRank": 1,
+                "VoteWeight": 1,
+              },
+              Object {
+                "CandidateId": "8d649c12-936e-46be-b65a-c17f30f59574",
+                "VoteRank": 2,
+                "VoteWeight": 1,
+              },
+              Object {
+                "CandidateId": "81ce7f8e-94c3-4835-91fc-2146d51fa1fc",
+                "VoteRank": 0,
+                "VoteWeight": 0,
+              },
+              Object {
+                "CandidateId": "407540aa-58b5-40ca-b484-f40040eb2990",
+                "VoteRank": 3,
+                "VoteWeight": 1,
+              },
+            ],
+            "NetworkId": "TheRealAdamDean",
+            "ObjectType": "VoteBallot",
+            "ProposalId": "80064c28-1b03-4f1c-abf0-ca8c5a98d5b9",
+            "VoterId": "d990a1e8-cb90-4f59-b5cf-a8b59c9ba8ae",
+          },
+        },
+      ],
+    },
+  ],
+}
+`;
+
 exports[`transactions Returns transactions by hashes 1`] = `
 Object {
   "transactions": Array [

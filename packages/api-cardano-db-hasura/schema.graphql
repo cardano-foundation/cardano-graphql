@@ -289,7 +289,7 @@ type Genesis {
 type Relay {
   ipv4: IPv4
   ipv6: IPv6
-  dnsName: URL
+  dnsName: String
   dnsSrvName: String
   port: Int
 }
@@ -583,6 +583,7 @@ type Transaction {
     offset: Int
     where: TransactionInput_bool_exp
   ): TransactionInput_aggregate!
+  metadata: [TransactionMetadata]
   outputs (
     limit: Int
     order_by: [TransactionOutput_order_by]
@@ -630,6 +631,7 @@ input Transaction_bool_exp {
   hash: Hash32Hex_comparison_exp
   includedAt: Date_comparison_exp
   inputs: TransactionInput_bool_exp
+  metadata: TransactionMetadata_bool_exp
   outputs: TransactionOutput_bool_exp
   size: BigInt_comparison_exp
   totalOutput: text_comparison_exp
@@ -733,6 +735,15 @@ type TransactionInput_min_fields {
 
 type TransactionInput_sum_fields {
   value: String
+}
+
+type TransactionMetadata {
+  key: String!
+  value: JSONObject!
+}
+
+input TransactionMetadata_bool_exp {
+  key: text_comparison_exp
 }
 
 type TransactionOutput {
