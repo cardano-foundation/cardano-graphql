@@ -41,10 +41,7 @@ query keyNetworkInfo {
         minUTxOValue
         nOpt
         poolDeposit
-        protocolVersion {
-          major
-          minor
-        }
+        protocolVersion
         rho
         tau
       }

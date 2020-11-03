@@ -1,9 +1,6 @@
 {
   "name": "Cardano GraphQL Schema",
-  "schemaPath": [
-    "./packages/api-cardano-db-hasura/schema.graphql",
-    "./packages/api-genesis/schema.graphql"
-  ],
+  "schemaPath": "./packages/api-cardano-db-hasura/schema.graphql",
   "extensions": {
     "endpoints": {
       "Cardano GraphQL Endpoint": {

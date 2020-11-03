@@ -6,12 +6,12 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -b ./src",
-    "cleanup": "shx rm -rf dist node_modules",
+    "cleanup": "shx rm -rf dist node_modules test/api/dist",
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
     "prepack": "yarn build",
     "prestart": "yarn build",
     "start": "node dist/index.js",
-    "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js"
+    "test": "graphql-codegen && yarn build && NODE_ENV=test jest -c ./test/jest.config.js"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,6 @@
   "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/server/README.md",
   "dependencies": {
     "@cardano-graphql/api-cardano-db-hasura": "2.2.0",
-    "@cardano-graphql/api-genesis": "2.2.0",
     "@graphql-tools/merge": "^6.0.10",
     "apollo-metrics": "^1.0.1",
     "apollo-server-core": "^2.14.3",
@@ -42,6 +41,7 @@
   },
   "devDependencies": {
     "@cardano-graphql/util-dev": "2.2.0",
+    "@graphql-codegen/cli": "^1.15.2",
     "@types/fs-extra": "^9.0.1",
     "@types/graphql-depth-limit": "^1.1.2",
     "@types/node": "^14.0.13",

@@ -6,7 +6,6 @@ STD_ARGS="--non-interactive --no-git-tag-version --sign-git-tag --new-version ${
 
 yarn version ${STD_ARGS} --cwd ../  && \
 yarn version ${STD_ARGS} --cwd ./packages/api-cardano-db-hasura  && \
-yarn version ${STD_ARGS} --cwd ./packages/api-genesis  && \
 yarn version ${STD_ARGS} --cwd ./packages/cli  && \
 yarn version ${STD_ARGS} --cwd ./packages/client-ts  && \
 yarn version ${STD_ARGS} --cwd ./packages/server  && \

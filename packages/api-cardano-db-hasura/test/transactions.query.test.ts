@@ -6,6 +6,14 @@ import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
 import { tx05ad8b, txe68043, tx0b8c5b } from './data_assertions'
 import { buildClient } from './util'
+import { Genesis } from '@src/graphql_types'
+
+const genesis = {
+  mainnet: {
+    byron: require('../../../config/network/mainnet/genesis/byron.json'),
+    shelley: require('../../../config/network/mainnet/genesis/shelley.json')
+  }
+} as Genesis
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'transactions'), name)
@@ -14,7 +22,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('transactions', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442)
+    client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442, genesis)
   })
 
   it('Returns transactions by hashes', async () => {

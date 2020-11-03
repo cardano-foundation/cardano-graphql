@@ -8,8 +8,9 @@ import { HasuraClient } from '@src/HasuraClient'
 import path from 'path'
 import { readSecrets } from '@src/util'
 import { Config } from '@src/Config'
+import { Genesis } from '@src/graphql_types'
 
-export async function buildClient (apiUri: string, hasuraUri: Config['hasuraUri'], dbPort: Config['db']['port']) {
+export async function buildClient (apiUri: string, hasuraUri: Config['hasuraUri'], dbPort: Config['db']['port'], genesis: Genesis) {
   if (process.env.TEST_MODE === 'e2e') {
     const client = await utilDev.createE2EClient(apiUri)
     await pRetry(async () => {
@@ -37,7 +38,7 @@ export async function buildClient (apiUri: string, hasuraUri: Config['hasuraUri'
     await db.init({
       onDbSetup: hasuraClient.applySchemaAndMetadata.bind(hasuraClient)
     })
-    const schema = await buildSchema(hasuraClient)
+    const schema = await buildSchema(hasuraClient, genesis)
     return utilDev.createIntegrationClient(schema)
   }
 }

@@ -6,13 +6,11 @@ import { GraphQLSchema, print } from 'graphql'
 import { introspectSchema, wrapSchema } from '@graphql-tools/wrap'
 import path from 'path'
 import tmp from 'tmp-promise'
-import { buildSchema as buildGenesisSchema } from '@cardano-graphql/api-genesis'
+import { buildSchema } from './api/src'
 import util from '@cardano-graphql/util'
 import { Server } from '@src/Server'
 import { IntrospectionNotPermitted, TracingRequired } from '@src/errors'
 
-const byronTestnetGenesis = '../../../config/network/testnet/genesis/byron.json'
-const shelleyTestnetGenesis = '../../../config/network/testnet/genesis/shelley.json'
 const clientPath = path.resolve(__dirname, 'app_with_graphql_operations')
 const staticConfig = {
   apiPort: 3301,
@@ -24,14 +22,14 @@ describe('Server', () => {
   let client: ApolloClient<any>
   let allowedDocumentNode: DocumentNode
   let server: any
-  let genesisSchema: GraphQLSchema
+  let schema: GraphQLSchema
   let allowListPath: string
 
   beforeAll(async () => {
     allowListPath = await tmp.tmpName({ postfix: '.json' })
     execSync(`npx persistgraphql ${clientPath} ${allowListPath}`)
-    genesisSchema = buildGenesisSchema({ byron: require(byronTestnetGenesis), shelley: require(shelleyTestnetGenesis) })
-    allowedDocumentNode = await util.loadQueryNode(path.resolve(clientPath, 'src', 'feature_1'), 'maxLovelaceSupply')
+    schema = buildSchema()
+    allowedDocumentNode = await util.loadQueryNode(path.resolve(clientPath, 'src', 'feature_1'), 'test')
   })
 
   afterEach(() => {
@@ -58,7 +56,7 @@ describe('Server', () => {
         }
       })
     })
-    server = new Server([genesisSchema], {
+    server = new Server([schema], {
       apiPort,
       allowIntrospection: false,
       cacheEnabled: false,
@@ -70,15 +68,10 @@ describe('Server', () => {
     await server.start()
     const validQueryResult = await client.query({
       query: gql`query valid {
-          genesis {
-              shelley {
-                  maxLovelaceSupply
-                  systemStart
-              }
-          }
+          test
       }`
     })
-    expect(validQueryResult.data.genesis.shelley.maxLovelaceSupply).toBeDefined()
+    expect(validQueryResult.data.test).toBe('foo')
     expect(validQueryResult.errors).not.toBeDefined()
   })
 
@@ -106,7 +99,7 @@ describe('Server', () => {
     describe('Allowing specific queries', () => {
       describe('Booting the server without providing an allow-list', () => {
         beforeEach(async () => {
-          server = new Server([genesisSchema], {
+          server = new Server([schema], {
             ...staticConfig,
             allowIntrospection: false,
             cacheEnabled: false,
@@ -120,15 +113,10 @@ describe('Server', () => {
         it('returns data for all valid queries', async () => {
           const validQueryResult = await client.query({
             query: gql`query valid {
-              genesis {
-                  shelley {
-                      maxLovelaceSupply
-                      systemStart
-                  }
-              }
+              test
           }`
           })
-          expect(validQueryResult.data.genesis.shelley.maxLovelaceSupply).toBeDefined()
+          expect(validQueryResult.data.test).toBe('foo')
           expect(validQueryResult.errors).not.toBeDefined()
         })
       })
@@ -136,7 +124,7 @@ describe('Server', () => {
       describe('Providing an allow-list produced by persistgraphql, intended to limit the API for specific application requirements', () => {
         beforeEach(async () => {
           server = new Server(
-            [genesisSchema],
+            [schema],
             {
               ...staticConfig,
               allowListPath,
@@ -157,7 +145,7 @@ describe('Server', () => {
           const result = await client.query({
             query: allowedDocumentNode
           })
-          expect(result.data.genesis.shelley.maxLovelaceSupply).toBeDefined()
+          expect(result.data.test).toBe('foo')
           expect(result.errors).not.toBeDefined()
         })
         it('Returns a forbidden error and 403 HTTP response error if a valid but disallowed operation is sent', async () => {
@@ -165,12 +153,7 @@ describe('Server', () => {
           try {
             await client.query({
               query: gql`query validButNotWhitelisted {
-                  genesis {
-                      shelley {
-                          maxLovelaceSupply
-                          systemStart
-                      }
-                  }
+                  testTwo
               }`
             })
           } catch (e) {
@@ -203,7 +186,7 @@ describe('Server', () => {
         server.shutdown()
       })
       it('stops the schema being introspected', async () => {
-        server = new Server([genesisSchema], {
+        server = new Server([schema], {
           ...staticConfig,
           allowIntrospection: false,
           cacheEnabled: false,
@@ -217,7 +200,7 @@ describe('Server', () => {
         })
       })
       it('allows the schema to be introspected', async () => {
-        server = new Server([genesisSchema], {
+        server = new Server([schema], {
           ...staticConfig,
           allowIntrospection: true,
           cacheEnabled: false,
@@ -229,7 +212,7 @@ describe('Server', () => {
         await expect(fetchSchemaViaIntrospection()).resolves.toBeInstanceOf(GraphQLSchema)
       })
       it('cannot be used with the allow-list feature enabled', async () => {
-        server = new Server([genesisSchema], {
+        server = new Server([schema], {
           ...staticConfig,
           allowIntrospection: true,
           allowListPath,
@@ -246,7 +229,7 @@ describe('Server', () => {
         server.shutdown()
       })
       it('requires tracing to be enabled', async () => {
-        server = new Server([genesisSchema], {
+        server = new Server([schema], {
           ...staticConfig,
           allowIntrospection: false,
           cacheEnabled: false,
@@ -254,7 +237,7 @@ describe('Server', () => {
           tracing: true
         })
         await expect(server.init()).resolves
-        server = new Server([genesisSchema], {
+        server = new Server([schema], {
           ...staticConfig,
           allowIntrospection: false,
           cacheEnabled: false,

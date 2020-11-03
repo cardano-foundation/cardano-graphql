@@ -1,7 +1,7 @@
-schema: ./schema.graphql
+schema: ./test/api/schema.graphql
 overwrite: true
 generates:
-  ./src/graphql_types.ts:
+  ./test/api/src/graphql_types.ts:
       config:
         useIndexSignature: true
       plugins:
