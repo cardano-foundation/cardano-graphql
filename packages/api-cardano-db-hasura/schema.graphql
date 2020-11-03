@@ -911,7 +911,9 @@ type Epoch {
   blocksCount: String!
   fees: BigInt!
   output: String!
+  nonce: Hash32Hex
   number: Int!
+  protocolParams: ShelleyProtocolParams
   transactionsCount: String!
   startedAt: DateTime!
   lastBlockTime: DateTime!

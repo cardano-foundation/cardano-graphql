@@ -177,6 +177,15 @@
       select_aggregate: epochs_aggregate
       select: epochs
     custom_column_names: {}
+  object_relationships:
+  - name: protocolParams
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: ShelleyEpochProtocolParams
+        column_mapping:
+          number: epoch_no
   array_relationships:
   - name: activeStake
     using:
@@ -201,6 +210,7 @@
       - blocksCount
       - fees
       - lastBlockTime
+      - nonce
       - number
       - output
       - startedAt
@@ -242,6 +252,32 @@
       filter: {}
       limit: 100
       allow_aggregations: true
+- table:
+    schema: public
+    name: ShelleyEpochProtocolParams
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - a0
+      - decentralisationParam
+      - eMax
+      - extraEntropy
+      - keyDeposit
+      - maxBlockBodySize
+      - maxBlockHeaderSize
+      - maxTxSize
+      - minFeeA
+      - minFeeB
+      - minPoolCost
+      - minUTxOValue
+      - nOpt
+      - poolDeposit
+      - protocolVersion
+      - rho
+      - tau
+      filter: {}
+      limit: 100
 - table:
     schema: public
     name: SlotLeader

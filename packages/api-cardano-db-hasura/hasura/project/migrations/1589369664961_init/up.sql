@@ -47,11 +47,38 @@ SELECT
   epoch.fees AS "fees",
   epoch.out_sum AS "output",
   epoch.no AS "number",
+  (
+  	SELECT epoch_param.nonce
+  	FROM epoch_param
+  	WHERE epoch_param.epoch_no = epoch.no
+  ) AS "nonce",
   epoch.tx_count AS "transactionsCount",
   epoch.start_time AS "startedAt",
   epoch.end_time AS "lastBlockTime",
   epoch.blk_count AS "blocksCount"
 FROM epoch;
+
+CREATE VIEW "ShelleyEpochProtocolParams" AS
+SELECT
+  epoch_param.influence AS "a0",
+  epoch_param.decentralisation AS "decentralisationParam",
+  epoch_param.max_epoch AS "eMax",
+  epoch_param.epoch_no AS "epoch_no",
+  epoch_param.entropy AS "extraEntropy",
+  epoch_param.key_deposit AS "keyDeposit",
+  epoch_param.max_block_size AS "maxBlockBodySize",
+  epoch_param.max_bh_size AS "maxBlockHeaderSize",
+  epoch_param.max_tx_size AS "maxTxSize",
+  epoch_param.min_fee_a AS "minFeeA",
+  epoch_param.min_fee_b AS "minFeeB",
+  epoch_param.min_pool_cost AS "minPoolCost",
+  epoch_param.min_utxo_value AS "minUTxOValue",
+  epoch_param.optimal_pool_count AS "nOpt",
+  epoch_param.pool_deposit AS "poolDeposit",
+  jsonb_build_object('major', epoch_param.protocol_major, 'minor', epoch_param.protocol_major) AS "protocolVersion",
+  epoch_param.monetary_expand_rate AS "rho",
+  epoch_param.treasury_growth_rate AS "tau"
+FROM epoch_param;
 
 CREATE VIEW "Reward" AS
 SELECT

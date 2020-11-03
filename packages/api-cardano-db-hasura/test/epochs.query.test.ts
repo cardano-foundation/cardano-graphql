@@ -34,6 +34,15 @@ describe('epochs', () => {
     expect(result.data).toMatchSnapshot()
   })
 
+  it('Included protocol params in effect for the epoch', async () => {
+    const result = await client.query({
+      query: await loadQueryNode('epochProtocolParams'),
+      variables: { where: { number: { _eq: 220 } } }
+    })
+    expect(result.data.epochs[0].protocolParams).toEqual(epoch220.protocolParams)
+    expect(result.data).toMatchSnapshot()
+  })
+
   it('Can return aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinEpoch'),
