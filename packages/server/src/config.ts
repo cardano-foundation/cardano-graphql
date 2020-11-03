@@ -1,10 +1,9 @@
 import { Config as ApiCardanoDbHasuraConfig } from '@cardano-graphql/api-cardano-db-hasura'
-import { Config as ApiGenesisConfig } from '@cardano-graphql/api-genesis'
 import { MissingConfig } from './errors'
 import fs from 'fs-extra'
 import { Config as ServerConfig } from './Server'
 
-export type Config = ServerConfig & ApiCardanoDbHasuraConfig & ApiGenesisConfig
+export type Config = ServerConfig & ApiCardanoDbHasuraConfig
 
 export async function getConfig (): Promise<Config> {
   const {
@@ -13,8 +12,7 @@ export async function getConfig (): Promise<Config> {
     allowListPath,
     apiPort,
     cacheEnabled,
-    genesisFileByron,
-    genesisFileShelley,
+    genesis,
     hasuraUri,
     listenAddress,
     postgresDb,
@@ -30,11 +28,8 @@ export async function getConfig (): Promise<Config> {
     tracing
   } = filterAndTypecastEnvs(process.env)
 
-  if (!hasuraUri && !genesisFileShelley) {
-    throw new MissingConfig(
-      `You have not provided configuration to load an API segment. Set HASURA_URI and/or 
-      GENESIS_FILE_BYRON and GENESIS_FILE_SHELLEY`
-    )
+  if (!hasuraUri && !genesis.shelleyPath) {
+    throw new MissingConfig('HASURA_URI and GENESIS_FILE_SHELLEY env not set')
   }
   if (!postgresDbFile && !postgresDb) {
     throw new MissingConfig('POSTGRES_DB_FILE or POSTGRES_DB env not set')
@@ -72,8 +67,7 @@ export async function getConfig (): Promise<Config> {
     apiPort: apiPort || 3100,
     cacheEnabled: cacheEnabled || false,
     db,
-    genesisFileByron,
-    genesisFileShelley,
+    genesis,
     hasuraUri,
     listenAddress: listenAddress || '0.0.0.0',
     prometheusMetrics,
@@ -116,8 +110,10 @@ function filterAndTypecastEnvs (env: any) {
     allowListPath: ALLOW_LIST_PATH || WHITELIST_PATH,
     apiPort: Number(API_PORT),
     cacheEnabled: CACHE_ENABLED === 'true',
-    genesisFileByron: GENESIS_FILE_BYRON,
-    genesisFileShelley: GENESIS_FILE_SHELLEY,
+    genesis: {
+      byronPath: GENESIS_FILE_BYRON,
+      shelleyPath: GENESIS_FILE_SHELLEY
+    },
     hasuraUri: HASURA_URI,
     listenAddress: LISTEN_ADDRESS,
     postgresDb: POSTGRES_DB,

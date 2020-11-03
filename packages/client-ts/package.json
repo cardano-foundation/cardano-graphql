@@ -9,11 +9,10 @@
   "main": "api/index.js",
   "typings": "api/index.d.ts",
   "scripts": {
-    "build": "graphql-codegen -c codegen.cardano-db-hasura.yml && graphql-codegen -c codegen.genesis.yml && tsc",
+    "build": "graphql-codegen -c codegen.yml && tsc",
     "cleanup": "./scripts/cleanup.sh",
-    "combine-schema": "node ./util/combineGraphQLSchema.js",
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
-    "prepack": "yarn build && ./scripts/embed_schema.sh && node ./util/combineGraphQLSchema.js",
+    "prepack": "yarn build && ./scripts/embed_schema.sh",
     "postpack": "yarn cleanup",
     "test": "shx echo No tests in this package"
   },

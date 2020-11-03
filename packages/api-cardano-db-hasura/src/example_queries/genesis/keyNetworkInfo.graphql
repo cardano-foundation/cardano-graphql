@@ -28,9 +28,7 @@ query keyNetworkInfo {
         a0
         decentralisationParam
         eMax
-        extraEntropy {
-          tag
-        }
+        extraEntropy
         keyDeposit
         maxBlockBodySize
         maxBlockHeaderSize
@@ -41,10 +39,7 @@ query keyNetworkInfo {
         minUTxOValue
         nOpt
         poolDeposit
-        protocolVersion {
-          major
-          minor
-        }
+        protocolVersion
         rho
         tau
       }

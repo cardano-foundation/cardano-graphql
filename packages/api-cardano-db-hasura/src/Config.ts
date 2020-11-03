@@ -7,5 +7,9 @@ export interface Config {
     port: number
     user: string,
   },
+  genesis: {
+    byronPath: string,
+    shelleyPath: string
+  },
   hasuraUri: string
 }

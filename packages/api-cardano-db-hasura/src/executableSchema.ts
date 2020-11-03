@@ -5,21 +5,24 @@ import { delegateToSchema } from '@graphql-tools/delegate'
 import pRetry from 'p-retry'
 import path from 'path'
 import util from '@cardano-graphql/util'
-import { Resolvers } from './graphql_types'
+import { Resolvers, Genesis } from './graphql_types'
 import { HasuraClient } from './HasuraClient'
 import { GraphQLSchema } from 'graphql'
+import { JSONObjectResolver, TimestampResolver } from 'graphql-scalars'
 
 const GraphQLBigInt = require('graphql-bigint')
 
 export const scalarResolvers = {
-  Hash28Hex: util.scalars.Hash28Hex,
-  Hash32Hex: util.scalars.Hash32Hex,
   BigInt: GraphQLBigInt,
   DateTime: util.scalars.DateTimeUtcToIso,
-  Percentage: util.scalars.Percentage
+  Hash28Hex: util.scalars.Hash28Hex,
+  Hash32Hex: util.scalars.Hash32Hex,
+  JSONObject: JSONObjectResolver,
+  Percentage: util.scalars.Percentage,
+  Timestamp: TimestampResolver
 } as any
 
-export async function buildSchema (hasuraClient: HasuraClient) {
+export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis) {
   let hasuraSchema: GraphQLSchema
   await pRetry(async () => {
     hasuraSchema = await hasuraClient.buildHasuraSchema()
@@ -125,6 +128,7 @@ export async function buildSchema (hasuraClient: HasuraClient) {
             schema: hasuraSchema
           })
         },
+        genesis: async () => genesis,
         rewards: (_root, args, context, info) => {
           return delegateToSchema({
             args,

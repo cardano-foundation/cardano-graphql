@@ -4346,11 +4346,6 @@ graphql-scalars@^1.2.1:
   optionalDependencies:
     mongodb "*"
 
-graphql-scalars@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/graphql-scalars/-/graphql-scalars-1.2.2.tgz#4ffa1c80b4e13ba59c7ff3a6a252f85e538e73d5"
-  integrity sha512-onmDP35hKOg7ULwo2HmBjNwQAjbFg04KQvGW6i5EPQcp+XR/SoHIBELyYvIGEIgCCZpnq43qlSUAga1sF+Z3uw==
-
 graphql-subscriptions@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-1.1.0.tgz#5f2fa4233eda44cf7570526adfcf3c16937aef11"

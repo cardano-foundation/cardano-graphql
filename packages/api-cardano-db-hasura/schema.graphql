@@ -2,14 +2,15 @@ schema {
   query: Query
 }
 
+scalar BigInt
+scalar DateTime
 scalar Hash28Hex
 scalar Hash32Hex
 scalar IPv4
 scalar IPv6
 scalar JSONObject
-scalar BigInt
-scalar DateTime
 scalar Percentage
+scalar Timestamp
 scalar URL
 
 type Query {
@@ -57,6 +58,7 @@ type Query {
     offset: Int
     where: Epoch_bool_exp
   ): Epoch_aggregate!
+  genesis: Genesis!
   rewards (
     limit: Int
     order_by: [Reward_order_by!]
@@ -197,6 +199,49 @@ type ActiveStake_sum_fields {
   amount: String
 }
 
+type ByronBlockVersionData {
+  scriptVersion: Int!
+  slotDuration: Int!
+  maxBlockSize: Int!
+  maxHeaderSize: Int!
+  maxTxSize: Int!
+  maxProposalSize: Int!
+  mpcThd: String!
+  heavyDelThd: String!
+  updateVoteThd: String!
+  updateProposalThd: String!
+  updateImplicit: String!
+  softforkRule: ByronSoftForkRule!
+  txFeePolicy: ByronTxFeePolicy!
+  unlockStakeEpoch: String!
+}
+
+type ByronGenesis {
+  bootStakeholders: JSONObject!
+  heavyDelegation: JSONObject!
+  startTime: Timestamp!
+  nonAvvmBalances: JSONObject!
+  blockVersionData: ByronBlockVersionData!
+  protocolConsts: ByronProtocolConsts!
+  avvmDistr: JSONObject!
+}
+
+type ByronProtocolConsts {
+  k: Int!
+  protocolMagic: Int
+}
+
+type ByronSoftForkRule {
+  initThd: String!
+  minThd: String!
+  thdDecrement: String!
+}
+
+type ByronTxFeePolicy {
+  summand: String!
+  multiplier: String!
+}
+
 type Cardano {
   tip: Block!
   currentEpoch: Epoch!
@@ -234,6 +279,11 @@ type Delegation_aggregate {
 
 type Delegation_aggregate_fields {
   count: String
+}
+
+type Genesis {
+  byron: ByronGenesis
+  shelley: ShelleyGenesis
 }
 
 type Relay {
@@ -299,6 +349,49 @@ input Reward_order_by {
   amount: text_comparison_exp
   earnedIn: Epoch_order_by
   stakePool: StakePool_order_by
+}
+
+type ShelleyGenesis {
+  activeSlotsCoeff: Float!
+  epochLength: Int!
+  genDelegs: JSONObject
+  initialFunds: JSONObject!
+  maxKESEvolutions: Int!
+  maxLovelaceSupply: String!
+  networkId: String!
+  networkMagic: Int!
+  protocolParams: ShelleyProtocolParams!
+  securityParam: Int!
+  slotLength: Int!
+  slotsPerKESPeriod: Int!
+  staking: ShelleyGenesisStaking
+  systemStart: String!
+  updateQuorum: Int!
+}
+
+type ShelleyGenesisStaking {
+  pools: JSONObject!
+  stake: JSONObject!
+}
+
+type ShelleyProtocolParams {
+  a0: Float!
+  decentralisationParam: Float!
+  eMax: Int!
+  extraEntropy: JSONObject
+  keyDeposit: Int!
+  maxBlockBodySize: Int!
+  maxBlockHeaderSize: Int!
+  maxTxSize: Int!
+  minFeeA: Int!
+  minFeeB: Int!
+  minPoolCost: Int!
+  minUTxOValue: Int!
+  nOpt: Int!
+  poolDeposit: Int!
+  protocolVersion: JSONObject!
+  rho: Float!
+  tau: Float!
 }
 
 type StakeDeregistration {
@@ -818,7 +911,9 @@ type Epoch {
   blocksCount: String!
   fees: BigInt!
   output: String!
+  nonce: Hash32Hex
   number: Int!
+  protocolParams: ShelleyProtocolParams
   transactionsCount: String!
   startedAt: DateTime!
   lastBlockTime: DateTime!

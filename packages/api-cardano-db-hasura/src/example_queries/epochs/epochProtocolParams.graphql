@@ -1,0 +1,25 @@
+query epochProtocolParams (
+    $where: Epoch_bool_exp
+){
+    epochs( where: $where ) {
+        protocolParams {
+            a0
+            decentralisationParam
+            eMax
+            extraEntropy
+            keyDeposit
+            maxBlockBodySize
+            maxBlockHeaderSize
+            maxTxSize
+            minFeeA
+            minFeeB
+            minPoolCost
+            minUTxOValue
+            nOpt
+            poolDeposit
+            protocolVersion
+            rho
+            tau
+        }
+    }
+}

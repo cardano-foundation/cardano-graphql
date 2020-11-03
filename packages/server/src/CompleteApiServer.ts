@@ -1,18 +1,23 @@
 import { Config } from './config'
 import { Server } from './Server'
-import { buildSchema as buildCardanoDbHasuraSchema, Db, HasuraClient } from '@cardano-graphql/api-cardano-db-hasura'
-import { buildSchema as buildGenesisSchema } from '@cardano-graphql/api-genesis'
+import {
+  buildSchema as buildCardanoDbHasuraSchema,
+  Db,
+  Genesis,
+  HasuraClient
+} from '@cardano-graphql/api-cardano-db-hasura'
 import { GraphQLSchema } from 'graphql'
 
 export * from './config'
 
 export async function CompleteApiServer (config: Config): Promise<Server> {
   const schemas: GraphQLSchema[] = []
-  if (config.genesisFileByron !== undefined || config.genesisFileShelley !== undefined) {
-    schemas.push(buildGenesisSchema({
-      ...config.genesisFileByron !== undefined ? { byron: require(config.genesisFileByron) } : {},
-      ...config.genesisFileShelley !== undefined ? { shelley: require(config.genesisFileShelley) } : {}
-    }))
+  let genesis: Genesis
+  if (config.genesis.byronPath !== undefined || config.genesis.shelleyPath !== undefined) {
+    genesis = {
+      ...config.genesis.byronPath !== undefined ? { byron: require(config.genesis.byronPath) } : {},
+      ...config.genesis.shelleyPath !== undefined ? { shelley: require(config.genesis.shelleyPath) } : {}
+    }
   }
   if (config.hasuraUri !== undefined) {
     const hasuraClient = new HasuraClient(config.hasuraUri)
@@ -20,7 +25,7 @@ export async function CompleteApiServer (config: Config): Promise<Server> {
     await db.init({
       onDbSetup: hasuraClient.applySchemaAndMetadata.bind(hasuraClient)
     })
-    schemas.push(await buildCardanoDbHasuraSchema(hasuraClient))
+    schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis))
   }
   return new Server(schemas, config)
 }

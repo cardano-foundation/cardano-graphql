@@ -1,9 +1,0 @@
-
-query maxLovelaceSupplyAndSystemStart {
-  genesis {
-    shelley {
-      maxLovelaceSupply
-      systemStart
-    }
-  }
-}

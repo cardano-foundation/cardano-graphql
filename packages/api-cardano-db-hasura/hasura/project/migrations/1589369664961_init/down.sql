@@ -4,6 +4,7 @@ DROP VIEW IF EXISTS
   "Cardano",
   "Delegation",
   "Epoch",
+  "ShelleyEpochProtocolParams",
   "Reward",
   "SlotLeader",
   "StakeDeregistration",

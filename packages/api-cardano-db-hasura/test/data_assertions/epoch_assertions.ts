@@ -55,6 +55,28 @@ export const epoch220 = {
     number: 220,
     transactionsCount: '12870'
   },
+  protocolParams: {
+    a0: 0.3,
+    decentralisationParam: 0.64,
+    eMax: 18,
+    extraEntropy: null as any,
+    keyDeposit: 2000000,
+    maxBlockBodySize: 65536,
+    maxBlockHeaderSize: 1100,
+    maxTxSize: 16384,
+    minFeeA: 44,
+    minFeeB: 155381,
+    minPoolCost: 340000000,
+    minUTxOValue: 1000000,
+    nOpt: 150,
+    poolDeposit: 500000000,
+    protocolVersion: {
+      major: 2,
+      minor: 2
+    },
+    rho: 0.003,
+    tau: 0.2
+  },
   aggregated: {
     activeStake_aggregate: {
       aggregate: {

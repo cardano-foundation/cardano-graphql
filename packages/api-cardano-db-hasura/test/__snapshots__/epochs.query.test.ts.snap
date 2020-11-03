@@ -112,6 +112,37 @@ Object {
 }
 `;
 
+exports[`epochs Included protocol params in effect for the epoch 1`] = `
+Object {
+  "epochs": Array [
+    Object {
+      "protocolParams": Object {
+        "a0": 0.3,
+        "decentralisationParam": 0.64,
+        "eMax": 18,
+        "extraEntropy": null,
+        "keyDeposit": 2000000,
+        "maxBlockBodySize": 65536,
+        "maxBlockHeaderSize": 1100,
+        "maxTxSize": 16384,
+        "minFeeA": 44,
+        "minFeeB": 155381,
+        "minPoolCost": 340000000,
+        "minUTxOValue": 1000000,
+        "nOpt": 150,
+        "poolDeposit": 500000000,
+        "protocolVersion": Object {
+          "major": 2,
+          "minor": 2,
+        },
+        "rho": 0.003,
+        "tau": 0.2,
+      },
+    },
+  ],
+}
+`;
+
 exports[`epochs Returns epoch details by number 1`] = `
 Object {
   "epochs": Array [
