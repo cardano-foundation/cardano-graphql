@@ -281,10 +281,6 @@ type Delegation_aggregate_fields {
   count: String
 }
 
-type ExtraEntropy {
-  tag: String!
-}
-
 type Genesis {
   byron: ByronGenesis
   shelley: ShelleyGenesis
@@ -380,9 +376,9 @@ type ShelleyGenesisStaking {
 
 type ShelleyProtocolParams {
   a0: Float!
-  decentralisationParam: Int!
+  decentralisationParam: Float!
   eMax: Int!
-  extraEntropy: ExtraEntropy!
+  extraEntropy: JSONObject
   keyDeposit: Int!
   maxBlockBodySize: Int!
   maxBlockHeaderSize: Int!

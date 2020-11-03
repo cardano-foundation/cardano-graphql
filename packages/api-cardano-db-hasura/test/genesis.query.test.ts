@@ -21,7 +21,6 @@ describe('genesis', () => {
 
   beforeAll(async () => {
     client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442, genesis)
-    console.log(client)
   })
 
   it('Returns key information about the network genesis', async () => {

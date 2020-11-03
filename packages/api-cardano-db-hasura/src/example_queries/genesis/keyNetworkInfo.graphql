@@ -28,9 +28,7 @@ query keyNetworkInfo {
         a0
         decentralisationParam
         eMax
-        extraEntropy {
-          tag
-        }
+        extraEntropy
         keyDeposit
         maxBlockBodySize
         maxBlockHeaderSize
