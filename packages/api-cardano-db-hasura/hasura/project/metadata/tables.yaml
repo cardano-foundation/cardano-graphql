@@ -3,6 +3,7 @@
     name: ActiveStake
   configuration:
     custom_root_fields:
+      select_aggregate: activeStake_aggregate
       select: activeStake
     custom_column_names: {}
   object_relationships:
