@@ -102,7 +102,7 @@ services:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
     expose:
-      - 3100
+      - ${API_PORT:-3100}
     ports:
       - ${API_PORT:-3100}:3100
     restart: on-failure
