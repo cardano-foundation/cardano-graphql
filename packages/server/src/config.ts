@@ -6,78 +6,55 @@ import { Config as ServerConfig } from './Server'
 export type Config = ServerConfig & ApiCardanoDbHasuraConfig
 
 export async function getConfig (): Promise<Config> {
-  const {
-    allowIntrospection,
-    allowedOrigins,
-    allowListPath,
-    apiPort,
-    cacheEnabled,
-    genesis,
-    hasuraCliPath,
-    hasuraUri,
-    listenAddress,
-    postgresDb,
-    postgresDbFile,
-    postgresHost,
-    postgresPassword,
-    postgresPasswordFile,
-    postgresPort,
-    postgresUser,
-    postgresUserFile,
-    prometheusMetrics,
-    queryDepthLimit,
-    tracing
-  } = filterAndTypecastEnvs(process.env)
+  const env = filterAndTypecastEnvs(process.env)
 
-  if (!hasuraCliPath) {
+  if (!env.hasuraCliPath) {
     throw new MissingConfig('HASURA_CLI_PATH env not set')
   }
-  if (!hasuraUri && !genesis.shelleyPath) {
-    throw new MissingConfig('HASURA_URI and GENESIS_FILE_SHELLEY env not set')
+  if (!env.hasuraUri) {
+    throw new MissingConfig('HASURA_URI env not set')
   }
-  if (!postgresDbFile && !postgresDb) {
+  if (!env.genesis.shelleyPath) {
+    throw new MissingConfig('GENESIS_FILE_SHELLEY env not set')
+  }
+  if (!env.postgresDbFile && !env.postgresDb) {
     throw new MissingConfig('POSTGRES_DB_FILE or POSTGRES_DB env not set')
   }
-  if (!postgresHost) {
+  if (!env.postgresHost) {
     throw new MissingConfig('POSTGRES_HOST env not set')
   }
-  if (!postgresPasswordFile && !postgresPassword) {
+  if (!env.postgresPasswordFile && !env.postgresPassword) {
     throw new MissingConfig('POSTGRES_PASSWORD_FILE or POSTGRES_PASSWORD env not set')
   }
-  if (!postgresPort) {
+  if (!env.postgresPort) {
     throw new MissingConfig('POSTGRES_PORT env not set')
   }
-  if (!postgresUserFile && !postgresUser) {
+  if (!env.postgresUserFile && !env.postgresUser) {
     throw new MissingConfig('POSTGRES_USER_FILE or POSTGRES_USER env not set')
   }
   let db: Config['db']
   try {
     db = {
-      database: postgresDb || (await fs.readFile(postgresDbFile, 'utf8')).toString(),
-      host: postgresHost,
-      password: postgresPassword || (await fs.readFile(postgresPasswordFile, 'utf8')).toString(),
-      port: postgresPort,
-      user: postgresUser || (await fs.readFile(postgresUserFile, 'utf8')).toString()
+      database: env.postgresDb || (await fs.readFile(env.postgresDbFile, 'utf8')).toString(),
+      host: env.postgresHost,
+      password: env.postgresPassword || (await fs.readFile(env.postgresPasswordFile, 'utf8')).toString(),
+      port: env.postgresPort,
+      user: env.postgresUser || (await fs.readFile(env.postgresUserFile, 'utf8')).toString()
     }
   } catch (error) {
     throw new MissingConfig('Database configuration cannot be read')
   }
   return {
+    ...env,
     allowIntrospection:
-      (process.env.NODE_ENV === 'production' && allowIntrospection) ||
-      (process.env.NODE_ENV !== 'production' && allowIntrospection !== false),
-    allowedOrigins: allowedOrigins || true,
-    allowListPath,
-    apiPort: apiPort || 3100,
-    cacheEnabled: cacheEnabled || false,
+      (process.env.NODE_ENV === 'production' && env.allowIntrospection) ||
+      (process.env.NODE_ENV !== 'production' && env.allowIntrospection !== false),
+    allowedOrigins: env.allowedOrigins || true,
+    apiPort: env.apiPort || 3100,
+    cacheEnabled: env.cacheEnabled || false,
     db,
-    genesis,
-    hasuraCliPath,
-    hasuraUri,
-    listenAddress: listenAddress || '0.0.0.0',
-    prometheusMetrics,
-    queryDepthLimit: queryDepthLimit || 10,
-    tracing
+    listenAddress: env.listenAddress || '0.0.0.0',
+    queryDepthLimit: env.queryDepthLimit || 10
   }
 }
 
@@ -104,7 +81,7 @@ function filterAndTypecastEnvs (env: any) {
     PROMETHEUS_METRICS,
     QUERY_DEPTH_LIMIT,
     TRACING
-  } = env
+  } = env as NodeJS.ProcessEnv
   return {
     allowIntrospection: ALLOW_INTROSPECTION === 'true',
     allowedOrigins: ALLOWED_ORIGINS,

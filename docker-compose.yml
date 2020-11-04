@@ -81,14 +81,7 @@ services:
       - "postgres"
     restart: on-failure
     environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_DB_FILE=/run/secrets/postgres_db
-      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
-      - POSTGRES_USER_FILE=/run/secrets/postgres_user
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
-      - HASURA_GRAPHQL_ENABLED_LOG_TYPES=startup, http-log, webhook-log, websocket-log, query-log
-      - HASURA_GRAPHQL_ENABLE_TELEMETRY=false
     secrets:
       - postgres_db
       - postgres_password
@@ -108,15 +101,6 @@ services:
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
-      - GENESIS_FILE_BYRON=/config/genesis/byron.json
-      - GENESIS_FILE_SHELLEY=/config/genesis/shelley.json
-      - HASURA_CLI_PATH=/usr/local/bin/hasura
-      - HASURA_URI=http://hasura:8080
-      - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - POSTGRES_DB_FILE=/run/secrets/postgres_db
-      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
-      - POSTGRES_USER_FILE=/run/secrets/postgres_user
     expose:
       - 3100
     ports:
