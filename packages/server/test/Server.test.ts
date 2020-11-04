@@ -152,7 +152,7 @@ describe('Server', () => {
           expect.assertions(2)
           try {
             await client.query({
-              query: gql`query validButNotWhitelisted {
+              query: gql`query validButDisallowed {
                   testTwo
               }`
             })
