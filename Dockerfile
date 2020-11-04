@@ -33,6 +33,16 @@ RUN hasura --skip-update-check update-cli --version v1.2.1
 
 FROM frolvlad/alpine-glibc:alpine-3.11_glibc-2.30 as server
 ARG NETWORK=mainnet
+ENV \
+  GENESIS_FILE_BYRON=/config/genesis/byron.json \
+  GENESIS_FILE_SHELLEY=/config/genesis/shelley.json \
+  HASURA_CLI_PATH=/usr/local/bin/hasura \
+  HASURA_URI="http://hasura:8080" \
+  POSTGRES_DB_FILE=/run/secrets/postgres_db \
+  POSTGRES_HOST=postgres \
+  POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password \
+  POSTGRES_PORT=5432 \
+  POSTGRES_USER_FILE=/run/secrets/postgres_user 
 RUN apk add nodejs
 RUN mkdir /application
 COPY --from=builder /application/packages/api-cardano-db-hasura/dist /application/packages/api-cardano-db-hasura/dist
