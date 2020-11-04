@@ -13,6 +13,7 @@ export async function getConfig (): Promise<Config> {
     apiPort,
     cacheEnabled,
     genesis,
+    hasuraCliPath,
     hasuraUri,
     listenAddress,
     postgresDb,
@@ -28,6 +29,9 @@ export async function getConfig (): Promise<Config> {
     tracing
   } = filterAndTypecastEnvs(process.env)
 
+  if (!hasuraCliPath) {
+    throw new MissingConfig('HASURA_CLI_PATH env not set')
+  }
   if (!hasuraUri && !genesis.shelleyPath) {
     throw new MissingConfig('HASURA_URI and GENESIS_FILE_SHELLEY env not set')
   }
@@ -68,6 +72,7 @@ export async function getConfig (): Promise<Config> {
     cacheEnabled: cacheEnabled || false,
     db,
     genesis,
+    hasuraCliPath,
     hasuraUri,
     listenAddress: listenAddress || '0.0.0.0',
     prometheusMetrics,
@@ -85,6 +90,7 @@ function filterAndTypecastEnvs (env: any) {
     CACHE_ENABLED,
     GENESIS_FILE_BYRON,
     GENESIS_FILE_SHELLEY,
+    HASURA_CLI_PATH,
     HASURA_URI,
     LISTEN_ADDRESS,
     POSTGRES_DB,
@@ -114,6 +120,7 @@ function filterAndTypecastEnvs (env: any) {
       byronPath: GENESIS_FILE_BYRON,
       shelleyPath: GENESIS_FILE_SHELLEY
     },
+    hasuraCliPath: HASURA_CLI_PATH,
     hasuraUri: HASURA_URI,
     listenAddress: LISTEN_ADDRESS,
     postgresDb: POSTGRES_DB,

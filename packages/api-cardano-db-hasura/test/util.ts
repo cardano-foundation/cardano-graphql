@@ -10,7 +10,12 @@ import { readSecrets } from '@src/util'
 import { Config } from '@src/Config'
 import { Genesis } from '@src/graphql_types'
 
-export async function buildClient (apiUri: string, hasuraUri: Config['hasuraUri'], dbPort: Config['db']['port'], genesis: Genesis) {
+export async function buildClient (
+  apiUri: string,
+  hasuraUri: Config['hasuraUri'],
+  dbPort: Config['db']['port'],
+  genesis: Genesis
+) {
   if (process.env.TEST_MODE === 'e2e') {
     const client = await utilDev.createE2EClient(apiUri)
     await pRetry(async () => {
@@ -30,7 +35,7 @@ export async function buildClient (apiUri: string, hasuraUri: Config['hasuraUri'
     })
     return client
   } else {
-    const hasuraClient = new HasuraClient(hasuraUri)
+    const hasuraClient = new HasuraClient('hasura', hasuraUri)
     const db = new Db({
       ...{ host: 'localhost', port: dbPort },
       ...await readSecrets(path.resolve(__dirname, '..', '..', '..', 'config', 'secrets'))

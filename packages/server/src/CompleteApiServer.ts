@@ -20,7 +20,7 @@ export async function CompleteApiServer (config: Config): Promise<Server> {
     }
   }
   if (config.hasuraUri !== undefined) {
-    const hasuraClient = new HasuraClient(config.hasuraUri)
+    const hasuraClient = new HasuraClient(config.hasuraCliPath, config.hasuraUri)
     const db = new Db(config.db)
     await db.init({
       onDbSetup: hasuraClient.applySchemaAndMetadata.bind(hasuraClient)
