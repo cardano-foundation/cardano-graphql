@@ -10,6 +10,7 @@ scalar IPv4
 scalar IPv6
 scalar JSONObject
 scalar Percentage
+scalar StakeAddress
 scalar StakePoolID
 scalar Timestamp
 scalar URL
@@ -150,7 +151,7 @@ type Query {
 }
 
 type ActiveStake {
-  address: String!
+  address: StakeAddress!
   amount: String!
   epoch: Epoch
   epochNo: Int!
@@ -158,7 +159,7 @@ type ActiveStake {
 }
 
 input ActiveStake_bool_exp {
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   amount: text_comparison_exp
   epoch: Epoch_bool_exp
   epochNo: Int_comparison_exp
@@ -255,7 +256,7 @@ type CardanoDbMeta {
 }
 
 type Delegation {
-  address: String!
+  address: StakeAddress!
   stakePool: StakePool!
   transaction: Transaction
 }
@@ -270,7 +271,7 @@ input Delegation_bool_exp {
   _and: [Delegation_bool_exp]
   _not: Delegation_bool_exp
   _or: [Delegation_bool_exp]
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   stakePool: StakePool_bool_exp
   transaction: Transaction_bool_exp
 }
@@ -305,7 +306,7 @@ input Relay_bool_exp {
 }
 
 type Reward {
-  address: String!
+  address: StakeAddress!
   amount: String!
   earnedIn: Epoch!
   stakePool: StakePool!
@@ -340,14 +341,14 @@ type Reward_sum_fields {
 }
 
 input Reward_bool_exp {
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   amount: text_comparison_exp
   earnedIn: Epoch_bool_exp
   stakePool: StakePool_bool_exp
 }
 
 input Reward_order_by {
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   amount: text_comparison_exp
   earnedIn: Epoch_order_by
   stakePool: StakePool_order_by
@@ -396,8 +397,15 @@ type ShelleyProtocolParams {
   tau: Float!
 }
 
+input StakeAddress_comparison_exp {
+  _eq: StakeAddress
+  _in: [StakeAddress]
+  _neq: StakeAddress
+  _nin: [StakeAddress]
+}
+
 type StakeDeregistration {
-  address: String!
+  address: StakeAddress!
   transaction: Transaction!
 }
 
@@ -410,7 +418,7 @@ type StakeDeregistration_aggregate_fields {
 }
 
 input StakeDeregistration_order_by {
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   transaction: Transaction_order_by
 }
 
@@ -418,7 +426,7 @@ input StakeDeregistration_bool_exp {
   _and: [StakeDeregistration_bool_exp]
   _not: StakeDeregistration_bool_exp
   _or: [StakeDeregistration_bool_exp]
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   transaction: Transaction_bool_exp
 }
 
@@ -444,7 +452,7 @@ type StakePool {
   pledge: String!
   relays: [Relay]
   retirements: [StakePoolRetirement]
-  rewardAddress: String!
+  rewardAddress: StakeAddress!
   rewards: [Reward]!
   rewards_aggregate (
     limit: Int
@@ -549,7 +557,7 @@ type StakePoolOwner {
 
 
 type StakeRegistration {
-  address: String!
+  address: StakeAddress!
   transaction: Transaction!
 }
 
@@ -562,7 +570,7 @@ input StakeRegistration_bool_exp {
   _and: [StakeRegistration_bool_exp]
   _not: StakeRegistration_bool_exp
   _or: [StakeRegistration_bool_exp]
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   transaction: Transaction_bool_exp
 }
 
@@ -993,7 +1001,7 @@ type Epoch_sum_fields {
 }
 
 type Withdrawal {
-  address: String!
+  address: StakeAddress!
   amount: String!
   transaction: Transaction!
 }
@@ -1002,7 +1010,7 @@ input Withdrawal_bool_exp {
   _and: [Withdrawal_bool_exp]
   _not: Withdrawal_bool_exp
   _or: [Withdrawal_bool_exp]
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   amount: text_comparison_exp
   transaction: Transaction_bool_exp
 }
