@@ -10,6 +10,7 @@ scalar IPv4
 scalar IPv6
 scalar JSONObject
 scalar Percentage
+scalar StakePoolID
 scalar Timestamp
 scalar URL
 
@@ -435,7 +436,7 @@ input SlotLeader_bool_exp {
 type StakePool {
   fixedCost: String!
   hash: Hash28Hex!
-  id: String!
+  id: StakePoolID!
   margin: Float!
   metadataHash: Hash32Hex
   owners: [StakePoolOwner!]!
@@ -470,7 +471,7 @@ input StakePool_bool_exp {
   _not: StakePool_bool_exp
   _or: [StakePool_bool_exp]
   hash: Hash28Hex_comparison_exp
-  id: text_comparison_exp
+  id: StakePoolID_comparison_exp
   margin: Float_comparison_exp
   metadataHash: Hash32Hex_comparison_exp
   owners: StakePoolOwner_bool_exp
@@ -517,6 +518,13 @@ type StakePool_sum_fields {
   fixedCost: String
   margin: Float
   pledge: String
+}
+
+input StakePoolID_comparison_exp {
+  _eq: StakePoolID
+  _in: [StakePoolID]
+  _neq: StakePoolID
+  _nin: [StakePoolID]
 }
 
 input StakePoolOwner_bool_exp {
