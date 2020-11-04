@@ -28,7 +28,7 @@ describe('blocks', () => {
     const result = await client.query({
       query: await loadQueryNode('blockHashesNoArgs')
     })
-    expect(result.data.blocks.length).toBe(100)
+    expect(result.data.blocks.length).toBe(2500)
   })
 
   it('allows custom pagination size with a limit and offset', async () => {

@@ -31,7 +31,7 @@
       - amount
       - epochNo
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -103,7 +103,7 @@
       - transactionsCount
       - vrfKey
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -168,7 +168,7 @@
       columns:
       - address
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -217,7 +217,7 @@
       - startedAt
       - transactionsCount
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -251,7 +251,7 @@
       - address
       - amount
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -278,7 +278,7 @@
       - rho
       - tau
       filter: {}
-      limit: 100
+      limit: 2500
 - table:
     schema: public
     name: SlotLeader
@@ -298,7 +298,7 @@
       - description
       - hash
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -323,7 +323,7 @@
       columns:
       - address
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -388,7 +388,7 @@
       - rewardAddress
       - url
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -424,7 +424,7 @@
       columns:
       - inEffectFrom
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -449,7 +449,7 @@
       columns:
       - address
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -514,7 +514,7 @@
       - size
       - totalOutput
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -546,7 +546,7 @@
       - sourceTxHash
       - sourceTxIndex
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -569,7 +569,7 @@
       - txHash
       - index
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -597,7 +597,7 @@
       - txHash
       - index
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -623,7 +623,7 @@
       - amount
       - address
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -643,7 +643,7 @@
       columns:
       - hash
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -672,7 +672,7 @@
       - ipv6
       - port
       filter: {}
-      limit: 100
+      limit: 2500
       allow_aggregations: true
 - table:
     schema: public
@@ -697,4 +697,4 @@
       - json
       - key
       filter: {}
-      limit: 100
+      limit: 2500
