@@ -103,17 +103,12 @@ function filterAndTypecastEnvs (env: any) {
     POSTGRES_USER_FILE,
     PROMETHEUS_METRICS,
     QUERY_DEPTH_LIMIT,
-    TRACING,
-    WHITELIST_PATH
+    TRACING
   } = env
-  if (WHITELIST_PATH) {
-    console.warn(`WHITELIST_PATH is deprecated and will be removed in 3.0.0.
-    Please update your configuration to use ALLOW_LIST_PATH instead.`)
-  }
   return {
     allowIntrospection: ALLOW_INTROSPECTION === 'true',
     allowedOrigins: ALLOWED_ORIGINS,
-    allowListPath: ALLOW_LIST_PATH || WHITELIST_PATH,
+    allowListPath: ALLOW_LIST_PATH,
     apiPort: Number(API_PORT),
     cacheEnabled: CACHE_ENABLED === 'true',
     genesis: {
