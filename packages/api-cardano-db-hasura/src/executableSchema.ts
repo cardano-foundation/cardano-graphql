@@ -28,7 +28,8 @@ export const scalarResolvers = {
   Percentage: util.scalars.Percentage,
   StakePoolID: util.scalars.StakePoolID,
   Timestamp: TimestampResolver,
-  URL: URLResolver
+  URL: URLResolver,
+  VRFVerificationKey: util.scalars.VRFVerificationKey
 } as any
 
 export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis) {

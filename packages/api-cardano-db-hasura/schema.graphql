@@ -13,6 +13,7 @@ scalar Percentage
 scalar StakePoolID
 scalar Timestamp
 scalar URL
+scalar VRFVerificationKey
 
 type Query {
   activeStake (
@@ -843,7 +844,7 @@ type Block {
     where: Transaction_bool_exp
   ): Transaction_aggregate!
   transactionsCount: String!
-  vrfKey: String
+  vrfKey: VRFVerificationKey
 }
 
 input Block_bool_exp {
@@ -863,7 +864,7 @@ input Block_bool_exp {
   slotNo: Int_comparison_exp
   transactions: Transaction_bool_exp
   transactionsCount: text_comparison_exp
-  vrfKey: text_comparison_exp
+  vrfKey: VRFVerificationKey_comparison_exp
 }
 
 input Block_order_by {
@@ -1156,4 +1157,12 @@ enum order_by_with_nulls {
   desc_nulls_first
   # in the descending order, nulls last
   desc_nulls_last
+}
+
+input VRFVerificationKey_comparison_exp {
+  _eq: VRFVerificationKey
+  _in: [VRFVerificationKey]
+  _is_null: Boolean
+  _neq: VRFVerificationKey
+  _nin: [VRFVerificationKey]
 }
