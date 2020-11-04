@@ -24,6 +24,16 @@ describe('stakePools', () => {
     client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442, genesis)
   })
 
+  it('can lookup stake pools by ID', async () => {
+    const result = await client.query({
+      query: await loadQueryNode('stakePoolById'),
+      variables: { id: 'pool1mxqjlrfskhd5kql9kak06fpdh8xjwc76gec76p3taqy2qmfzs5z' }
+    })
+    const { stakePools } = result.data
+    expect(stakePools.length).toBe(1)
+    expect(stakePools[0].hash).toBeDefined()
+  })
+
   it('can return details on active stake pools', async () => {
     const result = await client.query({
       query: await loadQueryNode('allStakePoolFields'),

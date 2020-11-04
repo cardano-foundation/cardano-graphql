@@ -10,8 +10,11 @@ scalar IPv4
 scalar IPv6
 scalar JSONObject
 scalar Percentage
+scalar StakeAddress
+scalar StakePoolID
 scalar Timestamp
 scalar URL
+scalar VRFVerificationKey
 
 type Query {
   activeStake (
@@ -148,7 +151,7 @@ type Query {
 }
 
 type ActiveStake {
-  address: String!
+  address: StakeAddress!
   amount: String!
   epoch: Epoch
   epochNo: Int!
@@ -156,7 +159,7 @@ type ActiveStake {
 }
 
 input ActiveStake_bool_exp {
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   amount: text_comparison_exp
   epoch: Epoch_bool_exp
   epochNo: Int_comparison_exp
@@ -253,7 +256,7 @@ type CardanoDbMeta {
 }
 
 type Delegation {
-  address: String!
+  address: StakeAddress!
   stakePool: StakePool!
   transaction: Transaction
 }
@@ -268,7 +271,7 @@ input Delegation_bool_exp {
   _and: [Delegation_bool_exp]
   _not: Delegation_bool_exp
   _or: [Delegation_bool_exp]
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   stakePool: StakePool_bool_exp
   transaction: Transaction_bool_exp
 }
@@ -303,7 +306,7 @@ input Relay_bool_exp {
 }
 
 type Reward {
-  address: String!
+  address: StakeAddress!
   amount: String!
   earnedIn: Epoch!
   stakePool: StakePool!
@@ -338,14 +341,14 @@ type Reward_sum_fields {
 }
 
 input Reward_bool_exp {
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   amount: text_comparison_exp
   earnedIn: Epoch_bool_exp
   stakePool: StakePool_bool_exp
 }
 
 input Reward_order_by {
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   amount: text_comparison_exp
   earnedIn: Epoch_order_by
   stakePool: StakePool_order_by
@@ -394,8 +397,15 @@ type ShelleyProtocolParams {
   tau: Float!
 }
 
+input StakeAddress_comparison_exp {
+  _eq: StakeAddress
+  _in: [StakeAddress]
+  _neq: StakeAddress
+  _nin: [StakeAddress]
+}
+
 type StakeDeregistration {
-  address: String!
+  address: StakeAddress!
   transaction: Transaction!
 }
 
@@ -408,7 +418,7 @@ type StakeDeregistration_aggregate_fields {
 }
 
 input StakeDeregistration_order_by {
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   transaction: Transaction_order_by
 }
 
@@ -416,7 +426,7 @@ input StakeDeregistration_bool_exp {
   _and: [StakeDeregistration_bool_exp]
   _not: StakeDeregistration_bool_exp
   _or: [StakeDeregistration_bool_exp]
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   transaction: Transaction_bool_exp
 }
 
@@ -435,14 +445,14 @@ input SlotLeader_bool_exp {
 type StakePool {
   fixedCost: String!
   hash: Hash28Hex!
-  id: String!
+  id: StakePoolID!
   margin: Float!
   metadataHash: Hash32Hex
   owners: [StakePoolOwner!]!
   pledge: String!
   relays: [Relay]
   retirements: [StakePoolRetirement]
-  rewardAddress: String!
+  rewardAddress: StakeAddress!
   rewards: [Reward]!
   rewards_aggregate (
     limit: Int
@@ -470,7 +480,7 @@ input StakePool_bool_exp {
   _not: StakePool_bool_exp
   _or: [StakePool_bool_exp]
   hash: Hash28Hex_comparison_exp
-  id: text_comparison_exp
+  id: StakePoolID_comparison_exp
   margin: Float_comparison_exp
   metadataHash: Hash32Hex_comparison_exp
   owners: StakePoolOwner_bool_exp
@@ -519,6 +529,13 @@ type StakePool_sum_fields {
   pledge: String
 }
 
+input StakePoolID_comparison_exp {
+  _eq: StakePoolID
+  _in: [StakePoolID]
+  _neq: StakePoolID
+  _nin: [StakePoolID]
+}
+
 input StakePoolOwner_bool_exp {
   hash: Hash28Hex_comparison_exp
 }
@@ -540,7 +557,7 @@ type StakePoolOwner {
 
 
 type StakeRegistration {
-  address: String!
+  address: StakeAddress!
   transaction: Transaction!
 }
 
@@ -553,7 +570,7 @@ input StakeRegistration_bool_exp {
   _and: [StakeRegistration_bool_exp]
   _not: StakeRegistration_bool_exp
   _or: [StakeRegistration_bool_exp]
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   transaction: Transaction_bool_exp
 }
 
@@ -835,7 +852,7 @@ type Block {
     where: Transaction_bool_exp
   ): Transaction_aggregate!
   transactionsCount: String!
-  vrfKey: String
+  vrfKey: VRFVerificationKey
 }
 
 input Block_bool_exp {
@@ -855,7 +872,7 @@ input Block_bool_exp {
   slotNo: Int_comparison_exp
   transactions: Transaction_bool_exp
   transactionsCount: text_comparison_exp
-  vrfKey: text_comparison_exp
+  vrfKey: VRFVerificationKey_comparison_exp
 }
 
 input Block_order_by {
@@ -984,7 +1001,7 @@ type Epoch_sum_fields {
 }
 
 type Withdrawal {
-  address: String!
+  address: StakeAddress!
   amount: String!
   transaction: Transaction!
 }
@@ -993,7 +1010,7 @@ input Withdrawal_bool_exp {
   _and: [Withdrawal_bool_exp]
   _not: Withdrawal_bool_exp
   _or: [Withdrawal_bool_exp]
-  address: text_comparison_exp
+  address: StakeAddress_comparison_exp
   amount: text_comparison_exp
   transaction: Transaction_bool_exp
 }
@@ -1148,4 +1165,12 @@ enum order_by_with_nulls {
   desc_nulls_first
   # in the descending order, nulls last
   desc_nulls_last
+}
+
+input VRFVerificationKey_comparison_exp {
+  _eq: VRFVerificationKey
+  _in: [VRFVerificationKey]
+  _is_null: Boolean
+  _neq: VRFVerificationKey
+  _nin: [VRFVerificationKey]
 }
