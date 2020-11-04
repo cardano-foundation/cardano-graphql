@@ -23,6 +23,12 @@ type Query {
     offset: Int
     where: ActiveStake_bool_exp
   ): [ActiveStake]!
+  activeStake_aggregate (
+    limit: Int
+    order_by: [ActiveStake_order_by!]
+    offset: Int
+    where: ActiveStake_bool_exp
+  ): ActiveStake_aggregate!
   blocks (
     limit: Int
     order_by: [Block_order_by!]

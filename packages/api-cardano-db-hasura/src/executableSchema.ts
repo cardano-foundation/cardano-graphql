@@ -55,6 +55,16 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             schema: hasuraSchema
           })
         },
+        activeStake_aggregate: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'activeStake_aggregate',
+            info,
+            operation: 'query',
+            schema: hasuraSchema
+          })
+        },
         blocks: (_root, args, context, info) => {
           return delegateToSchema({
             args,

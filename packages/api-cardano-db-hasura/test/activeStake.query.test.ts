@@ -35,4 +35,14 @@ describe('activeStake', () => {
     expect(activeStake[0].epochNo).toBeDefined()
     expect(activeStake[0].registeredWith.hash).toBeDefined()
   })
+
+  it('can return aggregated active stake information for an address', async () => {
+    const result = await client.query({
+      query: await loadQueryNode('averageActiveStakeForAddress'),
+      variables: { address: 'stake1u8atejkgfn8772722rh03lmnxyshvjakk260gfsefamc6sga68ag2' }
+    })
+    const { activeStake_aggregate } = result.data
+    expect(activeStake_aggregate.aggregate.count).toBeDefined()
+    expect(activeStake_aggregate.aggregate.avg.amount).toBeDefined()
+  })
 })
