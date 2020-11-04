@@ -11,5 +11,6 @@ export interface Config {
     byronPath: string,
     shelleyPath: string
   },
+  hasuraCliPath: string,
   hasuraUri: string
 }

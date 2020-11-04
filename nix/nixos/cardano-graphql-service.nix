@@ -131,6 +131,7 @@ in {
         POOL_METADATA_PROXY = cfg.smashUrl;
         GENESIS_FILE_BYRON = cfg.genesisByron;
         GENESIS_FILE_SHELLEY = cfg.genesisShelley;
+        HASURA_CLI_PATH = hasura-cli;
         HASURA_URI = hasuraBaseUri;
         POSTGRES_DB = cfg.db;
         POSTGRES_HOST = cfg.dbHost;

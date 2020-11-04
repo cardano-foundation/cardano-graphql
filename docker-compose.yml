@@ -110,6 +110,7 @@ services:
       - CACHE_ENABLED=true
       - GENESIS_FILE_BYRON=/config/genesis/byron.json
       - GENESIS_FILE_SHELLEY=/config/genesis/shelley.json
+      - HASURA_CLI_PATH=/usr/local/bin/hasura
       - HASURA_URI=http://hasura:8080
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432

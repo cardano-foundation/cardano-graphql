@@ -14,10 +14,12 @@ dayjs.extend(utc)
 
 export class HasuraClient {
   private client: ApolloClient<NormalizedCacheObject>
+  readonly hasuraCliPath: string
   readonly hasuraUri: string
   private applyingSchemaAndMetadata: boolean
 
-  constructor (hasuraUri: string) {
+  constructor (hasuraCliPath: string, hasuraUri: string) {
+    this.hasuraCliPath = hasuraCliPath
     this.hasuraUri = hasuraUri
     this.client = new ApolloClient({
       cache: new InMemoryCache({
@@ -114,7 +116,7 @@ export class HasuraClient {
   async hasuraCli (command: string) {
     return new Promise((resolve, reject) => {
       exec(
-        `hasura --skip-update-check --project ${path.resolve(__dirname, '..', 'hasura', 'project')} --endpoint ${this.hasuraUri} ${command}`,
+        `${this.hasuraCliPath} --skip-update-check --project ${path.resolve(__dirname, '..', 'hasura', 'project')} --endpoint ${this.hasuraUri} ${command}`,
         (error, stdout) => {
           if (error) {
             reject(error)
