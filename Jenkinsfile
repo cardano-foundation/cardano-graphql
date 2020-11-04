@@ -1,7 +1,7 @@
 pipeline {
   agent any
 
-  tools {nodejs 'Node 10'}
+  tools {nodejs 'Node.js 14'}
 
    // Lock concurrent builds due to the docker dependency
   options {

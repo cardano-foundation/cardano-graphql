@@ -1,4 +1,5 @@
-FROM node:10.15.3-alpine as builder
+FROM node:14.15.0-alpine as node_alpine
+FROM node_alpine as builder
 RUN apk add --update python make g++ yarn
 RUN mkdir /application
 COPY package.json yarn.lock .yarnrc /application/
@@ -13,7 +14,7 @@ COPY packages/util-dev /application/packages/util-dev
 RUN yarn --offline --frozen-lockfile --non-interactive
 RUN yarn build
 
-FROM node:10.15.3-alpine as production_deps
+FROM node_alpine as production_deps
 RUN mkdir -p application/packages
 COPY package.json yarn.lock .yarnrc /application/
 COPY --from=builder /application/packages-cache /application/packages-cache
