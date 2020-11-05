@@ -94,7 +94,6 @@ services:
   cardano-graphql:
     build:
       context: .
-      target: server
       args:
         - NETWORK=${NETWORK:-mainnet}
     image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-2.2.0}
