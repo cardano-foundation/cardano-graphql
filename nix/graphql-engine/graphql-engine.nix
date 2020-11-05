@@ -15,6 +15,7 @@
 , case-insensitive
 , ci-info
 , containers
+, cron
 , cryptonite
 , data-has
 , dependent-map
@@ -55,6 +56,7 @@
 , regex-tdfa
 , scientific
 , semialign
+, semigroups
 , semver
 , shakespeare
 , split
@@ -114,6 +116,7 @@ mkDerivation {
     case-insensitive
     ci-info
     containers
+    cron
     cryptonite
     data-has
     dependent-map
@@ -151,6 +154,7 @@ mkDerivation {
     regex-tdfa
     scientific
     semialign
+    semigroups
     semver
     shakespeare
     split
