@@ -2,6 +2,69 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/input-output-hk/cardano-graphql/compare/2.2.0...3.0.0) (2020-11-05)
+This new major version, now based on the current Node.js LTS, brings the second round of Shelley-era 
+features to the API. Most notably, rewards, active stake captured at each epoch boundary, 
+transaction metadata, protocol parameters in effect during the epoch, and custom types for the Bech32 
+values covered by [CIP5](https://github.com/cardano-foundation/CIPs/tree/master/CIP5). 
+
+You may be impacted by breaking changes, which are listed below.
+
+
+### Compatible with:
+
+- [`cardano-node`: `1.21.1`](https://github.com/input-output-hk/cardano-node/releases/tag/1.21.1)
+- [`cardano-db-sync`: `6.0.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/6.0.0) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.2`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.2)
+
+### ⚠ BREAKING CHANGES
+
+* Omitting the limit in queries will now return 2500 records, rather than 100
+* `WHITELIST_PATH` is now `ALLOW_LIST_PATH`
+* `HASURA_CLI_PATH` is now required configuration, however it's set in the Dockerfile and nix service by default.
+* All schema instances for stake addresses are now validated for the correct prefix using a custom scalar
+* `Block.vrfKey` and the associated input types are now a validated for the correct prefix using a custom scalar
+* `StakePool.id` and the associated input types are now a validated for the correct prefix using a custom scalar
+* `Hash32HexString` -> `Hash32Hex`
+* `Hash32HexString_comparison_exp` -> `Hash32Hex_comparison_exp`
+* `SlotLeader.hash`, `StakePool.hash`, `StakePoolOwner.hash` are now `Hash28Hex` type
+* `Block.vrfKey` is now the bech32 encoded value as per CIP5. It's now typed as `VRFVerificationKey`. 
+
+### Features
+* Rewards ([46cc878](https://github.com/input-output-hk/cardano-graphql/commit/46cc87880fed5118560c76dd62e7b038eb5df689))
+  - top-level queries rewards and rewards_aggregate
+  - StakePool.rewards and StakePool.rewards_aggregate
+* `StakePool.id` ([3fc763c](https://github.com/input-output-hk/cardano-graphql/commit/3fc763c37e7dc96c1b36191ec85f40c992d47221))
+  - Bech32 encoded, prefixed with `pool`
+* Introduce ActiveStake concept ([1b66fee](https://github.com/input-output-hk/cardano-graphql/commit/1b66fee2f54c4a4995d2e407693aaf7e470c5cfb))
+  - Snapshot of the stake linked to a registered stake key, per epoch.
+  - This features adds an activeStake query, and extends the Epoch type to include activeStake and activeStake_aggregate fields.
+  - top-level activeStake_aggregate query ([8e13a52](https://github.com/input-output-hk/cardano-graphql/commit/8e13a5267fe89c409d17de1337cf2fab88dab7a7))
+* `Epoch.protocolParams` and `Epoch.nonce` ([c08d652](https://github.com/input-output-hk/cardano-graphql/commit/c08d652f4b584e757726710626eef0610154da07))
+* `Transaction.metadata` ([8cec6e8](https://github.com/input-output-hk/cardano-graphql/commit/8cec6e8fde66979075f18d53aa1c1e46d4d61085))
+* Custom GraphQL scalars
+  - `StakeAddress` ([1bd5c8b](https://github.com/input-output-hk/cardano-graphql/commit/1bd5c8b41bddb575570b539f8344c1fb415b3598))
+  - `StakePoolID` ([627db37](https://github.com/input-output-hk/cardano-graphql/commit/627db37d33bcda2b955100bd654fe6c84983d690))
+  - `VRFVerificationKey` ([eae8f72](https://github.com/input-output-hk/cardano-graphql/commit/eae8f726d9742ae39248cf6a92b91adb5b7438f5))
+
+### Improvements
+* consolidate `api-genesis` with `api-cardano-db-hasura`([0f927c4](https://github.com/input-output-hk/cardano-graphql/commit/0f927c45ce50296ac176384380f68275561c4d2b))
+* upgrade to Node.js 14 ([950852a](https://github.com/input-output-hk/cardano-graphql/commit/950852a1b88596d4b0e5ad54b05a24d79acfd7a4))
+* Require explicit path to hasura CLI executable ([ca22d42](https://github.com/input-output-hk/cardano-graphql/commit/ca22d423e840290946b0f1c7b4d88461c0b7d2e3))
+* Remove depreciated config option `WHITELIST_PATH` ([a2d00ff](https://github.com/input-output-hk/cardano-graphql/commit/a2d00ff2e0c6cb1568820990debea55e06526fd2))
+* Change Hasura record limit from 100 to 2500 ([212bc47](https://github.com/input-output-hk/cardano-graphql/commit/212bc4731f66af66d4eb49ed68c7e2e847423cfd)), closes [#333](https://github.com/input-output-hk/cardano-graphql/issues/333)
+* server configuration lifted to Dockerfile ([167ff42](https://github.com/input-output-hk/cardano-graphql/commit/167ff426a8934cfda23d88089082d01331e04f64))
+* expose the API port (Removes the hard-coding) ([e422734](https://github.com/input-output-hk/cardano-graphql/commit/e422734c2e412976aac976daecc10cb5f3779e99))
+
+### Bug Fixes
+* accurately allocate hashes to 28 byte type ([f9597bc](https://github.com/input-output-hk/cardano-graphql/commit/f9597bc3ffb595aa74566c04c08b4c2c3a724506))
+* add port and custom column names to pool_relay mapping ([879a51a](https://github.com/input-output-hk/cardano-graphql/commit/879a51ac3bb2a7f11837e410678f558e3773ed5e)), closes [#328](https://github.com/input-output-hk/cardano-graphql/issues/328) [#329](https://github.com/input-output-hk/cardano-graphql/issues/329)
+* Change Block.vrfKey type to String ([a34c8aa](https://github.com/input-output-hk/cardano-graphql/commit/a34c8aa42899cd2aec2541183933ab8f511b0963))
+* properly type ShelleyProtocolParams ([a7a2c3a](https://github.com/input-output-hk/cardano-graphql/commit/a7a2c3acdf0272207e61b2aacf4ec7565abdd06b))
+* remove invalid Genesis.shelley.protocolMagicId ([a73ba1e](https://github.com/input-output-hk/cardano-graphql/commit/a73ba1e56ae543b65376766a6f898f81e4ee3e05)), closes [#327](https://github.com/input-output-hk/cardano-graphql/issues/327)
+* remove StakePool.withdrawals field ([46dd937](https://github.com/input-output-hk/cardano-graphql/commit/46dd93720428fa28d45e288c7c625dc2b0b8210b))
+* typo in missing config error message ([d904a72](https://github.com/input-output-hk/cardano-graphql/commit/d904a72fdc80ee3b3e8dc0eea0cf1b1bf610389f))
+
 ## [2.2.0](https://github.com/input-output-hk/cardano-graphql/compare/2.1.0...2.2.0) (2020-09-24)
 
 ### Compatible with:

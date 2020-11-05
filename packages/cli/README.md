@@ -1,5 +1,5 @@
 # Cardano GraphQL - CLI
-## Global install from [npm](https://www.npmjs.com/package/cardano-graphql-cli)
+## Global install from [npm](https://www.npmjs.com/package/@cardano-graphql/cli)
 ```
 npm i -g @cardano-graphql/cli
 cgql --help
