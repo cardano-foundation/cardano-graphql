@@ -90,7 +90,7 @@
 
 mkDerivation {
   pname = "graphql-engine";
-  version = "1.2.1";
+  version = "1.3.2";
   src = sources.graphql-engine;
   postUnpack = "sourceRoot+=/server; echo source root reset to $sourceRoot";
   isLibrary = true;

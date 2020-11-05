@@ -18,10 +18,10 @@
         "homepage": "https://hasura.io",
         "owner": "hasura",
         "repo": "graphql-engine",
-        "rev": "27b0b59361cebecd074bd59123f602e7b013bac1",
-        "sha256": "0hg44zl3gqa8lq7kggwgmgbsgdc7zrv5cxs507vilg11xklsbz4l",
+        "rev": "de7e6d1f8472956aca2c2c0e3f6e8e6f7091c80a",
+        "sha256": "1jipygc6bp15cq4wr3yngs7knpak24w0z518fkzfzahxmd910kjh",
         "type": "tarball",
-        "url": "https://github.com/hasura/graphql-engine/archive/27b0b59361cebecd074bd59123f602e7b013bac1.tar.gz",
+        "url": "https://github.com/hasura/graphql-engine/archive/de7e6d1f8472956aca2c2c0e3f6e8e6f7091c80a.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "niv": {
