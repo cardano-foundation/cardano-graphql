@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 import path from 'path'
 import { down, IDockerComposeResult, ps, stop, upAll } from 'docker-compose'
-import { cardanoNodeService, DockerClient, postgresService, StatefulService } from './'
+import { cardanoDbSyncService, cardanoNodeService, DockerClient, postgresService, StatefulService } from './'
 import { dummyLogger, Logger } from 'ts-log'
 import { DockerState, DockerStore } from './DockerStore'
 
@@ -38,8 +38,9 @@ export class DockerComposeStack {
     this.projectName = options.projectName || 'cardano-graphql'
     this.store = store
     this.statefulServices = options.statefulServices || new Map([
-      ['postgres', postgresService(this.projectName)],
-      ['cardano-node', cardanoNodeService(this.projectName)]
+      ['cardano-db-sync', cardanoDbSyncService(this.projectName)],
+      ['cardano-node', cardanoNodeService(this.projectName)],
+      ['postgres', postgresService(this.projectName)]
     ])
   }
 
