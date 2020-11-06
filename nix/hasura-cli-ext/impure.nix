@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "hasura-cli-ext";
-  version = "1.2.1";
+  version = "1.3.2";
   src = fetchurl {
     url = "https://github.com/hasura/graphql-engine/releases/download/v${version}/cli-ext-hasura-linux.tar.gz";
     sha256 = "013m4f56mf2rx6mjkfki64xblvjjcwb0n70ny8wykwqzj5cp1pr5";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp cli-ext-hasura-linux $out/bin/
+    chmod +x $out/bin/cli-ext-hasura-linux
   '';
   preFixup = let
     libPath = lib.makeLibraryPath [ stdenv.cc.cc ];

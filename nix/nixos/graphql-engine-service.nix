@@ -1,7 +1,6 @@
 { lib, pkgs, config, ... }:
 let
   cfg = config.services.graphql-engine;
-  sources = import ../sources.nix;
 
 in {
   options = {
@@ -45,7 +44,7 @@ in {
     };
   };
   config = let
-    graphqlEngine = (import ../..).hasuraHaskellPackages.graphql-engine;
+    graphqlEngine = (import ../pkgs.nix {}).packages.graphql-engine;
     hasuraDbPerms = pkgs.writeScript "hasuraDbPerms.sql" ''
       CREATE EXTENSION IF NOT EXISTS pgcrypto;
       CREATE SCHEMA IF NOT EXISTS hdb_catalog;
