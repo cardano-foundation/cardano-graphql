@@ -6,6 +6,14 @@ export interface StatefulService {
   volumes: string[]
 }
 
+export function cardanoDbSyncService (projectName: DockerComposeStack['projectName']): StatefulService {
+  return {
+    name: 'cardano-db-sync',
+    dataPath: '/data',
+    volumes: [`${projectName}_db-sync-data`]
+  }
+}
+
 export function cardanoNodeService (projectName: DockerComposeStack['projectName']): StatefulService {
   return {
     name: 'cardano-node',
