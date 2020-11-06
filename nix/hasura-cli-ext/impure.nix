@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp cli-ext-hasura-linux $out/bin/
+    chmod +x $out/bin/cli-ext-hasura-linux
   '';
   preFixup = let
     libPath = lib.makeLibraryPath [ stdenv.cc.cc ];

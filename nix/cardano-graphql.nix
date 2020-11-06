@@ -55,5 +55,7 @@ in stdenv.mkDerivation {
     exec ${nodejs}/bin/node $out/packages/server/dist/index.js
     EOF
     chmod +x $out/bin/cardano-graphql
+
+    mkdir -p $out/packages/api-cardano-db-hasura/hasura/project/seeds
   '';
 }

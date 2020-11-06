@@ -17,6 +17,7 @@ let
   overlay = self: super: {
     packages = self.callPackages ./packages.nix {};
     nodejs = super.nodejs-14_x;
+    inherit sources;
   };
   pkgs = import nixpkgs {
     inherit system crossSystem config;

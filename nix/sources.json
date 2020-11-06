@@ -1,14 +1,15 @@
 {
-    "gitignore": {
+    "ci-info-hs": {
         "branch": "master",
-        "description": "Nix function for filtering local git sources",
+        "builtin": false,
+        "description": " Get details about the current Continuous Integration environment - Haskell port of https://github.com/watson/ci-info",
         "homepage": "",
-        "owner": "hercules-ci",
-        "repo": "gitignore",
-        "rev": "f9e996052b5af4032fe6150bba4a6fe4f7b9d698",
-        "sha256": "0jrh5ghisaqdd0vldbywags20m2cxpkbbk5jjjmwaw0gr8nhsafv",
+        "owner": "hasura",
+        "repo": "ci-info-hs",
+        "rev": "947fd56582b1e8bec9ffed98ca9ac2f6b63e36c9",
+        "sha256": "1hfbmyz8lwjzwji8zslsib89sw2a6ay3b0qrm4xdk6m8iiwf4ip5",
         "type": "tarball",
-        "url": "https://github.com/hercules-ci/gitignore/archive/f9e996052b5af4032fe6150bba4a6fe4f7b9d698.tar.gz",
+        "url": "https://github.com/hasura/ci-info-hs/archive/947fd56582b1e8bec9ffed98ca9ac2f6b63e36c9.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "graphql-engine": {
@@ -24,6 +25,19 @@
         "url": "https://github.com/hasura/graphql-engine/archive/de7e6d1f8472956aca2c2c0e3f6e8e6f7091c80a.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
+    "graphql-parser-hs": {
+        "branch": "master",
+        "builtin": false,
+        "description": "A GraphQL query parser for Haskell",
+        "homepage": null,
+        "owner": "hasura",
+        "repo": "graphql-parser-hs",
+        "rev": "f4a093981ca5626982a17c2bfaad047cc0834a81",
+        "sha256": "0x4c1prp3xjacy1hhcvxrqr0ns4vcyvlmkzy0yf4pj8mpylmd7z4",
+        "type": "tarball",
+        "url": "https://github.com/hasura/graphql-parser-hs/archive/f4a093981ca5626982a17c2bfaad047cc0834a81.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "iohk-nix": {
         "branch": "master",
         "description": "nix scripts shared across projects",
@@ -34,18 +48,6 @@
         "sha256": "1pr934kh8fwj40cyw8pkx0hfj41k2p3k2hkslsyk4k7a3hnplc82",
         "type": "tarball",
         "url": "https://github.com/input-output-hk/iohk-nix/archive/72262b212e0cd8efe119466f0cb123f9d3760d35.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
-    "niv": {
-        "branch": "iohk",
-        "description": "Easy dependency management for Nix projects",
-        "homepage": "https://github.com/nmattia/niv",
-        "owner": "input-output-hk",
-        "repo": "niv",
-        "rev": "89da7b2e7ae0779fd351618fc74df1b1da5e6214",
-        "sha256": "0jn88ahv6mycxdkzihy1v0dz2110q0d42q4ggyj68l2lyba6y0yy",
-        "type": "tarball",
-        "url": "https://github.com/input-output-hk/niv/archive/89da7b2e7ae0779fd351618fc74df1b1da5e6214.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nix-inclusive": {
@@ -60,16 +62,17 @@
         "url": "https://github.com/input-output-hk/nix-inclusive/archive/11d05e4f1ca04fd250a9734e27970ad73bbd872d.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
-    "vgo2nix": {
+    "pg-client-hs": {
         "branch": "master",
-        "description": "Convert go.mod files to nixpkgs buildGoPackage compatible deps.nix files [maintainer=@adisbladis]",
-        "homepage": "",
-        "owner": "nix-community",
-        "repo": "vgo2nix",
-        "rev": "9286b289764831bd40c2a82fe311caef019056f4",
-        "sha256": "1zd8pqqdgnn8n8yl2hk2smng9z3gl90cfqb8805bk7kfxrsqa0m9",
+        "builtin": false,
+        "description": "A low level Haskell library to connect to postgres ",
+        "homepage": null,
+        "owner": "hasura",
+        "repo": "pg-client-hs",
+        "rev": "5b112acaaae15664e2bc0817b1a17f44f04df69b",
+        "sha256": "1zn1qcx3c6sjr4fmbc165irzfxhcyyc8c1b11nsilgpwwl7brcsg",
         "type": "tarball",
-        "url": "https://github.com/nix-community/vgo2nix/archive/9286b289764831bd40c2a82fe311caef019056f4.tar.gz",
+        "url": "https://github.com/hasura/pg-client-hs/archive/5b112acaaae15664e2bc0817b1a17f44f04df69b.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
