@@ -17,4 +17,5 @@ self: super: {
   superbuffer = haskell.lib.doJailbreak (haskell.lib.unmarkBroken super.superbuffer);
   Spock-core = haskell.lib.unmarkBroken super.Spock-core;
   stm-containers = haskell.lib.unmarkBroken super.stm-containers;
+  these_0_7_6 = self.callPackage ./these_0_7_6.nix {};
 }
