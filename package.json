@@ -2,7 +2,7 @@
   "name": "cardano-graphql",
   "description": "A TypeScript monorepo. Includes a server package and API modules for flexible implementation",
   "engines": {
-    "node": "^14"
+    "node": "^12 || ^14"
   },
   "version": "3.0.0",
   "private": true,
