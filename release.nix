@@ -6,19 +6,25 @@
 # them to all supported build platforms.
 #
 ############################################################################
-{
-  cardano-graphql ? { rev = null; }
+{ cardano-graphql ? { rev = null; }
+, pkgs ? import ./nix/pkgs.nix {}
 }:
-
+with pkgs;
 let
-  sources = import ./nix/sources.nix;
-  pkgs = import ./nix/pkgs.nix {};
+  mkPins = inputs: runCommand "ifd-pins" {} ''
+    mkdir $out
+    cd $out
+    ${lib.concatMapStringsSep "\n" (input: "ln -sv ${input.value} ${input.key}") (lib.attrValues (lib.mapAttrs (key: value: { inherit key value; }) inputs))}
+  '';
 in
 
-pkgs.lib.fix (self: {
-  inherit ( import ./. ) cardano-graphql hasura-cli hasura-cli-ext persistgraphql graphql-engine;
-  build-version = pkgs.writeText "version.json" (builtins.toJSON { inherit (cardano-graphql) rev; });
-  required = pkgs.releaseTools.aggregate {
+lib.fix (self: {
+  ifd-pins = mkPins {
+      inherit (sources) ci-info-hs graphql-engine graphql-parser-hs pg-client-hs;
+  };
+  inherit (packages) cardano-graphql hasura-cli hasura-cli-ext persistgraphql graphql-engine;
+  build-version = writeText "version.json" (builtins.toJSON { inherit (cardano-graphql) rev; });
+  required = releaseTools.aggregate {
     name = "required";
     constituents = with self; [
       cardano-graphql

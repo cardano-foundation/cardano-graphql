@@ -2,7 +2,7 @@
 # It just takes the shell attribute from default.nix.
 { config ? {}
 , sourcesOverride ? {}
-, pkgs ? import ./nix/pkgs.nix {}
+, pkgs ? import ./nix/pkgs.nix { inherit config sourcesOverride; }
 }:
 
 with pkgs;
@@ -15,14 +15,14 @@ let
     buildInputs = [
       git                    # Distributed version control system
       go                     # The Go Programming language
-      packages.niv           # Dependency management for Nix projects
+      niv                    # Dependency management for Nix projects
       nix                    # Purely Functional Package Manager
       nodePackages.node2nix  # Generates a set of Nix expressions from a NPM package's package.json
-      packages.nodejs        # Event-driven I/O framework for the V8 JavaScript engine
+      nodejs                 # Event-driven I/O framework for the V8 JavaScript engine
       packages.cardano-graphql
       pkgconfig              # Allows packages to find out information about other packages
-      pkgs.packages.persistgraphql
-      pkgs.packages.hasura-cli
+      persistgraphql
+      hasura-cli
       python                 # The Python Programming language
       tmux                   # Terminal multiplexer
       yarn                   # Dependency management for javascript

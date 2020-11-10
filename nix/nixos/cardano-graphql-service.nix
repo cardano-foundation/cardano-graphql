@@ -3,7 +3,7 @@
 { lib, pkgs, config, ... }:
 let
   cfg = config.services.cardano-graphql;
-  sources = import ../sources.nix;
+  selfPkgs = import ../pkgs.nix {};
 in {
   options = {
     services.cardano-graphql = {
@@ -107,10 +107,10 @@ in {
   config = let
     # TODO: there has to be a better way to handle boolean env vars in nodejs???
     boolToNodeJSEnv = bool: if bool then "true" else "false";
-    frontend = (import ../../.).cardano-graphql;
-    persistgraphql = (import ../../.).persistgraphql;
-    hasura-cli = (import ../../.).hasura-cli;
-    hasura-cli-ext = (import ../../.).hasura-cli-ext;
+    frontend = selfPkgs.packages.cardano-graphql;
+    persistgraphql = selfPkgs.packages.persistgraphql;
+    hasura-cli = selfPkgs.packages.hasura-cli;
+    hasura-cli-ext = selfPkgs.packages.hasura-cli-ext;
     hasuraBaseUri = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}";
     pluginLibPath = pkgs.lib.makeLibraryPath [
       pkgs.stdenv.cc.cc.lib
@@ -131,7 +131,7 @@ in {
         POOL_METADATA_PROXY = cfg.smashUrl;
         GENESIS_FILE_BYRON = cfg.genesisByron;
         GENESIS_FILE_SHELLEY = cfg.genesisShelley;
-        HASURA_CLI_PATH = hasura-cli;
+        HASURA_CLI_PATH = hasura-cli + "/bin/hasura";
         HASURA_URI = hasuraBaseUri;
         POSTGRES_DB = cfg.db;
         POSTGRES_HOST = cfg.dbHost;
