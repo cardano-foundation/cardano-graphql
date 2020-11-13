@@ -507,7 +507,7 @@ input StakePool_bool_exp {
   relays: Relay_bool_exp
   retirements: StakePoolRetirement_bool_exp
   rewardAddress: text_comparison_exp
-  rewards: Relay_bool_exp
+  rewards: Reward_bool_exp
   url: text_comparison_exp
 }
 
