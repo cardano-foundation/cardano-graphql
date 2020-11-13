@@ -165,6 +165,9 @@ type ActiveStake {
 }
 
 input ActiveStake_bool_exp {
+  _and: [ActiveStake_bool_exp]
+  _not: ActiveStake_bool_exp
+  _or: [ActiveStake_bool_exp]
   address: StakeAddress_comparison_exp
   amount: text_comparison_exp
   epoch: Epoch_bool_exp
@@ -304,6 +307,9 @@ type Relay {
 }
 
 input Relay_bool_exp {
+  _and: [Relay_bool_exp]
+  _not: Relay_bool_exp
+  _or: [Relay_bool_exp]
   ipv4: text_comparison_exp
   ipv6: text_comparison_exp
   dnsName: text_comparison_exp
@@ -347,6 +353,9 @@ type Reward_sum_fields {
 }
 
 input Reward_bool_exp {
+  _and: [Reward_bool_exp]
+  _not: Reward_bool_exp
+  _or: [Reward_bool_exp]
   address: StakeAddress_comparison_exp
   amount: text_comparison_exp
   earnedIn: Epoch_bool_exp
@@ -443,6 +452,9 @@ type SlotLeader {
 }
 
 input SlotLeader_bool_exp {
+  _and: [SlotLeader_bool_exp]
+  _not: SlotLeader_bool_exp
+  _or: [SlotLeader_bool_exp]
   description: text_comparison_exp
   hash: Hash28Hex_comparison_exp
   stakePool: StakePool_bool_exp
@@ -543,6 +555,9 @@ input StakePoolID_comparison_exp {
 }
 
 input StakePoolOwner_bool_exp {
+  _and: [StakePoolOwner_bool_exp]
+  _not: StakePoolOwner_bool_exp
+  _or: [StakePoolOwner_bool_exp]
   hash: Hash28Hex_comparison_exp
 }
 
@@ -553,6 +568,9 @@ type StakePoolRetirement {
 }
 
 input StakePoolRetirement_bool_exp {
+  _and: [StakePoolRetirement_bool_exp]
+  _not: StakePoolRetirement_bool_exp
+  _or: [StakePoolRetirement_bool_exp]
   announcedIn: Transaction_bool_exp
   inEffectFrom: Epoch_bool_exp
 }
