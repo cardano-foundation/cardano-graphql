@@ -6,7 +6,7 @@ self: super: {
   })));
   graphql-engine = haskell.lib.dontHaddock (haskell.lib.dontCheck (super.graphql-engine.overrideAttrs (_: {
     src = sources.graphql-engine;
-    name = "graphql-engine-1.3.2";
+    name = "graphql-engine-1.3.3";
   })));
   graphql-parser = haskell.lib.dontHaddock (haskell.lib.dontCheck (super.graphql-parser.overrideAttrs (_: {
     src = sources.graphql-parser-hs;

@@ -9,7 +9,7 @@ let
     hasura-cli = pkgs.hasura-cli.overrideAttrs (_: rec {
       src = pkgs.sources.graphql-engine;
       name = "hasura-${version}";
-      version = "1.3.2";
+      version = "1.3.3";
       buildFlagsArray = [''-ldflags=
         -X github.com/hasura/graphql-engine/cli/version.BuildVersion=${version}
         -s

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "hasura-cli-ext";
-  version = "1.3.2";
+  version = "1.3.3";
   src = fetchurl {
     url = "https://github.com/hasura/graphql-engine/releases/download/v${version}/cli-ext-hasura-linux.tar.gz";
-    sha256 = "1hibvwiknbbwc6ir1wx044rk67myxcd16plgl6azyhyifasbx9zq";
+    sha256 = "0a49w1lb3j33i8yz232inr7lm8j6vxg6y52izljnn71w2l25mqlw";
   };
   sourceRoot = ".";
   buildPhase = ":";
