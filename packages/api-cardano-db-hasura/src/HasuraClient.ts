@@ -1,14 +1,15 @@
 import { ApolloClient, gql, InMemoryCache, NormalizedCacheObject } from 'apollo-boost'
 import { createHttpLink } from 'apollo-link-http'
-import util from '@cardano-graphql/util'
+import util, { DataFetcher } from '@cardano-graphql/util'
 import { exec } from 'child_process'
 import fetch from 'cross-fetch'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
-import { DocumentNode, print } from 'graphql'
+import { DocumentNode, GraphQLSchema, print } from 'graphql'
 import { introspectSchema, wrapSchema } from '@graphql-tools/wrap'
 import pRetry from 'p-retry'
 import path from 'path'
+import { AssetSupply } from './graphql_types'
 
 dayjs.extend(utc)
 
@@ -17,8 +18,14 @@ export class HasuraClient {
   readonly hasuraCliPath: string
   readonly hasuraUri: string
   private applyingSchemaAndMetadata: boolean
+  public adaCirculatingSupplyFetcher: DataFetcher<AssetSupply['circulating']>
+  public schema: GraphQLSchema
 
-  constructor (hasuraCliPath: string, hasuraUri: string) {
+  constructor (hasuraCliPath: string, hasuraUri: string, pollingInterval: number) {
+    this.adaCirculatingSupplyFetcher = new DataFetcher<AssetSupply['circulating']>(
+      this.getAdaCirculatingSupply.bind(this),
+      pollingInterval
+    )
     this.hasuraCliPath = hasuraCliPath
     this.hasuraUri = hasuraUri
     this.client = new ApolloClient({
@@ -38,6 +45,22 @@ export class HasuraClient {
         }
       })
     })
+  }
+
+  public async initialize () {
+    await this.applySchemaAndMetadata()
+    await pRetry(async () => {
+      this.schema = await this.buildHasuraSchema()
+    }, {
+      factor: 1.75,
+      retries: 9,
+      onFailedAttempt: util.onFailedAttemptFor('Fetching Hasura schema via introspection')
+    })
+    await this.adaCirculatingSupplyFetcher.initialize()
+  }
+
+  public async shutdown () {
+    await this.adaCirculatingSupplyFetcher.shutdown()
   }
 
   public async applySchemaAndMetadata (): Promise<void> {
@@ -113,7 +136,22 @@ export class HasuraClient {
     }
   }
 
-  async hasuraCli (command: string) {
+  private async getAdaCirculatingSupply (): Promise<AssetSupply['circulating']> {
+    const result = await this.client.query({
+      query: gql`query {
+          utxos_aggregate {
+              aggregate {
+                  sum {
+                      value
+                  }
+              }
+          }
+      }`
+    })
+    return result.data.utxos_aggregate.aggregate.sum.value
+  }
+
+  private async hasuraCli (command: string) {
     return new Promise((resolve, reject) => {
       exec(
         `${this.hasuraCliPath} --skip-update-check --project ${path.resolve(__dirname, '..', 'hasura', 'project')} --endpoint ${this.hasuraUri} ${command}`,

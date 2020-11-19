@@ -1,4 +1,3 @@
-# WARNING!!! THIS IS BROKEN! DO NOT USE!
 
 { lib, pkgs, config, ... }:
 let
@@ -8,6 +7,16 @@ in {
   options = {
     services.cardano-graphql = {
       enable = lib.mkEnableOption "cardano-explorer graphql service";
+
+      cardanoCliPackage = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.cardano-cli;
+      };
+      
+      currentEraFirstSlot = lib.mkOption {
+        type = lib.types.int;
+        default = 16588800;
+      };
 
       dbHost = lib.mkOption {
         type = lib.types.str;
@@ -38,7 +47,12 @@ in {
         type = lib.types.int;
         default = 9999;
       };
-
+      
+      eraName = lib.mkOption {
+        type = lib.types.str;
+        default = "allegra";
+      };
+      
       port = lib.mkOption {
         type = lib.types.int;
         default = 3100;
@@ -126,12 +140,16 @@ in {
       wantedBy = [ "multi-user.target" ];
       requires = [ "graphql-engine.service" ];
       environment = lib.filterAttrs (k: v: v != null) {
+        CARDANO_CLI_PATH = cfg.cardanoCliPackage + "/bin/cardano-cli";
         CARDANO_NODE_SOCKET_PATH = cfg.cardanoNodeSocketPath;
+        CURRENT_ERA_FIRST_SLOT = cfg.currentEraFirstSlot;
+        ERA_NAME =cfg.eraName; 
         POOL_METADATA_PROXY = cfg.smashUrl;
         GENESIS_FILE_BYRON = cfg.genesisByron;
         GENESIS_FILE_SHELLEY = cfg.genesisShelley;
         HASURA_CLI_PATH = hasura-cli + "/bin/hasura";
         HASURA_URI = hasuraBaseUri;
+        JQ_PATH = pkgs.jq + "/bin/jq";
         POSTGRES_DB = cfg.db;
         POSTGRES_HOST = cfg.dbHost;
         POSTGRES_PASSWORD = cfg.dbPassword;

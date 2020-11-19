@@ -9,10 +9,8 @@ import { buildClient } from './util'
 import { Genesis } from '@src/graphql_types'
 
 const genesis = {
-  mainnet: {
-    byron: require('../../../config/network/mainnet/genesis/byron.json'),
-    shelley: require('../../../config/network/mainnet/genesis/shelley.json')
-  }
+  byron: require('../../../config/network/mainnet/genesis/byron.json'),
+  shelley: require('../../../config/network/mainnet/genesis/shelley.json')
 } as Genesis
 
 function loadQueryNode (name: string): Promise<DocumentNode> {

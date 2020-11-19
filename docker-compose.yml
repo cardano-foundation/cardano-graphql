@@ -101,6 +101,8 @@ services:
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
+      - CURRENT_ERA_FIRST_SLOT=${CURRENT_ERA_FIRST_SLOT:-16588800}
+      - ERA_NAME=${ERA_NAME:-allegra}
     expose:
       - ${API_PORT:-3100}
     ports:
@@ -115,6 +117,8 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+    volumes:
+      - node-ipc:/node-ipc
 secrets:
   postgres_db:
     file: ./config/secrets/postgres_db

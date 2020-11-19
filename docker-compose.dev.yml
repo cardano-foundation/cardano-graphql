@@ -1,0 +1,82 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-11.5-alpine}
+    environment:
+      - POSTGRES_LOGGING=true
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+    ports:
+    - ${POSTGRES_PORT:-5442}:5432
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    shm_size: '2gb'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  cardano-db-sync-extended:
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-7.1.0}
+    command: [
+      "--config", "/config/cardano-db-sync/config.json",
+      "--socket-path", "/node-ipc/node.socket",
+      "--state-dir", "/data"
+    ]
+    environment:
+      - EXTENDED=true
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    depends_on:
+      - postgres
+    secrets:
+      - postgres_password
+      - postgres_user
+      - postgres_db
+    volumes:
+      - ./config/network/${NETWORK:-mainnet}:/config
+      - db-sync-data:/data
+      - ./state/network/${NETWORK:-mainnet}/node-ipc:/node-ipc
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  hasura:
+    build:
+      context: ./packages/api-cardano-db-hasura/hasura
+    image: inputoutput/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-3.0.1}
+    depends_on:
+      - "postgres"
+    restart: on-failure
+    environment:
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+    ports:
+      - ${HASURA_PORT:-8090}:8080
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+secrets:
+  postgres_db:
+    file: ./config/secrets/postgres_db
+  postgres_password:
+    file: ./config/secrets/postgres_password
+  postgres_user:
+    file: ./config/secrets/postgres_user
+volumes:
+  db-sync-data:
+  postgres-data:

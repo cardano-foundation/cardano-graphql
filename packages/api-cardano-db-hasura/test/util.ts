@@ -16,7 +16,7 @@ export async function buildClient (
   dbPort: Config['db']['port'],
   genesis: Genesis
 ) {
-  if (process.env.TEST_MODE === 'e2e') {
+  if (process.env.TEST_MODE !== 'integration') {
     const client = await utilDev.createE2EClient(apiUri)
     await pRetry(async () => {
       const result = await client.query({
@@ -35,7 +35,7 @@ export async function buildClient (
     })
     return client
   } else {
-    const hasuraClient = new HasuraClient('hasura', hasuraUri)
+    const hasuraClient = new HasuraClient('hasura', hasuraUri, 1000 * 60 * 5)
     const db = new Db({
       ...{ host: 'localhost', port: dbPort },
       ...await readSecrets(path.resolve(__dirname, '..', '..', '..', 'config', 'secrets'))
