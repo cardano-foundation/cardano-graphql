@@ -12,6 +12,8 @@
  * closure_size_untagged itself is based loosely on `scavenge_one` from `Scav.c`.
  */
 
+#include "Rts.h"
+
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +27,6 @@
 // #define DEBUG 1
 
 #include "HsFFI.h"
-#include "Rts.h"
 
 #ifdef DEBUG
 StgOffset checkClosure(const StgClosure* p);
