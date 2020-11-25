@@ -53,12 +53,20 @@ module Data.Sequence.Strict
   , findIndicesL
   , findIndexR
   , findIndicesR
+
+    -- * Zips and unzips
+  , zip
+  , zipWith
+  , unzip
+  , unzipWith
+
   ) where
 
 import           Cardano.Prelude (forceElemsToWHNF)
 import           Prelude hiding (drop, length, lookup, null, scanl, splitAt,
-                     take)
+                     take, unzip, zip, zipWith)
 
+import           Control.Arrow ((***))
 import           Codec.Serialise (Serialise)
 import           Data.Foldable (foldl', toList)
 import           Data.Sequence (Seq)
@@ -311,6 +319,22 @@ findIndicesL p (StrictSeq xs) = Seq.findIndicesL p xs
 -- descending order.
 findIndicesR :: (a -> Bool) -> StrictSeq a -> [Int]
 findIndicesR p (StrictSeq xs) = Seq.findIndicesR p xs
+
+{-------------------------------------------------------------------------------
+  Zips and Unzips
+-------------------------------------------------------------------------------}
+
+zip :: StrictSeq a -> StrictSeq b -> StrictSeq (a, b)
+zip = zipWith (,)
+
+zipWith :: (a -> b -> c) -> StrictSeq a -> StrictSeq b -> StrictSeq c
+zipWith f (StrictSeq x) (StrictSeq y) = toStrict $ Seq.zipWith f x y
+
+unzip :: StrictSeq (a, b) -> (StrictSeq a, StrictSeq b)
+unzip = unzipWith id
+
+unzipWith :: (a -> (b, c)) -> StrictSeq a -> (StrictSeq b, StrictSeq c)
+unzipWith f (StrictSeq xs) = StrictSeq *** StrictSeq $ Seq.unzipWith f xs
 
 {-------------------------------------------------------------------------------
   Helpers
