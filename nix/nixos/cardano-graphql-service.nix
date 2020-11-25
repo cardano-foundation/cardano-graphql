@@ -118,9 +118,8 @@ in {
     installHasuraCLI = ''
       # always start with no plugins so future upgrades will work
       rm -rf ~/.hasura/plugins
-      # TODO: identify how to get what's needed without the install of the broken plugin
-      hasura plugin install cli-ext
-      cp ${hasura-cli-ext}/bin/cli-ext-hasura-linux ~/.hasura/plugins/bin/hasura-cli_ext
+      mkdir -p ~/.hasura/plugins/store/cli-ext/v${hasura-cli-ext.version}
+      ln -s ${hasura-cli-ext}/bin/cli-ext-hasura-linux ~/.hasura/plugins/store/cli-ext/v${hasura-cli-ext.version}/cli-ext-hasura-linux
     '';
   in lib.mkIf cfg.enable {
     systemd.services.cardano-graphql = {
