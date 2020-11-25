@@ -13,16 +13,16 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "graphql-engine": {
-        "branch": "master",
+        "branch": "refs/tags/v1.3.3",
         "builtin": false,
         "description": "Blazing fast, instant realtime GraphQL APIs on Postgres with fine grained access control, also trigger webhooks on database events.",
         "homepage": "https://hasura.io",
         "owner": "hasura",
         "repo": "graphql-engine",
-        "rev": "de7e6d1f8472956aca2c2c0e3f6e8e6f7091c80a",
-        "sha256": "1jipygc6bp15cq4wr3yngs7knpak24w0z518fkzfzahxmd910kjh",
+        "rev": "8c9ffbeb6d60226970f69b6ef5b08d9551d944e2",
+        "sha256": "1kc0dfxww05dzj61xn0qfq977xkwlzdv51knxf22ciw9xg58c000",
         "type": "tarball",
-        "url": "https://github.com/hasura/graphql-engine/archive/de7e6d1f8472956aca2c2c0e3f6e8e6f7091c80a.tar.gz",
+        "url": "https://github.com/hasura/graphql-engine/archive/8c9ffbeb6d60226970f69b6ef5b08d9551d944e2.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "graphql-parser-hs": {
@@ -69,10 +69,10 @@
         "homepage": null,
         "owner": "hasura",
         "repo": "pg-client-hs",
-        "rev": "5b112acaaae15664e2bc0817b1a17f44f04df69b",
-        "sha256": "1zn1qcx3c6sjr4fmbc165irzfxhcyyc8c1b11nsilgpwwl7brcsg",
+        "rev": "77e9ddaef5c2b6aae829d66295644beebfb55ff1",
+        "sha256": "17igykbig8yhf35sv5a3j9z2avsinf38c5nj0h2r0kvklnazm696",
         "type": "tarball",
-        "url": "https://github.com/hasura/pg-client-hs/archive/5b112acaaae15664e2bc0817b1a17f44f04df69b.tar.gz",
+        "url": "https://github.com/hasura/pg-client-hs/archive/77e9ddaef5c2b6aae829d66295644beebfb55ff1.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
