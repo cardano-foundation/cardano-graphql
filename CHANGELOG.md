@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/input-output-hk/cardano-graphql/compare/3.0.0...3.0.1) (2020-11-27)
+
+### Compatible with:
+
+- [`cardano-node`: `1.21.1`](https://github.com/input-output-hk/cardano-node/releases/tag/1.21.1)
+- [`cardano-db-sync`: `6.0.1`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/6.0.1) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### Bug Fixes
+* add missing comparison operator fields to bool expressions ([89addef](https://github.com/input-output-hk/cardano-graphql/commit/89addef432c79d300a3935a72a066bbaa529acb2))
+* StakePool_bool_exp.rewards type ([1f02a68](https://github.com/input-output-hk/cardano-graphql/commit/1f02a68448946c6a1eda6213396ff0fca4379fbb))
+
 ## [3.0.0](https://github.com/input-output-hk/cardano-graphql/compare/2.2.0...3.0.0) (2020-11-05)
 This new major version, now based on the current Node.js LTS, brings the second round of Shelley-era 
 features to the API. Most notably, rewards, active stake captured at each epoch boundary, 
