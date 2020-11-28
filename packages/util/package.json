@@ -1,6 +1,6 @@
 {
   "name": "@cardano-graphql/util",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Common utilities",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
