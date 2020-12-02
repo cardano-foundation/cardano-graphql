@@ -15,9 +15,8 @@ import Data.String
 import Formatting (bprint, shown)
 import Formatting.Buildable (Buildable(build))
 
-import qualified Cardano.Prelude.Base16.Internal as B16
-import qualified Data.ByteString.Char8 as BS
 import qualified Data.Text.Encoding as Text
+import qualified Data.ByteString.Base16 as B16
 
 {- HLINT ignore "Use isDigit" -}
 
@@ -30,17 +29,8 @@ instance Buildable Base16ParseError where
     bprint ("Base16 parsing failed with incorrect suffix " . shown) suffix
 
 parseBase16 :: Text -> Either Base16ParseError ByteString
-parseBase16 s = do
-  let (bs, suffix) = B16.decode $ Text.encodeUtf8 s
-  unless (BS.null suffix) . Left $ Base16IncorrectSuffix suffix
-  pure bs
+parseBase16 t = first (const (Base16IncorrectSuffix bs)) (B16.decode bs)
+  where bs = Text.encodeUtf8 t
 
 decodeEitherBase16 :: ByteString -> Either String ByteString
-decodeEitherBase16 bs = case B16.decode bs of
-  (decodedBs, "") -> Right decodedBs
-  (_, _) -> Left $ "invalid character at offset: " <> show (BS.length (BS.takeWhile isHex bs))
-  where isHex :: Char -> Bool
-        isHex w =
-          (w >= '0' && w <= '9') ||
-          (w >= 'a' && w <= 'f') ||
-          (w >= 'A' && w <= 'F')
+decodeEitherBase16 = B16.decode

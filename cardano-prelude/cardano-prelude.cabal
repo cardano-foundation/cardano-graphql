@@ -21,7 +21,6 @@ flag development
 library
   hs-source-dirs:      src
   exposed-modules:     Cardano.Prelude
-                       Cardano.Prelude.Base16.Internal
                        Data.FingerTree.Strict
                        Data.Sequence.Strict
                        Data.Semigroup.Action
@@ -42,7 +41,7 @@ library
   build-depends:       base
                      , aeson
                      , array
-                     , base16-bytestring
+                     , base16-bytestring >= 1
                      , bytestring
                      , canonical-json
                      , cborg
