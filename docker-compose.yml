@@ -24,7 +24,7 @@ services:
         max-size: "200k"
         max-file: "10"
   cardano-node:
-    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-1.21.1}
+    image: rhyslbw/cardano-node:${CARDANO_NODE_VERSION:-c6c5758aa5991a1c0d821622349f39c12a40e1ad}
     command: [
       "run",
       "--config", "/config/config.json",
@@ -44,7 +44,7 @@ services:
         max-size: "400k"
         max-file: "20"
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-6.0.1}
+    image: rhyslbw/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-ffa31f3171983a2c07674d75e2f49ebf428bdcb3}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket",
