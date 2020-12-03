@@ -131,7 +131,7 @@ SELECT
   block.block_no AS "blockNo",
   pool.registered_tx_id AS "updated_in_tx_id",
   pool.pledge AS "pledge",
-  ( SELECT stake_address.view FROM stake_address WHERE stake_address.id = pool.reward_addr_id) AS "rewardAddress",
+  ( SELECT stake_address.view FROM stake_address WHERE stake_address.hash_raw = pool.reward_addr) AS "rewardAddress",
   pool_meta_data.url AS "url"
 FROM pool_update AS pool
   LEFT JOIN pool_meta_data ON pool.meta_id = pool_meta_data.id
