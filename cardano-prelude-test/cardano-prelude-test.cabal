@@ -32,7 +32,7 @@ library
                      , aeson
                      , aeson-pretty >= 0.8.5
                      , attoparsec
-                     , base16-bytestring
+                     , base16-bytestring >= 1
                      , bytestring
                      , canonical-json
                      , cardano-prelude
@@ -66,13 +66,11 @@ test-suite cardano-prelude-test-suite
   hs-source-dirs:      test
   main-is:             test.hs
   type:                exitcode-stdio-1.0
-  other-modules:       Test.Cardano.Prelude.Base16Spec
-                       Test.Cardano.Prelude.GHC.Heap.NormalFormSpec
+  other-modules:       Test.Cardano.Prelude.GHC.Heap.NormalFormSpec
                        Test.Cardano.Prelude.GHC.Heap.SizeSpec
                        Test.Cardano.Prelude.GHC.Heap.TreeSpec
 
   build-depends:       base
-                     , base16-bytestring
                      , bytestring
                      , cardano-prelude
                      , cardano-prelude-test
