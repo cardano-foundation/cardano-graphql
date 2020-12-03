@@ -179,6 +179,8 @@ SELECT
   tx.hash,
   tx.id,
   block.time AS "includedAt",
+  tx.invalid_before AS "invalidBefore",
+  tx.invalid_hereafter AS "invalidHereafter",
   tx.size,
   CAST(COALESCE((SELECT SUM("value") FROM tx_out WHERE tx_id = tx.id), 0) AS bigint) AS "totalOutput"
 FROM

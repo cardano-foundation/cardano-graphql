@@ -511,6 +511,8 @@
       - fee
       - hash
       - includedAt
+      - invalidBefore
+      - invalidHereafter
       - size
       - totalOutput
       filter: {}
