@@ -1,0 +1,9 @@
+{
+  "Producers": [
+    {
+      "addr": "relays-new.allegra.dev.cardano.org",
+      "port": 3001,
+      "valency": 2
+    }
+  ]
+}
