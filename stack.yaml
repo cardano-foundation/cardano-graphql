@@ -1,8 +1,0 @@
-resolver: ./snapshot.yaml
-
-packages:
-  - cardano-prelude
-  - cardano-prelude-test
-
-nix:
-  shell-file: nix/stack-shell.nix
