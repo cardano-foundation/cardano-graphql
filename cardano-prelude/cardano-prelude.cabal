@@ -25,7 +25,6 @@ library
                        Data.Sequence.Strict
                        Data.Semigroup.Action
   other-modules:       Cardano.Prelude.Base
-                       Cardano.Prelude.Base16
                        Cardano.Prelude.Error
                        Cardano.Prelude.Formatting
                        Cardano.Prelude.GHC.Heap
