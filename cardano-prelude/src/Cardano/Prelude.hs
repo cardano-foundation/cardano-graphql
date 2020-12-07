@@ -4,7 +4,6 @@ module Cardano.Prelude
 where
 
 import Cardano.Prelude.Base as X
-import Cardano.Prelude.Base16 as X
 import Cardano.Prelude.Error as X
 import Cardano.Prelude.Formatting as X
 import Cardano.Prelude.GHC.Heap as X
