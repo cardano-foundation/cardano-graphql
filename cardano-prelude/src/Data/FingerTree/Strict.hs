@@ -43,6 +43,7 @@ module Data.FingerTree.Strict
 
     -- ** Maps
   , fmap'
+  , unsafeFmap
 
   -- Re-export from "Data.FingerTree"
   , Measured(..)
@@ -263,3 +264,7 @@ reverse (SFT ft) = SFT (FT.reverse ft)
 fmap' :: (Measured v1 a1, Measured v2 a2)
       => (a1 -> a2) -> StrictFingerTree v1 a1 -> StrictFingerTree v2 a2
 fmap' f (SFT ft) = forceToStrict (FT.fmap' f ft)
+
+-- | Like 'fmap', but safe only if the function preserves the measure.
+unsafeFmap :: (a -> b) -> StrictFingerTree v a -> StrictFingerTree v b
+unsafeFmap f (SFT ft) = forceToStrict (FT.unsafeFmap f ft)
