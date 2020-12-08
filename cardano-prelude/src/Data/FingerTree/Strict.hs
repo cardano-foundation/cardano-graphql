@@ -10,6 +10,8 @@
 --
 module Data.FingerTree.Strict
   ( StrictFingerTree
+  , fromStrict
+  , forceToStrict
 
     -- * Construction
   , empty
@@ -41,6 +43,7 @@ module Data.FingerTree.Strict
 
     -- ** Maps
   , fmap'
+  , unsafeFmap
 
   -- Re-export from "Data.FingerTree"
   , Measured(..)
@@ -48,6 +51,7 @@ module Data.FingerTree.Strict
   , ViewR (..)
   ) where
 
+import           Cardano.Prelude (forceElemsToWHNF)
 import           Prelude hiding (null, reverse)
 
 import           Data.FingerTree (Measured (..), ViewL (..), ViewR (..))
@@ -68,7 +72,7 @@ infixl 5 |>
 -- construction functions in this module. These functions essentially just
 -- wrap the original "Data.FingerTree" functions while forcing the provided
 -- value to WHNF.
-newtype StrictFingerTree v a = SFT (FT.FingerTree v a)
+newtype StrictFingerTree v a = SFT { fromStrict :: FT.FingerTree v a }
   deriving (Eq, Ord, Show)
 
 deriving newtype instance Foldable (StrictFingerTree v)
@@ -84,7 +88,7 @@ instance NoThunks a => NoThunks (StrictFingerTree v a) where
 
 -- | /O(1)/. The empty sequence.
 empty :: Measured v a => StrictFingerTree v a
-empty = SFT (FT.empty)
+empty = SFT FT.empty
 
 -- | /O(1)/. A singleton sequence.
 singleton :: Measured v a => a -> StrictFingerTree v a
@@ -109,6 +113,12 @@ SFT ft |> (!a) = SFT (ft FT.|> a)
 (><) :: (Measured v a)
      => StrictFingerTree v a -> StrictFingerTree v a -> StrictFingerTree v a
 SFT ft >< SFT ft' = SFT (ft FT.>< ft')
+
+
+-- | Convert a 'FT.FingerTree' into a 'StrictFingerTree' by forcing each element
+-- to WHNF.
+forceToStrict :: FT.FingerTree v a -> StrictFingerTree v a
+forceToStrict xs = SFT (forceElemsToWHNF xs)
 
 {-------------------------------------------------------------------------------
   Deconstruction
@@ -253,22 +263,8 @@ reverse (SFT ft) = SFT (FT.reverse ft)
 -- | Like 'fmap', but with constraints on the element types.
 fmap' :: (Measured v1 a1, Measured v2 a2)
       => (a1 -> a2) -> StrictFingerTree v1 a1 -> StrictFingerTree v2 a2
-fmap' f (SFT ft) = SFT $ toStrict (FT.fmap' f ft)
-  where
-    -- In order to ensure that all of the values in the 'FT.FingerTree' are
-    -- strict, we can simply 'foldMap' over it and 'seq' each value with unit.
-    -- However, '()''s 'mappend' implementation is actually completely lazy:
-    -- @_ <> _ = ()@
-    -- So, in order to work around this, we instead utilize this newly
-    -- introduced 'StrictUnit' whose 'mappend' implementation is specifically
-    -- strict.
-    toStrict :: FT.FingerTree v a -> FT.FingerTree v a
-    toStrict !ft' = foldMap (`seq` StrictUnit) ft' `seq` ft'
+fmap' f (SFT ft) = forceToStrict (FT.fmap' f ft)
 
-data StrictUnit = StrictUnit
-
-instance Semigroup StrictUnit where
-  StrictUnit <> StrictUnit = StrictUnit
-
-instance Monoid StrictUnit where
-  mempty = StrictUnit
+-- | Like 'fmap', but safe only if the function preserves the measure.
+unsafeFmap :: (a -> b) -> StrictFingerTree v a -> StrictFingerTree v b
+unsafeFmap f (SFT ft) = forceToStrict (FT.unsafeFmap f ft)

@@ -8,7 +8,8 @@
 --
 module Data.Sequence.Strict
   ( StrictSeq (Empty, (:<|), (:|>))
-  , getSeq
+  , fromStrict
+  , forceToStrict
 
     -- * Construction
   , empty
@@ -17,7 +18,6 @@ module Data.Sequence.Strict
   , (|>)
   , (><)
   , fromList
-  , toStrict
 
     -- * Deconstruction
     -- | Additional functions for deconstructing sequences are available
@@ -60,6 +60,9 @@ module Data.Sequence.Strict
   , unzip
   , unzipWith
 
+    -- * Deprecated
+  , getSeq
+  , toStrict
   ) where
 
 import           Cardano.Prelude (forceElemsToWHNF)
@@ -90,7 +93,7 @@ infixl 5 :|>
 -- construction functions in this module. These functions essentially just
 -- wrap the original "Data.Sequence" functions while forcing the provided
 -- value to WHNF.
-newtype StrictSeq a = StrictSeq { getSeq :: Seq a }
+newtype StrictSeq a = StrictSeq { fromStrict :: Seq a }
   deriving stock (Eq, Ord, Show)
   deriving newtype (Foldable, Semigroup, Serialise)
 
@@ -169,9 +172,9 @@ StrictSeq xs >< StrictSeq ys = StrictSeq (xs Seq.>< ys)
 fromList :: [a] -> StrictSeq a
 fromList !xs = foldl' (|>) empty xs
 
--- | Convert a 'Seq' into a 'StrictSeq'.
-toStrict :: Seq a -> StrictSeq a
-toStrict xs = StrictSeq (forceElemsToWHNF xs)
+-- | Convert a 'Seq' into a 'StrictSeq' by forcing each element to WHNF.
+forceToStrict :: Seq a -> StrictSeq a
+forceToStrict xs = StrictSeq (forceElemsToWHNF xs)
 
 {-------------------------------------------------------------------------------
   Deconstruction
@@ -342,3 +345,15 @@ unzipWith f (StrictSeq xs) = StrictSeq *** StrictSeq $ Seq.unzipWith f xs
 
 toStrictSeqTuple :: (Seq a, Seq a) -> (StrictSeq a, StrictSeq a)
 toStrictSeqTuple (a, b) = (StrictSeq a, StrictSeq b)
+
+{-------------------------------------------------------------------------------
+  Deprecated
+-------------------------------------------------------------------------------}
+
+getSeq :: StrictSeq a -> Seq a
+getSeq = fromStrict
+{-# DEPRECATED getSeq "Use fromStrict" #-}
+
+toStrict :: Seq a -> StrictSeq a
+toStrict = forceToStrict
+{-# DEPRECATED toStrict "Use forceToStrict" #-}
