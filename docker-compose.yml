@@ -24,7 +24,7 @@ services:
         max-size: "200k"
         max-file: "10"
   cardano-node:
-    image: rhyslbw/cardano-node:${CARDANO_NODE_VERSION:-c6c5758aa5991a1c0d821622349f39c12a40e1ad}
+    image: inputoutput/cardano-node:${CARDANO_NODE_VERSION:-1.24.2}
     command: [
       "run",
       "--config", "/config/config.json",

@@ -88,6 +88,9 @@
           "kind": "UserDefinedBK",
           "name": "LiveViewBackend"
         }
+      ],
+      "cardano.node.resources": [
+        "EKGViewBK"
       ]
     },
     "mapSubtrace": {

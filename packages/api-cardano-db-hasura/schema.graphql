@@ -363,8 +363,8 @@ input Reward_bool_exp {
 }
 
 input Reward_order_by {
-  address: StakeAddress_comparison_exp
-  amount: text_comparison_exp
+  address: order_by
+  amount: order_by
   earnedIn: Epoch_order_by
   stakePool: StakePool_order_by
 }
@@ -433,7 +433,7 @@ type StakeDeregistration_aggregate_fields {
 }
 
 input StakeDeregistration_order_by {
-  address: StakeAddress_comparison_exp
+  address: order_by
   transaction: Transaction_order_by
 }
 
