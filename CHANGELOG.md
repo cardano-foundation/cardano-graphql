@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/input-output-hk/cardano-graphql/compare/3.0.1...3.1.0) (2020-12-10)
+
+### Compatible with:
+
+- [`cardano-node`: `1.24.2`](https://github.com/input-output-hk/cardano-node/releases/tag/1.24.2)
+- [`cardano-db-sync`: `7.1.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/7.1.0) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### Features
+* Transaction validity interval fields ([ad9b4e5](https://github.com/input-output-hk/cardano-graphql/commit/ad9b4e5d3aebc2ca0984c67114e53f7f31210ec2))
+  - `Transaction.invalidBefore`
+  - `Transaction.invalidHereafter`
+  - associated input fields
+### Bug Fixes
+
+* Reward and StakeDeregistration order_by fields ([a6f9a88](https://github.com/input-output-hk/cardano-graphql/commit/a6f9a885b507b8b4da32e257b4230765fa27e855)), closes [#382](https://github.com/input-output-hk/cardano-graphql/issues/382)
+
+
 ### [3.0.1](https://github.com/input-output-hk/cardano-graphql/compare/3.0.0...3.0.1) (2020-11-27)
 
 ### Compatible with:
