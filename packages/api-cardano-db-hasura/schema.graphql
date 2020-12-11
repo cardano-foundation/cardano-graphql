@@ -625,7 +625,7 @@ type Transaction {
     where: TransactionInput_bool_exp
   ): TransactionInput_aggregate!
   invalidBefore: String
-  invalidHereAfter: String
+  invalidHereafter: String
   metadata: [TransactionMetadata]
   outputs (
     limit: Int
@@ -659,7 +659,7 @@ input Transaction_order_by {
   hash: order_by
   includedAt: order_by
   invalidBefore: order_by_with_nulls
-  invalidHereAfter: order_by_with_nulls
+  invalidHereafter: order_by_with_nulls
   size: order_by
   totalOutput: order_by
   withdrawals: order_by
@@ -677,7 +677,7 @@ input Transaction_bool_exp {
   includedAt: Date_comparison_exp
   inputs: TransactionInput_bool_exp
   invalidBefore: text_comparison_exp
-  invalidHereAfter: text_comparison_exp
+  invalidHereafter: text_comparison_exp
   metadata: TransactionMetadata_bool_exp
   outputs: TransactionOutput_bool_exp
   size: BigInt_comparison_exp
@@ -709,7 +709,7 @@ type Transaction_max_fields {
   deposit: String
   fee: String
   invalidBefore: String
-  invalidHereAfter: String
+  invalidHereafter: String
   size: String
   totalOutput: String
   withdrawals: Withdrawal_max_fields
@@ -719,7 +719,7 @@ type Transaction_min_fields {
   deposit: String
   fee: String
   invalidBefore: String
-  invalidHereAfter: String
+  invalidHereafter: String
   size: String
   totalOutput: String
   withdrawals: Withdrawal_min_fields
