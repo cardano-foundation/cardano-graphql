@@ -74,7 +74,7 @@ services:
   hasura:
     build:
       context: ./packages/api-cardano-db-hasura/hasura
-    image: inputoutput/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-3.1.0}
+    image: inputoutput/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-3.1.1}
     ports:
       - ${HASURA_PORT:-8090}:8080
     depends_on:
@@ -97,7 +97,7 @@ services:
       target: server
       args:
         - NETWORK=${NETWORK:-mainnet}
-    image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-3.1.0}
+    image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-3.1.1}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
