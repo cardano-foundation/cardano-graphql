@@ -117,11 +117,22 @@ describe('transactions', () => {
     })
     expect(result.data).toMatchSnapshot()
   })
-  it('Can return transaction metadata if present', async () => {
-    const result = await client.query({
-      query: await loadQueryNode('transactionByIdWithMetadataIfPresent'),
-      variables: { hash: 'f910021138e553c65b96cf3e4647927fcd9f634e06544251f83cffb1891876e8' }
+
+  describe('metadata', () => {
+    it('JSON object', async () => {
+      const result = await client.query({
+        query: await loadQueryNode('transactionByIdWithMetadataIfPresent'),
+        variables: { hash: 'f910021138e553c65b96cf3e4647927fcd9f634e06544251f83cffb1891876e8' }
+      })
+      expect(result.data).toMatchSnapshot()
     })
-    expect(result.data).toMatchSnapshot()
+
+    it('JSON string', async () => {
+      const result = await client.query({
+        query: await loadQueryNode('transactionByIdWithMetadataIfPresent'),
+        variables: { hash: '204ca3088bbab666692f39dddb9b773e6fb20b0d0c3e464407985fa7863e5bac' }
+      })
+      expect(result.data).toMatchSnapshot()
+    })
   })
 })
