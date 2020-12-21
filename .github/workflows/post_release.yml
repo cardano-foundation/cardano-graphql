@@ -24,7 +24,7 @@ jobs:
         env:
           SKIP_PREFLIGHT_CHECK: true
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.6.1
+        uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
          BRANCH: gh-pages
