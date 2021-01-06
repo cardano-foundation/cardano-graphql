@@ -12,6 +12,8 @@ jobs:
       -
         name: Checkout source code
         uses: actions/checkout@v2
+        with:
+          path: cardano-graphql
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
