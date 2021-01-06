@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      -  
+        name: Checkout source code
+        uses: actions/checkout@v2
+        with:
+          path: cardano-graphql
+      -
+        name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Compile TypeScript and lint
+        working-directory: ./cardano-graphql
+        run: |
+          yarn install --offline --frozen-lockfile --non-interactive --logevel=error
+          yarn build
+          yarn lint
+        env:
+          ALLOW_INTROSPECTION: true
+          CACHE_ENABLED: false
+          CURRENT_ERA_FIRST_SLOT: 16588800
+          CARDANO_GRAPHQL_VERSION: ${{ github.sha }}
+      -
+        name: Build Cardano GraphQL Dockerfile
+        uses: docker/build-push-action@v2
+        with:
+          cache-from: type=registry,ref=inputoutput/cardano-graphql:master
+          cache-to: type=inline
+          tags: inputoutput/cardano-graphql:${{ github.sha }}
+          target: server
+      -
+        name: Build Cardano GraphQL Hasura Dockerfile
+        uses: docker/build-push-action@v2
+        with:
+          context: ./cardano-graphql/packages/api-cardano-db-hasura/hasura
+          file: ./cardano-graphql/packages/api-cardano-db-hasura/hasura/Dockerfile
+          tags: inputoutput/cardano-graphql-hasura:${{ github.sha }}
