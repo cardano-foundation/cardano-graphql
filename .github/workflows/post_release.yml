@@ -6,25 +6,59 @@ on:
       - published
 
 jobs:
-  publish-docs:
+  publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
+      -
+        name: Checkout source code
         uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-      - name: Setup Node.js
+      -
+        name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 12
-      - name: Build docs
+          node-version: 14
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      -
+        name: Build and push Cardano GraphQL Dockerfile
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: inputoutput/cardano-graphql:${{ github.sha }}, inputoutput/cardano-graphql:${{ github.event.release.tag_name }}, inputoutput/cardano-graphql:latest
+          cache-from: type=registry,ref=inputoutput/cardano-graphql:master
+          cache-to: type=inline
+      -
+        name: Build and push Cardano GraphQL Hasura Dockerfile
+        uses: docker/build-push-action@v2
+        with:
+          context: ./cardano-graphql/packages/api-cardano-db-hasura/hasura
+          file: ./cardano-graphql/packages/api-cardano-db-hasura/hasura/Dockerfile
+          push: true
+          tags: inputoutput/cardano-graphql-hasura:${{ github.sha }}, inputoutput/cardano-graphql-hasura:${{ github.event.release.tag_name }}, inputoutput/cardano-graphql-hasura:latest
+      -
+        name: Publish packages to npm registry
+        run: |
+          npx npm-cli-login -u ${{ secrets.NPM_REGISTRY_USER }} -e ${{ secrets.NPM_REGISTRY_EMAIL }} -p ${{ secrets.NPM_REGISTRY_TOKEN }}
+          ./scripts/publish_packages.sh
+        if: ${{ always() }}
+          rm -f .npmrc
+      -
+        name: Build docs
         run: |
           yarn --cwd ./docs install --frozen-lockfile
           yarn --cwd ./docs build
         env:
           SKIP_PREFLIGHT_CHECK: true
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.6.1
+      -
+        name: Deploy
+        uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
          BRANCH: gh-pages

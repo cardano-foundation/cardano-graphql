@@ -6,9 +6,7 @@
   <img width="200" src=".github/images/cardano-logo.png"/>
 </p>
 
-<p align="center">
-  <a href="https://jenkins.daedalus-operations.com/blue/organizations/jenkins/cardano-graphql/"><img src="https://jenkins.daedalus-operations.com/buildStatus/icon?job=cardano-graphql%2Fmaster&style=flat-square" /></a>
-</p>
+[![CI][img_src_CI]][workflow_CI]
 
 <hr/>
 
@@ -95,3 +93,6 @@ See [Building](https://github.com/input-output-hk/cardano-graphql/wiki/Building)
 <p align="center">
   <a href="https://github.com/input-output-hk/cardano-graphql/blob/master/LICENSE"><img src="https://img.shields.io/github/license/input-output-hk/cardano-graphql.svg?style=for-the-badge" /></a>
 </p>
+
+[img_src_CI]: https://github.com/input-output-hk/cardano-graphql/workflows/CI/badge.svg
+[workflow_CI]: https://github.com/input-output-hk/cardano-graphql/actions?query=workflow%3ACI
