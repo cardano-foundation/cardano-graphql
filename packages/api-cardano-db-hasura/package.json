@@ -50,7 +50,8 @@
     "p-retry": "^4.2.0",
     "pg": "^8.5.1",
     "pg-listen": "^1.6.0",
-    "set-interval-async": "^1.0.33"
+    "set-interval-async": "^1.0.33",
+    "ts-log": "^2.2.3"
   },
   "devDependencies": {
     "@cardano-graphql/util-dev": "3.1.0",

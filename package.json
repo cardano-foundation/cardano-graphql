@@ -59,6 +59,7 @@
     "@graphql-codegen/typescript": "^1.15.2",
     "@graphql-codegen/typescript-graphql-files-modules": "^1.15.2",
     "@graphql-codegen/typescript-resolvers": "^1.15.2",
+    "@types/bunyan": "^1.8.6",
     "@types/clear": "^0.1.0",
     "@types/dockerode": "^2.5.33",
     "@types/figlet": "^1.2.0",

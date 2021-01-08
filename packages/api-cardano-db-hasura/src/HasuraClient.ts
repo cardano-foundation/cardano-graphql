@@ -10,24 +10,28 @@ import { introspectSchema, wrapSchema } from '@graphql-tools/wrap'
 import pRetry from 'p-retry'
 import path from 'path'
 import { AssetSupply } from './graphql_types'
+import { dummyLogger, Logger } from 'ts-log'
 
 dayjs.extend(utc)
 
 export class HasuraClient {
   private client: ApolloClient<NormalizedCacheObject>
-  readonly hasuraCliPath: string
-  readonly hasuraUri: string
   private applyingSchemaAndMetadata: boolean
   public adaCirculatingSupplyFetcher: DataFetcher<AssetSupply['circulating']>
   public schema: GraphQLSchema
 
-  constructor (hasuraCliPath: string, hasuraUri: string, pollingInterval: number) {
+  constructor (
+    readonly hasuraCliPath: string,
+    readonly hasuraUri: string,
+    pollingInterval: number,
+    private logger: Logger = dummyLogger
+  ) {
     this.adaCirculatingSupplyFetcher = new DataFetcher<AssetSupply['circulating']>(
+      'AdaCirculatingSupply',
       this.getAdaCirculatingSupply.bind(this),
-      pollingInterval
+      pollingInterval,
+      this.logger
     )
-    this.hasuraCliPath = hasuraCliPath
-    this.hasuraUri = hasuraUri
     this.client = new ApolloClient({
       cache: new InMemoryCache({
         addTypename: false
@@ -94,7 +98,7 @@ export class HasuraClient {
         })
         return fetchResult.json()
       } catch (error) {
-        console.error(error)
+        this.logger.error(error)
         throw error
       }
     }
@@ -159,7 +163,7 @@ export class HasuraClient {
           if (error) {
             reject(error)
           }
-          console.log(stdout)
+          this.logger.debug(stdout)
           resolve()
         }
       )

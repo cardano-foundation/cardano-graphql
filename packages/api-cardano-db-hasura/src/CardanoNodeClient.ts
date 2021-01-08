@@ -3,6 +3,7 @@ import fs from 'fs-extra'
 import { AssetSupply } from './graphql_types'
 import pRetry from 'p-retry'
 import util, { DataFetcher } from '@cardano-graphql/util'
+import { dummyLogger, Logger } from 'ts-log'
 
 export type LedgerState = {
   accountState: {
@@ -15,22 +16,22 @@ export type LedgerState = {
 }
 
 export class CardanoNodeClient {
-  private cardanoCli: CardanoCli
-  readonly currentEraFirstSlot: number
   readonly networkParams: string[]
   public adaCirculatingSupply: AssetSupply['circulating']
   public ledgerStateFetcher: DataFetcher<LedgerState>
 
   constructor (
-    cardanoCli: CardanoCli,
+    private cardanoCli: CardanoCli,
     pollingInterval: number,
-    currentEraFirstSlot: number
+    private currentEraFirstSlot: number,
+    private logger: Logger = dummyLogger
   ) {
-    this.cardanoCli = cardanoCli
     this.currentEraFirstSlot = currentEraFirstSlot
     this.ledgerStateFetcher = new DataFetcher<LedgerState>(
+      'LedgerState',
       this.cardanoCli.getLedgerState,
-      pollingInterval
+      pollingInterval,
+      this.logger
     )
   }
 
@@ -39,7 +40,10 @@ export class CardanoNodeClient {
       await fs.stat(process.env.CARDANO_NODE_SOCKET_PATH)
       const { slotNo } = await this.cardanoCli.getTip()
       if (slotNo < this.currentEraFirstSlot) {
-        throw new Error('cardano-node is still synchronizing')
+        this.logger.debug('cardano-node tip', { module: 'CardanoNodeClient', value: slotNo })
+        this.logger.debug('currentEraFirstSlot', { module: 'CardanoNodeClient', value: this.currentEraFirstSlot })
+        this.logger.warn('cardano-node is still synchronizing', { module: 'CardanoNodeClient' })
+        throw new Error()
       }
     }, {
       factor: 1.5,

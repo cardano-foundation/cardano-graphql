@@ -53,6 +53,11 @@ in {
         default = "allegra";
       };
       
+      logLevel = lib.mkOption {
+        type = lib.types.str;
+        default = "info";
+      };
+      
       port = lib.mkOption {
         type = lib.types.int;
         default = 3100;
@@ -143,13 +148,14 @@ in {
         CARDANO_CLI_PATH = cfg.cardanoCliPackage + "/bin/cardano-cli";
         CARDANO_NODE_SOCKET_PATH = cfg.cardanoNodeSocketPath;
         CURRENT_ERA_FIRST_SLOT = cfg.currentEraFirstSlot;
-        ERA_NAME =cfg.eraName; 
+        ERA_NAME = cfg.eraName;
         POOL_METADATA_PROXY = cfg.smashUrl;
         GENESIS_FILE_BYRON = cfg.genesisByron;
         GENESIS_FILE_SHELLEY = cfg.genesisShelley;
         HASURA_CLI_PATH = hasura-cli + "/bin/hasura";
         HASURA_URI = hasuraBaseUri;
         JQ_PATH = pkgs.jq + "/bin/jq";
+        LOGGER_LEVEL = cfg.loggerLevel;
         POSTGRES_DB = cfg.db;
         POSTGRES_HOST = cfg.dbHost;
         POSTGRES_PASSWORD = cfg.dbPassword;
