@@ -29,6 +29,7 @@ type Query {
     offset: Int
     where: ActiveStake_bool_exp
   ): ActiveStake_aggregate!
+  ada: Ada!
   blocks (
     limit: Int
     order_by: [Block_order_by!]
@@ -209,6 +210,31 @@ type ActiveStake_min_fields {
 
 type ActiveStake_sum_fields {
   amount: String
+}
+
+type Ada {
+  supply: AssetSupply!
+}
+
+type AssetSupply {
+  circulating: String!
+  max: String!
+  total: String!
+}
+
+input AssetSupply_bool_exp {
+  _and: [AssetSupply_bool_exp]
+  _not: AssetSupply_bool_exp
+  _or: [AssetSupply_bool_exp]
+  circulating: text_comparison_exp
+  max: text_comparison_exp
+  total: text_comparison_exp
+}
+
+input AssetSupply_order_by {
+  circulating: order_by
+  max: order_by
+  total: order_by
 }
 
 type ByronBlockVersionData {

@@ -2,12 +2,10 @@ import fs from 'fs'
 import { ApolloError } from 'apollo-server'
 import { makeExecutableSchema } from '@graphql-tools/schema'
 import { delegateToSchema } from '@graphql-tools/delegate'
-import pRetry from 'p-retry'
 import path from 'path'
 import util from '@cardano-graphql/util'
 import { Resolvers, Genesis } from './graphql_types'
 import { HasuraClient } from './HasuraClient'
-import { GraphQLSchema } from 'graphql'
 import {
   IPv4Resolver,
   IPv6Resolver,
@@ -15,6 +13,8 @@ import {
   TimestampResolver,
   URLResolver
 } from 'graphql-scalars'
+import BigNumber from 'bignumber.js'
+import { CardanoNodeClient } from './CardanoNodeClient'
 const GraphQLBigInt = require('graphql-bigint')
 
 export const scalarResolvers = {
@@ -33,15 +33,11 @@ export const scalarResolvers = {
   VRFVerificationKey: util.scalars.VRFVerificationKey
 } as any
 
-export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis) {
-  let hasuraSchema: GraphQLSchema
-  await pRetry(async () => {
-    hasuraSchema = await hasuraClient.buildHasuraSchema()
-  }, {
-    factor: 1.75,
-    retries: 9,
-    onFailedAttempt: util.onFailedAttemptFor('Fetching Hasura schema via introspection')
-  })
+export async function buildSchema (
+  hasuraClient: HasuraClient,
+  genesis: Genesis,
+  cardanoNodeClient?: CardanoNodeClient
+) {
   return makeExecutableSchema({
     resolvers: Object.assign({}, scalarResolvers, {
       Query: {
@@ -52,7 +48,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'activeStake',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         activeStake_aggregate: (_root, args, context, info) => {
@@ -62,8 +58,22 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'activeStake_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
+        },
+        ada: async () => {
+          if (!(await cardanoNodeClient.isInCurrentEra())) {
+            return new ApolloError('ada query results are only available when close to the network tip. This is expected during the initial chain-sync.')
+          }
+          return {
+            supply: {
+              circulating: hasuraClient.adaCirculatingSupplyFetcher.value,
+              max: genesis.shelley.maxLovelaceSupply,
+              total: new BigNumber(genesis.shelley.maxLovelaceSupply)
+                .minus(new BigNumber(cardanoNodeClient.ledgerStateFetcher.value.accountState._reserves))
+                .toString()
+            }
+          }
         },
         blocks: (_root, args, context, info) => {
           return delegateToSchema({
@@ -72,7 +82,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'blocks',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         blocks_aggregate: (_root, args, context, info) => {
@@ -82,7 +92,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'blocks_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         cardano: async (_root, _args, context, info) => {
@@ -92,7 +102,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
               fieldName: 'cardano',
               info,
               operation: 'query',
-              schema: hasuraSchema
+              schema: hasuraClient.schema
             })
             if (result[0].currentEpoch === null) {
               return new ApolloError('currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.')
@@ -116,7 +126,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'delegations',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         delegations_aggregate: (_root, args, context, info) => {
@@ -126,7 +136,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'delegations_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         epochs: (_root, args, context, info) => {
@@ -136,7 +146,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'epochs',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         epochs_aggregate: (_root, args, context, info) => {
@@ -146,7 +156,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'epochs_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         genesis: async () => genesis,
@@ -157,7 +167,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'rewards',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         rewards_aggregate: (_root, args, context, info) => {
@@ -167,7 +177,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'rewards_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         stakeDeregistrations: (_root, args, context, info) => {
@@ -177,7 +187,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'stakeDeregistrations',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         stakeDeregistrations_aggregate: (_root, args, context, info) => {
@@ -187,7 +197,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'stakeDeregistrations_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         stakePools: (_root, args, context, info) => {
@@ -197,7 +207,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'stakePools',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         stakePools_aggregate: (_root, args, context, info) => {
@@ -207,7 +217,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'stakePools_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         stakeRegistrations: (_root, args, context, info) => {
@@ -217,7 +227,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'stakeRegistrations',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         stakeRegistrations_aggregate: (_root, args, context, info) => {
@@ -227,7 +237,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'stakeRegistrations_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         transactions: (_root, args, context, info) => {
@@ -237,7 +247,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'transactions',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         transactions_aggregate: (_root, args, context, info) => {
@@ -247,7 +257,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'transactions_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         utxos: (_root, args, context, info) => {
@@ -257,7 +267,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'utxos',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         utxos_aggregate: (_root, args, context, info) => {
@@ -267,7 +277,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'utxos_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         withdrawals: (_root, args, context, info) => {
@@ -277,7 +287,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'withdrawals',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         },
         withdrawals_aggregate: (_root, args, context, info) => {
@@ -287,7 +297,7 @@ export async function buildSchema (hasuraClient: HasuraClient, genesis: Genesis)
             fieldName: 'withdrawals_aggregate',
             info,
             operation: 'query',
-            schema: hasuraSchema
+            schema: hasuraClient.schema
           })
         }
       }

@@ -8,3 +8,5 @@ lerna-debug.log
 *node_modules/
 result*
 *yarn-error.log
+bin
+state

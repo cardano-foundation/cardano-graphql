@@ -12,6 +12,8 @@ import { AllowList } from './AllowList'
 import { prometheusMetricsPlugin } from './apollo_server_plugins'
 import { IntrospectionNotPermitted, TracingRequired } from './errors'
 import { allowListMiddleware } from './express_middleware'
+import { dummyLogger, Logger } from 'ts-log'
+import { LogLevelString } from 'bunyan'
 
 export type Config = {
   allowIntrospection: boolean
@@ -20,6 +22,7 @@ export type Config = {
   apiPort: number
   cacheEnabled: boolean
   listenAddress: string
+  loggerLevel: LogLevelString
   prometheusMetrics: boolean
   queryDepthLimit?: number
   tracing: boolean
@@ -28,13 +31,15 @@ export type Config = {
 export class Server {
   public app: express.Application
   private apolloServer: ApolloServer
-  private config: Config
   private httpServer: http.Server
   private schemas: GraphQLSchema[]
 
-  constructor (schemas: GraphQLSchema[], config: Config) {
+  constructor (
+    schemas: GraphQLSchema[],
+    private config: Config,
+    private logger: Logger = dummyLogger
+  ) {
     this.app = express()
-    this.config = config
     this.schemas = schemas
   }
 
@@ -50,9 +55,9 @@ export class Server {
         const file = await fs.readFile(this.config.allowListPath, 'utf8')
         allowList = JSON.parse(file)
         this.app.use('/', json(), allowListMiddleware(allowList))
-        console.log('The server will only allow only operations from the provided list')
+        this.logger.info('The server will only allow only operations from the provided list')
       } catch (error) {
-        console.error(`Cannot read or parse allow-list JSON file at ${this.config.allowListPath}`)
+        this.logger.error(`Cannot read or parse allow-list JSON file at ${this.config.allowListPath}`)
         throw error
       }
     }
@@ -61,7 +66,7 @@ export class Server {
         throw new TracingRequired('Prometheus')
       }
       plugins.push(prometheusMetricsPlugin(this.app))
-      console.log('Prometheus metrics will be served at /metrics')
+      this.logger.info('Prometheus metrics will be served at /metrics')
     }
     if (this.config.queryDepthLimit) {
       validationRules.push(depthLimit(this.config.queryDepthLimit))
@@ -88,7 +93,7 @@ export class Server {
 
   async start () {
     this.httpServer = await listenPromise(this.app, this.config.apiPort, this.config.listenAddress)
-    console.log(`GraphQL HTTP server at http://${this.config.listenAddress}:` +
+    this.logger.info(`GraphQL HTTP server at http://${this.config.listenAddress}:` +
       `${this.config.apiPort}${this.apolloServer.graphqlPath} started`
     )
   }
@@ -96,7 +101,7 @@ export class Server {
   shutdown () {
     if (this.httpServer !== undefined) {
       this.httpServer.close()
-      console.log(`GraphQL HTTP server at http://${this.config.listenAddress}:` +
+      this.logger.info(`GraphQL HTTP server at http://${this.config.listenAddress}:` +
         `${this.config.apiPort}${this.apolloServer.graphqlPath} shutting down`
       )
     }
