@@ -4,20 +4,30 @@ import { dummyLogger, Logger } from 'ts-log'
 
 export class DataFetcher<DataValue> {
   private pollingQueryTimer: SetIntervalAsyncTimer
+  private fetch: () => Promise<void>
+  private isFetching: boolean
   public value: DataValue
 
   constructor (
     public name: string,
-    private fetchFn: FetchFunction<DataValue>,
+    fetchFn: FetchFunction<DataValue>,
     private pollingInterval: number,
     private logger: Logger = dummyLogger
-  ) {}
+  ) {
+    this.isFetching = false
+    this.fetch = async () => {
+      if (this.isFetching) return
+      this.isFetching = true
+      this.value = await fetchFn()
+      this.isFetching = false
+    }
+  }
 
   public async initialize () {
-    this.value = await this.fetchFn()
+    await this.fetch()
     this.logger.debug('initial value fetched', { module: 'DataFetcher', instance: this.name, value: this.value })
     this.pollingQueryTimer = setIntervalAsync(async () => {
-      this.value = await this.fetchFn()
+      await this.fetch()
       this.logger.debug(`value fetched after ${this.pollingInterval / 1000} seconds`, { module: 'DataFetcher', instance: this.name, value: this.value })
     }, this.pollingInterval)
   }
