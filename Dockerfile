@@ -136,6 +136,7 @@ ENV \
   HASURA_URI="http://hasura:8080" \
   JQ_PATH=/usr/bin/jq \
   LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
+  NETWORK=${NETWORK} \
   POSTGRES_DB_FILE=/run/secrets/postgres_db \
   POSTGRES_HOST=postgres \
   POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password \
@@ -152,7 +153,9 @@ COPY --from=cardano-graphql-builder /app/packages/util/package.json /app/package
 COPY --from=cardano-graphql-production-deps /app/node_modules /app/node_modules
 COPY --from=cardano-graphql-production-deps /app/packages/api-cardano-db-hasura/node_modules /app/packages/api-cardano-db-hasura/node_modules
 COPY config/network/${NETWORK}/genesis /config/genesis/
+COPY scripts/docker_entrypoint.sh /scripts/docker_entrypoint.sh
 RUN mkdir /node-ipc
 WORKDIR /app/packages/server/dist
 EXPOSE 3100
-CMD ["node", "index.js"]
+ENTRYPOINT ["/scripts/docker_entrypoint.sh"]
+CMD ["index.js"]

@@ -37,10 +37,6 @@ case "$NETWORK" in
             HASURA_PORT=8093
             POSTGRES_PORT=5445
             ;;
-        *)
-            echo "Unknown network: $NETWORK {mainnet|testnet|allegra|launchpad}"
-            exit 1
-
 esac
 
 export ALLOW_INTROSPECTION=true
