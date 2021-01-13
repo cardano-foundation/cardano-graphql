@@ -1,0 +1,21 @@
+# TODO: this doesn't really map to the REST response type,
+# which is:
+#
+# {
+#   "Right": {
+#     "cgaiCardanoAddress": "Ae2tdPwUPEZK72eZZqulakkhaUfTCcoaGepvQP718aYBczw5uZmp47h1k14",
+#     "cgaiGenesisAmount": {
+#       "getCoin": "string"
+#     },
+#     "cgaiIsRedeemed": true
+#   }
+# }
+#
+query getGenesisSummary {
+  genesis {
+    byron {
+      avvmDistr
+      nonAvvmBalances
+    }
+  }
+}

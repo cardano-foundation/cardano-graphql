@@ -1,0 +1,40 @@
+query getTxSummary($hash: Hash32Hex!) {
+  transactions(where: { hash: { _eq: $hash } }) {
+    hash # ctsId
+    includedAt # ctsTxTimeIssued
+    fee # ctsFees
+    block {
+      epochNo # ctsBlockEpoch
+      slotNo # ctsBlockSlot
+      slotInEpoch
+      number # ctsBlockHeight
+      hash # ctsBlockHash
+    }
+    inputs { # ctsInputs
+      address # ctaAddress
+      value # ctaAmount
+      sourceTxHash # ctaTxHash
+      sourceTxIndex # ctaTxIndex
+    }
+    inputs_aggregate {
+      aggregate {
+        sum {
+          value # ctsTotalInput
+        }
+      }
+    }
+    outputs { # ctsOutputs
+      address # ctaAddress
+      value # ctaAmount
+      index # ctaTxIndex
+      txHash # ctaTxHash
+    }
+    outputs_aggregate {
+      aggregate {
+        sum {
+          value # ctsTotalOutput
+        }
+      }
+    }
+  }
+}

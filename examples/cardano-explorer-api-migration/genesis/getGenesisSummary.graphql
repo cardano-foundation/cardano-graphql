@@ -1,0 +1,25 @@
+# TODO: this doesn't really map to the REST response type,
+# which is:
+#
+# {
+#   "Right": {
+#     "cgsNumTotal": 0,
+#     "cgsNumRedeemed": 0,
+#     "cgsNumNotRedeemed": 0,
+#     "cgsRedeemedAmountTotal": {
+#       "getCoin": "string"
+#     },
+#     "cgsNonRedeemedAmountTotal": {
+#       "getCoin": "string"
+#     }
+#   }
+# }
+#
+query getGenesisSummary {
+  genesis {
+    byron {
+      avvmDistr
+      nonAvvmBalances
+    }
+  }
+}

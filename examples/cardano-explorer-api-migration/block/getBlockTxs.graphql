@@ -1,0 +1,38 @@
+query getBlockTxs($hash: Hash32Hex!) {
+  blocks(limit: 1, where: { hash: { _eq: $hash } }) {
+    transactions {
+      hash # ctbId
+      includedAt # ctbTimeIssued
+      fee # ctbFees
+      inputs {
+        # ctbInputs
+        address # ctaAddress
+        value # ctaAmount
+        sourceTxHash # ctaTxHash
+        sourceTxIndex # ctaTxIndex
+      }
+      inputs_aggregate {
+        aggregate {
+          sum {
+            value # ctbInputSum
+          }
+        }
+      }
+      outputs { # ctbOutputs
+        address # ctaAddress
+        index # ctaTxIndex
+        value # ctaAmount
+        transaction {
+          hash # ctaTxHash
+        }
+      }
+      outputs_aggregate {
+        aggregate {
+          sum {
+            value # ctbOutputSum
+          }
+        }
+      }
+    }
+  }
+}

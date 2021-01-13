@@ -1,0 +1,27 @@
+query getAddressBalance($address: String!) {
+  utxos_aggregate(where: { address: { _eq: $address } }) {
+    aggregate {
+      sum {
+        value
+      }
+    }
+  }
+  transactions_aggregate(
+    where: {
+      _or: [
+        { inputs: { address: { _eq: $address } } }
+        { outputs: { address: { _eq: $address } } }
+      ]
+    }
+  ) {
+    aggregate {
+      count
+    }
+  }
+  utxos(where: { address: { _eq: $address } }) {
+    address # address
+    txHash # txid
+    index # index
+    value # coin
+  }
+}

@@ -1,0 +1,6 @@
+query getTxsStats($limit: Int!) {
+  transactions(limit: $limit, order_by: { includedAt: desc }) {
+    hash,
+    size
+  }
+}

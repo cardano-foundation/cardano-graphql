@@ -1,0 +1,30 @@
+query getBlock($hash: Hash32Hex!) {
+  blocks(limit: 1, where: { hash: { _eq: $hash } }) {
+    slotInEpoch # cbeEpoch
+    slotNo # cbeSlot
+    number # cbeBlkHeight
+    hash # cbeBlkHash
+    forgedAt # cbeTimeIssued
+    transactionsCount # cbeTxNum
+    transactions_aggregate {
+      aggregate {
+        sum {
+          totalOutput # cbeTotalSent
+        }
+      }
+    }
+    size # cbeSize
+    slotLeader {
+      hash # cbeBlockLead
+    }
+    fees # cbeFees
+    previousBlock {
+      hash # cbsPrevHash
+    }
+    nextBlock {
+      hash # cbsNextHash
+    }
+    merkelRoot # cbsMerkleRoot
+  }
+}
+

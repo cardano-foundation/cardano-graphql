@@ -1,0 +1,13 @@
+query getTxs($limit: Int!) {
+  transactions(limit: $limit, order_by: { includedAt: desc }) {
+    hash # cteId
+    includedAt # cteTimeIssued
+    outputs_aggregate {
+      aggregate {
+        sum {
+          value # cteAmount
+        }
+      }
+    }
+  }
+}

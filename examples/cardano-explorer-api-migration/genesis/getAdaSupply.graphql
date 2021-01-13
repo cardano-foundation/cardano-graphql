@@ -1,0 +1,11 @@
+query getAdaSupply {
+  ada {
+    supply {
+      total # corresponds to REST output
+            # total = max - reserves
+      # additional interesting output
+      circulating
+      max
+    }
+  }
+}

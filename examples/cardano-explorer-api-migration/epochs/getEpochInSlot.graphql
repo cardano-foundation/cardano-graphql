@@ -1,0 +1,25 @@
+query getSlotInEpoch($epoch: Int!, $slot: Int!) {
+  epochs(where: { number: { _eq: $epoch } }) {
+    number # cbeEpoch
+    blocks(where: { slotInEpoch: { _eq: $slot } }) {
+      slotNo # cbeSlot
+      number # cbeBlkHeight
+      hash # cbeBlkHash
+      slotLeader {
+        hash # cbeBlockLead
+      }
+      forgedAt # cbeTimeIssued
+    }
+    startedAt
+    transactionsCount # cbeTxNum
+    blocks_aggregate(where: { slotInEpoch: { _eq: $slot } }) {
+      aggregate {
+        sum {
+          size # cbeSize
+          fees # cbeFees
+        }
+      }
+    }
+    output # cbeTotalSent
+  }
+}

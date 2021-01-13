@@ -1,0 +1,23 @@
+query getBlocks($limit: Int!, $epoch: Int!) {
+  blocks(limit: $limit, where: { epoch: { number: { _eq: $epoch } } }) {
+    slotNo # cbeSlot
+    slotInEpoch # cbeEpoch
+    number # cbeBlkHeight
+    hash # cbeBlkHash
+    forgedAt # cbeTimeIssued
+    transactionsCount # cbeTxNum
+    transactions_aggregate {
+      aggregate {
+        sum {
+          totalOutput # cbeTotalSent
+        }
+      }
+    }
+    slotLeader {
+      hash # cbeBlockLead
+    }
+    size # cbeSize
+    fees # cbeFees
+  }
+}
+

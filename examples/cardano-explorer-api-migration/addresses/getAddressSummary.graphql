@@ -1,0 +1,73 @@
+query getAddressSummary($address: String!) {
+  caTxNum: transactions_aggregate(
+    where: {
+      _or: [
+        { inputs: { address: { _eq: $address } } }
+        { outputs: { address: { _eq: $address } } }
+      ]
+    }
+  ) {
+    aggregate {
+      count # caTxNum
+    }
+  }
+  # TODO: caTotalFee ??
+  # TODO: caType ??
+  # TODO: caChainTip ??
+  caTotalInput: transactions_aggregate(
+    where: { inputs: { address: { _eq: $address } } }
+  ) {
+    aggregate {
+      sum {
+        totalOutput # caTotalInput ??
+      }
+    }
+  }
+  caTotalOutput: transactions_aggregate(
+    where: { outputs: { address: { _eq: $address } } }
+  ) {
+    aggregate {
+      sum {
+        totalOutput # caTotalOutput ??
+      }
+    }
+  }
+  caBalance: utxos_aggregate(where: { address: { _eq: $address } }) {
+    aggregate {
+      sum {
+        value # caBalance
+      }
+    }
+  }
+  caTxList: transactions(where: { inputs: { address: { _eq: $address } } }) {
+    hash # ctbId
+    includedAt # ctbTimeIssued
+    fee # ctbFees
+    inputs(where: { address: { _eq: $address } }) { # ctbInputs
+      address # ctaAddress
+      value # ctaAmount
+      txHash # ctaTxHash
+      sourceTxIndex # ctaTxIndex
+    }
+    outputs(where: { address: { _eq: $address } }) {
+      address # ctaAddress
+      value # ctaAmount
+      txHash # ctaTxHash
+      # TODO: ctaTxIndex ??
+    }
+    inputs_aggregate(where: { address: { _eq: $address } }) {
+      aggregate {
+        sum {
+          value # ctbInputSum
+        }
+      }
+    }
+    outputs_aggregate(where: { address: { _eq: $address } }) {
+      aggregate {
+        sum {
+          value # ctbOutputSum
+        }
+      }
+    }
+  }
+}

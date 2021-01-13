@@ -1,0 +1,53 @@
+query getAddressBlockSummary($address: String!, $block: Hash32Hex!) {
+  blocks(where: { hash: { _eq: $block } }) {
+    # TODO: caType ??
+    # TODO: caChainTip ??
+    # TODO: caTotalFee ??
+    # TODO: caBalance -- no utxo aggregate for blocks
+    # TODO: caTotalInput -- bug with graphql aliases prevents this
+    # TODO: caTotalOutput -- bug with graphql aliases prevents this
+    transactions_aggregate(
+      where: {
+        _or: [
+          { inputs: { address: { _eq: $address } } }
+          { outputs: { address: { _eq: $address } } }
+        ]
+      }
+    ) {
+      aggregate {
+        count # caTxNum
+      }
+    }
+    transactions(where: { inputs: { address: { _eq: $address } } }) {
+      # caTxList
+      hash # ctbId
+      includedAt # ctbTimeIssued
+      fee # ctbFees
+      inputs(where: { address: { _eq: $address } }) {
+        address # ctaAddress
+        value # ctaAmount
+        txHash # ctaTxHash
+        sourceTxIndex # ctaTxIndex
+      }
+      outputs(where: { address: { _eq: $address } }) {
+        address # ctaAddress
+        value # ctaAmount
+        txHash # ctaTxHash
+      }
+      inputs_aggregate(where: { address: { _eq: $address } }) {
+        aggregate {
+          sum {
+            value # ctbInputSum
+          }
+        }
+      }
+      outputs_aggregate(where: { address: { _eq: $address } }) {
+        aggregate {
+          sum {
+            value # ctbOutputSum
+          }
+        }
+      }
+    }
+  }
+}
