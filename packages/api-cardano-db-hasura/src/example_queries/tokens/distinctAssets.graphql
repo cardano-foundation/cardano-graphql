@@ -1,0 +1,21 @@
+query distinctAssets {
+    tokens_aggregate(distinct_on: assetId) {
+        aggregate {
+            count
+            avg {
+                quantity
+            }
+            min {
+                quantity
+            }
+            max {
+                quantity
+            }
+        }
+        nodes {
+            assetId
+            assetName
+            policyId
+        }
+    }
+}

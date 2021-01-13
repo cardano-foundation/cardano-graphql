@@ -9,8 +9,15 @@ import { DocumentNode, GraphQLSchema, print } from 'graphql'
 import { introspectSchema, wrapSchema } from '@graphql-tools/wrap'
 import pRetry from 'p-retry'
 import path from 'path'
-import { AssetSupply } from './graphql_types'
+import {
+  AssetBalance,
+  AssetSupply,
+  PaymentAddressSummary,
+  Token,
+  TransactionOutput
+} from './graphql_types'
 import { dummyLogger, Logger } from 'ts-log'
+import BigNumber from 'bignumber.js'
 
 dayjs.extend(utc)
 
@@ -84,7 +91,6 @@ export class HasuraClient {
   }
 
   public async buildHasuraSchema () {
-    await this.applySchemaAndMetadata()
     const executor = async ({ document, variables }: { document: DocumentNode, variables?: Object }) => {
       const query = print(document)
       try {
@@ -120,6 +126,85 @@ export class HasuraClient {
       }
     }
     return schema
+  }
+
+  public async getPaymentAddressSummary (address: string, atBlock?: number): Promise<PaymentAddressSummary> {
+    const result = await this.client.query({
+      query: gql`query PaymentAddressSummary (
+          $address: String!
+          $atBlock: Int
+      ){
+          utxos (
+              where: {
+                  _and: {
+                      address: { _eq: $address },
+                      transaction: { block: { number: { _lte: $atBlock }}}
+                  }
+              }
+          ) {
+              value
+              tokens {
+                  assetId
+                  assetName
+                  policyId
+                  quantity
+              }
+          }
+          utxos_aggregate (
+              where: {
+                  _and: {
+                      address: { _eq: $address },
+                      transaction: { block: { number: { _lte: $atBlock }}}
+                  }
+              }
+          ) {
+              aggregate {
+                  count
+              }
+          }
+      }`,
+      variables: { address, atBlock }
+    })
+    const map = new Map<Token['assetId'], AssetBalance>()
+    for (const utxo of result.data.utxos as TransactionOutput[]) {
+      if (map.has('ada')) {
+        const current = map.get('ada')
+        map.set('ada', {
+          ...current,
+          ...{
+            quantity: new BigNumber(current.quantity)
+              .plus(new BigNumber(utxo.value))
+              .toString()
+          }
+        })
+      } else {
+        map.set('ada', {
+          assetId: 'ada',
+          assetName: 'ada',
+          policyId: '',
+          quantity: utxo.value
+        })
+      }
+      for (const token of utxo.tokens as Token[]) {
+        if (map.has(token.assetId)) {
+          const current = map.get(token.assetId)
+          map.set(token.assetId, {
+            ...current,
+            ...{
+              quantity: new BigNumber(current.quantity)
+                .plus(new BigNumber(token.quantity))
+                .toString()
+            }
+          })
+        } else {
+          map.set(token.assetId, token as unknown as AssetBalance)
+        }
+      }
+    }
+    return {
+      assetBalances: [...map.values()],
+      utxosCount: result.data.utxos_aggregate.aggregate.count
+    }
   }
 
   public async getMeta () {

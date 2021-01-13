@@ -38,8 +38,22 @@ export async function buildSchema (
   genesis: Genesis,
   cardanoNodeClient?: CardanoNodeClient
 ) {
+  const throwIfNotInCurrentEra = async (queryName: string) => {
+    if (!(await cardanoNodeClient.isInCurrentEra())) {
+      return new ApolloError(`${queryName} results are only available when close to the network tip. This is expected during the initial chain-sync.`)
+    }
+  }
   return makeExecutableSchema({
     resolvers: Object.assign({}, scalarResolvers, {
+      PaymentAddress: {
+        summary: async (parent, args) => {
+          try {
+            return await hasuraClient.getPaymentAddressSummary(parent.address, args.atBlock)
+          } catch (error) {
+            throw new ApolloError(error)
+          }
+        }
+      },
       Query: {
         activeStake: (_root, args, context, info) => {
           return delegateToSchema({
@@ -62,9 +76,7 @@ export async function buildSchema (
           })
         },
         ada: async () => {
-          if (!(await cardanoNodeClient.isInCurrentEra())) {
-            return new ApolloError('ada query results are only available when close to the network tip. This is expected during the initial chain-sync.')
-          }
+          await throwIfNotInCurrentEra('ada')
           return {
             supply: {
               circulating: hasuraClient.adaCirculatingSupplyFetcher.value,
@@ -160,6 +172,12 @@ export async function buildSchema (
           })
         },
         genesis: async () => genesis,
+        paymentAddresses: async (_root, args) => {
+          await throwIfNotInCurrentEra('addressSummary')
+          return args.addresses.map(async (address) => {
+            return { address }
+          })
+        },
         rewards: (_root, args, context, info) => {
           return delegateToSchema({
             args,
@@ -235,6 +253,26 @@ export async function buildSchema (
             args,
             context,
             fieldName: 'stakeRegistrations_aggregate',
+            info,
+            operation: 'query',
+            schema: hasuraClient.schema
+          })
+        },
+        tokens: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'tokens',
+            info,
+            operation: 'query',
+            schema: hasuraClient.schema
+          })
+        },
+        tokens_aggregate: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'tokens_aggregate',
             info,
             operation: 'query',
             schema: hasuraClient.schema

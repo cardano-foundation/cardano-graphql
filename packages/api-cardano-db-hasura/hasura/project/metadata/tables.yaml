@@ -221,6 +221,29 @@
       allow_aggregations: true
 - table:
     schema: public
+    name: Mint
+  object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - assetId
+      - assetName
+      - policyId
+      - quantity
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
+- table:
+    schema: public
     name: Reward
   configuration:
     custom_root_fields:
@@ -453,6 +476,34 @@
       allow_aggregations: true
 - table:
     schema: public
+    name: Token
+  configuration:
+    custom_root_fields:
+      select_aggregate: tokens_aggregate
+      select: tokens
+    custom_column_names: {}
+  object_relationships:
+  - name: transactionOutput
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: TransactionOutput
+        column_mapping:
+          tx_out_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - assetId
+      - assetName
+      - policyId
+      - quantity
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
+- table:
+    schema: public
     name: Transaction
   configuration:
     custom_root_fields:
@@ -483,6 +534,14 @@
         remote_table:
           schema: public
           name: tx_metadata
+        column_mapping:
+          id: tx_id
+  - name: mint
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Mint
         column_mapping:
           id: tx_id
   - name: outputs
@@ -538,6 +597,15 @@
           name: Transaction
         column_mapping:
           txHash: hash
+  array_relationships:
+  - name: tokens
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Token
+        column_mapping:
+          source_tx_out_id: tx_out_id
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -562,6 +630,15 @@
           name: Transaction
         column_mapping:
           txHash: hash
+  array_relationships:
+  - name: tokens
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Token
+        column_mapping:
+          id: tx_out_id
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -590,6 +667,15 @@
           name: Transaction
         column_mapping:
           txHash: hash
+  array_relationships:
+  - name: tokens
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Token
+        column_mapping:
+          id: tx_out_id
   select_permissions:
   - role: cardano-graphql
     permission:

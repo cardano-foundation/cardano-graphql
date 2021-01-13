@@ -4,7 +4,9 @@ import fs from 'fs-extra'
 import { Config as ServerConfig } from './Server'
 import { LogLevelString } from 'bunyan'
 
-export type Config = ServerConfig & ApiCardanoDbHasuraConfig
+export type Config = ServerConfig & ApiCardanoDbHasuraConfig & {
+  loggerLevel: LogLevelString
+}
 
 export async function getConfig (): Promise<Config> {
   const env = filterAndTypecastEnvs(process.env)

@@ -20,7 +20,7 @@ describe('DataFetcher', () => {
 
   describe('initialize', () => {
     beforeEach(() => {
-      dataFetcher = new DataFetcher<boolean>(fetchFunctionResolvesTrueSpy, 10)
+      dataFetcher = new DataFetcher<boolean>('testDataFetcher-initialize', fetchFunctionResolvesTrueSpy, 10)
     })
 
     afterEach(() => {
@@ -38,7 +38,7 @@ describe('DataFetcher', () => {
 
   describe('shutdown', () => {
     beforeEach(async () => {
-      dataFetcher = new DataFetcher<boolean>(fetchFunctionResolvesTrueSpy, 10)
+      dataFetcher = new DataFetcher<boolean>('testDataFetcher-shutdown', fetchFunctionResolvesTrueSpy, 10)
       await dataFetcher.initialize()
     })
 
