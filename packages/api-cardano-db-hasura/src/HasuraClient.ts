@@ -33,6 +33,7 @@ export class HasuraClient {
     pollingInterval: number,
     private logger: Logger = dummyLogger
   ) {
+    this.applyingSchemaAndMetadata = false
     this.adaCirculatingSupplyFetcher = new DataFetcher<AssetSupply['circulating']>(
       'AdaCirculatingSupply',
       this.getAdaCirculatingSupply.bind(this),
@@ -59,6 +60,7 @@ export class HasuraClient {
   }
 
   public async initialize () {
+    this.logger.info('Initializing Hasura', { module: 'HasuraClient' })
     await this.applySchemaAndMetadata()
     await pRetry(async () => {
       this.schema = await this.buildHasuraSchema()
@@ -67,6 +69,7 @@ export class HasuraClient {
       retries: 9,
       onFailedAttempt: util.onFailedAttemptFor('Fetching Hasura schema via introspection')
     })
+    this.logger.info('Hasura initialized', { module: 'HasuraClient' })
     await this.adaCirculatingSupplyFetcher.initialize()
   }
 
