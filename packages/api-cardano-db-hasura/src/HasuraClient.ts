@@ -83,12 +83,18 @@ export class HasuraClient {
     await pRetry(async () => {
       await this.hasuraCli('migrate apply --down all')
       await this.hasuraCli('migrate apply --up all')
+    }, {
+      factor: 1.75,
+      retries: 9,
+      onFailedAttempt: util.onFailedAttemptFor('Applying PostgreSQL schema migrations')
+    })
+    await pRetry(async () => {
       await this.hasuraCli('metadata clear')
       await this.hasuraCli('metadata apply')
     }, {
       factor: 1.75,
       retries: 9,
-      onFailedAttempt: util.onFailedAttemptFor('Applying PostgreSQL schema and Hasura metadata')
+      onFailedAttempt: util.onFailedAttemptFor('Applying Hasura metadata')
     })
     this.applyingSchemaAndMetadata = false
   }
