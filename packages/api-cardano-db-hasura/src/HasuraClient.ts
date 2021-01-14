@@ -59,6 +59,36 @@ export class HasuraClient {
     })
   }
 
+  private async getAdaCirculatingSupply (): Promise<AssetSupply['circulating']> {
+    const result = await this.client.query({
+      query: gql`query {
+          utxos_aggregate {
+              aggregate {
+                  sum {
+                      value
+                  }
+              }
+          }
+      }`
+    })
+    return result.data.utxos_aggregate.aggregate.sum.value
+  }
+
+  private async hasuraCli (command: string) {
+    return new Promise((resolve, reject) => {
+      exec(
+        `${this.hasuraCliPath} --skip-update-check --project ${path.resolve(__dirname, '..', 'hasura', 'project')} --endpoint ${this.hasuraUri} ${command}`,
+        (error, stdout) => {
+          if (error) {
+            reject(error)
+          }
+          this.logger.debug(stdout)
+          resolve()
+        }
+      )
+    })
+  }
+
   public async initialize () {
     this.logger.info('Initializing Hasura', { module: 'HasuraClient' })
     await this.applySchemaAndMetadata()
@@ -232,35 +262,5 @@ export class HasuraClient {
       initialized: tipUtc.isAfter(currentUtc.subtract(120, 'second')),
       syncPercentage: (tipUtc.valueOf() / currentUtc.valueOf()) * 100
     }
-  }
-
-  private async getAdaCirculatingSupply (): Promise<AssetSupply['circulating']> {
-    const result = await this.client.query({
-      query: gql`query {
-          utxos_aggregate {
-              aggregate {
-                  sum {
-                      value
-                  }
-              }
-          }
-      }`
-    })
-    return result.data.utxos_aggregate.aggregate.sum.value
-  }
-
-  private async hasuraCli (command: string) {
-    return new Promise((resolve, reject) => {
-      exec(
-        `${this.hasuraCliPath} --skip-update-check --project ${path.resolve(__dirname, '..', 'hasura', 'project')} --endpoint ${this.hasuraUri} ${command}`,
-        (error, stdout) => {
-          if (error) {
-            reject(error)
-          }
-          this.logger.debug(stdout)
-          resolve()
-        }
-      )
-    })
   }
 }
