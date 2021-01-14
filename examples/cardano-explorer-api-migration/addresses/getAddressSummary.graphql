@@ -39,11 +39,19 @@ query getAddressSummary($address: String!) {
       }
     }
   }
-  caTxList: transactions(where: { inputs: { address: { _eq: $address } } }) {
+  caTxList: transactions(
+    where: {
+      _or: [
+        { inputs: { address: { _eq: $address } } }
+        { outputs: { address: { _eq: $address } } }
+      ]
+    }
+  ) {
     hash # ctbId
     includedAt # ctbTimeIssued
     fee # ctbFees
-    inputs(where: { address: { _eq: $address } }) { # ctbInputs
+    inputs(where: { address: { _eq: $address } }) {
+      # ctbInputs
       address # ctaAddress
       value # ctaAmount
       txHash # ctaTxHash

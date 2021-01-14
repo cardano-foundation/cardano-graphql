@@ -2,7 +2,7 @@ query getEpoch($epoch: Int!, $block_limit: Int!) {
   epochs(where: { number: { _eq: $epoch } }) {
     number # cbeEpoch
     blocks(limit: $block_limit, order_by: { slotNo: asc }) {
-      slotNo # cbeSlot
+      slotInEpoch # cbeSlot
       number # cbeBlkHeight
       hash # cbeBlkHash
       slotLeader {

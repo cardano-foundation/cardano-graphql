@@ -1,6 +1,14 @@
-query getTxsStats($limit: Int!) {
-  transactions(limit: $limit, order_by: { includedAt: desc }) {
-    hash,
-    size
+query getTxsStats($start: Int!, $end: Int!) {
+  blocks(
+    order_by: { forgedAt: desc }
+    where: {
+      number: { _gte: $start, _lte: $end }
+      transactionsCount: { _gt: "0" }
+    }
+  ) {
+    transactions {
+      hash
+      size
+    }
   }
 }

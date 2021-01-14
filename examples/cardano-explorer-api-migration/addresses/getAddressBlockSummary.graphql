@@ -18,7 +18,15 @@ query getAddressBlockSummary($address: String!, $block: Hash32Hex!) {
         count # caTxNum
       }
     }
-    transactions(where: { inputs: { address: { _eq: $address } } }) {
+    transactions(where: { inputs: { address: { _eq: $address } } }
+    where: {
+      _or: [
+        { inputs: { address: { _eq: $address } } }
+        { outputs: { address: { _eq: $address } } }
+      ]
+    }
+
+    ) {
       # caTxList
       hash # ctbId
       includedAt # ctbTimeIssued
