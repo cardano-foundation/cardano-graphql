@@ -97,7 +97,10 @@ export class HasuraClient {
     }, {
       factor: 1.75,
       retries: 9,
-      onFailedAttempt: util.onFailedAttemptFor('Fetching Hasura schema via introspection')
+      onFailedAttempt: util.onFailedAttemptFor(
+        'Fetching Hasura schema via introspection',
+        this.logger
+      )
     })
     this.logger.info('Hasura initialized', { module: 'HasuraClient' })
     await this.adaCirculatingSupplyFetcher.initialize()
@@ -116,7 +119,10 @@ export class HasuraClient {
     }, {
       factor: 1.75,
       retries: 9,
-      onFailedAttempt: util.onFailedAttemptFor('Applying PostgreSQL schema migrations')
+      onFailedAttempt: util.onFailedAttemptFor(
+        'Applying PostgreSQL schema migrations',
+        this.logger
+      )
     })
     await pRetry(async () => {
       await this.hasuraCli('metadata clear')
@@ -124,7 +130,7 @@ export class HasuraClient {
     }, {
       factor: 1.75,
       retries: 9,
-      onFailedAttempt: util.onFailedAttemptFor('Applying Hasura metadata')
+      onFailedAttempt: util.onFailedAttemptFor('Applying Hasura metadata', this.logger)
     })
     this.applyingSchemaAndMetadata = false
   }
