@@ -522,6 +522,11 @@ input SlotLeader_bool_exp {
   stakePool: StakePool_bool_exp
 }
 
+input SlotLeader_order_by {
+  hash: order_by
+  stakePool: StakePool_order_by
+}
+
 type StakePool {
   fixedCost: String!
   hash: Hash28Hex!
@@ -783,7 +788,7 @@ type Transaction {
 }
 
 input Transaction_order_by {
-  block: order_by
+  block: Block_order_by
   blockIndex: order_by
   deposit: order_by
   fee: order_by
@@ -1061,7 +1066,7 @@ input Block_bool_exp {
 
 input Block_order_by {
   forgedAt: order_by
-  slotLeader: order_by
+  slotLeader: SlotLeader_order_by
   epoch: Epoch_order_by
   fees: order_by
   hash: order_by
@@ -1109,7 +1114,6 @@ type Epoch {
   activeStake_aggregate: ActiveStake_aggregate
   blocks (
     limit: Int
-    order_by: [Block_order_by!]
     order_by: [Block_order_by!]
     offset: Int
     where: Block_bool_exp
