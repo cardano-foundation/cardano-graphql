@@ -3,7 +3,7 @@ CREATE VIEW "Block" AS
            FROM tx
           WHERE (tx.block_id = block.id)), (0)::NUMERIC))::bigint AS fees,
     block.hash,
-    block.merkel_root AS "merkelRoot",
+    block.merkle_root AS "merkelRoot",
     block.block_no AS "number",
     block.op_cert AS "opCert",
     previous_block.hash AS "previousBlockHash",
