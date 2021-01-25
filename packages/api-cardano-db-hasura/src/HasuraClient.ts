@@ -3,8 +3,6 @@ import { createHttpLink } from 'apollo-link-http'
 import util, { DataFetcher } from '@cardano-graphql/util'
 import { exec } from 'child_process'
 import fetch from 'cross-fetch'
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
 import { DocumentNode, GraphQLSchema, print } from 'graphql'
 import { introspectSchema, wrapSchema } from '@graphql-tools/wrap'
 import pRetry from 'p-retry'
@@ -18,8 +16,6 @@ import {
 } from './graphql_types'
 import { dummyLogger, Logger } from 'ts-log'
 import BigNumber from 'bignumber.js'
-
-dayjs.extend(utc)
 
 export class HasuraClient {
   private client: ApolloClient<NormalizedCacheObject>
@@ -252,21 +248,30 @@ export class HasuraClient {
     }
   }
 
-  public async getMeta () {
+  public async getMeta (nodeTipBlockNumber: number) {
     const result = await this.client.query({
       query: gql`query {
+          epochs (limit: 1, order_by: { number: desc }) {
+              number
+          }
           cardano {
               tip {
+                  epoch {
+                      number
+                  }
+                  number
                   forgedAt
               }
           }}`
     })
     const { tip } = result.data?.cardano[0]
-    const currentUtc = dayjs().utc()
-    const tipUtc = dayjs.utc(tip.forgedAt)
+    const lastEpoch = result.data?.epochs[0]
     return {
-      initialized: tipUtc.isAfter(currentUtc.subtract(120, 'second')),
-      syncPercentage: (tipUtc.valueOf() / currentUtc.valueOf()) * 100
+      // cardano-db-sync writes the epoch record at the end of each epoch during times of bulk sync
+      // The initialization state can be determined by comparing the last epoch record against the
+      // tip
+      initialized: lastEpoch.number === tip.epoch.number,
+      syncPercentage: (tip.number / nodeTipBlockNumber) * 100
     }
   }
 }

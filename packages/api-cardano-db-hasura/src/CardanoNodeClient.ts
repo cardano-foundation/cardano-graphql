@@ -23,7 +23,7 @@ export class CardanoNodeClient {
   constructor (
     private cardanoCli: CardanoCli,
     pollingInterval: number,
-    private currentEraFirstSlot: number,
+    readonly currentEraFirstSlot: number,
     private logger: Logger = dummyLogger
   ) {
     this.currentEraFirstSlot = currentEraFirstSlot
@@ -35,10 +35,16 @@ export class CardanoNodeClient {
     )
   }
 
+  public async getTip () {
+    const tip = this.cardanoCli.getTip()
+    this.logger.debug('getTip', { module: 'CardanoNodeClient', value: tip })
+    return tip
+  }
+
   public async initialize () {
     await pRetry(async () => {
       await fs.stat(process.env.CARDANO_NODE_SOCKET_PATH)
-      const { slotNo } = await this.cardanoCli.getTip()
+      const { slotNo } = await this.getTip()
       if (slotNo < this.currentEraFirstSlot) {
         this.logger.debug('cardano-node tip', { module: 'CardanoNodeClient', value: slotNo })
         this.logger.debug('currentEraFirstSlot', { module: 'CardanoNodeClient', value: this.currentEraFirstSlot })
