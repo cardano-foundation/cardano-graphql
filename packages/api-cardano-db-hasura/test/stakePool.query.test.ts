@@ -35,10 +35,18 @@ describe('stakePools', () => {
   it('can return details on active stake pools', async () => {
     const result = await client.query({
       query: await loadQueryNode('allStakePoolFields'),
-      variables: { limit: 5 }
+      variables: {
+        limit: 5,
+        delegatorsLimit: 5,
+        activeStakeLimit: 5
+      }
     })
     const { stakePools } = result.data
     expect(stakePools.length).toBe(5)
+    expect(stakePools[0].activeStake).toBeDefined()
+    expect(stakePools[0].activeStake_aggregate).toBeDefined()
+    expect(stakePools[0].delegators).toBeDefined()
+    expect(stakePools[0].delegators_aggregate).toBeDefined()
     expect(stakePools[0].fixedCost).toBeDefined()
     expect(stakePools[0].hash).toBeDefined()
     expect(stakePools[0].id.slice(0, 4)).toBe('pool')

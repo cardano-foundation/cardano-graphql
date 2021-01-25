@@ -179,6 +179,8 @@ type ActiveStake {
   amount: String!
   epoch: Epoch
   epochNo: Int!
+  stakePpoolHash: Hash28Hex!
+  stakePoolId: StakePoolID!
   registeredWith: StakePool!
 }
 
@@ -190,6 +192,8 @@ input ActiveStake_bool_exp {
   amount: text_comparison_exp
   epoch: Epoch_bool_exp
   epochNo: Int_comparison_exp
+  stakePoolHash: Hash28Hex_comparison_exp
+  stakePoolId: StakePoolID_comparison_exp
   registeredWith: StakePool_bool_exp
 }
 
@@ -198,6 +202,8 @@ input ActiveStake_order_by {
   amount: order_by
   epoch: Epoch_order_by
   epochNo: order_by
+  stakePoolHash: order_by
+  stakePoolId: order_by
   registeredWith: StakePool_order_by
 }
 
@@ -317,12 +323,16 @@ type CardanoDbMeta {
 type Delegation {
   address: StakeAddress!
   stakePool: StakePool!
+  stakePoolHash: Hash28Hex!
+  stakePoolId: StakePoolID!
   transaction: Transaction
 }
 
 input Delegation_order_by {
   address: order_by
   stakePool: StakePool_order_by
+  stakePoolHash: order_by
+  stakePoolId: order_by
   transaction: Transaction_order_by
 }
 
@@ -332,6 +342,8 @@ input Delegation_bool_exp {
   _or: [Delegation_bool_exp]
   address: StakeAddress_comparison_exp
   stakePool: StakePool_bool_exp
+  stakePoolHash: Hash28Hex_comparison_exp
+  stakePoolId: StakePoolID_comparison_exp
   transaction: Transaction_bool_exp
 }
 
@@ -528,6 +540,30 @@ input SlotLeader_order_by {
 }
 
 type StakePool {
+  activeStake (
+    limit: Int
+    order_by: [ActiveStake_order_by!]
+    offset: Int
+    where: ActiveStake_bool_exp
+  ): [ActiveStake]!
+  activeStake_aggregate (
+    limit: Int
+    order_by: [ActiveStake_order_by!]
+    offset: Int
+    where: ActiveStake_bool_exp
+  ): ActiveStake_aggregate!
+  delegators (
+    limit: Int
+    order_by: [Delegation_order_by!]
+    offset: Int
+    where: Delegation_bool_exp
+  ): [Delegation]!
+  delegators_aggregate (
+    limit: Int
+    order_by: [Delegation_order_by!]
+    offset: Int
+    where: Delegation_bool_exp
+  ): Delegation_aggregate!
   fixedCost: String!
   hash: Hash28Hex!
   id: StakePoolID!

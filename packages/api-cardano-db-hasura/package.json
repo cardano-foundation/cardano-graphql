@@ -43,6 +43,7 @@
     "apollo-server": "^2.15.1",
     "bignumber.js": "^9.0.1",
     "cross-fetch": "^3.0.4",
+    "dayjs": "^1.8.29",
     "graphql": "14.5.8",
     "graphql-bigint": "^1.0.0",
     "graphql-scalars": "^1.2.1",
