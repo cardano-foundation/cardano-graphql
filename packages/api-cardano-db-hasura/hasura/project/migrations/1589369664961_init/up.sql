@@ -170,6 +170,24 @@ SELECT
   ( SELECT pool_hash.hash_raw FROM pool_hash WHERE pool_hash.id = pool_id ) AS "pool_hash"
 FROM epoch_stake;
 
+CREATE VIEW "Mint" AS
+SELECT
+  CONCAT(policy,name) as "assetId",
+  name as "assetName",
+  policy as "policyId",
+  quantity,
+  tx_id
+FROM ma_tx_mint;
+
+CREATE VIEW "Token" AS
+SELECT
+  CONCAT(policy,name) as "assetId",
+  name as "assetName",
+  policy as "policyId",
+  quantity,
+  tx_out_id
+FROM ma_tx_out;
+
 CREATE VIEW "Transaction" AS
 SELECT
   block.hash AS "blockHash",
@@ -194,7 +212,8 @@ SELECT
   source_tx_out.value,
   tx.hash AS "txHash",
   source_tx.hash AS "sourceTxHash",
-  tx_in.tx_out_index AS "sourceTxIndex"
+  tx_in.tx_out_index AS "sourceTxIndex",
+  source_tx_out.id AS source_tx_out_id
 FROM
   tx
 JOIN tx_in
@@ -210,6 +229,7 @@ SELECT
   address,
   value,
   tx.hash AS "txHash",
+  tx_out.id,
   index
 FROM tx
 JOIN tx_out
@@ -219,6 +239,7 @@ CREATE VIEW "Utxo" AS SELECT
   address,
   value,
   tx.hash AS "txHash",
+  tx_out.id,
   index
 FROM tx
 JOIN tx_out
@@ -246,8 +267,8 @@ CREATE INDEX idx_block_hash
 CREATE INDEX idx_tx_hash
     ON tx(hash);
 
- CREATE INDEX idx_tx_in_consuming_tx
-    ON tx_in(tx_out_id);
+CREATE INDEX idx_tx_in_consuming_tx
+   ON tx_in(tx_out_id);
 
 CREATE INDEX idx_tx_out_tx
     ON tx_out(tx_id);
@@ -258,6 +279,7 @@ RETURNS SETOF "TransactionOutput" AS $$
     "TransactionOutput".address,
     "TransactionOutput".value,
     "TransactionOutput"."txHash",
+    "TransactionOutput"."id",
     "TransactionOutput".index
   FROM tx
   JOIN tx_out

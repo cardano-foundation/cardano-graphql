@@ -1,0 +1,60 @@
+query transactionsByHashesWithTokens(
+    $hashes: [Hash32Hex]!
+) {
+    transactions(
+        where: { hash: { _in: $hashes }},
+        order_by: { hash: desc }
+    ) {
+        block {
+            number
+        }
+        blockIndex
+        deposit
+        fee
+        hash
+        inputs(order_by: { sourceTxHash: asc }) {
+            address
+            sourceTxIndex
+            sourceTxHash
+            value
+        }
+        inputs_aggregate {
+            aggregate {
+                sum {
+                    value
+                }
+            }
+        }
+        mint {
+            assetName
+            policyId
+            quantity
+        }
+        outputs(order_by: { index: asc }) {
+            index
+            address
+            value
+            tokens {
+                assetName
+                policyId
+                quantity
+            }
+        }
+        outputs_aggregate {
+            aggregate {
+                sum {
+                    value
+                }
+            }
+        }
+        size
+        totalOutput
+        withdrawals_aggregate {
+            aggregate {
+                sum {
+                    amount
+                }
+            }
+        }
+    }
+}

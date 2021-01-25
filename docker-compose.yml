@@ -101,6 +101,7 @@ services:
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
+      - LOGGER_LEVEL=${LOGGER_LEVEL:-info}
     expose:
       - ${API_PORT:-3100}
     ports:

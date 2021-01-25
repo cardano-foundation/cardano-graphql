@@ -49,7 +49,8 @@ export class CardanoNodeClient {
       factor: 1.5,
       retries: 39,
       onFailedAttempt: util.onFailedAttemptFor(
-        'Establishing connection to cardano-node and ensuring state is in the expected era'
+        'Establishing connection to cardano-node and ensuring state is in the expected era',
+        this.logger
       )
     })
     await this.ledgerStateFetcher.initialize()

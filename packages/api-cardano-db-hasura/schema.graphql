@@ -69,6 +69,9 @@ type Query {
     where: Epoch_bool_exp
   ): Epoch_aggregate!
   genesis: Genesis!
+  paymentAddresses (
+    addresses: [String]!
+  ): [PaymentAddress]
   rewards (
     limit: Int
     order_by: [Reward_order_by!]
@@ -117,6 +120,20 @@ type Query {
     offset: Int
     where: StakeRegistration_bool_exp
   ): StakeRegistration_aggregate
+  tokens (
+    distinct_on: [Token_distinct_on!]
+    limit: Int
+    order_by: [Token_order_by!]
+    offset: Int
+    where: Token_bool_exp
+  ): [Token]!
+  tokens_aggregate (
+    distinct_on: [Token_distinct_on!]
+    limit: Int
+    order_by: [Token_order_by!]
+    offset: Int
+    where: Token_bool_exp
+  ): Token_aggregate!
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
@@ -214,6 +231,13 @@ type ActiveStake_sum_fields {
 
 type Ada {
   supply: AssetSupply!
+}
+
+type AssetBalance {
+  assetId: String!
+  assetName: String!
+  policyId: Hash28Hex!
+  quantity: String!
 }
 
 type AssetSupply {
@@ -322,6 +346,18 @@ type Delegation_aggregate_fields {
 type Genesis {
   byron: ByronGenesis
   shelley: ShelleyGenesis
+}
+
+type PaymentAddress {
+  address: String!
+  summary(
+    atBlock: Int
+  ): PaymentAddressSummary
+}
+
+type PaymentAddressSummary {
+  assetBalances: [AssetBalance]!
+  utxosCount: Int!
 }
 
 type Relay {
@@ -632,6 +668,68 @@ type StakeRegistration_aggregate_fields {
   count: String
 }
 
+type Token {
+  assetId: String!
+  assetName: String!
+  policyId: Hash28Hex!
+  quantity: String!
+  transactionOutput: TransactionOutput
+}
+
+input Token_order_by {
+  assetId: order_by
+  assetName: order_by
+  policyId: order_by
+  quantity: order_by
+}
+
+input Token_bool_exp {
+  _and: [Token_bool_exp]
+  _not: Token_bool_exp
+  _or: [Token_bool_exp]
+  assetId: text_comparison_exp
+  assetName: text_comparison_exp
+  policyId: Hash28Hex_comparison_exp
+  quantity: text_comparison_exp
+  transactionOutput: TransactionOutput_bool_exp
+}
+
+type Token_aggregate {
+  aggregate: Token_aggregate_fields
+  nodes: [Token!]!
+}
+
+type Token_aggregate_fields {
+  avg: Token_avg_fields!
+  count: String!
+  max: Token_max_fields!
+  min: Token_min_fields!
+  sum: Token_sum_fields!
+}
+
+type Token_avg_fields {
+  quantity: String
+}
+
+enum Token_distinct_on {
+  assetId
+  assetName
+  policyId
+}
+
+type Token_max_fields {
+  quantity: String
+}
+
+type Token_min_fields {
+  quantity: String
+}
+
+type Token_sum_fields {
+  quantity: String
+}
+
+
 type Transaction {
   block: Block
   blockIndex: Int!
@@ -653,6 +751,13 @@ type Transaction {
   invalidBefore: String
   invalidHereafter: String
   metadata: [TransactionMetadata]
+  mint: [Token!]
+  mint_aggregate(
+    limit: Int
+    order_by: [Token_order_by]
+    offset: Int
+    where: Token_bool_exp
+  ): Token_aggregate!
   outputs (
     limit: Int
     order_by: [TransactionOutput_order_by]
@@ -705,6 +810,7 @@ input Transaction_bool_exp {
   invalidBefore: text_comparison_exp
   invalidHereafter: text_comparison_exp
   metadata: TransactionMetadata_bool_exp
+  mint: Token_bool_exp
   outputs: TransactionOutput_bool_exp
   size: BigInt_comparison_exp
   totalOutput: text_comparison_exp
@@ -726,6 +832,7 @@ type Transaction_aggregate_fields {
 type Transaction_avg_fields {
   deposit: Float
   fee: Float
+  mint: Token_avg_fields
   size: Float
   totalOutput: Float
   withdrawals: Withdrawal_ave_fields
@@ -736,6 +843,7 @@ type Transaction_max_fields {
   fee: String
   invalidBefore: String
   invalidHereafter: String
+  mint: Token_max_fields
   size: String
   totalOutput: String
   withdrawals: Withdrawal_max_fields
@@ -746,6 +854,7 @@ type Transaction_min_fields {
   fee: String
   invalidBefore: String
   invalidHereafter: String
+  mint: Token_min_fields
   size: String
   totalOutput: String
   withdrawals: Withdrawal_min_fields
@@ -754,6 +863,7 @@ type Transaction_min_fields {
 type Transaction_sum_fields {
   deposit: String
   fee: String
+  mint: Token_sum_fields
   size: String
   totalOutput: String
   withdrawals: Withdrawal_sum_fields
@@ -764,6 +874,8 @@ type TransactionInput {
   sourceTransaction: Transaction!
   sourceTxHash: Hash32Hex!
   sourceTxIndex: Int!
+  tokens: [Token!]!
+  tokens_aggregate: Token_aggregate!
   transaction: Transaction!
   txHash: Hash32Hex!
   value: String!
@@ -782,6 +894,7 @@ input TransactionInput_bool_exp {
   _or: [TransactionInput_bool_exp]
   address: text_comparison_exp
   sourceTransaction: Transaction_bool_exp
+  tokens: Token_bool_exp
   transaction: Transaction_bool_exp
   value: text_comparison_exp
 }
@@ -799,18 +912,22 @@ type TransactionInput_aggregate_fields {
 }
 
 type TransactionInput_avg_fields {
+  tokens: Token_avg_fields
   value: String
 }
 
 type TransactionInput_max_fields {
+  tokens: Token_max_fields
   value: String
 }
 
 type TransactionInput_min_fields {
+  tokens: Token_min_fields
   value: String
 }
 
 type TransactionInput_sum_fields {
+  tokens: Token_sum_fields
   value: String
 }
 
@@ -828,6 +945,8 @@ type TransactionOutput {
   index: Int!
   transaction: Transaction!
   txHash: Hash32Hex!
+  tokens: [Token!]!
+  tokens_aggregate: Token_aggregate!
   value: String!
 }
 
@@ -847,6 +966,7 @@ input TransactionOutput_bool_exp {
   _not: TransactionOutput_bool_exp
   _or: [TransactionOutput_bool_exp]
   address: text_comparison_exp
+  tokens: Token_bool_exp
   transaction: Transaction_bool_exp
   value: text_comparison_exp
 }
@@ -864,18 +984,22 @@ type TransactionOutput_aggregate_fields {
 }
 
 type TransactionOutput_avg_fields {
+  tokens: Token_avg_fields
   value: String
 }
 
 type TransactionOutput_max_fields {
+  tokens: Token_max_fields
   value: String
 }
 
 type TransactionOutput_min_fields {
+  tokens: Token_min_fields
   value: String
 }
 
 type TransactionOutput_sum_fields {
+  tokens: Token_sum_fields
   value: String
 }
 

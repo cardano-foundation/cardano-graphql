@@ -274,12 +274,6 @@ Object {
     Object {
       "metadata": Array [
         Object {
-          "key": "0",
-          "value": Object {
-            "La_RepsistancE": "Was here",
-          },
-        },
-        Object {
           "key": "1",
           "value": Object {
             "Choices": Array [
@@ -310,6 +304,12 @@ Object {
             "VoterId": "d990a1e8-cb90-4f59-b5cf-a8b59c9ba8ae",
           },
         },
+        Object {
+          "key": "0",
+          "value": Object {
+            "La_RepsistancE": "Was here",
+          },
+        },
       ],
     },
   ],
@@ -322,36 +322,36 @@ Object {
     Object {
       "metadata": Array [
         Object {
-          "key": "0",
-          "value": "MelDemo1",
-        },
-        Object {
-          "key": "1",
-          "value": "454654654564564654",
-        },
-        Object {
-          "key": "2",
-          "value": "sha256",
-        },
-        Object {
-          "key": "3",
-          "value": "http://127.0.0.1/data.json",
-        },
-        Object {
-          "key": "4",
-          "value": "dsfgdfsgsdfgsdfgsdfgdsfdfgdsfgdfgdfsgsdef",
-        },
-        Object {
-          "key": "5",
-          "value": "http://127.0.0.1/client_publickey.txt",
+          "key": "7",
+          "value": "http://scantrust/server_publickey.txt",
         },
         Object {
           "key": "6",
           "value": "kjfsdhgdjiksfedhdgjksdhfgjksdfhgjklsdhf",
         },
         Object {
-          "key": "7",
-          "value": "http://scantrust/server_publickey.txt",
+          "key": "5",
+          "value": "http://127.0.0.1/client_publickey.txt",
+        },
+        Object {
+          "key": "4",
+          "value": "dsfgdfsgsdfgsdfgsdfgdsfdfgdsfgdfgdfsgsdef",
+        },
+        Object {
+          "key": "3",
+          "value": "http://127.0.0.1/data.json",
+        },
+        Object {
+          "key": "2",
+          "value": "sha256",
+        },
+        Object {
+          "key": "1",
+          "value": "454654654564564654",
+        },
+        Object {
+          "key": "0",
+          "value": "MelDemo1",
         },
       ],
     },

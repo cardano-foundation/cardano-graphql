@@ -13,7 +13,6 @@ import { prometheusMetricsPlugin } from './apollo_server_plugins'
 import { IntrospectionNotPermitted, TracingRequired } from './errors'
 import { allowListMiddleware } from './express_middleware'
 import { dummyLogger, Logger } from 'ts-log'
-import { LogLevelString } from 'bunyan'
 
 export type Config = {
   allowIntrospection: boolean
@@ -22,7 +21,6 @@ export type Config = {
   apiPort: number
   cacheEnabled: boolean
   listenAddress: string
-  loggerLevel: LogLevelString
   prometheusMetrics: boolean
   queryDepthLimit?: number
   tracing: boolean
