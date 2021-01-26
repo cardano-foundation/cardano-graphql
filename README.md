@@ -37,7 +37,7 @@ on [npm](https://www.npmjs.com/package/cardano-graphql-ts).
 ## Getting Started
 Check the [releases](https://github.com/input-output-hk/cardano-graphql/releases) for the latest version.
 ``` console
-git clone --single-branch --branch <VERSION> git@github.com:input-output-hk/cardano-graphql.git --recurse-submodules
+git clone --single-branch --branch <VERSION> https://github.com/input-output-hk/cardano-graphql.git --recurse-submodules
 cd cardano-graphql
 ```
 ### Build and Run via Docker Compose
