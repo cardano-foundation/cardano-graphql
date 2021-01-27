@@ -5,7 +5,7 @@ import { Config as ServerConfig } from './Server'
 import { LogLevelString } from 'bunyan'
 
 export type Config = ServerConfig & ApiCardanoDbHasuraConfig & {
-  loggerLevel: LogLevelString
+  loggerMinSeverity: LogLevelString
 }
 
 export async function getConfig (): Promise<Config> {
@@ -63,7 +63,7 @@ export async function getConfig (): Promise<Config> {
     currentEraFirstSlot: env.currentEraFirstSlot || 16588800,
     db,
     eraName: env.eraName || 'allegra',
-    loggerLevel: env.loggerLevel || 'info' as LogLevelString,
+    loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString,
     jqPath: env.jqPath || 'jq',
     listenAddress: env.listenAddress || '0.0.0.0',
     pollingIntervalAdaSupply: env.pollingIntervalAdaSupply || 1000 * 60,
@@ -88,7 +88,7 @@ function filterAndTypecastEnvs (env: any) {
     HASURA_URI,
     JQ_PATH,
     LISTEN_ADDRESS,
-    LOGGER_LEVEL,
+    LOGGER_MIN_SEVERITY,
     POLLING_INTERVAL_ADA_SUPPLY,
     POSTGRES_DB,
     POSTGRES_DB_FILE,
@@ -120,7 +120,7 @@ function filterAndTypecastEnvs (env: any) {
     hasuraUri: HASURA_URI,
     jqPath: JQ_PATH,
     listenAddress: LISTEN_ADDRESS,
-    loggerLevel: LOGGER_LEVEL as LogLevelString,
+    loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
     pollingIntervalAdaSupply: Number(POLLING_INTERVAL_ADA_SUPPLY),
     postgresDb: POSTGRES_DB,
     postgresDbFile: POSTGRES_DB_FILE,
