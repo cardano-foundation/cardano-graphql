@@ -13,6 +13,8 @@ import { prometheusMetricsPlugin } from './apollo_server_plugins'
 import { IntrospectionNotPermitted, TracingRequired } from './errors'
 import { allowListMiddleware } from './express_middleware'
 import { dummyLogger, Logger } from 'ts-log'
+import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic'
+import { clearIntervalAsync } from 'set-interval-async'
 
 export type Config = {
   allowIntrospection: boolean
@@ -31,6 +33,7 @@ export class Server {
   private apolloServer: ApolloServer
   private httpServer: http.Server
   private schemas: GraphQLSchema[]
+  private syncProgress: SetIntervalAsyncTimer
 
   constructor (
     schemas: GraphQLSchema[],
@@ -94,9 +97,33 @@ export class Server {
     this.logger.info(`GraphQL HTTP server at http://${this.config.listenAddress}:` +
       `${this.config.apiPort}${this.apolloServer.graphqlPath} started`
     )
+    this.logger.debug('Checking DB status', { module: 'Server' })
+    this.syncProgress = setIntervalAsync(async () => {
+      const result = await this.apolloServer.executeOperation(
+        {
+          query: `query getSyncStatus {
+              cardanoDbMeta {
+                  initialized
+                  syncPercentage
+              }
+          }`
+        }
+      )
+      if (result.errors !== undefined) {
+        this.logger.debug(JSON.stringify(result.errors))
+        return
+      }
+      if (result.data.cardanoDbMeta.initialized) {
+        this.logger.info('CardanoDB is initialized')
+        await clearIntervalAsync(this.syncProgress)
+      } else {
+        this.logger.info(`SyncPercentage: ${result.data.cardanoDbMeta.syncPercentage}`)
+      }
+    }, 5000)
   }
 
-  shutdown () {
+  async shutdown () {
+    await clearIntervalAsync(this.syncProgress)
     if (this.httpServer !== undefined) {
       this.httpServer.close()
       this.logger.info(`GraphQL HTTP server at http://${this.config.listenAddress}:` +

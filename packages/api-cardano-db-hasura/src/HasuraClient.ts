@@ -270,7 +270,7 @@ export class HasuraClient {
       // cardano-db-sync writes the epoch record at the end of each epoch during times of bulk sync
       // The initialization state can be determined by comparing the last epoch record against the
       // tip
-      initialized: lastEpoch.number === tip.epoch.number,
+      initialized: lastEpoch.number === tip.epoch?.number,
       syncPercentage: (tip.number / nodeTipBlockNumber) * 100
     }
   }

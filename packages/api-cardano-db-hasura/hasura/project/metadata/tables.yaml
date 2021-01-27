@@ -22,7 +22,7 @@
           schema: public
           name: StakePool
         column_mapping:
-          pool_hash: hash
+          stakePoolHash: hash
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -30,6 +30,8 @@
       - address
       - amount
       - epochNo
+      - stakePoolHash
+      - stakePoolId
       filter: {}
       limit: 2500
       allow_aggregations: true
@@ -366,6 +368,22 @@
         column_mapping:
           updated_in_tx_id: id
   array_relationships:
+  - name: activeStake
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: ActiveStake
+        column_mapping:
+          hash: stakePoolHash
+  - name: delegators
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Delegation
+        column_mapping:
+          hash_id: pool_hash_id
   - name: owners
     using:
       manual_configuration:

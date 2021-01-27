@@ -166,9 +166,12 @@ SELECT
   ) AS "address",
   amount AS "amount",
   epoch_no as "epochNo",
-  id AS "id",
-  ( SELECT pool_hash.hash_raw FROM pool_hash WHERE pool_hash.id = pool_id ) AS "pool_hash"
-FROM epoch_stake;
+  epoch_stake.id AS "id",
+  pool_hash.hash_raw AS "stakePoolHash",
+  pool_hash.view AS "stakePoolId"
+FROM epoch_stake
+JOIN pool_hash
+  ON pool_hash.id = epoch_stake.pool_id;
 
 CREATE VIEW "Mint" AS
 SELECT

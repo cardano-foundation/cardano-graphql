@@ -36,7 +36,7 @@ export class CardanoNodeClient {
   }
 
   public async getTip () {
-    const tip = this.cardanoCli.getTip()
+    const tip = await this.cardanoCli.getTip()
     this.logger.debug('getTip', { module: 'CardanoNodeClient', value: tip })
     return tip
   }
@@ -46,7 +46,6 @@ export class CardanoNodeClient {
       await fs.stat(process.env.CARDANO_NODE_SOCKET_PATH)
       const { slotNo } = await this.getTip()
       if (slotNo < this.currentEraFirstSlot) {
-        this.logger.debug('cardano-node tip', { module: 'CardanoNodeClient', value: slotNo })
         this.logger.debug('currentEraFirstSlot', { module: 'CardanoNodeClient', value: this.currentEraFirstSlot })
         this.logger.warn('cardano-node is still synchronizing', { module: 'CardanoNodeClient' })
         throw new Error()

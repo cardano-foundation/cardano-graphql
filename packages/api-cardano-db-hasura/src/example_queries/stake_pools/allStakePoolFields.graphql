@@ -1,8 +1,35 @@
 query allStakePoolFields (
     $limit: Int!
     $where: StakePool_bool_exp
+    $activeStakeLimit: Int!
+    $activeStakeWhere: ActiveStake_bool_exp
+    $delegatorsLimit: Int!
+    $delegatorsWhere: Delegation_bool_exp
 )  {
     stakePools (limit: $limit, where: $where) {
+        activeStake (limit: $activeStakeLimit, where: $activeStakeWhere) {
+            address
+            amount
+        }
+        activeStake_aggregate (limit: $activeStakeLimit, where: $activeStakeWhere) {
+            aggregate {
+                count
+                sum {
+                    amount
+                }
+            }
+        }
+        delegators (limit: $delegatorsLimit, where: $delegatorsWhere) {
+            address
+            transaction {
+                includedAt
+            }
+        }
+        delegators_aggregate (limit: $delegatorsLimit, where: $delegatorsWhere) {
+            aggregate {
+                count
+            }
+        }
         fixedCost
         hash
         id
