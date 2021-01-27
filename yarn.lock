@@ -8075,6 +8075,13 @@ set-interval-async@^1.0.33:
   dependencies:
     "@babel/runtime" "7.5.0"
 
+set-interval-async@^1.0.34:
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/set-interval-async/-/set-interval-async-1.0.34.tgz#3dcd299ce0067f11b73b23b69aa68872d46ce805"
+  integrity sha512-wwDVmeXwOaumkZ7FizY0ux8N0fk4KM1Bq7DfBGHxjD/NSSjcvSlj4D6HHIxzu415QngUr0YW97TXl/s1Ou/BHQ==
+  dependencies:
+    "@babel/runtime" "7.5.0"
+
 set-value@^2.0.0, set-value@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/set-value/-/set-value-2.0.1.tgz#a18d40530e6f07de4228c7defe4227af8cad005b"
