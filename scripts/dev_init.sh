@@ -6,9 +6,7 @@ BIN_DIR=../bin
 
 mkdir -p \
   state/network/mainnet/node-ipc \
-  state/network/testnet/node-ipc \
-  state/network/allegra/node-ipc \
-  state/network/launchpad/node-ipc
+  state/network/testnet/node-ipc
 cabal update
 cd cardano-node
 cabal install cardano-node \
