@@ -23,20 +23,6 @@ case "$NETWORK" in
             HASURA_PORT=8091
             POSTGRES_PORT=5443
             ;;
-        allegra)
-            API_PORT=3102
-            CURRENT_ERA_FIRST_SLOT=0
-            ERA_NAME=allegra
-            HASURA_PORT=8092
-            POSTGRES_PORT=5444
-            ;;
-        launchpad)
-            API_PORT=3103
-            CURRENT_ERA_FIRST_SLOT=3531400
-            ERA_NAME=mary
-            HASURA_PORT=8093
-            POSTGRES_PORT=5445
-            ;;
 esac
 
 export ALLOW_INTROSPECTION=true
