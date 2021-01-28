@@ -9,7 +9,7 @@ export * from './config'
   const config = await getConfig()
   const logger: Logger = createLogger({
     name: 'cardano-graphql',
-    level: config.loggerLevel
+    level: config.loggerMinSeverity
   })
   try {
     const server = await CompleteApiServer(config, logger)

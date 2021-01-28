@@ -53,7 +53,7 @@ in {
         default = "allegra";
       };
       
-      logLevel = lib.mkOption {
+      loggerMinSeverity = lib.mkOption {
         type = lib.types.str;
         default = "info";
       };
@@ -156,7 +156,7 @@ in {
         HASURA_GRAPHQL_ENABLE_TELEMETRY = false;
         HASURA_URI = hasuraBaseUri;
         JQ_PATH = pkgs.jq + "/bin/jq";
-        LOGGER_LEVEL = cfg.logLevel;
+        LOGGER_MIN_SEVERITY = cfg.loggerMinSeverity;
         POSTGRES_DB = cfg.db;
         POSTGRES_HOST = cfg.dbHost;
         POSTGRES_PASSWORD = cfg.dbPassword;
