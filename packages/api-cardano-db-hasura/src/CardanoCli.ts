@@ -21,7 +21,8 @@ const isEraMismatch = (errorMessage: string, era: string): boolean => {
 export interface CardanoCli {
   getLedgerState(): Promise<LedgerState>,
   getProtocolParams(): Promise<ProtocolParams>,
-  getTip(): Promise<CardanoCliTip>
+  getTip(): Promise<CardanoCliTip>,
+  submitTransaction(filePath: string): Promise<void>
 }
 
 export function createCardanoCli (
@@ -75,6 +76,19 @@ export function createCardanoCli (
         withEraFlag: true
       }
     ),
-    getTip: () => query<CardanoCliTip>('tip')
+    getTip: () => query<CardanoCliTip>('tip'),
+    submitTransaction: (filePath) => {
+      return new Promise((resolve, reject) => {
+        exec(
+          `${cardanoCliPath} transaction submit --tx-file ${filePath} ${networkArg}`,
+          (error, _stdout, stderr) => {
+            if (error !== null || stderr.toString() !== '') {
+              return reject(new Error(stderr.toString()))
+            }
+            return resolve()
+          }
+        )
+      })
+    }
   }
 }

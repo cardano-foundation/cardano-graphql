@@ -1,4 +1,5 @@
 schema {
+  mutation: Mutation
   query: Query
 }
 
@@ -15,6 +16,11 @@ scalar StakePoolID
 scalar Timestamp
 scalar URL
 scalar VRFVerificationKey
+
+type Mutation {
+  # Submit a signed transaction to the network
+  submitTransaction (transaction: String!): TransactionSubmitResponse!
+}
 
 type Query {
   activeStake (
@@ -1042,6 +1048,10 @@ type TransactionOutput_min_fields {
 type TransactionOutput_sum_fields {
   tokens: Token_sum_fields
   value: String
+}
+
+type TransactionSubmitResponse {
+  hash: String!
 }
 
 type Block {

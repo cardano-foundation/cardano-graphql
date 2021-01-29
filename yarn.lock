@@ -574,6 +574,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@emurgo/cardano-serialization-lib-nodejs@^5.0.0-rc.0":
+  version "5.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/@emurgo/cardano-serialization-lib-nodejs/-/cardano-serialization-lib-nodejs-5.0.0-rc.0.tgz#da6e7679ee83e467adfc78c2789b2a5129f7f6b1"
+  integrity sha512-CVd5YHVIsxiokJTYnyZunzr8jaeuEMVb83Jjt4j0OTNJJfp3ReV0ZIvGsoGJUP2K+07nT8xWnHDEDrMH97ZIkQ==
+
 "@graphql-codegen/cli@^1.15.2":
   version "1.16.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-1.16.2.tgz#ff92e5e6813a404616d7504500be26ff88b7092d"
@@ -1698,6 +1703,13 @@
   version "0.0.30"
   resolved "https://registry.yarnpkg.com/@types/strip-json-comments/-/strip-json-comments-0.0.30.tgz#9aa30c04db212a9a0649d6ae6fd50accc40748a1"
   integrity sha512-7NQmHra/JILCd1QqpSzl8+mJRc8ZHz3uDm8YV1Ks9IhK0epEiTw8aIErbvH9PI+6XbqhyIQy3462nEsn7UVzjQ==
+
+"@types/temp-write@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/temp-write/-/temp-write-4.0.0.tgz#983237bb6dbcac883137dba8189b8c6177e8a04d"
+  integrity sha512-BNcDNG/ujXmzR49TeVxcWMbglOO55YQbe1ij3LE6WoZdLtZvclSEl5GAmmlfsr0Y5kM9mLIE1wk3r3pzQz62gQ==
+  dependencies:
+    temp-write "*"
 
 "@types/through@*":
   version "0.0.30"
@@ -8675,6 +8687,22 @@ tdigest@^0.1.1:
   integrity sha1-Ljyyw56kSeVdHmzZEReszKRYgCE=
   dependencies:
     bintrees "1.0.1"
+
+temp-dir@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/temp-dir/-/temp-dir-1.0.0.tgz#0a7c0ea26d3a39afa7e0ebea9c1fc0bc4daa011d"
+  integrity sha1-CnwOom06Oa+n4OvqnB/AvE2qAR0=
+
+temp-write@*, temp-write@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/temp-write/-/temp-write-4.0.0.tgz#cd2e0825fc826ae72d201dc26eef3bf7e6fc9320"
+  integrity sha512-HIeWmj77uOOHb0QX7siN3OtwV3CTntquin6TNVg6SHOqCP3hYKmox90eeFOGaY1MqJ9WYDDjkyZrW6qS5AWpbw==
+  dependencies:
+    graceful-fs "^4.1.15"
+    is-stream "^2.0.0"
+    make-dir "^3.0.0"
+    temp-dir "^1.0.0"
+    uuid "^3.3.2"
 
 terminal-link@^2.0.0:
   version "2.1.1"

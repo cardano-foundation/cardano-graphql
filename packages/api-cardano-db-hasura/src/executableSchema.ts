@@ -45,6 +45,13 @@ export async function buildSchema (
   }
   return makeExecutableSchema({
     resolvers: Object.assign({}, scalarResolvers, {
+      Mutation: {
+        submitTransaction: async (_root, args) => {
+          await throwIfNotInCurrentEra('submitTransaction')
+          const hash = await cardanoNodeClient.submitTransaction(args.transaction)
+          return { hash }
+        }
+      },
       PaymentAddress: {
         summary: async (parent, args) => {
           try {
