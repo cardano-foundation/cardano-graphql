@@ -11,7 +11,6 @@ export interface Config {
     port: number
     user: string,
   },
-  eraName: string,
   genesis: {
     byronPath: string,
     shelleyPath: string
