@@ -12,14 +12,12 @@ case "$NETWORK" in
         mainnet)
             API_PORT=3100
             CURRENT_ERA_FIRST_SLOT=16588800
-            ERA_NAME=allegra
             HASURA_PORT=8090
             POSTGRES_PORT=5442
             ;;
         testnet)
             API_PORT=3101
             CURRENT_ERA_FIRST_SLOT=13694400
-            ERA_NAME=allegra
             HASURA_PORT=8091
             POSTGRES_PORT=5443
             ;;

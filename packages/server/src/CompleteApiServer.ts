@@ -28,7 +28,7 @@ export async function CompleteApiServer (
   }
   if (config.cardanoCliPath !== undefined) {
     cardanoNodeClient = new CardanoNodeClient(
-      createCardanoCli(config.cardanoCliPath, config.eraName, genesis.shelley, config.jqPath),
+      createCardanoCli(config.cardanoCliPath, genesis.shelley, config.jqPath),
       1000 * 60 * 10,
       config.currentEraFirstSlot,
       logger
