@@ -19,6 +19,11 @@ case "$NETWORK" in
             HASURA_PORT=8091
             POSTGRES_PORT=5443
             ;;
+        mary_qa)
+            API_PORT=3102
+            HASURA_PORT=8092
+            POSTGRES_PORT=5444
+            ;;
 esac
 
 export ALLOW_INTROSPECTION=true
