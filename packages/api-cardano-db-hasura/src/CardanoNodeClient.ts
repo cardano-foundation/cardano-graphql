@@ -23,10 +23,9 @@ export class CardanoNodeClient {
   constructor (
     private cardanoCli: CardanoCli,
     pollingInterval: number,
-    readonly currentEraFirstSlot: number,
+    readonly lastConfiguredMajorVersion: number,
     private logger: Logger = dummyLogger
   ) {
-    this.currentEraFirstSlot = currentEraFirstSlot
     this.ledgerStateFetcher = new DataFetcher<LedgerState>(
       'LedgerState',
       this.cardanoCli.getLedgerState,
@@ -41,12 +40,16 @@ export class CardanoNodeClient {
     return tip
   }
 
+  public async getProtocolParams () {
+    const protocolParams = await this.cardanoCli.getProtocolParams()
+    this.logger.debug('getProtocolParams', { module: 'CardanoNodeClient', value: protocolParams })
+    return protocolParams
+  }
+
   public async initialize () {
     await pRetry(async () => {
       await fs.stat(process.env.CARDANO_NODE_SOCKET_PATH)
-      const { slotNo } = await this.getTip()
-      if (slotNo < this.currentEraFirstSlot) {
-        this.logger.debug('currentEraFirstSlot', { module: 'CardanoNodeClient', value: this.currentEraFirstSlot })
+      if (!(await this.isInCurrentEra())) {
         this.logger.warn('cardano-node is still synchronizing', { module: 'CardanoNodeClient' })
         throw new Error()
       }
@@ -62,7 +65,15 @@ export class CardanoNodeClient {
   }
 
   public async isInCurrentEra () {
-    return (await this.cardanoCli.getTip()).slotNo >= this.currentEraFirstSlot
+    const { protocolVersion } = await this.getProtocolParams()
+    this.logger.debug('Comparing current protocol params with last known major version from cardano-node config', {
+      module: 'CardanoNodeClient',
+      value: {
+        currentProtocolVersion: protocolVersion,
+        lastConfiguredMajorVersion: this.lastConfiguredMajorVersion
+      }
+    })
+    return protocolVersion.major >= this.lastConfiguredMajorVersion
   }
 
   public async shutdown () {

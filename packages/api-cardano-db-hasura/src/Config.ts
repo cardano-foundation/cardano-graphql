@@ -2,8 +2,6 @@
 export interface Config {
   cardanoCliPath: string,
   cardanoNodeSocketPath: string,
-  // Workaround until we can query the node for the current era
-  currentEraFirstSlot: number,
   db: {
     database: string,
     host: string,

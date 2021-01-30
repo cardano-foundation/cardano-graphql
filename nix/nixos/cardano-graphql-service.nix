@@ -12,11 +12,6 @@ in {
         type = lib.types.package;
         default = pkgs.cardano-cli;
       };
-      
-      currentEraFirstSlot = lib.mkOption {
-        type = lib.types.int;
-        default = 16588800;
-      };
 
       dbHost = lib.mkOption {
         type = lib.types.str;
@@ -46,11 +41,6 @@ in {
       enginePort = lib.mkOption {
         type = lib.types.int;
         default = 9999;
-      };
-      
-      eraName = lib.mkOption {
-        type = lib.types.str;
-        default = "allegra";
       };
       
       loggerMinSeverity = lib.mkOption {
@@ -147,8 +137,6 @@ in {
       environment = lib.filterAttrs (k: v: v != null) {
         CARDANO_CLI_PATH = cfg.cardanoCliPackage + "/bin/cardano-cli";
         CARDANO_NODE_SOCKET_PATH = cfg.cardanoNodeSocketPath;
-        CURRENT_ERA_FIRST_SLOT = toString cfg.currentEraFirstSlot;
-        ERA_NAME = cfg.eraName;
         POOL_METADATA_PROXY = cfg.smashUrl;
         GENESIS_FILE_BYRON = cfg.genesisByron;
         GENESIS_FILE_SHELLEY = cfg.genesisShelley;

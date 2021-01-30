@@ -32,7 +32,6 @@ jobs:
         env:
           ALLOW_INTROSPECTION: true
           CACHE_ENABLED: false
-          CURRENT_ERA_FIRST_SLOT: 16588800
           CARDANO_GRAPHQL_VERSION: ${{ github.sha }}
       -
         name: Build Cardano GraphQL Dockerfile
