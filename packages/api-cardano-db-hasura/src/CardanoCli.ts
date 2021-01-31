@@ -1,5 +1,5 @@
 import { exec } from 'child_process'
-import { Genesis } from './graphql_types'
+import { Genesis, ShelleyProtocolParams } from './graphql_types'
 import { Config } from './Config'
 import { LedgerState } from './CardanoNodeClient'
 import { knownEras } from '@cardano-graphql/util'
@@ -9,8 +9,18 @@ export interface CardanoCliTip {
   headerHash: string, slotNo: number
 }
 
+export type ProtocolParams = ShelleyProtocolParams
+
+const isEraMismatch = (errorMessage: string, era: string): boolean => {
+  return errorMessage.includes('EraMismatch') ||
+    errorMessage.includes(
+      `The attempted local state query does not support the ${era.charAt(0).toUpperCase().concat(era.slice(1))} protocol`
+    )
+}
+
 export interface CardanoCli {
   getLedgerState(): Promise<LedgerState>,
+  getProtocolParams(): Promise<ProtocolParams>,
   getTip(): Promise<CardanoCliTip>
 }
 
@@ -22,43 +32,49 @@ export function createCardanoCli (
   const networkArg = genesis.networkId === '1'
     ? '--mainnet'
     : `--testnet-magic ${genesis.networkMagic.toString()}`
-  return {
-    getLedgerState: () => {
-      return new Promise((resolve, reject) => {
-        for (const era of knownEras) {
-          exec(
-            `${cardanoCliPath} query ledger-state ${networkArg} --${era}-era | 
-          ${jqPath} "{accountState: .nesEs.esAccountState, esNonMyopic: { rewardPot: .nesEs.esNonMyopic.rewardPotNM } }"
-          `,
-            (error, stdout, stderr) => {
-              if (error !== null || stderr.toString() !== '') {
-                if (
-                  stderr.toString().match(/EraMismatch/g) !== null ||
-                  stderr.toString().match(/The attempted local state query does not support the/g) !== null
-                ) {
-                } else {
-                  reject(new Error(stderr.toString()))
-                }
-              } else {
-                resolve(JSON.parse(stdout))
-              }
-            }
-          )
+  const query = <T> (
+    queryName: string,
+    options?: {
+      jqOperation?: string,
+      withEraFlag: boolean
+    }): Promise<T> => {
+    return new Promise((resolve, reject) => {
+      for (const era of knownEras) {
+        const command = [cardanoCliPath, 'query', queryName, networkArg]
+        if (options?.withEraFlag) {
+          command.push(`--${era}-era`)
         }
-      })
-    },
-    getTip: () => {
-      return new Promise((resolve, reject) => {
-        exec(
-          `${cardanoCliPath} query tip ${networkArg}`,
+        if (options?.jqOperation) {
+          command.push('|', jqPath, options?.jqOperation)
+        }
+        exec(command.join(' '),
           (error, stdout, stderr) => {
             if (error !== null || stderr.toString() !== '') {
-              return reject(new Error(stderr.toString()))
+              if (!isEraMismatch(stderr.toString(), era)) {
+                return reject(new Error(stderr.toString()))
+              }
+            } else {
+              return resolve(JSON.parse(stdout))
             }
-            return resolve(JSON.parse(stdout))
           }
         )
-      })
-    }
+      }
+    })
+  }
+  return {
+    getLedgerState: () => query<LedgerState>(
+      'ledger-state',
+      {
+        jqOperation: '"{accountState: .nesEs.esAccountState, esNonMyopic: { rewardPot: .nesEs.esNonMyopic.rewardPotNM } }"',
+        withEraFlag: true
+      }
+    ),
+    getProtocolParams: () => query<ProtocolParams>(
+      'protocol-parameters',
+      {
+        withEraFlag: true
+      }
+    ),
+    getTip: () => query<CardanoCliTip>('tip')
   }
 }

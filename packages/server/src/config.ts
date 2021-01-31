@@ -59,8 +59,6 @@ export async function getConfig (): Promise<Config> {
     apiPort: env.apiPort || 3100,
     cacheEnabled: env.cacheEnabled || false,
     cardanoCliPath: env.cardanoCliPath || 'cardano-cli',
-    // defaults to mainnet
-    currentEraFirstSlot: env.currentEraFirstSlot || 16588800,
     db,
     loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString,
     jqPath: env.jqPath || 'jq',
@@ -79,7 +77,6 @@ function filterAndTypecastEnvs (env: any) {
     CACHE_ENABLED,
     CARDANO_CLI_PATH,
     CARDANO_NODE_SOCKET_PATH,
-    CURRENT_ERA_FIRST_SLOT,
     GENESIS_FILE_BYRON,
     GENESIS_FILE_SHELLEY,
     HASURA_CLI_PATH,
@@ -108,7 +105,6 @@ function filterAndTypecastEnvs (env: any) {
     cacheEnabled: CACHE_ENABLED === 'true',
     cardanoCliPath: CARDANO_CLI_PATH,
     cardanoNodeSocketPath: CARDANO_NODE_SOCKET_PATH,
-    currentEraFirstSlot: Number(CURRENT_ERA_FIRST_SLOT),
     genesis: {
       byronPath: GENESIS_FILE_BYRON,
       shelleyPath: GENESIS_FILE_SHELLEY

@@ -117,7 +117,7 @@ export class Server {
         this.logger.info('CardanoDB is initialized')
         await clearIntervalAsync(this.syncProgress)
       } else {
-        this.logger.info(`SyncPercentage: ${result.data.cardanoDbMeta.syncPercentage}`)
+        this.logger.info(`DB sync progress: ${result.data.cardanoDbMeta.syncPercentage} %`)
       }
     }, 5000)
   }

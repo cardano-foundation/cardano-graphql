@@ -26,7 +26,7 @@ module.exports = {
       script: 'docker-compose',
       args: [
         '-f', `${path.resolve(__dirname, '..')}/docker-compose.dev.yml`,
-        '-p', `dev-${process.env.NETWORK}`,
+        '-p', `${process.env.NETWORK}`,
         'up', '--build'
       ],
       autorestart: false,

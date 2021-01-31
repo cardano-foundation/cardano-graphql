@@ -30,7 +30,7 @@ export async function CompleteApiServer (
     cardanoNodeClient = new CardanoNodeClient(
       createCardanoCli(config.cardanoCliPath, genesis.shelley, config.jqPath),
       1000 * 60 * 10,
-      config.currentEraFirstSlot,
+      genesis.shelley.protocolParams.protocolVersion.major,
       logger
     )
   }

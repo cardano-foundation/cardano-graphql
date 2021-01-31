@@ -11,15 +11,18 @@ export STATE_DIR=${CONTEXT}/state/network/${NETWORK}
 case "$NETWORK" in
         mainnet)
             API_PORT=3100
-            CURRENT_ERA_FIRST_SLOT=16588800
             HASURA_PORT=8090
             POSTGRES_PORT=5442
             ;;
         testnet)
             API_PORT=3101
-            CURRENT_ERA_FIRST_SLOT=13694400
             HASURA_PORT=8091
             POSTGRES_PORT=5443
+            ;;
+        mary_qa)
+            API_PORT=3102
+            HASURA_PORT=8092
+            POSTGRES_PORT=5444
             ;;
 esac
 
@@ -27,8 +30,6 @@ export ALLOW_INTROSPECTION=true
 export API_PORT
 export CARDANO_CLI_PATH=${BIN_DIR}/cardano-cli
 export CARDANO_NODE_SOCKET_PATH=${STATE_DIR}/node-ipc/node.socket
-export CURRENT_ERA_FIRST_SLOT
-export ERA_NAME
 export GENESIS_FILE_BYRON=${CONFIG_DIR}/genesis/byron.json
 export GENESIS_FILE_SHELLEY=${CONFIG_DIR}/genesis/shelley.json
 export HASURA_CLI_PATH=${BIN_DIR}/hasura
