@@ -1,9 +1,11 @@
 import { CardanoCli } from './CardanoCli'
 import fs from 'fs-extra'
-import { AssetSupply } from './graphql_types'
+import { AssetSupply, Transaction } from './graphql_types'
 import pRetry from 'p-retry'
-import util, { DataFetcher } from '@cardano-graphql/util'
+import util, { DataFetcher, knownEras } from '@cardano-graphql/util'
+import tempWrite from 'temp-write'
 import { dummyLogger, Logger } from 'ts-log'
+import { getHashOfSignedTransaction } from './util'
 
 export type LedgerState = {
   accountState: {
@@ -14,6 +16,23 @@ export type LedgerState = {
     rewardPot: string
   }
 }
+
+const fileTypeFromEra = (era: string) => {
+  switch (era) {
+    case 'mary' :
+      return 'Tx MaryEra'
+    case 'allegra' :
+      return 'Tx AllegraEra'
+    case 'shelley' :
+      return 'TxSignedShelley'
+    default :
+      throw new Error(`Transaction not submitted. ${era} era not supported.`)
+  }
+}
+
+const isEraMismatch = (errorMessage: string): boolean =>
+  errorMessage.includes('DecoderErrorDeserialiseFailure') ||
+  errorMessage.includes('The era of the node and the tx do not match')
 
 export class CardanoNodeClient {
   readonly networkParams: string[]
@@ -78,5 +97,27 @@ export class CardanoNodeClient {
 
   public async shutdown () {
     await this.ledgerStateFetcher.shutdown()
+  }
+
+  public async submitTransaction (transaction: string): Promise<Transaction['hash']> {
+    for (const era of knownEras) {
+      const filePath = await tempWrite(`{
+        "type": "${fileTypeFromEra(era)}",
+        "description": "",
+        "cborHex": "${transaction}"
+      }`)
+      const hash = getHashOfSignedTransaction(transaction)
+      try {
+        await this.cardanoCli.submitTransaction(filePath)
+        this.logger.info('submitTransaction', { module: 'CardanoNodeClient', hash: hash })
+        return hash
+      } catch (error) {
+        if (!isEraMismatch(error.message)) {
+          throw error
+        }
+      } finally {
+        await fs.unlink(filePath)
+      }
+    }
   }
 }
