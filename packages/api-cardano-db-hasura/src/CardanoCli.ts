@@ -2,7 +2,7 @@ import { exec } from 'child_process'
 import { Genesis, ShelleyProtocolParams } from './graphql_types'
 import { Config } from './Config'
 import { LedgerState } from './CardanoNodeClient'
-import { knownEras } from '@cardano-graphql/util'
+import { knownEras, capitalizeFirstChar } from '@cardano-graphql/util'
 
 export interface CardanoCliTip {
   blockNo: number,
@@ -14,7 +14,7 @@ export type ProtocolParams = ShelleyProtocolParams
 const isEraMismatch = (errorMessage: string, era: string): boolean => {
   return errorMessage.includes('EraMismatch') ||
     errorMessage.includes(
-      `The attempted local state query does not support the ${era.charAt(0).toUpperCase().concat(era.slice(1))} protocol`
+      `The attempted local state query does not support the ${capitalizeFirstChar(era)} protocol`
     )
 }
 
