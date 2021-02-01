@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/input-output-hk/cardano-graphql/compare/3.1.1...3.2.0) (2021-02-01)
+
+- [`cardano-node`: `1.25.1`](https://github.com/input-output-hk/cardano-node/releases/tag/1.25.1)
+- [`cardano-db-sync`: `8.0.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/8.0.0) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### Features
+* Ada supply query ([e716d51](https://github.com/input-output-hk/cardano-graphql/commit/e716d51b801fa758b26843f3853949d0d3c434a7))
+* Submit transaction mutation ([29f1adb](https://github.com/input-output-hk/cardano-graphql/commit/29f1adb0b3a2c3762dc0dd8dadb4bff4a3041245))
+* Multi-asset support ([86e4206](https://github.com/input-output-hk/cardano-graphql/commit/86e42064a02e1aabb6e4b2ea1d53157b4e21a7ef))
+* Structured logging ([f948cf5](https://github.com/input-output-hk/cardano-graphql/commit/f948cf51ca3d2e95147e219cbed3323a6c3bf0d0))
+* Improve delegation and active stake models ([ad06274](https://github.com/input-output-hk/cardano-graphql/commit/ad062749e8250c0ddbb9139539aeeed31389281c))
+* Report sync progress in logs during initialisation ([83279c3](https://github.com/input-output-hk/cardano-graphql/commit/83279c35a7b96d8b7abe2f09e4e99fc50d731d7b))
+
+### Bug Fixes
+
+* GraphQL schema order_by ([9869a48](https://github.com/input-output-hk/cardano-graphql/commit/9869a481e0e0ac4022da9d1ad842fccb60feb272))
+* guard against simultaneous data fetches ([93e198f](https://github.com/input-output-hk/cardano-graphql/commit/93e198f900b697fcbd82a939d30bbd9cb8486094))
+* Opt-out of Hasura CLI telemetry ([196086c](https://github.com/input-output-hk/cardano-graphql/commit/196086ce9dc0f5565d34c676e5a4ccda77726f17))
+* pass logger to onFailedAttempt ([1b8b0cf](https://github.com/input-output-hk/cardano-graphql/commit/1b8b0cf3b651a4d7b9b4bbb14409d2a523b95f74))
+* Replaces the time-based logic to determine sync progress and initialisation state ([b29ef3e](https://github.com/input-output-hk/cardano-graphql/commit/b29ef3e31820eadcb876278f0c8e9653d387a16b)), closes [#248](https://github.com/input-output-hk/cardano-graphql/issues/248)
+* Reward and StakeDeregistration order_by fields ([a6f9a88](https://github.com/input-output-hk/cardano-graphql/commit/a6f9a885b507b8b4da32e257b4230765fa27e855)), closes [#382](https://github.com/input-output-hk/cardano-graphql/issues/382)
+
 ### [3.1.1](https://github.com/input-output-hk/cardano-graphql/compare/3.1.0...3.1.1) (2020-12-21)
 
 - [`cardano-node`: `1.24.2`](https://github.com/input-output-hk/cardano-node/releases/tag/1.24.2)
