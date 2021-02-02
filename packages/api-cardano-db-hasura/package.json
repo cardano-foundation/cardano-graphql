@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@cardano-graphql/util": "3.2.0",
-    "@emurgo/cardano-serialization-lib-nodejs": "^5.0.0-rc.0",
+    "cardano-serialization-lib": "file:../../packages-cache/cardano-serialization-lib-5.0.0-98fdbfacef9e24dfb90b955dfadb1a3ff8e1425d-rc.0.tgz",
     "@graphql-tools/delegate": "^6.0.10",
     "@graphql-tools/schema": "^6.0.9",
     "@graphql-tools/wrap": "^6.0.9",

@@ -1,4 +1,4 @@
-import CardanoWasm from '@emurgo/cardano-serialization-lib-nodejs'
+import CardanoWasm from 'cardano-serialization-lib'
 import { Config } from './Config'
 import fs from 'fs-extra'
 import path from 'path'

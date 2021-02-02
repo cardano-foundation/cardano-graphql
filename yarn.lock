@@ -574,11 +574,6 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@emurgo/cardano-serialization-lib-nodejs@^5.0.0-rc.0":
-  version "5.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@emurgo/cardano-serialization-lib-nodejs/-/cardano-serialization-lib-nodejs-5.0.0-rc.0.tgz#da6e7679ee83e467adfc78c2789b2a5129f7f6b1"
-  integrity sha512-CVd5YHVIsxiokJTYnyZunzr8jaeuEMVb83Jjt4j0OTNJJfp3ReV0ZIvGsoGJUP2K+07nT8xWnHDEDrMH97ZIkQ==
-
 "@graphql-codegen/cli@^1.15.2":
   version "1.16.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-1.16.2.tgz#ff92e5e6813a404616d7504500be26ff88b7092d"
@@ -2887,6 +2882,10 @@ capture-exit@^2.0.0:
   integrity sha512-PiT/hQmTonHhl/HFGN+Lx3JJUznrVYJ3+AQsnthneZbvW7x+f08Tk7yLJTLEOUvBTbduLeeBkxEaYXUOUrRq6g==
   dependencies:
     rsvp "^4.8.4"
+
+"cardano-serialization-lib@file:packages-cache/cardano-serialization-lib-5.0.0-98fdbfacef9e24dfb90b955dfadb1a3ff8e1425d-rc.0.tgz":
+  version "5.0.0-rc.0"
+  resolved "file:packages-cache/cardano-serialization-lib-5.0.0-98fdbfacef9e24dfb90b955dfadb1a3ff8e1425d-rc.0.tgz#271675fcd46fd5abb527e59d7c507e66c93c2fc1"
 
 caseless@~0.12.0:
   version "0.12.0"
