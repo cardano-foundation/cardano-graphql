@@ -37,8 +37,12 @@ on [npm](https://www.npmjs.com/package/cardano-graphql-ts).
 ## Getting Started
 Check the [releases](https://github.com/input-output-hk/cardano-graphql/releases) for the latest version.
 ``` console
-git clone --single-branch --branch <VERSION> https://github.com/input-output-hk/cardano-graphql.git --recurse-submodules
-cd cardano-graphql
+git clone \
+  --single-branch \
+  --branch <VERSION> \
+  --recurse-submodules \
+  https://github.com/input-output-hk/cardano-graphql.git \
+  && cd cardano-graphql
 ```
 ### Build and Run via Docker Compose
 Builds `@cardano-graphql/server` and starts it along with `cardano-node`, `cardano-db-sync-extended`, `postgresql`, and `hasura`:
@@ -54,7 +58,11 @@ Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
 ```
 or via command line:
 ``` console
-curl -X POST -H "Content-Type: application/json" -d '{"query": "{ cardanoDbMeta { initialized syncPercentage }}"}' http://localhost:3100/graphql
+curl \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ cardanoDbMeta { initialized syncPercentage }}"}' \
+  http://localhost:3100/graphql
 ```
 :information_source: Wait for `initialized` to be `true` to ensure the epoch dataset is complete.
 ### Query the full dataset
@@ -62,7 +70,10 @@ curl -X POST -H "Content-Type: application/json" -d '{"query": "{ cardanoDbMeta 
 { cardano { tip { number slotNo epoch { number } } } }
 ```
 ``` console
-curl -X POST -H "Content-Type: application/json" -d '{"query": "{ cardano { tip { number slotNo epoch { number } } } }"}' http://localhost:3100/graphql
+curl \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ cardano { tip { number slotNo epoch { number } } } }"}' http://localhost:3100/graphql
 ```
 ### :tada:
 ``` json
