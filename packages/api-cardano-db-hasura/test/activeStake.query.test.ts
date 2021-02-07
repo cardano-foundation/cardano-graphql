@@ -32,6 +32,8 @@ describe('activeStake', () => {
     expect(activeStake[0].amount).toBeDefined()
     expect(activeStake[0].epochNo).toBeDefined()
     expect(activeStake[0].registeredWith.hash).toBeDefined()
+    expect(activeStake[0].stakePoolHash).toBeDefined()
+    expect(activeStake[0].stakePoolId).toBeDefined()
   })
 
   it('can return aggregated active stake information for an address', async () => {
