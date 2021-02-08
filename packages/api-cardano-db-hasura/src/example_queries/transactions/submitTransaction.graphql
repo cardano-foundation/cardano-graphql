@@ -1,5 +1,7 @@
 mutation submitTransaction(
     $transaction: String!
 ) {
-    submitTransaction(transaction: $transaction)
+    submitTransaction(transaction: $transaction) {
+        hash
+    }
 }
