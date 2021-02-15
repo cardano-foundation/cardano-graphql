@@ -18,6 +18,8 @@ DROP VIEW IF EXISTS
   "TransactionOutput",
   "Utxo",
   "Withdrawal" CASCADE;
+DROP TABLE IF EXISTS
+  "Asset";
 DROP INDEX IF EXISTS
   idx_block_hash,
   idx_tx_hash,

@@ -12,5 +12,7 @@ query activeStakeForAddress (
         registeredWith {
             hash
         }
+        stakePoolHash
+        stakePoolId
     }
 }

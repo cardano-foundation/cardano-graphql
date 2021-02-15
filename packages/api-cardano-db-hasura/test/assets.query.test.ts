@@ -13,26 +13,22 @@ const genesis = {
 } as Genesis
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
-  return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'tokens'), name)
+  return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'assets'), name)
 }
 
-describe('tokens', () => {
+describe('assets', () => {
   let client: TestClient
   beforeAll(async () => {
     client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442, genesis)
   })
 
-  it('can return information on distinct assets', async () => {
+  it('can return information on assets', async () => {
     const result = await client.query({
-      query: await loadQueryNode('distinctAssets')
+      query: await loadQueryNode('assets')
     })
-    const { tokens_aggregate } = result.data
-    const { aggregate, nodes } = tokens_aggregate
+    const { assets_aggregate, assets } = result.data
+    const { aggregate } = assets_aggregate
     expect(aggregate.count).toBeDefined()
-    if (aggregate.count > 0) {
-      expect(nodes[0].assetId).toBeDefined()
-      expect(nodes[0].assetName).toBeDefined()
-      expect(nodes[0].policyId).toBeDefined()
-    }
+    expect(assets).toMatchSnapshot()
   })
 })

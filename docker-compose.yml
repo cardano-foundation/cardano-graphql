@@ -97,6 +97,7 @@ services:
       target: server
       args:
         - NETWORK=${NETWORK:-mainnet}
+        - METADATA_SERVER_URI=${METADATA_SERVER_URI:-https://metadata.cardano.org/metadata}
     image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-3.2.0}
     environment:
       - ALLOW_INTROSPECTION=true

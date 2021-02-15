@@ -63,7 +63,13 @@ export async function getConfig (): Promise<Config> {
     loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString,
     jqPath: env.jqPath || 'jq',
     listenAddress: env.listenAddress || '0.0.0.0',
-    pollingIntervalAdaSupply: env.pollingIntervalAdaSupply || 1000 * 60,
+    pollingInterval: {
+      adaSupply: env.pollingInterval.adaSupply || 1000 * 60,
+      metadataSync: {
+        initial: env.pollingInterval.metadataSync.initial || 1000 * 60 * 5,
+        ongoing: env.pollingInterval.metadataSync.ongoing || 1000 * 60 * 60
+      }
+    },
     queryDepthLimit: env.queryDepthLimit || 10
   }
 }
@@ -84,7 +90,10 @@ function filterAndTypecastEnvs (env: any) {
     JQ_PATH,
     LISTEN_ADDRESS,
     LOGGER_MIN_SEVERITY,
+    METADATA_SERVER_URI,
     POLLING_INTERVAL_ADA_SUPPLY,
+    POLLING_INTERVAL_METADATA_SYNC_INITIAL,
+    POLLING_INTERVAL_METADATA_SYNC_ONGOING,
     POSTGRES_DB,
     POSTGRES_DB_FILE,
     POSTGRES_HOST,
@@ -114,7 +123,14 @@ function filterAndTypecastEnvs (env: any) {
     jqPath: JQ_PATH,
     listenAddress: LISTEN_ADDRESS,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
-    pollingIntervalAdaSupply: Number(POLLING_INTERVAL_ADA_SUPPLY),
+    metadataServerUri: METADATA_SERVER_URI,
+    pollingInterval: {
+      adaSupply: Number(POLLING_INTERVAL_ADA_SUPPLY),
+      metadataSync: {
+        initial: Number(POLLING_INTERVAL_METADATA_SYNC_INITIAL),
+        ongoing: Number(POLLING_INTERVAL_METADATA_SYNC_ONGOING)
+      }
+    },
     postgresDb: POSTGRES_DB,
     postgresDbFile: POSTGRES_DB_FILE,
     postgresHost: POSTGRES_HOST,
