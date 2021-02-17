@@ -52,6 +52,7 @@
     "postcss-normalize": "8.0.1",
     "postcss-preset-env": "6.7.0",
     "postcss-safe-parser": "4.0.1",
+    "raw-loader": "^4.0.2",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
     "react-dev-utils": "^10.2.1",
@@ -60,6 +61,7 @@
     "resolve-url-loader": "3.1.1",
     "sass-loader": "8.0.2",
     "semver": "6.3.0",
+    "shx": "^0.3.3",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "2.3.5",
     "ts-pnp": "1.1.6",
@@ -71,8 +73,9 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "copy-schema": "shx cp ../packages/api-cardano-db-hasura/schema.graphql src",
+    "start": "yarn copy-schema && node scripts/start.js",
+    "build": "yarn copy-schema && node scripts/build.js",
     "test": "node scripts/test.js",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d build"
