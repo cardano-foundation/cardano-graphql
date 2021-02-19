@@ -11,9 +11,7 @@ jobs:
     steps:
       -
         name: Checkout source code
-        uses: actions/checkout@v2
-        with:
-          path: cardano-graphql
+        uses: actions/checkout@v2.3.1
       -
         name: Setup Node.js
         uses: actions/setup-node@v1
@@ -40,13 +38,12 @@ jobs:
         name: Build and push Cardano GraphQL Hasura Dockerfile
         uses: docker/build-push-action@v2
         with:
-          context: ./cardano-graphql/packages/api-cardano-db-hasura/hasura
-          file: ./cardano-graphql/packages/api-cardano-db-hasura/hasura/Dockerfile
+          context: ./packages/api-cardano-db-hasura/hasura
+          file: ./packages/api-cardano-db-hasura/hasura/Dockerfile
           push: true
           tags: inputoutput/cardano-graphql-hasura:${{ github.sha }}, inputoutput/cardano-graphql-hasura:${{ github.event.release.tag_name }}, inputoutput/cardano-graphql-hasura:latest
       -
         name: Publish packages to npm registry
-        working-directory: cardano-graphql
         run: |
           npx npm-cli-login -u ${{ secrets.NPM_REGISTRY_USER }} -e ${{ secrets.NPM_REGISTRY_EMAIL }} -p ${{ secrets.NPM_REGISTRY_TOKEN }}
           scripts/publish_packages.sh
@@ -54,7 +51,6 @@ jobs:
           rm -f .npmrc
       -
         name: Build docs
-        working-directory: cardano-graphql
         run: |
           yarn --cwd ./docs install --frozen-lockfile
           yarn --cwd ./docs build
@@ -62,9 +58,7 @@ jobs:
           SKIP_PREFLIGHT_CHECK: true
       -
         name: Deploy
-        uses: JamesIves/github-pages-deploy-action@3.7.1
+        uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
-         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-         BRANCH: gh-pages
-         FOLDER: cardano-graphql/docs/build
-         CLEAN: true
+          branch: gh-pages
+          folder: docs/build

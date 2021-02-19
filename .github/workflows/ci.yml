@@ -11,9 +11,7 @@ jobs:
     steps:
       -  
         name: Checkout source code
-        uses: actions/checkout@v2
-        with:
-          path: cardano-graphql
+        uses: actions/checkout@v2.3.1
       -
         name: Setup Node.js
         uses: actions/setup-node@v1
@@ -24,7 +22,6 @@ jobs:
         uses: docker/setup-buildx-action@v1
       -
         name: Compile TypeScript and lint
-        working-directory: ./cardano-graphql
         run: |
           yarn install --offline --frozen-lockfile --non-interactive --logevel=error
           yarn build
@@ -45,6 +42,6 @@ jobs:
         name: Build Cardano GraphQL Hasura Dockerfile
         uses: docker/build-push-action@v2
         with:
-          context: ./cardano-graphql/packages/api-cardano-db-hasura/hasura
-          file: ./cardano-graphql/packages/api-cardano-db-hasura/hasura/Dockerfile
+          context: ./packages/api-cardano-db-hasura/hasura
+          file: ./packages/api-cardano-db-hasura/hasura/Dockerfile
           tags: inputoutput/cardano-graphql-hasura:${{ github.sha }}
