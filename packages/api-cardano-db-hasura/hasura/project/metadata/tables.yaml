@@ -801,9 +801,6 @@
       allow_aggregations: true
 - table:
     schema: public
-    name: block
-- table:
-    schema: public
     name: pool_owner
   object_relationships:
   - name: stakePool
