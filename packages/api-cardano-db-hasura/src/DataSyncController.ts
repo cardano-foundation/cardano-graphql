@@ -12,7 +12,7 @@ export interface Signature {
 }
 
 export interface AssetMetadata {
-  acronym: {
+  ticker: {
     value: string
     anSignatures: Signature[]
   }
@@ -153,7 +153,7 @@ export class DataSyncController {
       const response = await this.axiosClient.post('query', {
         subjects: assets.map(asset => asset.assetId),
         properties: [
-          'acronym',
+          'ticker',
           'description',
           'logo',
           'name',

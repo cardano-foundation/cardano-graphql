@@ -244,7 +244,7 @@ type Ada {
 }
 
 type Asset {
-  acronym: String
+  ticker: String
   assetId: String!
   assetName: String
   description: String
@@ -260,7 +260,7 @@ input Asset_bool_exp {
   _and: [Asset_bool_exp]
   _not: Asset_bool_exp
   _or: [Asset_bool_exp]
-  acronym: text_comparison_exp
+  ticker: text_comparison_exp
   assetId: text_comparison_exp
   assetName: text_comparison_exp
   description: text_comparison_exp

@@ -1,6 +1,6 @@
 query assets {
     assets {
-        acronym
+        ticker
         assetId
         assetName
         description
