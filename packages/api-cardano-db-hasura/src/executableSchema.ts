@@ -94,6 +94,26 @@ export async function buildSchema (
             }
           }
         },
+        assets: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'assets',
+            info,
+            operation: 'query',
+            schema: hasuraClient.schema
+          })
+        },
+        assets_aggregate: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'assets_aggregate',
+            info,
+            operation: 'query',
+            schema: hasuraClient.schema
+          })
+        },
         blocks: (_root, args, context, info) => {
           return delegateToSchema({
             args,
@@ -261,26 +281,6 @@ export async function buildSchema (
             args,
             context,
             fieldName: 'stakeRegistrations_aggregate',
-            info,
-            operation: 'query',
-            schema: hasuraClient.schema
-          })
-        },
-        tokens: (_root, args, context, info) => {
-          return delegateToSchema({
-            args,
-            context,
-            fieldName: 'tokens',
-            info,
-            operation: 'query',
-            schema: hasuraClient.schema
-          })
-        },
-        tokens_aggregate: (_root, args, context, info) => {
-          return delegateToSchema({
-            args,
-            context,
-            fieldName: 'tokens_aggregate',
             info,
             operation: 'query',
             schema: hasuraClient.schema

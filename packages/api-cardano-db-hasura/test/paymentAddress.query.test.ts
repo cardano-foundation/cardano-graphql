@@ -37,7 +37,7 @@ describe('paymentAddress', () => {
       variables: { addresses: [address1] }
     })
     const paymentAddress = result.data.paymentAddresses[0]
-    expect(paymentAddress.summary.assetBalances[0].assetName).toEqual('ada')
+    expect(paymentAddress.summary.assetBalances[0].asset.assetId).toBeDefined()
     expect(new BigNumber(paymentAddress.summary.assetBalances[0].quantity).toNumber())
       .toBeGreaterThan(0)
   })

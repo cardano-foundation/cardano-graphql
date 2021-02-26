@@ -5,7 +5,11 @@ query paymentAddressSummay(
   paymentAddresses (addresses: $addresses) {
     summary (atBlock: $atBlock){
       assetBalances {
-        assetName
+        asset {
+          assetId
+          description
+          name
+        }
         quantity
       }
     }

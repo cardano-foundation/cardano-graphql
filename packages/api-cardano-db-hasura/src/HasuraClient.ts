@@ -8,14 +8,16 @@ import { introspectSchema, wrapSchema } from '@graphql-tools/wrap'
 import pRetry from 'p-retry'
 import path from 'path'
 import {
+  Asset,
   AssetBalance,
-  AssetSupply,
+  AssetSupply, Int_Comparison_Exp as IntComparisonExp,
   PaymentAddressSummary,
   Token,
   TransactionOutput
 } from './graphql_types'
 import { dummyLogger, Logger } from 'ts-log'
 import BigNumber from 'bignumber.js'
+import { AssetMetadata } from './DataSyncController'
 
 export class HasuraClient {
   private client: ApolloClient<NormalizedCacheObject>
@@ -185,9 +187,11 @@ export class HasuraClient {
           ) {
               value
               tokens {
-                  assetId
-                  assetName
-                  policyId
+                  asset {
+                      assetId
+                      assetName
+                      policyId  
+                  }
                   quantity
               }
           }
@@ -206,7 +210,7 @@ export class HasuraClient {
       }`,
       variables: { address, atBlock }
     })
-    const map = new Map<Token['assetId'], AssetBalance>()
+    const map = new Map<Asset['assetId'], AssetBalance>()
     for (const utxo of result.data.utxos as TransactionOutput[]) {
       if (map.has('ada')) {
         const current = map.get('ada')
@@ -220,16 +224,19 @@ export class HasuraClient {
         })
       } else {
         map.set('ada', {
-          assetId: 'ada',
-          assetName: 'ada',
-          policyId: '',
+          asset: {
+            assetId: 'ada',
+            assetName: 'ada',
+            name: 'ada',
+            policyId: ''
+          },
           quantity: utxo.value
         })
       }
       for (const token of utxo.tokens as Token[]) {
-        if (map.has(token.assetId)) {
-          const current = map.get(token.assetId)
-          map.set(token.assetId, {
+        if (map.has(token.asset.assetId)) {
+          const current = map.get(token.asset.assetId)
+          map.set(token.asset.assetId, {
             ...current,
             ...{
               quantity: new BigNumber(current.quantity)
@@ -238,7 +245,7 @@ export class HasuraClient {
             }
           })
         } else {
-          map.set(token.assetId, token as unknown as AssetBalance)
+          map.set(token.asset.assetId, token as unknown as AssetBalance)
         }
       }
     }
@@ -273,5 +280,171 @@ export class HasuraClient {
       initialized: lastEpoch.number === tip.epoch?.number,
       syncPercentage: (tip.number / nodeTipBlockNumber) * 100
     }
+  }
+
+  public async getDistinctAssetsInTokens (): Promise<Asset[]> {
+    const result = await this.client.query({
+      query: gql`query {
+          tokens (distinct_on: assetId) {
+              assetId
+              assetName
+              policyId
+          }
+      }`
+    })
+    return result.data.tokens as Asset[]
+  }
+
+  public async getAssetIds (): Promise<Asset['assetId'][]> {
+    const result = await this.client.query({
+      query: gql`query {
+          assets {
+              assetId
+          }
+      }`
+    })
+    return result.data.assets.map((asset: Asset) => asset.assetId)
+  }
+
+  public async getAssetsIncMetadata (metadataFetchAttempts?: IntComparisonExp): Promise<Asset[]> {
+    const result = await this.client.query({
+      query: gql`query AssetsIncMetadata (
+          $metadataFetchAttempts: Int_comparison_exp
+      ){
+          assets (
+              where: {
+                  metadataFetchAttempts: $metadataFetchAttempts
+              }
+          ) {
+              assetId
+              assetName
+              description
+              name
+              policyId
+          }
+      }`,
+      variables: {
+        metadataFetchAttempts
+      }
+    })
+    return result.data.assets
+  }
+
+  public async getAssetsWithoutMetadata (metadataFetchAttempts: IntComparisonExp): Promise<Asset[]> {
+    const result = await this.client.query({
+      query: gql`query IdsOfAssetsWithoutMetadata (
+          $metadataFetchAttempts: Int_comparison_exp!
+      ){
+          assets (
+              where: { 
+                  _and: [
+                      { metadataFetchAttempts: $metadataFetchAttempts },
+                      { metadataHash: { _is_null: true }}
+                  ]
+              }) {
+              assetId
+              metadataFetchAttempts
+          }
+      }`,
+      variables: {
+        metadataFetchAttempts
+      }
+    })
+    return result.data.assets
+  }
+
+  public addMetadata (metadata: AssetMetadata, metadataHash: string) {
+    this.logger.info('adding metadata to asset', { module: 'HasuraClient', value: { assetId: metadata.subject, metadataHash } })
+    return this.client.mutate({
+      mutation: gql`mutation AddAssetMetadata(
+          $acronym: String
+          $assetId: String!
+          $description: String
+          $logo: String
+          $metadataHash: bpchar!
+          $name: String
+          $unit: jsonb
+          $url: String
+      ) {
+          update_assets(
+              where: {
+                  assetId: { _eq: $assetId }
+              },
+              _set: {
+                  acronym: $acronym,
+                  description: $description,
+                  logo: $logo,
+                  metadataHash: $metadataHash,
+                  name: $name,
+                  unit: $unit
+                  url: $url
+              }
+          ) {
+              returning {
+                  assetId
+                  description
+                  name
+              }
+          }
+      }`,
+      variables: {
+        acronym: metadata.acronym?.value,
+        assetId: metadata.subject,
+        description: metadata.description?.value,
+        logo: metadata.logo?.value,
+        metadataHash,
+        name: metadata.name?.value,
+        unit: metadata.unit ? JSON.stringify(metadata.unit.value) : undefined,
+        url: metadata.url?.value
+      }
+    })
+  }
+
+  public incrementMetadataFetchAttempts (assetId: Asset['assetId']) {
+    this.logger.debug('incrementing asset metadata fetch attempt', { module: 'HasuraClient', value: assetId })
+    return this.client.mutate({
+      mutation: gql`mutation IncrementAssetMetadataFetchAttempt(
+          $assetId: String!
+      ) {
+          update_assets(
+              where: {
+                  assetId: { _eq: $assetId }
+              },
+              _inc: {
+                  metadataFetchAttempts: 1
+              }
+          ) {
+              returning {
+                  assetId
+                  metadataFetchAttempts
+              }
+          }
+      }`,
+      variables: {
+        assetId
+      }
+    })
+  }
+
+  public async insertAssets (assets: Asset[]) {
+    this.logger.info('inserting assets', { module: 'HasuraClient', value: assets.length })
+    const result = await this.client.mutate({
+      mutation: gql`mutation InsertAssets($assets: [Asset_insert_input!]!) {
+        insert_assets(objects: $assets) {
+          returning {
+            name
+            policyId
+            description
+            assetName
+            assetId
+          }
+          affected_rows
+        }
+      }`,
+      variables: {
+        assets
+      }
+    })
+    return result.data
   }
 }

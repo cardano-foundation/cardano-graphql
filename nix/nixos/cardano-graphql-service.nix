@@ -42,6 +42,11 @@ in {
         type = lib.types.int;
         default = 9999;
       };
+
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
+        default = null;
+      };
       
       loggerMinSeverity = lib.mkOption {
         type = lib.types.str;
@@ -111,6 +116,22 @@ in {
         default = null;
         description = "Source directory or file to generate allow-list from";
       };
+      metadataServerUri = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+      };
+      pollingIntervalAdaSupply = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
+        default = null;
+      };
+      pollingIntervalMetadataSyncInitial = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
+        default = null;
+      };
+      pollingIntervalMetadataSyncOngoing = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
+        default = null;
+      };
     };
   };
   config = let
@@ -157,6 +178,11 @@ in {
         API_PORT = toString cfg.port;
       } //
       (lib.optionalAttrs (cfg.allowedOrigins != null) { ALLOWED_ORIGINS = cfg.allowedOrigins; }) //
+      (lib.optionalAttrs (cfg.listenAddress != null) { LISTEN_ADDRESS = cfg.listenAddress; }) //
+      (lib.optionalAttrs (cfg.metadataServerUri != null) { METADATA_SERVER_URI = toString cfg.metadataServerUri; }) //
+      (lib.optionalAttrs (cfg.pollingIntervalAdaSupply != null) { POLLING_INTERVAL_ADA_SUPPLY = toString cfg.pollingIntervalAdaSupply; }) //
+      (lib.optionalAttrs (cfg.pollingIntervalMetadataSyncInitial != null) { POLLING_INTERVAL_METADATA_SYNC_INITIAL = toString cfg.pollingIntervalMetadataSyncInitial; }) //
+      (lib.optionalAttrs (cfg.pollingIntervalMetadataSyncOngoing != null) { POLLING_INTERVAL_METADATA_SYNC_ONGOING = toString cfg.pollingIntervalMetadataSyncOngoing; }) //
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; }) //
       (lib.optionalAttrs (cfg.allowListPath != null) { ALLOW_LIST_PATH = cfg.allowListPath; });
       path = with pkgs; [ netcat curl postgresql jq frontend hasura-cli glibc.bin patchelf ];

@@ -4,6 +4,7 @@ import {
   buildSchema as buildCardanoDbHasuraSchema,
   CardanoNodeClient,
   createCardanoCli,
+  DataSyncController,
   Db,
   Genesis,
   HasuraClient
@@ -34,21 +35,26 @@ export async function CompleteApiServer (
       logger
     )
   }
-  if (config.hasuraUri !== undefined) {
-    const hasuraClient = new HasuraClient(
-      config.hasuraCliPath,
-      config.hasuraUri,
-      config.pollingIntervalAdaSupply,
-      logger
-    )
-    const db = new Db(config.db, logger)
-    await db.init({
-      onDbSetup: () => Promise.all([
-        hasuraClient.initialize(),
-        cardanoNodeClient.initialize()
-      ])
-    })
-    schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis, cardanoNodeClient))
-  }
+  const hasuraClient = new HasuraClient(
+    config.hasuraCliPath,
+    config.hasuraUri,
+    config.pollingInterval.adaSupply,
+    logger
+  )
+  const db = new Db(config.db, logger)
+  const dataSyncController = new DataSyncController(
+    hasuraClient,
+    db,
+    config.pollingInterval.metadataSync,
+    logger,
+    config.metadataServerUri
+  )
+  await db.init({
+    onDbSetup: () => Promise.all([
+      hasuraClient.initialize().then(() => dataSyncController.initialize()),
+      cardanoNodeClient.initialize()
+    ])
+  })
+  schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis, cardanoNodeClient))
   return new Server(schemas, config, logger)
 }

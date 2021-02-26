@@ -36,6 +36,18 @@ type Query {
     where: ActiveStake_bool_exp
   ): ActiveStake_aggregate!
   ada: Ada!
+  assets (
+    limit: Int
+    order_by: [Asset_order_by!]
+    offset: Int
+    where: Asset_bool_exp
+  ): [Asset]!
+  assets_aggregate (
+    limit: Int
+    order_by: [Asset_order_by!]
+    offset: Int
+    where: Asset_bool_exp
+  ): Asset_aggregate!
   blocks (
     limit: Int
     order_by: [Block_order_by!]
@@ -126,20 +138,6 @@ type Query {
     offset: Int
     where: StakeRegistration_bool_exp
   ): StakeRegistration_aggregate
-  tokens (
-    distinct_on: [Token_distinct_on!]
-    limit: Int
-    order_by: [Token_order_by!]
-    offset: Int
-    where: Token_bool_exp
-  ): [Token]!
-  tokens_aggregate (
-    distinct_on: [Token_distinct_on!]
-    limit: Int
-    order_by: [Token_order_by!]
-    offset: Int
-    where: Token_bool_exp
-  ): Token_aggregate!
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
@@ -245,10 +243,49 @@ type Ada {
   supply: AssetSupply!
 }
 
-type AssetBalance {
+type Asset {
+  acronym: String
   assetId: String!
-  assetName: String!
+  assetName: String
+  description: String
+  logo: String
+  metadataHash: String
+  name: String
+  unit: JSONObject
+  url: String
   policyId: Hash28Hex!
+}
+
+input Asset_bool_exp {
+  _and: [Asset_bool_exp]
+  _not: Asset_bool_exp
+  _or: [Asset_bool_exp]
+  acronym: text_comparison_exp
+  assetId: text_comparison_exp
+  assetName: text_comparison_exp
+  description: text_comparison_exp
+  logo: text_comparison_exp
+  name: text_comparison_exp
+  policyId: text_comparison_exp
+  unit: JSONObject
+  url: text_comparison_exp
+}
+
+input Asset_order_by {
+  assetId: order_by
+  name: order_by
+}
+
+type Asset_aggregate {
+  aggregate:Asset_aggregate_fields
+}
+
+type Asset_aggregate_fields {
+  count: String!
+}
+
+type AssetBalance {
+  asset: Asset!
   quantity: String!
 }
 
@@ -716,17 +753,13 @@ type StakeRegistration_aggregate_fields {
 }
 
 type Token {
-  assetId: String!
-  assetName: String!
-  policyId: Hash28Hex!
+  asset: Asset!
   quantity: String!
   transactionOutput: TransactionOutput
 }
 
 input Token_order_by {
-  assetId: order_by
-  assetName: order_by
-  policyId: order_by
+  asset: Asset_order_by
   quantity: order_by
 }
 
@@ -734,9 +767,7 @@ input Token_bool_exp {
   _and: [Token_bool_exp]
   _not: Token_bool_exp
   _or: [Token_bool_exp]
-  assetId: text_comparison_exp
-  assetName: text_comparison_exp
-  policyId: Hash28Hex_comparison_exp
+  asset: Asset_bool_exp
   quantity: text_comparison_exp
   transactionOutput: TransactionOutput_bool_exp
 }
@@ -756,12 +787,6 @@ type Token_aggregate_fields {
 
 type Token_avg_fields {
   quantity: String
-}
-
-enum Token_distinct_on {
-  assetId
-  assetName
-  policyId
 }
 
 type Token_max_fields {

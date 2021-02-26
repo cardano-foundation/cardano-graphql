@@ -12,16 +12,21 @@ case "$NETWORK" in
         mainnet)
             API_PORT=3100
             HASURA_PORT=8090
+            METADATA_SERVER_URI="https://metadata.cardano.org/metadata"
+            PG_ADMIN_PORT=8442
             POSTGRES_PORT=5442
             ;;
         testnet)
             API_PORT=3101
             HASURA_PORT=8091
+            METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io/metadata"
+            PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
             ;;
         mary_qa)
             API_PORT=3102
             HASURA_PORT=8092
+            PG_ADMIN_PORT=8444
             POSTGRES_PORT=5444
             ;;
 esac
@@ -35,9 +40,11 @@ export GENESIS_FILE_SHELLEY=${CONFIG_DIR}/genesis/shelley.json
 export HASURA_CLI_PATH=${BIN_DIR}/hasura
 export HASURA_PORT
 export HASURA_URI=http://localhost:${HASURA_PORT}
+export METADATA_SERVER_URI
 export NETWORK
 export POSTGRES_DB_FILE=${SECRETS_DIR}/postgres_db
 export POSTGRES_PASSWORD_FILE=${SECRETS_DIR}/postgres_password
+export PG_ADMIN_PORT
 export POSTGRES_PORT
 export POSTGRES_USER_FILE=${SECRETS_DIR}/postgres_user
 export POSTGRES_HOST=localhost

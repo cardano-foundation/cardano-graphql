@@ -23,6 +23,16 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+  pg-admin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-user@domain.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:-password}
+    depends_on:
+      - postgres
+    ports:
+      - ${PG_ADMIN_PORT:-8442}:80
+    restart: always
   cardano-db-sync-extended:
     image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-8.0.0}
     command: [

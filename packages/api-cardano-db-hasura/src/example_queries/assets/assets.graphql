@@ -1,0 +1,18 @@
+query assets {
+    assets {
+        acronym
+        assetId
+        assetName
+        description
+        logo
+        name
+        unit
+        url
+        policyId
+    }
+    assets_aggregate {
+        aggregate {
+            count
+        }
+    }
+}

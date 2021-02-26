@@ -26,8 +26,13 @@ query transactionsByHashesWithTokens(
             }
         }
         mint {
-            assetName
-            policyId
+            asset {
+                assetId
+                assetName
+                description
+                policyId
+                name
+            }
             quantity
         }
         outputs(order_by: { index: asc }) {
@@ -35,8 +40,13 @@ query transactionsByHashesWithTokens(
             address
             value
             tokens {
-                assetName
-                policyId
+                asset {
+                    assetId
+                    assetName
+                    description
+                    policyId
+                    name
+                }
                 quantity
             }
         }
