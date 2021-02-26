@@ -3,6 +3,7 @@ schema {
   query: Query
 }
 
+scalar AssetFingerprint
 scalar BigInt
 scalar DateTime
 scalar Hash28Hex
@@ -248,6 +249,7 @@ type Asset {
   assetId: String!
   assetName: String
   description: String
+  fingerprint: AssetFingerprint
   logo: String
   metadataHash: String
   name: String
@@ -264,6 +266,7 @@ input Asset_bool_exp {
   assetId: text_comparison_exp
   assetName: text_comparison_exp
   description: text_comparison_exp
+  fingerprint: AssetFingerprint_comparison_exp
   logo: text_comparison_exp
   name: text_comparison_exp
   policyId: text_comparison_exp
@@ -273,6 +276,7 @@ input Asset_bool_exp {
 
 input Asset_order_by {
   assetId: order_by
+  fingerprint: order_by
   name: order_by
 }
 
@@ -1400,6 +1404,13 @@ input text_comparison_exp {
   _nlike: String
   _nsimilar: String
   _similar: String
+}
+
+input AssetFingerprint_comparison_exp {
+  _eq: String
+  _in: [String]
+  _neq: String
+  _nin: [String]
 }
 
 # ordering options

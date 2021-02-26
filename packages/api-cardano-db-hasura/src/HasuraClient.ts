@@ -330,6 +330,22 @@ export class HasuraClient {
     return result.data.assets
   }
 
+  public async getAssetsWithoutFingerprint (): Promise<Pick<Asset, 'assetId' | 'assetName' | 'policyId'>[]> {
+    const result = await this.client.query({
+      query: gql`query {
+          assets (where: { fingerprint: { _is_null: true }}) {
+              assetId
+              assetName
+              policyId
+          }
+      }`
+    })
+    return result.data.assets.map((asset: Asset) => ({
+      ...asset,
+      policyId: util.scalars.Hash28Hex.serialize(asset.policyId)
+    }))
+  }
+
   public async getAssetsWithoutMetadata (metadataFetchAttempts: IntComparisonExp): Promise<Asset[]> {
     const result = await this.client.query({
       query: gql`query IdsOfAssetsWithoutMetadata (
@@ -353,8 +369,35 @@ export class HasuraClient {
     return result.data.assets
   }
 
+  public addAssetFingerprint (assetId: Asset['assetId'], fingerprint: Asset['fingerprint']) {
+    this.logger.debug('adding fingerprint to asset', { module: 'HasuraClient', value: { assetId, fingerprint } })
+    return this.client.mutate({
+      mutation: gql`mutation AddAssetFingerprint(
+          $assetId: String!
+          $fingerprint: bpchar!
+      ) {
+          update_assets(
+              where: {
+                  assetId: { _eq: $assetId }
+              },
+              _set: {
+                  fingerprint: $fingerprint,
+              }
+          ) {
+              returning {
+                  assetId
+              }
+          }
+      }`,
+      variables: {
+        assetId,
+        fingerprint
+      }
+    })
+  }
+
   public addMetadata (metadata: AssetMetadata, metadataHash: string) {
-    this.logger.info('adding metadata to asset', { module: 'HasuraClient', value: { assetId: metadata.subject, metadataHash } })
+    this.logger.debug('adding metadata to asset', { module: 'HasuraClient', value: { assetId: metadata.subject, metadataHash } })
     return this.client.mutate({
       mutation: gql`mutation AddAssetMetadata(
           $ticker: String

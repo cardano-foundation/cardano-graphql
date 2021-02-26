@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios'
 import { chunkArray, DataFetcher } from '@cardano-graphql/util'
+import AssetFingerprint from '@emurgo/cip14-js'
 import { Asset } from './graphql_types'
 import hash from 'object-hash'
 import { dummyLogger, Logger } from 'ts-log'
@@ -10,6 +11,12 @@ export interface Signature {
   signature: string
   publicKey: string
 }
+
+export const assetFingerprint = (asset: Pick<Asset, 'assetName' | 'policyId'>) =>
+  new AssetFingerprint(
+    Buffer.from(asset.policyId, 'hex'),
+    asset.assetName !== '' ? Buffer.from(asset.assetName, 'hex') : undefined)
+    .fingerprint()
 
 export interface AssetMetadata {
   ticker: {
@@ -108,6 +115,7 @@ export class DataSyncController {
           .map(asset => ({
             assetId: asset.assetId,
             assetName: asset.assetName,
+            fingerprint: assetFingerprint(asset),
             policyId: asset.policyId,
             metadataFetchAttempts: 0
           })
@@ -153,10 +161,10 @@ export class DataSyncController {
       const response = await this.axiosClient.post('query', {
         subjects: assets.map(asset => asset.assetId),
         properties: [
-          'ticker',
           'description',
           'logo',
           'name',
+          'ticker',
           'unit',
           'url'
         ]
@@ -168,8 +176,19 @@ export class DataSyncController {
     }
   }
 
+  private async ensureAssetFingerprints (): Promise<void> {
+    const assets = await this.hasuraClient.getAssetsWithoutFingerprint()
+    this.logger.debug('Assets without fingerprint', { module: 'DataSyncController', value: assets.length })
+    for (const asset of assets) {
+      const fingerprint = assetFingerprint(asset)
+      this.logger.debug('Asset', { module: 'DataSyncController', value: { assetId: asset.assetId, fingerprint } })
+      await this.hasuraClient.addAssetFingerprint(asset.assetId, fingerprint)
+    }
+  }
+
   public async initialize () {
     this.logger.info('Initializing', { module: 'DataSyncController' })
+    await this.ensureAssetFingerprints()
     await this.assetSynchronizer.initialize()
     if (this.metadataServerUri) {
       await this.metadataSynchronizer.initial.initialize()

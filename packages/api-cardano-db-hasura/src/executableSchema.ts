@@ -18,6 +18,7 @@ import { CardanoNodeClient } from './CardanoNodeClient'
 const GraphQLBigInt = require('graphql-bigint')
 
 export const scalarResolvers = {
+  AssetFingerprint: util.scalars.AssetFingerprint,
   BigInt: GraphQLBigInt,
   DateTime: util.scalars.DateTimeUtcToIso,
   Hash28Hex: util.scalars.Hash28Hex,
