@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS "Asset"
   AS
   SELECT
     DISTINCT CONCAT(RIGHT(CONCAT(E'\\', policy), -3), RIGHT(CONCAT(E'\\', name), -3)) as "assetId",
-    CAST(NULL AS TEXT) AS "acronym",
+    CAST(NULL AS TEXT) AS "ticker",
     name as "assetName",
     CAST(NULL AS TEXT) AS "description",
     CAST(NULL AS TEXT) AS "logo",

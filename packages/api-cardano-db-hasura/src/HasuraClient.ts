@@ -357,7 +357,7 @@ export class HasuraClient {
     this.logger.info('adding metadata to asset', { module: 'HasuraClient', value: { assetId: metadata.subject, metadataHash } })
     return this.client.mutate({
       mutation: gql`mutation AddAssetMetadata(
-          $acronym: String
+          $ticker: String
           $assetId: String!
           $description: String
           $logo: String
@@ -371,7 +371,7 @@ export class HasuraClient {
                   assetId: { _eq: $assetId }
               },
               _set: {
-                  acronym: $acronym,
+                  ticker: $ticker,
                   description: $description,
                   logo: $logo,
                   metadataHash: $metadataHash,
@@ -388,7 +388,7 @@ export class HasuraClient {
           }
       }`,
       variables: {
-        acronym: metadata.acronym?.value,
+        ticker: metadata.ticker?.value,
         assetId: metadata.subject,
         description: metadata.description?.value,
         logo: metadata.logo?.value,
