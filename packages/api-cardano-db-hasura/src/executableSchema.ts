@@ -10,6 +10,7 @@ import {
   IPv4Resolver,
   IPv6Resolver,
   JSONResolver,
+  JSONObjectResolver,
   TimestampResolver,
   URLResolver
 } from 'graphql-scalars'
@@ -25,7 +26,8 @@ export const scalarResolvers = {
   Hash32Hex: util.scalars.Hash32Hex,
   IPv4: IPv4Resolver,
   IPv6: IPv6Resolver,
-  JSONObject: JSONResolver,
+  JSON: JSONResolver,
+  JSONObject: JSONObjectResolver,
   Percentage: util.scalars.Percentage,
   StakeAddress: util.scalars.StakeAddress,
   StakePoolID: util.scalars.StakePoolID,
