@@ -4,8 +4,9 @@ CREATE TABLE IF NOT EXISTS "Asset"
   SELECT
     DISTINCT CONCAT(RIGHT(CONCAT(E'\\', policy), -3), RIGHT(CONCAT(E'\\', name), -3)) as "assetId",
     CAST(NULL AS TEXT) AS "ticker",
-    name as "assetName",
+    RIGHT(CONCAT(E'\\', name), -3) as "assetName",
     CAST(NULL AS TEXT) AS "description",
+    CAST(NULL AS CHAR(44)) as "fingerprint",
     CAST(NULL AS TEXT) AS "logo",
     0 AS "metadataFetchAttempts",
     CAST(NULL AS CHAR(40)) AS "metadataHash",

@@ -54,6 +54,7 @@
       - assetId
       - assetName
       - description
+      - fingerprint
       - logo
       - metadataFetchAttempts
       - metadataHash
@@ -70,6 +71,7 @@
       - assetId
       - assetName
       - description
+      - fingerprint
       - logo
       - metadataFetchAttempts
       - metadataHash
@@ -88,6 +90,7 @@
       - assetId
       - assetName
       - description
+      - fingerprint
       - logo
       - metadataFetchAttempts
       - metadataHash
