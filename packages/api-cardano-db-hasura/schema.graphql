@@ -10,6 +10,7 @@ scalar Hash28Hex
 scalar Hash32Hex
 scalar IPv4
 scalar IPv6
+scalar JSON
 scalar JSONObject
 scalar Percentage
 scalar StakeAddress
@@ -1009,7 +1010,7 @@ type TransactionInput_sum_fields {
 
 type TransactionMetadata {
   key: String!
-  value: JSONObject!
+  value: JSON!
 }
 
 input TransactionMetadata_bool_exp {
