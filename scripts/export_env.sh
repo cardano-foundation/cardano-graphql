@@ -12,7 +12,7 @@ case "$NETWORK" in
         mainnet)
             API_PORT=3100
             HASURA_PORT=8090
-            METADATA_SERVER_URI="https://metadata.cardano.org/metadata"
+            METADATA_SERVER_URI="https://tokens.cardano.org/metadata"
             PG_ADMIN_PORT=8442
             POSTGRES_PORT=5442
             ;;
