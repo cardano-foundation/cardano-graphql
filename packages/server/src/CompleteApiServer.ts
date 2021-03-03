@@ -7,7 +7,8 @@ import {
   DataSyncController,
   Db,
   Genesis,
-  HasuraClient
+  HasuraClient,
+  HostDoesNotExist
 } from '@cardano-graphql/api-cardano-db-hasura'
 import { GraphQLSchema } from 'graphql'
 import { dummyLogger, Logger } from 'ts-log'
@@ -50,7 +51,14 @@ export async function CompleteApiServer (
   )
   await db.init({
     onDbSetup: () => Promise.all([
-      hasuraClient.initialize().then(() => dataSyncController.initialize()),
+      hasuraClient.initialize()
+        .then(() => dataSyncController.initialize())
+        .catch((error) => {
+          if (error instanceof HostDoesNotExist) {
+            logger.error(error.message)
+            process.exit(1)
+          }
+        }),
       cardanoNodeClient.initialize()
     ])
   })
