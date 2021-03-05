@@ -34,7 +34,16 @@ export class HasuraClient {
     this.applyingSchemaAndMetadata = false
     this.adaCirculatingSupplyFetcher = new DataFetcher<AssetSupply['circulating']>(
       'AdaCirculatingSupply',
-      this.getAdaCirculatingSupply.bind(this),
+      () => {
+        try {
+          return this.getAdaCirculatingSupply()
+        } catch (error) {
+          if (error.message !== 'currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.') {
+            throw error
+          }
+          this.logger.debug(error.message)
+        }
+      },
       pollingInterval,
       this.logger
     )
@@ -60,6 +69,13 @@ export class HasuraClient {
   private async getAdaCirculatingSupply (): Promise<AssetSupply['circulating']> {
     const result = await this.client.query({
       query: gql`query {
+          rewards_aggregate {
+              aggregate {
+                  sum {
+                      amount
+                  }
+              }
+          }
           utxos_aggregate {
               aggregate {
                   sum {
@@ -67,9 +83,25 @@ export class HasuraClient {
                   }
               }
           }
+          withdrawals_aggregate {
+              aggregate {
+                  sum {
+                      amount
+                  }
+              }
+          }
       }`
     })
-    return result.data.utxos_aggregate.aggregate.sum.value
+    const {
+      rewards_aggregate: rewardsAggregate,
+      utxos_aggregate: utxosAggregate,
+      withdrawals_aggregate: withdrawalsAggregate
+    } = result.data
+    const rewards = new BigNumber(rewardsAggregate.aggregate.sum.amount)
+    const utxos = new BigNumber(utxosAggregate.aggregate.sum.value)
+    const withdrawals = new BigNumber(withdrawalsAggregate.aggregate.sum.amount)
+    const withdrawableRewards = rewards.minus(withdrawals)
+    return utxos.plus(withdrawableRewards).toString()
   }
 
   private async hasuraCli (command: string) {

@@ -86,9 +86,13 @@ export async function buildSchema (
         },
         ada: async () => {
           await throwIfNotInCurrentEra('ada')
+          const circulating = hasuraClient.adaCirculatingSupplyFetcher.value
+          if (circulating === undefined) {
+            return new ApolloError('ada query results are not ready yet. This can occur during startup.')
+          }
           return {
             supply: {
-              circulating: hasuraClient.adaCirculatingSupplyFetcher.value,
+              circulating,
               max: genesis.shelley.maxLovelaceSupply
             }
           }
