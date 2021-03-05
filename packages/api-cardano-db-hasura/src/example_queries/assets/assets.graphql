@@ -4,6 +4,7 @@ query assets {
         assetId
         assetName
         description
+        fingerprint
         logo
         name
         unit

@@ -2,20 +2,10 @@ import { CardanoCli } from './CardanoCli'
 import fs from 'fs-extra'
 import { AssetSupply, Transaction } from './graphql_types'
 import pRetry from 'p-retry'
-import util, { DataFetcher, knownEras } from '@cardano-graphql/util'
+import util, { knownEras } from '@cardano-graphql/util'
 import tempWrite from 'temp-write'
 import { dummyLogger, Logger } from 'ts-log'
 import { getHashOfSignedTransaction } from './util'
-
-export type LedgerState = {
-  accountState: {
-    _reserves: string
-    _treasury: string
-  },
-  esNonMyopic: {
-    rewardPot: string
-  }
-}
 
 const fileTypeFromEra = (era: string) => {
   switch (era) {
@@ -37,21 +27,12 @@ const isEraMismatch = (errorMessage: string): boolean =>
 export class CardanoNodeClient {
   readonly networkParams: string[]
   public adaCirculatingSupply: AssetSupply['circulating']
-  public ledgerStateFetcher: DataFetcher<LedgerState>
 
   constructor (
     private cardanoCli: CardanoCli,
-    pollingInterval: number,
     readonly lastConfiguredMajorVersion: number,
     private logger: Logger = dummyLogger
-  ) {
-    this.ledgerStateFetcher = new DataFetcher<LedgerState>(
-      'LedgerState',
-      this.cardanoCli.getLedgerState,
-      pollingInterval,
-      this.logger
-    )
-  }
+  ) {}
 
   public async getTip () {
     const tip = await this.cardanoCli.getTip()
@@ -80,7 +61,6 @@ export class CardanoNodeClient {
         this.logger
       )
     })
-    await this.ledgerStateFetcher.initialize()
   }
 
   public async isInCurrentEra () {
@@ -93,10 +73,6 @@ export class CardanoNodeClient {
       }
     })
     return protocolVersion.major >= this.lastConfiguredMajorVersion
-  }
-
-  public async shutdown () {
-    await this.ledgerStateFetcher.shutdown()
   }
 
   public async submitTransaction (transaction: string): Promise<Transaction['hash']> {

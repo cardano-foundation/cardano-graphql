@@ -1,7 +1,6 @@
 import { exec } from 'child_process'
 import { Genesis, ShelleyProtocolParams } from './graphql_types'
 import { Config } from './Config'
-import { LedgerState } from './CardanoNodeClient'
 import { knownEras, capitalizeFirstChar } from '@cardano-graphql/util'
 
 export interface CardanoCliTip {
@@ -19,7 +18,6 @@ const isEraMismatch = (errorMessage: string, era: string): boolean => {
 }
 
 export interface CardanoCli {
-  getLedgerState(): Promise<LedgerState>,
   getProtocolParams(): Promise<ProtocolParams>,
   getTip(): Promise<CardanoCliTip>,
   submitTransaction(filePath: string): Promise<void>
@@ -63,13 +61,6 @@ export function createCardanoCli (
     })
   }
   return {
-    getLedgerState: () => query<LedgerState>(
-      'ledger-state',
-      {
-        jqOperation: '"{accountState: .nesEs.esAccountState, esNonMyopic: { rewardPot: .nesEs.esNonMyopic.rewardPotNM } }"',
-        withEraFlag: true
-      }
-    ),
     getProtocolParams: () => query<ProtocolParams>(
       'protocol-parameters',
       {
