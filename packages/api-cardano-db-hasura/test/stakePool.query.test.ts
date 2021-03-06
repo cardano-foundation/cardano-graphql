@@ -90,6 +90,6 @@ describe('stakePools', () => {
     })
     const { stakePools_aggregate } = result.data
     expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(0)
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(600)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(800)
   })
 })
