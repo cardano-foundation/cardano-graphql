@@ -29,10 +29,8 @@ describe('ada', () => {
     const { ada } = result.data
     const circulatingSupply = new BigNumber(ada.supply.circulating).toNumber()
     const maxSupply = new BigNumber(ada.supply.max).toNumber()
-    const totalSupply = new BigNumber(ada.supply.total).toNumber()
     expect(maxSupply).toEqual(genesis.shelley.maxLovelaceSupply)
     expect(maxSupply).toBeGreaterThanOrEqual(circulatingSupply)
-    expect(maxSupply).toBeGreaterThanOrEqual(totalSupply)
-    expect(totalSupply).toBeGreaterThan(circulatingSupply)
+    expect(ada.supply.total).toBeNull()
   })
 })

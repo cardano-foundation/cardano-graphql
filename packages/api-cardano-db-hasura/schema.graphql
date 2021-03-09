@@ -297,7 +297,7 @@ type AssetBalance {
 type AssetSupply {
   circulating: String!
   max: String!
-  total: String!
+  total: String
 }
 
 input AssetSupply_bool_exp {

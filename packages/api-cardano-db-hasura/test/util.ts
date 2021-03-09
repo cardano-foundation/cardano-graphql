@@ -9,6 +9,8 @@ import path from 'path'
 import { readSecrets } from '@src/util'
 import { Config } from '@src/Config'
 import { Genesis } from '@src/graphql_types'
+import { createCardanoCli } from '@src/CardanoCli'
+import { CardanoNodeClient } from '@src/CardanoNodeClient'
 
 export async function buildClient (
   apiUri: string,
@@ -35,6 +37,10 @@ export async function buildClient (
     })
     return client
   } else {
+    const cardanoNodeClient = new CardanoNodeClient(
+      createCardanoCli(path.resolve('..', '..', '..', 'bin', 'cardano-cli'), genesis.shelley, 'jq'),
+      genesis.shelley.protocolParams.protocolVersion.major
+    )
     const hasuraClient = new HasuraClient('hasura', hasuraUri, 1000 * 60 * 5)
     const db = new Db({
       ...{ host: 'localhost', port: dbPort },
@@ -43,7 +49,7 @@ export async function buildClient (
     await db.init({
       onDbSetup: hasuraClient.applySchemaAndMetadata.bind(hasuraClient)
     })
-    const schema = await buildSchema(hasuraClient, genesis)
+    const schema = await buildSchema(hasuraClient, genesis, cardanoNodeClient)
     return utilDev.createIntegrationClient(schema)
   }
 }

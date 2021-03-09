@@ -14,7 +14,6 @@ import {
   TimestampResolver,
   URLResolver
 } from 'graphql-scalars'
-import BigNumber from 'bignumber.js'
 import { CardanoNodeClient } from './CardanoNodeClient'
 const GraphQLBigInt = require('graphql-bigint')
 
@@ -39,7 +38,7 @@ export const scalarResolvers = {
 export async function buildSchema (
   hasuraClient: HasuraClient,
   genesis: Genesis,
-  cardanoNodeClient?: CardanoNodeClient
+  cardanoNodeClient: CardanoNodeClient
 ) {
   const throwIfNotInCurrentEra = async (queryName: string) => {
     if (!(await cardanoNodeClient.isInCurrentEra())) {
@@ -87,13 +86,14 @@ export async function buildSchema (
         },
         ada: async () => {
           await throwIfNotInCurrentEra('ada')
+          const circulating = hasuraClient.adaCirculatingSupplyFetcher.value
+          if (circulating === undefined) {
+            return new ApolloError('ada query results are not ready yet. This can occur during startup.')
+          }
           return {
             supply: {
-              circulating: hasuraClient.adaCirculatingSupplyFetcher.value,
-              max: genesis.shelley.maxLovelaceSupply,
-              total: new BigNumber(genesis.shelley.maxLovelaceSupply)
-                .minus(new BigNumber(cardanoNodeClient.ledgerStateFetcher.value.accountState._reserves))
-                .toString()
+              circulating,
+              max: genesis.shelley.maxLovelaceSupply
             }
           }
         },

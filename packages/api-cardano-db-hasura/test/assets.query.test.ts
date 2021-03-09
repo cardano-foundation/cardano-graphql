@@ -29,6 +29,7 @@ describe('assets', () => {
     const { assets_aggregate, assets } = result.data
     const { aggregate } = assets_aggregate
     expect(aggregate.count).toBeDefined()
-    expect(assets).toMatchSnapshot()
+    expect(assets.length).toBeGreaterThan(0)
+    expect(assets[0].fingerprint.slice(0, 5)).toBe('asset')
   })
 })
