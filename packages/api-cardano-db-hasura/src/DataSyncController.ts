@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from 'axios'
 import { chunkArray, DataFetcher } from '@cardano-graphql/util'
 import AssetFingerprint from '@emurgo/cip14-js'
 import { Asset } from './graphql_types'
+import { HostDoesNotExist } from './errors'
 import hash from 'object-hash'
 import { dummyLogger, Logger } from 'ts-log'
 import { Db } from './Db'
@@ -171,8 +172,11 @@ export class DataSyncController {
       })
       return response.data.subjects
     } catch (error) {
-      this.logger.error(error.message)
-      throw error
+      if (error.code === 'ENOTFOUND') {
+        this.logger.error(error.message)
+      } else {
+        throw error
+      }
     }
   }
 
@@ -186,11 +190,24 @@ export class DataSyncController {
     }
   }
 
+  private async ensureMetadataServerIsAvailable (): Promise<void> {
+    try {
+      await this.axiosClient.get('healthcheck')
+    } catch (error) {
+      if (error.code === 'ENOTFOUND') {
+        throw new HostDoesNotExist('metadata server')
+      } else if (error.response.status !== 404) {
+        throw error
+      }
+    }
+  }
+
   public async initialize () {
     this.logger.info('Initializing', { module: 'DataSyncController' })
     await this.ensureAssetFingerprints()
     await this.assetSynchronizer.initialize()
     if (this.metadataServerUri) {
+      await this.ensureMetadataServerIsAvailable()
       await this.metadataSynchronizer.initial.initialize()
       await this.metadataSynchronizer.ongoing.initialize()
     }
