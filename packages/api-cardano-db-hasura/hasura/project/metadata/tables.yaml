@@ -37,6 +37,22 @@
       allow_aggregations: true
 - table:
     schema: public
+    name: AdaPots
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - deposits
+      - fees
+      - reserves
+      - rewards
+      - slotNo
+      - treasury
+      - utxo
+      filter: {}
+      allow_aggregations: true
+- table:
+    schema: public
     name: Asset
   configuration:
     custom_root_fields:
@@ -253,6 +269,14 @@
       select: epochs
     custom_column_names: {}
   object_relationships:
+  - name: adaPots
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: AdaPots
+        column_mapping:
+          number: epochNo
   - name: protocolParams
     using:
       manual_configuration:

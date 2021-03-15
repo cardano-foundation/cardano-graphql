@@ -8,6 +8,7 @@ import { introspectSchema, wrapSchema } from '@graphql-tools/wrap'
 import pRetry from 'p-retry'
 import path from 'path'
 import {
+  AdaPots,
   Asset,
   AssetBalance,
   AssetSupply,
@@ -21,10 +22,12 @@ import { dummyLogger, Logger } from 'ts-log'
 import BigNumber from 'bignumber.js'
 import { AssetWithoutTokens } from './typeAliases'
 
+export type AdaPotsToCalculateSupply = { circulating: AssetSupply['circulating'], reserves: AdaPots['reserves']}
+
 export class HasuraClient {
   private client: ApolloClient<NormalizedCacheObject>
   private applyingSchemaAndMetadata: boolean
-  public adaCirculatingSupplyFetcher: DataFetcher<AssetSupply['circulating']>
+  public adaPotsToCalculateSupplyFetcher: DataFetcher<AdaPotsToCalculateSupply>
   public currentProtocolVersionFetcher: DataFetcher<ShelleyProtocolParams['protocolVersion']>
   public schema: GraphQLSchema
 
@@ -36,11 +39,11 @@ export class HasuraClient {
     private logger: Logger = dummyLogger
   ) {
     this.applyingSchemaAndMetadata = false
-    this.adaCirculatingSupplyFetcher = new DataFetcher<AssetSupply['circulating']>(
-      'AdaCirculatingSupply',
+    this.adaPotsToCalculateSupplyFetcher = new DataFetcher<AdaPotsToCalculateSupply>(
+      'AdaPotsToCalculateSupply',
       () => {
         try {
-          return this.getAdaCirculatingSupply()
+          return this.getAdaPotsToCalculateSupply()
         } catch (error) {
           if (error.message !== 'currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.') {
             throw error
@@ -80,9 +83,16 @@ export class HasuraClient {
     })
   }
 
-  private async getAdaCirculatingSupply (): Promise<AssetSupply['circulating']> {
+  private async getAdaPotsToCalculateSupply (): Promise<AdaPotsToCalculateSupply> {
     const result = await this.client.query({
       query: gql`query {
+          cardano { 
+              currentEpoch {
+                  adaPots {
+                      reserves
+                  }
+              }
+          }
           rewards_aggregate {
               aggregate {
                   sum {
@@ -107,6 +117,7 @@ export class HasuraClient {
       }`
     })
     const {
+      cardano,
       rewards_aggregate: rewardsAggregate,
       utxos_aggregate: utxosAggregate,
       withdrawals_aggregate: withdrawalsAggregate
@@ -115,7 +126,10 @@ export class HasuraClient {
     const utxos = new BigNumber(utxosAggregate.aggregate.sum.value)
     const withdrawals = new BigNumber(withdrawalsAggregate.aggregate.sum.amount)
     const withdrawableRewards = rewards.minus(withdrawals)
-    return utxos.plus(withdrawableRewards).toString()
+    return {
+      circulating: utxos.plus(withdrawableRewards).toString(),
+      reserves: cardano[0].currentEpoch.adaPots.reserves
+    }
   }
 
   private async hasuraCli (command: string) {
@@ -146,13 +160,12 @@ export class HasuraClient {
         this.logger
       )
     })
-    this.logger.info('Initialized', { module: 'HasuraClient' })
-    await this.currentProtocolVersionFetcher.initialize()
-    await this.adaCirculatingSupplyFetcher.initialize()
+    this.logger.info('Hasura initialized', { module: 'HasuraClient' })
+    await this.adaPotsToCalculateSupplyFetcher.initialize()
   }
 
   public async shutdown () {
-    await this.adaCirculatingSupplyFetcher.shutdown()
+    await this.adaPotsToCalculateSupplyFetcher.shutdown()
     await this.currentProtocolVersionFetcher.shutdown()
   }
 

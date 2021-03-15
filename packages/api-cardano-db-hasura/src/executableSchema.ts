@@ -14,6 +14,7 @@ import {
   TimestampResolver
 } from 'graphql-scalars'
 import { CardanoNodeClient } from './CardanoNodeClient'
+import BigNumber from 'bignumber.js'
 const GraphQLBigInt = require('graphql-bigint')
 
 export const scalarResolvers = {
@@ -84,14 +85,17 @@ export async function buildSchema (
         },
         ada: async () => {
           await throwIfNotInCurrentEra('ada')
-          const circulating = hasuraClient.adaCirculatingSupplyFetcher.value
-          if (circulating === undefined) {
+          const adaPots = hasuraClient.adaPotsToCalculateSupplyFetcher.value
+          if (adaPots === undefined) {
             return new ApolloError('ada query results are not ready yet. This can occur during startup.')
           }
           return {
             supply: {
-              circulating,
-              max: genesis.shelley.maxLovelaceSupply
+              circulating: adaPots.circulating,
+              max: genesis.shelley.maxLovelaceSupply,
+              total: new BigNumber(genesis.shelley.maxLovelaceSupply)
+                .minus(new BigNumber(adaPots.reserves))
+                .toString()
             }
           }
         },

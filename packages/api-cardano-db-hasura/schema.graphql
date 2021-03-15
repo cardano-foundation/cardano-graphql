@@ -244,6 +244,16 @@ type Ada {
   supply: AssetSupply!
 }
 
+type AdaPots {
+  deposits: String!
+  fees: String!
+  reserves: String!
+  rewards: String!
+  slotNo: Int!
+  treasury: String!
+  utxo: String!
+}
+
 type Asset {
   assetId: String!
   assetName: String
@@ -1263,6 +1273,7 @@ type Block_sum_fields {
 type Epoch {
   activeStake: [ActiveStake]
   activeStake_aggregate: ActiveStake_aggregate
+  adaPots: AdaPots
   blocks (
     limit: Int
     order_by: [Block_order_by!]

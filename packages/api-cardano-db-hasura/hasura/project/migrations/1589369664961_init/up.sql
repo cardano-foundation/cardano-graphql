@@ -1,4 +1,16 @@
 
+CREATE VIEW "AdaPots" AS
+  SELECT
+    epoch_no AS "epochNo",
+    deposits,
+    fees,
+    reserves,
+    rewards,
+    slot_no AS "slotNo",
+    treasury,
+    utxo
+FROM ada_pots;
+
 CREATE TABLE IF NOT EXISTS "Asset"
   AS
   SELECT

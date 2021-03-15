@@ -2,6 +2,15 @@ query epochDetailsInRange (
     $numbers: [Int!]
 ) {
     epochs( where: { number: { _in: $numbers }}) {
+        adaPots {
+            deposits,
+            fees,
+            reserves,
+            rewards,
+            slotNo,
+            treasury,
+            utxo
+        }
         blocksCount
         fees
         output
