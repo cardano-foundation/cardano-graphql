@@ -158,10 +158,11 @@
       - fees
       - forgedAt
       - hash
-      - merkelRoot
+      - merkleRoot
       - nextBlockHash
       - number
       - opCert
+      - pool_hash_id
       - previousBlockHash
       - protocolVersion
       - size
@@ -439,6 +440,14 @@
           name: ActiveStake
         column_mapping:
           hash: stakePoolHash
+  - name: blocks
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Block
+        column_mapping:
+          hash_id: pool_hash_id
   - name: delegators
     using:
       manual_configuration:

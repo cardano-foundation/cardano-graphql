@@ -37,6 +37,7 @@ describe('stakePools', () => {
       query: await loadQueryNode('allStakePoolFields'),
       variables: {
         limit: 5,
+        blocksLimit: 5,
         delegatorsLimit: 5,
         activeStakeLimit: 5
       }
@@ -45,6 +46,8 @@ describe('stakePools', () => {
     expect(stakePools.length).toBe(5)
     expect(stakePools[0].activeStake).toBeDefined()
     expect(stakePools[0].activeStake_aggregate).toBeDefined()
+    expect(stakePools[0].blocks).toBeDefined()
+    expect(stakePools[0].blocks_aggregate).toBeDefined()
     expect(stakePools[0].delegators).toBeDefined()
     expect(stakePools[0].delegators_aggregate).toBeDefined()
     expect(stakePools[0].fixedCost).toBeDefined()

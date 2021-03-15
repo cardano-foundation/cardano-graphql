@@ -3,6 +3,8 @@ query allStakePoolFields (
     $where: StakePool_bool_exp
     $activeStakeLimit: Int!
     $activeStakeWhere: ActiveStake_bool_exp
+    $blocksLimit: Int!
+    $blocksWhere: Block_bool_exp
     $delegatorsLimit: Int!
     $delegatorsWhere: Delegation_bool_exp
 )  {
@@ -17,6 +19,15 @@ query allStakePoolFields (
                 sum {
                     amount
                 }
+            }
+        }
+        blocks (limit: $blocksLimit, where: $blocksWhere) {
+            slotNo
+            epochNo
+        }
+        blocks_aggregate {
+            aggregate {
+                count
             }
         }
         delegators (limit: $delegatorsLimit, where: $delegatorsWhere) {

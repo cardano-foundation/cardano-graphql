@@ -16,7 +16,6 @@ scalar Percentage
 scalar StakeAddress
 scalar StakePoolID
 scalar Timestamp
-scalar URL
 scalar VRFVerificationKey
 
 type Mutation {
@@ -600,6 +599,18 @@ type StakePool {
     offset: Int
     where: ActiveStake_bool_exp
   ): ActiveStake_aggregate!
+  blocks (
+    limit: Int
+    order_by: [Block_order_by!]
+    offset: Int
+    where: Block_bool_exp
+  ): [Block!]!
+  blocks_aggregate (
+    limit: Int
+    order_by: [Block_order_by!]
+    offset: Int
+    where: Block_bool_exp
+  ): Block_aggregate!
   delegators (
     limit: Int
     order_by: [Delegation_order_by!]
@@ -630,7 +641,7 @@ type StakePool {
     where: Reward_bool_exp
   ): Reward_aggregate!
   updatedIn: Transaction!
-  url: URL
+  url: String
 }
 
 
@@ -1093,7 +1104,7 @@ type Block {
   slotLeader: SlotLeader!
   hash: Hash32Hex!
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a block number
-  merkelRoot: Hash32Hex
+  merkleRoot: Hash32Hex
   number: Int
   opCert: Hash32Hex
   slotInEpoch: Int

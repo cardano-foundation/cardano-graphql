@@ -11,8 +11,7 @@ import {
   IPv6Resolver,
   JSONResolver,
   JSONObjectResolver,
-  TimestampResolver,
-  URLResolver
+  TimestampResolver
 } from 'graphql-scalars'
 import { CardanoNodeClient } from './CardanoNodeClient'
 const GraphQLBigInt = require('graphql-bigint')
@@ -31,7 +30,6 @@ export const scalarResolvers = {
   StakeAddress: util.scalars.StakeAddress,
   StakePoolID: util.scalars.StakePoolID,
   Timestamp: TimestampResolver,
-  URL: URLResolver,
   VRFVerificationKey: util.scalars.VRFVerificationKey
 } as any
 

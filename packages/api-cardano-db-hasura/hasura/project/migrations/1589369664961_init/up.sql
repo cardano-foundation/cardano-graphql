@@ -23,7 +23,7 @@ CREATE VIEW "Block" AS
            FROM tx
           WHERE (tx.block_id = block.id)), (0)::NUMERIC))::bigint AS fees,
     block.hash,
-    block.merkle_root AS "merkelRoot",
+    block.merkle_root AS "merkleRoot",
     block.block_no AS "number",
     block.op_cert AS "opCert",
     previous_block.hash AS "previousBlockHash",
@@ -36,6 +36,7 @@ CREATE VIEW "Block" AS
     block.epoch_slot_no AS "slotInEpoch",
     block.slot_no AS "slotNo",
     slot_leader.id AS "slot_leader_id",
+    slot_leader.pool_hash_id AS "pool_hash_id",
     block.vrf_key As "vrfKey"
    FROM (((block
      LEFT JOIN block previous_block ON ((block.previous_id = previous_block.id)))
