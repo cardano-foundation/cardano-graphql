@@ -1322,10 +1322,17 @@ type Epoch_aggregate {
 }
 
 type Epoch_aggregate_fields {
+  ave: Epoch_ave_fields!
   count: String!
   max: Epoch_max_fields!
   min: Epoch_min_fields!
   sum: Epoch_sum_fields!
+}
+
+type Epoch_ave_fields {
+  fees: Float!
+  output: Float!
+  transactionsCount: Float!
 }
 
 type Epoch_max_fields {
