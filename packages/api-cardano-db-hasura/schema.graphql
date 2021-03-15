@@ -600,6 +600,18 @@ type StakePool {
     offset: Int
     where: ActiveStake_bool_exp
   ): ActiveStake_aggregate!
+  blocks (
+    limit: Int
+    order_by: [Block_order_by!]
+    offset: Int
+    where: Block_bool_exp
+  ): [Block!]!
+  blocks_aggregate (
+    limit: Int
+    order_by: [Block_order_by!]
+    offset: Int
+    where: Block_bool_exp
+  ): Block_aggregate!
   delegators (
     limit: Int
     order_by: [Delegation_order_by!]

@@ -36,6 +36,7 @@ CREATE VIEW "Block" AS
     block.epoch_slot_no AS "slotInEpoch",
     block.slot_no AS "slotNo",
     slot_leader.id AS "slot_leader_id",
+    slot_leader.pool_hash_id AS "pool_hash_id",
     block.vrf_key As "vrfKey"
    FROM (((block
      LEFT JOIN block previous_block ON ((block.previous_id = previous_block.id)))
