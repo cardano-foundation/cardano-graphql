@@ -158,7 +158,7 @@
       - fees
       - forgedAt
       - hash
-      - merkelRoot
+      - merkleRoot
       - nextBlockHash
       - number
       - opCert

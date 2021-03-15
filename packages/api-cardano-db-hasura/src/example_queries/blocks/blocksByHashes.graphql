@@ -17,7 +17,7 @@ query blocksByHashes(
         epochNo
         fees
         hash
-        merkelRoot
+        merkleRoot
         number
         forgedAt
         slotLeader {
