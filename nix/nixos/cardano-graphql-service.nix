@@ -74,11 +74,6 @@ in {
         default = null;
       };
 
-      smashUrl = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-      };
-
       hasuraIp = lib.mkOption {
         type = lib.types.str;
         default = "127.0.0.1";
@@ -158,7 +153,6 @@ in {
       environment = lib.filterAttrs (k: v: v != null) {
         CARDANO_CLI_PATH = cfg.cardanoCliPackage + "/bin/cardano-cli";
         CARDANO_NODE_SOCKET_PATH = cfg.cardanoNodeSocketPath;
-        POOL_METADATA_PROXY = cfg.smashUrl;
         GENESIS_FILE_BYRON = cfg.genesisByron;
         GENESIS_FILE_SHELLEY = cfg.genesisShelley;
         HASURA_CLI_PATH = hasura-cli + "/bin/hasura";
