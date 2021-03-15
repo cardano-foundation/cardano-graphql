@@ -16,7 +16,6 @@ scalar Percentage
 scalar StakeAddress
 scalar StakePoolID
 scalar Timestamp
-scalar URL
 scalar VRFVerificationKey
 
 type Mutation {
@@ -642,7 +641,7 @@ type StakePool {
     where: Reward_bool_exp
   ): Reward_aggregate!
   updatedIn: Transaction!
-  url: URL
+  url: String
 }
 
 
