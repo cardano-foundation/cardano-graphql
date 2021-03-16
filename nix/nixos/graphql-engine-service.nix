@@ -79,7 +79,8 @@ in {
           --port ${toString cfg.dbPort} \
           serve \
           --server-port ${toString cfg.enginePort} \
-          --enable-telemetry=false
+          --enable-telemetry=false \
+          --disable-cors
       '';
     };
   };
