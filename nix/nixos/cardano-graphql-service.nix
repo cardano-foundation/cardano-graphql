@@ -44,15 +44,15 @@ in {
       };
 
       listenAddress = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.nullOr lib.types.str;
         default = null;
       };
-      
+
       loggerMinSeverity = lib.mkOption {
         type = lib.types.str;
         default = "info";
       };
-      
+
       port = lib.mkOption {
         type = lib.types.int;
         default = 3100;
