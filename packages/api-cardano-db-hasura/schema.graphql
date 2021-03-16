@@ -253,7 +253,6 @@ type Asset {
   logo: String
   metadataHash: String
   name: String
-  unit: JSONObject
   url: String
   policyId: Hash28Hex!
 }
@@ -270,7 +269,6 @@ input Asset_bool_exp {
   logo: text_comparison_exp
   name: text_comparison_exp
   policyId: text_comparison_exp
-  unit: JSONObject
   url: text_comparison_exp
 }
 

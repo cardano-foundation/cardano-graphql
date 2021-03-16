@@ -42,13 +42,6 @@ export interface AssetMetadata {
     hashFn: string
   }
   subject: string
-  unit: {
-    value: {
-      decimals: number
-      name: string
-    }
-    anSignatures: Signature[]
-  }
   url: {
     value: string
     anSignatures: Signature[]
@@ -166,7 +159,6 @@ export class DataSyncController {
           'logo',
           'name',
           'ticker',
-          'unit',
           'url'
         ]
       })
