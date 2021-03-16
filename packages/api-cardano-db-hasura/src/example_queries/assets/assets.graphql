@@ -1,5 +1,7 @@
-query assets {
-    assets {
+query assets (
+    $where: Asset_bool_exp
+) {
+    assets (where: $where) {
         ticker
         assetId
         assetName
@@ -7,7 +9,6 @@ query assets {
         fingerprint
         logo
         name
-        unit
         url
         policyId
     }

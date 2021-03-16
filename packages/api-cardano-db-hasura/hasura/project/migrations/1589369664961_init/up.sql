@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS "Asset"
     CAST(NULL AS CHAR(40)) AS "metadataHash",
     CAST(NULL AS TEXT) AS "name",
     policy as "policyId",
-    CAST(NULL AS JSONB) AS "unit",
     CAST(NULL AS TEXT) AS "url"
   FROM ma_tx_out;
 

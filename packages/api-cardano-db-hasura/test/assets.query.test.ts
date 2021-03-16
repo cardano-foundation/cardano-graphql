@@ -32,4 +32,23 @@ describe('assets', () => {
     expect(assets.length).toBeGreaterThan(0)
     expect(assets[0].fingerprint.slice(0, 5)).toBe('asset')
   })
+
+  it('can return information on assets by fingerprint', async () => {
+    const result = await client.query({
+      query: await loadQueryNode('assets'),
+      variables: {
+        where: { fingerprint: { _eq: 'asset12h3p5l3nd5y26lr22am7y7ga3vxghkhf57zkhd' } }
+      }
+    })
+    const { assets } = result.data
+    expect(assets[0].assetId).toBeDefined()
+    expect(assets[0].assetName).toBeDefined()
+    expect(assets[0].description).toBeDefined()
+    expect(assets[0].fingerprint).toBeDefined()
+    expect(assets[0].logo).toBeDefined()
+    expect(assets[0].name).toBeDefined()
+    expect(assets[0].policyId).toBeDefined()
+    expect(assets[0].ticker).toBeDefined()
+    expect(assets[0].url).toBeDefined()
+  })
 })

@@ -438,7 +438,6 @@ export class HasuraClient {
           $logo: String
           $metadataHash: bpchar!
           $name: String
-          $unit: jsonb
           $url: String
       ) {
           update_assets(
@@ -451,7 +450,6 @@ export class HasuraClient {
                   logo: $logo,
                   metadataHash: $metadataHash,
                   name: $name,
-                  unit: $unit
                   url: $url
               }
           ) {
@@ -469,7 +467,6 @@ export class HasuraClient {
         logo: metadata.logo?.value,
         metadataHash,
         name: metadata.name?.value,
-        unit: metadata.unit ? JSON.stringify(metadata.unit.value) : undefined,
         url: metadata.url?.value
       }
     })
