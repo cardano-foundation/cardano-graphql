@@ -161,7 +161,7 @@ in {
         GENESIS_FILE_BYRON = cfg.genesisByron;
         GENESIS_FILE_SHELLEY = cfg.genesisShelley;
         HASURA_CLI_PATH = hasura-cli + "/bin/hasura";
-        HASURA_GRAPHQL_ENABLE_TELEMETRY = false;
+        HASURA_GRAPHQL_ENABLE_TELEMETRY = toString false;
         HASURA_URI = hasuraBaseUri;
         JQ_PATH = pkgs.jq + "/bin/jq";
         LOGGER_MIN_SEVERITY = cfg.loggerMinSeverity;
