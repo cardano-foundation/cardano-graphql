@@ -358,3 +358,77 @@ Object {
   ],
 }
 `;
+
+exports[`transactions transactions with tokens shows the tokens minted and output 1`] = `
+Object {
+  "transactions": Array [
+    Object {
+      "block": Object {
+        "number": 5406748,
+      },
+      "blockIndex": 8,
+      "deposit": 0,
+      "fee": 1000000,
+      "hash": "e252be4c7e40d35919f741c9649ff207c3e49d53bb819e5c1cb458055fd363ed",
+      "inputs": Array [
+        Object {
+          "address": "addr1qxrmuatfdt49ndqmxeq46zmu3daqcg078h26vwfe4nau8gpgtal0gcphul7kruzdrx6v4w78la7z5luz0xs375zz922sege8ks",
+          "sourceTxHash": "d9a8ae2194e2e25e8079a04a4694e2679464a4f51512863a0008a35a85762ff0",
+          "sourceTxIndex": 0,
+          "value": "5000000",
+        },
+      ],
+      "inputs_aggregate": Object {
+        "aggregate": Object {
+          "sum": Object {
+            "value": "5000000",
+          },
+        },
+      },
+      "mint": Array [
+        Object {
+          "asset": Object {
+            "assetId": "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae6e7574636f696e",
+            "assetName": "6e7574636f696e",
+            "policyId": "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae",
+          },
+          "quantity": "1",
+        },
+      ],
+      "outputs": Array [
+        Object {
+          "address": "addr1qxrmuatfdt49ndqmxeq46zmu3daqcg078h26vwfe4nau8gpgtal0gcphul7kruzdrx6v4w78la7z5luz0xs375zz922sege8ks",
+          "index": 0,
+          "tokens": Array [
+            Object {
+              "asset": Object {
+                "assetId": "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae6e7574636f696e",
+                "assetName": "6e7574636f696e",
+                "policyId": "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae",
+              },
+              "quantity": "1",
+            },
+          ],
+          "value": "4000000",
+        },
+      ],
+      "outputs_aggregate": Object {
+        "aggregate": Object {
+          "sum": Object {
+            "value": "4000000",
+          },
+        },
+      },
+      "size": 453,
+      "totalOutput": "4000000",
+      "withdrawals_aggregate": Object {
+        "aggregate": Object {
+          "sum": Object {
+            "amount": null,
+          },
+        },
+      },
+    },
+  ],
+}
+`;

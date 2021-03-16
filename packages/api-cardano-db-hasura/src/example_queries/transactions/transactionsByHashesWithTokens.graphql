@@ -29,9 +29,7 @@ query transactionsByHashesWithTokens(
             asset {
                 assetId
                 assetName
-                description
                 policyId
-                name
             }
             quantity
         }
@@ -43,9 +41,7 @@ query transactionsByHashesWithTokens(
                 asset {
                     assetId
                     assetName
-                    description
                     policyId
-                    name
                 }
                 quantity
             }

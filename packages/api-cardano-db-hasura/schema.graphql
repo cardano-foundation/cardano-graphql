@@ -769,7 +769,7 @@ type StakeRegistration_aggregate_fields {
 type Token {
   asset: Asset!
   quantity: String!
-  transactionOutput: TransactionOutput
+  transactionOutput: TransactionOutput!
 }
 
 input Token_order_by {
@@ -815,7 +815,6 @@ type Token_sum_fields {
   quantity: String
 }
 
-
 type Transaction {
   block: Block
   blockIndex: Int!
@@ -837,7 +836,7 @@ type Transaction {
   invalidBefore: String
   invalidHereafter: String
   metadata: [TransactionMetadata]
-  mint: [Token!]
+  mint: [Token!]!
   mint_aggregate(
     limit: Int
     order_by: [Token_order_by]

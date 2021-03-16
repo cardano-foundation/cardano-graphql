@@ -288,6 +288,14 @@
     schema: public
     name: Mint
   object_relationships:
+  - name: asset
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Asset
+        column_mapping:
+          assetId: assetId
   - name: transaction
     using:
       manual_configuration:

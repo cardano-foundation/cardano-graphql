@@ -133,4 +133,15 @@ describe('transactions', () => {
       expect(result.data).toMatchSnapshot()
     })
   })
+
+
+  describe('transactions with tokens', () => {
+    it('shows the tokens minted and output', async () => {
+      const result = await client.query({
+        query: await loadQueryNode('transactionsByHashesWithTokens'),
+        variables: { hashes: ['e252be4c7e40d35919f741c9649ff207c3e49d53bb819e5c1cb458055fd363ed'] }
+      })
+      expect(result.data).toMatchSnapshot()
+    })
+  })
 })

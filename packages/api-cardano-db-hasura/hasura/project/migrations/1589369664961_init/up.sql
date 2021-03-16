@@ -195,7 +195,7 @@ JOIN pool_hash
 
 CREATE VIEW "Mint" AS
 SELECT
-  CONCAT(RIGHT(CONCAT(E'\\',policy), -3), RIGHT(CONCAT(E'\\',name), -3)) as "assetId",
+  CONCAT(RIGHT(CONCAT(E'\\', policy), -3), RIGHT(CONCAT(E'\\', name), -3)) as "assetId",
   quantity,
   tx_id
 FROM ma_tx_mint;
