@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/input-output-hk/cardano-graphql/compare/3.0.1...4.0.0) (2021-03-29)
+
+### Compatible with:
+
+- [`cardano-node`: `1.25.1`](https://github.com/input-output-hk/cardano-node/releases/tag/1.25.1)
+- [`cardano-db-sync`: `9.0.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/9.0.0) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### ⚠ BREAKING CHANGES
+
+* StakePool.url no longer URL type. The ledger does not validate the url value provided by the owner,
+therefore trying to impose rules around the structure will fail.
+
+* Transaction.metadata is now more accurately JSON type, not JSONObject. Despite the name, 
+  JSONObject was currently mapped to the underlying JSON resolver as a workaround to avoid breaking changes.
+
+* The fields previously modelled on Token have been nested under Token.asset. tokens and tokens_aggregate 
+  have been removed in favour of assets and assets_aggregate. Asset properties are now nested under 
+  PaymentAddress.summary.assetBalances.asset
+
+### Bug Fixes
+
+* ActiveStake.stakePoolHash field name ([08fe609](https://github.com/input-output-hk/cardano-graphql/commit/08fe609f6d027fe8ce62e8feeac6d7f4a4df905b))
+* add Mint.asset relationship ([0deaaac](https://github.com/input-output-hk/cardano-graphql/commit/0deaaac3cce76268eacd3faa64e1894cfa8cae36))
+* add remaining Asset fields Hasura query used to fulfil paymentAddress query ([879db94](https://github.com/input-output-hk/cardano-graphql/commit/879db9410801668ab3e6e8507898225585b70782))
+* batch asset synchronising operations ([637d607](https://github.com/input-output-hk/cardano-graphql/commit/637d6077748cfc4264485b18e64136a4f34b2265))
+* Block.merkelRoot -> Block.merkleRoot ([b9e1e13](https://github.com/input-output-hk/cardano-graphql/commit/b9e1e13fdbca32b62618a4ca6f27bfed271e3fc9))
+* include rewards in ada circulating supply ([69f23c1](https://github.com/input-output-hk/cardano-graphql/commit/69f23c1c114ede071efd7c68864e706715c4d2a1))
+* StakePool.url is now type String ([a661525](https://github.com/input-output-hk/cardano-graphql/commit/a661525db77db020ea87132cbdfd4e658ebdc4db))
+* StakePoolRetirement_bool_exp.inEffectFrom type ([96aa708](https://github.com/input-output-hk/cardano-graphql/commit/96aa7088de16134808758fc97775569121ab253b))
+* Correct Transaction.metadata type ([79205a2](https://github.com/input-output-hk/cardano-graphql/commit/79205a209b3d511fd05b8ad8e33e1e3d02ac53da))
+* Remove cardano-cli ledger-state query, make AssetSupply.total optional ([f86ef42](https://github.com/input-output-hk/cardano-graphql/commit/f86ef42298574785e29435265f622fef5fa57129))
+* use cardano-node config for lastConfiguredMajorVersion ([5a621c2](https://github.com/input-output-hk/cardano-graphql/commit/5a621c2d1f16ec90693ee57b1c67d7d56b6ece33)), closes [#454](https://github.com/input-output-hk/cardano-graphql/issues/454)
+* replace cardano-cli query with db lookup for protocol params ([a6387b3](https://github.com/input-output-hk/cardano-graphql/commit/a6387b381c8c63d2110d02accb10fdda10937b62))
+* throw error in resolver rather than return it ([dd9a031](https://github.com/input-output-hk/cardano-graphql/commit/dd9a031675e9cc708f2bb62b5cad1b454f74b14a))
+
+### Features
+
+* Introduce asset model and fetch metadata from external service ([0329a84](https://github.com/input-output-hk/cardano-graphql/commit/0329a84c7a137cc8135635afd10502243324208a))
+* Ada Pots ([9c7f058](https://github.com/input-output-hk/cardano-graphql/commit/9c7f058ef331a06576ad5cf5e567af4ddb723bf0))
+
 ## [3.2.0](https://github.com/input-output-hk/cardano-graphql/compare/3.1.1...3.2.0) (2021-02-01)
 
 - [`cardano-node`: `1.25.1`](https://github.com/input-output-hk/cardano-node/releases/tag/1.25.1)
