@@ -20,10 +20,6 @@ export const assetFingerprint = (asset: Pick<Asset, 'assetName' | 'policyId'>) =
     .fingerprint()
 
 export interface AssetMetadata {
-  ticker: {
-    value: string
-    anSignatures: Signature[]
-  }
   description: {
     value: string
     anSignatures: Signature[]
@@ -42,6 +38,10 @@ export interface AssetMetadata {
     hashFn: string
   }
   subject: string
+  ticker: {
+    value: string
+    anSignatures: Signature[]
+  }
   url: {
     value: string
     anSignatures: Signature[]

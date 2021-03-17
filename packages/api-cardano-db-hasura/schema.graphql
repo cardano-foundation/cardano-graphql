@@ -245,7 +245,6 @@ type Ada {
 }
 
 type Asset {
-  ticker: String
   assetId: String!
   assetName: String
   description: String
@@ -253,8 +252,9 @@ type Asset {
   logo: String
   metadataHash: String
   name: String
-  url: String
   policyId: Hash28Hex!
+  ticker: String
+  url: String
 }
 
 input Asset_bool_exp {

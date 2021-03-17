@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS "Asset"
   AS
   SELECT
     DISTINCT CONCAT(RIGHT(CONCAT(E'\\', policy), -3), RIGHT(CONCAT(E'\\', name), -3)) as "assetId",
-    CAST(NULL AS TEXT) AS "ticker",
     RIGHT(CONCAT(E'\\', name), -3) as "assetName",
     CAST(NULL AS TEXT) AS "description",
     CAST(NULL AS CHAR(44)) as "fingerprint",
@@ -12,6 +11,7 @@ CREATE TABLE IF NOT EXISTS "Asset"
     CAST(NULL AS CHAR(40)) AS "metadataHash",
     CAST(NULL AS TEXT) AS "name",
     policy as "policyId",
+    CAST(NULL AS TEXT) AS "ticker",
     CAST(NULL AS TEXT) AS "url"
   FROM ma_tx_out;
 
