@@ -63,7 +63,7 @@ export class CardanoNodeClient {
     })
   }
 
-  public async isInCurrentEra () {
+  private async isInCurrentEra () {
     const { protocolVersion } = await this.getProtocolParams()
     this.logger.debug('Comparing current protocol params with last known major version from cardano-node config', {
       module: 'CardanoNodeClient',
