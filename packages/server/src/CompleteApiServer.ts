@@ -28,10 +28,12 @@ export async function CompleteApiServer (
       ...config.genesis.shelleyPath !== undefined ? { shelley: require(config.genesis.shelleyPath) } : {}
     }
   }
+  const lastConfiguredMajorVersion = require(config.cardanoNodeConfigPath)['LastKnownBlockVersion-Major']
+
   if (config.cardanoCliPath !== undefined) {
     cardanoNodeClient = new CardanoNodeClient(
       createCardanoCli(config.cardanoCliPath, genesis.shelley, config.jqPath),
-      genesis.shelley.protocolParams.protocolVersion.major,
+      lastConfiguredMajorVersion,
       logger
     )
   }
@@ -39,6 +41,7 @@ export async function CompleteApiServer (
     config.hasuraCliPath,
     config.hasuraUri,
     config.pollingInterval.adaSupply,
+    lastConfiguredMajorVersion,
     logger
   )
   const db = new Db(config.db, logger)

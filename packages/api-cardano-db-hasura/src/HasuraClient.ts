@@ -10,8 +10,10 @@ import path from 'path'
 import {
   Asset,
   AssetBalance,
-  AssetSupply, Int_Comparison_Exp as IntComparisonExp,
+  AssetSupply,
+  Int_Comparison_Exp as IntComparisonExp,
   PaymentAddressSummary,
+  ShelleyProtocolParams,
   Token,
   TransactionOutput
 } from './graphql_types'
@@ -23,12 +25,14 @@ export class HasuraClient {
   private client: ApolloClient<NormalizedCacheObject>
   private applyingSchemaAndMetadata: boolean
   public adaCirculatingSupplyFetcher: DataFetcher<AssetSupply['circulating']>
+  public currentProtocolVersionFetcher: DataFetcher<ShelleyProtocolParams['protocolVersion']>
   public schema: GraphQLSchema
 
   constructor (
     readonly hasuraCliPath: string,
     readonly hasuraUri: string,
     pollingInterval: number,
+    readonly lastConfiguredMajorVersion: number,
     private logger: Logger = dummyLogger
   ) {
     this.applyingSchemaAndMetadata = false
@@ -45,6 +49,16 @@ export class HasuraClient {
         }
       },
       pollingInterval,
+      this.logger
+    )
+    this.currentProtocolVersionFetcher = new DataFetcher<ShelleyProtocolParams['protocolVersion']>(
+      'ProtocolParams',
+      async () => {
+        const getCurrentProtocolVersion = await this.getCurrentProtocolVersion()
+        this.logger.debug(getCurrentProtocolVersion)
+        return getCurrentProtocolVersion
+      },
+      1000 * 60,
       this.logger
     )
     this.client = new ApolloClient({
@@ -133,11 +147,13 @@ export class HasuraClient {
       )
     })
     this.logger.info('Hasura initialized', { module: 'HasuraClient' })
+    await this.currentProtocolVersionFetcher.initialize()
     await this.adaCirculatingSupplyFetcher.initialize()
   }
 
   public async shutdown () {
     await this.adaCirculatingSupplyFetcher.shutdown()
+    await this.currentProtocolVersionFetcher.shutdown()
   }
 
   public async applySchemaAndMetadata (): Promise<void> {
@@ -201,6 +217,19 @@ export class HasuraClient {
       }
     }
     return schema
+  }
+
+  public async getCurrentProtocolVersion (): Promise<ShelleyProtocolParams['protocolVersion']> {
+    const result = await this.client.query({
+      query: gql`query {
+          epochs (limit: 1, order_by: { number: desc }) {
+              protocolParams {
+                  protocolVersion
+              }
+          }
+      }`
+    })
+    return result.data?.epochs[0].protocolParams.protocolVersion
   }
 
   public async getPaymentAddressSummary (address: string, atBlock?: number): Promise<PaymentAddressSummary> {
@@ -399,6 +428,18 @@ export class HasuraClient {
       }
     })
     return result.data.assets
+  }
+
+  public async isInCurrentEra () {
+    const protocolVersion = this.currentProtocolVersionFetcher.value
+    this.logger.debug('Comparing current protocol params with last known major version from cardano-node config', {
+      module: 'CardanoNodeClient',
+      value: {
+        currentProtocolVersion: protocolVersion,
+        lastConfiguredMajorVersion: protocolVersion.major
+      }
+    })
+    return protocolVersion.major >= this.lastConfiguredMajorVersion
   }
 
   public addAssetFingerprint (assetId: Asset['assetId'], fingerprint: Asset['fingerprint']) {

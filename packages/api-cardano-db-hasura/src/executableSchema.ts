@@ -39,8 +39,8 @@ export async function buildSchema (
   cardanoNodeClient: CardanoNodeClient
 ) {
   const throwIfNotInCurrentEra = async (queryName: string) => {
-    if (!(await cardanoNodeClient.isInCurrentEra())) {
-      return new ApolloError(`${queryName} results are only available when close to the network tip. This is expected during the initial chain-sync.`)
+    if (!(await hasuraClient.isInCurrentEra())) {
+      throw new ApolloError(`${queryName} results are only available when close to the network tip. This is expected during the initial chain-sync.`)
     }
   }
   return makeExecutableSchema({
