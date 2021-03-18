@@ -58,7 +58,11 @@ in {
         default = 3100;
       };
 
-      # Used if you tx submission is allowed
+      cardanoNodeConfigPath = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+      };
+      
       cardanoNodeSocketPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -152,6 +156,7 @@ in {
       requires = [ "graphql-engine.service" ];
       environment = lib.filterAttrs (k: v: v != null) {
         CARDANO_CLI_PATH = cfg.cardanoCliPackage + "/bin/cardano-cli";
+        CARDANO_NODE_CONFIG_PATH = cfg.cardanoNodeConfigPath;
         CARDANO_NODE_SOCKET_PATH = cfg.cardanoNodeSocketPath;
         GENESIS_FILE_BYRON = cfg.genesisByron;
         GENESIS_FILE_SHELLEY = cfg.genesisShelley;

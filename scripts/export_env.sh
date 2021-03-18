@@ -35,6 +35,7 @@ esac
 export ALLOW_INTROSPECTION=true
 export API_PORT
 export CARDANO_CLI_PATH=${BIN_DIR}/cardano-cli
+export CARDANO_NODE_CONFIG_PATH=${CONFIG_DIR}/cardano-node/config.json
 export CARDANO_NODE_SOCKET_PATH=${STATE_DIR}/node-ipc/node.socket
 export GENESIS_FILE_BYRON=${CONFIG_DIR}/genesis/byron.json
 export GENESIS_FILE_SHELLEY=${CONFIG_DIR}/genesis/shelley.json
