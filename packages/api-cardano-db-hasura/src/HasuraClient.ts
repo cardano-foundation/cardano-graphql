@@ -398,15 +398,43 @@ export class HasuraClient {
     return result.data.assets
   }
 
-  public async getAssetsWithoutFingerprint (): Promise<Pick<Asset, 'assetId' | 'assetName' | 'policyId'>[]> {
+  public async hasAssetsWithoutFingerprint (): Promise<boolean> {
     const result = await this.client.query({
       query: gql`query {
-          assets (where: { fingerprint: { _is_null: true }}) {
+          assets_aggregate (
+              where: { fingerprint: { _is_null: true }}
+          ) {
+              aggregate {
+                  count  
+              }
+          }
+      }`
+    })
+    this.logger.debug(
+      'Assets without a fingerprint stored',
+      { module: 'HasuraClient', value: result.data.assets_aggregate.aggregate.count }
+    )
+    return new BigNumber(result.data.assets_aggregate.aggregate.count).isGreaterThan(0)
+  }
+
+  public async getAssetsWithoutFingerprint (limit?: number): Promise<Pick<Asset, 'assetId' | 'assetName' | 'policyId'>[]> {
+    const result = await this.client.query({
+      query: gql`query AssetsWithoutFingerprint (
+        $limit: Int
+      ) {
+          assets (
+              limit: $limit,
+              order_by: { assetId: asc }
+              where: { fingerprint: { _is_null: true }}
+          ) {
               assetId
               assetName
               policyId
           }
-      }`
+      }`,
+      variables: {
+        limit
+      }
     })
     return result.data.assets.map((asset: Asset) => ({
       ...asset,
@@ -450,7 +478,7 @@ export class HasuraClient {
   }
 
   public addAssetFingerprint (assetId: Asset['assetId'], fingerprint: Asset['fingerprint']) {
-    this.logger.debug('adding fingerprint to asset', { module: 'HasuraClient', value: { assetId, fingerprint } })
+    this.logger.trace('adding fingerprint to asset', { module: 'HasuraClient', value: { assetId, fingerprint } })
     return this.client.mutate({
       mutation: gql`mutation AddAssetFingerprint(
           $assetId: String!

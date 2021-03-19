@@ -173,12 +173,14 @@ export class DataSyncController {
   }
 
   private async ensureAssetFingerprints (): Promise<void> {
-    const assets = await this.hasuraClient.getAssetsWithoutFingerprint()
-    this.logger.debug('Assets without fingerprint', { module: 'DataSyncController', value: assets.length })
-    for (const asset of assets) {
-      const fingerprint = assetFingerprint(asset)
-      this.logger.debug('Asset', { module: 'DataSyncController', value: { assetId: asset.assetId, fingerprint } })
-      await this.hasuraClient.addAssetFingerprint(asset.assetId, fingerprint)
+    const runBatch = async (assets: Pick<Asset, 'assetId' | 'assetName' | 'policyId'>[]) => {
+      for (const asset of assets) {
+        const fingerprint = assetFingerprint(asset)
+        await this.hasuraClient.addAssetFingerprint(asset.assetId, fingerprint)
+      }
+    }
+    while (await this.hasuraClient.hasAssetsWithoutFingerprint()) {
+      await runBatch(await this.hasuraClient.getAssetsWithoutFingerprint(2500))
     }
   }
 
