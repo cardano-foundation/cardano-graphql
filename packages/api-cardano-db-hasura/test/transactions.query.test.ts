@@ -134,7 +134,6 @@ describe('transactions', () => {
     })
   })
 
-
   describe('transactions with tokens', () => {
     it('shows the tokens minted and output', async () => {
       const result = await client.query({

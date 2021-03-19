@@ -74,11 +74,31 @@ export class DataSyncController {
         initial: new DataFetcher<number>(
           'MetadataSynchronizer',
           async () => {
-            const assets = await this.hasuraClient.getAssetsWithoutMetadata({ _lte: 5 })
-            if (assets.length > 0) {
-              await this.fetchAndApplyMetadata(assets, 'Assets missing metadata')
+            const batchSize = 2500
+            const assetsWithoutMetadataCount = await this.hasuraClient.assetsWithoutMetadataCount({ _lte: 2 })
+            this.logger.debug(
+              'new assets without metadata count',
+              { module: 'DataSyncController', value: assetsWithoutMetadataCount }
+            )
+            const batchQty = Math.ceil(assetsWithoutMetadataCount / batchSize)
+            let totalCount = 0
+            for (const i of Array(batchQty).keys()) {
+              const assetsInBatch = await this.hasuraClient.getAssetsWithoutMetadata(
+                { _lte: 3 }, { limit: batchSize, offset: batchSize * i }
+              )
+              this.logger.debug(
+                'assets without metadata in batch',
+                {
+                  module: 'DataSyncController',
+                  value: { batch: i, qty: assetsInBatch.length }
+                }
+              )
+              if (assetsInBatch.length > 0) {
+                await this.fetchAndApplyMetadata(assetsInBatch, 'Assets missing metadata')
+              }
+              totalCount = totalCount + assetsInBatch.length
             }
-            return assets.length
+            return totalCount
           },
           pollingInterval.initial,
           this.logger
@@ -86,11 +106,32 @@ export class DataSyncController {
         ongoing: new DataFetcher<number>(
           'MetadataSynchronizerRefresh',
           async () => {
-            const assets = await this.hasuraClient.getAssetsIncMetadata({ _gt: 5 })
-            if (assets.length > 0) {
-              await this.fetchAndApplyMetadata(assets, 'All assets')
+            const batchSize = 2500
+            const assetsEligibleForMetadataRefreshCount =
+              await this.hasuraClient.assetsEligibleForMetadataRefreshCount({ _gt: 2 })
+            this.logger.debug(
+              'assets eligible for metadata refresh count',
+              { module: 'DataSyncController', value: assetsEligibleForMetadataRefreshCount }
+            )
+            const batchQty = Math.ceil(assetsEligibleForMetadataRefreshCount / batchSize)
+            let totalCount = 0
+            for (const i of Array(batchQty).keys()) {
+              const assetsInBatch = await this.hasuraClient.getAssetsIncMetadata(
+                { _gt: 2 }, { limit: batchSize, offset: batchSize * i }
+              )
+              this.logger.debug(
+                'assets without metadata in batch',
+                {
+                  module: 'DataSyncController',
+                  value: { batch: i, qty: assetsInBatch.length }
+                }
+              )
+              if (assetsInBatch.length > 0) {
+                await this.fetchAndApplyMetadata(assetsInBatch, 'All assets')
+              }
+              totalCount = totalCount + assetsInBatch.length
             }
-            return assets.length
+            return totalCount
           },
           pollingInterval.ongoing,
           this.logger
@@ -100,26 +141,48 @@ export class DataSyncController {
     this.assetSynchronizer = new DataFetcher<number>(
       'AssetTableSynchronizer',
       async () => {
-        const distinctAssetsInTokens = await this.hasuraClient.getDistinctAssetsInTokens()
-        this.logger.debug('distinct asset IDs from tokens', { module: 'DataSyncController', value: distinctAssetsInTokens.length })
-        const assetIds = await this.hasuraClient.getAssetIds()
-        this.logger.debug('fetched asset IDs', { module: 'DataSyncController', value: assetIds.length })
-        const diff = distinctAssetsInTokens
-          .filter(asset => !assetIds.includes(asset.assetId))
-          .map(asset => ({
-            assetId: asset.assetId,
-            assetName: asset.assetName,
-            fingerprint: assetFingerprint(asset),
-            policyId: asset.policyId,
-            metadataFetchAttempts: 0
-          })
+        const batchSize = 500
+        const distinctAssetsInTokensCount = await this.hasuraClient.distinctAssetsInTokensCount()
+        this.logger.debug(
+          'distinct assets in tokens count',
+          { module: 'DataSyncController', value: distinctAssetsInTokensCount }
+        )
+        const batchQty = Math.ceil(distinctAssetsInTokensCount / batchSize)
+        let totalCount = 0
+        for (const i of Array(batchQty).keys()) {
+          const assetsInBatch = await this.hasuraClient.getDistinctAssetsInTokens(
+            { limit: batchSize, offset: batchSize * i }
           )
-        this.logger.debug('asset IDs diff', { module: 'DataSyncController', value: diff.length })
-        if (diff.length > 0) {
-          await this.hasuraClient.insertAssets(diff)
-          this.logger.debug('synchronised assets table from tokens', { module: 'DataSyncController', value: diff.length })
+          const assetsAlreadyInDb =
+            await this.hasuraClient.getAssetsById(assetsInBatch.map(asset => asset.assetId))
+          this.logger.debug(
+            'asset IDs from tokens',
+            {
+              module: 'DataSyncController',
+              value: { batch: i, qty: assetsInBatch.length, existing: assetsAlreadyInDb.length }
+            }
+          )
+          const newAssets = assetsInBatch
+            .filter(asset => assetsAlreadyInDb.find(existingAsset =>
+              existingAsset.assetId === asset.assetId) === undefined)
+            .map(asset => ({
+              assetId: asset.assetId,
+              assetName: asset.assetName,
+              fingerprint: assetFingerprint(asset),
+              policyId: asset.policyId,
+              metadataFetchAttempts: 0
+            }))
+          this.logger.debug('asset IDs diff', { module: 'DataSyncController', value: newAssets.length })
+          if (newAssets.length > 0) {
+            totalCount = totalCount + newAssets.length
+            await this.hasuraClient.insertAssets(newAssets)
+            this.logger.debug(
+              'synchronised assets table from tokens',
+              { module: 'DataSyncController', value: { batch: i, qty: newAssets.length } }
+            )
+          }
         }
-        return diff.length
+        return totalCount
       },
       60 * 1000,
       this.logger
@@ -138,7 +201,10 @@ export class DataSyncController {
           asset: assets.find(asset => asset.assetId === metadata.subject)
         }))
         .filter(({ asset, metadataHash }) => metadataHash !== asset.metadataHash)
-      this.logger.debug('Metadata with updates to apply', { module: 'DataSyncController', value: metadataWithAssetAndHash.length })
+      this.logger.debug(
+        'Metadata with updates to apply',
+        { module: 'DataSyncController', value: metadataWithAssetAndHash.length }
+      )
       if (metadataWithAssetAndHash.length > 0) {
         for (const { metadata, metadataHash } of metadataWithAssetAndHash) {
           await this.hasuraClient.addMetadata(metadata, metadataHash)

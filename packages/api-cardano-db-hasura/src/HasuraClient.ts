@@ -134,7 +134,7 @@ export class HasuraClient {
   }
 
   public async initialize () {
-    this.logger.info('Initializing Hasura', { module: 'HasuraClient' })
+    this.logger.info('Initializing', { module: 'HasuraClient' })
     await this.applySchemaAndMetadata()
     await pRetry(async () => {
       this.schema = await this.buildHasuraSchema()
@@ -146,7 +146,7 @@ export class HasuraClient {
         this.logger
       )
     })
-    this.logger.info('Hasura initialized', { module: 'HasuraClient' })
+    this.logger.info('Initialized', { module: 'HasuraClient' })
     await this.currentProtocolVersionFetcher.initialize()
     await this.adaCirculatingSupplyFetcher.initialize()
   }
@@ -350,36 +350,80 @@ export class HasuraClient {
     }
   }
 
-  public async getDistinctAssetsInTokens (): Promise<Asset[]> {
+  public async getDistinctAssetsInTokens (options?: { limit: number, offset: number }): Promise<Asset[]> {
     const result = await this.client.query({
-      query: gql`query {
-          tokens (distinct_on: assetId) {
+      query: gql`query DistinctAssetsInTokens (
+          $limit: Int
+          $offset: Int
+      ) {
+          tokens (
+              distinct_on: assetId
+              limit: $limit
+              order_by: { assetId: asc }
+              offset: $offset
+          ) {
               assetId
               assetName
               policyId
           }
-      }`
+      }`,
+      variables: {
+        limit: options?.limit,
+        offset: options?.offset
+      }
     })
     return result.data.tokens as Asset[]
   }
 
-  public async getAssetIds (): Promise<Asset['assetId'][]> {
+  public async distinctAssetsInTokensCount (): Promise<number> {
     const result = await this.client.query({
       query: gql`query {
-          assets {
-              assetId
+          tokens_aggregate (distinct_on: assetId) {
+              aggregate {
+                  count
+              }
           }
       }`
     })
-    return result.data.assets.map((asset: Asset) => asset.assetId)
+    return result.data.tokens_aggregate.aggregate.count
   }
 
-  public async getAssetsIncMetadata (metadataFetchAttempts?: IntComparisonExp): Promise<Asset[]> {
+  public async assetsEligibleForMetadataRefreshCount (metadataFetchAttempts: IntComparisonExp): Promise<number> {
+    try {
+      const result = await this.client.query({
+        query: gql`query AssetsEligibleForMetadataRefreshCount (
+            $metadataFetchAttempts: Int_comparison_exp!
+        ) {
+            assets_aggregate (
+                where: {
+                    metadataFetchAttempts: $metadataFetchAttempts
+                }) {
+                aggregate {
+                    count
+                }
+            }
+        }`,
+        variables: {
+          metadataFetchAttempts
+        }
+      })
+      return result.data.assets_aggregate.aggregate.count
+    } catch (error) {
+      this.logger.error(error)
+      throw error
+    }
+  }
+
+  public async getAssetsIncMetadata (metadataFetchAttempts: IntComparisonExp, options: { limit: number, offset: number }): Promise<Asset[]> {
     const result = await this.client.query({
       query: gql`query AssetsIncMetadata (
           $metadataFetchAttempts: Int_comparison_exp
+          $limit: Int
+          $offset: Int
       ){
           assets (
+              limit: $limit
+              offset: $offset
               where: {
                   metadataFetchAttempts: $metadataFetchAttempts
               }
@@ -392,7 +436,9 @@ export class HasuraClient {
           }
       }`,
       variables: {
-        metadataFetchAttempts
+        metadataFetchAttempts,
+        limit: options.limit,
+        offset: options.offset
       }
     })
     return result.data.assets
@@ -415,6 +461,25 @@ export class HasuraClient {
       { module: 'HasuraClient', value: result.data.assets_aggregate.aggregate.count }
     )
     return new BigNumber(result.data.assets_aggregate.aggregate.count).isGreaterThan(0)
+  }
+
+  public async getAssetsById (assetIds: Asset['assetId'][]): Promise<Asset[]> {
+    const result = await this.client.query({
+      query: gql`query IdsOfAssetsWithoutMetadata (
+          $assetIds: [String!]!
+      ){
+          assets (
+              where: {
+                  assetId: { _in: $assetIds }
+              }) {
+              assetId
+          }
+      }`,
+      variables: {
+        assetIds
+      }
+    })
+    return result.data.assets
   }
 
   public async getAssetsWithoutFingerprint (limit?: number): Promise<Pick<Asset, 'assetId' | 'assetName' | 'policyId'>[]> {
@@ -442,12 +507,49 @@ export class HasuraClient {
     }))
   }
 
-  public async getAssetsWithoutMetadata (metadataFetchAttempts: IntComparisonExp): Promise<Asset[]> {
+  public async assetsWithoutMetadataCount (metadataFetchAttempts: IntComparisonExp): Promise<number> {
+    try {
+      const result = await this.client.query({
+        query: gql`query AssetsWithoutMetadataCount (
+            $metadataFetchAttempts: Int_comparison_exp!
+        ) {
+            assets_aggregate (
+                where: {
+                    _and: [
+                        { metadataFetchAttempts: $metadataFetchAttempts },
+                        { metadataHash: { _is_null: true }}
+                    ]
+                }) {
+                aggregate {
+                    count
+                }
+            }
+        }`,
+        variables: {
+          metadataFetchAttempts
+        }
+      })
+      return result.data.assets_aggregate.aggregate.count
+    } catch (error) {
+      this.logger.error(error)
+      throw error
+    }
+  }
+
+  public async getAssetsWithoutMetadata (
+    metadataFetchAttempts: IntComparisonExp,
+    options?: { limit: number, offset: number }
+  ): Promise<Asset[]> {
     const result = await this.client.query({
       query: gql`query IdsOfAssetsWithoutMetadata (
+          $limit: Int
           $metadataFetchAttempts: Int_comparison_exp!
+          $offset: Int
       ){
           assets (
+              limit: $limit
+              order_by: { assetId: asc }
+              offset: $offset
               where: { 
                   _and: [
                       { metadataFetchAttempts: $metadataFetchAttempts },
@@ -459,7 +561,9 @@ export class HasuraClient {
           }
       }`,
       variables: {
-        metadataFetchAttempts
+        metadataFetchAttempts,
+        limit: options?.limit,
+        offset: options?.offset
       }
     })
     return result.data.assets
@@ -549,7 +653,6 @@ export class HasuraClient {
   }
 
   public incrementMetadataFetchAttempts (assetId: Asset['assetId']) {
-    this.logger.debug('incrementing asset metadata fetch attempt', { module: 'HasuraClient', value: assetId })
     return this.client.mutate({
       mutation: gql`mutation IncrementAssetMetadataFetchAttempt(
           $assetId: String!
