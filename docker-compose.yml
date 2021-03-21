@@ -119,6 +119,7 @@ services:
         max-file: "10"
     volumes:
       - node-ipc:/node-ipc
+      - ./config/network/${NETWORK:-mainnet}:/config
 secrets:
   postgres_db:
     file: ./config/secrets/postgres_db
