@@ -19,7 +19,6 @@ import {
 } from './graphql_types'
 import { dummyLogger, Logger } from 'ts-log'
 import BigNumber from 'bignumber.js'
-import { AssetMetadata } from './DataSyncController'
 
 export class HasuraClient {
   private client: ApolloClient<NormalizedCacheObject>
@@ -581,19 +580,15 @@ export class HasuraClient {
     return protocolVersion.major >= this.lastConfiguredMajorVersion
   }
 
-  public addAssetFingerprint (assetId: Asset['assetId'], fingerprint: Asset['fingerprint']) {
-    this.logger.trace('adding fingerprint to asset', { module: 'HasuraClient', value: { assetId, fingerprint } })
+  public addAssetFingerprints (assets: Pick<Asset, 'assetId' | 'fingerprint'>[]) {
+    this.logger.debug('Adding fingerprint to assets', { module: 'HasuraClient', value: assets.length })
     return this.client.mutate({
-      mutation: gql`mutation AddAssetFingerprint(
-          $assetId: String!
-          $fingerprint: bpchar!
-      ) {
-          update_assets(
-              where: {
-                  assetId: { _eq: $assetId }
-              },
-              _set: {
-                  fingerprint: $fingerprint,
+      mutation: gql`mutation AddAssetFingerprint($assets: [Asset_insert_input!]!) {
+          insert_assets(
+              objects: $assets,
+              on_conflict: {
+                  constraint: Asset_pkey,
+                  update_columns: [fingerprint]
               }
           ) {
               returning {
@@ -602,64 +597,52 @@ export class HasuraClient {
           }
       }`,
       variables: {
-        assetId,
-        fingerprint
+        assets
       }
     })
   }
 
-  public addMetadata (metadata: AssetMetadata, metadataHash: string) {
-    this.logger.debug('adding metadata to asset', { module: 'HasuraClient', value: { assetId: metadata.subject, metadataHash } })
+  public addMetadata (assets: (Pick<Asset, 'assetId' | 'description' | 'logo' | 'name' | 'ticker' | 'url'> & { metadataHash: string })[]) {
+    this.logger.info('Adding metadata to assets', { module: 'HasuraClient', value: assets.length })
     return this.client.mutate({
-      mutation: gql`mutation AddAssetMetadata(
-          $ticker: String
-          $assetId: String!
-          $description: String
-          $logo: String
-          $metadataHash: bpchar!
-          $name: String
-          $url: String
-      ) {
-          update_assets(
-              where: {
-                  assetId: { _eq: $assetId }
-              },
-              _set: {
-                  ticker: $ticker,
-                  description: $description,
-                  logo: $logo,
-                  metadataHash: $metadataHash,
-                  name: $name,
-                  url: $url
+      mutation: gql`mutation AddAssetMetadata($assets: [Asset_insert_input!]!) {
+          insert_assets(
+              objects: $assets,
+              on_conflict: {
+                  constraint: Asset_pkey,
+                  update_columns: [
+                      description,
+                      logo,
+                      metadataHash,
+                      name,
+                      ticker,
+                      url
+                  ]
               }
           ) {
               returning {
                   assetId
-                  description
-                  name
               }
           }
       }`,
       variables: {
-        ticker: metadata.ticker?.value,
-        assetId: metadata.subject,
-        description: metadata.description?.value,
-        logo: metadata.logo?.value,
-        metadataHash,
-        name: metadata.name?.value,
-        url: metadata.url?.value
+        assets
       }
     })
   }
 
-  public incrementMetadataFetchAttempts (assetId: Asset['assetId']) {
+  public incrementMetadataFetchAttempts (assetIds: Asset['assetId'][]) {
+    this.logger.info(
+      'Incrementing metadata fetch attempt',
+      { module: 'HasuraClient', value: assetIds.length }
+    )
     return this.client.mutate({
       mutation: gql`mutation IncrementAssetMetadataFetchAttempt(
-          $assetId: String!
+          $assetIds: [String!]!
       ) {
           update_assets(
               where: {
-                  assetId: { _eq: $assetId }
+                  assetId: { _in: $assetIds }
               },
               _inc: {
                   metadataFetchAttempts: 1
@@ -672,7 +655,7 @@ export class HasuraClient {
           }
       }`,
       variables: {
-        assetId
+        assetIds
       }
     })
   }
