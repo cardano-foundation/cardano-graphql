@@ -20,15 +20,15 @@ export const assetFingerprint = (asset: Pick<Asset, 'assetName' | 'policyId'>) =
     .fingerprint()
 
 export interface AssetMetadata {
-  description: {
+  description?: {
     value: string
     anSignatures: Signature[]
   }
-  logo: {
+  logo?: {
     value: string
     anSignatures: Signature[]
   }
-  name: {
+  name?: {
     value: string
     anSignatures: Signature[]
   }
@@ -38,11 +38,11 @@ export interface AssetMetadata {
     hashFn: string
   }
   subject: string
-  ticker: {
+  ticker?: {
     value: string
     anSignatures: Signature[]
   }
-  url: {
+  url?: {
     value: string
     anSignatures: Signature[]
   }
@@ -77,7 +77,7 @@ export class DataSyncController {
             const batchSize = 2500
             const assetsWithoutMetadataCount = await this.hasuraClient.assetsWithoutMetadataCount({ _lte: 2 })
             this.logger.debug(
-              'new assets without metadata count',
+              'Newly discovered assets missing metadata',
               { module: 'DataSyncController', value: assetsWithoutMetadataCount }
             )
             const batchQty = Math.ceil(assetsWithoutMetadataCount / batchSize)
@@ -86,15 +86,8 @@ export class DataSyncController {
               const assetsInBatch = await this.hasuraClient.getAssetsWithoutMetadata(
                 { _lte: 3 }, { limit: batchSize, offset: batchSize * i }
               )
-              this.logger.debug(
-                'assets without metadata in batch',
-                {
-                  module: 'DataSyncController',
-                  value: { batch: i, qty: assetsInBatch.length }
-                }
-              )
               if (assetsInBatch.length > 0) {
-                await this.fetchAndApplyMetadata(assetsInBatch, 'Assets missing metadata')
+                await this.fetchAndApplyMetadata(assetsInBatch)
               }
               totalCount = totalCount + assetsInBatch.length
             }
@@ -110,7 +103,7 @@ export class DataSyncController {
             const assetsEligibleForMetadataRefreshCount =
               await this.hasuraClient.assetsEligibleForMetadataRefreshCount({ _gt: 2 })
             this.logger.debug(
-              'assets eligible for metadata refresh count',
+              'Assets eligible for metadata refresh',
               { module: 'DataSyncController', value: assetsEligibleForMetadataRefreshCount }
             )
             const batchQty = Math.ceil(assetsEligibleForMetadataRefreshCount / batchSize)
@@ -119,15 +112,8 @@ export class DataSyncController {
               const assetsInBatch = await this.hasuraClient.getAssetsIncMetadata(
                 { _gt: 2 }, { limit: batchSize, offset: batchSize * i }
               )
-              this.logger.debug(
-                'assets without metadata in batch',
-                {
-                  module: 'DataSyncController',
-                  value: { batch: i, qty: assetsInBatch.length }
-                }
-              )
               if (assetsInBatch.length > 0) {
-                await this.fetchAndApplyMetadata(assetsInBatch, 'All assets')
+                await this.fetchAndApplyMetadata(assetsInBatch)
               }
               totalCount = totalCount + assetsInBatch.length
             }
@@ -189,36 +175,42 @@ export class DataSyncController {
     )
   }
 
-  private async fetchAndApplyMetadata (assets: Asset[], assetsDescriptor: string) {
-    this.logger.debug(assetsDescriptor, { module: 'DataSyncController', value: assets.length })
+  private async fetchAndApplyMetadata (assets: Asset[]) {
     const assetBatches = chunkArray<Asset>(assets, 250)
     for (const batch of assetBatches) {
       const newMetadata = await this.getAssetMetadata(batch)
-      const metadataWithAssetAndHash = newMetadata
+      const assetsWithMetadata = newMetadata
         .map(metadata => ({
           metadata,
           metadataHash: hash(metadata),
           asset: assets.find(asset => asset.assetId === metadata.subject)
         }))
         .filter(({ asset, metadataHash }) => metadataHash !== asset.metadataHash)
+        .map(obj => ({
+          ...obj.asset,
+          ...{
+            description: obj.metadata.description?.value,
+            logo: obj.metadata.logo?.value,
+            name: obj.metadata.name?.value,
+            ticker: obj.metadata.ticker?.value,
+            url: obj.metadata.url?.value
+          },
+          ...{ metadataHash: hash(obj.metadata) }
+        }))
       this.logger.debug(
         'Metadata with updates to apply',
-        { module: 'DataSyncController', value: metadataWithAssetAndHash.length }
+        { module: 'DataSyncController', value: assetsWithMetadata.length }
       )
-      if (metadataWithAssetAndHash.length > 0) {
-        for (const { metadata, metadataHash } of metadataWithAssetAndHash) {
-          await this.hasuraClient.addMetadata(metadata, metadataHash)
-        }
+      if (assetsWithMetadata.length > 0) {
+        await this.hasuraClient.addMetadata(assetsWithMetadata)
       }
-      for (const asset of batch) {
-        await this.hasuraClient.incrementMetadataFetchAttempts(asset.assetId)
-      }
+      await this.hasuraClient.incrementMetadataFetchAttempts(batch.map(asset => asset.assetId))
     }
   }
 
   private async getAssetMetadata (assets: Asset[]): Promise<AssetMetadata[]> {
     try {
-      const response = await this.axiosClient.post('query', {
+      const response = await this.axiosClient.post('metadata/query', {
         subjects: assets.map(asset => asset.assetId),
         properties: [
           'description',
@@ -240,10 +232,9 @@ export class DataSyncController {
 
   private async ensureAssetFingerprints (): Promise<void> {
     const runBatch = async (assets: Pick<Asset, 'assetId' | 'assetName' | 'policyId'>[]) => {
-      for (const asset of assets) {
-        const fingerprint = assetFingerprint(asset)
-        await this.hasuraClient.addAssetFingerprint(asset.assetId, fingerprint)
-      }
+      await this.hasuraClient.addAssetFingerprints(
+        assets.map((asset) => ({ assetId: asset.assetId, fingerprint: assetFingerprint(asset) }))
+      )
     }
     while (await this.hasuraClient.hasAssetsWithoutFingerprint()) {
       await runBatch(await this.hasuraClient.getAssetsWithoutFingerprint(2500))
@@ -252,7 +243,7 @@ export class DataSyncController {
 
   private async ensureMetadataServerIsAvailable (): Promise<void> {
     try {
-      await this.axiosClient.get('healthcheck')
+      await this.axiosClient.get('/metadata/healthcheck')
     } catch (error) {
       if (error.code === 'ENOTFOUND') {
         throw new HostDoesNotExist('metadata server')
