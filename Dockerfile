@@ -159,6 +159,7 @@ COPY --from=cardano-graphql-builder /app/packages/util/package.json /app/package
 COPY --from=cardano-graphql-production-deps /app/node_modules /app/node_modules
 COPY --from=cardano-graphql-production-deps /app/packages/api-cardano-db-hasura/node_modules /app/packages/api-cardano-db-hasura/node_modules
 COPY config/network/${NETWORK}/genesis /config/genesis/
+COPY config/network/${NETWORK}/cardano-node /config/cardano-node/
 RUN mkdir /node-ipc
 WORKDIR /app/packages/server/dist
 EXPOSE 3100
