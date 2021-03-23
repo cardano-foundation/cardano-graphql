@@ -1,14 +1,34 @@
 query assets (
+    $limit: Int
+    $offset: Int
     $where: Asset_bool_exp
 ) {
-    assets (where: $where) {
-        ticker
+    assets (
+        limit: $limit
+        offset: $offset
+        where: $where
+    ) {
         assetId
         assetName
         description
         fingerprint
         logo
         name
+        ticker
+        tokenMints {
+            quantity
+            transaction {
+                hash
+            }
+        }
+        tokenMints_aggregate {
+            aggregate {
+                count
+                sum {
+                    quantity
+                }
+            }
+        }
         url
         policyId
     }

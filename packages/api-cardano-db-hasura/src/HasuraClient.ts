@@ -19,6 +19,7 @@ import {
 } from './graphql_types'
 import { dummyLogger, Logger } from 'ts-log'
 import BigNumber from 'bignumber.js'
+import { AssetWithoutTokens } from './typeAliases'
 
 export class HasuraClient {
   private client: ApolloClient<NormalizedCacheObject>
@@ -256,6 +257,29 @@ export class HasuraClient {
                       metadataHash
                       name
                       ticker
+                      tokenMints {
+                          quantity
+                          transaction {
+                              hash
+                          }
+                      }
+                      tokenMints_aggregate {
+                          aggregate {
+                              avg {
+                                  quantity
+                              }
+                              count
+                              max {
+                                  quantity
+                              }
+                              min {
+                                  quantity
+                              }
+                              sum {
+                                  quantity
+                              }
+                          }
+                      }
                       url
                       policyId  
                   }
@@ -295,7 +319,26 @@ export class HasuraClient {
             assetId: 'ada',
             assetName: 'ada',
             name: 'ada',
-            policyId: ''
+            policyId: '',
+            tokenMints: [],
+            tokenMints_aggregate: {
+              aggregate: {
+                avg: {
+                  quantity: 'na'
+                },
+                count: 'na',
+                max: {
+                  quantity: 'na'
+                },
+                min: {
+                  quantity: 'na'
+                },
+                sum: {
+                  quantity: 'na'
+                }
+              },
+              nodes: []
+            }
           },
           quantity: utxo.value
         })
@@ -349,13 +392,13 @@ export class HasuraClient {
     }
   }
 
-  public async getDistinctAssetsInTokens (options?: { limit: number, offset: number }): Promise<Asset[]> {
+  public async getDistinctAssetsInTokens (options?: { limit: number, offset: number }): Promise<AssetWithoutTokens[]> {
     const result = await this.client.query({
       query: gql`query DistinctAssetsInTokens (
           $limit: Int
           $offset: Int
       ) {
-          tokens (
+          tokenMints (
               distinct_on: assetId
               limit: $limit
               order_by: { assetId: asc }
@@ -371,20 +414,20 @@ export class HasuraClient {
         offset: options?.offset
       }
     })
-    return result.data.tokens as Asset[]
+    return result.data.tokenMints as AssetWithoutTokens[]
   }
 
   public async distinctAssetsInTokensCount (): Promise<number> {
     const result = await this.client.query({
       query: gql`query {
-          tokens_aggregate (distinct_on: assetId) {
+          tokenMints_aggregate (distinct_on: assetId) {
               aggregate {
                   count
               }
           }
       }`
     })
-    return result.data.tokens_aggregate.aggregate.count
+    return result.data.tokenMints_aggregate.aggregate.count
   }
 
   public async assetsEligibleForMetadataRefreshCount (metadataFetchAttempts: IntComparisonExp): Promise<number> {
@@ -413,7 +456,7 @@ export class HasuraClient {
     }
   }
 
-  public async getAssetsIncMetadata (metadataFetchAttempts: IntComparisonExp, options: { limit: number, offset: number }): Promise<Asset[]> {
+  public async getAssetsIncMetadata (metadataFetchAttempts: IntComparisonExp, options: { limit: number, offset: number }): Promise<AssetWithoutTokens[]> {
     const result = await this.client.query({
       query: gql`query AssetsIncMetadata (
           $metadataFetchAttempts: Int_comparison_exp
@@ -462,7 +505,7 @@ export class HasuraClient {
     return new BigNumber(result.data.assets_aggregate.aggregate.count).isGreaterThan(0)
   }
 
-  public async getAssetsById (assetIds: Asset['assetId'][]): Promise<Asset[]> {
+  public async getAssetsById (assetIds: Asset['assetId'][]): Promise<AssetWithoutTokens[]> {
     const result = await this.client.query({
       query: gql`query IdsOfAssetsWithoutMetadata (
           $assetIds: [String!]!
@@ -481,7 +524,7 @@ export class HasuraClient {
     return result.data.assets
   }
 
-  public async getAssetsWithoutFingerprint (limit?: number): Promise<Pick<Asset, 'assetId' | 'assetName' | 'policyId'>[]> {
+  public async getAssetsWithoutFingerprint (limit?: number): Promise<Pick<AssetWithoutTokens, 'assetId' | 'assetName' | 'policyId'>[]> {
     const result = await this.client.query({
       query: gql`query AssetsWithoutFingerprint (
         $limit: Int
@@ -500,7 +543,7 @@ export class HasuraClient {
         limit
       }
     })
-    return result.data.assets.map((asset: Asset) => ({
+    return result.data.assets.map((asset: AssetWithoutTokens) => ({
       ...asset,
       policyId: util.scalars.Hash28Hex.serialize(asset.policyId)
     }))
@@ -538,7 +581,7 @@ export class HasuraClient {
   public async getAssetsWithoutMetadata (
     metadataFetchAttempts: IntComparisonExp,
     options?: { limit: number, offset: number }
-  ): Promise<Asset[]> {
+  ): Promise<AssetWithoutTokens[]> {
     const result = await this.client.query({
       query: gql`query IdsOfAssetsWithoutMetadata (
           $limit: Int
@@ -580,7 +623,7 @@ export class HasuraClient {
     return protocolVersion.major >= this.lastConfiguredMajorVersion
   }
 
-  public addAssetFingerprints (assets: Pick<Asset, 'assetId' | 'fingerprint'>[]) {
+  public addAssetFingerprints (assets: Pick<AssetWithoutTokens, 'assetId' | 'fingerprint'>[]) {
     this.logger.debug('Adding fingerprint to assets', { module: 'HasuraClient', value: assets.length })
     return this.client.mutate({
       mutation: gql`mutation AddAssetFingerprint($assets: [Asset_insert_input!]!) {
@@ -602,7 +645,7 @@ export class HasuraClient {
     })
   }
 
-  public addMetadata (assets: (Pick<Asset, 'assetId' | 'description' | 'logo' | 'name' | 'ticker' | 'url'> & { metadataHash: string })[]) {
+  public addMetadata (assets: (Pick<AssetWithoutTokens, 'assetId' | 'description' | 'logo' | 'name' | 'ticker' | 'url'> & { metadataHash: string })[]) {
     this.logger.info('Adding metadata to assets', { module: 'HasuraClient', value: assets.length })
     return this.client.mutate({
       mutation: gql`mutation AddAssetMetadata($assets: [Asset_insert_input!]!) {
@@ -631,7 +674,7 @@ export class HasuraClient {
     })
   }
 
-  public incrementMetadataFetchAttempts (assetIds: Asset['assetId'][]) {
+  public incrementMetadataFetchAttempts (assetIds: AssetWithoutTokens['assetId'][]) {
     this.logger.info(
       'Incrementing metadata fetch attempt',
       { module: 'HasuraClient', value: assetIds.length }
@@ -660,7 +703,7 @@ export class HasuraClient {
     })
   }
 
-  public async insertAssets (assets: Asset[]) {
+  public async insertAssets (assets: AssetWithoutTokens[]) {
     this.logger.debug('inserting assets', { module: 'HasuraClient', value: assets.length })
     const result = await this.client.mutate({
       mutation: gql`mutation InsertAssets($assets: [Asset_insert_input!]!) {

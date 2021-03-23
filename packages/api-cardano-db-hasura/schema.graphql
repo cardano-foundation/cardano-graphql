@@ -251,6 +251,18 @@ type Asset {
   fingerprint: AssetFingerprint
   logo: String
   metadataHash: String
+  tokenMints (
+    limit: Int
+    order_by: [TokenMint_order_by!]
+    offset: Int
+    where: TokenMint_bool_exp
+  ): [TokenMint]!
+  tokenMints_aggregate (
+    limit: Int
+    order_by: [TokenMint_order_by!]
+    offset: Int
+    where: TokenMint_bool_exp
+  ): TokenMint_aggregate!
   name: String
   policyId: Hash28Hex!
   ticker: String
@@ -815,6 +827,56 @@ type Token_sum_fields {
   quantity: String
 }
 
+type TokenMint {
+  asset: Asset!
+  quantity: String!
+  transaction: Transaction!
+}
+
+input TokenMint_order_by {
+  asset: Asset_order_by
+  quantity: order_by
+  transaction: Transaction_order_by
+}
+
+input TokenMint_bool_exp {
+  _and: [TokenMint_bool_exp]
+  _not: TokenMint_bool_exp
+  _or: [TokenMint_bool_exp]
+  asset: Asset_bool_exp
+  quantity: text_comparison_exp
+  transaction: Transaction_bool_exp
+}
+
+type TokenMint_aggregate {
+  aggregate: TokenMint_aggregate_fields
+  nodes: [TokenMint!]!
+}
+
+type TokenMint_aggregate_fields {
+  avg: TokenMint_avg_fields!
+  count: String!
+  max: TokenMint_max_fields!
+  min: TokenMint_min_fields!
+  sum: TokenMint_sum_fields!
+}
+
+type TokenMint_avg_fields {
+  quantity: String
+}
+
+type TokenMint_max_fields {
+  quantity: String
+}
+
+type TokenMint_min_fields {
+  quantity: String
+}
+
+type TokenMint_sum_fields {
+  quantity: String
+}
+
 type Transaction {
   block: Block
   blockIndex: Int!
@@ -836,7 +898,12 @@ type Transaction {
   invalidBefore: String
   invalidHereafter: String
   metadata: [TransactionMetadata]
-  mint: [Token!]!
+  mint(
+    limit: Int
+    order_by: [Token_order_by]
+    offset: Int
+    where: Token_bool_exp
+  ): [Token!]!
   mint_aggregate(
     limit: Int
     order_by: [Token_order_by]

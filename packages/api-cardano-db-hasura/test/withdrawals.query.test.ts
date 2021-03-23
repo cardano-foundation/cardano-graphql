@@ -4,13 +4,7 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { buildClient } from './util'
-import { Genesis } from '@src/graphql_types'
-
-const genesis = {
-  byron: require('../../../config/network/mainnet/genesis/byron.json'),
-  shelley: require('../../../config/network/mainnet/genesis/shelley.json')
-} as Genesis
+import { testClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'withdrawals'), name)
@@ -19,7 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('withdrawals', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await buildClient('http://localhost:3100', 'http://localhost:8090', 5442, genesis)
+    client = await testClient.mainnet()
   })
 
   it('can return details for withdrawals', async () => {

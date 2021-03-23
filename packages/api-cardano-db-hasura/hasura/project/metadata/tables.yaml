@@ -45,6 +45,15 @@
       select: assets
       update: update_assets
     custom_column_names: {}
+  array_relationships:
+  - name: tokenMints
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: TokenMint
+        column_mapping:
+          assetId: assetId
   insert_permissions:
   - role: cardano-graphql
     permission:
@@ -281,35 +290,6 @@
       - output
       - startedAt
       - transactionsCount
-      filter: {}
-      limit: 2500
-      allow_aggregations: true
-- table:
-    schema: public
-    name: Mint
-  object_relationships:
-  - name: asset
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: Asset
-        column_mapping:
-          assetId: assetId
-  - name: transaction
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: Transaction
-        column_mapping:
-          tx_id: id
-  select_permissions:
-  - role: cardano-graphql
-    permission:
-      columns:
-      - assetId
-      - quantity
       filter: {}
       limit: 2500
       allow_aggregations: true
@@ -571,12 +551,7 @@
       allow_aggregations: true
 - table:
     schema: public
-    name: Token
-  configuration:
-    custom_root_fields:
-      select_aggregate: tokens_aggregate
-      select: tokens
-    custom_column_names: {}
+    name: TokenInOutput
   object_relationships:
   - name: asset
     using:
@@ -594,6 +569,42 @@
           name: TransactionOutput
         column_mapping:
           tx_out_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - assetId
+      - assetName
+      - policyId
+      - quantity
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
+- table:
+    schema: public
+    name: TokenMint
+  configuration:
+    custom_root_fields:
+      select_aggregate: tokenMints_aggregate
+      select: tokenMints
+    custom_column_names: {}
+  object_relationships:
+  - name: asset
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Asset
+        column_mapping:
+          assetId: assetId
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
   select_permissions:
   - role: cardano-graphql
     permission:
@@ -644,7 +655,7 @@
       manual_configuration:
         remote_table:
           schema: public
-          name: Mint
+          name: TokenMint
         column_mapping:
           id: tx_id
   - name: outputs
@@ -706,7 +717,7 @@
       manual_configuration:
         remote_table:
           schema: public
-          name: Token
+          name: TokenInOutput
         column_mapping:
           source_tx_out_id: tx_out_id
   select_permissions:
@@ -739,7 +750,7 @@
       manual_configuration:
         remote_table:
           schema: public
-          name: Token
+          name: TokenInOutput
         column_mapping:
           id: tx_out_id
   select_permissions:
@@ -776,7 +787,7 @@
       manual_configuration:
         remote_table:
           schema: public
-          name: Token
+          name: TokenInOutput
         column_mapping:
           id: tx_out_id
   select_permissions:

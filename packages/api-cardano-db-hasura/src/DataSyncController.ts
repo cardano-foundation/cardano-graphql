@@ -1,19 +1,19 @@
 import axios, { AxiosInstance } from 'axios'
 import { chunkArray, DataFetcher } from '@cardano-graphql/util'
 import AssetFingerprint from '@emurgo/cip14-js'
-import { Asset } from './graphql_types'
 import { HostDoesNotExist } from './errors'
 import hash from 'object-hash'
 import { dummyLogger, Logger } from 'ts-log'
 import { Db } from './Db'
 import { HasuraClient } from './HasuraClient'
+import { AssetWithoutTokens } from './typeAliases'
 
 export interface Signature {
   signature: string
   publicKey: string
 }
 
-export const assetFingerprint = (asset: Pick<Asset, 'assetName' | 'policyId'>) =>
+export const assetFingerprint = (asset: Pick<AssetWithoutTokens, 'assetName' | 'policyId'>) =>
   new AssetFingerprint(
     Buffer.from(asset.policyId, 'hex'),
     asset.assetName !== '' ? Buffer.from(asset.assetName, 'hex') : undefined)
@@ -130,7 +130,7 @@ export class DataSyncController {
         const batchSize = 500
         const distinctAssetsInTokensCount = await this.hasuraClient.distinctAssetsInTokensCount()
         this.logger.debug(
-          'distinct assets in tokens count',
+          'Distinct assets in tokens count',
           { module: 'DataSyncController', value: distinctAssetsInTokensCount }
         )
         const batchQty = Math.ceil(distinctAssetsInTokensCount / batchSize)
@@ -142,7 +142,7 @@ export class DataSyncController {
           const assetsAlreadyInDb =
             await this.hasuraClient.getAssetsById(assetsInBatch.map(asset => asset.assetId))
           this.logger.debug(
-            'asset IDs from tokens',
+            'Assets from tokens',
             {
               module: 'DataSyncController',
               value: { batch: i, qty: assetsInBatch.length, existing: assetsAlreadyInDb.length }
@@ -170,13 +170,13 @@ export class DataSyncController {
         }
         return totalCount
       },
-      60 * 1000,
+      120 * 1000,
       this.logger
     )
   }
 
-  private async fetchAndApplyMetadata (assets: Asset[]) {
-    const assetBatches = chunkArray<Asset>(assets, 250)
+  private async fetchAndApplyMetadata (assets: AssetWithoutTokens[]) {
+    const assetBatches = chunkArray<AssetWithoutTokens>(assets, 250)
     for (const batch of assetBatches) {
       const newMetadata = await this.getAssetMetadata(batch)
       const assetsWithMetadata = newMetadata
@@ -208,7 +208,7 @@ export class DataSyncController {
     }
   }
 
-  private async getAssetMetadata (assets: Asset[]): Promise<AssetMetadata[]> {
+  private async getAssetMetadata (assets: AssetWithoutTokens[]): Promise<AssetMetadata[]> {
     try {
       const response = await this.axiosClient.post('metadata/query', {
         subjects: assets.map(asset => asset.assetId),
@@ -231,7 +231,7 @@ export class DataSyncController {
   }
 
   private async ensureAssetFingerprints (): Promise<void> {
-    const runBatch = async (assets: Pick<Asset, 'assetId' | 'assetName' | 'policyId'>[]) => {
+    const runBatch = async (assets: Pick<AssetWithoutTokens, 'assetId' | 'assetName' | 'policyId'>[]) => {
       await this.hasuraClient.addAssetFingerprints(
         assets.map((asset) => ({ assetId: asset.assetId, fingerprint: assetFingerprint(asset) }))
       )

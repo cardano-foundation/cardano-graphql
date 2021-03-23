@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "Asset"
     policy as "policyId",
     CAST(NULL AS TEXT) AS "ticker",
     CAST(NULL AS TEXT) AS "url"
-  FROM ma_tx_out;
+  FROM ma_tx_mint;
 
 ALTER TABLE "Asset" ADD PRIMARY KEY ("assetId");
 
@@ -49,7 +49,7 @@ CREATE OR REPLACE VIEW "Cardano" AS
   WHERE (block.block_no IS NOT NULL)
   ORDER BY block.block_no DESC
  LIMIT 1;
- 
+
 CREATE VIEW "Delegation" AS
 SELECT
   delegation.id AS "id",
@@ -193,18 +193,20 @@ FROM epoch_stake
 JOIN pool_hash
   ON pool_hash.id = epoch_stake.pool_id;
 
-CREATE VIEW "Mint" AS
+CREATE VIEW "TokenMint" AS
 SELECT
   CONCAT(RIGHT(CONCAT(E'\\', policy), -3), RIGHT(CONCAT(E'\\', name), -3)) as "assetId",
+  RIGHT(CONCAT(E'\\', name), -3) AS "assetName",
+  policy AS "policyId",
   quantity,
   tx_id
 FROM ma_tx_mint;
 
-CREATE VIEW "Token" AS
+CREATE VIEW "TokenInOutput" AS
 SELECT
   CONCAT(RIGHT(CONCAT(E'\\',policy), -3), RIGHT(CONCAT(E'\\',name), -3)) as "assetId",
   RIGHT(CONCAT(E'\\', name), -3) as "assetName",
-  policy as "policyId",
+  policy AS "policyId",
   quantity,
   tx_out_id
 FROM ma_tx_out;
