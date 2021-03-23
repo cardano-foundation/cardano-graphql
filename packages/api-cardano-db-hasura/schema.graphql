@@ -744,7 +744,7 @@ input StakePoolRetirement_bool_exp {
   _not: StakePoolRetirement_bool_exp
   _or: [StakePoolRetirement_bool_exp]
   announcedIn: Transaction_bool_exp
-  inEffectFrom: Epoch_bool_exp
+  inEffectFrom: Int_comparison_exp
 }
 
 type StakePoolOwner {
