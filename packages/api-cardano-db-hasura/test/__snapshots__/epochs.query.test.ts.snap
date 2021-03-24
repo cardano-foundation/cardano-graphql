@@ -112,7 +112,7 @@ Object {
 }
 `;
 
-exports[`epochs Included protocol params in effect for the epoch 1`] = `
+exports[`epochs Includes protocol params in effect for the epoch 1`] = `
 Object {
   "epochs": Array [
     Object {
@@ -147,13 +147,22 @@ exports[`epochs Returns epoch details by number 1`] = `
 Object {
   "epochs": Array [
     Object {
-      "blocksCount": "21590",
-      "fees": 1033002678,
-      "lastBlockTime": "2017-10-03T21:44:31Z",
-      "number": 1,
-      "output": "101402912214214220",
-      "startedAt": "2017-09-28T21:44:51Z",
-      "transactionsCount": "12870",
+      "adaPots": Object {
+        "deposits": "739776000000",
+        "fees": "4970194949",
+        "reserves": "13120582265809832",
+        "rewards": "151012138061367",
+        "slotNo": 9676800,
+        "treasury": "94812346026398",
+        "utxo": "31632848503907452",
+      },
+      "blocksCount": "21627",
+      "fees": 5135934788,
+      "lastBlockTime": "2020-10-02T21:44:19Z",
+      "number": 220,
+      "output": "12708523642248888",
+      "startedAt": "2020-09-27T21:44:51Z",
+      "transactionsCount": "19534",
     },
   ],
 }
@@ -163,6 +172,7 @@ exports[`epochs Returns epoch details by number range 1`] = `
 Object {
   "epochs": Array [
     Object {
+      "adaPots": null,
       "blocksCount": "21590",
       "fees": 1033002678,
       "lastBlockTime": "2017-10-03T21:44:31Z",

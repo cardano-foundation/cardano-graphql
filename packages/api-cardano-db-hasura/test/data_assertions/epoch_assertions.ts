@@ -2,6 +2,7 @@ import { Epoch } from '@src/graphql_types'
 
 export const epoch1 = {
   basic: {
+    adaPots: null,
     startedAt: '2017-09-28T21:44:51Z',
     blocksCount: '21590',
     fees: 1033002678,
@@ -9,7 +10,7 @@ export const epoch1 = {
     output: '101402912214214220',
     number: 1,
     transactionsCount: '12870'
-  },
+  } as Epoch,
   aggregated: {
     blocksCount: '21590',
     activeStake_aggregate: {
@@ -47,14 +48,23 @@ export const epoch1 = {
 
 export const epoch220 = {
   basic: {
-    startedAt: '2017-09-28T21:44:51Z',
+    adaPots: {
+      deposits: '739776000000',
+      fees: '4970194949',
+      reserves: '13120582265809832',
+      rewards: '151012138061367',
+      slotNo: 9676800,
+      treasury: '94812346026398',
+      utxo: '31632848503907452'
+    },
+    startedAt: '2020-09-27T21:44:51Z',
     blocksCount: '21627',
-    fees: 1033002678,
-    lastBlockTime: '2017-10-03T21:44:31Z',
-    output: '101402912214214220',
+    fees: 5135934788,
+    lastBlockTime: '2020-10-02T21:44:19Z',
+    output: '12708523642248888',
     number: 220,
-    transactionsCount: '12870'
-  },
+    transactionsCount: '19534'
+  } as Epoch,
   protocolParams: {
     a0: 0.3,
     decentralisationParam: 0.64,

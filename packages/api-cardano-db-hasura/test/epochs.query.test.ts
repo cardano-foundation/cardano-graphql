@@ -20,13 +20,13 @@ describe('epochs', () => {
   it('Returns epoch details by number', async () => {
     const result = await client.query({
       query: await loadQueryNode('epochDetailsByNumber'),
-      variables: { number: 1 }
+      variables: { number: 220 }
     })
-    expect(result.data.epochs[0]).toEqual(epoch1.basic)
+    expect(result.data.epochs[0]).toEqual(epoch220.basic)
     expect(result.data).toMatchSnapshot()
   })
 
-  it('Included protocol params in effect for the epoch', async () => {
+  it('Includes protocol params in effect for the epoch', async () => {
     const result = await client.query({
       query: await loadQueryNode('epochProtocolParams'),
       variables: { where: { number: { _eq: 220 } } }

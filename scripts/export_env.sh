@@ -1,4 +1,4 @@
-# Source this with the CONTEXT and NETWORK env set, containing the full path and 
+# Source this with the CONTEXT and NETWORK env set, containing the full path and
 # supported network name.
 # e.g.
 # CONTEXT=$PWD NETWORK=mainnet . ./scripts/export_env.sh
@@ -29,6 +29,13 @@ case "$NETWORK" in
             METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
             PG_ADMIN_PORT=8444
             POSTGRES_PORT=5444
+            ;;
+        shelley_qa)
+            API_PORT=3103
+            HASURA_PORT=8093
+            METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
+            PG_ADMIN_PORT=8445
+            POSTGRES_PORT=5445
             ;;
 esac
 
