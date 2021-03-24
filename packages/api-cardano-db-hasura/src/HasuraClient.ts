@@ -160,8 +160,32 @@ export class HasuraClient {
         this.logger
       )
     })
-    this.logger.info('Hasura initialized', { module: 'HasuraClient' })
+    this.logger.debug('graphql-engine setup', { module: 'HasuraClient' })
+    await pRetry(async () => {
+      const result = await this.client.query({
+        query: gql`query {
+            cardano {
+                currentEpoch {
+                    number
+                }
+            }
+        }`
+      })
+      if (result.data.cardano.currentEpoch === null) {
+        this.logger.debug('Not in current era')
+        throw new Error('Not in current era')
+      }
+    }, {
+      factor: 1.05,
+      retries: 100,
+      onFailedAttempt: util.onFailedAttemptFor(
+        'Detecting sync state being in current era',
+        this.logger
+      )
+    })
+    this.logger.debug('DB is in current era', { module: 'HasuraClient' })
     await this.adaPotsToCalculateSupplyFetcher.initialize()
+    this.logger.info('Initialized', { module: 'HasuraClient' })
   }
 
   public async shutdown () {
@@ -688,7 +712,7 @@ export class HasuraClient {
   }
 
   public incrementMetadataFetchAttempts (assetIds: AssetWithoutTokens['assetId'][]) {
-    this.logger.info(
+    this.logger.debug(
       'Incrementing metadata fetch attempt',
       { module: 'HasuraClient', value: assetIds.length }
     )
@@ -717,7 +741,7 @@ export class HasuraClient {
   }
 
   public async insertAssets (assets: AssetWithoutTokens[]) {
-    this.logger.debug('inserting assets', { module: 'HasuraClient', value: assets.length })
+    this.logger.info('inserting assets found in tokens', { module: 'HasuraClient', value: assets.length })
     const result = await this.client.mutate({
       mutation: gql`mutation InsertAssets($assets: [Asset_insert_input!]!) {
         insert_assets(objects: $assets) {
