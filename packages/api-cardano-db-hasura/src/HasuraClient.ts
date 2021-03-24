@@ -184,6 +184,7 @@ export class HasuraClient {
       )
     })
     this.logger.debug('DB is in current era', { module: 'HasuraClient' })
+    await this.currentProtocolVersionFetcher.initialize()
     await this.adaPotsToCalculateSupplyFetcher.initialize()
     this.logger.info('Initialized', { module: 'HasuraClient' })
   }
