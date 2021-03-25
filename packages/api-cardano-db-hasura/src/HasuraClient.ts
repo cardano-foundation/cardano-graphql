@@ -742,7 +742,7 @@ export class HasuraClient {
   }
 
   public async insertAssets (assets: AssetWithoutTokens[]) {
-    this.logger.info('inserting assets found in tokens', { module: 'HasuraClient', value: assets.length })
+    this.logger.debug('inserting assets found in tokens', { module: 'HasuraClient', value: assets.length })
     const result = await this.client.mutate({
       mutation: gql`mutation InsertAssets($assets: [Asset_insert_input!]!) {
         insert_assets(objects: $assets) {
