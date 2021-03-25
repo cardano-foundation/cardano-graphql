@@ -74,7 +74,7 @@ export class DataSyncController {
         initial: new DataFetcher<number>(
           'MetadataSynchronizer',
           async () => {
-            const batchSize = 2500
+            const batchSize = 500
             const assetsWithoutMetadataCount = await this.hasuraClient.assetsWithoutMetadataCount({ _lte: 2 })
             this.logger.debug(
               'Newly discovered assets missing metadata',
@@ -99,7 +99,7 @@ export class DataSyncController {
         ongoing: new DataFetcher<number>(
           'MetadataSynchronizerRefresh',
           async () => {
-            const batchSize = 2500
+            const batchSize = 500
             const assetsEligibleForMetadataRefreshCount =
               await this.hasuraClient.assetsEligibleForMetadataRefreshCount({ _gt: 2 })
             this.logger.debug(
@@ -176,7 +176,7 @@ export class DataSyncController {
   }
 
   private async fetchAndApplyMetadata (assets: AssetWithoutTokens[]) {
-    const assetBatches = chunkArray<AssetWithoutTokens>(assets, 250)
+    const assetBatches = chunkArray<AssetWithoutTokens>(assets, 200)
     for (const batch of assetBatches) {
       const newMetadata = await this.getAssetMetadata(batch)
       const assetsWithMetadata = newMetadata
