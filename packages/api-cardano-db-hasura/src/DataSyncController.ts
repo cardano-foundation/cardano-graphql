@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import { chunkArray, DataFetcher } from '@cardano-graphql/util'
+import { DataFetcher } from '@cardano-graphql/util'
 import AssetFingerprint from '@emurgo/cip14-js'
 import { HostDoesNotExist } from './errors'
 import hash from 'object-hash'
@@ -176,36 +176,33 @@ export class DataSyncController {
   }
 
   private async fetchAndApplyMetadata (assets: AssetWithoutTokens[]) {
-    const assetBatches = chunkArray<AssetWithoutTokens>(assets, 200)
-    for (const batch of assetBatches) {
-      const newMetadata = await this.getAssetMetadata(batch)
-      const assetsWithMetadata = newMetadata
-        .map(metadata => ({
-          metadata,
-          metadataHash: hash(metadata),
-          asset: assets.find(asset => asset.assetId === metadata.subject)
-        }))
-        .filter(({ asset, metadataHash }) => metadataHash !== asset.metadataHash)
-        .map(obj => ({
-          ...obj.asset,
-          ...{
-            description: obj.metadata.description?.value,
-            logo: obj.metadata.logo?.value,
-            name: obj.metadata.name?.value,
-            ticker: obj.metadata.ticker?.value,
-            url: obj.metadata.url?.value
-          },
-          ...{ metadataHash: hash(obj.metadata) }
-        }))
-      this.logger.debug(
-        'Metadata with updates to apply',
-        { module: 'DataSyncController', value: assetsWithMetadata.length }
-      )
-      if (assetsWithMetadata.length > 0) {
-        await this.hasuraClient.addMetadata(assetsWithMetadata)
-      }
-      await this.hasuraClient.incrementMetadataFetchAttempts(batch.map(asset => asset.assetId))
+    const newMetadata = await this.getAssetMetadata(assets)
+    const assetsWithMetadata = newMetadata
+      .map(metadata => ({
+        metadata,
+        metadataHash: hash(metadata),
+        asset: assets.find(asset => asset.assetId === metadata.subject)
+      }))
+      .filter(({ asset, metadataHash }) => metadataHash !== asset.metadataHash)
+      .map(obj => ({
+        ...obj.asset,
+        ...{
+          description: obj.metadata.description?.value,
+          logo: obj.metadata.logo?.value,
+          name: obj.metadata.name?.value,
+          ticker: obj.metadata.ticker?.value,
+          url: obj.metadata.url?.value
+        },
+        ...{ metadataHash: hash(obj.metadata) }
+      }))
+    this.logger.debug(
+      'Metadata with updates to apply',
+      { module: 'DataSyncController', value: assetsWithMetadata.length }
+    )
+    if (assetsWithMetadata.length > 0) {
+      await this.hasuraClient.addMetadata(assetsWithMetadata)
     }
+    await this.hasuraClient.incrementMetadataFetchAttempts(assets.map(asset => asset.assetId))
   }
 
   private async getAssetMetadata (assets: AssetWithoutTokens[]): Promise<AssetMetadata[]> {
