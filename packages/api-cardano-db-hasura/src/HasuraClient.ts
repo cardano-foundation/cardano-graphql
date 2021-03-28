@@ -497,6 +497,7 @@ export class HasuraClient {
           assets (
               limit: $limit
               offset: $offset
+              order_by: { assetId: asc }
               where: {
                   metadataFetchAttempts: $metadataFetchAttempts
               }
