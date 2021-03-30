@@ -62,7 +62,7 @@ in {
         type = lib.types.nullOr lib.types.path;
         default = null;
       };
-      
+
       cardanoNodeSocketPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -139,17 +139,10 @@ in {
     frontend = selfPkgs.packages.cardano-graphql;
     persistgraphql = selfPkgs.packages.persistgraphql;
     hasura-cli = selfPkgs.packages.hasura-cli;
-    hasura-cli-ext = selfPkgs.packages.hasura-cli-ext;
     hasuraBaseUri = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}";
     pluginLibPath = pkgs.lib.makeLibraryPath [
       pkgs.stdenv.cc.cc.lib
     ];
-    installHasuraCLI = ''
-      # always start with no plugins so future upgrades will work
-      rm -rf ~/.hasura/plugins
-      mkdir -p ~/.hasura/plugins/store/cli-ext/v${hasura-cli-ext.version}
-      ln -s ${hasura-cli-ext}/bin/cli-ext-hasura-linux ~/.hasura/plugins/store/cli-ext/v${hasura-cli-ext.version}/cli-ext-hasura-linux
-    '';
   in lib.mkIf cfg.enable {
     systemd.services.cardano-graphql = {
       wantedBy = [ "multi-user.target" ];
@@ -184,11 +177,7 @@ in {
       (lib.optionalAttrs (cfg.pollingIntervalMetadataSyncOngoing != null) { POLLING_INTERVAL_METADATA_SYNC_ONGOING = toString cfg.pollingIntervalMetadataSyncOngoing; }) //
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; }) //
       (lib.optionalAttrs (cfg.allowListPath != null) { ALLOW_LIST_PATH = cfg.allowListPath; });
-      path = with pkgs; [ netcat curl postgresql jq frontend hasura-cli glibc.bin patchelf ];
-      preStart = ''
-        set -exuo pipefail
-        ${installHasuraCLI}
-      '';
+      path = with pkgs; [ netcat curl postgresql jq frontend glibc.bin patchelf ];
       script = ''
         exec cardano-graphql
       '';
