@@ -23,19 +23,12 @@ case "$NETWORK" in
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
             ;;
-        mary_qa)
+        shelley_qa)
             API_PORT=3102
             HASURA_PORT=8092
             METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
             PG_ADMIN_PORT=8444
             POSTGRES_PORT=5444
-            ;;
-        shelley_qa)
-            API_PORT=3103
-            HASURA_PORT=8093
-            METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
-            PG_ADMIN_PORT=8445
-            POSTGRES_PORT=5445
             ;;
 esac
 
