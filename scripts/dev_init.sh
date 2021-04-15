@@ -7,7 +7,6 @@ BIN_DIR=../bin
 mkdir -p \
   state/network/mainnet/node-ipc \
   state/network/testnet/node-ipc \
-  state/network/mary_qa/node-ipc \
   state/network/shelley_qa/node-ipc
 cabal update
 cd cardano-node
