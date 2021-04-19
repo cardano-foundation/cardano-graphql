@@ -311,6 +311,26 @@ export async function buildSchema (
             schema: hasuraClient.schema
           })
         },
+        tokenMints: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'tokenMints',
+            info,
+            operation: 'query',
+            schema: hasuraClient.schema
+          })
+        },
+        tokenMints_aggregate: (_root, args, context, info) => {
+          return delegateToSchema({
+            args,
+            context,
+            fieldName: 'tokenMints_aggregate',
+            info,
+            operation: 'query',
+            schema: hasuraClient.schema
+          })
+        },
         utxos: (_root, args, context, info) => {
           return delegateToSchema({
             args,

@@ -36,7 +36,12 @@ describe('assets', () => {
     const result = await client.query({
       query: await loadQueryNode('assets'),
       variables: {
-        where: { fingerprint: { _eq: 'asset12h3p5l3nd5y26lr22am7y7ga3vxghkhf57zkhd' } }
+        where: {
+          _and: [{
+            fingerprint: { _eq: 'asset12h3p5l3nd5y26lr22am7y7ga3vxghkhf57zkhd' },
+            tokenMints: { transaction: { includedAt: { _gt: '2017-09-23T21:44:51Z' } } }
+          }]
+        }
       }
     })
     const { assets } = result.data
