@@ -139,6 +139,18 @@ type Query {
     offset: Int
     where: StakeRegistration_bool_exp
   ): StakeRegistration_aggregate
+  tokenMints (
+    limit: Int
+    order_by: [TokenMint_order_by!]
+    offset: Int
+    where: TokenMint_bool_exp
+  ): [TokenMint]!
+  tokenMints_aggregate (
+    limit: Int
+    order_by: [TokenMint_order_by!]
+    offset: Int
+    where: TokenMint_bool_exp
+  ): TokenMint_aggregate!
   transactions (
     limit: Int
     order_by: [Transaction_order_by!]
