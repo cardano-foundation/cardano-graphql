@@ -1,7 +1,11 @@
 query aggregatedDataWithinEpoch (
+    $orderBy: [Epoch_order_by!]
     $where: Epoch_bool_exp
 ) {
-    epochs( where: $where) {
+    epochs(
+        order_by: $orderBy
+        where: $where
+    ) {
         blocksCount
         activeStake_aggregate {
             aggregate {

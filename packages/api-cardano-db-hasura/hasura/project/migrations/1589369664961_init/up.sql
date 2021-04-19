@@ -65,30 +65,24 @@ CREATE OR REPLACE VIEW "Cardano" AS
 CREATE VIEW "Delegation" AS
 SELECT
   delegation.id AS "id",
-  (
-	  SELECT stake_address.view
-	  FROM stake_address
-	  WHERE stake_address.id = delegation.addr_id
-  ) AS "address",
+  stake_address.view AS "address",
   delegation.tx_id AS "tx_id",
   pool_hash_id AS "pool_hash_id"
-FROM delegation;
+FROM delegation
+JOIN stake_address on delegation.addr_id = stake_address.id;
 
 CREATE VIEW "Epoch" AS
 SELECT
   epoch.fees AS "fees",
   epoch.out_sum AS "output",
   epoch.no AS "number",
-  (
-  	SELECT epoch_param.nonce
-  	FROM epoch_param
-  	WHERE epoch_param.epoch_no = epoch.no
-  ) AS "nonce",
+  epoch_param.nonce AS "nonce",
   epoch.tx_count AS "transactionsCount",
   epoch.start_time AS "startedAt",
   epoch.end_time AS "lastBlockTime",
   epoch.blk_count AS "blocksCount"
-FROM epoch;
+FROM epoch
+  LEFT JOIN epoch_param on epoch.no = epoch_param.epoch_no;
 
 CREATE VIEW "ShelleyEpochProtocolParams" AS
 SELECT
@@ -114,15 +108,12 @@ FROM epoch_param;
 
 CREATE VIEW "Reward" AS
 SELECT
-  reward.amount AS "amount",
-  (
-	  SELECT stake_address.view
-	  FROM stake_address
-	  WHERE stake_address.id = reward.addr_id
-  ) AS "address",
+  reward.amount,
+  stake_address.view AS "address",
   reward.epoch_no AS "epochNo",
-  reward.pool_id AS "pool_hash_id"
-FROM reward;
+  reward.pool_id AS pool_hash_id
+FROM reward
+JOIN stake_address on reward.addr_id = stake_address.id;
 
 CREATE VIEW "SlotLeader" AS
 SELECT
@@ -135,13 +126,10 @@ FROM slot_leader;
 CREATE VIEW "StakeDeregistration" AS
 SELECT
   stake_deregistration.id AS "id",
-  (
-	  SELECT stake_address.view
-	  FROM stake_address
-	  WHERE stake_address.id = stake_deregistration.addr_id
-  ) AS "address",
+  stake_address.view AS "address",
   stake_deregistration.tx_id AS "tx_id"
-FROM stake_deregistration;
+FROM stake_deregistration
+JOIN stake_address on stake_deregistration.addr_id = stake_address.id;
 
 CREATE VIEW "StakePool" AS
 WITH
@@ -154,8 +142,8 @@ WITH
 )
 SELECT
   pool.fixed_cost AS "fixedCost",
-  ( SELECT pool_hash.hash_raw FROM pool_hash WHERE pool_hash.id = pool.hash_id ) AS "hash",
-  ( SELECT pool_hash.view FROM pool_hash WHERE pool_hash.id = pool.hash_id ) AS "id",
+  pool_hash.hash_raw AS "hash",
+  pool_hash.view AS "id",
   pool.hash_id AS "hash_id",
   pool.id AS "update_id",
   pool.margin AS "margin",
@@ -163,13 +151,15 @@ SELECT
   block.block_no AS "blockNo",
   pool.registered_tx_id AS "updated_in_tx_id",
   pool.pledge AS "pledge",
-  ( SELECT stake_address.view FROM stake_address WHERE stake_address.hash_raw = pool.reward_addr) AS "rewardAddress",
+  stake_address.view AS "rewardAddress",
   pool_meta_data.url AS "url"
 FROM pool_update AS pool
   LEFT JOIN pool_meta_data ON pool.meta_id = pool_meta_data.id
   INNER JOIN tx ON pool.registered_tx_id = tx.id
   INNER JOIN latest_block_times ON latest_block_times.hash_id = pool.hash_id
-  INNER JOIN block ON tx.block_id = block.id AND latest_block_times.blockTime = block.time;
+  INNER JOIN block ON tx.block_id = block.id AND latest_block_times.blockTime = block.time
+  JOIN stake_address on pool.reward_addr = stake_address.hash_raw
+  JOIN pool_hash on pool_hash.id = pool.hash_id;
 
 CREATE VIEW "StakePoolRetirement" AS
 SELECT
@@ -181,21 +171,14 @@ FROM pool_retire;
 CREATE VIEW "StakeRegistration" AS
 SELECT
   stake_registration.id AS "id",
-  (
-	  SELECT stake_address.view
-	  FROM stake_address
-	  WHERE stake_address.id = stake_registration.addr_id
-  ) AS "address",
+  stake_address.view AS "address",
   stake_registration.tx_id AS "tx_id"
-FROM stake_registration;
+FROM stake_registration
+JOIN stake_address on stake_registration.addr_id = stake_address.id;
 
 CREATE VIEW "ActiveStake" AS
 SELECT
-  (
-  	SELECT stake_address.view
-  	FROM stake_address
-  	WHERE stake_address.id = epoch_stake.addr_id
-  ) AS "address",
+  stake_address.view AS "address",
   amount AS "amount",
   epoch_no as "epochNo",
   epoch_stake.id AS "id",
@@ -203,7 +186,8 @@ SELECT
   pool_hash.view AS "stakePoolId"
 FROM epoch_stake
 JOIN pool_hash
-  ON pool_hash.id = epoch_stake.pool_id;
+  ON pool_hash.id = epoch_stake.pool_id
+JOIN stake_address on epoch_stake.addr_id = stake_address.id;
 
 CREATE VIEW "TokenMint" AS
 SELECT
@@ -288,13 +272,10 @@ CREATE VIEW "Withdrawal" AS
 SELECT
   withdrawal.amount AS "amount",
   withdrawal.id AS "id",
-  (
-	  SELECT stake_address.view
-	  FROM stake_address
-	  WHERE stake_address.id = withdrawal.addr_id
-  ) AS "address",
+  stake_address.view "address",
   withdrawal.tx_id AS "tx_id"
-FROM withdrawal;
+FROM withdrawal
+JOIN stake_address on withdrawal.addr_id = stake_address.id;
 
 CREATE INDEX idx_block_hash
     ON block(hash);
