@@ -38,7 +38,10 @@ describe('epochs', () => {
   it('Can return aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinEpoch'),
-      variables: { where: { number: { _in: [1, 220] } } }
+      variables: {
+        orderBy: { number: 'asc' },
+        where: { number: { _in: [1, 220] } }
+      }
     })
     expect(result.data.epochs[0]).toEqual(epoch1.aggregated)
     expect(result.data.epochs[1]).toEqual(epoch220.aggregated)
