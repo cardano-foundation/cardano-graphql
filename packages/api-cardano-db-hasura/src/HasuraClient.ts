@@ -23,6 +23,8 @@ import { AssetWithoutTokens } from './typeAliases'
 
 export type AdaPotsToCalculateSupply = { circulating: AssetSupply['circulating'], reserves: AdaPots['reserves']}
 
+const notInCurrentEraMessage = 'currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.'
+
 export class HasuraClient {
   private client: GraphQLClient
   private applyingSchemaAndMetadata: boolean
@@ -44,7 +46,7 @@ export class HasuraClient {
         try {
           return this.getAdaPotsToCalculateSupply()
         } catch (error) {
-          if (error.message !== 'currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.') {
+          if (error.message !== notInCurrentEraMessage) {
             throw error
           }
           this.logger.debug(error.message)
@@ -112,6 +114,10 @@ export class HasuraClient {
       utxos_aggregate: utxosAggregate,
       withdrawals_aggregate: withdrawalsAggregate
     } = result
+    if (cardano[0].currentEpoch === null) {
+      this.logger.debug(notInCurrentEraMessage)
+      throw new Error(notInCurrentEraMessage)
+    }
     const rewards = new BigNumber(rewardsAggregate.aggregate.sum.amount)
     const utxos = new BigNumber(utxosAggregate.aggregate.sum.value)
     const withdrawals = new BigNumber(withdrawalsAggregate.aggregate.sum.amount)
@@ -161,9 +167,9 @@ export class HasuraClient {
             }
         }`
       )
-      if (result.cardano.currentEpoch === null) {
-        this.logger.debug('Not in current era')
-        throw new Error('Not in current era')
+      if (result.cardano[0].currentEpoch === null) {
+        this.logger.debug(notInCurrentEraMessage)
+        throw new Error(notInCurrentEraMessage)
       }
     }, {
       factor: 1.05,
