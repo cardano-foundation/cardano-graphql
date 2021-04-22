@@ -95,6 +95,8 @@ function filterAndTypecastEnvs (env: any) {
     LISTEN_ADDRESS,
     LOGGER_MIN_SEVERITY,
     METADATA_SERVER_URI,
+    OGMIOS_HOST,
+    OGMIOS_PORT,
     POLLING_INTERVAL_ADA_SUPPLY,
     POLLING_INTERVAL_METADATA_SYNC_INITIAL,
     POLLING_INTERVAL_METADATA_SYNC_ONGOING,
@@ -129,6 +131,10 @@ function filterAndTypecastEnvs (env: any) {
     listenAddress: LISTEN_ADDRESS,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
     metadataServerUri: METADATA_SERVER_URI,
+    ogmios: {
+      host: OGMIOS_HOST,
+      port: OGMIOS_PORT ? Number(OGMIOS_PORT) : undefined
+    },
     pollingInterval: {
       adaSupply: Number(POLLING_INTERVAL_ADA_SUPPLY),
       metadataSync: {
@@ -141,7 +147,7 @@ function filterAndTypecastEnvs (env: any) {
     postgresHost: POSTGRES_HOST,
     postgresPassword: POSTGRES_PASSWORD,
     postgresPasswordFile: POSTGRES_PASSWORD_FILE,
-    postgresPort: Number(POSTGRES_PORT),
+    postgresPort: POSTGRES_PORT ? Number(POSTGRES_PORT) : undefined,
     postgresUser: POSTGRES_USER,
     postgresUserFile: POSTGRES_USER_FILE,
     prometheusMetrics: PROMETHEUS_METRICS === 'true',

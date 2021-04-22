@@ -402,7 +402,7 @@ export class HasuraClient {
     }
   }
 
-  public async getMeta (nodeTipBlockNumber: number) {
+  public async getMeta (nodeTipSlotNumber: number) {
     const result = await this.client.request(
       gql`query {
           epochs (limit: 1, order_by: { number: desc }) {
@@ -413,7 +413,7 @@ export class HasuraClient {
                   epoch {
                       number
                   }
-                  number
+                  slotNo
                   forgedAt
               }
           }}`
@@ -425,7 +425,7 @@ export class HasuraClient {
       // The initialization state can be determined by comparing the last epoch record against the
       // tip
       initialized: lastEpoch.number === tip.epoch?.number,
-      syncPercentage: (tip.number / nodeTipBlockNumber) * 100
+      syncPercentage: (tip.slotNo / nodeTipSlotNumber) * 100
     }
   }
 

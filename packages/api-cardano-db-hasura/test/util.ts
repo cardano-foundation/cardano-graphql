@@ -9,7 +9,6 @@ import path from 'path'
 import { readSecrets } from '@src/util'
 import { Config } from '@src/Config'
 import { Genesis } from '@src/graphql_types'
-import { createCardanoCli } from '@src/CardanoCli'
 import { CardanoNodeClient } from '@src/CardanoNodeClient'
 
 const getLastConfiguredMajorVersion = (network: string) =>
@@ -55,7 +54,6 @@ export async function buildClient (
     return client
   } else {
     const cardanoNodeClient = new CardanoNodeClient(
-      createCardanoCli(path.resolve('..', '..', '..', 'bin', 'cardano-cli'), genesis.shelley, 'jq'),
       genesis.shelley.protocolParams.protocolVersion.major
     )
     const hasuraClient = new HasuraClient('hasura', hasuraUri, 1000 * 60 * 5, lastConfiguredMajorVersion)

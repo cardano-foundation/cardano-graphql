@@ -33,6 +33,7 @@
   ],
   "dependencies": {
     "@cardano-graphql/util": "4.0.0",
+    "@cardano-ogmios/client": "^3.2.0",
     "@emurgo/cardano-serialization-lib-nodejs": "^6.0.0",
     "@emurgo/cip14-js": "^2.0.0",
     "@graphql-tools/delegate": "^6.0.10",
@@ -57,7 +58,6 @@
     "pg": "^8.5.1",
     "pg-listen": "^1.6.0",
     "set-interval-async": "^1.0.33",
-    "temp-write": "^4.0.0",
     "ts-custom-error": "^3.2.0",
     "ts-log": "^2.2.3"
   },

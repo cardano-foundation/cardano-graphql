@@ -91,6 +91,19 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+  ogmios:
+    build:
+      context: cardano-ogmios/server
+      cache_from:
+        - ktorz/ogmios:latest
+        - ktorz/ogmios:3.2.0
+    image: ktorz/ogmios:3.2.0
+    restart: on-failure
+    environment:
+      - OGMIOS_NETWORK=${NETWORK:-mainnet}
+    command: [ "--host", "0.0.0.0", "--node-socket", "/ipc/node.socket" ]
+    volumes:
+      - node-ipc:/ipc
   cardano-graphql:
     build:
       context: .

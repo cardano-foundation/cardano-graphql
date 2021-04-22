@@ -76,7 +76,7 @@ describe('stakePools', () => {
       variables: { where: { _not: { retirements: {} } } }
     })
     const { stakePools_aggregate } = result.data
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(800)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(500)
     expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(4000)
   })
 
@@ -87,6 +87,6 @@ describe('stakePools', () => {
     })
     const { stakePools_aggregate } = result.data
     expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(0)
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(800)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(1200)
   })
 })
