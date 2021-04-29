@@ -25,10 +25,10 @@ export class DataFetcher<DataValue> {
 
   public async initialize () {
     await this.fetch()
-    this.logger.debug('initial value fetched', { module: 'DataFetcher', instance: this.name, value: this.value })
+    this.logger.debug({ module: 'DataFetcher', instance: this.name, value: this.value }, 'Initial value fetched')
     this.pollingQueryTimer = setIntervalAsync(async () => {
       await this.fetch()
-      this.logger.debug(`value fetched after ${this.pollingInterval / 1000} seconds`, { module: 'DataFetcher', instance: this.name, value: this.value })
+      this.logger.debug({ module: 'DataFetcher', instance: this.name, value: this.value }, `value fetched after ${this.pollingInterval / 1000} seconds`)
     }, this.pollingInterval)
   }
 

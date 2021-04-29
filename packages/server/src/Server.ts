@@ -56,9 +56,9 @@ export class Server {
         const file = await fs.readFile(this.config.allowListPath, 'utf8')
         allowList = JSON.parse(file)
         this.app.use('/', json(), allowListMiddleware(allowList))
-        this.logger.info('The server will only allow only operations from the provided list')
+        this.logger.info({ module: 'Server' }, 'The server will only allow only operations from the provided list')
       } catch (error) {
-        this.logger.error(`Cannot read or parse allow-list JSON file at ${this.config.allowListPath}`)
+        this.logger.error({ module: 'Server' }, `Cannot read or parse allow-list JSON file at ${this.config.allowListPath}`)
         throw error
       }
     }
@@ -67,7 +67,7 @@ export class Server {
         throw new TracingRequired('Prometheus')
       }
       plugins.push(prometheusMetricsPlugin(this.app))
-      this.logger.info('Prometheus metrics will be served at /metrics')
+      this.logger.info({ module: 'Server' }, 'Prometheus metrics will be served at /metrics')
     }
     if (this.config.queryDepthLimit) {
       validationRules.push(depthLimit(this.config.queryDepthLimit))
@@ -94,10 +94,10 @@ export class Server {
 
   async start () {
     this.httpServer = await listenPromise(this.app, this.config.apiPort, this.config.listenAddress)
-    this.logger.info(`GraphQL HTTP server at http://${this.config.listenAddress}:` +
+    this.logger.info({ module: 'Server' }, `GraphQL HTTP server at http://${this.config.listenAddress}:` +
       `${this.config.apiPort}${this.apolloServer.graphqlPath} started`
     )
-    this.logger.debug('Checking DB status', { module: 'Server' })
+    this.logger.debug({ module: 'Server' }, 'Checking DB status')
     this.syncProgress = setIntervalAsync(async () => {
       const result = await this.apolloServer.executeOperation(
         {
@@ -110,14 +110,14 @@ export class Server {
         }
       )
       if (result.errors !== undefined) {
-        this.logger.debug(JSON.stringify(result.errors))
+        this.logger.debug({ module: 'Server' }, JSON.stringify(result.errors))
         return
       }
       if (result.data.cardanoDbMeta.initialized) {
-        this.logger.info('DB ready')
+        this.logger.info({ module: 'Server' }, 'DB ready')
         await clearIntervalAsync(this.syncProgress)
       } else {
-        this.logger.info(`DB sync progress: ${result.data.cardanoDbMeta.syncPercentage} %`)
+        this.logger.info({ module: 'Server' }, `DB sync progress: ${result.data.cardanoDbMeta.syncPercentage} %`)
       }
     }, 5000)
   }
@@ -126,7 +126,7 @@ export class Server {
     await clearIntervalAsync(this.syncProgress)
     if (this.httpServer !== undefined) {
       this.httpServer.close()
-      this.logger.info(`GraphQL HTTP server at http://${this.config.listenAddress}:` +
+      this.logger.info({ module: 'Server' }, `GraphQL HTTP server at http://${this.config.listenAddress}:` +
         `${this.config.apiPort}${this.apolloServer.graphqlPath} shutting down`
       )
     }

@@ -29,13 +29,13 @@ export class CardanoNodeClient {
   public async getTipSlotNo () {
     const tip = await this.stateQueryClient.ledgerTip()
     const slotNo = tip === 'origin' ? 0 : tip.slot
-    this.logger.debug('getTipSlotNo', { module: 'CardanoNodeClient', value: slotNo })
+    this.logger.debug({ module: 'CardanoNodeClient', slotNo }, 'getTipSlotNo')
     return slotNo
   }
 
   public async getProtocolParams () {
     const protocolParams = await this.stateQueryClient.currentProtocolParameters()
-    this.logger.debug('getProtocolParams', { module: 'CardanoNodeClient', value: protocolParams })
+    this.logger.debug({ module: 'CardanoNodeClient', protocolParams }, 'getProtocolParams')
     return protocolParams
   }
 
@@ -45,7 +45,7 @@ export class CardanoNodeClient {
       this.stateQueryClient = await createStateQueryClient(options)
       this.txSubmissionClient = await createTxSubmissionClient(options)
       if (!(await this.isInCurrentEra())) {
-        this.logger.warn('cardano-node is still synchronizing', { module: 'CardanoNodeClient' })
+        this.logger.warn({ module: 'CardanoNodeClient' }, 'cardano-node is still synchronizing')
         throw new Error()
       }
     }, {
@@ -60,13 +60,11 @@ export class CardanoNodeClient {
 
   private async isInCurrentEra () {
     const { protocolVersion } = await this.getProtocolParams()
-    this.logger.debug('Comparing current protocol params with last known major version from cardano-node config', {
+    this.logger.debug({
       module: 'CardanoNodeClient',
-      value: {
-        currentProtocolVersion: protocolVersion,
-        lastConfiguredMajorVersion: this.lastConfiguredMajorVersion
-      }
-    })
+      currentProtocolVersion: protocolVersion,
+      lastConfiguredMajorVersion: this.lastConfiguredMajorVersion
+    }, 'Comparing current protocol params with last known major version from cardano-node config')
     return protocolVersion.major >= this.lastConfiguredMajorVersion
   }
 
@@ -81,7 +79,7 @@ export class CardanoNodeClient {
     try {
       await this.txSubmissionClient.submitTx(transaction)
       const hash = getHashOfSignedTransaction(transaction)
-      this.logger.info('submitTransaction', { module: 'CardanoNodeClient', hash })
+      this.logger.info({ module: 'CardanoNodeClient', hash }, 'submitTransaction')
       return hash
     } catch (error) {
       if (!isEraMismatch(error.message)) {
