@@ -302,7 +302,7 @@ input Asset_bool_exp {
   fingerprint: AssetFingerprint_comparison_exp
   logo: text_comparison_exp
   name: text_comparison_exp
-  policyId: text_comparison_exp
+  policyId: Hash28Hex_comparison_exp
   tokenMints: TokenMint_bool_exp
   url: text_comparison_exp
 }
