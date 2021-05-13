@@ -49,7 +49,7 @@ export class HasuraClient {
           if (error.message !== notInCurrentEraMessage) {
             throw error
           }
-          this.logger.debug(error.message)
+          this.logger.debug({ err: error })
         }
       },
       pollingInterval,
@@ -58,9 +58,12 @@ export class HasuraClient {
     this.currentProtocolVersionFetcher = new DataFetcher<ShelleyProtocolParams['protocolVersion']>(
       'ProtocolParams',
       async () => {
-        const getCurrentProtocolVersion = await this.getCurrentProtocolVersion()
-        this.logger.debug(getCurrentProtocolVersion)
-        return getCurrentProtocolVersion
+        const currentProtocolVersion = await this.getCurrentProtocolVersion()
+        this.logger.debug(
+          { module: 'HasuraClient', currentProtocolVersion },
+          'currentProtocolVersionFetcher'
+        )
+        return currentProtocolVersion
       },
       1000 * 60,
       this.logger
@@ -115,7 +118,7 @@ export class HasuraClient {
       withdrawals_aggregate: withdrawalsAggregate
     } = result
     if (cardano[0].currentEpoch === null) {
-      this.logger.debug(notInCurrentEraMessage)
+      this.logger.debug({ module: 'HasuraClient' }, notInCurrentEraMessage)
       throw new Error(notInCurrentEraMessage)
     }
     const rewards = new BigNumber(rewardsAggregate.aggregate.sum.amount)
@@ -136,7 +139,7 @@ export class HasuraClient {
           if (error) {
             reject(error)
           }
-          this.logger.debug(stdout)
+          this.logger.debug({ module: 'HasuraClient' }, stdout)
           resolve()
         }
       )
@@ -144,7 +147,7 @@ export class HasuraClient {
   }
 
   public async initialize () {
-    this.logger.info('Initializing', { module: 'HasuraClient' })
+    this.logger.info({ module: 'HasuraClient' }, 'Initializing')
     await this.applySchemaAndMetadata()
     await pRetry(async () => {
       this.schema = await this.buildHasuraSchema()
@@ -156,7 +159,7 @@ export class HasuraClient {
         this.logger
       )
     })
-    this.logger.debug('graphql-engine setup', { module: 'HasuraClient' })
+    this.logger.debug({ module: 'HasuraClient' }, 'graphql-engine setup')
     await pRetry(async () => {
       const result = await this.client.request(
         gql`query {
@@ -168,7 +171,7 @@ export class HasuraClient {
         }`
       )
       if (result.cardano[0].currentEpoch === null) {
-        this.logger.debug(notInCurrentEraMessage)
+        this.logger.debug({ module: 'HasuraClient' }, notInCurrentEraMessage)
         throw new Error(notInCurrentEraMessage)
       }
     }, {
@@ -179,10 +182,10 @@ export class HasuraClient {
         this.logger
       )
     })
-    this.logger.debug('DB is in current era', { module: 'HasuraClient' })
+    this.logger.debug({ module: 'HasuraClient' }, 'DB is in current era')
     await this.currentProtocolVersionFetcher.initialize()
     await this.adaPotsToCalculateSupplyFetcher.initialize()
-    this.logger.info('Initialized', { module: 'HasuraClient' })
+    this.logger.info({ module: 'HasuraClient' }, 'Initialized')
   }
 
   public async shutdown () {
@@ -229,7 +232,7 @@ export class HasuraClient {
         })
         return fetchResult.json()
       } catch (error) {
-        this.logger.error(error)
+        this.logger.error({ err: error })
         throw error
       }
     }
@@ -402,7 +405,7 @@ export class HasuraClient {
     }
   }
 
-  public async getMeta (nodeTipBlockNumber: number) {
+  public async getMeta (nodeTipSlotNumber: number) {
     const result = await this.client.request(
       gql`query {
           epochs (limit: 1, order_by: { number: desc }) {
@@ -413,7 +416,7 @@ export class HasuraClient {
                   epoch {
                       number
                   }
-                  number
+                  slotNo
                   forgedAt
               }
           }}`
@@ -425,7 +428,7 @@ export class HasuraClient {
       // The initialization state can be determined by comparing the last epoch record against the
       // tip
       initialized: lastEpoch.number === tip.epoch?.number,
-      syncPercentage: (tip.number / nodeTipBlockNumber) * 100
+      syncPercentage: (tip.slotNo / nodeTipSlotNumber) * 100
     }
   }
 
@@ -488,7 +491,7 @@ export class HasuraClient {
       )
       return result.assets_aggregate.aggregate.count
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error({ err: error })
       throw error
     }
   }
@@ -537,8 +540,8 @@ export class HasuraClient {
       }`
     )
     this.logger.debug(
-      'Assets without a fingerprint stored',
-      { module: 'HasuraClient', value: result.assets_aggregate.aggregate.count }
+      { module: 'HasuraClient', qty: result.assets_aggregate.aggregate.count },
+      'Assets without a fingerprint stored'
     )
     return new BigNumber(result.assets_aggregate.aggregate.count).isGreaterThan(0)
   }
@@ -611,7 +614,7 @@ export class HasuraClient {
       )
       return result.assets_aggregate.aggregate.count
     } catch (error) {
-      this.logger.error(error)
+      this.logger.error({ err: error })
       throw error
     }
   }
@@ -651,18 +654,21 @@ export class HasuraClient {
 
   public async isInCurrentEra () {
     const protocolVersion = this.currentProtocolVersionFetcher.value
-    this.logger.debug('Comparing current protocol params with last known major version from cardano-node config', {
+    this.logger.debug({
       module: 'CardanoNodeClient',
-      value: {
-        currentProtocolVersion: protocolVersion,
-        lastConfiguredMajorVersion: protocolVersion.major
-      }
-    })
+      currentProtocolVersion: protocolVersion,
+      lastConfiguredMajorVersion: protocolVersion.major
+    },
+    'Comparing current protocol params with last known major version from cardano-node config'
+    )
     return protocolVersion.major >= this.lastConfiguredMajorVersion
   }
 
   public addAssetFingerprints (assets: Pick<AssetWithoutTokens, 'assetId' | 'fingerprint'>[]) {
-    this.logger.debug('Adding fingerprint to assets', { module: 'HasuraClient', value: assets.length })
+    this.logger.debug(
+      { module: 'HasuraClient', qty: assets.length },
+      'Adding fingerprint to assets'
+    )
     return this.client.request(
       gql`mutation AddAssetFingerprint($assets: [Asset_insert_input!]!) {
           insert_assets(
@@ -684,7 +690,10 @@ export class HasuraClient {
   }
 
   public addMetadata (assets: (Pick<AssetWithoutTokens, 'assetId' | 'description' | 'logo' | 'name' | 'ticker' | 'url'> & { metadataHash: string })[]) {
-    this.logger.info('Adding metadata to assets', { module: 'HasuraClient', value: assets.length })
+    this.logger.info(
+      { module: 'HasuraClient', qty: assets.length },
+      'Adding metadata to assets'
+    )
     return this.client.request(
       gql`mutation AddAssetMetadata($assets: [Asset_insert_input!]!) {
           insert_assets(
@@ -714,8 +723,8 @@ export class HasuraClient {
 
   public incrementMetadataFetchAttempts (assetIds: AssetWithoutTokens['assetId'][]) {
     this.logger.debug(
-      'Incrementing metadata fetch attempt',
-      { module: 'HasuraClient', value: assetIds.length }
+      { module: 'HasuraClient', qty: assetIds.length },
+      'Incrementing metadata fetch attempt'
     )
     return this.client.request(
       gql`mutation IncrementAssetMetadataFetchAttempt(
@@ -742,7 +751,10 @@ export class HasuraClient {
   }
 
   public async insertAssets (assets: AssetWithoutTokens[]) {
-    this.logger.debug('inserting assets found in tokens', { module: 'HasuraClient', value: assets.length })
+    this.logger.debug(
+      { module: 'HasuraClient', qty: assets.length },
+      'inserting assets found in tokens'
+    )
     const result = await this.client.request(
       gql`mutation InsertAssets($assets: [Asset_insert_input!]!) {
         insert_assets(objects: $assets) {

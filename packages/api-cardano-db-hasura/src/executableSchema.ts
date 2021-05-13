@@ -158,8 +158,8 @@ export async function buildSchema (
         },
         cardanoDbMeta: async () => {
           try {
-            const tip = await cardanoNodeClient.getTip()
-            return hasuraClient.getMeta(tip.blockNo)
+            const slotNo = await cardanoNodeClient.getTipSlotNo()
+            return hasuraClient.getMeta(slotNo)
           } catch (error) {
             throw new ApolloError(error)
           }

@@ -1,5 +1,4 @@
 export * from './Config'
-export * from './CardanoCli'
 export * from './CardanoNodeClient'
 export * from './DataSyncController'
 export * from './Db'
