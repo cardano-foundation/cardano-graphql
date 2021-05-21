@@ -15,6 +15,7 @@ import {
 } from 'graphql-scalars'
 import { CardanoNodeClient } from './CardanoNodeClient'
 import BigNumber from 'bignumber.js'
+import { FieldsComplexityMapping } from './typeAliases'
 const GraphQLBigInt = require('graphql-bigint')
 
 export const scalarResolvers = {
@@ -37,7 +38,8 @@ export const scalarResolvers = {
 export async function buildSchema (
   hasuraClient: HasuraClient,
   genesis: Genesis,
-  cardanoNodeClient: CardanoNodeClient
+  cardanoNodeClient: CardanoNodeClient,
+  customFieldsComplexity: FieldsComplexityMapping = {}
 ) {
   const throwIfNotInCurrentEra = async (queryName: string) => {
     if (!(await hasuraClient.isInCurrentEra())) {
@@ -45,7 +47,7 @@ export async function buildSchema (
     }
   }
   return makeExecutableSchema({
-    resolvers: Object.assign({}, scalarResolvers, {
+    resolvers: Object.assign({}, scalarResolvers, customFieldsComplexity, {
       Mutation: {
         submitTransaction: async (_root, args) => {
           await throwIfNotInCurrentEra('submitTransaction')

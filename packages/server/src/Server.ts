@@ -16,6 +16,7 @@ import { dummyLogger, Logger } from 'ts-log'
 import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic'
 import { clearIntervalAsync } from 'set-interval-async'
 import { RunnableModuleState } from '@cardano-graphql/util'
+import { queryComplexityValidator } from './apollo_server_validation_rules'
 
 export type Config = {
   allowIntrospection: boolean
@@ -24,6 +25,7 @@ export type Config = {
   apiPort: number
   cacheEnabled: boolean
   listenAddress: string
+  maxQueryComplexity: number
   prometheusMetrics: boolean
   queryDepthLimit?: number
   tracing: boolean
@@ -77,6 +79,9 @@ export class Server {
     }
     if (this.config.queryDepthLimit) {
       validationRules.push(depthLimit(this.config.queryDepthLimit))
+    }
+    if (this.config.maxQueryComplexity) {
+      validationRules.push(queryComplexityValidator(this.logger, this.config.maxQueryComplexity))
     }
     this.apolloServer = new ApolloServer({
       cacheControl: this.config.cacheEnabled ? { defaultMaxAge: 20 } : undefined,

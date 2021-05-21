@@ -38,6 +38,7 @@
     "fs-extra": "^9.0.1",
     "graphql": "14.5.8",
     "graphql-depth-limit": "^1.1.0",
+    "graphql-query-complexity": "^0.8.1",
     "prom-client": "^11.5.3",
     "set-interval-async": "^2.0.3",
     "ts-custom-error": "^3.2.0",
