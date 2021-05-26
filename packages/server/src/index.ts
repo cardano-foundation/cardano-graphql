@@ -25,7 +25,6 @@ export * from './config'
   try {
     const schemas: GraphQLSchema[] = []
     let genesis: Genesis
-    let cardanoNodeClient: CardanoNodeClient
     if (config.genesis.byronPath !== undefined || config.genesis.shelleyPath !== undefined) {
       genesis = {
         ...config.genesis.byronPath !== undefined ? { byron: require(config.genesis.byronPath) } : {},
@@ -34,12 +33,10 @@ export * from './config'
     }
     const lastConfiguredMajorVersion = require(config.cardanoNodeConfigPath)['LastKnownBlockVersion-Major']
 
-    if (config.cardanoCliPath !== undefined) {
-      cardanoNodeClient = new CardanoNodeClient(
-        lastConfiguredMajorVersion,
-        logger
-      )
-    }
+    const cardanoNodeClient = new CardanoNodeClient(
+      lastConfiguredMajorVersion,
+      logger
+    )
     const hasuraClient = new HasuraClient(
       config.hasuraCliPath,
       config.hasuraUri,
