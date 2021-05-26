@@ -1,8 +1,6 @@
 
 export interface Config {
-  cardanoCliPath: string,
   cardanoNodeConfigPath: string,
-  cardanoNodeSocketPath: string,
   db: {
     database: string,
     host: string,

@@ -11,9 +11,6 @@ export type Config = ServerConfig & ApiCardanoDbHasuraConfig & {
 export async function getConfig (): Promise<Config> {
   const env = filterAndTypecastEnvs(process.env)
 
-  if (!env.cardanoNodeSocketPath) {
-    throw new MissingConfig('CARDANO_NODE_SOCKET_PATH env not set')
-  }
   if (!env.cardanoNodeConfigPath) {
     throw new MissingConfig('CARDANO_NODE_CONFIG_PATH env not set')
   }
@@ -61,7 +58,6 @@ export async function getConfig (): Promise<Config> {
     allowedOrigins: env.allowedOrigins || true,
     apiPort: env.apiPort || 3100,
     cacheEnabled: env.cacheEnabled || false,
-    cardanoCliPath: env.cardanoCliPath || 'cardano-cli',
     db,
     loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString,
     jqPath: env.jqPath || 'jq',
@@ -84,9 +80,7 @@ function filterAndTypecastEnvs (env: any) {
     ALLOW_LIST_PATH,
     API_PORT,
     CACHE_ENABLED,
-    CARDANO_CLI_PATH,
     CARDANO_NODE_CONFIG_PATH,
-    CARDANO_NODE_SOCKET_PATH,
     GENESIS_FILE_BYRON,
     GENESIS_FILE_SHELLEY,
     HASURA_CLI_PATH,
@@ -118,9 +112,7 @@ function filterAndTypecastEnvs (env: any) {
     allowListPath: ALLOW_LIST_PATH,
     apiPort: Number(API_PORT),
     cacheEnabled: CACHE_ENABLED === 'true',
-    cardanoCliPath: CARDANO_CLI_PATH,
     cardanoNodeConfigPath: CARDANO_NODE_CONFIG_PATH,
-    cardanoNodeSocketPath: CARDANO_NODE_SOCKET_PATH,
     genesis: {
       byronPath: GENESIS_FILE_BYRON,
       shelleyPath: GENESIS_FILE_SHELLEY
