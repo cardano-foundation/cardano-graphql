@@ -8210,17 +8210,10 @@ set-blocking@^2.0.0:
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha1-BF+XgtARrppoA93TgrJDkrPYkPc=
 
-set-interval-async@^1.0.33:
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/set-interval-async/-/set-interval-async-1.0.33.tgz#f9a0a2ad7d8fb62cd6eac0ce088a6d631602089c"
-  integrity sha512-cKV9rLl707sWirvrZEL8XxyOxaPowueFRYKruRRj2cKHRd+M0JGg6IPqoUZVXkvaOZxvM3ulqDdNJuG5MmngxA==
-  dependencies:
-    "@babel/runtime" "7.5.0"
-
-set-interval-async@^1.0.34:
-  version "1.0.34"
-  resolved "https://registry.yarnpkg.com/set-interval-async/-/set-interval-async-1.0.34.tgz#3dcd299ce0067f11b73b23b69aa68872d46ce805"
-  integrity sha512-wwDVmeXwOaumkZ7FizY0ux8N0fk4KM1Bq7DfBGHxjD/NSSjcvSlj4D6HHIxzu415QngUr0YW97TXl/s1Ou/BHQ==
+set-interval-async@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/set-interval-async/-/set-interval-async-2.0.3.tgz#8d9e4904deaf8406fd98219c67fd9ef469f5fae2"
+  integrity sha512-8jJgvnhQYQc+XHzyKuJ2g4/0h4jPcT/q3x9VURk+AZohRKpcggcueNhPbS7wOXnamgpAn/enbGl4OnWXurVafg==
   dependencies:
     "@babel/runtime" "7.5.0"
 

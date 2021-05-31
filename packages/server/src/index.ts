@@ -53,7 +53,7 @@ export * from './config'
       config.metadataServerUri
     )
     await db.init({
-      onDbSetup: () => Promise.all([
+      onDbSetup: () =>
         hasuraClient.initialize()
           .then(() => dataSyncController.initialize())
           .catch((error) => {
@@ -61,10 +61,9 @@ export * from './config'
               logger.error(error.message)
               process.exit(1)
             }
-          }),
-        cardanoNodeClient.initialize(config.ogmios)
-      ])
+          })
     })
+    await cardanoNodeClient.initialize(config.ogmios)
     schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis, cardanoNodeClient))
     const server = new Server(schemas, config, logger)
     await server.init()

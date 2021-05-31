@@ -115,7 +115,9 @@ export class Server {
       }
       if (result.data.cardanoDbMeta.initialized) {
         this.logger.info({ module: 'Server' }, 'DB ready')
-        await clearIntervalAsync(this.syncProgress)
+        // Promise not awaited purposely
+        // https://github.com/input-output-hk/cardano-graphql/issues/459
+        clearIntervalAsync(this.syncProgress)
       } else {
         this.logger.info({ module: 'Server' }, `DB sync progress: ${result.data.cardanoDbMeta.syncPercentage} %`)
       }
