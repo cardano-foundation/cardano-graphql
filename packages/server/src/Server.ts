@@ -9,14 +9,13 @@ import { mergeSchemas } from '@graphql-tools/merge'
 import http from 'http'
 import { listenPromise } from './util'
 import { AllowList } from './AllowList'
-import { prometheusMetricsPlugin } from './apollo_server_plugins'
+import { prometheusMetricsPlugin, queryComplexityPlugin } from './apollo_server_plugins'
 import { IntrospectionNotPermitted, TracingRequired } from './errors'
 import { allowListMiddleware } from './express_middleware'
 import { dummyLogger, Logger } from 'ts-log'
 import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic'
 import { clearIntervalAsync } from 'set-interval-async'
 import { RunnableModuleState } from '@cardano-graphql/util'
-import { queryComplexityValidator } from './apollo_server_validation_rules'
 
 export type Config = {
   allowIntrospection: boolean
@@ -25,7 +24,7 @@ export type Config = {
   apiPort: number
   cacheEnabled: boolean
   listenAddress: string
-  maxQueryComplexity: number
+  maxQueryComplexity?: number
   prometheusMetrics: boolean
   queryDepthLimit?: number
   tracing: boolean
@@ -56,6 +55,9 @@ export class Server {
     let allowList: AllowList
     const plugins: PluginDefinition[] = []
     const validationRules = []
+    const schema = mergeSchemas({
+      schemas: this.schemas
+    })
     if (this.config.allowListPath) {
       if (this.config.allowIntrospection === true) {
         throw new IntrospectionNotPermitted('allowListPath')
@@ -81,7 +83,7 @@ export class Server {
       validationRules.push(depthLimit(this.config.queryDepthLimit))
     }
     if (this.config.maxQueryComplexity) {
-      validationRules.push(queryComplexityValidator(this.logger, this.config.maxQueryComplexity))
+      plugins.push(queryComplexityPlugin(schema, this.logger, this.config.maxQueryComplexity))
     }
     this.apolloServer = new ApolloServer({
       cacheControl: this.config.cacheEnabled ? { defaultMaxAge: 20 } : undefined,
@@ -89,9 +91,7 @@ export class Server {
       playground: this.config.allowIntrospection,
       plugins,
       validationRules,
-      schema: mergeSchemas({
-        schemas: this.schemas
-      }),
+      schema,
       tracing: this.config.tracing
     })
     this.apolloServer.applyMiddleware({
