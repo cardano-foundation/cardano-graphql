@@ -1,0 +1,8 @@
+query fieldExtensionTest($multiplier: Int) {
+  extensionComplexityTest(multiplier: $multiplier) { 
+    fieldOne
+    fieldTwo
+    fieldThree
+    fieldFour
+  }
+}
