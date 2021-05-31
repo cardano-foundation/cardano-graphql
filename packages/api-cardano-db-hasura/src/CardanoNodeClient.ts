@@ -40,6 +40,7 @@ export class CardanoNodeClient {
   }
 
   public async initialize (ogmiosConnectionConfig?: ConnectionConfig) {
+    this.logger.info({ module: 'CardanoNodeClient' }, 'Initializing')
     await pRetry(async () => {
       const options = ogmiosConnectionConfig ? { connection: ogmiosConnectionConfig } : {}
       this.stateQueryClient = await createStateQueryClient(options)
@@ -56,6 +57,7 @@ export class CardanoNodeClient {
         this.logger
       )
     })
+    this.logger.info({ module: 'CardanoNodeClient' }, 'Initialized')
   }
 
   private async isInCurrentEra () {
