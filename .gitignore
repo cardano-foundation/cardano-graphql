@@ -3,6 +3,7 @@
 *.nyc_output
 *coverage
 *d.ts
+!packages/api-cardano-db-hasura/src/blake2b.d.ts
 *dist/
 lerna-debug.log
 *node_modules/
