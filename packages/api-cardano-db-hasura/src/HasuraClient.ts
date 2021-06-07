@@ -1,4 +1,5 @@
 import util, { DataFetcher } from '@cardano-graphql/util'
+import { Schema } from '@cardano-ogmios/client'
 import { exec } from 'child_process'
 import fetch from 'cross-fetch'
 import { DocumentNode, GraphQLSchema, print } from 'graphql'
@@ -11,7 +12,7 @@ import {
   Asset,
   AssetBalance,
   AssetSupply,
-  Int_Comparison_Exp as IntComparisonExp,
+  Block,
   PaymentAddressSummary,
   ShelleyProtocolParams,
   Token,
@@ -19,7 +20,11 @@ import {
 } from './graphql_types'
 import { dummyLogger, Logger } from 'ts-log'
 import BigNumber from 'bignumber.js'
-import { AssetWithoutTokens } from './typeAliases'
+import {
+  AssetMetadataAndHash,
+  AssetMetadataHashAndId,
+  AssetWithoutTokens
+} from './typeAliases'
 
 export type AdaPotsToCalculateSupply = { circulating: AssetSupply['circulating'], reserves: AdaPots['reserves']}
 
@@ -256,6 +261,31 @@ export class HasuraClient {
     return schema
   }
 
+  public async deleteAssetsAfterSlot (slotNo: Block['slotNo']): Promise<number> {
+    this.logger.debug(
+      { module: 'HasuraClient', slotNo },
+      'deleting assets found in tokens after slot'
+    )
+
+    const result = await this.client.request(
+      gql`mutation DeleteAssetsAfterSlot($slotNo: Int!) {
+          delete_assets(
+              where: {
+                  firstAppearedInSlot: {
+                      _gt: $slotNo
+                  }
+              }
+          ) {
+              affected_rows
+          }
+      }`,
+      {
+        slotNo
+      }
+    )
+    return result.delete_assets.affected_rows
+  }
+
   public async getCurrentProtocolVersion (): Promise<ShelleyProtocolParams['protocolVersion']> {
     const result = await this.client.request(
       gql`query {
@@ -267,6 +297,30 @@ export class HasuraClient {
       }`
     )
     return result.epochs[0].protocolParams.protocolVersion
+  }
+
+  public async getMostRecentPointWithNewAsset (): Promise<Schema.Point | null> {
+    // An offset of 1 is applied to ensure a partial block extraction is not skipped
+    const result = await this.client.request(
+      gql`query {
+          assets (
+              limit: 1
+              offset: 1
+              order_by: { firstAppearedInBlock: { slotNo: desc }}
+          ) {
+              firstAppearedInBlock {
+                  hash
+                  slotNo
+              }
+          }
+      }`
+    )
+    if (result.assets.length === 0) return null
+    const { hash, slotNo } = result.assets[0].firstAppearedInBlock
+    return {
+      hash: hash.substring(2),
+      slot: slotNo
+    }
   }
 
   public async getPaymentAddressSummary (address: string, atBlock?: number): Promise<PaymentAddressSummary> {
@@ -432,123 +486,31 @@ export class HasuraClient {
     }
   }
 
-  public async getDistinctAssetsInTokens (options?: { limit: number, offset: number }): Promise<AssetWithoutTokens[]> {
+  public async hasAsset (assetId: Asset['assetId']): Promise<boolean> {
     const result = await this.client.request(
-      gql`query DistinctAssetsInTokens (
-          $limit: Int
-          $offset: Int
+      gql`query HasAsset (
+          $assetId: String!
       ) {
-          tokenMints (
-              distinct_on: assetId
-              limit: $limit
-              order_by: { assetId: asc }
-              offset: $offset
-          ) {
-              assetId
-              assetName
-              policyId
-          }
-      }`,
-      {
-        limit: options?.limit,
-        offset: options?.offset
-      }
-    )
-    return result.tokenMints as AssetWithoutTokens[]
-  }
-
-  public async distinctAssetsInTokensCount (): Promise<number> {
-    const result = await this.client.request(
-      gql`query {
-          tokenMints_aggregate (distinct_on: assetId) {
-              aggregate {
-                  count
-              }
-          }
-      }`
-    )
-    return result.tokenMints_aggregate.aggregate.count
-  }
-
-  public async assetsEligibleForMetadataRefreshCount (metadataFetchAttempts: IntComparisonExp): Promise<number> {
-    try {
-      const result = await this.client.request(
-        gql`query AssetsEligibleForMetadataRefreshCount (
-            $metadataFetchAttempts: Int_comparison_exp!
-        ) {
-            assets_aggregate (
-                where: {
-                    metadataFetchAttempts: $metadataFetchAttempts
-                }) {
-                aggregate {
-                    count
-                }
-            }
-        }`,
-        {
-          metadataFetchAttempts
-        }
-      )
-      return result.assets_aggregate.aggregate.count
-    } catch (error) {
-      this.logger.error({ err: error })
-      throw error
-    }
-  }
-
-  public async getAssetsIncMetadata (metadataFetchAttempts: IntComparisonExp, options: { limit: number, offset: number }): Promise<AssetWithoutTokens[]> {
-    const result = await this.client.request(
-      gql`query AssetsIncMetadata (
-          $metadataFetchAttempts: Int_comparison_exp
-          $limit: Int
-          $offset: Int
-      ){
           assets (
-              limit: $limit
-              offset: $offset
-              order_by: { assetId: asc }
-              where: {
-                  metadataFetchAttempts: $metadataFetchAttempts
-              }
+              where: { assetId: { _eq: $assetId }}
           ) {
               assetId
-              assetName
-              description
-              name
-              policyId
           }
-      }`,
-      {
-        metadataFetchAttempts,
-        limit: options.limit,
-        offset: options.offset
+      }`, {
+        assetId
       }
     )
-    return result.assets
-  }
-
-  public async hasAssetsWithoutFingerprint (): Promise<boolean> {
-    const result = await this.client.request(
-      gql`query {
-          assets_aggregate (
-              where: { fingerprint: { _is_null: true }}
-          ) {
-              aggregate {
-                  count  
-              }
-          }
-      }`
-    )
+    const response = result.assets.length > 0
     this.logger.debug(
-      { module: 'HasuraClient', qty: result.assets_aggregate.aggregate.count },
-      'Assets without a fingerprint stored'
+      { module: 'HasuraClient', assetId, hasAsset: response },
+      'Has asset?'
     )
-    return new BigNumber(result.assets_aggregate.aggregate.count).isGreaterThan(0)
+    return response
   }
 
-  public async getAssetsById (assetIds: Asset['assetId'][]): Promise<AssetWithoutTokens[]> {
+  public async getAssetMetadataHashesById (assetIds: Asset['assetId'][]): Promise<AssetMetadataHashAndId[]> {
     const result = await this.client.request(
-      gql`query IdsOfAssetsWithoutMetadata (
+      gql`query AssetMetadataHashes (
           $assetIds: [String!]!
       ){
           assets (
@@ -556,97 +518,11 @@ export class HasuraClient {
                   assetId: { _in: $assetIds }
               }) {
               assetId
+              metadataHash
           }
       }`,
       {
         assetIds
-      }
-    )
-    return result.assets
-  }
-
-  public async getAssetsWithoutFingerprint (limit?: number): Promise<Pick<AssetWithoutTokens, 'assetId' | 'assetName' | 'policyId'>[]> {
-    const result = await this.client.request(
-      gql`query AssetsWithoutFingerprint (
-        $limit: Int
-      ) {
-          assets (
-              limit: $limit,
-              order_by: { assetId: asc }
-              where: { fingerprint: { _is_null: true }}
-          ) {
-              assetId
-              assetName
-              policyId
-          }
-      }`,
-      {
-        limit
-      }
-    )
-    return result.assets.map((asset: AssetWithoutTokens) => ({
-      ...asset,
-      policyId: util.scalars.Hash28Hex.serialize(asset.policyId)
-    }))
-  }
-
-  public async assetsWithoutMetadataCount (metadataFetchAttempts: IntComparisonExp): Promise<number> {
-    try {
-      const result = await this.client.request(
-        gql`query AssetsWithoutMetadataCount (
-            $metadataFetchAttempts: Int_comparison_exp!
-        ) {
-            assets_aggregate (
-                where: {
-                    _and: [
-                        { metadataFetchAttempts: $metadataFetchAttempts },
-                        { metadataHash: { _is_null: true }}
-                    ]
-                }) {
-                aggregate {
-                    count
-                }
-            }
-        }`,
-        {
-          metadataFetchAttempts
-        }
-      )
-      return result.assets_aggregate.aggregate.count
-    } catch (error) {
-      this.logger.error({ err: error })
-      throw error
-    }
-  }
-
-  public async getAssetsWithoutMetadata (
-    metadataFetchAttempts: IntComparisonExp,
-    options?: { limit: number, offset: number }
-  ): Promise<AssetWithoutTokens[]> {
-    const result = await this.client.request(
-      gql`query IdsOfAssetsWithoutMetadata (
-          $limit: Int
-          $metadataFetchAttempts: Int_comparison_exp!
-          $offset: Int
-      ){
-          assets (
-              limit: $limit
-              order_by: { assetId: asc }
-              offset: $offset
-              where: { 
-                  _and: [
-                      { metadataFetchAttempts: $metadataFetchAttempts },
-                      { metadataHash: { _is_null: true }}
-                  ]
-              }) {
-              assetId
-              metadataFetchAttempts
-          }
-      }`,
-      {
-        metadataFetchAttempts,
-        limit: options?.limit,
-        offset: options?.offset
       }
     )
     return result.assets
@@ -689,65 +565,47 @@ export class HasuraClient {
     )
   }
 
-  public addMetadata (assets: (Pick<AssetWithoutTokens, 'assetId' | 'description' | 'logo' | 'name' | 'ticker' | 'url'> & { metadataHash: string })[]) {
+  public async addAssetMetadata (asset: AssetMetadataAndHash) {
     this.logger.info(
-      { module: 'HasuraClient', qty: assets.length },
-      'Adding metadata to assets'
+      { module: 'HasuraClient', assetId: asset.assetId },
+      'Adding metadata to asset'
     )
-    return this.client.request(
-      gql`mutation AddAssetMetadata($assets: [Asset_insert_input!]!) {
-          insert_assets(
-              objects: $assets,
-              on_conflict: {
-                  constraint: Asset_pkey,
-                  update_columns: [
-                      description,
-                      logo,
-                      metadataHash,
-                      name,
-                      ticker,
-                      url
-                  ]
-              }
-          ) {
-              returning {
-                  assetId
-              }
-          }
-      }`,
-      {
-        assets
-      }
-    )
-  }
-
-  public incrementMetadataFetchAttempts (assetIds: AssetWithoutTokens['assetId'][]) {
-    this.logger.debug(
-      { module: 'HasuraClient', qty: assetIds.length },
-      'Incrementing metadata fetch attempt'
-    )
-    return this.client.request(
-      gql`mutation IncrementAssetMetadataFetchAttempt(
-          $assetIds: [String!]!
+    const result = await this.client.request(
+      gql`mutation AddAssetMetadata(
+          $assetId: String!
+          $description: String
+          $logo: String
+          $metadataHash: bpchar!
+          $name: String
+          $ticker: String
+          $url: String
       ) {
           update_assets(
               where: {
-                  assetId: { _in: $assetIds }
+                  assetId: { _eq: $assetId }
               },
-              _inc: {
-                  metadataFetchAttempts: 1
+              _set: {
+                  description: $description
+                  logo: $logo
+                  metadataHash: $metadataHash
+                  name: $name
+                  ticker: $ticker
+                  url: $url
               }
           ) {
+              affected_rows
               returning {
                   assetId
-                  metadataFetchAttempts
               }
           }
       }`,
       {
-        assetIds
+        ...asset
       }
     )
+    if (result.errors !== undefined) {
+      throw new Error(result.errors)
+    }
   }
 
   public async insertAssets (assets: AssetWithoutTokens[]) {

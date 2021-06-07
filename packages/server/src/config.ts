@@ -63,11 +63,7 @@ export async function getConfig (): Promise<Config> {
     jqPath: env.jqPath || 'jq',
     listenAddress: env.listenAddress || '0.0.0.0',
     pollingInterval: {
-      adaSupply: env.pollingInterval.adaSupply || 1000 * 60,
-      metadataSync: {
-        initial: env.pollingInterval.metadataSync.initial || 1000 * 60 * 5,
-        ongoing: env.pollingInterval.metadataSync.ongoing || 1000 * 60 * 60
-      }
+      adaSupply: env.pollingInterval.adaSupply || 1000 * 60
     },
     queryDepthLimit: env.queryDepthLimit || 10
   }
@@ -79,6 +75,7 @@ function filterAndTypecastEnvs (env: any) {
     ALLOWED_ORIGINS,
     ALLOW_LIST_PATH,
     API_PORT,
+    ASSET_METADATA_UPDATE_INTERVAL,
     CACHE_ENABLED,
     CARDANO_NODE_CONFIG_PATH,
     GENESIS_FILE_BYRON,
@@ -92,8 +89,6 @@ function filterAndTypecastEnvs (env: any) {
     OGMIOS_HOST,
     OGMIOS_PORT,
     POLLING_INTERVAL_ADA_SUPPLY,
-    POLLING_INTERVAL_METADATA_SYNC_INITIAL,
-    POLLING_INTERVAL_METADATA_SYNC_ONGOING,
     POSTGRES_DB,
     POSTGRES_DB_FILE,
     POSTGRES_HOST,
@@ -122,17 +117,16 @@ function filterAndTypecastEnvs (env: any) {
     jqPath: JQ_PATH,
     listenAddress: LISTEN_ADDRESS,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
+    metadataUpdateInterval: {
+      assets: ASSET_METADATA_UPDATE_INTERVAL ? Number(ASSET_METADATA_UPDATE_INTERVAL) : undefined
+    },
     metadataServerUri: METADATA_SERVER_URI,
     ogmios: {
       host: OGMIOS_HOST,
       port: OGMIOS_PORT ? Number(OGMIOS_PORT) : undefined
     },
     pollingInterval: {
-      adaSupply: Number(POLLING_INTERVAL_ADA_SUPPLY),
-      metadataSync: {
-        initial: Number(POLLING_INTERVAL_METADATA_SYNC_INITIAL),
-        ongoing: Number(POLLING_INTERVAL_METADATA_SYNC_ONGOING)
-      }
+      adaSupply: Number(POLLING_INTERVAL_ADA_SUPPLY)
     },
     postgresDb: POSTGRES_DB,
     postgresDbFile: POSTGRES_DB_FILE,

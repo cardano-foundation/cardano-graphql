@@ -16,15 +16,14 @@ export interface Config {
   hasuraUri: string,
   jqPath: string,
   metadataServerUri: string,
+  metadataUpdateInterval?: {
+    assets: number
+  },
   ogmios?: {
     host?: string
     port?: number
   },
   pollingInterval: {
     adaSupply: number
-    metadataSync: {
-      initial: number
-      ongoing: number
-    }
   }
 }

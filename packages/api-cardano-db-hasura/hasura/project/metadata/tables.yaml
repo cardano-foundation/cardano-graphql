@@ -59,8 +59,18 @@
       insert: insert_assets
       select_aggregate: assets_aggregate
       select: assets
+      delete: delete_assets
       update: update_assets
     custom_column_names: {}
+  object_relationships:
+  - name: firstAppearedInBlock
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Block
+        column_mapping:
+          firstAppearedInSlot: slotNo
   array_relationships:
   - name: tokenMints
     using:
@@ -75,32 +85,32 @@
     permission:
       check: {}
       columns:
-      - ticker
       - assetId
       - assetName
       - description
       - fingerprint
+      - firstAppearedInSlot
       - logo
-      - metadataFetchAttempts
       - metadataHash
       - name
       - policyId
+      - ticker
       - url
       backend_only: false
   select_permissions:
   - role: cardano-graphql
     permission:
       columns:
-      - ticker
       - assetId
       - assetName
       - description
       - fingerprint
+      - firstAppearedInSlot
       - logo
-      - metadataFetchAttempts
       - metadataHash
       - name
       - policyId
+      - ticker
       - url
       filter: {}
       limit: 2500
@@ -109,19 +119,23 @@
   - role: cardano-graphql
     permission:
       columns:
-      - ticker
       - assetId
       - assetName
       - description
       - fingerprint
+      - firstAppearedInSlot
       - logo
-      - metadataFetchAttempts
       - metadataHash
       - name
       - policyId
+      - ticker
       - url
       filter: {}
       check: {}
+  delete_permissions:
+  - role: cardano-graphql
+    permission:
+      filter: {}
 - table:
     schema: public
     name: Block

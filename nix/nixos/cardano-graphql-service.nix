@@ -113,11 +113,7 @@ in {
         type = lib.types.nullOr lib.types.int;
         default = null;
       };
-      pollingIntervalMetadataSyncInitial = lib.mkOption {
-        type = lib.types.nullOr lib.types.int;
-        default = null;
-      };
-      pollingIntervalMetadataSyncOngoing = lib.mkOption {
+      assetMetadataUpdateInterval = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
         default = null;
       };
@@ -168,8 +164,7 @@ in {
       (lib.optionalAttrs (cfg.listenAddress != null) { LISTEN_ADDRESS = cfg.listenAddress; }) //
       (lib.optionalAttrs (cfg.metadataServerUri != null) { METADATA_SERVER_URI = toString cfg.metadataServerUri; }) //
       (lib.optionalAttrs (cfg.pollingIntervalAdaSupply != null) { POLLING_INTERVAL_ADA_SUPPLY = toString cfg.pollingIntervalAdaSupply; }) //
-      (lib.optionalAttrs (cfg.pollingIntervalMetadataSyncInitial != null) { POLLING_INTERVAL_METADATA_SYNC_INITIAL = toString cfg.pollingIntervalMetadataSyncInitial; }) //
-      (lib.optionalAttrs (cfg.pollingIntervalMetadataSyncOngoing != null) { POLLING_INTERVAL_METADATA_SYNC_ONGOING = toString cfg.pollingIntervalMetadataSyncOngoing; }) //
+      (lib.optionalAttrs (cfg.assetMetadataUpdateInterval != null) { ASSET_METADATA_UPDATE_INTERVAL = toString cfg.assetMetadataUpdateInterval; }) //
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; }) //
       (lib.optionalAttrs (cfg.allowListPath != null) { ALLOW_LIST_PATH = cfg.allowListPath; });
       path = with pkgs; [ netcat curl postgresql jq frontend hasura-cli glibc.bin patchelf ];

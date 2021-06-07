@@ -5,6 +5,7 @@ import {
   ConnectionConfig,
   createStateQueryClient,
   createTxSubmissionClient,
+  Schema,
   StateQueryClient,
   TxSubmissionClient
 } from '@cardano-ogmios/client'
@@ -33,7 +34,7 @@ export class CardanoNodeClient {
     return slotNo
   }
 
-  public async getProtocolParams () {
+  public async getProtocolParams (): Promise<Schema.ProtocolParametersShelley> {
     const protocolParams = await this.stateQueryClient.currentProtocolParameters()
     this.logger.debug({ module: 'CardanoNodeClient', protocolParams }, 'getProtocolParams')
     return protocolParams

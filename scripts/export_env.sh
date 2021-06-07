@@ -20,6 +20,7 @@ case "$NETWORK" in
             API_PORT=3101
             HASURA_PORT=8091
             METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
+            OGMIOS_PORT=1338
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
             ;;
@@ -27,6 +28,7 @@ case "$NETWORK" in
             API_PORT=3102
             HASURA_PORT=8092
             METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
+            OGMIOS_PORT=1339
             PG_ADMIN_PORT=8444
             POSTGRES_PORT=5444
             ;;
@@ -44,6 +46,7 @@ export HASURA_PORT
 export HASURA_URI=http://localhost:${HASURA_PORT}
 export METADATA_SERVER_URI
 export NETWORK
+export OGMIOS_PORT
 export POSTGRES_DB_FILE=${SECRETS_DIR}/postgres_db
 export POSTGRES_PASSWORD_FILE=${SECRETS_DIR}/postgres_password
 export PG_ADMIN_PORT
