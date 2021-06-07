@@ -71,7 +71,7 @@ export class CardanoNodeClient {
   }
 
   public async shutdown (): Promise<void> {
-    Promise.all([
+    await Promise.all([
       this.stateQueryClient.release,
       this.txSubmissionClient.shutdown
     ])
