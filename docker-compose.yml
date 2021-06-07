@@ -82,6 +82,7 @@ services:
     restart: on-failure
     environment:
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+      - HASURA_GRAPHQL_CORS_DOMAIN=http://localhost:9695
     secrets:
       - postgres_db
       - postgres_password
