@@ -79,8 +79,8 @@ export * from './config'
           await worker.start()
           await chainFollower.start(points)
         } catch (error) {
+          logger.error(error.message)
           if (error instanceof errors.HostDoesNotExist) {
-            logger.error(error.message)
             process.exit(1)
           }
         }
