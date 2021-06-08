@@ -23,35 +23,36 @@ export async function getConfig (): Promise<Config> {
   if (!env.genesis.shelleyPath) {
     throw new MissingConfig('GENESIS_FILE_SHELLEY env not set')
   }
-  if (!env.postgresDbFile && !env.postgresDb) {
+  if (!env.postgres.dbFile && !env.postgres.db) {
     throw new MissingConfig('POSTGRES_DB_FILE or POSTGRES_DB env not set')
   }
-  if (!env.postgresHost) {
+  if (!env.postgres.host) {
     throw new MissingConfig('POSTGRES_HOST env not set')
   }
-  if (!env.postgresPasswordFile && !env.postgresPassword) {
+  if (!env.postgres.passwordFile && !env.postgres.password) {
     throw new MissingConfig('POSTGRES_PASSWORD_FILE or POSTGRES_PASSWORD env not set')
   }
-  if (!env.postgresPort) {
+  if (!env.postgres.port) {
     throw new MissingConfig('POSTGRES_PORT env not set')
   }
-  if (!env.postgresUserFile && !env.postgresUser) {
+  if (!env.postgres.userFile && !env.postgres.user) {
     throw new MissingConfig('POSTGRES_USER_FILE or POSTGRES_USER env not set')
   }
   let db: Config['db']
   try {
     db = {
-      database: env.postgresDb || (await fs.readFile(env.postgresDbFile, 'utf8')).toString(),
-      host: env.postgresHost,
-      password: env.postgresPassword || (await fs.readFile(env.postgresPasswordFile, 'utf8')).toString(),
-      port: env.postgresPort,
-      user: env.postgresUser || (await fs.readFile(env.postgresUserFile, 'utf8')).toString()
+      database: env.postgres.db || (await fs.readFile(env.postgres.dbFile, 'utf8')).toString(),
+      host: env.postgres.host,
+      password: env.postgres.password || (await fs.readFile(env.postgres.passwordFile, 'utf8')).toString(),
+      port: env.postgres.port,
+      user: env.postgres.user || (await fs.readFile(env.postgres.userFile, 'utf8')).toString()
     }
   } catch (error) {
     throw new MissingConfig('Database configuration cannot be read')
   }
+  const { postgres, ...selectedEnv } = env
   return {
-    ...env,
+    ...selectedEnv,
     allowIntrospection:
       (process.env.NODE_ENV === 'production' && env.allowIntrospection) ||
       (process.env.NODE_ENV !== 'production' && env.allowIntrospection !== false),
@@ -125,14 +126,16 @@ function filterAndTypecastEnvs (env: any) {
     pollingInterval: {
       adaSupply: Number(POLLING_INTERVAL_ADA_SUPPLY)
     },
-    postgresDb: POSTGRES_DB,
-    postgresDbFile: POSTGRES_DB_FILE,
-    postgresHost: POSTGRES_HOST,
-    postgresPassword: POSTGRES_PASSWORD,
-    postgresPasswordFile: POSTGRES_PASSWORD_FILE,
-    postgresPort: POSTGRES_PORT ? Number(POSTGRES_PORT) : undefined,
-    postgresUser: POSTGRES_USER,
-    postgresUserFile: POSTGRES_USER_FILE,
+    postgres: {
+      db: POSTGRES_DB,
+      dbFile: POSTGRES_DB_FILE,
+      host: POSTGRES_HOST,
+      password: POSTGRES_PASSWORD,
+      passwordFile: POSTGRES_PASSWORD_FILE,
+      port: POSTGRES_PORT ? Number(POSTGRES_PORT) : undefined,
+      user: POSTGRES_USER,
+      userFile: POSTGRES_USER_FILE
+    },
     prometheusMetrics: PROMETHEUS_METRICS === 'true',
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
     tracing: TRACING === 'true'
