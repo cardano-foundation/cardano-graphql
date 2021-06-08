@@ -14,7 +14,6 @@ export interface Config {
   },
   hasuraCliPath: string,
   hasuraUri: string,
-  jqPath: string,
   metadataServerUri: string,
   metadataUpdateInterval?: {
     assets: number

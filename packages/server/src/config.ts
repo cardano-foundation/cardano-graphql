@@ -60,7 +60,6 @@ export async function getConfig (): Promise<Config> {
     cacheEnabled: env.cacheEnabled || false,
     db,
     loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString,
-    jqPath: env.jqPath || 'jq',
     listenAddress: env.listenAddress || '0.0.0.0',
     pollingInterval: {
       adaSupply: env.pollingInterval.adaSupply || 1000 * 60
@@ -82,7 +81,6 @@ function filterAndTypecastEnvs (env: any) {
     GENESIS_FILE_SHELLEY,
     HASURA_CLI_PATH,
     HASURA_URI,
-    JQ_PATH,
     LISTEN_ADDRESS,
     LOGGER_MIN_SEVERITY,
     METADATA_SERVER_URI,
@@ -114,7 +112,6 @@ function filterAndTypecastEnvs (env: any) {
     },
     hasuraCliPath: HASURA_CLI_PATH,
     hasuraUri: HASURA_URI,
-    jqPath: JQ_PATH,
     listenAddress: LISTEN_ADDRESS,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
     metadataUpdateInterval: {

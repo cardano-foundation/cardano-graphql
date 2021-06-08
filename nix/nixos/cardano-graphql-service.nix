@@ -147,7 +147,6 @@ in {
         HASURA_CLI_PATH = hasura-cli + "/bin/hasura";
         HASURA_GRAPHQL_ENABLE_TELEMETRY = toString false;
         HASURA_URI = hasuraBaseUri;
-        JQ_PATH = pkgs.jq + "/bin/jq";
         LOGGER_MIN_SEVERITY = cfg.loggerMinSeverity;
         POSTGRES_DB = cfg.db;
         POSTGRES_HOST = cfg.dbHost;
@@ -167,7 +166,7 @@ in {
       (lib.optionalAttrs (cfg.assetMetadataUpdateInterval != null) { ASSET_METADATA_UPDATE_INTERVAL = toString cfg.assetMetadataUpdateInterval; }) //
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; }) //
       (lib.optionalAttrs (cfg.allowListPath != null) { ALLOW_LIST_PATH = cfg.allowListPath; });
-      path = with pkgs; [ netcat curl postgresql jq frontend hasura-cli glibc.bin patchelf ];
+      path = with pkgs; [ netcat curl postgresql frontend hasura-cli glibc.bin patchelf ];
       preStart = ''
         set -exuo pipefail
         ${installHasuraCLI}

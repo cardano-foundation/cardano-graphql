@@ -64,8 +64,7 @@ ARG METADATA_SERVER_URI="https://tokens.cardano.org"
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
   echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list &&\
   apt-get update && apt-get install -y --no-install-recommends \
-  ca-certificates \
-  jq
+  ca-certificates
 COPY --from=downloader /usr/local/bin/hasura /usr/local/bin/hasura
 ENV \
   CARDANO_NODE_CONFIG_PATH=/config/cardano-node/config.json \
@@ -75,7 +74,6 @@ ENV \
   HASURA_CLI_PATH=/usr/local/bin/hasura \
   HASURA_GRAPHQL_ENABLE_TELEMETRY=false \
   HASURA_URI="http://hasura:8080" \
-  JQ_PATH=/usr/bin/jq \
   LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
   METADATA_SERVER_URI=${METADATA_SERVER_URI} \
   NETWORK=${NETWORK} \
