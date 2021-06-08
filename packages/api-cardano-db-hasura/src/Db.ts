@@ -2,6 +2,8 @@ import { ClientConfig } from 'pg'
 import createSubscriber, { Subscriber } from 'pg-listen'
 import { dummyLogger, Logger } from 'ts-log'
 
+const MODULE_NAME = 'Db'
+
 export class Db {
   pgSubscriber: Subscriber
 
@@ -16,14 +18,14 @@ export class Db {
 
   public async init ({ onDbSetup }: { onDbSetup: Function }): Promise<void> {
     this.pgSubscriber.events.on('connected', async () => {
-      this.logger.debug({ module: 'Db' }, 'pgSubscriber: Connected')
+      this.logger.debug({ module: MODULE_NAME }, 'pgSubscriber: Connected')
       await onDbSetup()
     })
     this.pgSubscriber.events.on('reconnect', (attempt) => {
-      this.logger.warn({ module: 'Db' }, `pgSubscriber: Reconnecting attempt ${attempt}`)
+      this.logger.warn({ module: MODULE_NAME }, `pgSubscriber: Reconnecting attempt ${attempt}`)
     })
     this.pgSubscriber.events.on('error', (error) => {
-      this.logger.error({ module: 'Db', err: error }, 'pgSubscriber')
+      this.logger.error({ module: MODULE_NAME, err: error }, 'pgSubscriber')
       process.exit(1)
     })
     this.pgSubscriber.notifications.on('cardano_db_sync_startup', async payload => {
@@ -35,7 +37,7 @@ export class Db {
           await onDbSetup()
           break
         default :
-          this.logger.error({ module: 'Db' }, `DbClient.pgSubscriber: Unknown message payload ${payload}`)
+          this.logger.error({ module: MODULE_NAME }, `DbClient.pgSubscriber: Unknown message payload ${payload}`)
       }
     })
     try {

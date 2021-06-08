@@ -1,6 +1,6 @@
 import { AssetSupply, Transaction } from './graphql_types'
 import pRetry from 'p-retry'
-import util from '@cardano-graphql/util'
+import util, { errors } from '@cardano-graphql/util'
 import {
   ConnectionConfig,
   createStateQueryClient,
@@ -16,38 +16,50 @@ const isEraMismatch = (errorMessage: string): boolean =>
   errorMessage.includes('DecoderErrorDeserialiseFailure') ||
   errorMessage.includes('The era of the node and the tx do not match')
 
+const MODULE_NAME = 'CardanoNodeClient'
+
 export class CardanoNodeClient {
   readonly networkParams: string[]
   public adaCirculatingSupply: AssetSupply['circulating']
   private stateQueryClient: StateQueryClient
   private txSubmissionClient: TxSubmissionClient
+  private isInitialized: boolean
 
   constructor (
     readonly lastConfiguredMajorVersion: number,
     private logger: Logger = dummyLogger
-  ) {}
+  ) {
+    this.isInitialized = false
+  }
 
   public async getTipSlotNo () {
+    if (!this.isInitialized) {
+      throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getTipSlotNo')
+    }
     const tip = await this.stateQueryClient.ledgerTip()
     const slotNo = tip === 'origin' ? 0 : tip.slot
-    this.logger.debug({ module: 'CardanoNodeClient', slotNo }, 'getTipSlotNo')
+    this.logger.debug({ module: MODULE_NAME, slotNo }, 'getTipSlotNo')
     return slotNo
   }
 
   public async getProtocolParams (): Promise<Schema.ProtocolParametersShelley> {
+    if (!this.isInitialized) {
+      throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getProtocolParams')
+    }
     const protocolParams = await this.stateQueryClient.currentProtocolParameters()
-    this.logger.debug({ module: 'CardanoNodeClient', protocolParams }, 'getProtocolParams')
+    this.logger.debug({ module: MODULE_NAME, protocolParams }, 'getProtocolParams')
     return protocolParams
   }
 
   public async initialize (ogmiosConnectionConfig?: ConnectionConfig) {
-    this.logger.info({ module: 'CardanoNodeClient' }, 'Initializing')
+    this.logger.info({ module: MODULE_NAME }, 'Initializing')
+    this.isInitialized = true
     await pRetry(async () => {
       const options = ogmiosConnectionConfig ? { connection: ogmiosConnectionConfig } : {}
       this.stateQueryClient = await createStateQueryClient(options)
       this.txSubmissionClient = await createTxSubmissionClient(options)
       if (!(await this.isInCurrentEra())) {
-        this.logger.warn({ module: 'CardanoNodeClient' }, 'cardano-node is still synchronizing')
+        this.logger.warn({ module: MODULE_NAME }, 'cardano-node is still synchronizing')
         throw new Error()
       }
     }, {
@@ -58,13 +70,13 @@ export class CardanoNodeClient {
         this.logger
       )
     })
-    this.logger.info({ module: 'CardanoNodeClient' }, 'Initialized')
+    this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
   private async isInCurrentEra () {
     const { protocolVersion } = await this.getProtocolParams()
     this.logger.debug({
-      module: 'CardanoNodeClient',
+      module: MODULE_NAME,
       currentProtocolVersion: protocolVersion,
       lastConfiguredMajorVersion: this.lastConfiguredMajorVersion
     }, 'Comparing current protocol params with last known major version from cardano-node config')
@@ -79,10 +91,13 @@ export class CardanoNodeClient {
   }
 
   public async submitTransaction (transaction: string): Promise<Transaction['hash']> {
+    if (!this.isInitialized) {
+      throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'submitTransaction')
+    }
     try {
       await this.txSubmissionClient.submitTx(transaction)
       const hash = getHashOfSignedTransaction(transaction)
-      this.logger.info({ module: 'CardanoNodeClient', hash }, 'submitTransaction')
+      this.logger.info({ module: MODULE_NAME, hash }, 'submitTransaction')
       return hash
     } catch (error) {
       if (!isEraMismatch(error.message)) {

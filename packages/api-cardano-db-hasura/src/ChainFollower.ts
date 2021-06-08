@@ -5,6 +5,7 @@ import {
   isMaryBlock,
   Schema
 } from '@cardano-ogmios/client'
+import { errors } from '@cardano-graphql/util'
 import { Config } from './Config'
 import { Asset } from './graphql_types'
 import { HasuraClient } from './HasuraClient'
@@ -17,15 +18,19 @@ export const assetFingerprint = (policyId: Asset['policyId'], assetName?: Asset[
     assetName !== undefined ? Buffer.from(assetName, 'hex') : undefined)
     .fingerprint()
 
+const MODULE_NAME = 'ChainFollower'
+
 export class ChainFollower {
   private chainSyncClient: ChainSyncClient
   private queue: PgBoss
+  private isInitialized: boolean
 
   constructor (
     readonly hasuraClient: HasuraClient,
     private logger: Logger = dummyLogger,
     queueConfig: Config['db']
   ) {
+    this.isInitialized = false
     this.queue = new PgBoss({
       application_name: 'cardano-graphql',
       ...queueConfig
@@ -33,19 +38,19 @@ export class ChainFollower {
   }
 
   public async initialize (ogmiosConfig: Config['ogmios']) {
-    this.logger.info({ module: 'ChainFollower' }, 'Initializing')
+    this.logger.info({ module: MODULE_NAME }, 'Initializing')
     this.chainSyncClient = await createChainSyncClient({
       rollBackward: async ({ point, tip }, requestNext) => {
         if (point !== 'origin') {
           this.logger.info(
-            { module: 'ChainFollower', tip, rollbackPoint: point }, 'Rolling back'
+            { module: MODULE_NAME, tip, rollbackPoint: point }, 'Rolling back'
           )
           const deleteResult = await this.hasuraClient.deleteAssetsAfterSlot(point.slot)
-          this.logger.info({ module: 'ChainFollower' }, `Deleted ${deleteResult} assets`)
+          this.logger.info({ module: MODULE_NAME }, `Deleted ${deleteResult} assets`)
         } else {
-          this.logger.info({ module: 'ChainFollower' }, 'Rolling back to genesis')
+          this.logger.info({ module: MODULE_NAME }, 'Rolling back to genesis')
           const deleteResult = await this.hasuraClient.deleteAssetsAfterSlot(0)
-          this.logger.info({ module: 'ChainFollower' }, `Deleted ${deleteResult} assets`)
+          this.logger.info({ module: MODULE_NAME }, `Deleted ${deleteResult} assets`)
         }
         requestNext()
       },
@@ -81,21 +86,29 @@ export class ChainFollower {
         requestNext()
       }
     }, { connection: ogmiosConfig })
-    this.logger.info({ module: 'ChainFollower' }, 'Initialized')
+    this.isInitialized = true
+    this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
   public async start (points: Schema.Point[]) {
-    this.logger.info({ module: 'ChainFollower' }, 'Starting')
+    if (!this.isInitialized) {
+      throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'start')
+    }
+    this.logger.info({ module: MODULE_NAME }, 'Starting')
     await this.queue.start()
     await this.chainSyncClient.startSync(points)
+    this.logger.info({ module: MODULE_NAME }, 'Started')
   }
 
   public async shutdown () {
-    this.logger.info({ module: 'ChainFollower' }, 'Shutting down')
+    if (!this.isInitialized) {
+      throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'shutdown')
+    }
+    this.logger.info({ module: MODULE_NAME }, 'Shutting down')
     await this.chainSyncClient.shutdown()
     await this.queue.stop()
     this.logger.info(
-      { module: 'ChainFollower' },
+      { module: MODULE_NAME },
       'Shutdown complete')
   }
 }

@@ -49,8 +49,14 @@ export async function buildSchema (
       Mutation: {
         submitTransaction: async (_root, args) => {
           await throwIfNotInCurrentEra('submitTransaction')
-          const hash = await cardanoNodeClient.submitTransaction(args.transaction)
-          return { hash }
+          try {
+            const hash = await cardanoNodeClient.submitTransaction(args.transaction)
+            return { hash }
+          } catch (error) {
+            throw new ApolloError(
+              error.name === 'ModuleIsNotInitialized' ? 'submitTransaction query is not ready. Try again shortly' : error.message
+            )
+          }
         }
       },
       PaymentAddress: {
@@ -161,7 +167,9 @@ export async function buildSchema (
             const slotNo = await cardanoNodeClient.getTipSlotNo()
             return hasuraClient.getMeta(slotNo)
           } catch (error) {
-            throw new ApolloError(error)
+            throw new ApolloError(
+              error.name === 'ModuleIsNotInitialized' ? 'cardanoDbMeta query is not ready. Try again shortly' : error.message
+            )
           }
         },
         delegations: (_root, args, context, info) => {
