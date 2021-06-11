@@ -52,7 +52,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin
     cat <<EOF > $out/bin/cardano-graphql
     #!${runtimeShell}
-    exec ${nodejs}/bin/node $out/packages/server/dist/index.js
+    exec ${nodejs}/bin/node --max_old_space_size=4096 $out/packages/server/dist/index.js
     EOF
     chmod +x $out/bin/cardano-graphql
   '';
