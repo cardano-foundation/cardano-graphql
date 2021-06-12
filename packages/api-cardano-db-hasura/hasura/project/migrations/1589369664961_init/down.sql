@@ -10,6 +10,7 @@ DROP VIEW IF EXISTS
   "SlotLeader",
   "StakeDeregistration",
   "StakePool",
+  "StakePoolOwner",
   "StakeRegistration",
   "StakePoolRetirement",
   "TokenMint",

@@ -1190,8 +1190,6 @@ type Block {
   forgedAt: DateTime!
   slotLeader: SlotLeader!
   hash: Hash32Hex!
-  # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a block number
-  merkleRoot: Hash32Hex
   number: Int
   opCert: Hash32Hex
   slotInEpoch: Int

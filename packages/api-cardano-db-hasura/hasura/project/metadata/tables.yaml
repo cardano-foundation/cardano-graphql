@@ -180,7 +180,6 @@
       - fees
       - forgedAt
       - hash
-      - merkleRoot
       - nextBlockHash
       - number
       - opCert
@@ -470,7 +469,7 @@
       manual_configuration:
         remote_table:
           schema: public
-          name: pool_owner
+          name: StakePoolOwner
         column_mapping:
           hash_id: pool_hash_id
   - name: relays
@@ -509,6 +508,26 @@
       - pledge
       - rewardAddress
       - url
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
+- table:
+    schema: public
+    name: StakePoolOwner
+  object_relationships:
+  - name: stakePool
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: StakePool
+        column_mapping:
+          hash: hash
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - hash
       filter: {}
       limit: 2500
       allow_aggregations: true
@@ -848,26 +867,6 @@
       columns:
       - amount
       - address
-      filter: {}
-      limit: 2500
-      allow_aggregations: true
-- table:
-    schema: public
-    name: pool_owner
-  object_relationships:
-  - name: stakePool
-    using:
-      manual_configuration:
-        remote_table:
-          schema: public
-          name: StakePool
-        column_mapping:
-          pool_hash_id: hash_id
-  select_permissions:
-  - role: cardano-graphql
-    permission:
-      columns:
-      - hash
       filter: {}
       limit: 2500
       allow_aggregations: true
