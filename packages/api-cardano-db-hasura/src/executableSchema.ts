@@ -15,7 +15,12 @@ import {
 } from 'graphql-scalars'
 import { CardanoNodeClient } from './CardanoNodeClient'
 import BigNumber from 'bignumber.js'
-import { FieldsComplexityMapping, ComplexityMapping } from './queryComplexity'
+import {
+  FieldsComplexityMapping,
+  ComplexityMapping,
+  defaultComplexity,
+  getDefaultQueryComplexity
+} from './queryComplexity'
 const GraphQLBigInt = require('graphql-bigint')
 
 export const scalarResolvers = {
@@ -39,7 +44,7 @@ export async function buildSchema (
   hasuraClient: HasuraClient,
   genesis: Genesis,
   cardanoNodeClient: CardanoNodeClient,
-  customFieldsComplexity: FieldsComplexityMapping = {}
+  customFieldsComplexity: FieldsComplexityMapping = defaultComplexity
 ) {
   const throwIfNotInCurrentEra = async (queryName: string) => {
     if (!(await hasuraClient.isInCurrentEra())) {
@@ -50,12 +55,26 @@ export async function buildSchema (
   }
   const getComplexityExtension = (operation: string, queryName: string) => {
     if (operation in customFieldsComplexity) {
-      const operationMapping = customFieldsComplexity[operation] as ComplexityMapping
-      if (queryName in operationMapping) {
-        return operationMapping.extensions
+      const operationMapping = customFieldsComplexity[
+        operation
+      ] as ComplexityMapping
+      if (
+        queryName in operationMapping &&
+        operationMapping[queryName].extensions
+      ) {
+        // If it has a custom complexity then use that one and ignore the base cost,
+        // otherwise use the default with the base cost
+        return {
+          complexity:
+            operationMapping[queryName].extensions.complexity ||
+            getDefaultQueryComplexity(
+              operationMapping[queryName].extensions.baseCost
+            )
+        }
       }
     }
-    return null
+    // If not found, then just return the default complexity estimators
+    return { complexity: getDefaultQueryComplexity() }
   }
   return makeExecutableSchema({
     resolvers: Object.assign({}, scalarResolvers, customFieldsComplexity, {
@@ -367,7 +386,10 @@ export async function buildSchema (
             })
           },
           selectionSet: null,
-          extensions: getComplexityExtension('Query', 'stakeDeregistrations_aggregate')
+          extensions: getComplexityExtension(
+            'Query',
+            'stakeDeregistrations_aggregate'
+          )
         },
         stakePools: {
           resolve: (_root, args, context, info) => {
@@ -423,7 +445,10 @@ export async function buildSchema (
             })
           },
           selectionSet: null,
-          extensions: getComplexityExtension('Query', 'stakeRegistrations_aggregate')
+          extensions: getComplexityExtension(
+            'Query',
+            'stakeRegistrations_aggregate'
+          )
         },
         transactions: {
           resolve: (_root, args, context, info) => {

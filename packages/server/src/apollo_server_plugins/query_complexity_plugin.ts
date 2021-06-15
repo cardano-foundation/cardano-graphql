@@ -49,7 +49,7 @@ export const queryComplexityPlugin = (
       })
       // Here we can react to the calculated complexity,
       // like compare it with max and throw error when the threshold is reached.
-      if (complexity >= maximumComplexity) {
+      if (complexity > maximumComplexity) {
         throw new QueryTooComplex(complexity, maximumComplexity)
       }
       // This can be used for logging or to implement rate limiting
