@@ -38,6 +38,8 @@ services:
       - node-db:/data/db
       - node-ipc:/ipc
     restart: on-failure
+    environment:
+      - CARDANO_NODE_SOCKET_PATH=/ipc/node.socket
     logging:
       driver: "json-file"
       options:
