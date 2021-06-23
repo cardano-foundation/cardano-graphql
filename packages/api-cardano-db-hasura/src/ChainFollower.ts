@@ -5,7 +5,6 @@ import {
   isMaryBlock,
   Schema
 } from '@cardano-ogmios/client'
-import { errors } from '@cardano-graphql/util'
 import { Config } from './Config'
 import { errors, RunnableModuleState } from '@cardano-graphql/util'
 import { Asset } from './graphql_types'

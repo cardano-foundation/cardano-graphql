@@ -46,6 +46,9 @@ export class CardanoNodeClient {
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getProtocolParams')
     }
+    if (!(await this.isInCurrentEra())) {
+      throw new errors.OperationRequiresNodeInCurrentEra('getProtocolParams')
+    }
     const protocolParams = await this.stateQueryClient.currentProtocolParameters()
     this.logger.debug({ module: MODULE_NAME, protocolParams }, 'getProtocolParams')
     return protocolParams
@@ -55,20 +58,15 @@ export class CardanoNodeClient {
     if (this.state !== null) return
     this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing')
-    this.isInitialized = true
     await pRetry(async () => {
       const options = ogmiosConnectionConfig ? { connection: ogmiosConnectionConfig } : {}
-      this.stateQueryClient = await createStateQueryClient(options)
-      this.txSubmissionClient = await createTxSubmissionClient(options)
-      if (!(await this.isInCurrentEra())) {
-        this.logger.warn({ module: MODULE_NAME }, 'cardano-node is still synchronizing')
-        throw new Error()
-      }
+      this.stateQueryClient = await createStateQueryClient(this.logger.error, options)
+      this.txSubmissionClient = await createTxSubmissionClient(this.logger.error, options)
     }, {
-      factor: 1.5,
-      retries: 39,
+      factor: 1.2,
+      retries: 100,
       onFailedAttempt: util.onFailedAttemptFor(
-        'Establishing connection to cardano-node and ensuring state is in the expected era',
+        'Establishing connection to cardano-node',
         this.logger
       )
     })

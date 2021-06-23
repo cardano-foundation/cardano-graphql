@@ -1,4 +1,3 @@
-import util, { DataFetcher } from '@cardano-graphql/util'
 import { Schema } from '@cardano-ogmios/client'
 import { exec } from 'child_process'
 import util, { DataFetcher, ModuleState } from '@cardano-graphql/util'
