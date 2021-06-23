@@ -1,4 +1,4 @@
-import { Point } from '@cardano-ogmios/schema'
+import { Point } from '@rhyslbw/ogmios-schema'
 
 export interface Era {
   lastPoint?: Point
@@ -39,11 +39,36 @@ export const mainnet: NetworkInfo = {
   name: 'mainnet'
 }
 
+export const testnet: NetworkInfo = {
+  eras: {
+    byron: {
+      lastPoint: {
+        hash: 'ad6825e001ae4e529af25be11ddb488114033c302a233bc6d6b9c4617793f022',
+        slot: 1581712
+      }
+    },
+    shelley: {
+      lastPoint: {
+        hash: '1a9636ff1dbb54dff1ad652f5f9e7a734efddf0f2276cc665201589358dcfd8d',
+        slot: 13694314
+      }
+    },
+    allegra: {
+      lastPoint: {
+        hash: '450f1646951a7e0b27dfa80e1012e4dfbab3281b2fe0fea736bb7b94e240ddc9',
+        slot: 17042486
+      }
+    },
+    mary: {}
+  },
+  name: 'testnet'
+}
+
 export const networkInfoFromMagic = (magic: number) => {
   switch (magic) {
     case 764824073 :
       return mainnet
-    // case 1097911063 :
-    //   return testnet
+    case 1097911063 :
+      return testnet
   }
 }
