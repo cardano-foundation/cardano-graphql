@@ -1,6 +1,7 @@
 import util, { DataFetcher } from '@cardano-graphql/util'
 import { Schema } from '@cardano-ogmios/client'
 import { exec } from 'child_process'
+import util, { DataFetcher, ModuleState } from '@cardano-graphql/util'
 import fetch from 'cross-fetch'
 import { DocumentNode, GraphQLSchema, print } from 'graphql'
 import { GraphQLClient, gql } from 'graphql-request'
@@ -35,6 +36,7 @@ export class HasuraClient {
   private applyingSchemaAndMetadata: boolean
   public adaPotsToCalculateSupplyFetcher: DataFetcher<AdaPotsToCalculateSupply>
   public currentProtocolVersionFetcher: DataFetcher<ShelleyProtocolParams['protocolVersion']>
+  private state: ModuleState
   public schema: GraphQLSchema
 
   constructor (
@@ -44,6 +46,7 @@ export class HasuraClient {
     readonly lastConfiguredMajorVersion: number,
     private logger: Logger = dummyLogger
   ) {
+    this.state = null
     this.applyingSchemaAndMetadata = false
     this.adaPotsToCalculateSupplyFetcher = new DataFetcher<AdaPotsToCalculateSupply>(
       'AdaPotsToCalculateSupply',
@@ -86,7 +89,7 @@ export class HasuraClient {
   private async getAdaPotsToCalculateSupply (): Promise<AdaPotsToCalculateSupply> {
     const result = await this.client.request(
       gql`query {
-          cardano { 
+          cardano {
               currentEpoch {
                   adaPots {
                       reserves
@@ -152,6 +155,8 @@ export class HasuraClient {
   }
 
   public async initialize () {
+    if (this.state !== null) return
+    this.state = 'initializing'
     this.logger.info({ module: 'HasuraClient' }, 'Initializing')
     await this.applySchemaAndMetadata()
     await pRetry(async () => {
@@ -190,6 +195,7 @@ export class HasuraClient {
     this.logger.debug({ module: 'HasuraClient' }, 'DB is in current era')
     await this.currentProtocolVersionFetcher.initialize()
     await this.adaPotsToCalculateSupplyFetcher.initialize()
+    this.state = 'initialized'
     this.logger.info({ module: 'HasuraClient' }, 'Initialized')
   }
 
@@ -372,7 +378,7 @@ export class HasuraClient {
                           }
                       }
                       url
-                      policyId  
+                      policyId
                   }
                   quantity
               }
@@ -615,16 +621,16 @@ export class HasuraClient {
     )
     const result = await this.client.request(
       gql`mutation InsertAssets($assets: [Asset_insert_input!]!) {
-        insert_assets(objects: $assets) {
-          returning {
-            name
-            policyId
-            description
-            assetName
-            assetId
+          insert_assets(objects: $assets) {
+              returning {
+                  name
+                  policyId
+                  description
+                  assetName
+                  assetId
+              }
+              affected_rows
           }
-          affected_rows
-        }
       }`,
       {
         assets

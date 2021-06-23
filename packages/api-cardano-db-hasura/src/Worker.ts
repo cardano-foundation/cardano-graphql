@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios'
-import { errors } from '@cardano-graphql/util'
+import { errors, RunnableModuleState } from '@cardano-graphql/util'
 import hash from 'object-hash'
 import { dummyLogger, Logger } from 'ts-log'
 import { AssetMetadata } from './AssetMetadata'
@@ -18,7 +18,7 @@ const MODULE_NAME = 'Worker'
 export class Worker {
   private axiosClient: AxiosInstance
   private queue: PgBoss
-  private isInitialized: boolean
+  private state: RunnableModuleState
 
   constructor (
     readonly hasuraClient: HasuraClient,
@@ -31,7 +31,7 @@ export class Worker {
       }
     }
   ) {
-    this.isInitialized = false
+    this.state = null
     this.queue = new PgBoss({
       application_name: 'cardano-graphql',
       ...queueConfig
@@ -76,14 +76,16 @@ export class Worker {
   }
 
   public async initialize () {
+    if (this.state !== null) return
+    this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing')
     await this.ensureMetadataServerIsAvailable()
-    this.isInitialized = true
+    this.state = 'initialized'
     this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
   public async start () {
-    if (!this.isInitialized) {
+    if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'start')
     }
     this.logger.info({ module: MODULE_NAME }, 'Starting')
@@ -149,7 +151,7 @@ export class Worker {
   }
 
   public async shutdown () {
-    if (!this.isInitialized) {
+    if (this.state !== 'running') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'shutdown')
     }
     this.logger.info({ module: MODULE_NAME }, 'Shutting down')
@@ -157,6 +159,7 @@ export class Worker {
       this.queue.unsubscribe(ASSET_METADATA_FETCH_INITIAL),
       this.queue.unsubscribe(ASSET_METADATA_FETCH_UPDATE)
     ])
+    this.state = 'initialized'
     this.logger.info({ module: MODULE_NAME }, 'Shutdown complete')
   }
 }

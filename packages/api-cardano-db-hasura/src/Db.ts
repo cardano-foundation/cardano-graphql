@@ -1,22 +1,33 @@
 import { ClientConfig } from 'pg'
 import createSubscriber, { Subscriber } from 'pg-listen'
 import { dummyLogger, Logger } from 'ts-log'
+import { ModuleState } from '@cardano-graphql/util'
 
 const MODULE_NAME = 'Db'
 
 export class Db {
+  private state: ModuleState
   pgSubscriber: Subscriber
 
   constructor (
     pgClientConfig: ClientConfig,
     private logger: Logger = dummyLogger
   ) {
+    this.state = null
     this.pgSubscriber = createSubscriber(pgClientConfig, {
       parse: (value) => value
     })
   }
 
-  public async init ({ onDbSetup }: { onDbSetup: Function }): Promise<void> {
+  public async init ({
+    onDbInit,
+    onDbSetup
+  }: {
+    onDbInit: () => void,
+    onDbSetup: () => void
+  }): Promise<void> {
+    if (this.state !== null) return
+    this.state = 'initializing'
     this.pgSubscriber.events.on('connected', async () => {
       this.logger.debug({ module: MODULE_NAME }, 'pgSubscriber: Connected')
       await onDbSetup()
@@ -32,6 +43,7 @@ export class Db {
       switch (payload) {
         case 'init' :
           this.logger.warn({ module: 'Db' }, 'pgSubscriber: cardano-db-sync-extended starting, schema will be reset')
+          await onDbInit()
           break
         case 'db-setup' :
           await onDbSetup()
@@ -43,12 +55,14 @@ export class Db {
     try {
       await this.pgSubscriber.connect()
       await this.pgSubscriber.listenTo('cardano_db_sync_startup')
+      this.state = 'initialized'
     } catch (error) {
       this.logger.error({ err: error })
     }
   }
 
   public async shutdown () {
+    if (this.state !== 'initialized') return
     await this.pgSubscriber.close()
   }
 }

@@ -1,6 +1,6 @@
 import { AssetSupply, Transaction } from './graphql_types'
 import pRetry from 'p-retry'
-import util, { errors } from '@cardano-graphql/util'
+import util, { errors, ModuleState } from '@cardano-graphql/util'
 import {
   ConnectionConfig,
   createStateQueryClient,
@@ -23,17 +23,17 @@ export class CardanoNodeClient {
   public adaCirculatingSupply: AssetSupply['circulating']
   private stateQueryClient: StateQueryClient
   private txSubmissionClient: TxSubmissionClient
-  private isInitialized: boolean
+  private state: ModuleState
 
   constructor (
     readonly lastConfiguredMajorVersion: number,
     private logger: Logger = dummyLogger
   ) {
-    this.isInitialized = false
+    this.state = null
   }
 
   public async getTipSlotNo () {
-    if (!this.isInitialized) {
+    if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getTipSlotNo')
     }
     const tip = await this.stateQueryClient.ledgerTip()
@@ -43,7 +43,7 @@ export class CardanoNodeClient {
   }
 
   public async getProtocolParams (): Promise<Schema.ProtocolParametersShelley> {
-    if (!this.isInitialized) {
+    if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getProtocolParams')
     }
     const protocolParams = await this.stateQueryClient.currentProtocolParameters()
@@ -52,6 +52,8 @@ export class CardanoNodeClient {
   }
 
   public async initialize (ogmiosConnectionConfig?: ConnectionConfig) {
+    if (this.state !== null) return
+    this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing')
     this.isInitialized = true
     await pRetry(async () => {
@@ -70,6 +72,7 @@ export class CardanoNodeClient {
         this.logger
       )
     })
+    this.state = 'initialized'
     this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
@@ -91,7 +94,7 @@ export class CardanoNodeClient {
   }
 
   public async submitTransaction (transaction: string): Promise<Transaction['hash']> {
-    if (!this.isInitialized) {
+    if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'submitTransaction')
     }
     try {

@@ -63,9 +63,21 @@ export * from './config'
         }
       }
     )
+    const server = new Server(schemas, config, logger)
+    schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis, cardanoNodeClient))
     await db.init({
+      onDbInit: async () => {
+        await Promise.all([
+          hasuraClient.shutdown,
+          cardanoNodeClient.shutdown,
+          worker.shutdown,
+          chainFollower.shutdown
+        ])
+        await server.shutdown()
+      },
       onDbSetup: async () => {
         try {
+          await server.init()
           await hasuraClient.initialize()
           await cardanoNodeClient.initialize(config.ogmios)
           await worker.initialize()
@@ -78,6 +90,7 @@ export * from './config'
           )
           await worker.start()
           await chainFollower.start(points)
+          await server.start()
         } catch (error) {
           logger.error(error.message)
           if (error instanceof errors.HostDoesNotExist) {
@@ -86,20 +99,17 @@ export * from './config'
         }
       }
     })
-    schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis, cardanoNodeClient))
-    const server = new Server(schemas, config, logger)
-    await server.init()
-    onDeath(() => {
-      Promise.all([
-        server.shutdown,
-        chainFollower.shutdown,
-        worker.shutdown,
-        db.shutdown,
+    onDeath(async () => {
+      await Promise.all([
+        hasuraClient.shutdown,
         cardanoNodeClient.shutdown,
-        hasuraClient.shutdown
-      ]).then(() => process.exit(1))
+        worker.shutdown,
+        chainFollower.shutdown
+      ])
+      await db.shutdown()
+      await server.shutdown()
+      process.exit(1)
     })
-    await server.start()
   } catch (error) {
     logger.error(error)
     process.exit(1)

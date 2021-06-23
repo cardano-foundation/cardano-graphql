@@ -7,6 +7,7 @@ import {
 } from '@cardano-ogmios/client'
 import { errors } from '@cardano-graphql/util'
 import { Config } from './Config'
+import { errors, RunnableModuleState } from '@cardano-graphql/util'
 import { Asset } from './graphql_types'
 import { HasuraClient } from './HasuraClient'
 import PgBoss from 'pg-boss'
@@ -23,14 +24,14 @@ const MODULE_NAME = 'ChainFollower'
 export class ChainFollower {
   private chainSyncClient: ChainSyncClient
   private queue: PgBoss
-  private isInitialized: boolean
+  private state: RunnableModuleState
 
   constructor (
     readonly hasuraClient: HasuraClient,
     private logger: Logger = dummyLogger,
     queueConfig: Config['db']
   ) {
-    this.isInitialized = false
+    this.state = null
     this.queue = new PgBoss({
       application_name: 'cardano-graphql',
       ...queueConfig
@@ -38,6 +39,8 @@ export class ChainFollower {
   }
 
   public async initialize (ogmiosConfig: Config['ogmios']) {
+    if (this.state !== null) return
+    this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing')
     this.chainSyncClient = await createChainSyncClient({
       rollBackward: async ({ point, tip }, requestNext) => {
@@ -85,13 +88,15 @@ export class ChainFollower {
         }
         requestNext()
       }
-    }, { connection: ogmiosConfig })
-    this.isInitialized = true
+    },
+    this.logger.error,
+    { connection: ogmiosConfig })
+    this.state = 'initialized'
     this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
   public async start (points: Schema.Point[]) {
-    if (!this.isInitialized) {
+    if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'start')
     }
     this.logger.info({ module: MODULE_NAME }, 'Starting')
@@ -101,12 +106,13 @@ export class ChainFollower {
   }
 
   public async shutdown () {
-    if (!this.isInitialized) {
+    if (this.state !== 'running') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'shutdown')
     }
     this.logger.info({ module: MODULE_NAME }, 'Shutting down')
     await this.chainSyncClient.shutdown()
     await this.queue.stop()
+    this.state = 'initialized'
     this.logger.info(
       { module: MODULE_NAME },
       'Shutdown complete')
