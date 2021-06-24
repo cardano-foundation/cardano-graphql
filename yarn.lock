@@ -566,19 +566,7 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cardano-ogmios/client@^4.0.0-beta.1":
-  version "4.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@cardano-ogmios/client/-/client-4.0.0-beta.1.tgz#84eb76fd2d4713b5d7dcd1750ab35fcf03c7860e"
-  integrity sha512-TqoF+fyP/risIY+Fgnqv5eA3V2S1/C4BS4bKQyO0s5uDb8GMekDbdZDYcSH5s8xHb1JcZCAKMrChXyz2k0hB9A==
-  dependencies:
-    "@cardano-ogmios/schema" "4.0.0-beta.1"
-    fastq "^1.11.0"
-    isomorphic-ws "^4.0.1"
-    nanoid "^3.1.22"
-    ts-custom-error "^3.2.0"
-    ws "^7.4.6"
-
-"@cardano-ogmios/schema@4.0.0-beta.1", "@cardano-ogmios/schema@^4.0.0-beta.1":
+"@cardano-ogmios/schema@^4.0.0-beta.1":
   version "4.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-4.0.0-beta.1.tgz#653def559115404f201001737de4d1b8c338c660"
   integrity sha512-L9vBZ6cMLfL+o8GsBKSoW4txq+koJQo0OiVLLI9CMxh6QxJBAuwyOd6eegAecvROolBysP8U4ZLzVLP5MjtUqg==
@@ -1319,6 +1307,24 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
+
+"@rhyslbw/ogmios-client@^4.0.0-beta.3-10":
+  version "4.0.0-beta.3-10"
+  resolved "https://registry.yarnpkg.com/@rhyslbw/ogmios-client/-/ogmios-client-4.0.0-beta.3-10.tgz#19aaa3137256dbac378481254d8a70d221fa70c3"
+  integrity sha512-atgemjeuTiNfDZFdThHRn70lZEzC9cSUEXLPYyRpVB2X/yp2NJ9v/T3kzlnXp5KJo08E1iEujPne1U3HbzcUEg==
+  dependencies:
+    "@rhyslbw/ogmios-schema" "4.0.0-beta.3-10"
+    cross-fetch "^3.1.4"
+    fastq "^1.11.0"
+    isomorphic-ws "^4.0.1"
+    nanoid "^3.1.22"
+    ts-custom-error "^3.2.0"
+    ws "^7.4.6"
+
+"@rhyslbw/ogmios-schema@4.0.0-beta.3-10":
+  version "4.0.0-beta.3-10"
+  resolved "https://registry.yarnpkg.com/@rhyslbw/ogmios-schema/-/ogmios-schema-4.0.0-beta.3-10.tgz#ce7bdc91ccaf237e7b42ed46aca748b8479461f8"
+  integrity sha512-rqRO72dKJouR/UtUifT75DVB4NkHlH0PGUBpckOKaAYOaOAxt7GhEP/A1lgV8p4OGXpB161OXxxWM3w/jPhRFg==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
@@ -3360,6 +3366,13 @@ cross-fetch@^3.0.6:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.2.tgz#ee0c2f18844c4fde36150c2a4ddc068d20c1bc41"
   integrity sha512-+JhD65rDNqLbGmB3Gzs3HrEKC0aQnD+XA3SY6RjgkF88jV2q5cTc5+CwxlS3sdmLk98gpPt5CF9XRnPdlxZe6w==
+  dependencies:
+    node-fetch "2.6.1"
+
+cross-fetch@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.4.tgz#9723f3a3a247bf8b89039f3a380a9244e8fa2f39"
+  integrity sha512-1eAtFWdIubi6T4XPy6ei9iUFoKpUkIF971QLN8lIvvvwueI65+Nw5haMNKUwfJxabqlIIDODJKGrQ66gxC0PbQ==
   dependencies:
     node-fetch "2.6.1"
 
@@ -6738,9 +6751,9 @@ nanoassert@^1.0.0:
   integrity sha1-TzFS4JVA/eKMdvRLGbvNHVpCR40=
 
 nanoid@^3.1.22:
-  version "3.1.22"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.22.tgz#b35f8fb7d151990a8aebd5aa5015c03cf726f844"
-  integrity sha512-/2ZUaJX2ANuLtTvqTlgqBQNJoQO398KyJgZloL0PZkC0dpysjncRUPsFe3DUPzz/y3h+u7C46np8RMuvF3jsSQ==
+  version "3.1.23"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.23.tgz#f744086ce7c2bc47ee0a8472574d5c78e4183a81"
+  integrity sha512-FiB0kzdP0FFVGDKlRLEQ1BgDzU87dy5NnzjeW9YZNt+/c3+q82EQDUwniSAUxp/F0gFNI1ZhKU1FqYsMuqZVnw==
 
 nanomatch@^1.2.9:
   version "1.2.13"
@@ -9614,9 +9627,9 @@ ws@^7.2.3:
   integrity sha512-D3RuNkynyHmEJIpD2qrgVkc9DQ23OrN/moAwZX4L8DfvszsJxpjQuUq3LMx6HoYji9fbIOBY18XWBsAux1ZZUA==
 
 ws@^7.4.6:
-  version "7.4.6"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.6.tgz#5654ca8ecdeee47c33a9a4bf6d28e2be2980377c"
-  integrity sha512-YmhHDO4MzaDLB+M9ym/mDA5z0naX8j7SIlT8f8z+I0VtzsRbekxEutHSme7NPS2qE8StCYQNUnfWdXta/Yu85A==
+  version "7.5.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.0.tgz#0033bafea031fb9df041b2026fc72a571ca44691"
+  integrity sha512-6ezXvzOZupqKj4jUqbQ9tXuJNo+BR2gU8fFRk3XCP3e0G6WT414u5ELe6Y0vtp7kmSJ3F7YWObSNr1ESsgi4vw==
 
 ws@~7.2.0:
   version "7.2.5"

@@ -4,7 +4,7 @@ import {
   createChainSyncClient,
   isMaryBlock,
   Schema
-} from '@cardano-ogmios/client'
+} from '@rhyslbw/ogmios-client'
 import { Config } from './Config'
 import { errors, RunnableModuleState } from '@cardano-graphql/util'
 import { Asset } from './graphql_types'
@@ -89,6 +89,9 @@ export class ChainFollower {
       }
     },
     this.logger.error,
+    (code, reason) => {
+      this.logger.error({ module: MODULE_NAME, code }, reason)
+    },
     { connection: ogmiosConfig })
     this.state = 'initialized'
     this.logger.info({ module: MODULE_NAME }, 'Initialized')

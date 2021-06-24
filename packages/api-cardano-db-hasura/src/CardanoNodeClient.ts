@@ -8,7 +8,7 @@ import {
   Schema,
   StateQueryClient,
   TxSubmissionClient
-} from '@cardano-ogmios/client'
+} from '@rhyslbw/ogmios-client'
 import { dummyLogger, Logger } from 'ts-log'
 import { getHashOfSignedTransaction } from './util'
 
@@ -57,11 +57,23 @@ export class CardanoNodeClient {
   public async initialize (ogmiosConnectionConfig?: ConnectionConfig) {
     if (this.state !== null) return
     this.state = 'initializing'
-    this.logger.info({ module: MODULE_NAME }, 'Initializing')
+    this.logger.info({ module: MODULE_NAME }, 'Initializing. This can take a few minutes...')
     await pRetry(async () => {
       const options = ogmiosConnectionConfig ? { connection: ogmiosConnectionConfig } : {}
-      this.stateQueryClient = await createStateQueryClient(this.logger.error, options)
-      this.txSubmissionClient = await createTxSubmissionClient(this.logger.error, options)
+      this.stateQueryClient = await createStateQueryClient(
+        this.logger.error,
+        (code, reason) => {
+          this.logger.error({ module: MODULE_NAME, code }, reason)
+        },
+        options
+      )
+      this.txSubmissionClient = await createTxSubmissionClient(
+        this.logger.error,
+        (code, reason) => {
+          this.logger.error({ module: MODULE_NAME, code }, reason)
+        },
+        options
+      )
     }, {
       factor: 1.2,
       retries: 100,

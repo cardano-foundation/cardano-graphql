@@ -1,5 +1,5 @@
 import { createLogger } from 'bunyan'
-import { Schema } from '@cardano-ogmios/client'
+import { Schema } from '@rhyslbw/ogmios-client'
 import { getConfig } from './config'
 import {
   buildSchema as buildCardanoDbHasuraSchema,
