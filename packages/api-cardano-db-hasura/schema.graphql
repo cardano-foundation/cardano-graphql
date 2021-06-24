@@ -1010,7 +1010,7 @@ type Transaction_avg_fields {
   mint: Token_avg_fields
   size: Float
   totalOutput: Float
-  withdrawals: Withdrawal_ave_fields
+  withdrawals: Withdrawal_avg_fields
 }
 
 type Transaction_max_fields {
@@ -1333,14 +1333,14 @@ type Epoch_aggregate {
 }
 
 type Epoch_aggregate_fields {
-  ave: Epoch_ave_fields!
+  avg: Epoch_avg_fields!
   count: String!
   max: Epoch_max_fields!
   min: Epoch_min_fields!
   sum: Epoch_sum_fields!
 }
 
-type Epoch_ave_fields {
+type Epoch_avg_fields {
   fees: Float!
   output: Float!
   transactionsCount: Float!
@@ -1395,13 +1395,13 @@ type Withdrawal_aggregate {
 
 type Withdrawal_aggregate_fields {
   count: String!
-  ave: Withdrawal_ave_fields!
+  avg: Withdrawal_avg_fields!
   max: Withdrawal_max_fields!
   min: Withdrawal_min_fields!
   sum: Withdrawal_sum_fields!
 }
 
-type Withdrawal_ave_fields {
+type Withdrawal_avg_fields {
   amount: String
 }
 

@@ -62,6 +62,7 @@ export async function getConfig (): Promise<Config> {
     db,
     loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString,
     listenAddress: env.listenAddress || '0.0.0.0',
+    maxQueryComplexity: env.maxQueryComplexity || 200,
     pollingInterval: {
       adaSupply: env.pollingInterval.adaSupply || 1000 * 60
     },
@@ -84,6 +85,7 @@ function filterAndTypecastEnvs (env: any) {
     HASURA_URI,
     LISTEN_ADDRESS,
     LOGGER_MIN_SEVERITY,
+    MAX_QUERY_COMPLEXITY,
     METADATA_SERVER_URI,
     OGMIOS_HOST,
     OGMIOS_PORT,
@@ -115,6 +117,7 @@ function filterAndTypecastEnvs (env: any) {
     hasuraUri: HASURA_URI,
     listenAddress: LISTEN_ADDRESS,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
+    maxQueryComplexity: Number(MAX_QUERY_COMPLEXITY),
     metadataUpdateInterval: {
       assets: ASSET_METADATA_UPDATE_INTERVAL ? Number(ASSET_METADATA_UPDATE_INTERVAL) : undefined
     },

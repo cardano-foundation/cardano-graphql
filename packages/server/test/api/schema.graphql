@@ -2,7 +2,30 @@ schema {
   query: Query
 }
 
+directive @complexity(
+  # The complexity value for the field
+  value: Int!
+  # Optional multipliers
+  multipliers: [String!]
+) on FIELD_DEFINITION
+
 type Query {
   test: String!
   testTwo: String!
+  extensionComplexityTest(multiplier: Int): ExtensionComplexityTest!
+  directiveComplexityTest(multiplier: Int): DirectiveComplexityTest! @complexity(value: 1, multipliers: ["multiplier"])
+}
+
+type ExtensionComplexityTest {
+  fieldOne: String!
+  fieldTwo: Int!
+  fieldThree: Boolean!
+  fieldFour: String!
+}
+
+type DirectiveComplexityTest {
+  fieldOne: String! @complexity(value: 15)
+  fieldTwo: Int! @complexity(value: 5)
+  fieldThree: Boolean! @complexity(value: 10)
+  fieldFour: String!
 }

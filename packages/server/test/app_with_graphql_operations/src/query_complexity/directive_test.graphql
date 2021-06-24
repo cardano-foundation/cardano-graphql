@@ -1,0 +1,8 @@
+query directiveTest($multiplier: Int) {
+  directiveComplexityTest(multiplier: $multiplier) { 
+    fieldOne
+    fieldTwo
+    fieldThree
+    fieldFour
+  }
+}
