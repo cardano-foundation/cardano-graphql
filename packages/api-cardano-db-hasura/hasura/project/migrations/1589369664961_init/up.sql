@@ -11,23 +11,19 @@ CREATE VIEW "AdaPots" AS
     utxo
 FROM ada_pots;
 
-CREATE TABLE IF NOT EXISTS "Asset"
-  AS
-  SELECT
-    DISTINCT CONCAT(RIGHT(CONCAT(E'\\', policy), -3), RIGHT(CONCAT(E'\\', name), -3)) as "assetId",
-    RIGHT(CONCAT(E'\\', name), -3) as "assetName",
-    CAST(NULL AS TEXT) AS "description",
-    CAST(NULL AS CHAR(44)) as "fingerprint",
-    CAST(NULL AS TEXT) AS "logo",
-    0 AS "metadataFetchAttempts",
-    CAST(NULL AS CHAR(40)) AS "metadataHash",
-    CAST(NULL AS TEXT) AS "name",
-    policy as "policyId",
-    CAST(NULL AS TEXT) AS "ticker",
-    CAST(NULL AS TEXT) AS "url"
-  FROM ma_tx_mint;
-
-ALTER TABLE "Asset" ADD PRIMARY KEY ("assetId");
+CREATE TABLE IF NOT EXISTS "Asset" (
+    "assetId" TEXT PRIMARY KEY,
+    "assetName" TEXT,
+    "description" VARCHAR(500),
+    "fingerprint" CHAR(44),
+    "firstAppearedInSlot" INT,
+    "logo" VARCHAR(65536),
+    "metadataHash" CHAR(40),
+    "name" VARCHAR(50),
+    "policyId" TEXT,
+    "ticker" VARCHAR(5),
+    "url" VARCHAR(250)
+);
 
 CREATE VIEW "Block" AS
  SELECT (COALESCE(( SELECT sum((tx.fee)::bigint) AS sum

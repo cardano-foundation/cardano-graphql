@@ -1,18 +1,20 @@
 import { createLogger } from 'bunyan'
+import { Schema } from '@rhyslbw/ogmios-client'
 import { getConfig } from './config'
 import {
   buildSchema as buildCardanoDbHasuraSchema,
   CardanoNodeClient,
-  DataSyncController,
+  ChainFollower,
   Db,
   Genesis,
   HasuraClient,
-  HostDoesNotExist
+  Worker
 } from '@cardano-graphql/api-cardano-db-hasura'
+import { errors, networkInfoFromMagic } from '@cardano-graphql/util'
 import onDeath from 'death'
 import { GraphQLSchema } from 'graphql'
-import { Server } from './Server'
 import { Logger } from 'ts-log'
+import { Server } from './Server'
 
 export * from './config'
 
@@ -45,38 +47,69 @@ export * from './config'
       logger
     )
     const db = new Db(config.db, logger)
-    const dataSyncController = new DataSyncController(
+    const chainFollower = new ChainFollower(
       hasuraClient,
-      db,
-      config.pollingInterval.metadataSync,
       logger,
-      config.metadataServerUri
+      config.db
     )
-    await db.init({
-      onDbSetup: () =>
-        hasuraClient.initialize()
-          .then(() => dataSyncController.initialize())
-          .catch((error) => {
-            if (error instanceof HostDoesNotExist) {
-              logger.error(error.message)
-              process.exit(1)
-            }
-          })
-    })
-    await cardanoNodeClient.initialize(config.ogmios)
-    schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis, cardanoNodeClient))
+    const worker = new Worker(
+      hasuraClient,
+      logger,
+      config.metadataServerUri,
+      config.db,
+      {
+        metadataUpdateInterval: {
+          assets: config.metadataUpdateInterval?.assets
+        }
+      }
+    )
     const server = new Server(schemas, config, logger)
-    await server.init()
-    onDeath(() => {
-      Promise.all([
-        server.shutdown,
-        dataSyncController.shutdown,
-        db.shutdown,
-        cardanoNodeClient.shutdown,
-        hasuraClient.shutdown
-      ]).then(() => process.exit(1))
+    schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis, cardanoNodeClient))
+    await db.init({
+      onDbInit: async () => {
+        await Promise.all([
+          hasuraClient.shutdown,
+          cardanoNodeClient.shutdown,
+          worker.shutdown,
+          chainFollower.shutdown
+        ])
+        await server.shutdown()
+      },
+      onDbSetup: async () => {
+        try {
+          await server.init()
+          await hasuraClient.initialize()
+          await cardanoNodeClient.initialize(config.ogmios)
+          await worker.initialize()
+          await chainFollower.initialize(config.ogmios)
+          const mostRecentPoint = await hasuraClient.getMostRecentPointWithNewAsset()
+          const points: Schema.Point[] = mostRecentPoint !== null ? [mostRecentPoint] : []
+          points.push(
+            networkInfoFromMagic(genesis.shelley.networkMagic).eras.allegra.lastPoint,
+            'origin'
+          )
+          await worker.start()
+          await chainFollower.start(points)
+          await server.start()
+        } catch (error) {
+          logger.error(error.message)
+          if (error instanceof errors.HostDoesNotExist) {
+            process.exit(1)
+          }
+        }
+      }
     })
-    await server.start()
+    onDeath(async () => {
+      await Promise.all([
+        hasuraClient.shutdown,
+        cardanoNodeClient.shutdown,
+        worker.shutdown,
+        chainFollower.shutdown
+      ])
+      await db.shutdown()
+      await server.shutdown()
+      process.exit(1)
+    })
   } catch (error) {
     logger.error(error)
     process.exit(1)

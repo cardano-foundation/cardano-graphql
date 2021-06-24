@@ -82,6 +82,7 @@ services:
     restart: on-failure
     environment:
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+      - HASURA_GRAPHQL_CORS_DOMAIN=http://localhost:9695
     secrets:
       - postgres_db
       - postgres_password
@@ -93,11 +94,13 @@ services:
         max-file: "10"
   ogmios:
     build:
-      context: cardano-ogmios/server
+      context: ogmios
+      target: ogmios
       cache_from:
-        - ktorz/ogmios:latest
-        - ktorz/ogmios:3.2.0
-    image: ktorz/ogmios:3.2.0
+        - cardanosolutions/ogmios:v4.0.0-beta.3
+    image: cardanosolutions/ogmios:v4.0.0-beta.3
+    ports:
+      - ${OGMIOS_PORT:-1337}:1337
     restart: on-failure
     environment:
       - OGMIOS_NETWORK=${NETWORK:-mainnet}

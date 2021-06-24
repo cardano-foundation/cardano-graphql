@@ -23,35 +23,36 @@ export async function getConfig (): Promise<Config> {
   if (!env.genesis.shelleyPath) {
     throw new MissingConfig('GENESIS_FILE_SHELLEY env not set')
   }
-  if (!env.postgresDbFile && !env.postgresDb) {
+  if (!env.postgres.dbFile && !env.postgres.db) {
     throw new MissingConfig('POSTGRES_DB_FILE or POSTGRES_DB env not set')
   }
-  if (!env.postgresHost) {
+  if (!env.postgres.host) {
     throw new MissingConfig('POSTGRES_HOST env not set')
   }
-  if (!env.postgresPasswordFile && !env.postgresPassword) {
+  if (!env.postgres.passwordFile && !env.postgres.password) {
     throw new MissingConfig('POSTGRES_PASSWORD_FILE or POSTGRES_PASSWORD env not set')
   }
-  if (!env.postgresPort) {
+  if (!env.postgres.port) {
     throw new MissingConfig('POSTGRES_PORT env not set')
   }
-  if (!env.postgresUserFile && !env.postgresUser) {
+  if (!env.postgres.userFile && !env.postgres.user) {
     throw new MissingConfig('POSTGRES_USER_FILE or POSTGRES_USER env not set')
   }
   let db: Config['db']
   try {
     db = {
-      database: env.postgresDb || (await fs.readFile(env.postgresDbFile, 'utf8')).toString(),
-      host: env.postgresHost,
-      password: env.postgresPassword || (await fs.readFile(env.postgresPasswordFile, 'utf8')).toString(),
-      port: env.postgresPort,
-      user: env.postgresUser || (await fs.readFile(env.postgresUserFile, 'utf8')).toString()
+      database: env.postgres.db || (await fs.readFile(env.postgres.dbFile, 'utf8')).toString(),
+      host: env.postgres.host,
+      password: env.postgres.password || (await fs.readFile(env.postgres.passwordFile, 'utf8')).toString(),
+      port: env.postgres.port,
+      user: env.postgres.user || (await fs.readFile(env.postgres.userFile, 'utf8')).toString()
     }
   } catch (error) {
     throw new MissingConfig('Database configuration cannot be read')
   }
+  const { postgres, ...selectedEnv } = env
   return {
-    ...env,
+    ...selectedEnv,
     allowIntrospection:
       (process.env.NODE_ENV === 'production' && env.allowIntrospection) ||
       (process.env.NODE_ENV !== 'production' && env.allowIntrospection !== false),
@@ -60,14 +61,9 @@ export async function getConfig (): Promise<Config> {
     cacheEnabled: env.cacheEnabled || false,
     db,
     loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString,
-    jqPath: env.jqPath || 'jq',
     listenAddress: env.listenAddress || '0.0.0.0',
     pollingInterval: {
-      adaSupply: env.pollingInterval.adaSupply || 1000 * 60,
-      metadataSync: {
-        initial: env.pollingInterval.metadataSync.initial || 1000 * 60 * 5,
-        ongoing: env.pollingInterval.metadataSync.ongoing || 1000 * 60 * 60
-      }
+      adaSupply: env.pollingInterval.adaSupply || 1000 * 60
     },
     queryDepthLimit: env.queryDepthLimit || 10
   }
@@ -79,21 +75,19 @@ function filterAndTypecastEnvs (env: any) {
     ALLOWED_ORIGINS,
     ALLOW_LIST_PATH,
     API_PORT,
+    ASSET_METADATA_UPDATE_INTERVAL,
     CACHE_ENABLED,
     CARDANO_NODE_CONFIG_PATH,
     GENESIS_FILE_BYRON,
     GENESIS_FILE_SHELLEY,
     HASURA_CLI_PATH,
     HASURA_URI,
-    JQ_PATH,
     LISTEN_ADDRESS,
     LOGGER_MIN_SEVERITY,
     METADATA_SERVER_URI,
     OGMIOS_HOST,
     OGMIOS_PORT,
     POLLING_INTERVAL_ADA_SUPPLY,
-    POLLING_INTERVAL_METADATA_SYNC_INITIAL,
-    POLLING_INTERVAL_METADATA_SYNC_ONGOING,
     POSTGRES_DB,
     POSTGRES_DB_FILE,
     POSTGRES_HOST,
@@ -119,29 +113,29 @@ function filterAndTypecastEnvs (env: any) {
     },
     hasuraCliPath: HASURA_CLI_PATH,
     hasuraUri: HASURA_URI,
-    jqPath: JQ_PATH,
     listenAddress: LISTEN_ADDRESS,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
+    metadataUpdateInterval: {
+      assets: ASSET_METADATA_UPDATE_INTERVAL ? Number(ASSET_METADATA_UPDATE_INTERVAL) : undefined
+    },
     metadataServerUri: METADATA_SERVER_URI,
     ogmios: {
       host: OGMIOS_HOST,
       port: OGMIOS_PORT ? Number(OGMIOS_PORT) : undefined
     },
     pollingInterval: {
-      adaSupply: Number(POLLING_INTERVAL_ADA_SUPPLY),
-      metadataSync: {
-        initial: Number(POLLING_INTERVAL_METADATA_SYNC_INITIAL),
-        ongoing: Number(POLLING_INTERVAL_METADATA_SYNC_ONGOING)
-      }
+      adaSupply: Number(POLLING_INTERVAL_ADA_SUPPLY)
     },
-    postgresDb: POSTGRES_DB,
-    postgresDbFile: POSTGRES_DB_FILE,
-    postgresHost: POSTGRES_HOST,
-    postgresPassword: POSTGRES_PASSWORD,
-    postgresPasswordFile: POSTGRES_PASSWORD_FILE,
-    postgresPort: POSTGRES_PORT ? Number(POSTGRES_PORT) : undefined,
-    postgresUser: POSTGRES_USER,
-    postgresUserFile: POSTGRES_USER_FILE,
+    postgres: {
+      db: POSTGRES_DB,
+      dbFile: POSTGRES_DB_FILE,
+      host: POSTGRES_HOST,
+      password: POSTGRES_PASSWORD,
+      passwordFile: POSTGRES_PASSWORD_FILE,
+      port: POSTGRES_PORT ? Number(POSTGRES_PORT) : undefined,
+      user: POSTGRES_USER,
+      userFile: POSTGRES_USER_FILE
+    },
     prometheusMetrics: PROMETHEUS_METRICS === 'true',
     queryDepthLimit: Number(QUERY_DEPTH_LIMIT),
     tracing: TRACING === 'true'

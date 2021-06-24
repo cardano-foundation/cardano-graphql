@@ -10,5 +10,4 @@ HASURA_GRAPHQL_DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${P
 
 exec graphql-engine \
   --database-url $HASURA_GRAPHQL_DATABASE_URL \
-  serve \
-    --disable-cors
+  serve

@@ -15,6 +15,7 @@ import { allowListMiddleware } from './express_middleware'
 import { dummyLogger, Logger } from 'ts-log'
 import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic'
 import { clearIntervalAsync } from 'set-interval-async'
+import { RunnableModuleState } from '@cardano-graphql/util'
 
 export type Config = {
   allowIntrospection: boolean
@@ -30,6 +31,7 @@ export type Config = {
 
 export class Server {
   public app: express.Application
+  public state: RunnableModuleState
   private apolloServer: ApolloServer
   private httpServer: http.Server
   private schemas: GraphQLSchema[]
@@ -41,10 +43,14 @@ export class Server {
     private logger: Logger = dummyLogger
   ) {
     this.app = express()
+    this.state = null
     this.schemas = schemas
   }
 
   async init () {
+    if (this.state !== null) return
+    this.state = 'initializing'
+    this.logger.info({ module: 'Server' }, 'Initializing')
     let allowList: AllowList
     const plugins: PluginDefinition[] = []
     const validationRules = []
@@ -90,10 +96,13 @@ export class Server {
       } : undefined,
       path: '/'
     })
+    this.state = 'initialized'
   }
 
   async start () {
+    if (this.state !== 'initialized') return
     this.httpServer = await listenPromise(this.app, this.config.apiPort, this.config.listenAddress)
+    this.state = 'running'
     this.logger.info({ module: 'Server' }, `GraphQL HTTP server at http://${this.config.listenAddress}:` +
       `${this.config.apiPort}${this.apolloServer.graphqlPath} started`
     )
@@ -125,12 +134,12 @@ export class Server {
   }
 
   async shutdown () {
+    if (this.state !== 'running') return
     await clearIntervalAsync(this.syncProgress)
-    if (this.httpServer !== undefined) {
-      this.httpServer.close()
-      this.logger.info({ module: 'Server' }, `GraphQL HTTP server at http://${this.config.listenAddress}:` +
-        `${this.config.apiPort}${this.apolloServer.graphqlPath} shutting down`
-      )
-    }
+    this.httpServer.close()
+    this.logger.info({ module: 'Server' }, `GraphQL HTTP server at http://${this.config.listenAddress}:` +
+      `${this.config.apiPort}${this.apolloServer.graphqlPath} shutting down`
+    )
+    this.state = 'initialized'
   }
 }
