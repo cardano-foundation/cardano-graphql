@@ -1318,6 +1318,7 @@ input Epoch_bool_exp {
   fees: BigInt_comparison_exp
   number: Int_comparison_exp
   output: text_comparison_exp
+  startedAt: Date_comparison_exp
   transactionsCount: text_comparison_exp
 }
 
