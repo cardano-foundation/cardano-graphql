@@ -1141,6 +1141,7 @@ input TransactionOutput_bool_exp {
   _not: TransactionOutput_bool_exp
   _or: [TransactionOutput_bool_exp]
   address: text_comparison_exp
+  index: Int_comparison_exp
   tokens: Token_bool_exp
   transaction: Transaction_bool_exp
   value: text_comparison_exp
