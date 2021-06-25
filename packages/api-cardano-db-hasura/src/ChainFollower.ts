@@ -1,22 +1,15 @@
-import AssetFingerprint from '@emurgo/cip14-js'
 import {
   ChainSyncClient,
   createChainSyncClient,
   isMaryBlock,
   Schema
 } from '@rhyslbw/ogmios-client'
+import { assetFingerprint } from './assetFingerprint'
 import { Config } from './Config'
 import { errors, RunnableModuleState } from '@cardano-graphql/util'
-import { Asset } from './graphql_types'
 import { HasuraClient } from './HasuraClient'
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'
-
-export const assetFingerprint = (policyId: Asset['policyId'], assetName?: Asset['assetName']) =>
-  new AssetFingerprint(
-    Buffer.from(policyId, 'hex'),
-    assetName !== undefined ? Buffer.from(assetName, 'hex') : undefined)
-    .fingerprint()
 
 const MODULE_NAME = 'ChainFollower'
 

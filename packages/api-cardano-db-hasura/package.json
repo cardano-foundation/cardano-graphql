@@ -10,7 +10,7 @@
     "cleanup": "shx rm -rf dist node_modules src/graphql_types.ts",
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
     "prepack": "yarn build",
-    "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js query"
+    "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js"
   },
   "repository": {
     "type": "git",
