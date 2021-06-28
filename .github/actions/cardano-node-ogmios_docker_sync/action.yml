@@ -1,0 +1,51 @@
+name: cardano-node-ogmios Docker sync
+description: Synchronize cardano-node-ogmios using Docker
+inputs:
+  containerName:
+    description: Docker container name
+    required: false
+    default: cardano-node-ogmios
+  dbDir:
+    description: Path to the host db mount
+    required: true
+  hostOgmiosPort:
+    description: Mapped host Ogmios port
+    required: false
+    default: 1337
+  repository:
+    description: Docker repository
+    required: false
+    default: cardanosolutions/cardano-node-ogmios
+  network:
+    description: Cardano network
+    required: true
+  version:
+    description: Ogmios version
+    required: false
+    default: latest
+runs:
+  using: composite
+  steps:
+    - name: 🔵 Set Docker Image
+      id: dockerImage
+      shell: bash
+      run: |
+        echo "::set-output name=value::${{ inputs.repository }}:${{ inputs.version }}-${{ inputs.network }}"
+
+    - name: 📥 Pull Image
+      run: |
+        docker pull ${{ steps.dockerImage.outputs.value }}
+      shell: bash
+
+    - name: ⟲ Sync
+      run: |
+        docker run --name ${{ inputs.containerName }} -p ${{ inputs.ogmiosPort }}:1337 -v ${{ inputs.dbDir }}:/db ${{ steps.dockerImage.outputs.value }}
+        ./scripts/wait-for-sync.sh ${{ inputs.ogmiosPort }} 1
+      shell: bash
+
+    - name: 🧹 Cleanup
+      run: |
+        docker stop ${{ inputs.containerName }}
+        docker rm ${{ inputs.containerName }}
+        docker rmi ${{ steps.dockerImage.outputs.value }}
+      shell: bash

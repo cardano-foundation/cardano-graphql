@@ -1,0 +1,39 @@
+name: Node Sync
+
+on:
+  schedule:
+    - cron: '00 06,18 * * *'
+  workflow_dispatch:
+
+jobs:
+  nightly:
+    strategy:
+      matrix:
+        network: [ mainnet ]
+
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v2.3.3
+
+      - name: ⌚ Get Date
+        id: date
+        shell: bash
+        run: |
+          echo "::set-output name=value::$(/bin/date -u "+%Y%m%d")"
+
+      - name: 💾 Cache node-db
+        id: cache
+        uses: actions/cache@v2.1.1
+        with:
+          path: ${{ runner.temp }}/db
+          key: cardano-node-${{ matrix.network }}-${{ steps.date.outputs.value }}
+          restore-keys: |
+            cardano-node-${{ matrix.network }}
+
+      - name: ⟲ Sync Node
+        uses: ./.github/actions/cardano-node-ogmios_docker_sync
+        with:
+          dbDir: ${{ runner.temp }}/db
+          network: ${{ matrix.network }}
