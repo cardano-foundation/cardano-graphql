@@ -6,8 +6,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  nightly:
+  update-cache:
     strategy:
+      
       matrix:
         network: [ mainnet ]
 
@@ -36,4 +37,3 @@ jobs:
         uses: ./.github/actions/cardano-node-ogmios_docker_sync
         with:
           dbDir: ${{ runner.temp }}/db
-          network: ${{ matrix.network }}

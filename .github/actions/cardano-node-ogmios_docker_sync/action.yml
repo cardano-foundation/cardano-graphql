@@ -16,9 +16,6 @@ inputs:
     description: Docker repository
     required: false
     default: cardanosolutions/cardano-node-ogmios
-  network:
-    description: Cardano network
-    required: true
   version:
     description: Ogmios version
     required: false
@@ -30,7 +27,7 @@ runs:
       id: dockerImage
       shell: bash
       run: |
-        echo "::set-output name=value::${{ inputs.repository }}:${{ inputs.version }}-${{ inputs.network }}"
+        echo "::set-output name=value::${{ inputs.repository }}:${{ inputs.version }}"
 
     - name: 📥 Pull Image
       run: |
