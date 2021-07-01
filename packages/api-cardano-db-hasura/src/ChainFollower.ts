@@ -57,14 +57,15 @@ export class ChainFollower {
         if (b !== undefined) {
           for (const tx of b.body) {
             for (const entry of Object.entries(tx.body.mint.assets)) {
-              const [policyId, assetName] = entry[0].split('.')
-              const assetId = policyId.concat(assetName)
+              const [policyId, assetNameRaw] = entry[0].split('.')
+              const assetName = assetNameRaw !== undefined ? `\\x${assetNameRaw}` : undefined
+              const assetId = `\\x${policyId}${assetNameRaw !== undefined ? assetNameRaw : ''}`
               if (!(await this.hasuraClient.hasAsset(assetId))) {
                 const asset = {
                   assetId,
                   assetName,
                   firstAppearedInSlot: b.header.slot,
-                  fingerprint: assetFingerprint(policyId, assetName),
+                  fingerprint: assetFingerprint(policyId, assetNameRaw),
                   policyId: `\\x${policyId}`
                 }
                 await this.hasuraClient.insertAssets([asset])

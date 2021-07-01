@@ -29,6 +29,7 @@ export const scalarResolvers = {
   DateTime: util.scalars.DateTimeUtcToIso,
   Hash28Hex: util.scalars.Hash28Hex,
   Hash32Hex: util.scalars.Hash32Hex,
+  Hex: util.scalars.Hex,
   IPv4: IPv4Resolver,
   IPv6: IPv6Resolver,
   JSON: JSONResolver,

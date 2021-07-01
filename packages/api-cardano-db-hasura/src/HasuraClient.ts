@@ -494,7 +494,7 @@ export class HasuraClient {
   public async hasAsset (assetId: Asset['assetId']): Promise<boolean> {
     const result = await this.client.request(
       gql`query HasAsset (
-          $assetId: String!
+          $assetId: bytea!
       ) {
           assets (
               where: { assetId: { _eq: $assetId }}
@@ -516,7 +516,7 @@ export class HasuraClient {
   public async getAssetMetadataHashesById (assetIds: Asset['assetId'][]): Promise<AssetMetadataHashAndId[]> {
     const result = await this.client.request(
       gql`query AssetMetadataHashes (
-          $assetIds: [String!]!
+          $assetIds: [bytea!]!
       ){
           assets (
               where: {
@@ -577,7 +577,7 @@ export class HasuraClient {
     )
     const result = await this.client.request(
       gql`mutation AddAssetMetadata(
-          $assetId: String!
+          $assetId: bytea!
           $description: String
           $logo: String
           $metadataHash: bpchar!

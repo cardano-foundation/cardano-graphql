@@ -79,7 +79,8 @@
           schema: public
           name: TokenMint
         column_mapping:
-          assetId: assetId
+          policyId: policyId
+          assetName: assetName
   insert_permissions:
   - role: cardano-graphql
     permission:

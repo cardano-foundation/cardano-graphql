@@ -4,6 +4,7 @@ schema {
 }
 
 scalar AssetFingerprint
+scalar Hex
 scalar BigInt
 scalar DateTime
 scalar Hash28Hex
@@ -267,8 +268,8 @@ type AdaPots {
 }
 
 type Asset {
-  assetId: String!
-  assetName: String
+  assetId: Hex!
+  assetName: Hex
   description: String
   fingerprint: AssetFingerprint
   logo: String
@@ -296,8 +297,8 @@ input Asset_bool_exp {
   _not: Asset_bool_exp
   _or: [Asset_bool_exp]
   ticker: text_comparison_exp
-  assetId: text_comparison_exp
-  assetName: text_comparison_exp
+  assetId: Hex_comparison_exp
+  assetName: Hex_comparison_exp
   description: text_comparison_exp
   fingerprint: AssetFingerprint_comparison_exp
   logo: text_comparison_exp
@@ -1468,6 +1469,14 @@ input BigInt_comparison_exp {
   _lte: BigInt
   _neq: BigInt
   _nin: [BigInt!]
+}
+
+# All fields are combined with logical 'AND'.
+input Hex_comparison_exp {
+  _eq: Hex
+  _in: [Hex]
+  _neq: Hex
+  _nin: [Hex]
 }
 
 # expression to compare data of type Percentage. All fields are combined with logical 'AND'.
