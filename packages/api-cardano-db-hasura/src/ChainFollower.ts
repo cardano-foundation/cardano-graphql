@@ -58,7 +58,7 @@ export class ChainFollower {
           for (const tx of b.body) {
             for (const entry of Object.entries(tx.body.mint.assets)) {
               const [policyId, assetName] = entry[0].split('.')
-              const assetId = policyId.concat(assetName)
+              const assetId = policyId.concat(assetName || "")
               if (!(await this.hasuraClient.hasAsset(assetId))) {
                 const asset = {
                   assetId,
