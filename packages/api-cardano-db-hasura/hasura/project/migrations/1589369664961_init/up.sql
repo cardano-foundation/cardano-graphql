@@ -12,15 +12,15 @@ CREATE VIEW "AdaPots" AS
 FROM ada_pots;
 
 CREATE TABLE IF NOT EXISTS "Asset" (
-    "assetId" TEXT PRIMARY KEY,
-    "assetName" TEXT,
+    "assetId" BYTEA PRIMARY KEY,
+    "assetName" BYTEA,
     "description" VARCHAR(500),
     "fingerprint" CHAR(44),
     "firstAppearedInSlot" INT,
     "logo" VARCHAR(65536),
     "metadataHash" CHAR(40),
     "name" VARCHAR(50),
-    "policyId" TEXT,
+    "policyId" BYTEA,
     "ticker" VARCHAR(5),
     "url" VARCHAR(250)
 );
@@ -193,8 +193,8 @@ JOIN stake_address on epoch_stake.addr_id = stake_address.id;
 
 CREATE VIEW "TokenMint" AS
 SELECT
-  CONCAT(RIGHT(CONCAT(E'\\', policy), -3), RIGHT(CONCAT(E'\\', name), -3)) as "assetId",
-  RIGHT(CONCAT(E'\\', name), -3) AS "assetName",
+  CAST(CONCAT(policy, RIGHT(CONCAT(E'\\', name), -3)) as BYTEA) as "assetId",
+  name AS "assetName",
   policy AS "policyId",
   quantity,
   tx_id
@@ -202,8 +202,8 @@ FROM ma_tx_mint;
 
 CREATE VIEW "TokenInOutput" AS
 SELECT
-  CONCAT(RIGHT(CONCAT(E'\\',policy), -3), RIGHT(CONCAT(E'\\',name), -3)) as "assetId",
-  RIGHT(CONCAT(E'\\', name), -3) as "assetName",
+  CAST(CONCAT(policy, RIGHT(CONCAT(E'\\', name), -3)) as BYTEA) as "assetId",
+  name as "assetName",
   policy AS "policyId",
   quantity,
   tx_out_id
@@ -281,6 +281,12 @@ JOIN stake_address on withdrawal.addr_id = stake_address.id;
 
 CREATE INDEX idx_block_hash
     ON block(hash);
+
+CREATE INDEX idx_ma_tx_mint_name
+    ON ma_tx_mint(name);
+
+CREATE INDEX idx_ma_tx_mint_policy
+    ON ma_tx_mint(policy);
 
 CREATE INDEX idx_tx_hash
     ON tx(hash);
