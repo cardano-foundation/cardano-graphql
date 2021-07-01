@@ -89,11 +89,16 @@ export async function buildSchema (
               )
               return { hash }
             } catch (error) {
-              throw new ApolloError(
-                error.name === 'ModuleIsNotInitialized'
-                  ? 'submitTransaction query is not ready. Try again shortly'
-                  : error.message
-              )
+              if (Array.isArray(error)) {
+                throw new ApolloError('Invalid Transaction', 'BAD_REQUEST', {
+                  reasons: error.map(e => ({
+                    name: e.name,
+                    details: JSON.parse(e.message)
+                  }))
+                })
+              } else {
+                throw new ApolloError(error)
+              }
             }
           },
           selectionSet: null,

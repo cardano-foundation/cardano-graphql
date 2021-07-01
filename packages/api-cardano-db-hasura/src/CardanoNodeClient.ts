@@ -12,10 +12,6 @@ import {
 import { dummyLogger, Logger } from 'ts-log'
 import { getHashOfSignedTransaction } from './util'
 
-const isEraMismatch = (errorMessage: string): boolean =>
-  errorMessage.includes('DecoderErrorDeserialiseFailure') ||
-  errorMessage.includes('The era of the node and the tx do not match')
-
 const MODULE_NAME = 'CardanoNodeClient'
 
 export class CardanoNodeClient {
@@ -107,15 +103,9 @@ export class CardanoNodeClient {
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'submitTransaction')
     }
-    try {
-      await this.txSubmissionClient.submitTx(transaction)
-      const hash = getHashOfSignedTransaction(transaction)
-      this.logger.info({ module: MODULE_NAME, hash }, 'submitTransaction')
-      return hash
-    } catch (error) {
-      if (!isEraMismatch(error.message)) {
-        throw error
-      }
-    }
+    await this.txSubmissionClient.submitTx(transaction)
+    const hash = getHashOfSignedTransaction(transaction)
+    this.logger.info({ module: MODULE_NAME, hash }, 'submitTransaction')
+    return hash
   }
 }
