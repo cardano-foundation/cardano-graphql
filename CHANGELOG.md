@@ -2,6 +2,71 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/input-output-hk/cardano-graphql/compare/4.0.0...5.0.0) (2021-07-14)
+
+### Compatible with:
+
+- [`cardano-node`: `1.27.0`](https://github.com/input-output-hk/cardano-node/releases/tag/1.27.0)
+- [`cardano-db-sync`: `10.0.1`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/10.0.1) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### ⚠ BREAKING CHANGES
+
+* `Asset.assetName` and `Asset.assetId` are now typed as `Hex`, as the relationship from `Assets` to `TokenMints` needed
+  to be established using the underlying table, where `assetId` is not present.
+* Configuration of the asset metadata fetching is now a single value. `POLLING_INTERVAL_METADATA_SYNC_INITIAL` and
+  `POLLING_INTERVAL_METADATA_SYNC_ONGOING` are replaced by `ASSET_METADATA_UPDATE_INTERVAL`, which is the number of
+  seconds before the service checks the registry for updates.
+
+* AssetSupply.total is now an optional field, and can return null.
+* Transaction.metadata is now `JSON` type, not ``JSONObject
+  - Despite the name, `JSONObject` was mapped to the underlying JSON resolver as a workaround to avoid breaking changes.
+* The fields previously modelled on Token have been nested under Token.asset
+* `tokens` and `tokens_aggregate` have been removed in favour of assets and assets_aggregate
+- Asset properties nested under `PaymentAddress.assets` are
+  now under `PaymentAddress.assets.asset`
+
+### Features
+* Replaces the use of `cardano-cli` with [Ogmios](https://github.com/CardanoSolutions/ogmios/) for interacting with the
+  node using JSON-WSP, and implements the convenient `cardano-node-ogmios` Docker image as a drop-in replacement for
+  the `cardano-node` image.
+* Sync assets using chain-sync protocol via Ogmios ([784509e](https://github.com/input-output-hk/cardano-graphql/commit/784509eed509dc7bfd856aa4ee9cea7a7b40b046))
+* `tokenMints` and `tokenMints_aggregate` queries ([f803b94](https://github.com/input-output-hk/cardano-graphql/commit/f803b94f67fd016c47d0832510f7af9628a2186c))
+* add query complexity validations ([24a14a9](https://github.com/input-output-hk/cardano-graphql/commit/24a14a9cde019d4232fc9abf5cb4c6dcbf37638f)), 
+* add default query complexity calculations with arguments ([b16c77d](https://github.com/input-output-hk/cardano-graphql/commit/b16c77d0411696736ed3028f53925c8fa320780f))
+* implement complexity in resolvers ([5664a55](https://github.com/input-output-hk/cardano-graphql/commit/5664a5505c52168de0b343ab81f5350a31e99bb3))
+* use cardano-node config for lastConfiguredMajorVersion ([5a621c2](https://github.com/input-output-hk/cardano-graphql/commit/5a621c2d1f16ec90693ee57b1c67d7d56b6ece33)), closes [#454](https://github.com/input-output-hk/cardano-graphql/issues/454)
+* add Epoch_bool_exp.startedAt ([4cc580a](https://github.com/input-output-hk/cardano-graphql/commit/4cc580accc7eb7ae09e608ab1023e6a70cda1206))
+* add TransactionOutput_bool_exp.index ([34d5438](https://github.com/input-output-hk/cardano-graphql/commit/34d543899bba5f325e52bac67301d6baab01c1f8))
+* allow ordering of assets by token mint count ([cfbb039](https://github.com/input-output-hk/cardano-graphql/commit/cfbb03921ea65fe80a1132e433acc4a534e54544))
+
+### Bug Fixes
+* improve startup robustness ([7054a59](https://github.com/input-output-hk/cardano-graphql/commit/7054a596448e879ea8d113209422ad6f1c46e990))
+  - The GraphQL server is now delayed until all modules are initialized, and running. If `cardano-db-sync` reboots, all 
+    modules are shutdown, and restarted and therefore links the server availability with a fully initialized stack.
+* Add order_by to asset query ([5848c24](https://github.com/input-output-hk/cardano-graphql/commit/5848c24d533fe52ce7a89b3c66cb1096b54baaec))
+* Asset_bool_exp.tokenMints ([7616a49](https://github.com/input-output-hk/cardano-graphql/commit/7616a49eda5c165c4fc4fa922e2c3da72971e4d2))
+* assetFingerprint bug when no assetName present ([9a61d91](https://github.com/input-output-hk/cardano-graphql/commit/9a61d91f94a4006f9b1aef29e0ff498f670d806d)), closes [#487](https://github.com/input-output-hk/cardano-graphql/issues/487)
+* await all promises in shutdown function ([3d7ef11](https://github.com/input-output-hk/cardano-graphql/commit/3d7ef110306834545dea74632e974d36149251a6))
+* await CardanoNodeClient init before starting server ([f33f6aa](https://github.com/input-output-hk/cardano-graphql/commit/f33f6aaae1b9af3f4800d617e473cf52c58fc6f9))
+* cardanoDbSyncMeta.initialized during startup ([d6649cf](https://github.com/input-output-hk/cardano-graphql/commit/d6649cfd0b88f6438340b76b819b5b031b082166))
+* casing on invalid hereafter in GraphQL schema ([854ec4a](https://github.com/input-output-hk/cardano-graphql/commit/854ec4a9c096206ff260a29227b107d94c374159)), closes [#390](https://github.com/input-output-hk/cardano-graphql/issues/390)
+* Copy cardano-node config into Docker image ([4bf4866](https://github.com/input-output-hk/cardano-graphql/commit/4bf4866f3252d8e3c93143dd3a91a767b68a9c47))
+* default metadata server URI ([2a98055](https://github.com/input-output-hk/cardano-graphql/commit/2a980552b9194eb38a099849535cef16344cf6d9))
+* disable CORS in Hasura graphql-engine ([4499422](https://github.com/input-output-hk/cardano-graphql/commit/449942288ae17eed53d8438cfcd04f28921edc45)), closes [#392](https://github.com/input-output-hk/cardano-graphql/issues/392)
+* Ensure DB is in current era before completing HasuraClient initialization ([0d43abc](https://github.com/input-output-hk/cardano-graphql/commit/0d43abce1ca51760e0f620dbc270a04d0df76086))
+* guards on missing current epoch row ([6204c96](https://github.com/input-output-hk/cardano-graphql/commit/6204c96835c1d0c704b582f055a93c53465123e6))
+* log all error messages during service startup, not just `HostDoesNotExist` ([c81aad8](https://github.com/input-output-hk/cardano-graphql/commit/c81aad883e6532893d8563d78acc009f5415b234))
+* memory leak in Hasura GraphQL client ([3c8511d](https://github.com/input-output-hk/cardano-graphql/commit/3c8511d93674e97a01fd2502cb2090c7c6966806))
+* move current era check to be lazy operation ([7830c91](https://github.com/input-output-hk/cardano-graphql/commit/7830c912cc583dd4e66fac30465cea60d7f1c7dd))
+* move graphql-engine option under serve command ([f76e944](https://github.com/input-output-hk/cardano-graphql/commit/f76e944b70c3419ce5c4b56c6a35cdd904afccf0))
+* policyId comparison expression type ([99318cc](https://github.com/input-output-hk/cardano-graphql/commit/99318ccc76c5eb4cef9c205124612d36d9a0069a)), closes [#485](https://github.com/input-output-hk/cardano-graphql/issues/485)
+* remove promise chaining cycle ([8b55ca0](https://github.com/input-output-hk/cardano-graphql/commit/8b55ca00d7ff061a39cadf92f3da5f5cd6c7072d)), closes [#459](https://github.com/input-output-hk/cardano-graphql/issues/459)
+* Reorder logging arguments based on  Bunyan interface ([46b26a0](https://github.com/input-output-hk/cardano-graphql/commit/46b26a05139d12894ed5a0f58ccbdc73583d2706))
+* Restore protocol params fetcher init ([e86fc1a](https://github.com/input-output-hk/cardano-graphql/commit/e86fc1a734b3b1bec259bebf5cdb8da1d747b437))
+* scoping on package ([82e2040](https://github.com/input-output-hk/cardano-graphql/commit/82e204030d9ec09576bc61a85c08d641a0ba3a3b))
+* submitTransaction error mapping ([3629725](https://github.com/input-output-hk/cardano-graphql/commit/3629725e87a981a94a8fc66658ebcf86d5c369c5))
+
 ## [4.0.0](https://github.com/input-output-hk/cardano-graphql/compare/3.0.1...4.0.0) (2021-03-29)
 
 ### Compatible with:
@@ -64,7 +129,6 @@ therefore trying to impose rules around the structure will fail.
 * Opt-out of Hasura CLI telemetry ([196086c](https://github.com/input-output-hk/cardano-graphql/commit/196086ce9dc0f5565d34c676e5a4ccda77726f17))
 * pass logger to onFailedAttempt ([1b8b0cf](https://github.com/input-output-hk/cardano-graphql/commit/1b8b0cf3b651a4d7b9b4bbb14409d2a523b95f74))
 * Replaces the time-based logic to determine sync progress and initialisation state ([b29ef3e](https://github.com/input-output-hk/cardano-graphql/commit/b29ef3e31820eadcb876278f0c8e9653d387a16b)), closes [#248](https://github.com/input-output-hk/cardano-graphql/issues/248)
-* Reward and StakeDeregistration order_by fields ([a6f9a88](https://github.com/input-output-hk/cardano-graphql/commit/a6f9a885b507b8b4da32e257b4230765fa27e855)), closes [#382](https://github.com/input-output-hk/cardano-graphql/issues/382)
 
 ### [3.1.1](https://github.com/input-output-hk/cardano-graphql/compare/3.1.0...3.1.1) (2020-12-21)
 
