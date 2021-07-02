@@ -133,8 +133,7 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-    volumes:
-      - node-ipc:/node-ipc
+
 secrets:
   postgres_db:
     file: ./config/secrets/postgres_db
