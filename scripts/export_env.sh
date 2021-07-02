@@ -5,7 +5,7 @@
 
 export BIN_DIR=${CONTEXT}/bin
 export CONFIG_DIR=${CONTEXT}/config/network/${NETWORK}
-export SECRETS_DIR=${CONTEXT}/config/secrets
+export SECRETS_DIR=${CONTEXT}/placeholder-secrets
 export STATE_DIR=${CONTEXT}/state/network/${NETWORK}
 
 case "$NETWORK" in
@@ -23,14 +23,6 @@ case "$NETWORK" in
             OGMIOS_PORT=1338
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
-            ;;
-        shelley_qa)
-            API_PORT=3102
-            HASURA_PORT=8092
-            METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
-            OGMIOS_PORT=1339
-            PG_ADMIN_PORT=8444
-            POSTGRES_PORT=5444
             ;;
 esac
 
