@@ -77,7 +77,7 @@ ENV \
   LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
   METADATA_SERVER_URI=${METADATA_SERVER_URI} \
   NETWORK=${NETWORK} \
-  OGMIOS_HOST="ogmios" \
+  OGMIOS_HOST="cardano-node-ogmios" \
   POSTGRES_DB_FILE=/run/secrets/postgres_db \
   POSTGRES_HOST=postgres \
   POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password \
