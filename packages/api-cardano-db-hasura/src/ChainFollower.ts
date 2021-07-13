@@ -3,7 +3,7 @@ import {
   createChainSyncClient,
   isMaryBlock,
   Schema
-} from '@rhyslbw/ogmios-client'
+} from '@cardano-ogmios/client'
 import { assetFingerprint } from './assetFingerprint'
 import { Config } from './Config'
 import { errors, RunnableModuleState } from '@cardano-graphql/util'

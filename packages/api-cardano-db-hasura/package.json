@@ -33,12 +33,12 @@
   ],
   "dependencies": {
     "@cardano-graphql/util": "4.0.0",
+    "@cardano-ogmios/client": "^4.0.0-beta.5",
     "@emurgo/cardano-serialization-lib-nodejs": "^6.0.0",
     "@emurgo/cip14-js": "^2.0.0",
     "@graphql-tools/delegate": "^6.0.10",
     "@graphql-tools/schema": "^6.0.9",
     "@graphql-tools/wrap": "^6.0.9",
-    "@rhyslbw/ogmios-client": "^4.0.0-beta.3-10",
     "apollo-boost": "^0.4.9",
     "apollo-link": "^1.2.14",
     "apollo-link-http": "^1.5.17",

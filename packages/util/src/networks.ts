@@ -1,4 +1,4 @@
-import { Point } from '@rhyslbw/ogmios-schema'
+import { Point } from '@cardano-ogmios/schema'
 
 export interface Era {
   lastPoint?: Point

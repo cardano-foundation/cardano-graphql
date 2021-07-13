@@ -8,7 +8,7 @@ import {
   Schema,
   StateQueryClient,
   TxSubmissionClient
-} from '@rhyslbw/ogmios-client'
+} from '@cardano-ogmios/client'
 import { dummyLogger, Logger } from 'ts-log'
 import { getHashOfSignedTransaction } from './util'
 

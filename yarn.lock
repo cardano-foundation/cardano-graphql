@@ -566,10 +566,23 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cardano-ogmios/schema@^4.0.0-beta.1":
-  version "4.0.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-4.0.0-beta.1.tgz#653def559115404f201001737de4d1b8c338c660"
-  integrity sha512-L9vBZ6cMLfL+o8GsBKSoW4txq+koJQo0OiVLLI9CMxh6QxJBAuwyOd6eegAecvROolBysP8U4ZLzVLP5MjtUqg==
+"@cardano-ogmios/client@^4.0.0-beta.5":
+  version "4.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@cardano-ogmios/client/-/client-4.0.0-beta.5.tgz#a942d6e3d30d2cfc4ee1b6c6004dc90880cd0c63"
+  integrity sha512-Arj6UoBZ1blT5VpZwMfuQAoP6z4++G4n0WCcMMZDYjDSixEIRK3CUrv5QbH5UksT+96hdECvOmY1px9JMhd3Tg==
+  dependencies:
+    "@cardano-ogmios/schema" "4.0.0-beta.5"
+    cross-fetch "^3.1.4"
+    fastq "^1.11.0"
+    isomorphic-ws "^4.0.1"
+    nanoid "^3.1.22"
+    ts-custom-error "^3.2.0"
+    ws "^7.4.6"
+
+"@cardano-ogmios/schema@4.0.0-beta.5", "@cardano-ogmios/schema@^4.0.0-beta.5":
+  version "4.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-4.0.0-beta.5.tgz#40741360b692543490427075bd68d65d2a4a042d"
+  integrity sha512-e+qUo0uoFEau/+qEFkbmSoc98CnykX8AX2NI+9u/qmxloHxuMmoLqruITzQ0F9GCg+cfyDZfUhqMyAnh918rtg==
 
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
@@ -1307,24 +1320,6 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
-
-"@rhyslbw/ogmios-client@^4.0.0-beta.3-10":
-  version "4.0.0-beta.3-10"
-  resolved "https://registry.yarnpkg.com/@rhyslbw/ogmios-client/-/ogmios-client-4.0.0-beta.3-10.tgz#19aaa3137256dbac378481254d8a70d221fa70c3"
-  integrity sha512-atgemjeuTiNfDZFdThHRn70lZEzC9cSUEXLPYyRpVB2X/yp2NJ9v/T3kzlnXp5KJo08E1iEujPne1U3HbzcUEg==
-  dependencies:
-    "@rhyslbw/ogmios-schema" "4.0.0-beta.3-10"
-    cross-fetch "^3.1.4"
-    fastq "^1.11.0"
-    isomorphic-ws "^4.0.1"
-    nanoid "^3.1.22"
-    ts-custom-error "^3.2.0"
-    ws "^7.4.6"
-
-"@rhyslbw/ogmios-schema@4.0.0-beta.3-10":
-  version "4.0.0-beta.3-10"
-  resolved "https://registry.yarnpkg.com/@rhyslbw/ogmios-schema/-/ogmios-schema-4.0.0-beta.3-10.tgz#ce7bdc91ccaf237e7b42ed46aca748b8479461f8"
-  integrity sha512-rqRO72dKJouR/UtUifT75DVB4NkHlH0PGUBpckOKaAYOaOAxt7GhEP/A1lgV8p4OGXpB161OXxxWM3w/jPhRFg==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
@@ -4390,9 +4385,9 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
 fastq@^1.11.0:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.11.0.tgz#bb9fb955a07130a918eb63c1f5161cc32a5d0858"
-  integrity sha512-7Eczs8gIPDrVzT+EksYBcupqMyxSHXXrHOLRRxU2/DicV8789MRBRR8+Hc2uWzUupOs4YS4JzBmBxjjCVBxD/g==
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.11.1.tgz#5d8175aae17db61947f8b162cfc7f63264d22807"
+  integrity sha512-HOnr8Mc60eNYl1gzwp6r5RoUyAn5/glBolUzP/Ez6IFVPMPirxn/9phgL6zhOtaTy7ISwPvQ+wT+hfcRZh/bzw==
   dependencies:
     reusify "^1.0.4"
 
@@ -9623,10 +9618,15 @@ ws@^6.0.0:
   dependencies:
     async-limiter "~1.0.0"
 
-ws@^7.0.0, ws@^7.2.3, ws@^7.4.6:
+ws@^7.0.0, ws@^7.2.3:
   version "7.5.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.0.tgz#0033bafea031fb9df041b2026fc72a571ca44691"
   integrity sha512-6ezXvzOZupqKj4jUqbQ9tXuJNo+BR2gU8fFRk3XCP3e0G6WT414u5ELe6Y0vtp7kmSJ3F7YWObSNr1ESsgi4vw==
+
+ws@^7.4.6:
+  version "7.5.2"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.2.tgz#09cc8fea3bec1bc5ed44ef51b42f945be36900f6"
+  integrity sha512-lkF7AWRicoB9mAgjeKbGqVUekLnSNO4VjKVnuPHpQeOxZOErX6BPXwJk70nFslRCEEA8EVW7ZjKwXaP9N+1sKQ==
 
 ws@~7.2.0:
   version "7.2.5"

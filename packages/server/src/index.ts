@@ -1,5 +1,5 @@
 import { createLogger } from 'bunyan'
-import { Schema } from '@rhyslbw/ogmios-client'
+import { Point } from '@cardano-ogmios/schema'
 import { getConfig } from './config'
 import {
   buildSchema as buildCardanoDbHasuraSchema,
@@ -83,7 +83,7 @@ export * from './config'
           await worker.initialize()
           await chainFollower.initialize(config.ogmios)
           const mostRecentPoint = await hasuraClient.getMostRecentPointWithNewAsset()
-          const points: Schema.Point[] = mostRecentPoint !== null ? [mostRecentPoint] : []
+          const points: Point[] = mostRecentPoint !== null ? [mostRecentPoint] : []
           points.push(
             networkInfoFromMagic(genesis.shelley.networkMagic).eras.allegra.lastPoint,
             'origin'
