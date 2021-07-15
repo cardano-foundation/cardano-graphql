@@ -68,7 +68,6 @@ RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/key
 COPY --from=downloader /usr/local/bin/hasura /usr/local/bin/hasura
 ENV \
   CARDANO_NODE_CONFIG_PATH=/config/cardano-node/config.json \
-  CARDANO_NODE_SOCKET_PATH=/node-ipc/node.socket \
   GENESIS_FILE_BYRON=/config/genesis/byron.json \
   GENESIS_FILE_SHELLEY=/config/genesis/shelley.json \
   HASURA_CLI_PATH=/usr/local/bin/hasura \
