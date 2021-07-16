@@ -78,6 +78,16 @@ in {
         default = "http";
       };
 
+      ogmiosHost = lib.mkOption {
+        type = lib.types.str;
+        default = "127.0.0.1";
+      };
+
+      ogmiosPort = lib.mkOption {
+        type = lib.types.int;
+        default = 1337;
+      };
+
       enablePrometheus = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -148,6 +158,8 @@ in {
         HASURA_GRAPHQL_ENABLE_TELEMETRY = toString false;
         HASURA_URI = hasuraBaseUri;
         LOGGER_MIN_SEVERITY = cfg.loggerMinSeverity;
+        OGMIOS_HOST = cfg.ogmiosHost;
+        OGMIOS_PORT = toString cfg.ogmiosPort;
         POSTGRES_DB = cfg.db;
         POSTGRES_HOST = cfg.dbHost;
         POSTGRES_PASSWORD = cfg.dbPassword;
