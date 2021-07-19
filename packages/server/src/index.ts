@@ -10,7 +10,7 @@ import {
   HasuraClient,
   Worker
 } from '@cardano-graphql/api-cardano-db-hasura'
-import { errors, networkInfoFromMagic } from '@cardano-graphql/util'
+import { errors } from '@cardano-graphql/util'
 import onDeath from 'death'
 import { GraphQLSchema } from 'graphql'
 import { Logger } from 'ts-log'
@@ -83,11 +83,7 @@ export * from './config'
           await worker.initialize()
           await chainFollower.initialize(config.ogmios)
           const mostRecentPoint = await hasuraClient.getMostRecentPointWithNewAsset()
-          const points: Point[] = mostRecentPoint !== null ? [mostRecentPoint] : []
-          points.push(
-            networkInfoFromMagic(genesis.shelley.networkMagic).eras.allegra.lastPoint,
-            'origin'
-          )
+          const points: Point[] = mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
           await worker.start()
           await chainFollower.start(points)
           await server.start()
