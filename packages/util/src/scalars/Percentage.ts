@@ -1,7 +1,7 @@
 import { GraphQLScalarType, Kind } from 'graphql'
 
 const REGEX = /(^100(\.0{1,2})?$)|(^([1-9]([0-9])?|0)(\.[0-9]{1,2})?$)/g
-export const INVALID_REGEX_ERROR = new TypeError(`Percentage requires Regex: ${REGEX}`);
+export const INVALID_REGEX_ERROR = new TypeError(`Percentage requires Regex: ${REGEX}`)
 
 function roundFloatFromString (value: string) {
   return parseFloat(parseFloat(value).toFixed(2))
@@ -20,7 +20,7 @@ export const Percentage = new GraphQLScalarType({
   parseValue (value) {
     if (typeof value === 'string') {
       if (!REGEX.test(value)) {
-        throw INVALID_REGEX_ERROR;
+        throw INVALID_REGEX_ERROR
       }
       return roundFloatFromString(value)
     }
@@ -30,7 +30,7 @@ export const Percentage = new GraphQLScalarType({
     switch (ast.kind) {
       case Kind.STRING :
         if (!REGEX.test(ast.value)) {
-          throw INVALID_REGEX_ERROR;
+          throw INVALID_REGEX_ERROR
         }
         return roundFloatFromString(ast.value)
       case Kind.FLOAT :
