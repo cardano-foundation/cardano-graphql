@@ -482,12 +482,14 @@ export class HasuraClient {
     )
     const { tip } = result?.cardano[0]
     const lastEpoch = result?.epochs[0]
+    const syncPercentage = tip.slotNo / nodeTipSlotNumber * 100
     return {
       // cardano-db-sync writes the epoch record at the end of each epoch during times of bulk sync
       // The initialization state can be determined by comparing the last epoch record against the
       // tip
       initialized: lastEpoch.number === tip.epoch?.number,
-      syncPercentage: (tip.slotNo / nodeTipSlotNumber) * 100
+      // we cannot assume that actual db-sync syncPercentage will be less or equal to node sync state due to race condition at the query time
+      syncPercentage: syncPercentage > 100 ? 100 : syncPercentage
     }
   }
 
