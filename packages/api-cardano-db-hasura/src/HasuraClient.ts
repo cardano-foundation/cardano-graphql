@@ -30,6 +30,8 @@ export type AdaPotsToCalculateSupply = { circulating: AssetSupply['circulating']
 
 const notInCurrentEraMessage = 'currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.'
 
+const withHexPrefix = (value: string) => `\\x${value}`
+
 export class HasuraClient {
   private client: GraphQLClient
   private applyingSchemaAndMetadata: boolean
@@ -505,7 +507,7 @@ export class HasuraClient {
               assetId
           }
       }`, {
-        assetId
+        assetId: withHexPrefix(assetId)
       }
     )
     const response = result.assets.length > 0
@@ -530,7 +532,7 @@ export class HasuraClient {
           }
       }`,
       {
-        assetIds
+        assetIds: assetIds.map(id => withHexPrefix(id))
       }
     )
     return result.assets
@@ -610,7 +612,8 @@ export class HasuraClient {
           }
       }`,
       {
-        ...asset
+        ...asset,
+        ...{ assetId: withHexPrefix(asset.assetId) }
       }
     )
     if (result.errors !== undefined) {
@@ -637,7 +640,14 @@ export class HasuraClient {
           }
       }`,
       {
-        assets
+        assets: assets.map(asset => ({
+          ...asset,
+          ...{
+            assetId: withHexPrefix(asset.assetId),
+            assetName: withHexPrefix(asset.assetName),
+            policyId: withHexPrefix(asset.policyId)
+          }
+        }))
       }
     )
     return result
