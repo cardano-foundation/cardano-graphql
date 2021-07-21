@@ -30,7 +30,7 @@ export type AdaPotsToCalculateSupply = { circulating: AssetSupply['circulating']
 
 const notInCurrentEraMessage = 'currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.'
 
-const withHexPrefix = (value: string) => `\\x${value}`
+const withHexPrefix = (value: string) => `\\x${value !== undefined ? value : ''}`
 
 export class HasuraClient {
   private client: GraphQLClient
