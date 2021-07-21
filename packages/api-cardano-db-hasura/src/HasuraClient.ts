@@ -550,31 +550,6 @@ export class HasuraClient {
     return protocolVersion.major >= this.lastConfiguredMajorVersion
   }
 
-  public addAssetFingerprints (assets: Pick<AssetWithoutTokens, 'assetId' | 'fingerprint'>[]) {
-    this.logger.debug(
-      { module: 'HasuraClient', qty: assets.length },
-      'Adding fingerprint to assets'
-    )
-    return this.client.request(
-      gql`mutation AddAssetFingerprint($assets: [Asset_insert_input!]!) {
-          insert_assets(
-              objects: $assets,
-              on_conflict: {
-                  constraint: Asset_pkey,
-                  update_columns: [fingerprint]
-              }
-          ) {
-              returning {
-                  assetId
-              }
-          }
-      }`,
-      {
-        assets
-      }
-    )
-  }
-
   public async addAssetMetadata (asset: AssetMetadataAndHash) {
     this.logger.info(
       { module: 'HasuraClient', assetId: asset.assetId },
