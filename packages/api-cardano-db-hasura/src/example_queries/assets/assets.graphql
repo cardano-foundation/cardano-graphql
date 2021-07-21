@@ -10,6 +10,7 @@ query assets (
     ) {
         assetId
         assetName
+        decimals
         description
         fingerprint
         logo

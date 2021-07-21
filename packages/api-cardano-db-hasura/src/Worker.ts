@@ -46,6 +46,7 @@ export class Worker {
       const response = await this.axiosClient.post('metadata/query', {
         subjects: assetIds,
         properties: [
+          'decimals',
           'description',
           'logo',
           'name',
@@ -119,6 +120,7 @@ export class Worker {
               this.logger.trace({ module: MODULE_NAME, assetId }, 'Found metadata in registry')
               await this.hasuraClient.addAssetMetadata({
                 assetId,
+                decimals: metadata.decimals?.value,
                 description: metadata.description?.value,
                 logo: metadata.logo?.value,
                 name: metadata.name?.value,

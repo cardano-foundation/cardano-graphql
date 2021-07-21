@@ -88,6 +88,7 @@
       columns:
       - assetId
       - assetName
+      - decimals
       - description
       - fingerprint
       - firstAppearedInSlot
@@ -104,6 +105,7 @@
       columns:
       - assetId
       - assetName
+      - decimals
       - description
       - fingerprint
       - firstAppearedInSlot
@@ -122,6 +124,7 @@
       columns:
       - assetId
       - assetName
+      - decimals
       - description
       - fingerprint
       - firstAppearedInSlot

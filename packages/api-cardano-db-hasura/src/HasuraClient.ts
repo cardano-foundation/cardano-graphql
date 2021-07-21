@@ -347,6 +347,7 @@ export class HasuraClient {
                   asset {
                       assetId
                       assetName
+                      decimals
                       description
                       fingerprint
                       logo
@@ -580,6 +581,7 @@ export class HasuraClient {
     const result = await this.client.request(
       gql`mutation AddAssetMetadata(
           $assetId: bytea!
+          $decimals: Int
           $description: String
           $logo: String
           $metadataHash: bpchar!
@@ -592,6 +594,7 @@ export class HasuraClient {
                   assetId: { _eq: $assetId }
               },
               _set: {
+                  decimals: $decimals
                   description: $description
                   logo: $logo
                   metadataHash: $metadataHash

@@ -14,6 +14,7 @@ FROM ada_pots;
 CREATE TABLE IF NOT EXISTS "Asset" (
     "assetId" BYTEA PRIMARY KEY,
     "assetName" BYTEA,
+    "decimals" INT,
     "description" VARCHAR(500),
     "fingerprint" CHAR(44),
     "firstAppearedInSlot" INT,

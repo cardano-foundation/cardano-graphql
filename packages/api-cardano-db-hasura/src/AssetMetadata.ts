@@ -5,6 +5,10 @@ export interface Signature {
 }
 
 export interface AssetMetadata {
+  decimals: {
+    value: number
+    anSignatures: Signature[]
+  }
   description?: {
     value: string
     anSignatures: Signature[]

@@ -270,6 +270,7 @@ type AdaPots {
 type Asset {
   assetId: Hex!
   assetName: Hex
+  decimals: Int
   description: String
   fingerprint: AssetFingerprint
   logo: String
@@ -299,6 +300,7 @@ input Asset_bool_exp {
   ticker: text_comparison_exp
   assetId: Hex_comparison_exp
   assetName: Hex_comparison_exp
+  decimals: Int_comparison_exp
   description: text_comparison_exp
   fingerprint: AssetFingerprint_comparison_exp
   logo: text_comparison_exp
@@ -310,6 +312,7 @@ input Asset_bool_exp {
 
 input Asset_order_by {
   assetId: order_by
+  decimals: order_by
   fingerprint: order_by
   name: order_by
 }
