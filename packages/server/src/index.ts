@@ -8,6 +8,7 @@ import {
   Db,
   Genesis,
   HasuraClient,
+  MetadataClient,
   Worker
 } from '@cardano-graphql/api-cardano-db-hasura'
 import { errors } from '@cardano-graphql/util'
@@ -52,10 +53,13 @@ export * from './config'
       logger,
       config.db
     )
+    const metadataClient = new MetadataClient(
+      config.metadataServerUri
+    )
     const worker = new Worker(
       hasuraClient,
       logger,
-      config.metadataServerUri,
+      metadataClient,
       config.db,
       {
         metadataUpdateInterval: {
@@ -80,7 +84,7 @@ export * from './config'
           await server.init()
           await hasuraClient.initialize()
           await cardanoNodeClient.initialize(config.ogmios)
-          await worker.initialize()
+          await metadataClient.initialize()
           await chainFollower.initialize(config.ogmios)
           const mostRecentPoint = await hasuraClient.getMostRecentPointWithNewAsset()
           const points: Point[] = mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']

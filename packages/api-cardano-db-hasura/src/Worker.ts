@@ -1,12 +1,10 @@
-import axios, { AxiosInstance } from 'axios'
 import { errors, RunnableModuleState } from '@cardano-graphql/util'
 import hash from 'object-hash'
 import { dummyLogger, Logger } from 'ts-log'
-import { AssetMetadata } from './AssetMetadata'
 import { Config } from './Config'
-import { Asset } from './graphql_types'
 import { HasuraClient } from './HasuraClient'
 import PgBoss, { JobWithDoneCallback } from 'pg-boss'
+import { MetadataClient } from './MetadataClient'
 
 const ASSET_METADATA_FETCH_INITIAL = 'asset-metadata-fetch-initial'
 const ASSET_METADATA_FETCH_UPDATE = 'asset-metadata-fetch-update'
@@ -16,14 +14,13 @@ type AssetJobPayload = { assetId: string }
 const MODULE_NAME = 'Worker'
 
 export class Worker {
-  private axiosClient: AxiosInstance
   private queue: PgBoss
   private state: RunnableModuleState
 
   constructor (
     readonly hasuraClient: HasuraClient,
     private logger: Logger = dummyLogger,
-    private metadataServerUri: string,
+    private metadataFetchClient: MetadataClient,
     queueConfig: Config['db'],
     private options?: {
       metadataUpdateInterval?: {
@@ -31,58 +28,11 @@ export class Worker {
       }
     }
   ) {
-    this.state = null
+    this.state = 'initialized'
     this.queue = new PgBoss({
       application_name: 'cardano-graphql',
       ...queueConfig
     })
-    this.axiosClient = axios.create({
-      baseURL: this.metadataServerUri
-    })
-  }
-
-  private async getAssetMetadata (assetIds: Asset['assetId'][]): Promise<AssetMetadata[]> {
-    try {
-      const response = await this.axiosClient.post('metadata/query', {
-        subjects: assetIds,
-        properties: [
-          'decimals',
-          'description',
-          'logo',
-          'name',
-          'ticker',
-          'url'
-        ]
-      })
-      return response.data.subjects
-    } catch (error) {
-      if (error.code === 'ENOTFOUND') {
-        this.logger.error({ err: error })
-      } else {
-        throw error
-      }
-    }
-  }
-
-  private async ensureMetadataServerIsAvailable (): Promise<void> {
-    try {
-      await this.axiosClient.get('/metadata/healthcheck')
-    } catch (error) {
-      if (error.code === 'ENOTFOUND') {
-        throw new errors.HostDoesNotExist('metadata server')
-      } else if (error.response.status !== 404) {
-        throw error
-      }
-    }
-  }
-
-  public async initialize () {
-    if (this.state !== null) return
-    this.state = 'initializing'
-    this.logger.info({ module: MODULE_NAME }, 'Initializing')
-    await this.ensureMetadataServerIsAvailable()
-    this.state = 'initialized'
-    this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
   public async start () {
@@ -96,7 +46,7 @@ export class Worker {
         const jobs = data as JobWithDoneCallback<AssetJobPayload, AssetJobPayload>[]
         this.logger.debug({ module: MODULE_NAME, qty: jobs.length }, 'Processing jobs')
         const assetIds = jobs.map((job) => job.data.assetId)
-        const fetchedMetadata = await this.getAssetMetadata(assetIds)
+        const fetchedMetadata = await this.metadataFetchClient.fetch(assetIds)
         const existingAssetMetadataHashes = await this.hasuraClient.getAssetMetadataHashesById(assetIds)
         for (const job of jobs) {
           const assetId = job.data.assetId
