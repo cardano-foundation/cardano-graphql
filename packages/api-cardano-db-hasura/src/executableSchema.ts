@@ -238,7 +238,7 @@ export async function buildSchema (
                 operation: 'query',
                 schema: hasuraClient.schema
               })
-              if (result[0].currentEpoch === null) {
+              if (result[0]?.currentEpoch === null) {
                 return new ApolloError(
                   'currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.'
                 )

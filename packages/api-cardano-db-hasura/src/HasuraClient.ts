@@ -124,7 +124,7 @@ export class HasuraClient {
       utxos_aggregate: utxosAggregate,
       withdrawals_aggregate: withdrawalsAggregate
     } = result
-    if (cardano[0].currentEpoch === null) {
+    if (cardano[0]?.currentEpoch === null) {
       this.logger.debug({ module: 'HasuraClient' }, notInCurrentEraMessage)
       throw new Error(notInCurrentEraMessage)
     }
@@ -134,7 +134,7 @@ export class HasuraClient {
     const withdrawableRewards = rewards.minus(withdrawals)
     return {
       circulating: utxos.plus(withdrawableRewards).toString(),
-      reserves: cardano[0].currentEpoch.adaPots.reserves
+      reserves: cardano[0]?.currentEpoch.adaPots.reserves
     }
   }
 
@@ -179,7 +179,7 @@ export class HasuraClient {
             }
         }`
       )
-      if (result.cardano[0].currentEpoch === null) {
+      if (result.cardano[0]?.currentEpoch === null) {
         this.logger.debug({ module: 'HasuraClient' }, notInCurrentEraMessage)
         throw new Error(notInCurrentEraMessage)
       }
@@ -301,7 +301,7 @@ export class HasuraClient {
           }
       }`
     )
-    return result.epochs[0].protocolParams.protocolVersion
+    return result.epochs[0]?.protocolParams.protocolVersion
   }
 
   public async getMostRecentPointWithNewAsset (): Promise<Schema.Point | null> {
