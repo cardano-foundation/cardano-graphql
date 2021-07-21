@@ -19,7 +19,7 @@ All notable changes to this project will be documented in this file. See [standa
   seconds before the service checks the registry for updates.
 
 * AssetSupply.total is now an optional field, and can return null.
-* Transaction.metadata is now `JSON` type, not ``JSONObject
+* Transaction.metadata is now `JSON` type, not `JSONObject`
   - Despite the name, `JSONObject` was mapped to the underlying JSON resolver as a workaround to avoid breaking changes.
 * The fields previously modelled on Token have been nested under Token.asset
 * `tokens` and `tokens_aggregate` have been removed in favour of assets and assets_aggregate
@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file. See [standa
 * add Epoch_bool_exp.startedAt ([4cc580a](https://github.com/input-output-hk/cardano-graphql/commit/4cc580accc7eb7ae09e608ab1023e6a70cda1206))
 * add TransactionOutput_bool_exp.index ([34d5438](https://github.com/input-output-hk/cardano-graphql/commit/34d543899bba5f325e52bac67301d6baab01c1f8))
 * allow ordering of assets by token mint count ([cfbb039](https://github.com/input-output-hk/cardano-graphql/commit/cfbb03921ea65fe80a1132e433acc4a534e54544))
+* Asset metadata decimals ([082f509](https://github.com/input-output-hk/cardano-graphql/commit/082f509d4c88a387ed20c587cf1160d291db454a))
 
 ### Bug Fixes
 * improve startup robustness ([7054a59](https://github.com/input-output-hk/cardano-graphql/commit/7054a596448e879ea8d113209422ad6f1c46e990))
