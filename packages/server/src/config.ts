@@ -62,7 +62,7 @@ export async function getConfig (): Promise<Config> {
     db,
     loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString,
     listenAddress: env.listenAddress || '0.0.0.0',
-    maxQueryComplexity: env.maxQueryComplexity || 200,
+    maxQueryComplexity: env.maxQueryComplexity || 5000,
     pollingInterval: {
       adaSupply: env.pollingInterval.adaSupply || 1000 * 60
     },
