@@ -418,10 +418,10 @@ export class HasuraClient {
       } else {
         map.set('ada', {
           asset: {
-            assetId: 'ada',
-            assetName: 'ada',
+            assetId: '\\xada',
+            assetName: '\\xada',
             name: 'ada',
-            policyId: '',
+            policyId: '\\xada',
             tokenMints: [],
             tokenMints_aggregate: {
               aggregate: {
