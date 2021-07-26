@@ -127,6 +127,10 @@ in {
         type = lib.types.nullOr lib.types.int;
         default = null;
       };
+      maxQueryComplexity = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
+        default = null;
+      };
     };
   };
   config = let
@@ -177,7 +181,8 @@ in {
       (lib.optionalAttrs (cfg.pollingIntervalAdaSupply != null) { POLLING_INTERVAL_ADA_SUPPLY = toString cfg.pollingIntervalAdaSupply; }) //
       (lib.optionalAttrs (cfg.assetMetadataUpdateInterval != null) { ASSET_METADATA_UPDATE_INTERVAL = toString cfg.assetMetadataUpdateInterval; }) //
       (lib.optionalAttrs (cfg.queryDepthLimit != null) { QUERY_DEPTH_LIMIT = toString cfg.queryDepthLimit; }) //
-      (lib.optionalAttrs (cfg.allowListPath != null) { ALLOW_LIST_PATH = cfg.allowListPath; });
+      (lib.optionalAttrs (cfg.allowListPath != null) { ALLOW_LIST_PATH = cfg.allowListPath; }) //
+      (lib.optionalAttrs (cfg.maxQueryComplexity != null) { MAX_QUERY_COMPLEXITY = toString cfg.maxQueryComplexity; });
       path = with pkgs; [ netcat curl postgresql frontend hasura-cli glibc.bin patchelf ];
       preStart = ''
         set -exuo pipefail
