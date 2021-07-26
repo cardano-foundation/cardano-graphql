@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file. See [standa
 * `tokens` and `tokens_aggregate` have been removed in favour of assets and assets_aggregate
 - Asset properties nested under `PaymentAddress.assets` are
   now under `PaymentAddress.assets.asset`
+* `Block.merkleRoot` removed, as no longer part of `cardano-db-sync` schema. ([8b3b718](https://github.com/input-output-hk/cardano-graphql/commit/8b3b7185f619cc6ede85ac18b43c96fdb76ba19e))
 
 ### Features
 * Replaces the use of `cardano-cli` with [Ogmios](https://github.com/CardanoSolutions/ogmios/) for interacting with the
