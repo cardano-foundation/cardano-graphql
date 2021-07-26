@@ -10,7 +10,11 @@ import http from 'http'
 import { listenPromise } from './util'
 import { AllowList } from './AllowList'
 import { prometheusMetricsPlugin, queryComplexityPlugin } from './apollo_server_plugins'
-import { IntrospectionNotPermitted, TracingRequired } from './errors'
+import {
+  IntrospectionNotPermitted,
+  QueryComplexityLimitationNotPermitted,
+  TracingRequired
+} from './errors'
 import { allowListMiddleware } from './express_middleware'
 import { dummyLogger, Logger } from 'ts-log'
 import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic'
@@ -61,6 +65,9 @@ export class Server {
     if (this.config.allowListPath) {
       if (this.config.allowIntrospection === true) {
         throw new IntrospectionNotPermitted('allowListPath')
+      }
+      if (this.config.maxQueryComplexity) {
+        throw new QueryComplexityLimitationNotPermitted('allowListPath')
       }
       try {
         const file = await fs.readFile(this.config.allowListPath, 'utf8')

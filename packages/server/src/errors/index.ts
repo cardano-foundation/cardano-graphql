@@ -1,4 +1,5 @@
 export * from './IntrospectionNotPermitted'
 export * from './MissingConfig'
+export * from './QueryComplexityLimitationNotPermitted'
 export * from './QueryTooComplex'
 export * from './TracingRequired'

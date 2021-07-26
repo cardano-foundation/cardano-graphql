@@ -21,7 +21,7 @@ const apiUri = `http://${staticConfig.listenAddress}:${staticConfig.apiPort}`
 describe('Server', () => {
   let client: ApolloClient<any>
   let allowedDocumentNode: DocumentNode
-  let server: any
+  let server: Server
   let schema: GraphQLSchema
   let allowListPath: string
 
@@ -32,8 +32,8 @@ describe('Server', () => {
     allowedDocumentNode = await util.loadQueryNode(path.resolve(clientPath, 'src', 'feature_1'), 'test')
   })
 
-  afterEach(() => {
-    server.shutdown()
+  afterEach(async () => {
+    await server.shutdown()
   })
 
   it('can be configured to listen on a specified host and port', async () => {
@@ -137,8 +137,8 @@ describe('Server', () => {
           await server.init()
           await server.start()
         })
-        afterEach(() => {
-          server.shutdown()
+        afterEach(async () => {
+          await server.shutdown()
         })
 
         it('Accepts allowed queries', async () => {
@@ -164,6 +164,25 @@ describe('Server', () => {
       })
     })
 
+    describe('illegal configuration', () => {
+      it('cannot be used in conjunction with query complexity limitation', async () => {
+        expect.assertions(1)
+        server = new Server([schema], {
+          ...staticConfig,
+          allowListPath,
+          allowIntrospection: false,
+          cacheEnabled: false,
+          maxQueryComplexity: 1000,
+          prometheusMetrics: false,
+          tracing: false
+        })
+        const init = () => server.init()
+        await expect(init).rejects.toThrow(
+          'Query complexity limitation is not permitted while allowListPath is enabled'
+        )
+      })
+    })
+
     describe('configuring introspection', () => {
       async function fetchSchemaViaIntrospection (): Promise<GraphQLSchema> {
         const executor = async ({ document, variables }: { document: DocumentNode, variables?: Object }) => {
@@ -182,9 +201,6 @@ describe('Server', () => {
           executor
         })
       }
-      afterEach(() => {
-        server.shutdown()
-      })
       it('stops the schema being introspected', async () => {
         server = new Server([schema], {
           ...staticConfig,
@@ -225,9 +241,6 @@ describe('Server', () => {
     })
 
     describe('configuring metrics', () => {
-      afterEach(() => {
-        server.shutdown()
-      })
       it('requires tracing to be enabled', async () => {
         server = new Server([schema], {
           ...staticConfig,
