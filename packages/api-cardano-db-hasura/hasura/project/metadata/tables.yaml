@@ -350,7 +350,7 @@
           schema: public
           name: Epoch
         column_mapping:
-          epochNo: number
+          earnedInEpochNo: number
   - name: stakePool
     using:
       manual_configuration:
