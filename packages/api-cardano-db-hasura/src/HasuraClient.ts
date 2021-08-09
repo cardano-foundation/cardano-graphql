@@ -28,7 +28,7 @@ import {
 
 export type AdaPotsToCalculateSupply = { circulating: AssetSupply['circulating'], reserves: AdaPots['reserves']}
 
-const notInCurrentEraMessage = 'currentEpoch is only available when close to the chain tip. This is expected during the initial chain-sync.'
+const epochInformationNotYetAvailable = 'Epoch information not yet available. This is expected during the initial chain-sync.'
 
 const withHexPrefix = (value: string) => `\\x${value !== undefined ? value : ''}`
 
@@ -36,7 +36,6 @@ export class HasuraClient {
   private client: GraphQLClient
   private applyingSchemaAndMetadata: boolean
   public adaPotsToCalculateSupplyFetcher: DataFetcher<AdaPotsToCalculateSupply>
-  public currentProtocolVersionFetcher: DataFetcher<ShelleyProtocolParams['protocolVersion']>
   private state: ModuleState
   public schema: GraphQLSchema
 
@@ -44,7 +43,7 @@ export class HasuraClient {
     readonly hasuraCliPath: string,
     readonly hasuraUri: string,
     pollingInterval: number,
-    readonly lastConfiguredMajorVersion: number,
+    readonly lastConfiguredMajorVersion: number, // Todo: Depreciate
     private logger: Logger = dummyLogger
   ) {
     this.state = null
@@ -55,26 +54,13 @@ export class HasuraClient {
         try {
           return this.getAdaPotsToCalculateSupply()
         } catch (error) {
-          if (error.message !== notInCurrentEraMessage) {
+          if (error.message !== epochInformationNotYetAvailable) {
             throw error
           }
-          this.logger.debug({ err: error })
+          this.logger.trace({ err: error })
         }
       },
       pollingInterval,
-      this.logger
-    )
-    this.currentProtocolVersionFetcher = new DataFetcher<ShelleyProtocolParams['protocolVersion']>(
-      'ProtocolParams',
-      async () => {
-        const currentProtocolVersion = await this.getCurrentProtocolVersion()
-        this.logger.debug(
-          { module: 'HasuraClient', currentProtocolVersion },
-          'currentProtocolVersionFetcher'
-        )
-        return currentProtocolVersion
-      },
-      1000 * 60,
       this.logger
     )
     this.client = new GraphQLClient(
@@ -90,11 +76,9 @@ export class HasuraClient {
   private async getAdaPotsToCalculateSupply (): Promise<AdaPotsToCalculateSupply> {
     const result = await this.client.request(
       gql`query {
-          cardano {
-              currentEpoch {
-                  adaPots {
-                      reserves
-                  }
+          epochs (limit: 1, order_by: { number: desc }) {
+              adaPots {
+                  reserves
               }
           }
           rewards_aggregate {
@@ -121,14 +105,14 @@ export class HasuraClient {
       }`
     )
     const {
-      cardano,
+      epochs,
       rewards_aggregate: rewardsAggregate,
       utxos_aggregate: utxosAggregate,
       withdrawals_aggregate: withdrawalsAggregate
     } = result
-    if (cardano[0]?.currentEpoch === null) {
-      this.logger.debug({ module: 'HasuraClient' }, notInCurrentEraMessage)
-      throw new Error(notInCurrentEraMessage)
+    if (epochs.length === 0 && epochs[0].adaPots === null) {
+      this.logger.debug({ module: 'HasuraClient' }, epochInformationNotYetAvailable)
+      throw new Error(epochInformationNotYetAvailable)
     }
     const rewards = new BigNumber(rewardsAggregate.aggregate.sum.amount)
     const utxos = new BigNumber(utxosAggregate.aggregate.sum.value)
@@ -136,7 +120,7 @@ export class HasuraClient {
     const withdrawableRewards = rewards.minus(withdrawals)
     return {
       circulating: utxos.plus(withdrawableRewards).toString(),
-      reserves: cardano[0]?.currentEpoch.adaPots.reserves
+      reserves: epochs[0]?.adaPots.reserves
     }
   }
 
@@ -174,27 +158,24 @@ export class HasuraClient {
     await pRetry(async () => {
       const result = await this.client.request(
         gql`query {
-            cardano {
-                currentEpoch {
-                    number
-                }
+            epochs (limit: 1, order_by: { number: desc }) {
+                number
             }
         }`
       )
-      if (result.cardano[0]?.currentEpoch === null) {
-        this.logger.debug({ module: 'HasuraClient' }, notInCurrentEraMessage)
-        throw new Error(notInCurrentEraMessage)
+      if (result.epochs.length === 0) {
+        this.logger.debug({ module: 'HasuraClient' }, epochInformationNotYetAvailable)
+        throw new Error(epochInformationNotYetAvailable)
       }
     }, {
       factor: 1.05,
       retries: 100,
       onFailedAttempt: util.onFailedAttemptFor(
-        'Detecting sync state being in current era',
+        'Detecting DB sync state has reached minimum progress',
         this.logger
       )
     })
-    this.logger.debug({ module: 'HasuraClient' }, 'DB is in current era')
-    await this.currentProtocolVersionFetcher.initialize()
+    this.logger.debug({ module: 'HasuraClient' }, 'DB sync state has reached minimum progress')
     await this.adaPotsToCalculateSupplyFetcher.initialize()
     this.state = 'initialized'
     this.logger.info({ module: 'HasuraClient' }, 'Initialized')
@@ -202,7 +183,6 @@ export class HasuraClient {
 
   public async shutdown () {
     await this.adaPotsToCalculateSupplyFetcher.shutdown()
-    await this.currentProtocolVersionFetcher.shutdown()
   }
 
   public async applySchemaAndMetadata (): Promise<void> {
@@ -536,18 +516,6 @@ export class HasuraClient {
       }
     )
     return result.assets
-  }
-
-  public async isInCurrentEra () {
-    const protocolVersion = this.currentProtocolVersionFetcher.value
-    this.logger.debug({
-      module: 'CardanoNodeClient',
-      currentProtocolVersion: protocolVersion,
-      lastConfiguredMajorVersion: protocolVersion.major
-    },
-    'Comparing current protocol params with last known major version from cardano-node config'
-    )
-    return protocolVersion.major >= this.lastConfiguredMajorVersion
   }
 
   public async addAssetMetadata (asset: AssetMetadataAndHash) {

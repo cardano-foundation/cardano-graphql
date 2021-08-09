@@ -67,7 +67,7 @@ describe('stakePools', () => {
     })
     const { stakePools_aggregate } = result.data
     expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(900)
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(4000)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeLessThan(5000)
   })
 
   it('can return aggregated data on active stake pools', async () => {

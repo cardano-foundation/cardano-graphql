@@ -47,13 +47,6 @@ export async function buildSchema (
   cardanoNodeClient: CardanoNodeClient,
   customFieldsComplexity: FieldsComplexityMapping = defaultComplexity
 ) {
-  const throwIfNotInCurrentEra = async (queryName: string) => {
-    if (!(await hasuraClient.isInCurrentEra())) {
-      throw new ApolloError(
-        `${queryName} results are only available when close to the network tip. This is expected during the initial chain-sync.`
-      )
-    }
-  }
   const getComplexityExtension = (operation: string, queryName: string) => {
     if (operation in customFieldsComplexity) {
       const operationMapping = customFieldsComplexity[
@@ -82,7 +75,6 @@ export async function buildSchema (
       Mutation: {
         submitTransaction: {
           resolve: async (_root, args) => {
-            await throwIfNotInCurrentEra('submitTransaction')
             try {
               const hash = await cardanoNodeClient.submitTransaction(
                 args.transaction
@@ -152,7 +144,6 @@ export async function buildSchema (
         },
         ada: {
           resolve: async () => {
-            await throwIfNotInCurrentEra('ada')
             const adaPots = hasuraClient.adaPotsToCalculateSupplyFetcher.value
             if (adaPots === undefined) {
               return new ApolloError(
@@ -330,7 +321,6 @@ export async function buildSchema (
         },
         paymentAddresses: {
           resolve: async (_root, args) => {
-            await throwIfNotInCurrentEra('addressSummary')
             return args.addresses.map(async (address) => {
               return { address }
             })

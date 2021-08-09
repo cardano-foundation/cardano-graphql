@@ -24,6 +24,22 @@ case "$NETWORK" in
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
             ;;
+        alonzo-qa)
+            API_PORT=3102
+            HASURA_PORT=8092
+            METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
+            OGMIOS_PORT=1339
+            PG_ADMIN_PORT=8444
+            POSTGRES_PORT=5444
+            ;;
+          alonzo-purple)
+            API_PORT=3103
+            HASURA_PORT=8093
+            METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
+            OGMIOS_PORT=1340
+            PG_ADMIN_PORT=8445
+            POSTGRES_PORT=5445
+            ;;
 esac
 
 export ALLOW_INTROSPECTION=true
