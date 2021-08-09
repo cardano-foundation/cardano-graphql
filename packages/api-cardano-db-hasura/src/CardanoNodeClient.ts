@@ -1,11 +1,13 @@
 import { AssetSupply, Transaction } from './graphql_types'
 import pRetry from 'p-retry'
-import util, { errors, ModuleState } from '@cardano-graphql/util'
+import util, { DataFetcher, errors, ModuleState } from '@cardano-graphql/util'
 import {
   ConnectionConfig,
   createStateQueryClient,
   createTxSubmissionClient,
-  Schema,
+  getOgmiosHealth,
+  OgmiosHealth,
+  // Schema,
   StateQueryClient,
   TxSubmissionClient
 } from '@cardano-ogmios/client'
@@ -20,9 +22,10 @@ export class CardanoNodeClient {
   private stateQueryClient: StateQueryClient
   private txSubmissionClient: TxSubmissionClient
   private state: ModuleState
+  private serverHealthFetcher: DataFetcher<OgmiosHealth>
 
   constructor (
-    readonly lastConfiguredMajorVersion: number,
+    readonly lastConfiguredMajorVersion: number, // Todo: Depreciate
     private logger: Logger = dummyLogger
   ) {
     this.state = null
@@ -38,23 +41,27 @@ export class CardanoNodeClient {
     return slotNo
   }
 
-  public async getProtocolParams (): Promise<Schema.ProtocolParametersShelley> {
-    if (this.state !== 'initialized') {
-      throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getProtocolParams')
-    }
-    if (!(await this.isInCurrentEra())) {
-      throw new errors.OperationRequiresNodeInCurrentEra('getProtocolParams')
-    }
-    const protocolParams = await this.stateQueryClient.currentProtocolParameters()
-    this.logger.debug({ module: MODULE_NAME, protocolParams }, 'getProtocolParams')
-    return protocolParams
-  }
+  // Todo: Include in Graph
+  // public async getProtocolParams (): Promise<Schema.ProtocolParametersShelley> {
+  //   if (this.state !== 'initialized') {
+  //     throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getProtocolParams')
+  //   }
+  //   const protocolParams = await this.stateQueryClient.currentProtocolParameters()
+  //   this.logger.debug({ module: MODULE_NAME, protocolParams }, 'getProtocolParams')
+  //   return protocolParams
+  // }
 
   public async initialize (ogmiosConnectionConfig?: ConnectionConfig) {
     if (this.state !== null) return
     this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing. This can take a few minutes...')
+    this.serverHealthFetcher = new DataFetcher(
+      'ServerHealth',
+      () => getOgmiosHealth(ogmiosConnectionConfig),
+      30000, this.logger
+    )
     await pRetry(async () => {
+      await this.serverHealthFetcher.initialize()
       const options = ogmiosConnectionConfig ? { connection: ogmiosConnectionConfig } : {}
       this.stateQueryClient = await createStateQueryClient(
         this.logger.error,
@@ -82,18 +89,9 @@ export class CardanoNodeClient {
     this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
-  private async isInCurrentEra () {
-    const { protocolVersion } = await this.getProtocolParams()
-    this.logger.debug({
-      module: MODULE_NAME,
-      currentProtocolVersion: protocolVersion,
-      lastConfiguredMajorVersion: this.lastConfiguredMajorVersion
-    }, 'Comparing current protocol params with last known major version from cardano-node config')
-    return protocolVersion.major >= this.lastConfiguredMajorVersion
-  }
-
   public async shutdown (): Promise<void> {
     await Promise.all([
+      this.serverHealthFetcher.shutdown,
       this.stateQueryClient.release,
       this.txSubmissionClient.shutdown
     ])
@@ -102,6 +100,9 @@ export class CardanoNodeClient {
   public async submitTransaction (transaction: string): Promise<Transaction['hash']> {
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'submitTransaction')
+    }
+    if (this.serverHealthFetcher.value.networkSynchronization < 0.95) {
+      throw new errors.OperationRequiresSyncedNode('submitTransaction')
     }
     await this.txSubmissionClient.submitTx(transaction)
     const hash = getHashOfSignedTransaction(transaction)
