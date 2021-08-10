@@ -4,19 +4,30 @@ query epochProtocolParams (
     epochs( where: $where ) {
         protocolParams {
             a0
+            coinsPerUtxoWord
+            collateralPercent
+            costModels
             decentralisationParam
             eMax
             extraEntropy
             keyDeposit
             maxBlockBodySize
+            maxBlockExMem
+            maxBlockExSteps
             maxBlockHeaderSize
+            maxCollateralInputs
+            maxTxExMem
+            maxTxExSteps
             maxTxSize
+            maxValSize
             minFeeA
             minFeeB
             minPoolCost
             minUTxOValue
             nOpt
             poolDeposit
+            priceMem
+            priceStep
             protocolVersion
             rho
             tau

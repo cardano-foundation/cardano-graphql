@@ -246,6 +246,52 @@
       limit: 1
 - table:
     schema: public
+    name: Collateral
+  configuration:
+    custom_root_fields:
+      select_aggregate: collateralInputs_aggregate
+      select: collateralInputs
+    custom_column_names: {}
+  object_relationships:
+  - name: sourceTransaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          sourceTxHash: hash
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          txHash: hash
+  array_relationships:
+  - name: tokens
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: TokenInOutput
+        column_mapping:
+          source_tx_out_id: tx_out_id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - address
+      - sourceTxHash
+      - sourceTxIndex
+      - txHash
+      - value
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
+- table:
+    schema: public
     name: Delegation
   configuration:
     custom_root_fields:
@@ -253,6 +299,14 @@
       select: delegations
     custom_column_names: {}
   object_relationships:
+  - name: redeemer
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Redeemer
+        column_mapping:
+          redeemerId: id
   - name: stakePool
     using:
       manual_configuration:
@@ -336,6 +390,36 @@
       allow_aggregations: true
 - table:
     schema: public
+    name: Redeemer
+  configuration:
+    custom_root_fields:
+      select_aggregate: redeemers_aggregate
+      select: redeemers
+    custom_column_names: {}
+  object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          txId: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - fee
+      - index
+      - purpose
+      - scriptHash
+      - unitMem
+      - unitSteps
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
+- table:
+    schema: public
     name: Reward
   configuration:
     custom_root_fields:
@@ -370,25 +454,64 @@
       allow_aggregations: true
 - table:
     schema: public
+    name: Script
+  configuration:
+    custom_root_fields:
+      select_aggregate: scripts_aggregate
+      select: scripts
+    custom_column_names: {}
+  object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          txId: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - hash
+      - serialisedSize
+      - type
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
+- table:
+    schema: public
     name: ShelleyEpochProtocolParams
   select_permissions:
   - role: cardano-graphql
     permission:
       columns:
       - a0
+      - coinsPerUtxoWord
+      - collateralPercent
+      - costModels
       - decentralisationParam
       - eMax
+      - epoch_no
       - extraEntropy
       - keyDeposit
       - maxBlockBodySize
+      - maxBlockExMem
+      - maxBlockExSteps
       - maxBlockHeaderSize
+      - maxCollateralInputs
+      - maxTxExMem
+      - maxTxExSteps
       - maxTxSize
+      - maxValSize
       - minFeeA
       - minFeeB
       - minPoolCost
       - minUTxOValue
       - nOpt
       - poolDeposit
+      - priceMem
+      - priceStep
       - protocolVersion
       - rho
       - tau
@@ -424,6 +547,14 @@
       select: stakeDeregistrations
     custom_column_names: {}
   object_relationships:
+  - name: redeemer
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Redeemer
+        column_mapping:
+          redeemerId: id
   - name: transaction
     using:
       manual_configuration:
@@ -727,6 +858,22 @@
           name: TransactionOutput
         column_mapping:
           hash: txHash
+  - name: redeemers
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Redeemer
+        column_mapping:
+          id: txId
+  - name: scripts
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Script
+        column_mapping:
+          id: txId
   - name: withdrawals
     using:
       manual_configuration:
@@ -747,8 +894,10 @@
       - includedAt
       - invalidBefore
       - invalidHereafter
+      - scriptSize
       - size
       - totalOutput
+      - validContract
       filter: {}
       limit: 2500
       allow_aggregations: true
@@ -756,6 +905,14 @@
     schema: public
     name: TransactionInput
   object_relationships:
+  - name: redeemer
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Redeemer
+        column_mapping:
+          redeemerId: id
   - name: sourceTransaction
     using:
       manual_configuration:
@@ -819,9 +976,10 @@
     permission:
       columns:
       - address
-      - value
-      - txHash
+      - addressHasScript
       - index
+      - txHash
+      - value
       filter: {}
       limit: 2500
       allow_aggregations: true
@@ -856,9 +1014,10 @@
     permission:
       columns:
       - address
-      - value
-      - txHash
+      - addressHasScript
       - index
+      - txHash
+      - value
       filter: {}
       limit: 2500
       allow_aggregations: true
@@ -871,6 +1030,14 @@
       select: withdrawals
     custom_column_names: {}
   object_relationships:
+  - name: redeemer
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Redeemer
+        column_mapping:
+          redeemerId: id
   - name: transaction
     using:
       manual_configuration:
@@ -888,6 +1055,9 @@
       filter: {}
       limit: 2500
       allow_aggregations: true
+- table:
+    schema: public
+    name: epoch_param
 - table:
     schema: public
     name: pool_relay

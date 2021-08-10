@@ -9,6 +9,9 @@ query transactionsByHashes(
             number
         }
         blockIndex
+        collateral {
+            value
+        }
         deposit
         fee
         hash
@@ -28,6 +31,7 @@ query transactionsByHashes(
         outputs(order_by: { index: asc }) {
             index
             address
+            addressHasScript
             value
         }
         outputs_aggregate {
@@ -37,8 +41,18 @@ query transactionsByHashes(
                 }
             }
         }
+        redeemers {
+            scriptHash
+        }
+        scripts {
+            hash
+            serialisedSize
+            type
+        }
+        scriptSize
         size
         totalOutput
+        validContract
         withdrawals_aggregate {
             aggregate {
                 sum {
