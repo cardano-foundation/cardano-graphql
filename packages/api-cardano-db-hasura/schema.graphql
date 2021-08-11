@@ -303,6 +303,31 @@ type AdaPots {
   utxo: String!
 }
 
+type AlonzoGenesis {
+  lovelacePerUTxOWord: Int!
+  executionPrices: ExecutionPrices!
+  maxTxExUnits: ExecutionUnits!
+  maxBlockExUnits: ExecutionUnits!
+  maxValueSize: Int!
+  collateralPercentage: Int!
+  maxCollateralInputs: Int!
+}
+
+type ExecutionPrices {
+  prSteps: ExecutionPrice!
+  prMem: ExecutionPrice!
+}
+
+type ExecutionPrice {
+  numerator: Int!
+  denominator: Int!
+}
+
+type ExecutionUnits {
+  exUnitsMem: BigInt!
+  exUnitsSteps: BigInt!
+}
+
 type Asset {
   assetId: Hex!
   assetName: Hex
@@ -477,6 +502,7 @@ type Delegation_aggregate_fields {
 }
 
 type Genesis {
+  alonzo: AlonzoGenesis
   byron: ByronGenesis
   shelley: ShelleyGenesis
 }

@@ -8,10 +8,6 @@ export interface Config {
     port: number
     user: string,
   },
-  genesis: {
-    byronPath: string,
-    shelleyPath: string
-  },
   hasuraCliPath: string,
   hasuraUri: string,
   metadataServerUri: string,

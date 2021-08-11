@@ -47,8 +47,6 @@ export API_PORT
 export CARDANO_NODE_CONFIG_PATH=${CONFIG_DIR}/cardano-node/config.json
 export COMPOSE_DOCKER_CLI_BUILD=1
 export DOCKER_BUILDKIT=1
-export GENESIS_FILE_BYRON=${CONFIG_DIR}/genesis/byron.json
-export GENESIS_FILE_SHELLEY=${CONFIG_DIR}/genesis/shelley.json
 export HASURA_CLI_PATH=${BIN_DIR}/hasura
 export HASURA_PORT
 export HASURA_URI=http://localhost:${HASURA_PORT}
