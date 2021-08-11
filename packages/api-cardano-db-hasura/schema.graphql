@@ -1122,6 +1122,7 @@ type Transaction {
   size: BigInt!
   totalOutput: String!
   includedAt: DateTime!
+  # True unless a contract is invalid
   validContract: Boolean!
   withdrawals: [Withdrawal]!
   withdrawals_aggregate(
