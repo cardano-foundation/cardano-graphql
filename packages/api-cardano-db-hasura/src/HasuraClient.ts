@@ -110,7 +110,7 @@ export class HasuraClient {
       utxos_aggregate: utxosAggregate,
       withdrawals_aggregate: withdrawalsAggregate
     } = result
-    if (epochs.length === 0 && epochs[0].adaPots === null) {
+    if (epochs.length === 0 || epochs[0]?.adaPots === null) {
       this.logger.debug({ module: 'HasuraClient' }, epochInformationNotYetAvailable)
       throw new Error(epochInformationNotYetAvailable)
     }
