@@ -11,6 +11,7 @@ import util, { errors, RunnableModuleState } from '@cardano-graphql/util'
 import { HasuraClient } from './HasuraClient'
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'
+import { isAlonzoBlock } from './util'
 
 const MODULE_NAME = 'ChainFollower'
 
@@ -53,7 +54,9 @@ export class ChainFollower {
         },
         rollForward: async ({ block }, requestNext) => {
           let b: Schema.BlockMary
-          if (isMaryBlock(block)) {
+          if (isAlonzoBlock(block)) {
+            b = block.alonzo as Schema.BlockAlonzo
+          } else if (isMaryBlock(block)) {
             b = block.mary as Schema.BlockMary
           }
           if (b !== undefined) {
