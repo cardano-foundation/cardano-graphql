@@ -50,16 +50,23 @@ describe('transactions', () => {
   })
 
   it('Returns transactions by hashes - alonzo-qa', async () => {
-    const result = await alonzoQaClient.query({
+    const plutusResult = await alonzoQaClient.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
-          '29469842500a8591cdc548ce101f621ea06cb2321592066f097049a61fb328ea',
+          '5ff4ca7691cc2b9543bc1dab1ba6e5704ae445ae2799310961a61487ff510f59'
+        ]
+      }
+    })
+    const timelockResult = await alonzoQaClient.query({
+      query: await loadQueryNode('transactionsByHashesOrderByFee'),
+      variables: {
+        hashes: [
           '1801d0dbcc3c832aa1a675d59cff6b777c91f10035d24f71c06190e6dca96a1c'
         ]
       }
     })
-    expect(result.data).toMatchSnapshot()
+    expect({ plutusResult, timelockResult }).toMatchSnapshot()
   })
 
   it('Can return ordered by block index', async () => {
