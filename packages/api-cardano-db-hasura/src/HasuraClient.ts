@@ -287,27 +287,46 @@ export class HasuraClient {
   }
 
   public async getMostRecentPointWithNewAsset (): Promise<Schema.Point | null> {
-    // An offset of 1 is applied to ensure a partial block extraction is not skipped
-    const result = await this.client.request(
-      gql`query {
-          assets (
-              limit: 1
-              offset: 1
-              order_by: { firstAppearedInBlock: { slotNo: desc }}
-          ) {
-              firstAppearedInBlock {
-                  hash
-                  slotNo
-              }
-          }
-      }`
-    )
-    if (result.assets.length === 0) return null
-    const { hash, slotNo } = result.assets[0].firstAppearedInBlock
-    return {
-      hash: hash.substring(2),
-      slot: slotNo
-    }
+    let point: Schema.Point | null
+    // Handles possible race condition between the internal chain-follower, which manages the Asset table,
+    // and cardano-db-sync's which managed the block table.
+    await pRetry(async () => {
+      // An offset of 1 is applied to ensure a partial block extraction is not skipped
+      const result = await this.client.request(
+        gql`query {
+            assets (
+                limit: 1
+                offset: 1
+                order_by: { firstAppearedInBlock: { slotNo: desc }}
+            ) {
+                firstAppearedInBlock {
+                    hash
+                    slotNo
+                }
+            }
+        }`
+      )
+      if (result.errors !== undefined) {
+        throw new Error(result.errors)
+      }
+      if (result.assets.length !== 0) {
+        const { hash, slotNo } = result.assets[0].firstAppearedInBlock
+        point = {
+          hash: hash.substring(2),
+          slot: slotNo
+        }
+      } else {
+        point = null
+      }
+    }, {
+      factor: 1.5,
+      retries: 1000,
+      onFailedAttempt: util.onFailedAttemptFor(
+        'Getting the most recent point with a new asset',
+        this.logger
+      )
+    })
+    return point
   }
 
   public async getPaymentAddressSummary (address: string, atBlock?: number): Promise<PaymentAddressSummary> {
