@@ -1,5 +1,29 @@
 query keyNetworkInfo {
   genesis {
+    alonzo {
+      lovelacePerUTxOWord
+      executionPrices {
+        prMem {
+          denominator
+          numerator
+        }
+        prSteps {
+          denominator
+          numerator
+        }
+      }
+      maxTxExUnits {
+        exUnitsMem
+        exUnitsSteps
+      }
+      maxBlockExUnits {
+        exUnitsMem
+        exUnitsSteps
+      }
+      maxValueSize
+      collateralPercentage
+      maxCollateralInputs
+    }
     byron {
       blockVersionData {
         scriptVersion

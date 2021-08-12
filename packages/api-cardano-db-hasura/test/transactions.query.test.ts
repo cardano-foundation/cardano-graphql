@@ -13,8 +13,10 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 
 describe('transactions', () => {
   let client: TestClient
+  let alonzoQaClient: TestClient
   beforeAll(async () => {
     client = await testClient.mainnet()
+    alonzoQaClient = await testClient.alonzoQa()
   })
 
   it('Returns transactions by hashes', async () => {
@@ -31,7 +33,10 @@ describe('transactions', () => {
     expect(result.data.transactions.length).toBe(3)
     expect(result.data.transactions[0].inputs[0].sourceTxHash).toBe(txe68043.basic.inputs[0].sourceTxHash)
     expect(result.data.transactions[0].outputs[0].index).toBe(0)
+    expect(result.data.transactions[0].outputs[0].addressHasScript).toBe(false)
     expect(result.data.transactions[2].inputs[0].sourceTxHash).toBe(tx05ad8b.basic.inputs[0].sourceTxHash)
+    expect(result.data.transactions[0].scriptSize).toBe(tx05ad8b.basic.scriptSize)
+    expect(result.data.transactions[0].validContract).toBe(tx05ad8b.basic.validContract)
 
     const txWithWithdrawals = {
       fee: result.data.transactions[1].fee,
@@ -41,6 +46,19 @@ describe('transactions', () => {
     }
     const combinedInputs = txWithWithdrawals.inputsTotal.plus(txWithWithdrawals.totalWithdrawals)
     expect(txWithWithdrawals.totalOutput).toBe(combinedInputs.minus(txWithWithdrawals.fee).toString())
+    expect(result.data).toMatchSnapshot()
+  })
+
+  it('Returns transactions by hashes - alonzo-qa', async () => {
+    const result = await alonzoQaClient.query({
+      query: await loadQueryNode('transactionsByHashesOrderByFee'),
+      variables: {
+        hashes: [
+          '29469842500a8591cdc548ce101f621ea06cb2321592066f097049a61fb328ea',
+          '1801d0dbcc3c832aa1a675d59cff6b777c91f10035d24f71c06190e6dca96a1c'
+        ]
+      }
+    })
     expect(result.data).toMatchSnapshot()
   })
 

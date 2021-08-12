@@ -58,16 +58,6 @@ in {
         default = null;
       };
 
-      genesisByron = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-      };
-
-      genesisShelley = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-      };
-
       hasuraIp = lib.mkOption {
         type = lib.types.str;
         default = "127.0.0.1";
@@ -156,8 +146,6 @@ in {
       requires = [ "graphql-engine.service" ];
       environment = lib.filterAttrs (k: v: v != null) {
         CARDANO_NODE_CONFIG_PATH = cfg.cardanoNodeConfigPath;
-        GENESIS_FILE_BYRON = cfg.genesisByron;
-        GENESIS_FILE_SHELLEY = cfg.genesisShelley;
         HASURA_CLI_PATH = hasura-cli + "/bin/hasura";
         HASURA_GRAPHQL_ENABLE_TELEMETRY = toString false;
         HASURA_URI = hasuraBaseUri;

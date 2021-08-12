@@ -2,18 +2,21 @@ import { createLogger } from 'bunyan'
 import { Point } from '@cardano-ogmios/schema'
 import { getConfig } from './config'
 import {
+  AlonzoGenesis,
   buildSchema as buildCardanoDbHasuraSchema,
+  ByronGenesis,
   CardanoNodeClient,
   ChainFollower,
   Db,
   Genesis,
   HasuraClient,
-  MetadataClient,
+  MetadataClient, ShelleyGenesis,
   Worker
 } from '@cardano-graphql/api-cardano-db-hasura'
 import { errors } from '@cardano-graphql/util'
 import onDeath from 'death'
 import { GraphQLSchema } from 'graphql'
+import path from 'path'
 import { Logger } from 'ts-log'
 import { Server } from './Server'
 
@@ -26,13 +29,20 @@ export * from './config'
     level: config.loggerMinSeverity
   })
   try {
+    const loadGenesis = (eraName: string) =>
+      require(
+        path.resolve(
+          path.dirname(config.cardanoNodeConfigPath),
+          cardanoNodeConfig[`${eraName}GenesisFile`]
+        )
+      )
+
     const schemas: GraphQLSchema[] = []
-    let genesis: Genesis
-    if (config.genesis.byronPath !== undefined || config.genesis.shelleyPath !== undefined) {
-      genesis = {
-        ...config.genesis.byronPath !== undefined ? { byron: require(config.genesis.byronPath) } : {},
-        ...config.genesis.shelleyPath !== undefined ? { shelley: require(config.genesis.shelleyPath) } : {}
-      }
+    const cardanoNodeConfig = require(config.cardanoNodeConfigPath)
+    const genesis: Genesis = {
+      alonzo: loadGenesis('Alonzo') as AlonzoGenesis,
+      byron: loadGenesis('Byron') as ByronGenesis,
+      shelley: loadGenesis('Shelley') as ShelleyGenesis
     }
     const lastConfiguredMajorVersion = require(config.cardanoNodeConfigPath)['LastKnownBlockVersion-Major']
 

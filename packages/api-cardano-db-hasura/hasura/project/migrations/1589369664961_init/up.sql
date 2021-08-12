@@ -57,11 +57,30 @@ CREATE OR REPLACE VIEW "Cardano" AS
   WHERE (block.block_no IS NOT NULL)
   ORDER BY block.block_no DESC
  LIMIT 1;
+ 
+CREATE VIEW "Collateral" AS
+SELECT
+  source_tx_out.address,
+  source_tx_out.value,
+  tx.hash AS "txHash",
+  source_tx.hash AS "sourceTxHash",
+  collateral_tx_in.tx_out_index AS "sourceTxIndex",
+  source_tx_out.id AS source_tx_out_id
+FROM
+  tx
+JOIN collateral_tx_in
+  ON collateral_tx_in.tx_in_id = tx.id
+JOIN tx_out AS source_tx_out
+  ON collateral_tx_in.tx_out_id = source_tx_out.tx_id
+  AND collateral_tx_in.tx_out_index = source_tx_out.index
+JOIN tx AS source_tx
+  ON source_tx_out.tx_id = source_tx.id;
 
 CREATE VIEW "Delegation" AS
 SELECT
   delegation.id AS "id",
   stake_address.view AS "address",
+  delegation.redeemer_id AS "redeemerId",
   delegation.tx_id AS "tx_id",
   pool_hash_id AS "pool_hash_id"
 FROM delegation
@@ -83,24 +102,47 @@ FROM epoch
 CREATE VIEW "ShelleyEpochProtocolParams" AS
 SELECT
   epoch_param.influence AS "a0",
+  epoch_param.coins_per_utxo_word AS "coinsPerUtxoWord",
+  epoch_param.collateral_percent AS "collateralPercent",
+  epoch_param.cost_models AS "costModels",
   epoch_param.decentralisation AS "decentralisationParam",
+  epoch_param.max_collateral_inputs AS "maxCollateralInputs",
   epoch_param.max_epoch AS "eMax",
   epoch_param.epoch_no AS "epoch_no",
   epoch_param.entropy AS "extraEntropy",
   epoch_param.key_deposit AS "keyDeposit",
   epoch_param.max_block_size AS "maxBlockBodySize",
+  epoch_param.max_block_ex_mem AS "maxBlockExMem",
+  epoch_param.max_block_ex_steps AS "maxBlockExSteps",
   epoch_param.max_bh_size AS "maxBlockHeaderSize",
+  epoch_param.max_tx_ex_mem AS "maxTxExMem",
+  epoch_param.max_tx_ex_steps AS "maxTxExSteps",
   epoch_param.max_tx_size AS "maxTxSize",
+  epoch_param.max_val_size AS "maxValSize",
   epoch_param.min_fee_a AS "minFeeA",
   epoch_param.min_fee_b AS "minFeeB",
   epoch_param.min_pool_cost AS "minPoolCost",
   epoch_param.min_utxo_value AS "minUTxOValue",
   epoch_param.optimal_pool_count AS "nOpt",
   epoch_param.pool_deposit AS "poolDeposit",
+  epoch_param.price_mem AS "priceMem",
+  epoch_param.price_step AS "priceStep",
   jsonb_build_object('major', epoch_param.protocol_major, 'minor', epoch_param.protocol_major) AS "protocolVersion",
   epoch_param.monetary_expand_rate AS "rho",
   epoch_param.treasury_growth_rate AS "tau"
 FROM epoch_param;
+
+CREATE VIEW "Redeemer" AS
+SELECT
+  redeemer.fee AS "fee",
+  redeemer.id AS "id",
+  redeemer.index AS "index",
+  redeemer.purpose AS "purpose",
+  redeemer.script_hash AS "scriptHash",
+  redeemer.tx_id AS "txId",
+  redeemer.unit_mem AS "unitMem",
+  redeemer.unit_steps AS "unitSteps"
+FROM redeemer;
 
 CREATE VIEW "Reward" AS
 SELECT
@@ -111,6 +153,14 @@ SELECT
 FROM reward
 JOIN stake_address on reward.addr_id = stake_address.id
 WHERE type = 'member';
+
+CREATE VIEW "Script" AS
+SELECT
+  script.hash AS "hash",
+  script.serialised_size AS "serialisedSize",
+  script.type AS "type",
+  script.tx_id AS "txId"
+FROM script;
 
 CREATE VIEW "SlotLeader" AS
 SELECT
@@ -124,6 +174,7 @@ CREATE VIEW "StakeDeregistration" AS
 SELECT
   stake_deregistration.id AS "id",
   stake_address.view AS "address",
+  stake_deregistration.redeemer_id AS "redeemerId",
   stake_deregistration.tx_id AS "tx_id"
 FROM stake_deregistration
 JOIN stake_address on stake_deregistration.addr_id = stake_address.id;
@@ -222,8 +273,10 @@ SELECT
   block.time AS "includedAt",
   tx.invalid_before AS "invalidBefore",
   tx.invalid_hereafter AS "invalidHereafter",
+  tx.script_size AS "scriptSize",
   tx.size,
-  CAST(COALESCE((SELECT SUM("value") FROM tx_out WHERE tx_id = tx.id), 0) AS bigint) AS "totalOutput"
+  CAST(COALESCE((SELECT SUM("value") FROM tx_out WHERE tx_id = tx.id), 0) AS bigint) AS "totalOutput",
+  tx.valid_contract AS "validContract"
 FROM
   tx
 INNER JOIN block
@@ -232,6 +285,7 @@ INNER JOIN block
 CREATE VIEW "TransactionInput" AS
 SELECT
   source_tx_out.address,
+  tx_in.redeemer_id AS "redeemerId",
   source_tx_out.value,
   tx.hash AS "txHash",
   source_tx.hash AS "sourceTxHash",
@@ -250,6 +304,7 @@ JOIN tx AS source_tx
 CREATE VIEW "TransactionOutput" AS
 SELECT
   address,
+  tx_out.address_has_script AS "addressHasScript",
   value,
   tx.hash AS "txHash",
   tx_out.id,
@@ -260,6 +315,7 @@ JOIN tx_out
 
 CREATE VIEW "Utxo" AS SELECT
   address,
+  tx_out.address_has_script AS "addressHasScript",
   value,
   tx.hash AS "txHash",
   tx_out.id,
@@ -277,6 +333,7 @@ SELECT
   withdrawal.amount AS "amount",
   withdrawal.id AS "id",
   stake_address.view "address",
+  withdrawal.redeemer_id AS "redeemerId",
   withdrawal.tx_id AS "tx_id"
 FROM withdrawal
 JOIN stake_address on withdrawal.addr_id = stake_address.id;
@@ -303,6 +360,7 @@ CREATE function utxo_set_at_block("hash" hash32type)
 RETURNS SETOF "TransactionOutput" AS $$
   SELECT
     "TransactionOutput".address,
+    "TransactionOutput"."addressHasScript",
     "TransactionOutput".value,
     "TransactionOutput"."txHash",
     "TransactionOutput"."id",

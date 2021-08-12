@@ -43,7 +43,7 @@ services:
       - node-ipc:/ipc
     
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-alonzo-white-1.4}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-alonzo-purple-1.0.1}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket",

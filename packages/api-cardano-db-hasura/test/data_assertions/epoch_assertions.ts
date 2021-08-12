@@ -1,4 +1,4 @@
-import { Epoch } from '@src/graphql_types'
+import { Epoch, ShelleyProtocolParams } from '@src/graphql_types'
 
 export const epoch1 = {
   basic: {
@@ -67,26 +67,37 @@ export const epoch220 = {
   } as Epoch,
   protocolParams: {
     a0: 0.3,
+    coinsPerUtxoWord: null,
+    collateralPercent: null,
+    costModels: null,
     decentralisationParam: 0.64,
     eMax: 18,
     extraEntropy: null as any,
     keyDeposit: 2000000,
     maxBlockBodySize: 65536,
+    maxBlockExMem: null,
+    maxBlockExSteps: null,
     maxBlockHeaderSize: 1100,
+    maxCollateralInputs: null,
+    maxTxExMem: null,
+    maxTxExSteps: null,
     maxTxSize: 16384,
+    maxValSize: null,
     minFeeA: 44,
     minFeeB: 155381,
     minPoolCost: 340000000,
     minUTxOValue: 1000000,
     nOpt: 150,
     poolDeposit: 500000000,
+    priceMem: null,
+    priceStep: null,
     protocolVersion: {
       major: 2,
       minor: 2
     },
     rho: 0.003,
     tau: 0.2
-  },
+  } as ShelleyProtocolParams,
   aggregated: {
     activeStake_aggregate: {
       aggregate: {

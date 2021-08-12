@@ -64,6 +64,18 @@ type Query {
   ): Block_aggregate!
   cardano: Cardano!
   cardanoDbMeta: CardanoDbMeta!
+  collateralInputs (
+    limit: Int
+    order_by: [TransactionInput_order_by!]
+    offset: Int
+    where: TransactionInput_bool_exp
+  ): [TransactionInput]!
+  collateralInputs_aggregate (
+    limit: Int
+    order_by: [TransactionInput_order_by!]
+    offset: Int
+    where: TransactionInput_bool_exp
+  ): TransactionInput_aggregate!
   delegations (
     limit: Int
     order_by: [Delegation_order_by!]
@@ -92,6 +104,18 @@ type Query {
   paymentAddresses (
     addresses: [String]!
   ): [PaymentAddress]
+  redeemers (
+    limit: Int
+    order_by: [Redeemer_order_by!]
+    offset: Int
+    where: Redeemer_bool_exp
+  ): [Redeemer]!
+  redeemers_aggregate (
+    limit: Int
+    order_by: [Redeemer_order_by!]
+    offset: Int
+    where: Redeemer_bool_exp
+  ): Redeemer_aggregate!
   rewards (
     limit: Int
     order_by: [Reward_order_by!]
@@ -104,6 +128,18 @@ type Query {
     offset: Int
     where: Reward_bool_exp
   ): Reward_aggregate!
+  scripts (
+    limit: Int
+    order_by: [Script_order_by!]
+    offset: Int
+    where: Script_bool_exp
+  ): [Script]!
+  scripts_aggregate (
+    limit: Int
+    order_by: [Script_order_by!]
+    offset: Int
+    where: Script_bool_exp
+  ): Script_aggregate!
   stakeDeregistrations (
     limit: Int
     order_by: [StakeDeregistration_order_by!]
@@ -267,6 +303,31 @@ type AdaPots {
   utxo: String!
 }
 
+type AlonzoGenesis {
+  lovelacePerUTxOWord: Int!
+  executionPrices: ExecutionPrices!
+  maxTxExUnits: ExecutionUnits!
+  maxBlockExUnits: ExecutionUnits!
+  maxValueSize: Int!
+  collateralPercentage: Int!
+  maxCollateralInputs: Int!
+}
+
+type ExecutionPrices {
+  prSteps: ExecutionPrice!
+  prMem: ExecutionPrice!
+}
+
+type ExecutionPrice {
+  numerator: Int!
+  denominator: Int!
+}
+
+type ExecutionUnits {
+  exUnitsMem: BigInt!
+  exUnitsSteps: BigInt!
+}
+
 type Asset {
   assetId: Hex!
   assetName: Hex
@@ -406,6 +467,7 @@ type CardanoDbMeta {
 
 type Delegation {
   address: StakeAddress!
+  redeemer: Redeemer
   stakePool: StakePool!
   stakePoolHash: Hash28Hex!
   stakePoolId: StakePoolID!
@@ -440,6 +502,7 @@ type Delegation_aggregate_fields {
 }
 
 type Genesis {
+  alonzo: AlonzoGenesis
   byron: ByronGenesis
   shelley: ShelleyGenesis
 }
@@ -454,6 +517,73 @@ type PaymentAddress {
 type PaymentAddressSummary {
   assetBalances: [AssetBalance]!
   utxosCount: Int!
+}
+
+type Redeemer {
+  fee: BigInt!
+  index: Int!
+  purpose: String! # Todo: Make scalar
+  scriptHash: Hash28Hex!
+  transaction: Transaction!
+  unitMem: BigInt!
+  unitSteps: BigInt!
+}
+
+type Redeemer_aggregate {
+  aggregate: Redeemer_aggregate_fields
+}
+
+type Redeemer_aggregate_fields {
+  avg: Redeemer_avg_fields!
+  count: String!
+  max: Redeemer_max_fields!
+  min: Redeemer_min_fields!
+  sum: Redeemer_sum_fields!
+}
+
+type Redeemer_avg_fields {
+  fee: Float
+  unitMem: Float
+  unitSteps: Float
+}
+
+type Redeemer_max_fields {
+  fee: BigInt
+  unitMem: BigInt
+  unitSteps: BigInt
+}
+
+type Redeemer_min_fields {
+  fee: BigInt
+  unitMem: BigInt
+  unitSteps: BigInt
+}
+
+type Redeemer_sum_fields {
+  fee: BigInt
+  unitMem: BigInt
+  unitSteps: BigInt
+}
+
+input Redeemer_bool_exp {
+  _and: [Redeemer_bool_exp]
+  _not: Redeemer_bool_exp
+  _or: [Redeemer_bool_exp]
+  fee: BigInt_comparison_exp
+  index: Int_comparison_exp
+  purpose: text_comparison_exp
+  scriptHash: text_comparison_exp
+  transaction: Transaction_bool_exp
+  unitMem: BigInt_comparison_exp
+  unitSteps: BigInt_comparison_exp
+}
+
+input Redeemer_order_by {
+  purpose: order_by
+  scriptHash: order_by
+  transaction: Transaction_order_by
+  unitMem: order_by
+  unitSteps: order_by
 }
 
 type Relay {
@@ -527,6 +657,56 @@ input Reward_order_by {
   stakePool: StakePool_order_by
 }
 
+type Script {
+  hash: Hash28Hex!
+  serialisedSize: BigInt
+  transaction: Transaction!
+  type: String! # Todo: Make scalar
+}
+
+type Script_aggregate {
+  aggregate: Script_aggregate_fields
+}
+
+type Script_aggregate_fields {
+  avg: Script_avg_fields!
+  count: String!
+  max: Script_max_fields!
+  min: Script_min_fields!
+  sum: Script_sum_fields!
+}
+
+type Script_avg_fields {
+  serialisedSize: Float
+}
+
+type Script_max_fields {
+  serialisedSize: BigInt
+}
+
+type Script_min_fields {
+  serialisedSize: BigInt
+}
+
+type Script_sum_fields {
+  serialisedSize: BigInt
+}
+
+input Script_bool_exp {
+  _and: [Script_bool_exp]
+  _not: Script_bool_exp
+  _or: [Script_bool_exp]
+  serialisedSize: BigInt_comparison_exp
+  transaction: Transaction_bool_exp
+  type: text_comparison_exp
+}
+
+input Script_order_by {
+  serialisedSize: order_by
+  transaction: Transaction_order_by
+  type: order_by
+}
+
 type ShelleyGenesis {
   activeSlotsCoeff: Float!
   epochLength: Int!
@@ -552,19 +732,30 @@ type ShelleyGenesisStaking {
 
 type ShelleyProtocolParams {
   a0: Float!
+  coinsPerUtxoWord: Int
+  collateralPercent: Int
+  costModels: String
   decentralisationParam: Float!
   eMax: Int!
   extraEntropy: JSONObject
   keyDeposit: Int!
   maxBlockBodySize: Int!
+  maxBlockExMem: String
+  maxBlockExSteps: String
   maxBlockHeaderSize: Int!
+  maxCollateralInputs: Int
+  maxTxExMem: String
+  maxTxExSteps: String
   maxTxSize: Int!
+  maxValSize: String
   minFeeA: Int!
   minFeeB: Int!
   minPoolCost: Int!
   minUTxOValue: Int!
   nOpt: Int!
   poolDeposit: Int!
+  priceMem: Float
+  priceStep: Float
   protocolVersion: JSONObject!
   rho: Float!
   tau: Float!
@@ -579,6 +770,7 @@ input StakeAddress_comparison_exp {
 
 type StakeDeregistration {
   address: StakeAddress!
+  redeemer: Redeemer
   transaction: Transaction!
 }
 
@@ -907,6 +1099,7 @@ type TokenMint_sum_fields {
 type Transaction {
   block: Block
   blockIndex: Int!
+  collateral: [TransactionInput]
   deposit: BigInt!
   fee: BigInt!
   hash: Hash32Hex!
@@ -949,9 +1142,14 @@ type Transaction {
     offset: Int
     where: TransactionOutput_bool_exp
   ): TransactionOutput_aggregate!
+  redeemers: [Redeemer]
+  scripts: [Script]
+  scriptSize: Int!
   size: BigInt!
   totalOutput: String!
   includedAt: DateTime!
+  # True unless a contract is invalid
+  validContract: Boolean!
   withdrawals: [Withdrawal]!
   withdrawals_aggregate(
     limit: Int
@@ -970,8 +1168,10 @@ input Transaction_order_by {
   includedAt: order_by
   invalidBefore: order_by_with_nulls
   invalidHereafter: order_by_with_nulls
+  scriptSize: order_by_with_nulls
   size: order_by
   totalOutput: order_by
+  validContract: order_by
   withdrawals: order_by
 }
 
@@ -981,6 +1181,7 @@ input Transaction_bool_exp {
   _or: [Transaction_bool_exp]
   block: Block_bool_exp
   blockIndex: Int_comparison_exp
+  collateral: TransactionInput_bool_exp
   deposit: BigInt_comparison_exp
   fee: BigInt_comparison_exp
   hash: Hash32Hex_comparison_exp
@@ -991,8 +1192,10 @@ input Transaction_bool_exp {
   metadata: TransactionMetadata_bool_exp
   mint: Token_bool_exp
   outputs: TransactionOutput_bool_exp
+  scriptSize: Int_comparison_exp
   size: BigInt_comparison_exp
   totalOutput: text_comparison_exp
+  validContract: Boolean_comparison_exp
   withdrawals: Withdrawal_bool_exp
 }
 
@@ -1012,6 +1215,7 @@ type Transaction_avg_fields {
   deposit: Float
   fee: Float
   mint: Token_avg_fields
+  scriptSize: Float
   size: Float
   totalOutput: Float
   withdrawals: Withdrawal_avg_fields
@@ -1023,6 +1227,7 @@ type Transaction_max_fields {
   invalidBefore: String
   invalidHereafter: String
   mint: Token_max_fields
+  scriptSize: Int
   size: String
   totalOutput: String
   withdrawals: Withdrawal_max_fields
@@ -1034,6 +1239,7 @@ type Transaction_min_fields {
   invalidBefore: String
   invalidHereafter: String
   mint: Token_min_fields
+  scriptSize: Int
   size: String
   totalOutput: String
   withdrawals: Withdrawal_min_fields
@@ -1043,6 +1249,7 @@ type Transaction_sum_fields {
   deposit: String
   fee: String
   mint: Token_sum_fields
+  scriptSize: BigInt
   size: String
   totalOutput: String
   withdrawals: Withdrawal_sum_fields
@@ -1050,10 +1257,11 @@ type Transaction_sum_fields {
 
 type TransactionInput {
   address: String!
+  redeemer: Redeemer
   sourceTransaction: Transaction!
   sourceTxHash: Hash32Hex!
   sourceTxIndex: Int!
-  tokens: [Token!]!
+  tokens: [Token]!
   tokens_aggregate: Token_aggregate!
   transaction: Transaction!
   txHash: Hash32Hex!
@@ -1121,6 +1329,7 @@ input TransactionMetadata_bool_exp {
 
 type TransactionOutput {
   address: String!
+  addressHasScript: Boolean!
   index: Int!
   transaction: Transaction!
   txHash: Hash32Hex!
@@ -1135,6 +1344,7 @@ enum TransactionOutput_distinct_on {
 
 input TransactionOutput_order_by {
   address: order_by
+  addressHasScript: order_by
   index: order_by
   txHash: order_by
   value: order_by
@@ -1145,6 +1355,7 @@ input TransactionOutput_bool_exp {
   _not: TransactionOutput_bool_exp
   _or: [TransactionOutput_bool_exp]
   address: text_comparison_exp
+  addressHasScript: Boolean_comparison_exp
   index: Int_comparison_exp
   tokens: Token_bool_exp
   transaction: Transaction_bool_exp
@@ -1377,6 +1588,7 @@ type Epoch_sum_fields {
 type Withdrawal {
   address: StakeAddress!
   amount: String!
+  redeemer: Redeemer
   transaction: Transaction!
 }
 
@@ -1421,6 +1633,18 @@ type Withdrawal_min_fields {
 
 type Withdrawal_sum_fields {
   amount: String
+}
+
+input Boolean_comparison_exp {
+  _eq: Boolean
+  _gt: Boolean
+  _gte: Boolean
+  _in: [Boolean!]
+  _is_null: Boolean
+  _lt: Boolean
+  _lte: Boolean
+  _neq: Boolean
+  _nin: [Boolean!]
 }
 
 # expression to compare data of type date. All fields are combined with logical 'AND'.

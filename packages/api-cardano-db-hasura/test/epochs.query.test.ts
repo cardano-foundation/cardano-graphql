@@ -13,8 +13,10 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 
 describe('epochs', () => {
   let client: TestClient
+  let alonzoQaClient: TestClient
   beforeAll(async () => {
     client = await testClient.mainnet()
+    alonzoQaClient = await testClient.alonzoQa()
   })
 
   it('Returns epoch details by number', async () => {
@@ -26,12 +28,20 @@ describe('epochs', () => {
     expect(result.data).toMatchSnapshot()
   })
 
-  it('Includes protocol params in effect for the epoch', async () => {
+  it('Includes protocol params in effect for the epoch - mainnet', async () => {
     const result = await client.query({
       query: await loadQueryNode('epochProtocolParams'),
       variables: { where: { number: { _eq: 220 } } }
     })
     expect(result.data.epochs[0].protocolParams).toEqual(epoch220.protocolParams)
+    expect(result.data).toMatchSnapshot()
+  })
+
+  it('Includes protocol params in effect for the epoch - alonzo-qa', async () => {
+    const result = await alonzoQaClient.query({
+      query: await loadQueryNode('epochProtocolParams'),
+      variables: { where: { number: { _eq: 30 } } }
+    })
     expect(result.data).toMatchSnapshot()
   })
 

@@ -1,0 +1,26 @@
+query redeemersAggregate {
+    redeemers_aggregate {
+        aggregate {
+          avg {
+              fee
+              unitMem
+              unitSteps
+          }
+          max {
+              fee
+              unitMem
+              unitSteps
+          }
+          min {
+              fee
+              unitMem
+              unitSteps
+          }
+          sum {
+              fee
+              unitMem
+              unitSteps
+          }
+        }
+    }
+}

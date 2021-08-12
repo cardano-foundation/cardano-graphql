@@ -3,6 +3,30 @@
 exports[`genesis Returns key information about the network genesis 1`] = `
 Object {
   "genesis": Object {
+    "alonzo": Object {
+      "collateralPercentage": 150,
+      "executionPrices": Object {
+        "prMem": Object {
+          "denominator": 1000,
+          "numerator": 5,
+        },
+        "prSteps": Object {
+          "denominator": 100,
+          "numerator": 1,
+        },
+      },
+      "lovelacePerUTxOWord": 34482,
+      "maxBlockExUnits": Object {
+        "exUnitsMem": 40000000000,
+        "exUnitsSteps": 40000000000,
+      },
+      "maxCollateralInputs": 3,
+      "maxTxExUnits": Object {
+        "exUnitsMem": 10000000000,
+        "exUnitsSteps": 10000000000,
+      },
+      "maxValueSize": 5000,
+    },
     "byron": Object {
       "blockVersionData": Object {
         "maxBlockSize": 2000000,

@@ -144,12 +144,16 @@ export const tx05ad8b = {
     }],
     outputs: [{
       address: 'DdzFFzCqrhsxVv8Sjuj35Zkw42T9WjwXa6DasrNknm5M3bPVDnWJWwhX5NymoZncUArTfFYZ9sYGaA9htKSNYoK5Vkzx2vUtunAFt3eE',
+      addressHasScript: false,
       value: '4824799478660'
     }, {
       address: 'DdzFFzCqrhskotfhVwhLvNFaVGpA6C4yR9DXe56oEL4Ewmze51f1uQsc1cQb8qUyqgzjUPBgFZiVbuQu7BaXrQkouyvzjYjLqfJpKG5s',
+      addressHasScript: false,
       value: '100000000000'
     }],
+    scriptSize: 0,
     size: 220,
+    validContract: true,
     totalOutput: '4924799478660'
   },
   aggregated: {

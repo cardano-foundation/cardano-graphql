@@ -1,0 +1,17 @@
+query redeemers (
+    $limit: Int
+){
+    redeemers(
+        limit: $limit
+    ) {
+        fee
+        index
+        purpose
+        scriptHash
+        transaction {
+            hash
+        }
+        unitMem
+        unitSteps
+    }
+}

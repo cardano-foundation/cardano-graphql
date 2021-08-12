@@ -145,7 +145,7 @@ export async function buildSchema (
         ada: {
           resolve: async () => {
             const adaPots = hasuraClient.adaPotsToCalculateSupplyFetcher.value
-            if (adaPots === undefined) {
+            if (adaPots === undefined || adaPots === null) {
               return new ApolloError(
                 'ada query results are not ready yet. This can occur during startup.'
               )
@@ -258,6 +258,34 @@ export async function buildSchema (
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'cardanoDbMeta')
         },
+        collateralInputs: {
+          resolve: (_root, args, context, info) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'collateralInputs',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'collateralInputs')
+        },
+        collateralInputs_aggregate: {
+          resolve: (_root, args, context, info) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'collateralInputs_aggregate',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'collateralInputs_aggregate')
+        },
         delegations: {
           resolve: (_root, args, context, info) => {
             return delegateToSchema({
@@ -328,6 +356,34 @@ export async function buildSchema (
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'paymentAddresses')
         },
+        redeemers: {
+          resolve: (_root, args, context, info) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'redeemers',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'redeemers')
+        },
+        redeemers_aggregate: {
+          resolve: (_root, args, context, info) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'redeemers_aggregate',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'redeemers_aggregate')
+        },
         rewards: {
           resolve: (_root, args, context, info) => {
             return delegateToSchema({
@@ -355,6 +411,34 @@ export async function buildSchema (
           },
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'rewards_aggregate')
+        },
+        scripts: {
+          resolve: (_root, args, context, info) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'scripts',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'scripts')
+        },
+        scripts_aggregate: {
+          resolve: (_root, args, context, info) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'scripts_aggregate',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'scripts_aggregate')
         },
         stakeDeregistrations: {
           resolve: (_root, args, context, info) => {
