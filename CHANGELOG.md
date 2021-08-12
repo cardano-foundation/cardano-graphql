@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0-beta.0](https://github.com/input-output-hk/cardano-graphql/compare/5.0.0...5.1.0-beta.0) (2021-08-12)
+
+### Compatible with:
+
+- [`cardano-node`: `alonzo-purple-1.0.1`](https://github.com/input-output-hk/cardano-node/releases/tag/alonzo-purple-1.0.1)
+- [`cardano-db-sync`: `alonzo-purple-1.0.1`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/alonzo-purple-1.0.1) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### Features
+* feature: Alonzo data mapping ([eff1d9c](https://github.com/input-output-hk/cardano-graphql/commit/eff1d9ced4cdcd2adee6602de801feecc28451bf))
+* feature: add `AlonzoGenesis`([d600dc0](https://github.com/input-output-hk/cardano-graphql/commit/d600dc01849292fe0a5006202a9be936e56d105b))
+* feature: add Alonzo blocks to conditional chain following ([8d6aaf4](https://github.com/input-output-hk/cardano-graphql/commit/8d6aaf46f01eef3774e2f2efa07838c125cfd1fb))
+
+### Bug Fixes
+* Guard logic ([110deaa](https://github.com/input-output-hk/cardano-graphql/commit/110deaaba6ef0bd8b3ecbe28d4979ee26335302c))
+* OperationRequiresNodeInCurrentEra -> OperationRequiresSyncedNode ([6165965](https://github.com/input-output-hk/cardano-graphql/commit/616596568e709731387c65fea7dc1cfa4cacf92d))
+* startup race-condition with chain-followers ([0b15315](https://github.com/input-output-hk/cardano-graphql/commit/0b15315f4084f6cf2de1773e55a9217149c33e4b))
+
+
 ## [5.0.0](https://github.com/input-output-hk/cardano-graphql/compare/4.0.0...5.0.0) (2021-07-14)
 
 ### Compatible with:
