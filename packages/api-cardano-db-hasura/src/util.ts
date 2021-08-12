@@ -2,6 +2,7 @@ import CardanoWasm from '@emurgo/cardano-serialization-lib-nodejs'
 import { Config } from './Config'
 import fs from 'fs-extra'
 import path from 'path'
+import { Schema } from '@cardano-ogmios/client'
 
 export async function readSecrets (rootDir: string): Promise<Partial<Config['db']>> {
   return {
@@ -17,3 +18,6 @@ export function getHashOfSignedTransaction (signedTransaction: string): string {
   const hashBuffer = parsed && parsed.body() && Buffer.from(CardanoWasm.hash_transaction(parsed.body()).to_bytes())
   return hashBuffer.toString('hex')
 }
+
+export const isAlonzoBlock = (block: Schema.Block): block is { alonzo: Schema.BlockAlonzo } =>
+  (block as { alonzo: Schema.BlockAlonzo }).alonzo !== undefined
