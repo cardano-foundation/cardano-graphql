@@ -2,6 +2,4 @@
 
 set -euo pipefail
 
-export NETWORK=${NETWORK:-mainnet}
-
-docker-compose -p $NETWORK down
+docker-compose -p ${NETWORK:-mainnet} down
