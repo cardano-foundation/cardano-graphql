@@ -54,7 +54,7 @@ git clone \
 
 #### Config
 - `--use-cache`: Access remote cache from [Docker Hub]
-- `NETWORK`: [See available networks](../ogmios/server/config)
+- `NETWORK`: [See available networks](./ogmios/server/config)
 - `API_PORT`: GraphQL port exposed on the host
 - `OGMIOS_PORT`: Ogmios port exposed on the host
 - `POSTGRES_PORT`: PostgreSQL port exposed on the host
