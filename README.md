@@ -46,12 +46,28 @@ git clone \
   && cd cardano-graphql
 ```
 ### Build and Run via Docker Compose
-Builds `@cardano-graphql/server` and starts it along with `cardano-ogmios-node`, `cardano-db-sync-extended`, `postgresql`, and `hasura`:
 
 ``` console
-DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker-compose up -d --build && docker-compose logs -f
+./scripts/up.sh --use-cache
 ```
-:information_source: _Omit the `--build` to use a pre-built image from Dockerhub (or locally cached from previous build)_
+:information_source: _See [docker-compose.yaml](./docker-compose.yml) for service details_
+
+#### Config
+- `--use-cache`: Access remote cache from [Docker Hub]
+- `NETWORK`: [See available networks](../ogmios/server/config)
+- `API_PORT`: GraphQL port exposed on the host
+- `OGMIOS_PORT`: Ogmios port exposed on the host
+- `POSTGRES_PORT`: PostgreSQL port exposed on the host
+
+:information_source: _Set the ENVs before the script_
+
+## Down
+``` console
+./scripts/down.sh
+```
+#### Config
+- `NETWORK`: As provided to the `up` script.
+
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
 ``` graphql 
@@ -122,6 +138,7 @@ See [Building].
 [available on npm]: https://www.npmjs.com/package/cardano-graphql-ts
 [Ogmios]: https://ogmios.dev/
 [releases]: https://github.com/input-output-hk/cardano-graphql/releases
+[Docker Hub]: https://hub.docker.com/repository/docker/cardanosolutions/cardano-node-ogmios
 [Wiki :book:]: https://github.com/input-output-hk/cardano-graphql/wiki
 [Using Docker]: https://github.com/input-output-hk/cardano-graphql/wiki/Docker
 [Building]: https://github.com/input-output-hk/cardano-graphql/wiki/Building
