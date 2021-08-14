@@ -50,7 +50,9 @@ git clone \
 ``` console
 ./scripts/up.sh --use-cache
 ```
-:information_source: _See [docker-compose.yaml](./docker-compose.yml) for service details_
+:information_source: _This is a small convenience script to boot the [docker-compose stack] with a convention for
+container and volume scoping based on the network, as well as optionally hitting the remote cache to speed up the build.
+Should this not suit your use-case simply use it as a reference along with the [Docker Compose docs]_
 
 #### Config
 - `--use-cache`: Access remote cache from [Docker Hub]
@@ -138,6 +140,7 @@ See [Building].
 [available on npm]: https://www.npmjs.com/package/cardano-graphql-ts
 [Ogmios]: https://ogmios.dev/
 [releases]: https://github.com/input-output-hk/cardano-graphql/releases
+[Docker Compose docs]: https://docs.docker.com/compose/
 [Docker Hub]: https://hub.docker.com/repository/docker/cardanosolutions/cardano-node-ogmios
 [Wiki :book:]: https://github.com/input-output-hk/cardano-graphql/wiki
 [Using Docker]: https://github.com/input-output-hk/cardano-graphql/wiki/Docker
