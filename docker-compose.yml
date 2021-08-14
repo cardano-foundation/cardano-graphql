@@ -95,11 +95,12 @@ services:
 
   cardano-graphql:
     build:
-      context: .
-      target: server
       args:
         - NETWORK=${NETWORK:-mainnet}
         - METADATA_SERVER_URI=${METADATA_SERVER_URI:-https://tokens.cardano.org}
+      cache_from: [ inputoutput/cardano-graphql:latest ]
+      context: .
+      target: server
     image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-5.0.0}
     environment:
       - ALLOW_INTROSPECTION=true
