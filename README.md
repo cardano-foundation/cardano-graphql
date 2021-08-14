@@ -45,13 +45,137 @@ git clone \
   https://github.com/input-output-hk/cardano-graphql.git \
   && cd cardano-graphql
 ```
-### Build and Run via Docker Compose
-Builds `@cardano-graphql/server` and starts it along with `cardano-ogmios-node`, `cardano-db-sync-extended`, `postgresql`, and `hasura`:
+
+### Up
+Choose **one** of the following:
+
+#### A) Build and Run via Docker Compose
+Boot the [docker-compose stack] using a convention for container and volume scoping based on the network, as well as
+optionally hitting the remote cache to speed up the build. The containers are detached, so you can terminate the log
+console session freely. See [Docker Compose docs] to tailor for your use-case
+ 
+<details open>
+  <summary><i>mainnet</i></summary>
 
 ``` console
-DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker-compose up -d --build && docker-compose logs -f
+DOCKER_BUILDKIT=1 \
+COMPOSE_DOCKER_CLI_BUILD=1 \
+docker-compose up -d --build &&\
+docker-compose logs -f
 ```
-:information_source: _Omit the `--build` to use a pre-built image from Dockerhub (or locally cached from previous build)_
+</details>
+
+<details>
+  <summary><i>testnet</i></summary>
+
+``` console
+DOCKER_BUILDKIT=1 \
+COMPOSE_DOCKER_CLI_BUILD=1 \
+API_PORT=3101 \
+HASURA_PORT=8091 \
+OGMIOS_PORT=1338 \
+POSTGRES_PORT=5433 \
+METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
+docker-compose -p testnet up -d --build &&\
+docker-compose -p testnet logs -f
+```
+
+</details>
+
+<details>
+  <summary><i>alonzo-purple</i></summary>
+
+``` console
+DOCKER_BUILDKIT=1 \
+COMPOSE_DOCKER_CLI_BUILD=1 \
+API_PORT=3102 \
+HASURA_PORT=8092 \
+OGMIOS_PORT=1339 \
+POSTGRES_PORT=5434 \
+METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
+docker-compose -p alonzo-purple up -d --build &&\
+docker-compose -p alonzo-purple logs -f
+```
+
+</details>
+
+
+### B) Pull and Run via Docker Compose
+Pull images from Docker Hub and run using a convention for container and volume scoping based on the network. The
+containers are detached, so you can terminate the log console session freely. See [Docker Compose docs] to tailor for
+your use-case.
+
+<details open>
+  <summary><i>mainnet</i></summary>
+
+``` console
+docker-compose pull &&\
+docker-compose up -d &&\
+docker-compose logs -f
+```
+</details>
+
+<details>
+  <summary><i>testnet</i></summary>
+
+``` console
+export NETWORK=testnet &&\
+docker-compose pull &&\
+API_PORT=3101 \
+HASURA_PORT=8091 \
+OGMIOS_PORT=1338 \
+POSTGRES_PORT=5433 \
+docker-compose -p testnet up -d &&\
+docker-compose -p testnet logs -f
+```
+
+</details>
+
+<details>
+  <summary><i>alonzo-purple</i></summary>
+
+``` console
+export NETWORK=alonzo-purple &&\
+docker-compose pull &&\
+API_PORT=3102 \
+HASURA_PORT=8092 \
+OGMIOS_PORT=1339 \
+POSTGRES_PORT=5434 \
+docker-compose -p alonzo-purple up -d &&\
+docker-compose -p alonzo-purple logs -f
+```
+
+</details>
+
+### Down
+The following commands will not remove volumes, however should you wish to do so, append `-v`
+
+<details open>
+  <summary><i>mainnet</i></summary>
+
+``` console
+docker-compose down
+```
+</details>
+
+<details>
+  <summary><i>testnet</i></summary>
+
+``` console
+docker-compose -p testnet down
+```
+
+</details>
+
+<details>
+  <summary><i>alonzo-purple</i></summary>
+
+``` console
+docker-compose -p alonzo-purple down
+```
+
+</details>
+
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
 ``` graphql 
@@ -65,8 +189,10 @@ curl \
   -d '{"query": "{ cardanoDbMeta { initialized syncPercentage }}"}' \
   http://localhost:3100/graphql
 ```
-:information_source: Wait for `initialized` to be `true` to ensure the epoch dataset is complete. After the first sync
-you may need to restart the services using `docker-compose restart cardano-graphql` if the GraphQL server isn't running.
+:information_source: _Wait for `initialized` to be `true` to ensure the epoch dataset is complete. After the first sync
+you may need to restart the services using `docker-compose restart cardano-graphql` if the GraphQL server isn't
+running._
+
 ### Query the full dataset
 ```graphql
 { cardano { tip { number slotNo epoch { number } } } }
@@ -112,6 +238,7 @@ See [Building].
 [workflow_CI]: https://github.com/input-output-hk/cardano-graphql/actions?query=workflow%3ACI
 [packages]: ./packages
 [docker-compose stack]: ./docker-compose.yml
+[Docker Compose docs]: https://docs.docker.com/compose/
 [cardano-graphql-server Dockerfile]: ./Dockerfile
 [hasura Dockerfile]: ./packages/api-cardano-db-hasura/hasura/Dockerfile
 [cardano-node-ogmios]: https://ogmios.dev/getting-started/docker/
