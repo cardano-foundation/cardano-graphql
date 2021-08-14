@@ -28,7 +28,7 @@ services:
     build:
       args:
         - NETWORK=${NETWORK:-mainnet}
-      cache_from: [ cardanosolutions/ogmios:latest ]
+      cache_from: [ cardanosolutions/cardano-node-ogmios:latest ]
       context: ./ogmios
     logging:
       driver: "json-file"
