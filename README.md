@@ -100,7 +100,7 @@ docker-compose -p alonzo-purple logs -f
 </details>
 
 
-### B) Pull and Run via Docker Compose
+#### B) Pull and Run via Docker Compose
 Pull images from Docker Hub and run using a convention for container and volume scoping based on the network. The
 containers are detached, so you can terminate the log console session freely. See [Docker Compose docs] to tailor for
 your use-case.
