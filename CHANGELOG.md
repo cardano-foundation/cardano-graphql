@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.1.0-beta.1](https://github.com/input-output-hk/cardano-graphql/compare/5.1.0-beta.0...5.1.0-beta.1) (2021-08-15)
+
+### Compatible with:
+
+- [`cardano-node`: `alonzo-purple-1.0.1`](https://github.com/input-output-hk/cardano-node/releases/tag/alonzo-purple-1.0.1)
+- [`cardano-ogmios`: `v4.0.0-beta.6`](https://github.com/CardanoSolutions/ogmios/releases/tag/v4.0.0-beta.6)
+- [`cardano-db-sync`: `alonzo-purple-1.0.1`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/alonzo-purple-1.0.1) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### Features
+* support Docker pull and run to skip builds ([ee03a57](https://github.com/input-output-hk/cardano-graphql/commit/ee03a57b7045bf3947faa0df1eaa536b3c7c482a))
+
+### Bug Fixes
+
+* invalid cache target in compose file ([4b4dfc3](https://github.com/input-output-hk/cardano-graphql/commit/4b4dfc37a1a7c4b3729e251219ca0fb25464d8f9))
+
+
 ## [5.1.0-beta.0](https://github.com/input-output-hk/cardano-graphql/compare/5.0.0...5.1.0-beta.0) (2021-08-12)
 
 ### Compatible with:
