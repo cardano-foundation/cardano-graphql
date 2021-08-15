@@ -28,8 +28,9 @@ services:
     build:
       args:
         - NETWORK=${NETWORK:-mainnet}
-      cache_from: [ cardanosolutions/ogmios:latest ]
+      cache_from: [ cardanosolutions/cardano-node-ogmios:latest ]
       context: ./ogmios
+    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v4.0.0-beta.6}-${NETWORK:-mainnet}
     logging:
       driver: "json-file"
       options:
@@ -74,7 +75,7 @@ services:
   hasura:
     build:
       context: ./packages/api-cardano-db-hasura/hasura
-    image: inputoutput/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-5.0.0}
+    image: inputoutput/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-5.1.0-beta.0}
     ports:
       - ${HASURA_PORT:-8090}:8080
     depends_on:
@@ -95,12 +96,13 @@ services:
 
   cardano-graphql:
     build:
-      context: .
-      target: server
       args:
         - NETWORK=${NETWORK:-mainnet}
         - METADATA_SERVER_URI=${METADATA_SERVER_URI:-https://tokens.cardano.org}
-    image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-5.0.0}
+      cache_from: [ inputoutput/cardano-graphql:latest ]
+      context: .
+      target: server
+    image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-5.1.0-beta.0}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
