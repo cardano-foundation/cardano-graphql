@@ -45,6 +45,7 @@ jobs:
       -
         name: Publish packages to npm registry
         run: |
+          yarn install --offline --frozen-lockfile --non-interactive --logevel=error
           npx npm-cli-login -u ${{ secrets.NPM_REGISTRY_USER }} -e ${{ secrets.NPM_REGISTRY_EMAIL }} -p ${{ secrets.NPM_REGISTRY_TOKEN }}
           scripts/publish_packages.sh
         if: ${{ always() }}
