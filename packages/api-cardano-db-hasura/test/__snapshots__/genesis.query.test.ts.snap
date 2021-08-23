@@ -7,22 +7,22 @@ Object {
       "collateralPercentage": 150,
       "executionPrices": Object {
         "prMem": Object {
-          "denominator": 1000,
-          "numerator": 5,
+          "denominator": 10000,
+          "numerator": 577,
         },
         "prSteps": Object {
-          "denominator": 100,
-          "numerator": 1,
+          "denominator": 10000000,
+          "numerator": 721,
         },
       },
       "lovelacePerUTxOWord": 34482,
       "maxBlockExUnits": Object {
-        "exUnitsMem": 40000000000,
+        "exUnitsMem": 50000000,
         "exUnitsSteps": 40000000000,
       },
       "maxCollateralInputs": 3,
       "maxTxExUnits": Object {
-        "exUnitsMem": 10000000000,
+        "exUnitsMem": 10000000,
         "exUnitsSteps": 10000000000,
       },
       "maxValueSize": 5000,

@@ -566,20 +566,27 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cardano-ogmios/client@^4.0.0-beta.5":
-  version "4.0.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@cardano-ogmios/client/-/client-4.0.0-beta.5.tgz#a942d6e3d30d2cfc4ee1b6c6004dc90880cd0c63"
-  integrity sha512-Arj6UoBZ1blT5VpZwMfuQAoP6z4++G4n0WCcMMZDYjDSixEIRK3CUrv5QbH5UksT+96hdECvOmY1px9JMhd3Tg==
+"@cardano-ogmios/client@^4.0.0-beta.9":
+  version "4.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@cardano-ogmios/client/-/client-4.0.0-beta.9.tgz#0d4da285f149cbfac3e88b0fc4b629d6a0f36002"
+  integrity sha512-yl7JSV90bplHZAjf3ZRH/U1OVw9ZkkaseUAHu2yBZJtsSOmQsLRPcy+Hx20WGMuqxnO+7Vo3HPpXniIy6jKO0w==
   dependencies:
-    "@cardano-ogmios/schema" "4.0.0-beta.5"
+    "@cardano-ogmios/schema" "4.0.0-beta.9"
+    "@types/json-bigint" "^1.0.1"
     cross-fetch "^3.1.4"
     fastq "^1.11.0"
     isomorphic-ws "^4.0.1"
+    json-bigint "^1.0.0"
     nanoid "^3.1.22"
     ts-custom-error "^3.2.0"
     ws "^7.4.6"
 
-"@cardano-ogmios/schema@4.0.0-beta.5", "@cardano-ogmios/schema@^4.0.0-beta.5":
+"@cardano-ogmios/schema@4.0.0-beta.9":
+  version "4.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-4.0.0-beta.9.tgz#081b96e03deb541fd9ce391c77d365104fc064d0"
+  integrity sha512-F/UYk2Ur83RnMFPgJzrnT7rev7K1i6A/wNWH7hUXU5eh1rAP6YqJaanKWicPiqjUzAFlMzyCxVUfgzP8WhL4JA==
+
+"@cardano-ogmios/schema@^4.0.0-beta.5":
   version "4.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-4.0.0-beta.5.tgz#40741360b692543490427075bd68d65d2a4a042d"
   integrity sha512-e+qUo0uoFEau/+qEFkbmSoc98CnykX8AX2NI+9u/qmxloHxuMmoLqruITzQ0F9GCg+cfyDZfUhqMyAnh918rtg==
@@ -1575,6 +1582,11 @@
   version "3.12.5"
   resolved "https://registry.yarnpkg.com/@types/js-yaml/-/js-yaml-3.12.5.tgz#136d5e6a57a931e1cce6f9d8126aa98a9c92a6bb"
   integrity sha512-JCcp6J0GV66Y4ZMDAQCXot4xprYB+Zfd3meK9+INSJeVZwJmHAW30BBEEkPzXswMXuiyReUGOP3GxrADc9wPww==
+
+"@types/json-bigint@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/json-bigint/-/json-bigint-1.0.1.tgz#201062a6990119a8cc18023cfe1fed12fc2fc8a7"
+  integrity sha512-zpchZLNsNuzJHi6v64UBoFWAvQlPhch7XAi36FkH6tL1bbbmimIF+cS7vwkzY4u5RaSWMoflQfu+TshMPPw8uw==
 
 "@types/json-schema@^7.0.3":
   version "7.0.5"
@@ -6064,6 +6076,13 @@ jsesc@^2.5.1:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-2.5.2.tgz#80564d2e483dacf6e8ef209650a67df3f0c283a4"
   integrity sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA==
+
+json-bigint@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/json-bigint/-/json-bigint-1.0.0.tgz#ae547823ac0cad8398667f8cd9ef4730f5b01ff1"
+  integrity sha512-SiPv/8VpZuWbvLSMtTDU8hEfrZWg/mH/nV/b4o0CYbSxu1UIQPLdwKOCIyLQX+VIPO5vrLX3i8qtqFyhdPSUSQ==
+  dependencies:
+    bignumber.js "^9.0.0"
 
 json-parse-better-errors@^1.0.1:
   version "1.0.2"
