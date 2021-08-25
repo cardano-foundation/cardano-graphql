@@ -9,19 +9,18 @@ jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
-      -  
-        name: Checkout source code
+      - name: 📥 Checkout repository
         uses: actions/checkout@v2.3.1
-      -
-        name: Setup Node.js
+      
+      - name: 🧰 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+        
+      - name: 🧰 Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 14
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      -
-        name: Compile TypeScript and lint
+        
+      - name: 🔨 Compile TypeScript and lint
         run: |
           yarn install --offline --frozen-lockfile --non-interactive --logevel=error
           yarn build
@@ -30,16 +29,16 @@ jobs:
           ALLOW_INTROSPECTION: true
           CACHE_ENABLED: false
           CARDANO_GRAPHQL_VERSION: ${{ github.sha }}
-      -
-        name: Build Cardano GraphQL Dockerfile
+          
+      - name: 🔨 Build Cardano GraphQL Server Dockerfile
         uses: docker/build-push-action@v2
         with:
           cache-from: type=registry,ref=inputoutput/cardano-graphql:master
           cache-to: type=inline
           tags: inputoutput/cardano-graphql:${{ github.sha }}
           target: server
-      -
-        name: Build Cardano GraphQL Hasura Dockerfile
+          
+      - name: 🔨 Build Cardano GraphQL Hasura Dockerfile
         uses: docker/build-push-action@v2
         with:
           context: ./packages/api-cardano-db-hasura/hasura
