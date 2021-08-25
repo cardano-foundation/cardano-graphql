@@ -102,7 +102,7 @@ services:
       cache_from: [ inputoutput/cardano-graphql:latest ]
       context: .
       target: server
-    image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-5.1.0-beta.1}
+    image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-5.1.0-beta.1}-${NETWORK:-mainnet}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
