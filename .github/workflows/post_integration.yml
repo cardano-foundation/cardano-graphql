@@ -65,7 +65,6 @@ jobs:
           file: ./packages/api-cardano-db-hasura/hasura/Dockerfile
           push: true
           tags: ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:latest-${{ matrix.network }}
-          target: server
           cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:master-${{ matrix.network }}
           cache-to: type=inline    
           
