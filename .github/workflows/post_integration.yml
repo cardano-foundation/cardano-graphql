@@ -34,37 +34,37 @@ jobs:
           echo ::set-output name=cardano-graphql-server-image::inputoutput/cardano-graphql
           echo ::set-output name=cardano-graphql-hasura-image::inputoutput/cardano-graphql-hasura
 
-      - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (default latest)
+      - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (default)
         if: ${{ matrix.network == 'mainnet' }}
         uses: docker/build-push-action@v2
         with:
           build-args: NETWORK=${{ matrix.network }}
           context: .
           push: true
-          tags: ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.sha }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:master
           target: server
           cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest
           cache-to: type=inline
       
-      - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (network latest)
+      - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (network)
         uses: docker/build-push-action@v2
         with:
           build-args: NETWORK=${{ matrix.network }}
           context: .
           push: true
-          tags: ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest-${{ matrix.network }}
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.sha }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:master-${{ matrix.network }}
           target: server
           cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-server-image }}:master-${{ matrix.network }}
           cache-to: type=inline
       
-      - name: 🔨 Build and push Cardano GraphQL Hasura Dockerfile (network latest)
+      - name: 🔨 Build and push Cardano GraphQL Hasura Dockerfile
         uses: docker/build-push-action@v2
         with:
           build-args: NETWORK=${{ matrix.network }}
           context: ./packages/api-cardano-db-hasura/hasura
           file: ./packages/api-cardano-db-hasura/hasura/Dockerfile
           push: true
-          tags: ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:latest-${{ matrix.network }}
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:${{ github.sha }}, ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:master
           cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:master-${{ matrix.network }}
           cache-to: type=inline    
           
