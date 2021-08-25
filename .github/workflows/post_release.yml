@@ -7,58 +7,80 @@ on:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04 ]
+        network: [ "mainnet", "testnet", "alonzo-purple" ]
+        
+    runs-on: ${{ matrix.os }}
     steps:
-      -
-        name: Checkout source code
+      - name: 📥 Checkout repository
         uses: actions/checkout@v2.3.1
-      -
-        name: Setup Node.js
+
+      - name: 🧰 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: 🧰 Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 14
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      -
-        name: Login to Docker Hub
+
+      - name: 🐳 Login to DockerHub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      -
-        name: Build and push Cardano GraphQL Dockerfile
+          
+      - name: 📝 Base Variables
+        id: base-variables
+        run: |
+          echo ::set-output name=cardano-graphql-server-image::inputoutput/cardano-graphql
+          echo ::set-output name=cardano-graphql-hasura-image::inputoutput/cardano-graphql-hasura
+          
+      - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (default)
+        if: ${{ matrix.network == 'mainnet' }}
         uses: docker/build-push-action@v2
         with:
-          push: true
-          tags: inputoutput/cardano-graphql:${{ github.sha }}, inputoutput/cardano-graphql:${{ github.event.release.tag_name }}, inputoutput/cardano-graphql:latest
-          cache-from: type=registry,ref=inputoutput/cardano-graphql:master
+          cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest
           cache-to: type=inline
-      -
-        name: Build and push Cardano GraphQL Hasura Dockerfile
+          push: true
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.sha }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.event.release.tag_name }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest
+          target: server
+      
+      - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (network tags)
+        uses: docker/build-push-action@v2
+        with:
+          build-args: NETWORK=${{ matrix.network }}
+          cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest
+          cache-to: type=inline
+          push: true
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.sha }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.event.release.tag_name }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest-${{ matrix.network }}
+          target: server
+          
+      - name: 🔨 Build and push Cardano GraphQL Hasura Dockerfile
         uses: docker/build-push-action@v2
         with:
           context: ./packages/api-cardano-db-hasura/hasura
           file: ./packages/api-cardano-db-hasura/hasura/Dockerfile
           push: true
-          tags: inputoutput/cardano-graphql-hasura:${{ github.sha }}, inputoutput/cardano-graphql-hasura:${{ github.event.release.tag_name }}, inputoutput/cardano-graphql-hasura:latest
-      -
-        name: Publish packages to npm registry
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:${{ github.sha }}, inputoutput/cardano-graphql-hasura:${{ github.event.release.tag_name }}, inputoutput/cardano-graphql-hasura:latest
+      
+      - name: 📤 Publish packages to npm registry
         run: |
           yarn install --offline --frozen-lockfile --non-interactive --logevel=error
           npx npm-cli-login -u ${{ secrets.NPM_REGISTRY_USER }} -e ${{ secrets.NPM_REGISTRY_EMAIL }} -p ${{ secrets.NPM_REGISTRY_TOKEN }}
           scripts/publish_packages.sh
         if: ${{ always() }}
           rm -f .npmrc
-      -
-        name: Build docs
+        
+      - name: 🔨 Build docs
         run: |
           yarn --cwd ./docs install --frozen-lockfile
           yarn --cwd ./docs build
         env:
           SKIP_PREFLIGHT_CHECK: true
-      -
-        name: Deploy
+          
+      - name: 📤 Deploy
         uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
           branch: gh-pages
