@@ -55,7 +55,7 @@ export class HasuraClient {
           return this.getAdaPotsToCalculateSupply()
         } catch (error) {
           if (error.message !== epochInformationNotYetAvailable) {
-            throw error
+            console.debug(error.message)
           }
           this.logger.trace({ err: error })
         }
