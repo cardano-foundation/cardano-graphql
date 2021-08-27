@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.1.0](https://github.com/input-output-hk/cardano-graphql/compare/5.1.0-beta.1...5.1.0) (2021-08-27)
+
+### Compatible with:
+
+- [`cardano-node`: `1.29.0`](https://github.com/input-output-hk/cardano-node/releases/tag/1.29.0)
+- [`cardano-ogmios`: `v4.0.0-beta.9`](https://github.com/CardanoSolutions/ogmios/releases/tag/v4.0.0-beta.9)
+- [`cardano-db-sync`: `11.0.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/11.0.0) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### Bug Fixes
+
+* add network suffix to Docker Compose file ([53059b9](https://github.com/input-output-hk/cardano-graphql/commit/53059b995d18dba7bdd4c32ce90d9c01b8b56b91))
+* guard sync drift between cardano-db-sync and cardano-graphql ([3c9707b](https://github.com/input-output-hk/cardano-graphql/commit/3c9707bbe618cdd2ae9868347cb0f89692cc5a0e))
+* properly handle error as known exception ([755c500](https://github.com/input-output-hk/cardano-graphql/commit/755c5002ea9bb87468c5d26958da82fc06ebed99))
+
+
 ## [5.1.0-beta.1](https://github.com/input-output-hk/cardano-graphql/compare/5.1.0-beta.0...5.1.0-beta.1) (2021-08-15)
 
 ### Compatible with:

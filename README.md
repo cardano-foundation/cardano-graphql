@@ -40,7 +40,7 @@ Check the [releases] for the latest version.
 ``` console
 git clone \
   --single-branch \
-  --branch <VERSION> \
+  --branch 5.1.0 \
   --recurse-submodules \
   https://github.com/input-output-hk/cardano-graphql.git \
   && cd cardano-graphql
@@ -112,8 +112,8 @@ your use-case.
 
 ``` console
 export NETWORK=mainnet &&\
-docker pull inputoutput/cardano-graphql:5.1.0-beta.1-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:5.1.0-beta.1 &&\
+docker pull inputoutput/cardano-graphql:5.1.0-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-hasura:5.1.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.9-${NETWORK} &&\
 docker-compose up -d &&\
 docker-compose logs -f
@@ -125,8 +125,8 @@ docker-compose logs -f
 
 ``` console
 export NETWORK=testnet &&\
-docker pull inputoutput/cardano-graphql:5.1.0-beta.1-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:5.1.0-beta.1 &&\
+docker pull inputoutput/cardano-graphql:5.1.0-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-hasura:5.1.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.9-${NETWORK} &&\
 API_PORT=3101 \
 HASURA_PORT=8091 \
@@ -143,8 +143,8 @@ docker-compose -p ${NETWORK} logs -f
 
 ``` console
 export NETWORK=alonzo-purple &&\
-docker pull inputoutput/cardano-graphql:5.1.0-beta.1-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:5.1.0-beta.1 &&\
+docker pull inputoutput/cardano-graphql:5.1.0-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-hasura:5.1.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.9-${NETWORK} &&\
 API_PORT=3102 \
 HASURA_PORT=8092 \
