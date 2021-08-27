@@ -24,13 +24,13 @@ export const testClient = {
     //   shelley: require('../../../config/network/mainnet/genesis/shelley.json')
     // }
   ),
-  alonzoQa: buildClient.bind(this,
-    'http://localhost:3102'
+  alonzoPurple: buildClient.bind(this,
+    'http://localhost:3103'
     // 'http://localhost:8092',
     // 5444,
     // {
-    //   byron: require('../../../config/network/alonzo-qa/genesis/byron.json'),
-    //   shelley: require('../../../config/network/alonzo-qa/genesis/shelley.json')
+    //   byron: require('../../../config/network/alonzo-purple/genesis/byron.json'),
+    //   shelley: require('../../../config/network/alonzo-purple/genesis/shelley.json')
     // }
   )
 }

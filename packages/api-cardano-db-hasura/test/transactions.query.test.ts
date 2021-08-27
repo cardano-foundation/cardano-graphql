@@ -13,10 +13,10 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 
 describe('transactions', () => {
   let client: TestClient
-  let alonzoQaClient: TestClient
+  let alonzoPurpleClient: TestClient
   beforeAll(async () => {
     client = await testClient.mainnet()
-    alonzoQaClient = await testClient.alonzoQa()
+    alonzoPurpleClient = await testClient.alonzoPurple()
   })
 
   it('Returns transactions by hashes', async () => {
@@ -49,20 +49,20 @@ describe('transactions', () => {
     expect(result.data).toMatchSnapshot()
   })
 
-  it('Returns transactions by hashes - alonzo-qa', async () => {
-    const plutusResult = await alonzoQaClient.query({
+  it('Returns transactions by hashes - alonzo-purple', async () => {
+    const plutusResult = await alonzoPurpleClient.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
-          '5ff4ca7691cc2b9543bc1dab1ba6e5704ae445ae2799310961a61487ff510f59'
+          'd87f63dc68a3d51b1b3476f311c0406092d33ceb95884f6156605560dc984f19'
         ]
       }
     })
-    const timelockResult = await alonzoQaClient.query({
+    const timelockResult = await alonzoPurpleClient.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
-          '1801d0dbcc3c832aa1a675d59cff6b777c91f10035d24f71c06190e6dca96a1c'
+          '926a05e71a9c1f85178258287b1273b70ecd70bcba24fc5594ffd5808e162905'
         ]
       }
     })

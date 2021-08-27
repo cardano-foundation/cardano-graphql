@@ -1,5 +1,5 @@
 import { createLogger } from 'bunyan'
-import { Point } from '@cardano-ogmios/schema'
+import { PointOrOrigin } from '@cardano-ogmios/schema'
 import { getConfig } from './config'
 import {
   AlonzoGenesis,
@@ -10,7 +10,8 @@ import {
   Db,
   Genesis,
   HasuraClient,
-  MetadataClient, ShelleyGenesis,
+  MetadataClient,
+  ShelleyGenesis,
   Worker
 } from '@cardano-graphql/api-cardano-db-hasura'
 import { errors } from '@cardano-graphql/util'
@@ -64,7 +65,8 @@ export * from './config'
       config.db
     )
     const metadataClient = new MetadataClient(
-      config.metadataServerUri
+      config.metadataServerUri,
+      logger
     )
     const worker = new Worker(
       hasuraClient,
@@ -97,7 +99,7 @@ export * from './config'
           await metadataClient.initialize()
           await chainFollower.initialize(config.ogmios)
           const mostRecentPoint = await hasuraClient.getMostRecentPointWithNewAsset()
-          const points: Point[] = mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
+          const points: PointOrOrigin[] = mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
           await worker.start()
           await chainFollower.start(points)
           await server.start()

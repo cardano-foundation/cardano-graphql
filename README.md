@@ -71,6 +71,7 @@ docker-compose logs -f
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
+NETWORK=testnet \
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
@@ -88,6 +89,7 @@ docker-compose -p testnet logs -f
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
+NETWORK=alonzo-purple \
 API_PORT=3102 \
 HASURA_PORT=8092 \
 OGMIOS_PORT=1339 \
@@ -112,7 +114,7 @@ your use-case.
 export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql:5.1.0-beta.1-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:5.1.0-beta.1 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.6-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.9-${NETWORK} &&\
 docker-compose up -d &&\
 docker-compose logs -f
 ```
@@ -125,7 +127,7 @@ docker-compose logs -f
 export NETWORK=testnet &&\
 docker pull inputoutput/cardano-graphql:5.1.0-beta.1-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:5.1.0-beta.1 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.6-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.9-${NETWORK} &&\
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
@@ -143,7 +145,7 @@ docker-compose -p ${NETWORK} logs -f
 export NETWORK=alonzo-purple &&\
 docker pull inputoutput/cardano-graphql:5.1.0-beta.1-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:5.1.0-beta.1 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.6-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.9-${NETWORK} &&\
 API_PORT=3102 \
 HASURA_PORT=8092 \
 OGMIOS_PORT=1339 \

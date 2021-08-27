@@ -33,7 +33,7 @@
   ],
   "dependencies": {
     "@cardano-graphql/util": "5.1.0-beta.1",
-    "@cardano-ogmios/client": "^4.0.0-beta.5",
+    "@cardano-ogmios/client": "^4.0.0-beta.9",
     "@emurgo/cardano-serialization-lib-nodejs": "^6.0.0",
     "@emurgo/cip14-js": "^2.0.0",
     "@graphql-tools/delegate": "^6.0.10",

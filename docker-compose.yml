@@ -30,7 +30,7 @@ services:
         - NETWORK=${NETWORK:-mainnet}
       cache_from: [ cardanosolutions/cardano-node-ogmios:latest ]
       context: ./ogmios
-    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v4.0.0-beta.6}-${NETWORK:-mainnet}
+    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v4.0.0-beta.9}-${NETWORK:-mainnet}
     logging:
       driver: "json-file"
       options:
@@ -44,7 +44,7 @@ services:
       - node-ipc:/ipc
     
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-alonzo-purple-1.0.1}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-11.0.0}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket",
