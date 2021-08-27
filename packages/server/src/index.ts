@@ -65,7 +65,8 @@ export * from './config'
       config.db
     )
     const metadataClient = new MetadataClient(
-      config.metadataServerUri
+      config.metadataServerUri,
+      logger
     )
     const worker = new Worker(
       hasuraClient,
