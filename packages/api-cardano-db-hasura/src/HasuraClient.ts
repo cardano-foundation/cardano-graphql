@@ -310,6 +310,9 @@ export class HasuraClient {
         throw new Error(result.errors)
       }
       if (result.assets.length !== 0) {
+        if (result.assets[0].firstAppearedInBlock === null) {
+          throw new Error('cardano-db-sync is lagging behind the asset sync operation.')
+        }
         const { hash, slotNo } = result.assets[0].firstAppearedInBlock
         point = {
           hash: hash.substring(2),
