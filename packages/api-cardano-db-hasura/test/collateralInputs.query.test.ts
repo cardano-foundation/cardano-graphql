@@ -12,7 +12,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('collateralInputs', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.alonzoQa()
+    client = await testClient.alonzoPurple()
   })
 
   it('can return an array of collateral inputs', async () => {
