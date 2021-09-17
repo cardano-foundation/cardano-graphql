@@ -150,6 +150,7 @@ SELECT
   stake_address.view AS "address",
   reward.earned_epoch AS "earnedInEpochNo",
   reward.pool_id AS pool_hash_id,
+  reward.spendable_epoch AS "receivedInEpochNo",
   reward.type AS "type"
 FROM reward
 JOIN stake_address on reward.addr_id = stake_address.id;
