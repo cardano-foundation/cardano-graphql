@@ -20,6 +20,9 @@ export async function getConfig (): Promise<Config> {
   if (!env.hasuraUri) {
     throw new MissingConfig('HASURA_URI env not set')
   }
+  if (!env.metadataServerUri) {
+    throw new MissingConfig('METADATA_SERVER_URI env not set')
+  }
   if (!env.postgres.dbFile && !env.postgres.db) {
     throw new MissingConfig('POSTGRES_DB_FILE or POSTGRES_DB env not set')
   }
