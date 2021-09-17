@@ -1277,6 +1277,7 @@ type TransactionInput {
 input TransactionInput_order_by {
   address: order_by
   sourceTxHash: order_by
+  transaction: Transaction_order_by
   txHash: order_by
   value: order_by
 }
