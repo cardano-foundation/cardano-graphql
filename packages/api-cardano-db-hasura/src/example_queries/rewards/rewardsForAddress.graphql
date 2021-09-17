@@ -11,5 +11,6 @@ query rewardsForAddress (
         earnedIn {
             number
         }
+        type
     }
 }
