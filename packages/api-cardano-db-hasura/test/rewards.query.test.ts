@@ -25,6 +25,7 @@ describe('rewards', () => {
     expect(rewards.length).toBe(5)
     expect(rewards[0].stakePool.hash).toBeDefined()
     expect(rewards[0].earnedIn.number).toBeDefined()
+    expect(rewards[0].receivedIn.number).toBeDefined()
     expect(rewards[0].type).toBeDefined()
   })
 

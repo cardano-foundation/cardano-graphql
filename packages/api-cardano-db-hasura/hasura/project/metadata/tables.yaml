@@ -435,6 +435,14 @@
           name: Epoch
         column_mapping:
           earnedInEpochNo: number
+  - name: receivedIn
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Epoch
+        column_mapping:
+          receivedInEpochNo: number
   - name: stakePool
     using:
       manual_configuration:
