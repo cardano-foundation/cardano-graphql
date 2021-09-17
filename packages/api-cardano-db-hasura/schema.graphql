@@ -609,7 +609,8 @@ type Reward {
   address: StakeAddress!
   amount: String!
   earnedIn: Epoch!
-  stakePool: StakePool!
+  stakePool: StakePool
+  type: String!
 }
 
 type Reward_aggregate {
@@ -648,6 +649,7 @@ input Reward_bool_exp {
   amount: text_comparison_exp
   earnedIn: Epoch_bool_exp
   stakePool: StakePool_bool_exp
+  type: text_comparison_exp
 }
 
 input Reward_order_by {
@@ -655,6 +657,7 @@ input Reward_order_by {
   amount: order_by
   earnedIn: Epoch_order_by
   stakePool: StakePool_order_by
+  type: order_by
 }
 
 type Script {
