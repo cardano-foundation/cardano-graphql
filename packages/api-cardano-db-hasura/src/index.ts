@@ -1,4 +1,3 @@
-export * from './assetFingerprint'
 export * from './AssetMetadata'
 export * from './CardanoNodeClient'
 export * from './ChainFollower'

@@ -6,9 +6,8 @@ import {
   Schema
 } from '@cardano-ogmios/client'
 import pRetry from 'p-retry'
-import { assetFingerprint } from './assetFingerprint'
 import { Config } from './Config'
-import util, { errors, RunnableModuleState } from '@cardano-graphql/util'
+import util, { assetFingerprint, errors, RunnableModuleState } from '@cardano-graphql/util'
 import { HasuraClient } from './HasuraClient'
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'

@@ -15,6 +15,7 @@ RUN mkdir -p /app/packages
 WORKDIR /app
 COPY packages-cache packages-cache
 COPY packages/api-cardano-db-hasura packages/api-cardano-db-hasura
+COPY packages/chain-follower packages/chain-follower
 COPY packages/server packages/server
 COPY packages/util packages/util
 COPY packages/util-dev packages/util-dev
@@ -27,7 +28,7 @@ COPY \
 
 FROM nodejs-builder as cardano-graphql-builder
 RUN yarn --offline --frozen-lockfile --non-interactive &&\
-   yarn build
+  yarn build
 
 FROM nodejs-builder as cardano-graphql-production-deps
 RUN yarn --offline --frozen-lockfile --non-interactive --production
@@ -92,4 +93,15 @@ COPY config/network/${NETWORK}/genesis /config/genesis/
 COPY config/network/${NETWORK}/cardano-node /config/cardano-node/
 WORKDIR /app/packages/server/dist
 EXPOSE 3100
+CMD ["node", "index.js"]
+
+FROM ubuntu-nodejs as chain-follower
+ENV \
+  OGMIOS_HOST="cardano-node-ogmios"
+COPY --from=cardano-graphql-builder /app/packages/chain-follower/dist /app/packages/chain-follower/dist
+COPY --from=cardano-graphql-builder /app/packages/chain-follower/package.json /app/packages/chain-follower/package.json
+COPY --from=cardano-graphql-builder /app/packages/util/dist /app/packages/util/dist
+COPY --from=cardano-graphql-builder /app/packages/util/package.json /app/packages/util/package.json
+COPY --from=cardano-graphql-production-deps /app/node_modules /app/node_modules
+WORKDIR /app/packages/chain-follower/dist
 CMD ["node", "index.js"]
