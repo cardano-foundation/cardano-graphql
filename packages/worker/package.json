@@ -1,0 +1,50 @@
+{
+  "name": "@cardano-graphql/worker",
+  "version": "0.1.0",
+  "description": "Contains a service to create a queue client and start a worker",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b ./src",
+    "cleanup": "shx rm -rf dist node_modules",
+    "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
+    "prepack": "yarn build",
+    "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
+  },
+  "contributors": [
+    "Rhys Bartels-Waller <rhys.bartelswaller@iohk.io> (https://iohk.io)",
+    "James Sweetland"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/input-output-hk/cardano-graphql/issues"
+  },
+  "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/worker/README.md",
+  "files": [
+    "dist/*",
+    "!dist/__test__",
+    "!dist/**/*.test.*",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "dependencies": {
+    "@cardano-graphql/util": "5.1.0",
+    "amqplib": "^0.8.0",
+    "bunyan": "^1.8.15",
+    "death": "^1.1.0",
+    "envalid": "^7.2.1",
+    "fastq": "^1.13.0",
+    "ts-custom-error": "^3.2.0",
+    "ts-log": "^2.2.3"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.8.2",
+    "@types/node": "^14.0.13",
+    "shx": "^0.3.2",
+    "typescript": "^3.9.5"
+  }
+}
