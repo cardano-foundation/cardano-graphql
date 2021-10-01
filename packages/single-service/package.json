@@ -1,5 +1,5 @@
 {
-  "name": "@cardano-graphql/chain-follower",
+  "name": "@cardano-graphql/single-service",
   "version": "0.1.0",
   "description": "Contains a service to follow the chain and insert data into Dgraph",
   "main": "dist/index.js",
@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/input-output-hk/cardano-graphql/issues"
   },
-  "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/chain-follower/README.md",
+  "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/single-service/README.md",
   "files": [
     "dist/*",
     "!dist/__test__",
@@ -32,11 +32,13 @@
     "NOTICE"
   ],
   "dependencies": {
+    "@cardano-graphql/chain-follower": "0.1.0",
     "@cardano-graphql/util": "5.1.0",
     "@cardano-graphql/worker": "0.1.0",
-    "@cardano-ogmios/client": "^4.0.0-beta.9",
-    "@emurgo/cip14-js": "^2.0.0",
-    "ts-custom-error": "^3.2.0",
+    "bunyan": "^1.8.15",
+    "camelcase-keys": "7.0.0",
+    "death": "^1.1.0",
+    "envalid": "^7.2.1",
     "ts-log": "^2.2.3"
   },
   "devDependencies": {

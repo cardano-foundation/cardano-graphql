@@ -1,0 +1,40 @@
+version: "3.5"
+
+services:
+  cardano-node-ogmios:
+    build:
+      args:
+        - NETWORK=${NETWORK:-mainnet}
+      cache_from: [cardanosolutions/cardano-node-ogmios:latest]
+      context: ../../ogmios
+    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v4.0.0}-${NETWORK:-mainnet}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "400k"
+        max-file: "20"
+    ports:
+      - ${OGMIOS_PORT:-1337}:1337
+    restart: on-failure
+    volumes:
+      - node-db:/db
+
+  single-service:
+    build:
+      args:
+        - NETWORK=${NETWORK:-mainnet}
+      cache_from: [inputoutput/cardano-graphql-single-service:latest]
+      context: ../../
+      target: single-service
+    image: inputoutput/cardano-graphql-single-service:${CARDANO_GRAPHQL_VERSION:-5.1.0}-${NETWORK:-mainnet}
+    environment:
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+volumes:
+  node-db:

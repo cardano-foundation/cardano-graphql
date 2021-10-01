@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../dist/",
+    "rootDir": "./",
+  },
+  "references": [
+    { "path": "../../chain-follower/src" },
+    { "path": "../../util/src" },
+    { "path": "../../worker/src" },
+  ]
+}

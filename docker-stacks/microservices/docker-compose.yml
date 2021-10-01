@@ -3,6 +3,8 @@ version: "3.5"
 services:
   rabbitmq:
     image: rabbitmq:3-management
+    deploy:
+      replicas: 1
     ports:
         - 5672:5672
         - 15672:15672
@@ -11,6 +13,8 @@ services:
         
   dgraph:
     image: dgraph/standalone:v21.03.0
+    deploy:
+      replicas: 1
     ports:
       - 5080:5080
       - 6080:6080
@@ -21,12 +25,14 @@ services:
       - dgraph:/dgraph
 
   cardano-node-ogmios:
-    build:
-      args:
-        - NETWORK=${NETWORK:-mainnet}
-      cache_from: [cardanosolutions/cardano-node-ogmios:latest]
-      context: ../../ogmios
+    # build:
+    #   args:
+    #     - NETWORK=${NETWORK:-mainnet}
+    #   cache_from: [cardanosolutions/cardano-node-ogmios:latest]
+    #   context: ../../ogmios
     image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v4.0.0}-${NETWORK:-mainnet}
+    deploy:
+      replicas: 1
     logging:
       driver: "json-file"
       options:
@@ -46,6 +52,8 @@ services:
       context: ../../
       target: chain-follower
     image: inputoutput/cardano-graphql-chain-follower:${CARDANO_GRAPHQL_VERSION:-5.1.0}-${NETWORK:-mainnet}
+    deploy:
+      replicas: 1
     environment:
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
     restart: on-failure
@@ -55,7 +63,22 @@ services:
         max-size: "200k"
         max-file: "10"
 
+  worker:
+    build:
+      cache_from: [inputoutput/cardano-graphql-worker:latest]
+      context: ../../
+      target: worker
+    image: inputoutput/cardano-graphql-worker:${CARDANO_GRAPHQL_VERSION:-5.1.0}
+    restart: on-failure
+    environment:
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
 volumes:
-  node-db:
-  dgraph:
   rabbitmq:
+  dgraph:
+  node-db:

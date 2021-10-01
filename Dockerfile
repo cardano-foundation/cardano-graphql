@@ -17,6 +17,7 @@ COPY packages-cache packages-cache
 COPY packages/api-cardano-db-hasura packages/api-cardano-db-hasura
 COPY packages/chain-follower packages/chain-follower
 COPY packages/server packages/server
+COPY packages/single-service packages/single-service
 COPY packages/util packages/util
 COPY packages/util-dev packages/util-dev
 COPY packages/worker packages/worker
@@ -108,12 +109,23 @@ WORKDIR /app/packages/chain-follower/dist
 CMD ["node", "index.js"]
 
 FROM ubuntu-nodejs as worker
-ENV \
-  OGMIOS_HOST="cardano-node-ogmios"
 COPY --from=cardano-graphql-builder /app/packages/worker/dist /app/packages/worker/dist
 COPY --from=cardano-graphql-builder /app/packages/worker/package.json /app/packages/worker/package.json
 COPY --from=cardano-graphql-builder /app/packages/util/dist /app/packages/util/dist
 COPY --from=cardano-graphql-builder /app/packages/util/package.json /app/packages/util/package.json
 COPY --from=cardano-graphql-production-deps /app/node_modules /app/node_modules
 WORKDIR /app/packages/worker/dist
+CMD ["node", "index.js"]
+
+FROM ubuntu-nodejs as single-service
+ENV \
+  OGMIOS_HOST="cardano-node-ogmios"
+COPY --from=cardano-graphql-builder /app/packages/single-service/dist /app/packages/single-service/dist
+COPY --from=cardano-graphql-builder /app/packages/single-service/package.json /app/packages/single-service/package.json
+COPY --from=cardano-graphql-builder /app/packages/chain-follower/dist /app/packages/chain-follower/dist
+COPY --from=cardano-graphql-builder /app/packages/chain-follower/package.json /app/packages/chain-follower/package.json
+COPY --from=cardano-graphql-builder /app/packages/worker/dist /app/packages/worker/dist
+COPY --from=cardano-graphql-builder /app/packages/worker/package.json /app/packages/worker/package.json
+COPY --from=cardano-graphql-production-deps /app/node_modules /app/node_modules
+WORKDIR /app/packages/single-service/dist
 CMD ["node", "index.js"]
