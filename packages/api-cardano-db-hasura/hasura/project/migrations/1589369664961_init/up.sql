@@ -348,6 +348,9 @@ CREATE INDEX idx_ma_tx_mint_name
 CREATE INDEX idx_ma_tx_mint_policy
     ON ma_tx_mint(policy);
 
+CREATE INDEX idx_reward_type
+    ON reward(type);
+
 CREATE INDEX idx_tx_hash
     ON tx(hash);
 
