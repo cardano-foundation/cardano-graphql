@@ -122,10 +122,21 @@ export class Server {
     this.syncProgress = setIntervalAsync(async () => {
       const result = await this.apolloServer.executeOperation(
         {
-          query: `query getSyncStatus {
+          query: `
+            query getSyncStatus {
               cardanoDbMeta {
                   initialized
                   syncPercentage
+              }
+              assets_aggregate {
+                aggregate {
+                  count
+                }
+              }
+              tokenMints_aggregate(distinct_on: assetId) {
+                aggregate {
+                  count
+                }
               }
           }`
         }
@@ -134,13 +145,14 @@ export class Server {
         this.logger.debug({ module: 'Server' }, JSON.stringify(result.errors))
         return
       }
-      if (result.data.cardanoDbMeta.initialized) {
+      const assetSyncPercentage = Math.round(Number(result.data.assets_aggregate.aggregate.count) / Number(result.data.tokenMints_aggregate.aggregate.count) * 100)
+      if (result.data.cardanoDbMeta.initialized && assetSyncPercentage > 99) {
         this.logger.info({ module: 'Server' }, 'DB ready')
         // Promise not awaited purposely
         // https://github.com/input-output-hk/cardano-graphql/issues/459
         clearIntervalAsync(this.syncProgress)
       } else {
-        this.logger.info({ module: 'Server' }, `DB sync progress: ${result.data.cardanoDbMeta.syncPercentage} %`)
+        this.logger.info({ module: 'Server' }, `Sync Progress: cardano-db-sync: ${result.data.cardanoDbMeta.syncPercentage}% | Asset: ${assetSyncPercentage}%`)
       }
     }, 5000)
   }
