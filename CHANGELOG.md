@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.0.0](https://github.com/input-output-hk/cardano-graphql/compare/5.1.0...6.0.0) (2021-10-03)
+
+### ⚠ BREAKING CHANGES
+
+* `Reward.stakePool` is now nullable to handle rewards of type `treasury` or `reserves`.
+
+### Features
+
+* include all reward types in Reward model, adds `type` field ([6f1ddd9](https://github.com/input-output-hk/cardano-graphql/commit/6f1ddd9b482b746eaf2940c41f9150e84244727c))
+* `Reward.receivedIn` ([e9e5715](https://github.com/input-output-hk/cardano-graphql/commit/e9e5715847fad3d27a426d13186833a4aecf4e2d))
+* `TransactionInput_order_by.transaction` ([f775c45](https://github.com/input-output-hk/cardano-graphql/commit/f775c451c32b74c62bb6291c18c8bee8f16f6ba1))
+* use Asset table sync status to determine Server readiness ([dfff8d5](https://github.com/input-output-hk/cardano-graphql/commit/dfff8d53dd76c72b5695ca35cc3c4d545fec4571))
+
+### Bug Fixes
+
+* add permission to Reward.type, and index the column ([6f157a5](https://github.com/input-output-hk/cardano-graphql/commit/6f157a5b46944ca2693e17580f72af39ab9a961b))
+* make METADATA_SERVER_URI required config ([552c5e8](https://github.com/input-output-hk/cardano-graphql/commit/552c5e8550d96f9820cede6f2b471b16cdc074b7))
+
 ### [5.1.0](https://github.com/input-output-hk/cardano-graphql/compare/5.1.0-beta.1...5.1.0) (2021-08-27)
 
 ### Compatible with:
