@@ -30,7 +30,7 @@ services:
         - NETWORK=${NETWORK:-mainnet}
       cache_from: [ cardanosolutions/cardano-node-ogmios:latest ]
       context: ./ogmios
-    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v4.0.0-beta.9}-${NETWORK:-mainnet}
+    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v4.1.0}-${NETWORK:-mainnet}
     logging:
       driver: "json-file"
       options:
@@ -44,16 +44,17 @@ services:
       - node-ipc:/ipc
     
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-11.0.0}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-11.0.4}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
-      "--socket-path", "/node-ipc/node.socket",
-      "--state-dir", "/data"
+      "--socket-path", "/node-ipc/node.socket"
     ]
     environment:
       - EXTENDED=true
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
+      - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
+      - RESTORE_RECREATE_DB=N
     depends_on:
       - cardano-node-ogmios
       - postgres
@@ -63,7 +64,7 @@ services:
       - postgres_db
     volumes:
       - ./config/network/${NETWORK:-mainnet}:/config
-      - db-sync-data:/data
+      - db-sync-data:/var/lib/cdbsync
       - node-ipc:/node-ipc
     restart: on-failure
     logging:

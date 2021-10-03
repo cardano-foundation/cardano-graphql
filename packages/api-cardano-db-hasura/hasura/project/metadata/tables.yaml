@@ -457,6 +457,7 @@
       columns:
       - address
       - amount
+      - type
       filter: {}
       limit: 2500
       allow_aggregations: true

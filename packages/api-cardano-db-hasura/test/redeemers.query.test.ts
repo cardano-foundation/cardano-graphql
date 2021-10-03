@@ -12,7 +12,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('redeemers', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.alonzoPurple()
+    client = await testClient.mainnet()
   })
 
   it('can return an array of redeemers', async () => {

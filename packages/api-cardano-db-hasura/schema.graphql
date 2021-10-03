@@ -177,12 +177,14 @@ type Query {
     where: StakeRegistration_bool_exp
   ): StakeRegistration_aggregate
   tokenMints (
+    distinct_on: [TokenMint_aggregate_distinct_on!]
     limit: Int
     order_by: [TokenMint_order_by!]
     offset: Int
     where: TokenMint_bool_exp
   ): [TokenMint]!
   tokenMints_aggregate (
+    distinct_on: [TokenMint_aggregate_distinct_on!]
     limit: Int
     order_by: [TokenMint_order_by!]
     offset: Int
@@ -1076,6 +1078,11 @@ input TokenMint_bool_exp {
 type TokenMint_aggregate {
   aggregate: TokenMint_aggregate_fields
   nodes: [TokenMint!]!
+}
+
+enum TokenMint_aggregate_distinct_on {
+  assetId
+  policyId
 }
 
 type TokenMint_aggregate_fields {
