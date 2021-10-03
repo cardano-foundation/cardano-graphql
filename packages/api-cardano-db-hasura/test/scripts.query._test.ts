@@ -12,7 +12,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('scripts', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.alonzoPurple()
+    client = await testClient.mainnet()
   })
 
   it('can return an array of timelock scripts', async () => {

@@ -105,181 +105,6 @@ Object {
 }
 `;
 
-exports[`transactions Returns transactions by hashes - alonzo-purple 1`] = `
-Object {
-  "plutusResult": Object {
-    "data": Object {
-      "transactions": Array [
-        Object {
-          "block": Object {
-            "number": 16969,
-          },
-          "blockIndex": 0,
-          "collateral": null,
-          "deposit": 0,
-          "fee": 488655,
-          "hash": "d87f63dc68a3d51b1b3476f311c0406092d33ceb95884f6156605560dc984f19",
-          "inputs": Array [
-            Object {
-              "address": "addr_test1vpryqanpn72mpxtmapgtqmclwdjlevnu03dykydclya95sgq5eehp",
-              "sourceTxHash": "0873e1a82e660094505f03eca539ebbc2029ce17e278b49fe3d03cea7bb3ab64",
-              "sourceTxIndex": 1,
-              "value": "17000000",
-            },
-            Object {
-              "address": "addr_test1vpryqanpn72mpxtmapgtqmclwdjlevnu03dykydclya95sgq5eehp",
-              "sourceTxHash": "0873e1a82e660094505f03eca539ebbc2029ce17e278b49fe3d03cea7bb3ab64",
-              "sourceTxIndex": 0,
-              "value": "999572231092",
-            },
-            Object {
-              "address": "addr_test1wr7rcntrvl4j5jl85n44zpnqgly5m5rqz0nmtgpa96mj02g9cxwdv",
-              "sourceTxHash": "9689c9ef3605a76bee265fbde966ae33fe57bb78f832e5f3b7d3a9630651da47",
-              "sourceTxIndex": 1,
-              "value": "2000000",
-            },
-          ],
-          "inputs_aggregate": Object {
-            "aggregate": Object {
-              "sum": Object {
-                "value": "999591231092",
-              },
-            },
-          },
-          "outputs": Array [
-            Object {
-              "address": "addr_test1vpryqanpn72mpxtmapgtqmclwdjlevnu03dykydclya95sgq5eehp",
-              "addressHasScript": false,
-              "index": 0,
-              "value": "999563742437",
-            },
-            Object {
-              "address": "addr_test1vpryqanpn72mpxtmapgtqmclwdjlevnu03dykydclya95sgq5eehp",
-              "addressHasScript": false,
-              "index": 1,
-              "value": "2000000",
-            },
-            Object {
-              "address": "addr_test1vpryqanpn72mpxtmapgtqmclwdjlevnu03dykydclya95sgq5eehp",
-              "addressHasScript": false,
-              "index": 2,
-              "value": "25000000",
-            },
-          ],
-          "outputs_aggregate": Object {
-            "aggregate": Object {
-              "sum": Object {
-                "value": "999590742437",
-              },
-            },
-          },
-          "redeemers": Array [
-            Object {
-              "scriptHash": "fc3c4d6367eb2a4be7a4eb51066047c94dd06013e7b5a03d2eb727a9",
-            },
-          ],
-          "scriptSize": 3929,
-          "scripts": Array [
-            Object {
-              "hash": "fc3c4d6367eb2a4be7a4eb51066047c94dd06013e7b5a03d2eb727a9",
-              "serialisedSize": 3929,
-              "type": "plutus",
-            },
-          ],
-          "size": 4478,
-          "totalOutput": "999590742437",
-          "validContract": true,
-          "withdrawals_aggregate": Object {
-            "aggregate": Object {
-              "sum": Object {
-                "amount": null,
-              },
-            },
-          },
-        },
-      ],
-    },
-    "loading": false,
-    "networkStatus": 7,
-    "stale": false,
-  },
-  "timelockResult": Object {
-    "data": Object {
-      "transactions": Array [
-        Object {
-          "block": Object {
-            "number": 11033,
-          },
-          "blockIndex": 0,
-          "collateral": null,
-          "deposit": 0,
-          "fee": 201317,
-          "hash": "926a05e71a9c1f85178258287b1273b70ecd70bcba24fc5594ffd5808e162905",
-          "inputs": Array [
-            Object {
-              "address": "addr_test1qrfqc909vvxfq7903kaz09cuh5q2un8zw7j9ys4uh3k7j3qpgncz6fapajjvkyqka2sldfpk250nml40sf67am68wd2shl9fth",
-              "sourceTxHash": "ff9f1a88b05b3ba90719baf62bc9240de9d93a33969a00aa2dc980e3443d5e6e",
-              "sourceTxIndex": 0,
-              "value": "1000000000000",
-            },
-          ],
-          "inputs_aggregate": Object {
-            "aggregate": Object {
-              "sum": Object {
-                "value": "1000000000000",
-              },
-            },
-          },
-          "outputs": Array [
-            Object {
-              "address": "addr_test1qrfqc909vvxfq7903kaz09cuh5q2un8zw7j9ys4uh3k7j3qpgncz6fapajjvkyqka2sldfpk250nml40sf67am68wd2shl9fth",
-              "addressHasScript": false,
-              "index": 0,
-              "value": "999998298683",
-            },
-            Object {
-              "address": "addr_test1qzcgqjam9ky3mestc8fczl56dw22fl74re0ce5xg09mth60l0dw5r75vk42mv3ykq8vyjeaanvpytg79xqzymqy5acmqymjlf9",
-              "addressHasScript": false,
-              "index": 1,
-              "value": "1500000",
-            },
-          ],
-          "outputs_aggregate": Object {
-            "aggregate": Object {
-              "sum": Object {
-                "value": "999999798683",
-              },
-            },
-          },
-          "redeemers": Array [],
-          "scriptSize": 0,
-          "scripts": Array [
-            Object {
-              "hash": "57cdc42f2041cf67ceea61be6a25e913aff31f7f0bb5e59b8b6ad18b",
-              "serialisedSize": null,
-              "type": "timelock",
-            },
-          ],
-          "size": 659,
-          "totalOutput": "999999798683",
-          "validContract": true,
-          "withdrawals_aggregate": Object {
-            "aggregate": Object {
-              "sum": Object {
-                "amount": null,
-              },
-            },
-          },
-        },
-      ],
-    },
-    "loading": false,
-    "networkStatus": 7,
-    "stale": false,
-  },
-}
-`;
-
 exports[`transactions Returns transactions by hashes 1`] = `
 Object {
   "transactions": Array [
@@ -461,6 +286,27 @@ Object {
       },
     },
   ],
+}
+`;
+
+exports[`transactions Returns transactions by hashes 2`] = `
+Object {
+  "plutusResult": Object {
+    "data": Object {
+      "transactions": Array [],
+    },
+    "loading": false,
+    "networkStatus": 7,
+    "stale": false,
+  },
+  "timelockResult": Object {
+    "data": Object {
+      "transactions": Array [],
+    },
+    "loading": false,
+    "networkStatus": 7,
+    "stale": false,
+  },
 }
 `;
 

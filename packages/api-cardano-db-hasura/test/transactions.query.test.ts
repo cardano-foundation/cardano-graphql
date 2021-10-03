@@ -13,10 +13,8 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 
 describe('transactions', () => {
   let client: TestClient
-  let alonzoPurpleClient: TestClient
   beforeAll(async () => {
     client = await testClient.mainnet()
-    alonzoPurpleClient = await testClient.alonzoPurple()
   })
 
   it('Returns transactions by hashes', async () => {
@@ -49,8 +47,8 @@ describe('transactions', () => {
     expect(result.data).toMatchSnapshot()
   })
 
-  it('Returns transactions by hashes - alonzo-purple', async () => {
-    const plutusResult = await alonzoPurpleClient.query({
+  it('Returns transactions by hashes', async () => {
+    const plutusResult = await client.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
@@ -58,7 +56,7 @@ describe('transactions', () => {
         ]
       }
     })
-    const timelockResult = await alonzoPurpleClient.query({
+    const timelockResult = await client.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [

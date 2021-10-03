@@ -2,6 +2,7 @@ import {
   ChainSync,
   createChainSyncClient,
   createInteractionContext,
+  isAlonzoBlock,
   isMaryBlock,
   Schema
 } from '@cardano-ogmios/client'
@@ -11,7 +12,6 @@ import util, { assetFingerprint, errors, RunnableModuleState } from '@cardano-gr
 import { HasuraClient } from './HasuraClient'
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'
-import { isAlonzoBlock } from './util'
 
 const MODULE_NAME = 'ChainFollower'
 

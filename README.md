@@ -57,9 +57,11 @@ console session freely. See [Docker Compose docs] to tailor for your use-case
 <details open>
   <summary><i>mainnet</i></summary>
 
+Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/11/db-sync-snapshot-schema-11-block-6278640-x86_64.tgz \
 docker-compose up -d --build &&\
 docker-compose logs -f
 ```
@@ -68,10 +70,12 @@ docker-compose logs -f
 <details>
   <summary><i>testnet</i></summary>
 
+Get the most recent weekly snapshot link [here](https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
 NETWORK=testnet \
+RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/11/db-sync-snapshot-schema-11-block-2944498-x86_64.tgz \
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
@@ -83,25 +87,6 @@ docker-compose -p testnet logs -f
 
 </details>
 
-<details>
-  <summary><i>alonzo-purple</i></summary>
-
-``` console
-DOCKER_BUILDKIT=1 \
-COMPOSE_DOCKER_CLI_BUILD=1 \
-NETWORK=alonzo-purple \
-API_PORT=3102 \
-HASURA_PORT=8092 \
-OGMIOS_PORT=1339 \
-POSTGRES_PORT=5434 \
-METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
-docker-compose -p alonzo-purple up -d --build &&\
-docker-compose -p alonzo-purple logs -f
-```
-
-</details>
-
-
 #### B) Pull and Run via Docker Compose
 Pull images from Docker Hub and run using a convention for container and volume scoping based on the network. The
 containers are detached, so you can terminate the log console session freely. See [Docker Compose docs] to tailor for
@@ -110,11 +95,13 @@ your use-case.
 <details open>
   <summary><i>mainnet</i></summary>
 
+Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql:5.1.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:5.1.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.9-${NETWORK} &&\
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/11/db-sync-snapshot-schema-11-block-6278640-x86_64.tgz \
 docker-compose up -d &&\
 docker-compose logs -f
 ```
@@ -123,33 +110,17 @@ docker-compose logs -f
 <details>
   <summary><i>testnet</i></summary>
 
+Get the most recent weekly snapshot link [here](https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=testnet &&\
 docker pull inputoutput/cardano-graphql:5.1.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:5.1.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.9-${NETWORK} &&\
+RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/11/db-sync-snapshot-schema-11-block-2944498-x86_64.tgz \
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
 POSTGRES_PORT=5433 \
-docker-compose -p ${NETWORK} up -d &&\
-docker-compose -p ${NETWORK} logs -f
-```
-
-</details>
-
-<details>
-  <summary><i>alonzo-purple</i></summary>
-
-``` console
-export NETWORK=alonzo-purple &&\
-docker pull inputoutput/cardano-graphql:5.1.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:5.1.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v4.0.0-beta.9-${NETWORK} &&\
-API_PORT=3102 \
-HASURA_PORT=8092 \
-OGMIOS_PORT=1339 \
-POSTGRES_PORT=5434 \
 docker-compose -p ${NETWORK} up -d &&\
 docker-compose -p ${NETWORK} logs -f
 ```
@@ -172,15 +143,6 @@ docker-compose down
 
 ``` console
 docker-compose -p testnet down
-```
-
-</details>
-
-<details>
-  <summary><i>alonzo-purple</i></summary>
-
-``` console
-docker-compose -p alonzo-purple down
 ```
 
 </details>
