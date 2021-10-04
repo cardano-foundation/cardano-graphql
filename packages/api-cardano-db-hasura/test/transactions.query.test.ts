@@ -52,7 +52,7 @@ describe('transactions', () => {
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
-          'd87f63dc68a3d51b1b3476f311c0406092d33ceb95884f6156605560dc984f19'
+          'a95d16e891e51f98a3b1d3fe862ed355ebc8abffb7a7269d86f775553d9e653f'
         ]
       }
     })
@@ -60,7 +60,7 @@ describe('transactions', () => {
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
-          '926a05e71a9c1f85178258287b1273b70ecd70bcba24fc5594ffd5808e162905'
+          '80854839a855423f802745ad08c108a74a47eb161ae94838f1ef80f9308a81a1'
         ]
       }
     })
