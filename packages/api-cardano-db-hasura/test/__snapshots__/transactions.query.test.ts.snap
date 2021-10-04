@@ -293,7 +293,71 @@ exports[`transactions Returns transactions by hashes 2`] = `
 Object {
   "plutusResult": Object {
     "data": Object {
-      "transactions": Array [],
+      "transactions": Array [
+        Object {
+          "block": Object {
+            "number": 6236063,
+          },
+          "blockIndex": 3,
+          "collateral": null,
+          "deposit": 0,
+          "fee": 336139,
+          "hash": "a95d16e891e51f98a3b1d3fe862ed355ebc8abffb7a7269d86f775553d9e653f",
+          "inputs": Array [
+            Object {
+              "address": "addr1w984jz3aszhqxy466zmy64qv8l6ssrnhy58fm06sz93sq9s9edd6l",
+              "sourceTxHash": "7510385def92ad50602b75e519f733ed2acd248610aa5f920218ce8010acd4b4",
+              "sourceTxIndex": 0,
+              "value": "7000000",
+            },
+          ],
+          "inputs_aggregate": Object {
+            "aggregate": Object {
+              "sum": Object {
+                "value": "7000000",
+              },
+            },
+          },
+          "outputs": Array [
+            Object {
+              "address": "addr1vx6jjqsw4fz2fazphxtxze4lyajeevg44n2z33s53umcstcntljun",
+              "addressHasScript": false,
+              "index": 0,
+              "value": "6663861",
+            },
+          ],
+          "outputs_aggregate": Object {
+            "aggregate": Object {
+              "sum": Object {
+                "value": "6663861",
+              },
+            },
+          },
+          "redeemers": Array [
+            Object {
+              "scriptHash": "4f590a3d80ae0312bad0b64d540c3ff5080e77250e9dbf5011630016",
+            },
+          ],
+          "scriptSize": 2739,
+          "scripts": Array [
+            Object {
+              "hash": "4f590a3d80ae0312bad0b64d540c3ff5080e77250e9dbf5011630016",
+              "serialisedSize": 2739,
+              "type": "plutus",
+            },
+          ],
+          "size": 3075,
+          "totalOutput": "6663861",
+          "validContract": true,
+          "withdrawals_aggregate": Object {
+            "aggregate": Object {
+              "sum": Object {
+                "amount": null,
+              },
+            },
+          },
+        },
+      ],
     },
     "loading": false,
     "networkStatus": 7,
@@ -301,7 +365,73 @@ Object {
   },
   "timelockResult": Object {
     "data": Object {
-      "transactions": Array [],
+      "transactions": Array [
+        Object {
+          "block": Object {
+            "number": 6246881,
+          },
+          "blockIndex": 26,
+          "collateral": null,
+          "deposit": 0,
+          "fee": 202637,
+          "hash": "80854839a855423f802745ad08c108a74a47eb161ae94838f1ef80f9308a81a1",
+          "inputs": Array [
+            Object {
+              "address": "addr1v8yx3ewc4qdxxurmm8ddncds86efh8skxqngax7a7kaz53q4dawym",
+              "sourceTxHash": "6d85f79abb0da25e10c0c87a063a231a5a21342c9c7f4526b2f1fa931cdcb70f",
+              "sourceTxIndex": 0,
+              "value": "3913855",
+            },
+          ],
+          "inputs_aggregate": Object {
+            "aggregate": Object {
+              "sum": Object {
+                "value": "3913855",
+              },
+            },
+          },
+          "outputs": Array [
+            Object {
+              "address": "addr1q9d7uz9ppwpa87vcyenurf9h7mf433fgzz6fjjg2cekmze5aq2ca8rsdks8gd9smqshslgszpc2adlummszjx8grhd2quw4kcu",
+              "addressHasScript": false,
+              "index": 0,
+              "value": "2000000",
+            },
+            Object {
+              "address": "addr1v8gkdz5xdkftr53nd3lukvg378zqf60ywcrskp4gd8nzkks574gpk",
+              "addressHasScript": false,
+              "index": 1,
+              "value": "1711218",
+            },
+          ],
+          "outputs_aggregate": Object {
+            "aggregate": Object {
+              "sum": Object {
+                "value": "3711218",
+              },
+            },
+          },
+          "redeemers": Array [],
+          "scriptSize": 0,
+          "scripts": Array [
+            Object {
+              "hash": "14d75740fc8cf5ad4a50b8bc3e0c6a91b9f9502f258e171489f215ec",
+              "serialisedSize": null,
+              "type": "timelock",
+            },
+          ],
+          "size": 879,
+          "totalOutput": "3711218",
+          "validContract": true,
+          "withdrawals_aggregate": Object {
+            "aggregate": Object {
+              "sum": Object {
+                "amount": null,
+              },
+            },
+          },
+        },
+      ],
     },
     "loading": false,
     "networkStatus": 7,
