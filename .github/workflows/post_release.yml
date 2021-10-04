@@ -68,14 +68,15 @@ jobs:
           tags: ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:${{ github.sha }}, inputoutput/cardano-graphql-hasura:${{ github.event.release.tag_name }}, inputoutput/cardano-graphql-hasura:latest
       
       - name: 📤 Publish packages to npm registry
+        if: ${{ matrix.network == 'mainnet' }}
         run: |
           yarn install --offline --frozen-lockfile --non-interactive --logevel=error
           npx npm-cli-login -u ${{ secrets.NPM_REGISTRY_USER }} -e ${{ secrets.NPM_REGISTRY_EMAIL }} -p ${{ secrets.NPM_REGISTRY_TOKEN }}
           scripts/publish_packages.sh
-        if: ${{ always() }}
           rm -f .npmrc
         
       - name: 🔨 Build docs
+        if: ${{ matrix.network == 'mainnet' }}
         run: |
           yarn --cwd ./docs install --frozen-lockfile
           yarn --cwd ./docs build
@@ -83,6 +84,7 @@ jobs:
           SKIP_PREFLIGHT_CHECK: true
           
       - name: 📤 Deploy
+        if: ${{ matrix.network == 'mainnet' }}
         uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
           branch: gh-pages
