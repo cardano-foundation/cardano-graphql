@@ -9,7 +9,7 @@
     "cleanup": "shx rm -rf dist node_modules",
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
     "prepack": "yarn build",
-    "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js"
+    "test": "shx echo No tests in this package"
   },
   "repository": {
     "type": "git",
