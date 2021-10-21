@@ -1,38 +1,24 @@
 import {
   ChainSync,
+  ConnectionConfig,
   createChainSyncClient,
   createInteractionContext,
   Schema
 } from '@cardano-ogmios/client'
 import { errors, RunnableModuleState } from '@cardano-graphql/util'
-import { dummyLogger, Logger } from 'ts-log'
+import { dummyLogger } from 'ts-log'
 
 const MODULE_NAME = 'ChainFollower'
-
-interface Config {
-  cardanoNodeConfigPath: string;
-  db: {
-    database: string;
-    host: string;
-    password: string;
-    port: number;
-    user: string;
-  };
-  ogmios?: {
-    host?: string;
-    port?: number;
-  };
-}
 
 export class ChainFollower {
   private chainSyncClient: ChainSync.ChainSyncClient;
   private state: RunnableModuleState;
 
-  constructor (private logger: Logger = dummyLogger) {
+  constructor (private logger = dummyLogger) {
     this.state = null
   }
 
-  public async initialize (ogmiosConfig: Config['ogmios']) {
+  public async initialize (ogmiosConnection: ConnectionConfig) {
     if (this.state !== null) return
     this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing')
@@ -43,7 +29,7 @@ export class ChainFollower {
         this.logger.error({ module: MODULE_NAME, code }, reason)
       },
       {
-        connection: ogmiosConfig,
+        connection: ogmiosConnection,
         interactionType: 'LongRunning'
       }
     )
