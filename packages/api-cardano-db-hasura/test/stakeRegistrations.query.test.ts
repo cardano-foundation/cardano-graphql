@@ -13,7 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('stakeRegistrations', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.mainnet()
+    client = await testClient.testnet()
   })
 
   it('can return details for stake registrations', async () => {

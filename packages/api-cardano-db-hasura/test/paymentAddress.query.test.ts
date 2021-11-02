@@ -17,7 +17,7 @@ function loadTestOperationDocument (name: string): Promise<DocumentNode> {
 describe('paymentAddress', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.mainnet()
+    client = await testClient.testnet()
   })
 
   it('returns payment address summary for the provided addresses', async () => {

@@ -12,14 +12,14 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('cardano', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.mainnet()
+    client = await testClient.testnet()
   })
 
   it('Returns core information about the current state of the network', async () => {
     const result = await client.query({
       query: await loadQueryNode('chainTipAndCurrentEpochNumber')
     })
-    expect(result.data.cardano.tip.number).toBeGreaterThan(3994551)
-    expect(result.data.cardano.currentEpoch.number).toBeGreaterThan(184)
+    expect(result.data.cardano.tip.number).toBeGreaterThan(3037572)
+    expect(result.data.cardano.currentEpoch.number).toBeGreaterThan(165)
   })
 })

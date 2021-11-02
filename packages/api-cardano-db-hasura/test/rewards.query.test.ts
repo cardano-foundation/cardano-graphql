@@ -13,16 +13,16 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('rewards', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.mainnet()
+    client = await testClient.testnet()
   })
 
   it('can return details for rewards scoped to an address', async () => {
     const result = await client.query({
       query: await loadQueryNode('rewardsForAddress'),
-      variables: { limit: 5, where: { address: { _eq: 'stake1uyp6rqthh9n7y4rng75tz85t7djy7hny35fw27say5mfxygq3er9k' } } }
+      variables: { limit: 5, where: { address: { _eq: 'stake_test1uzxpncx82vfkl5ml00ws44hzfdh64r22kr93e79jqsumv0q8g8cy0' } } }
     })
     const { rewards } = result.data
-    expect(rewards.length).toBe(5)
+    expect(rewards.length).toBeGreaterThan(4)
     expect(rewards[0].stakePool.hash).toBeDefined()
     expect(rewards[0].earnedIn.number).toBeDefined()
     expect(rewards[0].receivedIn.number).toBeDefined()

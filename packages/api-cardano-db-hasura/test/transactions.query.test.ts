@@ -4,7 +4,6 @@ import { gql } from 'apollo-boost'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { tx05ad8b, txe68043, tx0b8c5b } from './data_assertions'
 import { testClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
@@ -14,7 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('transactions', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.mainnet()
+    client = await testClient.testnet()
   })
 
   it('Returns transactions by hashes', async () => {
@@ -22,37 +21,20 @@ describe('transactions', () => {
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
-          txe68043.basic.hash,
-          tx0b8c5b.basic.hash,
-          tx05ad8b.basic.hash
+          'd13e153c6df662e565b4d5608d4224de21fb387c5371f499d788e82912069324',
+          '657ac5fa926f9f047360cbc908a4f6177f2ac9b52d4254c63dcb1312127217f4'
         ]
       }
     })
-    expect(result.data.transactions.length).toBe(3)
-    expect(result.data.transactions[0].inputs[0].sourceTxHash).toBe(txe68043.basic.inputs[0].sourceTxHash)
-    expect(result.data.transactions[0].outputs[0].index).toBe(0)
-    expect(result.data.transactions[0].outputs[0].addressHasScript).toBe(false)
-    expect(result.data.transactions[2].inputs[0].sourceTxHash).toBe(tx05ad8b.basic.inputs[0].sourceTxHash)
-    expect(result.data.transactions[0].scriptSize).toBe(tx05ad8b.basic.scriptSize)
-    expect(result.data.transactions[0].validContract).toBe(tx05ad8b.basic.validContract)
-
-    const txWithWithdrawals = {
-      fee: result.data.transactions[1].fee,
-      totalOutput: result.data.transactions[1].totalOutput,
-      inputsTotal: new BigNumber(result.data.transactions[1].inputs_aggregate.aggregate.sum.value),
-      totalWithdrawals: new BigNumber(result.data.transactions[1].withdrawals_aggregate.aggregate.sum.amount)
-    }
-    const combinedInputs = txWithWithdrawals.inputsTotal.plus(txWithWithdrawals.totalWithdrawals)
-    expect(txWithWithdrawals.totalOutput).toBe(combinedInputs.minus(txWithWithdrawals.fee).toString())
     expect(result.data).toMatchSnapshot()
   })
 
-  it('Returns transactions by hashes', async () => {
+  it('Returns transactions by hashes with scripts', async () => {
     const plutusResult = await client.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
-          'a95d16e891e51f98a3b1d3fe862ed355ebc8abffb7a7269d86f775553d9e653f'
+          '39f065894a51ddf75f58f577e648de5990d9eddf239619e969ebb8aa3a0ea551'
         ]
       }
     })
@@ -60,7 +42,7 @@ describe('transactions', () => {
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
-          '80854839a855423f802745ad08c108a74a47eb161ae94838f1ef80f9308a81a1'
+          'c4f2f4ec91d2afe932c022b9f671cdf44ab62c35e9b6e582335ed01c82d167b0'
         ]
       }
     })
@@ -70,9 +52,9 @@ describe('transactions', () => {
   it('Can return ordered by block index', async () => {
     const result = await client.query({
       query: await loadQueryNode('orderedTransactionsInBlock'),
-      variables: { blockNumber: 3979532 }
+      variables: { blockNumber: 3037760 }
     })
-    expect(result.data.transactions.length).toBe(8)
+    expect(result.data.transactions.length).toBe(22)
     expect(result.data.transactions[0].blockIndex).toBe(0)
     expect(result.data.transactions[1].blockIndex).toBe(1)
     expect(result.data.transactions[2].blockIndex).toBe(2)
@@ -104,7 +86,7 @@ describe('transactions', () => {
               totalOutput
           }
       }`,
-      variables: { hash: 'b4caa8ed7bbcffb945bfcb7e61bce574cc15822d06c5ac0a74694b232361d09b' }
+      variables: { hash: '0576d6e3fabccabe120f19368bdc0b5a181759f845704e7b5eb01a2bfe948610' }
     })
     expect(result.data.transactions.length).toBe(1)
     expect(result.data.transactions[0].outputs_aggregate.aggregate.count).toBe('0')
@@ -116,19 +98,25 @@ describe('transactions', () => {
   it('Can return aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinTransaction'),
-      variables: { hashes: [txe68043.aggregated.hash, tx05ad8b.aggregated.hash] }
+      variables: {
+        hashes: [
+          'b5aff847f8cefe95f3ae06ae5850d19d33301a5aa3aedc618a3729558403e3db'
+        ]
+      }
     })
-    expect(result.data.transactions.length).toBe(2)
     const { transactions: txs } = result.data
-    expect(txs).toEqual([tx05ad8b.aggregated, txe68043.aggregated])
-    const outputsPlusFee = new BigNumber(txs[1].outputs_aggregate.aggregate.sum.value).plus(txs[1].fee).toString()
-    expect(txs[1].inputs_aggregate.aggregate.sum.value).toEqual(outputsPlusFee)
+    const outputsPlusFee = new BigNumber(txs[0].outputs_aggregate.aggregate.sum.value).plus(txs[0].fee).toString()
+    expect(txs[0].inputs_aggregate.aggregate.sum.value).toEqual(outputsPlusFee)
     expect(result.data).toMatchSnapshot()
   })
   it('Can return filtered aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('filteredAggregateDataWithinTransaction'),
-      variables: { hash: txe68043.aggregated_filtered.hash }
+      variables: {
+        hash: '2819f6a34f9029251eb91309c85d4b42d7d8dd26ed00ea0693463176bac62c45',
+        inputsValueGt: '3842014',
+        outputsAddress: 'addr_test1vzhv4acdxm6v00m2h62pllw4l6qtymh3pwkpr9urptp8zxccuawfr'
+      }
     })
     expect(result.data).toMatchSnapshot()
   })
@@ -137,7 +125,7 @@ describe('transactions', () => {
     it('JSON object', async () => {
       const result = await client.query({
         query: await loadQueryNode('transactionByIdWithMetadataIfPresent'),
-        variables: { hash: 'f910021138e553c65b96cf3e4647927fcd9f634e06544251f83cffb1891876e8' }
+        variables: { hash: '45fff8715b952f04cd84f6235b1a6f22d9437c2d60a699317f08bba60e2965a6' }
       })
       expect(result.data).toMatchSnapshot()
     })
@@ -145,7 +133,7 @@ describe('transactions', () => {
     it('JSON string', async () => {
       const result = await client.query({
         query: await loadQueryNode('transactionByIdWithMetadataIfPresent'),
-        variables: { hash: '204ca3088bbab666692f39dddb9b773e6fb20b0d0c3e464407985fa7863e5bac' }
+        variables: { hash: '23ae1816db236baa5e231166040ae5458b25f34bb33812b2754429f122f85a0d' }
       })
       expect(result.data).toMatchSnapshot()
     })
@@ -155,7 +143,7 @@ describe('transactions', () => {
     it('shows the tokens minted and output', async () => {
       const result = await client.query({
         query: await loadQueryNode('transactionsByHashesWithTokens'),
-        variables: { hashes: ['e252be4c7e40d35919f741c9649ff207c3e49d53bb819e5c1cb458055fd363ed'] }
+        variables: { hashes: ['fad76833b223b1ba778c4de016c6224cb56f29f48d286ee84090aa80afec1a58'] }
       })
       expect(result.data).toMatchSnapshot()
     })

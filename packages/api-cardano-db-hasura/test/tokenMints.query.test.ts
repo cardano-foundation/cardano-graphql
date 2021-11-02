@@ -13,7 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('tokenMints', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.mainnet()
+    client = await testClient.testnet()
   })
 
   it('can return information on token minting and burning', async () => {
@@ -36,7 +36,7 @@ describe('tokenMints', () => {
       query: await loadQueryNode('tokenMints'),
       variables: {
         where: {
-          asset: { fingerprint: { _eq: 'asset12h3p5l3nd5y26lr22am7y7ga3vxghkhf57zkhd' } }
+          asset: { fingerprint: { _eq: 'asset1325zj0yt3dxccmxk8g9429l4krg4yz6tyaxpnk' } }
         },
         orderBy: {
           transaction: { includedAt: 'desc' }

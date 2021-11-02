@@ -1,63 +1,63 @@
 import { Block } from '@src/graphql_types'
 
-export const block29021 = {
+export const block3037760 = {
   basic: {
     epoch: {
-      number: 1
+      number: 166
     },
-    epochNo: 1,
-    fees: 342316,
-    hash: '00aea2405f7cf4eb1d9e6694770ea25eeb113b857e377d22641aa1099742615d',
-    forgedAt: '2017-09-30T15:03:11Z',
-    createdBy: 'SlotLeader-8e8a7b0f4a23f07a',
-    number: 29021,
-    slotInEpoch: 7435,
-    slotNo: 29035,
+    epochNo: 166,
+    fees: 3874838,
+    hash: 'd3bdf2725bf90e7048a908d2045fa92885d7baaf9fd60c530f7d758c8549b928',
+    forgedAt: '2021-11-01T12:20:17',
+    number: 3037760,
+    slotInEpoch: 57601,
+    slotNo: 41400001,
     previousBlock: {
-      hash: '663c25ee1434e6d29f8bd08bd52ddbb16a30bb54ca3c69c815e3de7bc4c42770',
-      number: 29020
+      hash: 'eb3a492a1d9b6ff6f5ce0ed4745e032f9ddbca793150cf881cb503a7ffd4a15e',
+      number: 3037759
     },
     nextBlock: {
-      hash: 'bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380',
-      number: 29022
+      hash: '26e5bae89d6eaadacbba338bdf472ee7a2e71858a1048d8f47aa69d4c2abb3f3',
+      number: 3037761
     },
-    size: 1349,
-    transactionsCount: '2'
+    size: 6858,
+    transactionsCount: '22',
+    vrfKey: 'vrf_vk1pjw0hnkc3lw8yvwx0fxy9wqhtekphzy0uaqpfr625rmrzgjfvkeqcdkkdh'
   },
   aggregated: {
-    number: 29021,
+    number: 3037760,
     transactions_aggregate: {
       aggregate: {
         avg: {
-          fee: 171158,
-          size: 218,
-          totalOutput: 2846601153795
+          fee: 176129,
+          size: 313.27272727272725,
+          totalOutput: 421674965437.5455
         },
-        count: '2',
+        count: '22',
         max: {
-          fee: '171246',
-          size: '220',
-          totalOutput: '4924799478660'
+          fee: '204045',
+          size: '858',
+          totalOutput: '9223859752216'
         },
         min: {
-          fee: '171070',
-          size: '216',
-          totalOutput: '768402828930'
+          fee: '167085',
+          size: '237',
+          totalOutput: '12806911'
         },
         sum: {
           deposit: '0',
-          fee: '342316',
-          size: '436',
-          totalOutput: '5693202307590'
+          fee: '3874838',
+          size: '6892',
+          totalOutput: '9276849239626'
         }
       }
     }
   },
   aggregated_filtered: {
-    number: 29021,
+    number: 3037760,
     transactions_aggregate: {
       aggregate: {
-        count: '2'
+        count: '21'
       }
     }
   }
@@ -70,47 +70,46 @@ export const block29022 = {
     },
     epochNo: 1,
     fees: 0,
-    hash: 'bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380',
+    hash: '36f4d3e433e54c43d2a13e22b6b7168dcf672d446b14f1fcc725eaf13d8c102b',
     number: 29022,
-    forgedAt: '2017-09-30T15:03:31Z',
-    createdBy: 'SlotLeader-7b00350597671036',
+    forgedAt: '2019-07-31T19:17:36',
     previousBlock: {
-      hash: '00aea2405f7cf4eb1d9e6694770ea25eeb113b857e377d22641aa1099742615d',
+      hash: '2f74e2f742535c8cd1a11e31524cff2e503fa3b667a82e79e377e3f8c160a3af',
       number: 29021
     },
     nextBlock: {
-      hash: '9a20077183a044fbe41a6ac71747b3463966ba724cd0478786a3df5000b37008',
+      hash: '7063aa69f0923b1d603743644e40140021dfe0561630a1e2badb6660cc474c0e',
       number: 29023
     },
     size: 631,
-    slotInEpoch: 7436,
-    slotNo: 29036,
+    slotInEpoch: 8452,
+    slotNo: 30052,
     transactionsCount: '0'
   }
 }
 
-export const block4490600 = {
+export const block2490600 = {
   basic: {
     epoch: {
-      number: 208
+      number: 125
     },
-    epochNo: 208,
-    fees: 3700733,
-    hash: 'ab1df510b2fc22a2731212937f532894c474ddccf6240047b38b4a3c14c1895c',
-    number: 4490510,
-    forgedAt: '2020-07-29T22:14:51Z',
+    epochNo: 125,
+    fees: 0,
+    hash: '94f99e9dadd818a49d7966f788bbe1a7b31fd109217ffc015d450db9b262aa90',
+    number: 2490600,
+    forgedAt: '2021-04-13T21:49:47',
     previousBlock: {
-      hash: '02d698482b56b7345e3e0cb8938f6b22f12d1370231457eaa0d991bea3327f5c',
-      number: 4490599
+      hash: 'c852351dea5905e1950a6cb63bae306f64d0e68dbd3317178f14f1413735e84c',
+      number: 2490599
     },
     nextBlock: {
-      hash: '9fb51dab84fa0e9ae97c6ee48af4e655a330e25d7b96a236d8684761f54eca75',
-      number: 4490601
+      hash: 'def09fc71da9f739b3a414896391cc33ff1e9b9688a4f37e8e5538247571651d',
+      number: 2490601
     },
-    size: 14476,
-    slotInEpoch: 1800,
-    slotNo: 4494600,
-    transactionsCount: '17',
-    vrfKey: 'vrf_vk1ytuuajlv7wvxj57qr6j5ycx69l54ks5nzswqwyn4fhhec6dtdjgsqmzku7'
+    size: 3,
+    slotInEpoch: 350971,
+    slotNo: 23981371,
+    transactionsCount: '0',
+    vrfKey: 'vrf_vk16t90lzn5arxkz5det5yzwty0ja9vq6weupade2gfp8nc4gy3llrsd6nkwe'
   } as Partial<Block>
 }
