@@ -835,6 +835,14 @@
         column_mapping:
           blockHash: hash
   array_relationships:
+  - name: collateral
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Collateral
+        column_mapping:
+          hash: txHash
   - name: inputs
     using:
       manual_configuration:
