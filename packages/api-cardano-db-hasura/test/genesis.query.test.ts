@@ -12,7 +12,7 @@ describe('genesis', () => {
   let client: TestClient
 
   beforeAll(async () => {
-    client = await testClient.mainnet()
+    client = await testClient.testnet()
   })
 
   it('Returns key information about the network genesis', async () => {

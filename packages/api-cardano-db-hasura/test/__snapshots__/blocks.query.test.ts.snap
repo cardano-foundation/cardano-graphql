@@ -4,30 +4,30 @@ exports[`blocks Can return aggregated data 1`] = `
 Object {
   "blocks": Array [
     Object {
-      "number": 29021,
+      "number": 3037760,
       "transactions_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "fee": 171158,
-            "size": 218,
-            "totalOutput": 2846601153795,
+            "fee": 176129,
+            "size": 313.27272727272725,
+            "totalOutput": 421674965437.5455,
           },
-          "count": "2",
+          "count": "22",
           "max": Object {
-            "fee": "171246",
-            "size": "220",
-            "totalOutput": "4924799478660",
+            "fee": "204045",
+            "size": "858",
+            "totalOutput": "9223859752216",
           },
           "min": Object {
-            "fee": "171070",
-            "size": "216",
-            "totalOutput": "768402828930",
+            "fee": "167085",
+            "size": "237",
+            "totalOutput": "12806911",
           },
           "sum": Object {
             "deposit": "0",
-            "fee": "342316",
-            "size": "436",
-            "totalOutput": "5693202307590",
+            "fee": "3874838",
+            "size": "6892",
+            "totalOutput": "9276849239626",
           },
         },
       },
@@ -40,12 +40,12 @@ exports[`blocks Can return blocks by number 1`] = `
 Object {
   "blocks": Array [
     Object {
-      "hash": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "hash": "36f4d3e433e54c43d2a13e22b6b7168dcf672d446b14f1fcc725eaf13d8c102b",
       "vrfKey": null,
     },
     Object {
-      "hash": "ab1df510b2fc22a2731212937f532894c474ddccf6240047b38b4a3c14c1895c",
-      "vrfKey": "vrf_vk1ytuuajlv7wvxj57qr6j5ycx69l54ks5nzswqwyn4fhhec6dtdjgsqmzku7",
+      "hash": "94f99e9dadd818a49d7966f788bbe1a7b31fd109217ffc015d450db9b262aa90",
+      "vrfKey": "vrf_vk16t90lzn5arxkz5det5yzwty0ja9vq6weupade2gfp8nc4gy3llrsd6nkwe",
     },
   ],
 }
@@ -55,10 +55,10 @@ exports[`blocks Can return filtered aggregated data 1`] = `
 Object {
   "blocks": Array [
     Object {
-      "number": 29021,
+      "number": 3037760,
       "transactions_aggregate": Object {
         "aggregate": Object {
-          "count": "2",
+          "count": "21",
         },
       },
     },
@@ -70,7 +70,7 @@ exports[`blocks are linked to their predecessor, and the chain can be traversed 
 Object {
   "blocks": Array [
     Object {
-      "hash": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "hash": "36f4d3e433e54c43d2a13e22b6b7168dcf672d446b14f1fcc725eaf13d8c102b",
       "previousBlock": Object {
         "number": 29021,
         "previousBlock": Object {
@@ -89,7 +89,7 @@ exports[`blocks are linked to their successor, and the chain can be traversed 1`
 Object {
   "blocks": Array [
     Object {
-      "hash": "bf13d9a80ad99a4f34edb8a3262dd8120e29bbe182732cd3b00bf3d1bb7c2380",
+      "hash": "36f4d3e433e54c43d2a13e22b6b7168dcf672d446b14f1fcc725eaf13d8c102b",
       "nextBlock": Object {
         "nextBlock": Object {
           "nextBlock": Object {

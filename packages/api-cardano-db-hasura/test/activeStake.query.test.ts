@@ -13,13 +13,13 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('activeStake', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.mainnet()
+    client = await testClient.testnet()
   })
 
   it('can return active stake snapshots for an address', async () => {
     const result = await client.query({
       query: await loadQueryNode('activeStakeForAddress'),
-      variables: { limit: 5, where: { address: { _eq: 'stake1u8atejkgfn8772722rh03lmnxyshvjakk260gfsefamc6sga68ag2' } } }
+      variables: { limit: 5, where: { address: { _eq: 'stake_test1up5tgntagnfp04l07waka5p0duv6uw9eujf4axl7jw2wc8gnm6eh0' } } }
     })
     const { activeStake } = result.data
     expect(activeStake.length).toBe(5)
@@ -33,7 +33,7 @@ describe('activeStake', () => {
   it('can return aggregated active stake information for an address', async () => {
     const result = await client.query({
       query: await loadQueryNode('averageActiveStakeForAddress'),
-      variables: { address: 'stake1u8atejkgfn8772722rh03lmnxyshvjakk260gfsefamc6sga68ag2' }
+      variables: { address: 'stake_test1up5tgntagnfp04l07waka5p0duv6uw9eujf4axl7jw2wc8gnm6eh0' }
     })
     const { activeStake_aggregate } = result.data
     expect(activeStake_aggregate.aggregate.count).toBeDefined()

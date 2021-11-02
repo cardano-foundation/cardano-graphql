@@ -25,8 +25,8 @@ DROP VIEW IF EXISTS
   "Withdrawal" CASCADE;
 DROP INDEX IF EXISTS
   idx_block_hash,
-  idx_ma_tx_mint_name,
-  idx_ma_tx_mint_policy,
+  idx_multi_asset_name,
+  idx_multi_asset_policy,
   idx_reward_type,
   idx_tx_hash,
   idx_tx_in_consuming_tx,

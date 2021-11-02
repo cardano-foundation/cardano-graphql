@@ -13,13 +13,13 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('stakePools', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.mainnet()
+    client = await testClient.testnet()
   })
 
   it('can lookup stake pools by ID', async () => {
     const result = await client.query({
       query: await loadQueryNode('stakePoolById'),
-      variables: { id: 'pool1mxqjlrfskhd5kql9kak06fpdh8xjwc76gec76p3taqy2qmfzs5z' }
+      variables: { id: 'pool16kc6ck4clmhg2aykwhkymnz2ypk54yuvk0txt3p6mrw05hrsj3a' }
     })
     const { stakePools } = result.data
     expect(stakePools.length).toBe(1)

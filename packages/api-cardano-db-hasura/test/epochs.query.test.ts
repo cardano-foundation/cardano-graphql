@@ -4,7 +4,6 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { epoch1, epoch220 } from './data_assertions'
 import { testClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
@@ -14,31 +13,21 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('epochs', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.mainnet()
+    client = await testClient.testnet()
   })
 
   it('Returns epoch details by number', async () => {
     const result = await client.query({
       query: await loadQueryNode('epochDetailsByNumber'),
-      variables: { number: 220 }
+      variables: { number: 150 }
     })
-    expect(result.data.epochs[0]).toEqual(epoch220.basic)
-    expect(result.data).toMatchSnapshot()
-  })
-
-  it('Includes protocol params in effect for the epoch - mainnet', async () => {
-    const result = await client.query({
-      query: await loadQueryNode('epochProtocolParams'),
-      variables: { where: { number: { _eq: 220 } } }
-    })
-    expect(result.data.epochs[0].protocolParams).toEqual(epoch220.protocolParams)
     expect(result.data).toMatchSnapshot()
   })
 
   it('Includes protocol params in effect for the epoch', async () => {
     const result = await client.query({
       query: await loadQueryNode('epochProtocolParams'),
-      variables: { where: { number: { _eq: 30 } } }
+      variables: { where: { number: { _eq: 166 } } }
     })
     expect(result.data).toMatchSnapshot()
   })
@@ -48,19 +37,16 @@ describe('epochs', () => {
       query: await loadQueryNode('aggregateDataWithinEpoch'),
       variables: {
         orderBy: { number: 'asc' },
-        where: { number: { _in: [1, 220] } }
+        where: { number: { _in: [1, 150] } }
       }
     })
-    expect(result.data.epochs[0]).toEqual(epoch1.aggregated)
-    expect(result.data.epochs[1]).toEqual(epoch220.aggregated)
-    expect(result.data.epochs[0].blocksCount).toEqual(epoch1.aggregated.blocks_aggregate.aggregate.count)
     expect(result.data).toMatchSnapshot()
   })
 
   it('Can return filtered aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('numberOfBlocksProducedByLeaderInEpoch'),
-      variables: { number: 1, slotLeader: 'ByronGenesis-be09d88f50165c5c' }
+      variables: { number: 1, slotLeader: 'ByronGenesis-0df4205606dcb8ad' }
     })
     expect(result.data).toMatchSnapshot()
   })
@@ -71,14 +57,13 @@ describe('epochs', () => {
       query: await loadQueryNode('epochDetailsInRange'),
       variables: { numbers: [1] }
     })
-    expect(result.data.epochs[0]).toEqual(epoch1.basic)
     expect(result.data).toMatchSnapshot()
   })
 
   it('Can return aggregated Epoch data', async () => {
     const result = await client.query({
       query: await loadQueryNode('aggregateEpochData'),
-      variables: { epochNumberLessThan: 185 }
+      variables: { epochNumberLessThan: 165 }
     })
     expect(result.data).toMatchSnapshot()
   })
