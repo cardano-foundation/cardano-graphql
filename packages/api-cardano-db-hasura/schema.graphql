@@ -742,7 +742,7 @@ type ShelleyProtocolParams {
   a0: Float!
   coinsPerUtxoWord: Int
   collateralPercent: Int
-  costModels: String
+  costModels: JSONObject
   decentralisationParam: Float!
   eMax: Int!
   extraEntropy: JSONObject

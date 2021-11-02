@@ -104,7 +104,7 @@ SELECT
   epoch_param.influence AS "a0",
   epoch_param.coins_per_utxo_word AS "coinsPerUtxoWord",
   epoch_param.collateral_percent AS "collateralPercent",
-  epoch_param.cost_models AS "costModels",
+  cost_model.costs AS "costModels",
   epoch_param.decentralisation AS "decentralisationParam",
   epoch_param.max_collateral_inputs AS "maxCollateralInputs",
   epoch_param.max_epoch AS "eMax",
@@ -130,7 +130,9 @@ SELECT
   jsonb_build_object('major', epoch_param.protocol_major, 'minor', epoch_param.protocol_major) AS "protocolVersion",
   epoch_param.monetary_expand_rate AS "rho",
   epoch_param.treasury_growth_rate AS "tau"
-FROM epoch_param;
+FROM epoch_param
+JOIN cost_model
+  ON epoch_param.cost_model_id = cost_model.id;
 
 CREATE VIEW "Redeemer" AS
 SELECT
@@ -247,12 +249,14 @@ JOIN stake_address on epoch_stake.addr_id = stake_address.id;
 
 CREATE VIEW "TokenMint" AS
 SELECT
-  CAST(CONCAT(policy, RIGHT(CONCAT(E'\\', name), -3)) as BYTEA) as "assetId",
-  name AS "assetName",
-  policy AS "policyId",
+  CAST(CONCAT(multi_asset.policy, RIGHT(CONCAT(E'\\', multi_asset.name), -3)) as BYTEA) as "assetId",
+  multi_asset.name AS "assetName",
+  multi_asset.policy AS "policyId",
   quantity,
   tx_id
-FROM ma_tx_mint;
+FROM ma_tx_mint
+JOIN multi_asset
+  ON ma_tx_mint.ident = multi_asset.id;
 
 CREATE VIEW "TokenInOutput" AS
 SELECT
@@ -261,7 +265,9 @@ SELECT
   policy AS "policyId",
   quantity,
   tx_out_id
-FROM ma_tx_out;
+FROM ma_tx_out
+JOIN multi_asset
+  ON ma_tx_out.ident = multi_asset.id;
 
 CREATE VIEW "Transaction" AS
 SELECT
@@ -342,11 +348,11 @@ JOIN stake_address on withdrawal.addr_id = stake_address.id;
 CREATE INDEX idx_block_hash
     ON block(hash);
 
-CREATE INDEX idx_ma_tx_mint_name
-    ON ma_tx_mint(name);
+CREATE INDEX idx_multi_asset_name
+    ON multi_asset(name);
 
-CREATE INDEX idx_ma_tx_mint_policy
-    ON ma_tx_mint(policy);
+CREATE INDEX idx_multi_asset_policy
+    ON multi_asset(policy);
 
 CREATE INDEX idx_reward_type
     ON reward(type);
