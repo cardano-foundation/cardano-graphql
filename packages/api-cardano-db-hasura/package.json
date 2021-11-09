@@ -44,7 +44,7 @@
     "apollo-link": "^1.2.14",
     "apollo-link-http": "^1.5.17",
     "apollo-link-retry": "^2.2.16",
-    "apollo-server": "^2.15.1",
+    "apollo-server": "^2.25.3",
     "axios": "^0.21.2",
     "bignumber.js": "^9.0.1",
     "cross-fetch": "^3.0.4",
