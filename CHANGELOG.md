@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.1.0](https://github.com/input-output-hk/cardano-graphql/compare/6.0.0...6.1.0) (2021-12-09)
+
+### Compatible with:
+
+- [`cardano-node`: `1.31.0`](https://github.com/input-output-hk/cardano-node/releases/tag/1.31.0)
+- [`cardano-ogmios`: `v4.2.1`](https://github.com/CardanoSolutions/ogmios/releases/tag/v4.2.1)
+- [`cardano-db-sync`: `12.0.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/12.0.0) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### Bug Fixes
+
+* add missing Transaction.collateral Hasura table config ([8a5f93e](https://github.com/input-output-hk/cardano-graphql/commit/8a5f93ecfad822641535a9c76c17f9b813fe3d9d))
+
 ## [6.0.0](https://github.com/input-output-hk/cardano-graphql/compare/5.1.0...6.0.0) (2021-10-03)
 
 ### ⚠ BREAKING CHANGES

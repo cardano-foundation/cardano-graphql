@@ -32,7 +32,7 @@
     "NOTICE"
   ],
   "dependencies": {
-    "@cardano-graphql/util": "6.0.0",
+    "@cardano-graphql/util": "6.1.0",
     "@cardano-ogmios/client": "^4.2.1",
     "@cardanosolutions/json-bigint": "^1.0.0",
     "@emurgo/cip14-js": "^2.0.0",
@@ -40,7 +40,7 @@
     "ts-log": "^2.2.3"
   },
   "devDependencies": {
-    "@cardano-graphql/util-dev": "6.0.0",
+    "@cardano-graphql/util-dev": "6.1.0",
     "@types/node": "^14.0.13",
     "shx": "^0.3.2",
     "typescript": "^3.9.5"

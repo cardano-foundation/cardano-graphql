@@ -45,7 +45,7 @@ services:
       cache_from: [inputoutput/cardano-graphql-chain-follower:latest]
       context: ../../
       target: chain-follower
-    image: inputoutput/cardano-graphql-chain-follower:${CARDANO_GRAPHQL_VERSION:-6.0.0}-${NETWORK:-mainnet}
+    image: inputoutput/cardano-graphql-chain-follower:${CARDANO_GRAPHQL_VERSION:-6.1.0}-${NETWORK:-mainnet}
     environment:
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
     restart: on-failure
