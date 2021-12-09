@@ -603,25 +603,25 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cardano-ogmios/client@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@cardano-ogmios/client/-/client-4.1.0.tgz#fef6f1b82027eee7a9553fb31c6d5a7b32ee4d44"
-  integrity sha512-x0+0px0fx453ipLsTfIOl2N8cPP7sDjODHaW4tzrYq87yBlGvZMfqb5F68V6XaPXSRMdmWYLT+Cl30LH5f6YMg==
+"@cardano-ogmios/client@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@cardano-ogmios/client/-/client-4.2.1.tgz#02306fd567d160ebf2a0bdd68f65245b87ed8213"
+  integrity sha512-CiScFBqOeMZtFLN67jUqsiad4xIoW17TIt+QfZlgpX5nTHHjs1kTuoNYN088dICrBy7M6EvkETQBJLwK/BR83Q==
   dependencies:
-    "@cardano-ogmios/schema" "4.1.0"
+    "@cardano-ogmios/schema" "4.2.1"
+    "@cardanosolutions/json-bigint" "^1.0.0"
     "@types/json-bigint" "^1.0.1"
     cross-fetch "^3.1.4"
     fastq "^1.11.0"
     isomorphic-ws "^4.0.1"
-    json-bigint CardanoSolutions/json-bigint#d277387d
     nanoid "^3.1.22"
     ts-custom-error "^3.2.0"
     ws "^7.4.6"
 
-"@cardano-ogmios/schema@4.1.0", "@cardano-ogmios/schema@^4.1.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-4.1.0.tgz#d0fb5823d71fd7741801f56880a3fedbc43be081"
-  integrity sha512-lGDfb1lnmC9LN6a/MALIuzc/7gPvwD3ZssN48Do3DnNofVrxaMeSZJowMXk5CBCoF0dez1qUEDxyYsjOBuZZzA==
+"@cardano-ogmios/schema@4.2.1", "@cardano-ogmios/schema@^4.2.1":
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-4.2.1.tgz#c424563951ddf8f6fb4b4c01463277165bcf4f70"
+  integrity sha512-XRiew+YFeat/cfXAdjwWXux+agRGA5SzD0VCYXnZ9OtxgjyApwXxpbGFLeGxuz7FyMlAKimS88fq37dJPacS1Q==
 
 "@cardanosolutions/json-bigint@1.0.0", "@cardanosolutions/json-bigint@^1.0.0":
   version "1.0.0"
@@ -1753,7 +1753,7 @@
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.0.tgz#2b35eccfcee7d38cd72ad99232fbd58bffb3c84d"
   integrity sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==
 
-"@types/serve-static@*", "@types/serve-static@1.13.9":
+"@types/serve-static@*":
   version "1.13.9"
   resolved "https://registry.yarnpkg.com/@types/serve-static/-/serve-static-1.13.9.tgz#aacf28a85a05ee29a11fb7c3ead935ac56f33e4e"
   integrity sha512-ZFqF6qa48XsPdjXV5Gsz0Zqmux2PerNd3a/ktL45mHpa19cuMi/cL8tcxdAx497yRh+QtYPuofjT9oWw9P7nkA==
@@ -6174,12 +6174,6 @@ jsesc@^2.5.1:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-2.5.2.tgz#80564d2e483dacf6e8ef209650a67df3f0c283a4"
   integrity sha512-OYu7XEzjkCQ3C5Ps3QIZsQfNpqoJyZZA99wd9aWd05NCtC5pWOkShK2mkL6HXQR6/Cy2lbNdPlZBpuQHXE63gA==
-
-json-bigint@CardanoSolutions/json-bigint#d277387d:
-  version "1.0.0"
-  resolved "https://codeload.github.com/CardanoSolutions/json-bigint/tar.gz/d277387d7750ff4e698677d0aa0db97ebb60c581"
-  dependencies:
-    bignumber.js "^9.0.0"
 
 json-parse-better-errors@^1.0.1:
   version "1.0.2"
