@@ -40,7 +40,7 @@ Check the [releases] for the latest version.
 ``` console
 git clone \
   --single-branch \
-  --branch 6.0.0 \
+  --branch 6.1.0 \
   --recurse-submodules \
   https://github.com/input-output-hk/cardano-graphql.git \
   && cd cardano-graphql
@@ -57,11 +57,11 @@ console session freely. See [Docker Compose docs] to tailor for your use-case
 <details open>
   <summary><i>mainnet</i></summary>
 
-Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
+Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#12/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/11/db-sync-snapshot-schema-11-block-6278640-x86_64.tgz \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/12/db-sync-snapshot-schema-12-block-6647999-x86_64.tgz \
 docker-compose up -d --build &&\
 docker-compose logs -f
 ```
@@ -70,12 +70,12 @@ docker-compose logs -f
 <details>
   <summary><i>testnet</i></summary>
 
-Get the most recent weekly snapshot link [here](https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
+Get the most recent weekly snapshot link [here](https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/index.html#12/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
 NETWORK=testnet \
-RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/11/db-sync-snapshot-schema-11-block-2944498-x86_64.tgz \
+RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/12/db-sync-snapshot-schema-12-block-3166999-x86_64.tgz \
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
@@ -98,10 +98,10 @@ your use-case.
 Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=mainnet &&\
-docker pull inputoutput/cardano-graphql:6.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:6.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v4.1.0-${NETWORK} &&\
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/11/db-sync-snapshot-schema-11-block-6278640-x86_64.tgz \
+docker pull inputoutput/cardano-graphql:6.1.0-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-hasura:6.1.0 &&\
+docker pull cardanosolutions/cardano-node-ogmios:v4.2.1-${NETWORK} &&\
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/12/db-sync-snapshot-schema-12-block-6647999-x86_64.tgz \
 docker-compose up -d &&\
 docker-compose logs -f
 ```
@@ -113,10 +113,10 @@ docker-compose logs -f
 Get the most recent weekly snapshot link [here](https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=testnet &&\
-docker pull inputoutput/cardano-graphql:6.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:6.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v4.1.0-${NETWORK} &&\
-RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/11/db-sync-snapshot-schema-11-block-2944498-x86_64.tgz \
+docker pull inputoutput/cardano-graphql:6.1.0-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-hasura:6.1.0 &&\
+docker pull cardanosolutions/cardano-node-ogmios:v4.2.1-${NETWORK} &&\
+RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/12/db-sync-snapshot-schema-12-block-3166999-x86_64.tgz \
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
