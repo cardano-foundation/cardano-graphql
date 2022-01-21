@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS "Asset" (
     "metadataHash" CHAR(40),
     "name" VARCHAR(50),
     "policyId" BYTEA,
-    "ticker" VARCHAR(5),
+    "ticker" VARCHAR(9),
     "url" VARCHAR(250)
 );
 
