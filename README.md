@@ -40,7 +40,7 @@ Check the [releases] for the latest version.
 ``` console
 git clone \
   --single-branch \
-  --branch 6.1.0 \
+  --branch 6.2.0 \
   --recurse-submodules \
   https://github.com/input-output-hk/cardano-graphql.git \
   && cd cardano-graphql
@@ -98,8 +98,8 @@ your use-case.
 Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=mainnet &&\
-docker pull inputoutput/cardano-graphql:6.1.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:6.1.0 &&\
+docker pull inputoutput/cardano-graphql:6.2.0-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-hasura:6.2.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.1.0-${NETWORK} &&\
 RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/12/db-sync-snapshot-schema-12-block-6647999-x86_64.tgz \
 docker-compose up -d &&\
@@ -113,8 +113,8 @@ docker-compose logs -f
 Get the most recent weekly snapshot link [here](https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=testnet &&\
-docker pull inputoutput/cardano-graphql:6.1.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:6.1.0 &&\
+docker pull inputoutput/cardano-graphql:6.2.0-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-hasura:6.2.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.1.0-${NETWORK} &&\
 RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/12/db-sync-snapshot-schema-12-block-3166999-x86_64.tgz \
 API_PORT=3101 \

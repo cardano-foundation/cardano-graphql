@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [6.2.0](https://github.com/input-output-hk/cardano-graphql/compare/6.1.0...6.2.0) (2022-01-26)
+
+### Compatible with:
+
+- [`cardano-node`: `1.33.0`](https://github.com/input-output-hk/cardano-node/releases/tag/1.33.0)
+- [`cardano-ogmios`: `v5.1.0`](https://github.com/CardanoSolutions/ogmios/releases/tag/v5.1.0)
+- [`cardano-db-sync`: `12.0.0`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/12.0.0)
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### Features
+
+* support change to asset ticker length ([b858445](https://github.com/input-output-hk/cardano-graphql/commit/b8584456ad0a810734cf377020e7ddd1062f7a57))
+
 ## [6.1.0](https://github.com/input-output-hk/cardano-graphql/compare/6.0.0...6.1.0) (2021-12-09)
 
 ### Compatible with:
