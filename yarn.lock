@@ -603,25 +603,25 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cardano-ogmios/client@^4.2.1":
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/@cardano-ogmios/client/-/client-4.2.1.tgz#02306fd567d160ebf2a0bdd68f65245b87ed8213"
-  integrity sha512-CiScFBqOeMZtFLN67jUqsiad4xIoW17TIt+QfZlgpX5nTHHjs1kTuoNYN088dICrBy7M6EvkETQBJLwK/BR83Q==
+"@cardano-ogmios/client@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@cardano-ogmios/client/-/client-5.1.0.tgz#0953f498222329045928f541cdff107f45123c27"
+  integrity sha512-/h5lpZa47DeR9JscRCFha9gJMG5JgNibxQGtUGt9IAEV+Fv9Y7iCjIzbojVUpFOXnPdQN+nUepPEgu2lCJU17Q==
   dependencies:
-    "@cardano-ogmios/schema" "4.2.1"
+    "@cardano-ogmios/schema" "5.1.0"
     "@cardanosolutions/json-bigint" "^1.0.0"
     "@types/json-bigint" "^1.0.1"
     cross-fetch "^3.1.4"
     fastq "^1.11.0"
     isomorphic-ws "^4.0.1"
-    nanoid "^3.1.22"
+    nanoid "^3.1.31"
     ts-custom-error "^3.2.0"
     ws "^7.4.6"
 
-"@cardano-ogmios/schema@4.2.1", "@cardano-ogmios/schema@^4.2.1":
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-4.2.1.tgz#c424563951ddf8f6fb4b4c01463277165bcf4f70"
-  integrity sha512-XRiew+YFeat/cfXAdjwWXux+agRGA5SzD0VCYXnZ9OtxgjyApwXxpbGFLeGxuz7FyMlAKimS88fq37dJPacS1Q==
+"@cardano-ogmios/schema@5.1.0", "@cardano-ogmios/schema@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-5.1.0.tgz#8b6095675c15909e5253712bf758e5001677a2e3"
+  integrity sha512-xxke4wNhtRUv42meo69cK0+PraFcpDx3d+SDdtUSjUvKpQVbfuZKgkp+y30nuP6Al6qJ6qiS/wI8WM5bdNKzzg==
 
 "@cardanosolutions/json-bigint@1.0.0", "@cardanosolutions/json-bigint@^1.0.0":
   version "1.0.0"
@@ -6862,10 +6862,10 @@ nanoassert@^1.0.0:
   resolved "https://registry.yarnpkg.com/nanoassert/-/nanoassert-1.1.0.tgz#4f3152e09540fde28c76f44b19bbcd1d5a42478d"
   integrity sha1-TzFS4JVA/eKMdvRLGbvNHVpCR40=
 
-nanoid@^3.1.22:
-  version "3.1.23"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.23.tgz#f744086ce7c2bc47ee0a8472574d5c78e4183a81"
-  integrity sha512-FiB0kzdP0FFVGDKlRLEQ1BgDzU87dy5NnzjeW9YZNt+/c3+q82EQDUwniSAUxp/F0gFNI1ZhKU1FqYsMuqZVnw==
+nanoid@^3.1.31:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.2.0.tgz#62667522da6673971cca916a6d3eff3f415ff80c"
+  integrity sha512-fmsZYa9lpn69Ad5eDn7FMcnnSR+8R34W9qJEijxYhTbfOWzr22n1QxCMzXLK+ODyW2973V3Fux959iQoUxzUIA==
 
 nanomatch@^1.2.9:
   version "1.2.13"

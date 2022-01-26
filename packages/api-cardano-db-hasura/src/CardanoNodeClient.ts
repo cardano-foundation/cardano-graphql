@@ -57,7 +57,7 @@ export class CardanoNodeClient {
     this.logger.info({ module: MODULE_NAME }, 'Initializing. This can take a few minutes...')
     this.serverHealthFetcher = new DataFetcher(
       'ServerHealth',
-      () => getServerHealth(createConnectionObject(ogmiosConnectionConfig)),
+      () => getServerHealth({ connection: createConnectionObject(ogmiosConnectionConfig) }),
       30000, this.logger
     )
     await pRetry(async () => {

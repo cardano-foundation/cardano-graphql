@@ -100,7 +100,7 @@ Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.i
 export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql:6.1.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:6.1.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v4.2.1-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v5.1.0-${NETWORK} &&\
 RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/12/db-sync-snapshot-schema-12-block-6647999-x86_64.tgz \
 docker-compose up -d &&\
 docker-compose logs -f
@@ -115,7 +115,7 @@ Get the most recent weekly snapshot link [here](https://updates-cardano-testnet.
 export NETWORK=testnet &&\
 docker pull inputoutput/cardano-graphql:6.1.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:6.1.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v4.2.1-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v5.1.0-${NETWORK} &&\
 RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/12/db-sync-snapshot-schema-12-block-3166999-x86_64.tgz \
 API_PORT=3101 \
 HASURA_PORT=8091 \
