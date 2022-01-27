@@ -61,7 +61,7 @@ Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.i
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/12/db-sync-snapshot-schema-12-block-6647999-x86_64.tgz \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/12/db-sync-snapshot-schema-12-block-6764999-x86_64.tgz \
 docker-compose up -d --build &&\
 docker-compose logs -f
 ```
@@ -75,7 +75,7 @@ Get the most recent weekly snapshot link [here](https://updates-cardano-testnet.
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
 NETWORK=testnet \
-RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/12/db-sync-snapshot-schema-12-block-3166999-x86_64.tgz \
+RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/12/db-sync-snapshot-schema-12-block-3185999-x86_64.tgz \
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
@@ -101,7 +101,7 @@ export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql:6.2.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:6.2.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.1.0-${NETWORK} &&\
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/12/db-sync-snapshot-schema-12-block-6647999-x86_64.tgz \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/12/db-sync-snapshot-schema-12-block-6764999-x86_64.tgz \
 docker-compose up -d &&\
 docker-compose logs -f
 ```
@@ -116,7 +116,7 @@ export NETWORK=testnet &&\
 docker pull inputoutput/cardano-graphql:6.2.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:6.2.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.1.0-${NETWORK} &&\
-RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/12/db-sync-snapshot-schema-12-block-3166999-x86_64.tgz \
+RESTORE_SNAPSHOT=https://updates-cardano-testnet.s3.amazonaws.com/cardano-db-sync/12/db-sync-snapshot-schema-12-block-3185999-x86_64.tgz \
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
