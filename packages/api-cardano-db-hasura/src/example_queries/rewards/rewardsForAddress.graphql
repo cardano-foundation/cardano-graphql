@@ -1,8 +1,9 @@
 query rewardsForAddress (
     $limit: Int!
+    $offset: Int!
     $where: Reward_bool_exp
 ) {
-    rewards (limit: $limit, where: $where) {
+    rewards (limit: $limit, offset: $offset, where: $where) {
         address
         amount
         stakePool {
