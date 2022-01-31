@@ -43,7 +43,6 @@ export class HasuraClient {
     readonly hasuraCliPath: string,
     readonly hasuraUri: string,
     pollingInterval: number,
-    readonly lastConfiguredMajorVersion: number, // Todo: Depreciate
     private logger: Logger = dummyLogger
   ) {
     this.state = null

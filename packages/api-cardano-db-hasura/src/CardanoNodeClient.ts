@@ -25,7 +25,6 @@ export class CardanoNodeClient {
   private serverHealthFetcher: DataFetcher<ServerHealth>
 
   constructor (
-    readonly lastConfiguredMajorVersion: number, // Todo: Depreciate
     private logger: Logger = dummyLogger
   ) {
     this.state = null
