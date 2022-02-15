@@ -26,7 +26,7 @@ export class MetadataClient {
     } catch (error) {
       if (error.code === 'ENOTFOUND') {
         throw new errors.HostDoesNotExist('metadata server')
-      } else if (error.response.status !== 404) {
+      } else if (error.response?.status !== 404) {
         throw error
       }
     }
