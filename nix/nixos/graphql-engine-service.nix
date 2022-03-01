@@ -71,7 +71,7 @@ in {
         sudo -u ${cfg.dbAdminUser} -- psql ${cfg.db} < ${hasuraDbPerms}
       '';
       script = ''
-        ${graphqlEngine}/bin/graphql-engine \
+        exec ${graphqlEngine}/bin/graphql-engine \
           --host ${cfg.host} \
           -u ${cfg.dbUser} \
           --password ${cfg.password} \
