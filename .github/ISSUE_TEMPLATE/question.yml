@@ -1,0 +1,14 @@
+name: Question
+description: Ask a question
+#title: ""
+labels: ["question"]
+#assignees:
+#  -
+body:
+  - type: markdown
+    attributes:
+      value: Please check the existing issues and [Cardano Stack Exchange](https://cardano.stackexchange.com/) before submitting a question.
+  - type: textarea
+    id: ask-a-question
+    attributes:
+      label: Ask a question
