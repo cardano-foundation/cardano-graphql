@@ -82,6 +82,10 @@ in {
           --enable-telemetry=false \
           --disable-cors
       '';
+      serviceConfig = {
+        # Hasura sometimes fails with sucessuful exit code, preventing monitoring detection. So we restart automatically.
+        Restart = "always";
+      };
     };
   };
 }
