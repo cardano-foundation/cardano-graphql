@@ -71,7 +71,7 @@ in {
         sudo -u ${cfg.dbAdminUser} -- psql ${cfg.db} < ${hasuraDbPerms}
       '';
       script = ''
-        ${graphqlEngine}/bin/graphql-engine \
+        exec ${graphqlEngine}/bin/graphql-engine \
           --host ${cfg.host} \
           -u ${cfg.dbUser} \
           --password ${cfg.password} \
@@ -82,6 +82,10 @@ in {
           --enable-telemetry=false \
           --disable-cors
       '';
+      serviceConfig = {
+        # Hasura sometimes fails with sucessuful exit code, preventing monitoring detection. So we restart automatically.
+        Restart = "always";
+      };
     };
   };
 }
