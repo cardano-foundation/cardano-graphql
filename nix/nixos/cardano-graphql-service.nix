@@ -143,7 +143,8 @@ in {
   in lib.mkIf cfg.enable {
     systemd.services.cardano-graphql = {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "graphql-engine.service" ];
+      wants = [ "graphql-engine.service" ];
+      after = [ "graphql-engine.service" ];
       environment = lib.filterAttrs (k: v: v != null) {
         CARDANO_NODE_CONFIG_PATH = cfg.cardanoNodeConfigPath;
         HASURA_CLI_PATH = hasura-cli + "/bin/hasura";
