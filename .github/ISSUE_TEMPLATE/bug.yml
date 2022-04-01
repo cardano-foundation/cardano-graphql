@@ -1,7 +1,7 @@
 name: Bug Report
 description: Create a bug report
 #title: ""
-labels: ["bug"]
+labels: ["BUG"]
 #assignees:
 #  -
 body:
