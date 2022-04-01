@@ -1,0 +1,77 @@
+name: Bug Report
+description: Create a bug report
+#title: ""
+labels: ["bug"]
+#assignees:
+#  -
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report.
+        Please check the existing issues before raising a bug.
+  - type: textarea
+    attributes:
+      label: Summary
+      description: A clear and specific description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce the bug
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. Scroll down to '...'
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Actual Result
+      description: What is the reproducible outcome?
+      placeholder: See error...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Expected Result
+      description: A clear and concise description of what you expected to happen.
+      placeholder: No errors observed.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Environment
+      description: |
+        The [CLI](../tree/master/packages/cli) can be used to gather generic information about your system to assist with support. No installation is required thanks to [npx](https://github.com/npm/npx)
+        Run `npx @cardano-graphql/cli system-info`
+      placeholder: | 
+        Paste system-info report here
+        (Alternatively, paste release or Git revision are you using here)
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Platform
+      description: You may select more than one.
+      options:
+        - label: Linux (Ubuntu)
+        - label: Linux (Other)
+        - label: macOS
+        - label: Windows
+  - type: input
+    attributes:
+      label: Platform version
+      placeholder: "Ubuntu 20.04.3 LTS"
+  - type: checkboxes
+    attributes:
+      label: Runtime
+      description: You may select more than one.
+      options:
+        - label: Node.js
+        - label: Docker
+  - type: input
+    attributes:
+      label: Runtime version
+      description: Run `node -v` or `docker version`
+      placeholder: v12.12.0
