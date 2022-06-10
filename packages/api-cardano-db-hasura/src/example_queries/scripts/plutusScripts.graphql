@@ -3,7 +3,7 @@ query plutusScripts (
 ){
     scripts(
         limit: $limit
-        where: { type: { _eq: "plutus" }}
+        where: { type: { _eq: "plutusV1" }}
     ) {
         hash
         serialisedSize

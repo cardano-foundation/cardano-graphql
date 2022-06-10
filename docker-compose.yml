@@ -23,14 +23,14 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-        
+
   cardano-node-ogmios:
     build:
       args:
         - NETWORK=${NETWORK:-mainnet}
       cache_from: [ cardanosolutions/cardano-node-ogmios:latest ]
       context: ./ogmios
-    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v5.1.0}-${NETWORK:-mainnet}
+    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v5.5.0}-${NETWORK:-mainnet}
     logging:
       driver: "json-file"
       options:
@@ -42,9 +42,9 @@ services:
     volumes:
       - node-db:/db
       - node-ipc:/ipc
-    
+
   cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-12.0.0}
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.0.0}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket"
@@ -64,7 +64,7 @@ services:
       - postgres_db
     volumes:
       - ./config/network/${NETWORK:-mainnet}:/config
-      - db-sync-data:/var/lib/cdbsync
+      - db-sync-data:/var/lib/cexplorer
       - node-ipc:/node-ipc
     restart: on-failure
     logging:
@@ -72,7 +72,7 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-        
+
   hasura:
     build:
       context: ./packages/api-cardano-db-hasura/hasura

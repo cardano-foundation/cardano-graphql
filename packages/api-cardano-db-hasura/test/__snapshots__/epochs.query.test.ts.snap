@@ -118,7 +118,7 @@ Object {
     Object {
       "protocolParams": Object {
         "a0": 0.3,
-        "coinsPerUtxoWord": 34482,
+        "coinsPerUtxoSize": 34482,
         "collateralPercent": 150,
         "costModels": Object {
           "PlutusV1": Object {
@@ -136,9 +136,9 @@ Object {
             "appendString-memory-arguments-slope": 1,
             "bData-cpu-arguments": 150000,
             "bData-memory-arguments": 32,
-            "blake2b-cpu-arguments-intercept": 2477736,
-            "blake2b-cpu-arguments-slope": 29175,
-            "blake2b-memory-arguments": 4,
+            "blake2b_256-cpu-arguments-intercept": 2477736,
+            "blake2b_256-cpu-arguments-slope": 29175,
+            "blake2b_256-memory-arguments": 4,
             "cekApplyCost-exBudgetCPU": 29773,
             "cekApplyCost-exBudgetMemory": 100,
             "cekBuiltinCost-exBudgetCPU": 29773,
@@ -285,9 +285,9 @@ Object {
             "unListData-memory-arguments": 32,
             "unMapData-cpu-arguments": 150000,
             "unMapData-memory-arguments": 32,
-            "verifySignature-cpu-arguments-intercept": 3345831,
-            "verifySignature-cpu-arguments-slope": 1,
-            "verifySignature-memory-arguments": 1,
+            "verifyEd25519Signature-cpu-arguments-intercept": 3345831,
+            "verifyEd25519Signature-cpu-arguments-slope": 1,
+            "verifyEd25519Signature-memory-arguments": 1,
           },
         },
         "decentralisationParam": 0,

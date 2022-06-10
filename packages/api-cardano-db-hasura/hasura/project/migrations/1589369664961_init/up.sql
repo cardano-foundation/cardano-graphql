@@ -102,14 +102,14 @@ FROM epoch
 CREATE VIEW "ShelleyEpochProtocolParams" AS
 SELECT
   epoch_param.influence AS "a0",
-  epoch_param.coins_per_utxo_word AS "coinsPerUtxoWord",
+  epoch_param.coins_per_utxo_size AS "coinsPerUtxoSize",
   epoch_param.collateral_percent AS "collateralPercent",
   cost_model.costs AS "costModels",
   epoch_param.decentralisation AS "decentralisationParam",
   epoch_param.max_collateral_inputs AS "maxCollateralInputs",
   epoch_param.max_epoch AS "eMax",
   epoch_param.epoch_no AS "epoch_no",
-  epoch_param.entropy AS "extraEntropy",
+  epoch_param.extra_entropy AS "extraEntropy",
   epoch_param.key_deposit AS "keyDeposit",
   epoch_param.max_block_size AS "maxBlockBodySize",
   epoch_param.max_block_ex_mem AS "maxBlockExMem",
@@ -209,15 +209,17 @@ FROM pool_update AS pool
   INNER JOIN tx ON pool.registered_tx_id = tx.id
   INNER JOIN latest_block_times ON latest_block_times.hash_id = pool.hash_id
   INNER JOIN block ON tx.block_id = block.id AND latest_block_times.blockTime = block.time
-  JOIN stake_address on pool.reward_addr = stake_address.hash_raw
+  JOIN stake_address on pool.reward_addr_id = stake_address.id
   JOIN pool_hash on pool_hash.id = pool.hash_id;
 
 CREATE VIEW "StakePoolOwner" AS
 SELECT
   stake_address.hash_raw as "hash",
-  pool_owner.pool_hash_id as "pool_hash_id"
+  pool_hash.id as "pool_hash_id"
 FROM pool_owner
-  LEFT JOIN stake_address ON pool_owner.addr_id = stake_address.id;
+  LEFT JOIN stake_address ON pool_owner.addr_id = stake_address.id
+  LEFT JOIN pool_update ON pool_owner.pool_update_id = pool_update.id
+  LEFT JOIN pool_hash ON pool_update.hash_id = pool_hash.id;
 
 CREATE VIEW "StakePoolRetirement" AS
 SELECT
