@@ -3,6 +3,7 @@ import {
   createChainSyncClient,
   createInteractionContext,
   isAlonzoBlock,
+  isBabbageBlock,
   isMaryBlock,
   Schema
 } from '@cardano-ogmios/client'
@@ -65,9 +66,10 @@ export class ChainFollower {
             requestNext()
           },
           rollForward: async ({ block }, requestNext) => {
-            let b: Schema.BlockMary
-            if (isAlonzoBlock(block)) {
-              // @ts-ignore
+            let b: Schema.BlockBabbage | Schema.BlockAlonzo | Schema.BlockMary
+            if (isBabbageBlock(block)) {
+              b = block.babbage as Schema.BlockBabbage
+            } else if (isAlonzoBlock(block)) {
               b = block.alonzo as Schema.BlockAlonzo
             } else if (isMaryBlock(block)) {
               b = block.mary as Schema.BlockMary
