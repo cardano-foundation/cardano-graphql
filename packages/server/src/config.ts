@@ -41,11 +41,11 @@ export async function getConfig (): Promise<Config> {
   let db: Config['db']
   try {
     db = {
-      database: env.postgres.db || (await fs.readFile(env.postgres.dbFile, 'utf8')).toString(),
+      database: env.postgres.db || (await fs.readFile(env.postgres.dbFile, 'utf8')).toString().trim(),
       host: env.postgres.host,
-      password: env.postgres.password || (await fs.readFile(env.postgres.passwordFile, 'utf8')).toString(),
+      password: env.postgres.password || (await fs.readFile(env.postgres.passwordFile, 'utf8')).toString().trim(),
       port: env.postgres.port,
-      user: env.postgres.user || (await fs.readFile(env.postgres.userFile, 'utf8')).toString()
+      user: env.postgres.user || (await fs.readFile(env.postgres.userFile, 'utf8')).toString().trim()
     }
   } catch (error) {
     throw new MissingConfig('Database configuration cannot be read')
