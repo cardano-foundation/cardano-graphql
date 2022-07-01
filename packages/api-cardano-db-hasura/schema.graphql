@@ -611,7 +611,7 @@ type Reward {
   address: StakeAddress!
   amount: String!
   earnedIn: Epoch!
-  receivedIn: Epoch!
+  receivedIn: Epoch
   stakePool: StakePool
   type: String!
 }

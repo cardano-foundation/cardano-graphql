@@ -45,17 +45,14 @@ export * from './config'
       byron: loadGenesis('Byron') as ByronGenesis,
       shelley: loadGenesis('Shelley') as ShelleyGenesis
     }
-    const lastConfiguredMajorVersion = require(config.cardanoNodeConfigPath)['LastKnownBlockVersion-Major']
 
     const cardanoNodeClient = new CardanoNodeClient(
-      lastConfiguredMajorVersion,
       logger
     )
     const hasuraClient = new HasuraClient(
       config.hasuraCliPath,
       config.hasuraUri,
       config.pollingInterval.adaSupply,
-      lastConfiguredMajorVersion,
       logger
     )
     const db = new Db(config.db, logger)
