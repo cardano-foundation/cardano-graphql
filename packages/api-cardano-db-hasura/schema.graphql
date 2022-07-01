@@ -740,7 +740,7 @@ type ShelleyGenesisStaking {
 
 type ShelleyProtocolParams {
   a0: Float!
-  coinsPerUtxoWord: Int
+  coinsPerUtxoSize: Int
   collateralPercent: Int
   costModels: JSONObject
   decentralisationParam: Float!

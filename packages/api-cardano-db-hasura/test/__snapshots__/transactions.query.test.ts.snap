@@ -237,7 +237,7 @@ Object {
             Object {
               "hash": "82f065f4f62986d9add2c9418a559bd88fa26325d7996307a67545dd",
               "serialisedSize": 3602,
-              "type": "plutus",
+              "type": "plutusV1",
             },
           ],
           "size": 4294,

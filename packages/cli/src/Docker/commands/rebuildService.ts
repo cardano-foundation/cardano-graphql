@@ -6,7 +6,7 @@ import { selectServicesFromStack, servicesFromNameArg } from '../util'
 export function rebuildServiceCommand (stack: DockerComposeStack) {
   return createCommand('rebuild-service')
     .description('Drop and rebuild data volumes for the specified service')
-    .option('--services [services]', 'Service name', (names) => servicesFromNameArg(stack, names))
+    .option('--services services', 'Service name', (names) => servicesFromNameArg(stack, names))
     .option('--no-backup', 'Rebuild without making a backup')
     .action(async (cmd) => {
       const { backup, services } = cmd

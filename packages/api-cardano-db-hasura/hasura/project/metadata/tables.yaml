@@ -496,7 +496,7 @@
     permission:
       columns:
       - a0
-      - coinsPerUtxoWord
+      - coinsPerUtxoSize
       - collateralPercent
       - costModels
       - decentralisationParam
