@@ -12,7 +12,6 @@ import {
   TxSubmission
 } from '@cardano-ogmios/client'
 import { dummyLogger, Logger } from 'ts-log'
-import { getHashOfSignedTransaction } from './util'
 
 const MODULE_NAME = 'CardanoNodeClient'
 
@@ -112,8 +111,7 @@ export class CardanoNodeClient {
     if (this.serverHealthFetcher.value.networkSynchronization < 0.95) {
       throw new errors.OperationRequiresSyncedNode('submitTransaction')
     }
-    await this.txSubmissionClient.submitTx(transaction)
-    const hash = getHashOfSignedTransaction(transaction)
+    const hash = await this.txSubmissionClient.submitTx(transaction)
     this.logger.info({ module: MODULE_NAME, hash }, 'submitTransaction')
     return hash
   }
