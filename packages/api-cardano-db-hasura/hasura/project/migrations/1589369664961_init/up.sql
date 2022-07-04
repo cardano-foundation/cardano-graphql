@@ -1,5 +1,5 @@
 
-CREATE VIEW "AdaPots" AS
+CREATE OR REPLACE VIEW "AdaPots" AS
   SELECT
     epoch_no AS "epochNo",
     deposits,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS "Asset" (
     "url" VARCHAR(250)
 );
 
-CREATE VIEW "Block" AS
+CREATE OR REPLACE VIEW "Block" AS
  SELECT (COALESCE(( SELECT sum((tx.fee)::bigint) AS sum
            FROM tx
           WHERE (tx.block_id = block.id)), (0)::NUMERIC))::bigint AS fees,
@@ -58,7 +58,7 @@ CREATE OR REPLACE VIEW "Cardano" AS
   ORDER BY block.block_no DESC
  LIMIT 1;
  
-CREATE VIEW "Collateral" AS
+CREATE OR REPLACE VIEW "Collateral" AS
 SELECT
   source_tx_out.address,
   source_tx_out.value,
@@ -76,7 +76,7 @@ JOIN tx_out AS source_tx_out
 JOIN tx AS source_tx
   ON source_tx_out.tx_id = source_tx.id;
 
-CREATE VIEW "Delegation" AS
+CREATE OR REPLACE VIEW "Delegation" AS
 SELECT
   delegation.id AS "id",
   stake_address.view AS "address",
@@ -86,7 +86,7 @@ SELECT
 FROM delegation
 JOIN stake_address on delegation.addr_id = stake_address.id;
 
-CREATE VIEW "Epoch" AS
+CREATE OR REPLACE VIEW "Epoch" AS
 SELECT
   epoch.fees AS "fees",
   epoch.out_sum AS "output",
@@ -99,7 +99,7 @@ SELECT
 FROM epoch
   LEFT JOIN epoch_param on epoch.no = epoch_param.epoch_no;
 
-CREATE VIEW "ShelleyEpochProtocolParams" AS
+CREATE OR REPLACE VIEW "ShelleyEpochProtocolParams" AS
 SELECT
   epoch_param.influence AS "a0",
   epoch_param.coins_per_utxo_size AS "coinsPerUtxoSize",
@@ -134,7 +134,7 @@ FROM epoch_param
 JOIN cost_model
   ON epoch_param.cost_model_id = cost_model.id;
 
-CREATE VIEW "Redeemer" AS
+CREATE OR REPLACE VIEW "Redeemer" AS
 SELECT
   redeemer.fee AS "fee",
   redeemer.id AS "id",
@@ -146,7 +146,7 @@ SELECT
   redeemer.unit_steps AS "unitSteps"
 FROM redeemer;
 
-CREATE VIEW "Reward" AS
+CREATE OR REPLACE VIEW "Reward" AS
 SELECT
   reward.amount,
   stake_address.view AS "address",
@@ -157,7 +157,7 @@ SELECT
 FROM reward
 JOIN stake_address on reward.addr_id = stake_address.id;
 
-CREATE VIEW "Script" AS
+CREATE OR REPLACE VIEW "Script" AS
 SELECT
   script.hash AS "hash",
   script.serialised_size AS "serialisedSize",
@@ -165,7 +165,7 @@ SELECT
   script.tx_id AS "txId"
 FROM script;
 
-CREATE VIEW "SlotLeader" AS
+CREATE OR REPLACE VIEW "SlotLeader" AS
 SELECT
   slot_leader.hash AS "hash",
   slot_leader.id AS "id",
@@ -173,7 +173,7 @@ SELECT
   slot_leader.pool_hash_id AS "pool_hash_id"
 FROM slot_leader;
 
-CREATE VIEW "StakeDeregistration" AS
+CREATE OR REPLACE VIEW "StakeDeregistration" AS
 SELECT
   stake_deregistration.id AS "id",
   stake_address.view AS "address",
@@ -182,7 +182,7 @@ SELECT
 FROM stake_deregistration
 JOIN stake_address on stake_deregistration.addr_id = stake_address.id;
 
-CREATE VIEW "StakePool" AS
+CREATE OR REPLACE VIEW "StakePool" AS
 WITH
   latest_block_times AS (
     SELECT pool.hash_id, max(block.time) AS blockTime
@@ -212,7 +212,7 @@ FROM pool_update AS pool
   JOIN stake_address on pool.reward_addr_id = stake_address.id
   JOIN pool_hash on pool_hash.id = pool.hash_id;
 
-CREATE VIEW "StakePoolOwner" AS
+CREATE OR REPLACE VIEW "StakePoolOwner" AS
 SELECT
   stake_address.hash_raw as "hash",
   pool_hash.id as "pool_hash_id"
@@ -221,14 +221,14 @@ FROM pool_owner
   LEFT JOIN pool_update ON pool_owner.pool_update_id = pool_update.id
   LEFT JOIN pool_hash ON pool_update.hash_id = pool_hash.id;
 
-CREATE VIEW "StakePoolRetirement" AS
+CREATE OR REPLACE VIEW "StakePoolRetirement" AS
 SELECT
   retiring_epoch as "inEffectFrom",
   announced_tx_id as "tx_id",
   hash_id AS "pool_hash_id"
 FROM pool_retire;
 
-CREATE VIEW "StakeRegistration" AS
+CREATE OR REPLACE VIEW "StakeRegistration" AS
 SELECT
   stake_registration.id AS "id",
   stake_address.view AS "address",
@@ -236,7 +236,7 @@ SELECT
 FROM stake_registration
 JOIN stake_address on stake_registration.addr_id = stake_address.id;
 
-CREATE VIEW "ActiveStake" AS
+CREATE OR REPLACE VIEW "ActiveStake" AS
 SELECT
   stake_address.view AS "address",
   amount AS "amount",
@@ -249,7 +249,7 @@ JOIN pool_hash
   ON pool_hash.id = epoch_stake.pool_id
 JOIN stake_address on epoch_stake.addr_id = stake_address.id;
 
-CREATE VIEW "TokenMint" AS
+CREATE OR REPLACE VIEW "TokenMint" AS
 SELECT
   CAST(CONCAT(multi_asset.policy, RIGHT(CONCAT(E'\\', multi_asset.name), -3)) as BYTEA) as "assetId",
   multi_asset.name AS "assetName",
@@ -260,7 +260,7 @@ FROM ma_tx_mint
 JOIN multi_asset
   ON ma_tx_mint.ident = multi_asset.id;
 
-CREATE VIEW "TokenInOutput" AS
+CREATE OR REPLACE VIEW "TokenInOutput" AS
 SELECT
   CAST(CONCAT(policy, RIGHT(CONCAT(E'\\', name), -3)) as BYTEA) as "assetId",
   name as "assetName",
@@ -271,7 +271,7 @@ FROM ma_tx_out
 JOIN multi_asset
   ON ma_tx_out.ident = multi_asset.id;
 
-CREATE VIEW "Transaction" AS
+CREATE OR REPLACE VIEW "Transaction" AS
 SELECT
   block.hash AS "blockHash",
   tx.block_index AS "blockIndex",
@@ -291,7 +291,7 @@ FROM
 INNER JOIN block
   ON block.id = tx.block_id;
 
-CREATE VIEW "TransactionInput" AS
+CREATE OR REPLACE VIEW "TransactionInput" AS
 SELECT
   source_tx_out.address,
   tx_in.redeemer_id AS "redeemerId",
@@ -310,7 +310,7 @@ JOIN tx_out AS source_tx_out
 JOIN tx AS source_tx
   ON source_tx_out.tx_id = source_tx.id;
 
-CREATE VIEW "TransactionOutput" AS
+CREATE OR REPLACE VIEW "TransactionOutput" AS
 SELECT
   address,
   tx_out.address_has_script AS "addressHasScript",
@@ -322,7 +322,7 @@ FROM tx
 JOIN tx_out
   ON tx.id = tx_out.tx_id;
 
-CREATE VIEW "Utxo" AS SELECT
+CREATE OR REPLACE VIEW "Utxo" AS SELECT
   address,
   tx_out.address_has_script AS "addressHasScript",
   value,
@@ -337,7 +337,7 @@ LEFT OUTER JOIN tx_in
   AND tx_out.index = tx_in.tx_out_index
 WHERE tx_in.tx_in_id IS NULL;
 
-CREATE VIEW "Withdrawal" AS
+CREATE OR REPLACE VIEW "Withdrawal" AS
 SELECT
   withdrawal.amount AS "amount",
   withdrawal.id AS "id",
@@ -347,25 +347,25 @@ SELECT
 FROM withdrawal
 JOIN stake_address on withdrawal.addr_id = stake_address.id;
 
-CREATE INDEX idx_block_hash
+CREATE INDEX IF NOT EXISTS idx_block_hash
     ON block(hash);
 
-CREATE INDEX idx_multi_asset_name
+CREATE INDEX IF NOT EXISTS idx_multi_asset_name
     ON multi_asset(name);
 
-CREATE INDEX idx_multi_asset_policy
+CREATE INDEX IF NOT EXISTS idx_multi_asset_policy
     ON multi_asset(policy);
 
-CREATE INDEX idx_reward_type
+CREATE INDEX IF NOT EXISTS idx_reward_type
     ON reward(type);
 
-CREATE INDEX idx_tx_hash
+CREATE INDEX IF NOT EXISTS idx_tx_hash
     ON tx(hash);
 
-CREATE INDEX idx_tx_in_consuming_tx
+CREATE INDEX IF NOT EXISTS idx_tx_in_consuming_tx
    ON tx_in(tx_out_id);
 
-CREATE INDEX idx_tx_out_tx
+CREATE INDEX IF NOT EXISTS idx_tx_out_tx
     ON tx_out(tx_id);
 
 CREATE function utxo_set_at_block("hash" hash32type)
