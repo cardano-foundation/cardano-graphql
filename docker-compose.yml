@@ -30,7 +30,7 @@ services:
         - NETWORK=${NETWORK:-mainnet}
       cache_from: [ cardanosolutions/cardano-node-ogmios:latest ]
       context: ./ogmios
-    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v5.5.0}-${NETWORK:-mainnet}
+    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v5.5.1}-${NETWORK:-mainnet}
     logging:
       driver: "json-file"
       options:
