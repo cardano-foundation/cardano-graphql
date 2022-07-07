@@ -4,7 +4,7 @@ query epochProtocolParams (
     epochs( where: $where ) {
         protocolParams {
             a0
-            coinsPerUtxoSize
+            coinsPerUtxoByte
             collateralPercent
             costModels
             decentralisationParam

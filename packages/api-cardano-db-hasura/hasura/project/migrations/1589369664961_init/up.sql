@@ -99,10 +99,10 @@ SELECT
 FROM epoch
   LEFT JOIN epoch_param on epoch.no = epoch_param.epoch_no;
 
-CREATE OR REPLACE VIEW "ShelleyEpochProtocolParams" AS
+CREATE OR REPLACE VIEW "ProtocolParams" AS
 SELECT
   epoch_param.influence AS "a0",
-  epoch_param.coins_per_utxo_size AS "coinsPerUtxoSize",
+  epoch_param.coins_per_utxo_size AS "coinsPerUtxoByte",
   epoch_param.collateral_percent AS "collateralPercent",
   cost_model.costs AS "costModels",
   epoch_param.decentralisation AS "decentralisationParam",
