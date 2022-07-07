@@ -14,7 +14,7 @@ import {
   AssetSupply,
   Block,
   PaymentAddressSummary,
-  ShelleyProtocolParams,
+  ProtocolParams,
   Token,
   TransactionOutput
 } from './graphql_types'
@@ -272,7 +272,7 @@ export class HasuraClient {
     return result.delete_assets.affected_rows
   }
 
-  public async getCurrentProtocolVersion (): Promise<ShelleyProtocolParams['protocolVersion']> {
+  public async getCurrentProtocolVersion (): Promise<ProtocolParams['protocolVersion']> {
     const result = await this.client.request(
       gql`query {
           epochs (limit: 1, order_by: { number: desc }) {

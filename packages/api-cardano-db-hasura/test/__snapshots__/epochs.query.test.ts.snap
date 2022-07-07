@@ -118,7 +118,7 @@ Object {
     Object {
       "protocolParams": Object {
         "a0": 0.3,
-        "coinsPerUtxoSize": 34482,
+        "coinsPerUtxoByte": 34482,
         "collateralPercent": 150,
         "costModels": Object {
           "PlutusV1": Object {

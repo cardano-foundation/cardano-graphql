@@ -353,7 +353,7 @@
       manual_configuration:
         remote_table:
           schema: public
-          name: ShelleyEpochProtocolParams
+          name: ProtocolParams
         column_mapping:
           number: epoch_no
   array_relationships:
@@ -490,13 +490,13 @@
       allow_aggregations: true
 - table:
     schema: public
-    name: ShelleyEpochProtocolParams
+    name: ProtocolParams
   select_permissions:
   - role: cardano-graphql
     permission:
       columns:
       - a0
-      - coinsPerUtxoSize
+      - coinsPerUtxoByte
       - collateralPercent
       - costModels
       - decentralisationParam

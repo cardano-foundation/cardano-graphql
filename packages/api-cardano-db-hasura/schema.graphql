@@ -738,9 +738,9 @@ type ShelleyGenesisStaking {
   stake: JSONObject!
 }
 
-type ShelleyProtocolParams {
+type ProtocolParams {
   a0: Float!
-  coinsPerUtxoSize: Int
+  coinsPerUtxoByte: Int
   collateralPercent: Int
   costModels: JSONObject
   decentralisationParam: Float!
@@ -764,6 +764,26 @@ type ShelleyProtocolParams {
   poolDeposit: Int!
   priceMem: Float
   priceStep: Float
+  protocolVersion: JSONObject!
+  rho: Float!
+  tau: Float!
+}
+
+type ShelleyProtocolParams {
+  a0: Float!
+  decentralisationParam: Float!
+  eMax: Int!
+  extraEntropy: JSONObject
+  keyDeposit: Int!
+  maxBlockBodySize: Int!
+  maxBlockHeaderSize: Int!
+  maxTxSize: Int!
+  minFeeA: Int!
+  minFeeB: Int!
+  minPoolCost: Int!
+  minUTxOValue: Int!
+  nOpt: Int!
+  poolDeposit: Int!
   protocolVersion: JSONObject!
   rho: Float!
   tau: Float!
@@ -1532,7 +1552,7 @@ type Epoch {
   output: String!
   nonce: Hash32Hex
   number: Int!
-  protocolParams: ShelleyProtocolParams
+  protocolParams: ProtocolParams
   transactionsCount: String!
   startedAt: DateTime!
   lastBlockTime: DateTime!
