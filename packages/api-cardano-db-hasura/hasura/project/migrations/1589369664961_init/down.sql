@@ -23,4 +23,3 @@ DROP VIEW IF EXISTS
   "TransactionOutput",
   "Utxo",
   "Withdrawal" CASCADE;
-DROP FUNCTION IF EXISTS utxo_set_at_block CASCADE;

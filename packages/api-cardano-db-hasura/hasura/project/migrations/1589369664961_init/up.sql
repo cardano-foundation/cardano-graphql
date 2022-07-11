@@ -367,25 +367,3 @@ CREATE INDEX IF NOT EXISTS idx_tx_in_consuming_tx
 
 CREATE INDEX IF NOT EXISTS idx_tx_out_tx
     ON tx_out(tx_id);
-
-CREATE function utxo_set_at_block("hash" hash32type)
-RETURNS SETOF "TransactionOutput" AS $$
-  SELECT
-    "TransactionOutput".address,
-    "TransactionOutput"."addressHasScript",
-    "TransactionOutput".value,
-    "TransactionOutput"."txHash",
-    "TransactionOutput"."id",
-    "TransactionOutput".index
-  FROM tx
-  JOIN tx_out
-    ON tx.id = tx_out.tx_id
-  JOIN "TransactionOutput"
-    ON tx.hash = "TransactionOutput"."txHash"
-  LEFT OUTER JOIN tx_in
-    ON tx_out.tx_id = tx_in.tx_out_id
-    AND tx_out.index = tx_in.tx_out_index
-  WHERE tx_in.tx_in_id IS NULL
-  AND tx.block_id <= (SELECT id FROM block WHERE hash = "hash")
-$$ LANGUAGE SQL stable;
-
