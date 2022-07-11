@@ -522,7 +522,7 @@ type PaymentAddressSummary {
 }
 
 type Redeemer {
-  fee: BigInt!
+  fee: BigInt
   index: Int!
   purpose: String! # Todo: Make scalar
   scriptHash: Hash28Hex!
