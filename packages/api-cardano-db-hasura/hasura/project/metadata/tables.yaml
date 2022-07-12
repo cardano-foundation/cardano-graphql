@@ -292,6 +292,26 @@
       allow_aggregations: true
 - table:
     schema: public
+    name: Datum
+  object_relationships:
+  - name: firstIncludedIn
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - bytes
+      - hash
+      - value
+      filter: {}
+- table:
+    schema: public
     name: Delegation
   configuration:
     custom_root_fields:
@@ -390,6 +410,44 @@
       allow_aggregations: true
 - table:
     schema: public
+    name: ProtocolParams
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - a0
+      - coinsPerUtxoByte
+      - collateralPercent
+      - costModels
+      - decentralisationParam
+      - eMax
+      - epoch_no
+      - extraEntropy
+      - keyDeposit
+      - maxBlockBodySize
+      - maxBlockExMem
+      - maxBlockExSteps
+      - maxBlockHeaderSize
+      - maxCollateralInputs
+      - maxTxExMem
+      - maxTxExSteps
+      - maxTxSize
+      - maxValSize
+      - minFeeA
+      - minFeeB
+      - minPoolCost
+      - minUTxOValue
+      - nOpt
+      - poolDeposit
+      - priceMem
+      - priceStep
+      - protocolVersion
+      - rho
+      - tau
+      filter: {}
+      limit: 2500
+- table:
+    schema: public
     name: Redeemer
   configuration:
     custom_root_fields:
@@ -397,6 +455,14 @@
       select: redeemers
     custom_column_names: {}
   object_relationships:
+  - name: datum
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: RedeemerDatum
+        column_mapping:
+          redeemer_datum_id: id
   - name: transaction
     using:
       manual_configuration:
@@ -418,6 +484,26 @@
       filter: {}
       limit: 2500
       allow_aggregations: true
+- table:
+    schema: public
+    name: RedeemerDatum
+  object_relationships:
+  - name: firstIncludedIn
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          tx_id: id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - bytes
+      - hash
+      - value
+      filter: {}
 - table:
     schema: public
     name: Reward
@@ -488,44 +574,6 @@
       filter: {}
       limit: 2500
       allow_aggregations: true
-- table:
-    schema: public
-    name: ProtocolParams
-  select_permissions:
-  - role: cardano-graphql
-    permission:
-      columns:
-      - a0
-      - coinsPerUtxoByte
-      - collateralPercent
-      - costModels
-      - decentralisationParam
-      - eMax
-      - epoch_no
-      - extraEntropy
-      - keyDeposit
-      - maxBlockBodySize
-      - maxBlockExMem
-      - maxBlockExSteps
-      - maxBlockHeaderSize
-      - maxCollateralInputs
-      - maxTxExMem
-      - maxTxExSteps
-      - maxTxSize
-      - maxValSize
-      - minFeeA
-      - minFeeB
-      - minPoolCost
-      - minUTxOValue
-      - nOpt
-      - poolDeposit
-      - priceMem
-      - priceStep
-      - protocolVersion
-      - rho
-      - tau
-      filter: {}
-      limit: 2500
 - table:
     schema: public
     name: SlotLeader
@@ -971,6 +1019,22 @@
     schema: public
     name: TransactionOutput
   object_relationships:
+  - name: datum
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Datum
+        column_mapping:
+          inline_datum_id: id
+  - name: script
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Script
+        column_mapping:
+          reference_script_id: id
   - name: transaction
     using:
       manual_configuration:
@@ -1009,6 +1073,22 @@
       select: utxos
     custom_column_names: {}
   object_relationships:
+  - name: datum
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Datum
+        column_mapping:
+          inline_datum_id: id
+  - name: script
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Script
+        column_mapping:
+          reference_script_id: id
   - name: transaction
     using:
       manual_configuration:

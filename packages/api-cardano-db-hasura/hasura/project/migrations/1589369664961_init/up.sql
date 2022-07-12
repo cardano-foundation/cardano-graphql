@@ -99,6 +99,24 @@ SELECT
 FROM epoch
   LEFT JOIN epoch_param on epoch.no = epoch_param.epoch_no;
 
+CREATE OR REPLACE VIEW "Datum" AS
+SELECT
+  bytes,
+  hash,
+  id,
+  tx_id,
+  value
+FROM datum;
+
+CREATE OR REPLACE VIEW "RedeemerDatum" AS
+SELECT
+  bytes,
+  hash,
+  id,
+  tx_id,
+  value
+FROM redeemer_data;
+
 CREATE OR REPLACE VIEW "ProtocolParams" AS
 SELECT
   epoch_param.influence AS "a0",
@@ -143,7 +161,8 @@ SELECT
   redeemer.script_hash AS "scriptHash",
   redeemer.tx_id AS "txId",
   redeemer.unit_mem AS "unitMem",
-  redeemer.unit_steps AS "unitSteps"
+  redeemer.unit_steps AS "unitSteps",
+  redeemer.redeemer_data_id AS "redeemer_datum_id"
 FROM redeemer;
 
 CREATE OR REPLACE VIEW "Reward" AS
@@ -160,6 +179,7 @@ JOIN stake_address on reward.addr_id = stake_address.id;
 CREATE OR REPLACE VIEW "Script" AS
 SELECT
   script.hash AS "hash",
+  script.id AS "id",
   script.serialised_size AS "serialisedSize",
   script.type AS "type",
   script.tx_id AS "txId"
@@ -317,7 +337,9 @@ SELECT
   value,
   tx.hash AS "txHash",
   tx_out.id,
-  index
+  index,
+  tx_out.inline_datum_id AS "inline_datum_id",
+  tx_out.reference_script_id AS "reference_script_id"
 FROM tx
 JOIN tx_out
   ON tx.id = tx_out.tx_id;
@@ -328,7 +350,9 @@ CREATE OR REPLACE VIEW "Utxo" AS SELECT
   value,
   tx.hash AS "txHash",
   tx_out.id,
-  index
+  index,
+  tx_out.inline_datum_id AS "inline_datum_id",
+  tx_out.reference_script_id AS "reference_script_id"
 FROM tx
 JOIN tx_out
   ON tx.id = tx_out.tx_id

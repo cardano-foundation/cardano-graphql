@@ -467,6 +467,18 @@ type CardanoDbMeta {
   syncPercentage: Percentage!
 }
 
+type Datum {
+  bytes: Hex!
+  hash: Hash32Hex!
+  firstIncludedIn: Transaction!
+  value: JSONObject!
+}
+
+input Datum_bool_exp {
+  firstIncludedIn: Transaction_bool_exp
+  hash: Hex_comparison_exp
+}
+
 type Delegation {
   address: StakeAddress!
   redeemer: Redeemer
@@ -522,6 +534,7 @@ type PaymentAddressSummary {
 }
 
 type Redeemer {
+  datum: Datum
   fee: BigInt
   index: Int!
   purpose: String! # Todo: Make scalar
@@ -571,6 +584,7 @@ input Redeemer_bool_exp {
   _and: [Redeemer_bool_exp]
   _not: Redeemer_bool_exp
   _or: [Redeemer_bool_exp]
+  datum: Datum_bool_exp
   fee: BigInt_comparison_exp
   index: Int_comparison_exp
   purpose: text_comparison_exp
@@ -1364,7 +1378,9 @@ input TransactionMetadata_bool_exp {
 type TransactionOutput {
   address: String!
   addressHasScript: Boolean!
+  datum: Datum
   index: Int!
+  script: Script
   transaction: Transaction!
   txHash: Hash32Hex!
   tokens: [Token!]!
@@ -1379,6 +1395,7 @@ enum TransactionOutput_distinct_on {
 input TransactionOutput_order_by {
   address: order_by
   addressHasScript: order_by
+  datum: Transaction_order_by
   index: order_by
   txHash: order_by
   value: order_by
@@ -1390,7 +1407,9 @@ input TransactionOutput_bool_exp {
   _or: [TransactionOutput_bool_exp]
   address: text_comparison_exp
   addressHasScript: Boolean_comparison_exp
+  datum: Datum_bool_exp
   index: Int_comparison_exp
+  script: Script_bool_exp
   tokens: Token_bool_exp
   transaction: Transaction_bool_exp
   value: text_comparison_exp

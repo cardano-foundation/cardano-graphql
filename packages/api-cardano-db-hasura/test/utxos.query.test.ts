@@ -54,4 +54,22 @@ describe('utxos', () => {
     })
     expect(result.data.utxos_aggregate.aggregate.count).toBeDefined()
   })
+
+  it('Includes Plutus script and datum if present', async () => {
+    const result = await client.query({
+      query: await loadTestOperationDocument('getFirstUtxoWithPlutus')
+    })
+    const datum = result.data.utxos[0].datum
+    const script = result.data.utxos[0].script
+    expect(datum.hash).toBeDefined()
+    expect(datum).not.toBeNull()
+    expect(datum.bytes).not.toBeNull()
+    expect(datum.hash).not.toBeNull()
+    expect(datum.firstIncludedIn.hash).not.toBeNull()
+    expect(datum.value).not.toBeNull()
+    expect(script.hash).toBeDefined()
+    expect(script.serialisedSize).toBeDefined()
+    expect(script.transaction.hash).toBeDefined()
+    expect(script.type).toBeDefined()
+  })
 })
