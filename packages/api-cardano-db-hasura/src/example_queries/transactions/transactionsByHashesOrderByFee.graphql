@@ -9,7 +9,7 @@ query transactionsByHashes(
             number
         }
         blockIndex
-        collateral {
+        collateralInputs {
             value
         }
         deposit

@@ -58,7 +58,7 @@ CREATE OR REPLACE VIEW "Cardano" AS
   ORDER BY block.block_no DESC
  LIMIT 1;
  
-CREATE OR REPLACE VIEW "Collateral" AS
+CREATE OR REPLACE VIEW "CollateralInput" AS
 SELECT
   source_tx_out.address,
   source_tx_out.value,
@@ -75,6 +75,20 @@ JOIN tx_out AS source_tx_out
   AND collateral_tx_in.tx_out_index = source_tx_out.index
 JOIN tx AS source_tx
   ON source_tx_out.tx_id = source_tx.id;
+
+CREATE OR REPLACE VIEW "CollateralOutput" AS
+SELECT
+  address,
+  collateral_tx_out.address_has_script AS "addressHasScript",
+  value,
+  tx.hash AS "txHash",
+  collateral_tx_out.id,
+  index,
+  collateral_tx_out.inline_datum_id AS "inline_datum_id",
+  collateral_tx_out.reference_script_id AS "reference_script_id"
+FROM tx
+JOIN collateral_tx_out
+  ON tx.id = collateral_tx_out.tx_id;
 
 CREATE OR REPLACE VIEW "Delegation" AS
 SELECT

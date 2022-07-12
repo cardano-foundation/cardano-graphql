@@ -246,7 +246,7 @@
       limit: 1
 - table:
     schema: public
-    name: Collateral
+    name: CollateralInput
   configuration:
     custom_root_fields:
       select_aggregate: collateralInputs_aggregate
@@ -289,6 +289,50 @@
       - value
       filter: {}
       limit: 2500
+      allow_aggregations: true
+- table:
+    schema: public
+    name: CollateralOutput
+  configuration:
+    custom_root_fields:
+      select_aggregate: collateralOutputs_aggregate
+      select: collateralOutputs
+    custom_column_names: {}
+  object_relationships:
+  - name: datum
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Datum
+        column_mapping:
+          inline_datum_id: id
+  - name: script
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Script
+        column_mapping:
+          reference_script_id: id
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          txHash: hash
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - address
+      - addressHasScript
+      - index
+      - txHash
+      - value
+      filter: {}
       allow_aggregations: true
 - table:
     schema: public
@@ -883,12 +927,20 @@
         column_mapping:
           blockHash: hash
   array_relationships:
-  - name: collateral
+  - name: collateralInputs
     using:
       manual_configuration:
         remote_table:
           schema: public
-          name: Collateral
+          name: CollateralInput
+        column_mapping:
+          hash: txHash
+  - name: collateralOutputs
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: CollateralOutput
         column_mapping:
           hash: txHash
   - name: inputs
