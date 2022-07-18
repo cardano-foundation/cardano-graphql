@@ -158,4 +158,14 @@ describe('transactions', () => {
       expect(result.data).toMatchSnapshot()
     })
   })
+
+  describe('transactions with reference inputs', () => {
+    it('shows the reference inputs', async () => {
+      const result = await client.query({
+        query: await loadQueryNode('transactionsByHashesWithReferenceInputs'),
+        variables: { hashes: ['067e84ddc353faefcbd29f11586d854146b3df43f89b3c1a64a3ff9fbb3c05bd'] }
+      })
+      expect(result.data).toMatchSnapshot()
+    })
+  })
 })

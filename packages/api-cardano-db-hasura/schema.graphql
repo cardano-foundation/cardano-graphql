@@ -1354,6 +1354,18 @@ type Transaction {
     where: TransactionOutput_bool_exp
   ): TransactionOutput_aggregate!
   redeemers: [Redeemer]
+  referenceInputs (
+    limit: Int
+    order_by: [TransactionInput_order_by]
+    offset: Int
+    where: TransactionInput_bool_exp
+  ): [TransactionInput!]!
+  referenceInputs_aggregate (
+    limit: Int
+    order_by: [TransactionInput_order_by]
+    offset: Int
+    where: TransactionInput_bool_exp
+  ): TransactionInput_aggregate!
   scripts: [Script]
   scriptSize: Int!
   size: BigInt!

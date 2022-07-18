@@ -11,6 +11,7 @@ DROP VIEW IF EXISTS
   "ProtocolParams",
   "Redeemer",
   "RedeemerDatum",
+  "ReferenceInput",
   "Reward",
   "Script",
   "SlotLeader",

@@ -430,6 +430,43 @@ Object {
 }
 `;
 
+exports[`transactions transactions with reference inputs shows the reference inputs 1`] = `
+Object {
+  "transactions": Array [
+    Object {
+      "hash": "067e84ddc353faefcbd29f11586d854146b3df43f89b3c1a64a3ff9fbb3c05bd",
+      "referenceInputs": Array [
+        Object {
+          "address": "addr_test1wqag3rt979nep9g2wtdwu8mr4gz6m4kjdpp5zp705km8wys6t2kla",
+          "sourceTransaction": Object {
+            "hash": "62a8a3c215d1241e6407ec7422ec0878ea533b2db436e4d099bdd226a08fe7e1",
+          },
+          "sourceTxHash": "62a8a3c215d1241e6407ec7422ec0878ea533b2db436e4d099bdd226a08fe7e1",
+          "sourceTxIndex": 1,
+        },
+      ],
+      "referenceInputs_aggregate": Object {
+        "aggregate": Object {
+          "avg": Object {
+            "value": "1094740",
+          },
+          "count": "1",
+          "max": Object {
+            "value": "1094740",
+          },
+          "min": Object {
+            "value": "1094740",
+          },
+          "sum": Object {
+            "value": "1094740",
+          },
+        },
+      },
+    },
+  ],
+}
+`;
+
 exports[`transactions transactions with tokens shows the tokens minted and output 1`] = `
 Object {
   "transactions": Array [

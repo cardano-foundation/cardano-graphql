@@ -180,6 +180,24 @@ SELECT
   redeemer.redeemer_data_id AS "redeemer_datum_id"
 FROM redeemer;
 
+CREATE OR REPLACE VIEW "ReferenceInput" AS
+SELECT
+  source_tx_out.address,
+  source_tx_out.value,
+  tx.hash AS "txHash",
+  source_tx.hash AS "sourceTxHash",
+  reference_tx_in.tx_out_index AS "sourceTxIndex",
+  source_tx_out.id AS source_tx_out_id
+FROM
+  tx
+JOIN reference_tx_in
+  ON reference_tx_in.tx_in_id = tx.id
+JOIN tx_out AS source_tx_out
+  ON reference_tx_in.tx_out_id = source_tx_out.tx_id
+  AND reference_tx_in.tx_out_index = source_tx_out.index
+JOIN tx AS source_tx
+  ON source_tx_out.tx_id = source_tx.id;
+
 CREATE OR REPLACE VIEW "Reward" AS
 SELECT
   reward.amount,

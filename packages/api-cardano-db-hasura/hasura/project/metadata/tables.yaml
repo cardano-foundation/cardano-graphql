@@ -551,6 +551,46 @@
       filter: {}
 - table:
     schema: public
+    name: ReferenceInput
+  object_relationships:
+  - name: sourceTransaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          sourceTxHash: hash
+  - name: transaction
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: Transaction
+        column_mapping:
+          txHash: hash
+  array_relationships:
+  - name: tokens
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: TokenInOutput
+        column_mapping:
+          source_tx_out_id: tx_out_id
+  select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+      - address
+      - sourceTxHash
+      - sourceTxIndex
+      - txHash
+      - value
+      filter: {}
+      allow_aggregations: true
+- table:
+    schema: public
     name: Reward
   configuration:
     custom_root_fields:
@@ -984,6 +1024,14 @@
           name: Redeemer
         column_mapping:
           id: txId
+  - name: referenceInputs
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: ReferenceInput
+        column_mapping:
+          hash: txHash
   - name: scripts
     using:
       manual_configuration:
