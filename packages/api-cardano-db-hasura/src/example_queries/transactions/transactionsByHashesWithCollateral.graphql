@@ -60,6 +60,7 @@ query transactionsByHashesWithCollateral(
                 value
             }
             index
+            paymentCredential
             script {
                 hash
                 serialisedSize

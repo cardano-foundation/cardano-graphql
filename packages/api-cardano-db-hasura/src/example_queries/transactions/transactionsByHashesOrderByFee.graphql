@@ -32,6 +32,7 @@ query transactionsByHashes(
             index
             address
             addressHasScript
+            paymentCredential
             value
         }
         outputs_aggregate {

@@ -547,6 +547,7 @@ type CollateralOutput {
   addressHasScript: Boolean!
   datum: Datum
   index: Int!
+  paymentCredential: Hash28Hex
   script: Script
   transaction: Transaction!
   txHash: Hash32Hex!
@@ -1543,6 +1544,7 @@ type TransactionOutput {
   addressHasScript: Boolean!
   datum: Datum
   index: Int!
+  paymentCredential: Hash28Hex
   script: Script
   transaction: Transaction!
   txHash: Hash32Hex!

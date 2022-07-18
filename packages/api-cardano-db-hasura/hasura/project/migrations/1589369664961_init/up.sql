@@ -85,7 +85,8 @@ SELECT
   collateral_tx_out.id,
   index,
   collateral_tx_out.inline_datum_id AS "inline_datum_id",
-  collateral_tx_out.reference_script_id AS "reference_script_id"
+  collateral_tx_out.reference_script_id AS "reference_script_id",
+  collateral_tx_out.payment_cred AS "paymentCredential"
 FROM tx
 JOIN collateral_tx_out
   ON tx.id = collateral_tx_out.tx_id;
@@ -353,7 +354,8 @@ SELECT
   tx_out.id,
   index,
   tx_out.inline_datum_id AS "inline_datum_id",
-  tx_out.reference_script_id AS "reference_script_id"
+  tx_out.reference_script_id AS "reference_script_id",
+  tx_out.payment_cred AS "paymentCredential"
 FROM tx
 JOIN tx_out
   ON tx.id = tx_out.tx_id;
