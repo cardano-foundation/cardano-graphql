@@ -4,6 +4,14 @@ query redeemers (
     redeemers(
         limit: $limit
     ) {
+        datum {
+            bytes
+            hash
+            firstIncludedIn {
+                hash
+            }
+            value
+        }
         fee
         index
         purpose

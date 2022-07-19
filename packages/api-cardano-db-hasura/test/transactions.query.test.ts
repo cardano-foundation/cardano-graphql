@@ -148,4 +148,24 @@ describe('transactions', () => {
       expect(result.data).toMatchSnapshot()
     })
   })
+
+  describe('transactions with collateral', () => {
+    it('shows the collateral inputs and outputs', async () => {
+      const result = await client.query({
+        query: await loadQueryNode('transactionsByHashesWithCollateral'),
+        variables: { hashes: ['3fca8f8be6efba69327388dac1d0b37a72f8803ada94f724aa8bbf17b7e38eee'] }
+      })
+      expect(result.data).toMatchSnapshot()
+    })
+  })
+
+  describe('transactions with reference inputs', () => {
+    it('shows the reference inputs', async () => {
+      const result = await client.query({
+        query: await loadQueryNode('transactionsByHashesWithReferenceInputs'),
+        variables: { hashes: ['067e84ddc353faefcbd29f11586d854146b3df43f89b3c1a64a3ff9fbb3c05bd'] }
+      })
+      expect(result.data).toMatchSnapshot()
+    })
+  })
 })

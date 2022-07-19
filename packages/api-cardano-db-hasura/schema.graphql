@@ -66,16 +66,28 @@ type Query {
   cardanoDbMeta: CardanoDbMeta!
   collateralInputs (
     limit: Int
-    order_by: [TransactionInput_order_by!]
+    order_by: [CollateralInput_order_by!]
     offset: Int
-    where: TransactionInput_bool_exp
-  ): [TransactionInput]!
+    where: CollateralInput_bool_exp
+  ): [CollateralInput]!
   collateralInputs_aggregate (
     limit: Int
-    order_by: [TransactionInput_order_by!]
+    order_by: [CollateralInput_order_by!]
     offset: Int
-    where: TransactionInput_bool_exp
-  ): TransactionInput_aggregate!
+    where: CollateralInput_bool_exp
+  ): CollateralInput_aggregate!
+  collateralOutputs (
+    limit: Int
+    order_by: [CollateralOutput_order_by!]
+    offset: Int
+    where: CollateralOutput_bool_exp
+  ): [CollateralOutput]!
+  collateralOutputs_aggregate (
+    limit: Int
+    order_by: [CollateralOutput_order_by!]
+    offset: Int
+    where: CollateralOutput_bool_exp
+  ): CollateralOutput_aggregate!
   delegations (
     limit: Int
     order_by: [Delegation_order_by!]
@@ -467,6 +479,147 @@ type CardanoDbMeta {
   syncPercentage: Percentage!
 }
 
+type CollateralInput {
+  address: String!
+  sourceTransaction: Transaction!
+  sourceTxHash: Hash32Hex!
+  sourceTxIndex: Int!
+  tokens: [Token]!
+  tokens_aggregate: Token_aggregate!
+  transaction: Transaction!
+  txHash: Hash32Hex!
+  value: String!
+}
+
+input CollateralInput_order_by {
+  address: order_by
+  sourceTxHash: order_by
+  transaction: Transaction_order_by
+  txHash: order_by
+  value: order_by
+}
+
+input CollateralInput_bool_exp {
+  _and: [CollateralInput_bool_exp]
+  _not: CollateralInput_bool_exp
+  _or: [CollateralInput_bool_exp]
+  address: text_comparison_exp
+  sourceTransaction: Transaction_bool_exp
+  tokens: Token_bool_exp
+  transaction: Transaction_bool_exp
+  value: text_comparison_exp
+}
+
+type CollateralInput_aggregate {
+  aggregate: TransactionInput_aggregate_fields
+}
+
+type CollateralInput_aggregate_fields {
+  avg: CollateralInput_avg_fields!
+  count: String!
+  max: CollateralInput_max_fields!
+  min: CollateralInput_min_fields!
+  sum: CollateralInput_sum_fields!
+}
+
+type CollateralInput_avg_fields {
+  tokens: Token_avg_fields
+  value: String
+}
+
+type CollateralInput_max_fields {
+  tokens: Token_max_fields
+  value: String
+}
+
+type CollateralInput_min_fields {
+  tokens: Token_min_fields
+  value: String
+}
+
+type CollateralInput_sum_fields {
+  tokens: Token_sum_fields
+  value: String
+}
+
+type CollateralOutput {
+  address: String!
+  addressHasScript: Boolean!
+  datum: Datum
+  index: Int!
+  paymentCredential: Hash28Hex
+  script: Script
+  transaction: Transaction!
+  txHash: Hash32Hex!
+  value: String!
+}
+
+enum CollateralOutput_distinct_on {
+  address
+}
+
+input CollateralOutput_order_by {
+  address: order_by
+  addressHasScript: order_by
+  datum: Transaction_order_by
+  index: order_by
+  txHash: order_by
+  value: order_by
+}
+
+input CollateralOutput_bool_exp {
+  _and: [CollateralOutput_bool_exp]
+  _not: CollateralOutput_bool_exp
+  _or: [CollateralOutput_bool_exp]
+  address: text_comparison_exp
+  addressHasScript: Boolean_comparison_exp
+  datum: Datum_bool_exp
+  index: Int_comparison_exp
+  script: Script_bool_exp
+  transaction: Transaction_bool_exp
+  value: text_comparison_exp
+}
+
+type CollateralOutput_aggregate {
+  aggregate: CollateralOutput_aggregate_fields
+}
+
+type CollateralOutput_aggregate_fields {
+  avg: CollateralOutput_avg_fields!
+  count: String!
+  max: CollateralOutput_max_fields!
+  min: CollateralOutput_min_fields!
+  sum: CollateralOutput_sum_fields!
+}
+
+type CollateralOutput_avg_fields {
+  value: String
+}
+
+type CollateralOutput_max_fields {
+  value: String
+}
+
+type CollateralOutput_min_fields {
+  value: String
+}
+
+type CollateralOutput_sum_fields {
+  value: String
+}
+
+type Datum {
+  bytes: Hex!
+  hash: Hash32Hex!
+  firstIncludedIn: Transaction!
+  value: JSONObject!
+}
+
+input Datum_bool_exp {
+  firstIncludedIn: Transaction_bool_exp
+  hash: Hex_comparison_exp
+}
+
 type Delegation {
   address: StakeAddress!
   redeemer: Redeemer
@@ -522,7 +675,8 @@ type PaymentAddressSummary {
 }
 
 type Redeemer {
-  fee: BigInt!
+  datum: Datum
+  fee: BigInt
   index: Int!
   purpose: String! # Todo: Make scalar
   scriptHash: Hash28Hex!
@@ -571,6 +725,7 @@ input Redeemer_bool_exp {
   _and: [Redeemer_bool_exp]
   _not: Redeemer_bool_exp
   _or: [Redeemer_bool_exp]
+  datum: Datum_bool_exp
   fee: BigInt_comparison_exp
   index: Int_comparison_exp
   purpose: text_comparison_exp
@@ -1132,7 +1287,30 @@ type TokenMint_sum_fields {
 type Transaction {
   block: Block
   blockIndex: Int!
-  collateral: [TransactionInput]
+  collateralInputs(
+    limit: Int
+    order_by: [CollateralInput_order_by]
+    offset: Int
+    where: CollateralInput_bool_exp
+  ): [CollateralInput]
+  collateralInputs_aggregate (
+    limit: Int
+    order_by: [CollateralInput_order_by]
+    offset: Int
+    where: CollateralInput_bool_exp
+  ): CollateralInput_aggregate!
+  collateralOutputs(
+    limit: Int
+    order_by: [CollateralOutput_order_by]
+    offset: Int
+    where: CollateralOutput_bool_exp
+  ): [CollateralOutput]
+  collateralOutputs_aggregate (
+    limit: Int
+    order_by: [CollateralOutput_order_by]
+    offset: Int
+    where: CollateralOutput_bool_exp
+  ): CollateralOutput_aggregate!
   deposit: BigInt!
   fee: BigInt!
   hash: Hash32Hex!
@@ -1176,6 +1354,18 @@ type Transaction {
     where: TransactionOutput_bool_exp
   ): TransactionOutput_aggregate!
   redeemers: [Redeemer]
+  referenceInputs (
+    limit: Int
+    order_by: [TransactionInput_order_by]
+    offset: Int
+    where: TransactionInput_bool_exp
+  ): [TransactionInput!]!
+  referenceInputs_aggregate (
+    limit: Int
+    order_by: [TransactionInput_order_by]
+    offset: Int
+    where: TransactionInput_bool_exp
+  ): TransactionInput_aggregate!
   scripts: [Script]
   scriptSize: Int!
   size: BigInt!
@@ -1364,7 +1554,10 @@ input TransactionMetadata_bool_exp {
 type TransactionOutput {
   address: String!
   addressHasScript: Boolean!
+  datum: Datum
   index: Int!
+  paymentCredential: Hash28Hex
+  script: Script
   transaction: Transaction!
   txHash: Hash32Hex!
   tokens: [Token!]!
@@ -1379,6 +1572,7 @@ enum TransactionOutput_distinct_on {
 input TransactionOutput_order_by {
   address: order_by
   addressHasScript: order_by
+  datum: Transaction_order_by
   index: order_by
   txHash: order_by
   value: order_by
@@ -1390,7 +1584,9 @@ input TransactionOutput_bool_exp {
   _or: [TransactionOutput_bool_exp]
   address: text_comparison_exp
   addressHasScript: Boolean_comparison_exp
+  datum: Datum_bool_exp
   index: Int_comparison_exp
+  script: Script_bool_exp
   tokens: Token_bool_exp
   transaction: Transaction_bool_exp
   value: text_comparison_exp

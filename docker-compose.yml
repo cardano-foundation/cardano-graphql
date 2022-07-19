@@ -43,14 +43,13 @@ services:
       - node-db:/db
       - node-ipc:/ipc
 
-  cardano-db-sync-extended:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.0.0}
+  cardano-db-sync:
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.0.1}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket"
     ]
     environment:
-      - EXTENDED=true
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}

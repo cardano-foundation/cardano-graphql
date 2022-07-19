@@ -1,0 +1,32 @@
+query getFirstUtxoWithPlutus {
+    utxos (
+        limit: 1,
+        where: {
+            _and: {
+                script: { transaction: { block: { number: { _is_null: false }}}},
+                datum: { firstIncludedIn: { block: { number: { _is_null: false }}}}
+            }
+        }) {
+        address
+        datum {
+            bytes
+            firstIncludedIn {
+                hash
+            }
+            hash
+        }
+        script {
+            hash
+            serialisedSize
+            transaction {
+                hash
+            }
+            type
+        }
+        transaction {
+            block {
+                number
+            }
+        }
+    }
+}

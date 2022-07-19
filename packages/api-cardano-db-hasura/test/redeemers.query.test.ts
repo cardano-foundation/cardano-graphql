@@ -22,6 +22,11 @@ describe('redeemers', () => {
         limit: 1
       }
     })
+    expect(result.data.redeemers[0].datum).not.toBeNull()
+    expect(result.data.redeemers[0].datum.bytes).not.toBeNull()
+    expect(result.data.redeemers[0].datum.hash).not.toBeNull()
+    expect(result.data.redeemers[0].datum.firstIncludedIn.hash).not.toBeNull()
+    expect(result.data.redeemers[0].datum.value).not.toBeNull()
     expect(result.data.redeemers[0].fee).not.toBeNull()
     expect(result.data.redeemers[0].index).not.toBeNull()
     expect(result.data.redeemers[0].purpose).not.toBeNull()

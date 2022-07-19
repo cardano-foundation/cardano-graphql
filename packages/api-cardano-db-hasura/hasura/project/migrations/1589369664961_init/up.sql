@@ -58,7 +58,7 @@ CREATE OR REPLACE VIEW "Cardano" AS
   ORDER BY block.block_no DESC
  LIMIT 1;
  
-CREATE OR REPLACE VIEW "Collateral" AS
+CREATE OR REPLACE VIEW "CollateralInput" AS
 SELECT
   source_tx_out.address,
   source_tx_out.value,
@@ -75,6 +75,21 @@ JOIN tx_out AS source_tx_out
   AND collateral_tx_in.tx_out_index = source_tx_out.index
 JOIN tx AS source_tx
   ON source_tx_out.tx_id = source_tx.id;
+
+CREATE OR REPLACE VIEW "CollateralOutput" AS
+SELECT
+  address,
+  collateral_tx_out.address_has_script AS "addressHasScript",
+  value,
+  tx.hash AS "txHash",
+  collateral_tx_out.id,
+  index,
+  collateral_tx_out.inline_datum_id AS "inline_datum_id",
+  collateral_tx_out.reference_script_id AS "reference_script_id",
+  collateral_tx_out.payment_cred AS "paymentCredential"
+FROM tx
+JOIN collateral_tx_out
+  ON tx.id = collateral_tx_out.tx_id;
 
 CREATE OR REPLACE VIEW "Delegation" AS
 SELECT
@@ -98,6 +113,24 @@ SELECT
   epoch.blk_count AS "blocksCount"
 FROM epoch
   LEFT JOIN epoch_param on epoch.no = epoch_param.epoch_no;
+
+CREATE OR REPLACE VIEW "Datum" AS
+SELECT
+  bytes,
+  hash,
+  id,
+  tx_id,
+  value
+FROM datum;
+
+CREATE OR REPLACE VIEW "RedeemerDatum" AS
+SELECT
+  bytes,
+  hash,
+  id,
+  tx_id,
+  value
+FROM redeemer_data;
 
 CREATE OR REPLACE VIEW "ProtocolParams" AS
 SELECT
@@ -143,8 +176,27 @@ SELECT
   redeemer.script_hash AS "scriptHash",
   redeemer.tx_id AS "txId",
   redeemer.unit_mem AS "unitMem",
-  redeemer.unit_steps AS "unitSteps"
+  redeemer.unit_steps AS "unitSteps",
+  redeemer.redeemer_data_id AS "redeemer_datum_id"
 FROM redeemer;
+
+CREATE OR REPLACE VIEW "ReferenceInput" AS
+SELECT
+  source_tx_out.address,
+  source_tx_out.value,
+  tx.hash AS "txHash",
+  source_tx.hash AS "sourceTxHash",
+  reference_tx_in.tx_out_index AS "sourceTxIndex",
+  source_tx_out.id AS source_tx_out_id
+FROM
+  tx
+JOIN reference_tx_in
+  ON reference_tx_in.tx_in_id = tx.id
+JOIN tx_out AS source_tx_out
+  ON reference_tx_in.tx_out_id = source_tx_out.tx_id
+  AND reference_tx_in.tx_out_index = source_tx_out.index
+JOIN tx AS source_tx
+  ON source_tx_out.tx_id = source_tx.id;
 
 CREATE OR REPLACE VIEW "Reward" AS
 SELECT
@@ -160,6 +212,7 @@ JOIN stake_address on reward.addr_id = stake_address.id;
 CREATE OR REPLACE VIEW "Script" AS
 SELECT
   script.hash AS "hash",
+  script.id AS "id",
   script.serialised_size AS "serialisedSize",
   script.type AS "type",
   script.tx_id AS "txId"
@@ -317,7 +370,10 @@ SELECT
   value,
   tx.hash AS "txHash",
   tx_out.id,
-  index
+  index,
+  tx_out.inline_datum_id AS "inline_datum_id",
+  tx_out.reference_script_id AS "reference_script_id",
+  tx_out.payment_cred AS "paymentCredential"
 FROM tx
 JOIN tx_out
   ON tx.id = tx_out.tx_id;
@@ -328,7 +384,9 @@ CREATE OR REPLACE VIEW "Utxo" AS SELECT
   value,
   tx.hash AS "txHash",
   tx_out.id,
-  index
+  index,
+  tx_out.inline_datum_id AS "inline_datum_id",
+  tx_out.reference_script_id AS "reference_script_id"
 FROM tx
 JOIN tx_out
   ON tx.id = tx_out.tx_id
@@ -367,25 +425,3 @@ CREATE INDEX IF NOT EXISTS idx_tx_in_consuming_tx
 
 CREATE INDEX IF NOT EXISTS idx_tx_out_tx
     ON tx_out(tx_id);
-
-CREATE function utxo_set_at_block("hash" hash32type)
-RETURNS SETOF "TransactionOutput" AS $$
-  SELECT
-    "TransactionOutput".address,
-    "TransactionOutput"."addressHasScript",
-    "TransactionOutput".value,
-    "TransactionOutput"."txHash",
-    "TransactionOutput"."id",
-    "TransactionOutput".index
-  FROM tx
-  JOIN tx_out
-    ON tx.id = tx_out.tx_id
-  JOIN "TransactionOutput"
-    ON tx.hash = "TransactionOutput"."txHash"
-  LEFT OUTER JOIN tx_in
-    ON tx_out.tx_id = tx_in.tx_out_id
-    AND tx_out.index = tx_in.tx_out_index
-  WHERE tx_in.tx_in_id IS NULL
-  AND tx.block_id <= (SELECT id FROM block WHERE hash = "hash")
-$$ LANGUAGE SQL stable;
-

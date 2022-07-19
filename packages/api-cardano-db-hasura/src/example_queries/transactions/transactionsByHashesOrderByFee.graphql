@@ -9,7 +9,7 @@ query transactionsByHashes(
             number
         }
         blockIndex
-        collateral {
+        collateralInputs {
             value
         }
         deposit
@@ -32,6 +32,7 @@ query transactionsByHashes(
             index
             address
             addressHasScript
+            paymentCredential
             value
         }
         outputs_aggregate {

@@ -286,6 +286,34 @@ export async function buildSchema (
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'collateralInputs_aggregate')
         },
+        collateralOutputs: {
+          resolve: (_root, args, context, info) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'collateralOutputs',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'collateralOutputs')
+        },
+        collateralOutputs_aggregate: {
+          resolve: (_root, args, context, info) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'collateralOutputs_aggregate',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'collateralOutputs_aggregate')
+        },
         delegations: {
           resolve: (_root, args, context, info) => {
             return delegateToSchema({

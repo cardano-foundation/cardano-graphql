@@ -1,0 +1,89 @@
+query transactionsByHashesWithCollateral(
+    $hashes: [Hash32Hex]!
+) {
+    transactions(
+        where: { hash: { _in: $hashes }},
+        order_by: { hash: desc }
+    ) {
+        hash
+        collateralInputs(order_by: { sourceTxHash: asc }) {
+            address
+            sourceTransaction {
+                hash
+            }
+            sourceTxHash
+            sourceTxIndex
+            tokens {
+                asset {
+                    assetId
+                }
+                quantity
+                transactionOutput {
+                    value
+                }
+            }
+            tokens_aggregate {
+                aggregate {
+                    sum {
+                        quantity
+                    }
+                }
+            }
+            value
+        }
+        collateralInputs_aggregate(order_by: { sourceTxHash: asc }) {
+            aggregate {
+                avg {
+                    value
+                }
+                count
+                max {
+                    value
+                }
+                min {
+                    value
+                }
+                sum {
+                    value
+                }
+            }
+        }
+        collateralOutputs(order_by: { index: asc }) {
+            address
+            addressHasScript
+            datum {
+                bytes
+                hash
+                firstIncludedIn {
+                    hash
+                }
+                value
+            }
+            index
+            paymentCredential
+            script {
+                hash
+                serialisedSize
+            }
+            value
+
+        }
+        collateralOutputs_aggregate(order_by: { index: asc }) {
+            aggregate {
+                avg {
+                    value
+                }
+                count
+                max {
+                    value
+                }
+                min {
+                    value
+                }
+                sum {
+                    value
+                }
+            }
+        }
+    }
+}

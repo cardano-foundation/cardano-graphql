@@ -3,11 +3,15 @@ DROP VIEW IF EXISTS
   "ActiveStake",
   "Block",
   "Cardano",
-  "Collateral",
+  "CollateralInput",
+  "CollateralOutput",
+  "Datum",
   "Delegation",
   "Epoch",
   "ProtocolParams",
   "Redeemer",
+  "RedeemerDatum",
+  "ReferenceInput",
   "Reward",
   "Script",
   "SlotLeader",
@@ -23,4 +27,3 @@ DROP VIEW IF EXISTS
   "TransactionOutput",
   "Utxo",
   "Withdrawal" CASCADE;
-DROP FUNCTION IF EXISTS utxo_set_at_block CASCADE;
