@@ -423,5 +423,3 @@ CREATE INDEX IF NOT EXISTS idx_tx_hash
 CREATE INDEX IF NOT EXISTS idx_tx_in_consuming_tx
    ON tx_in(tx_out_id);
 
-CREATE INDEX IF NOT EXISTS idx_tx_out_tx
-    ON tx_out(tx_id);
