@@ -1,1 +1,0 @@
-# Cardano GraphQL - chain-follower
