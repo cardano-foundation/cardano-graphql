@@ -23,14 +23,31 @@ case "$NETWORK" in
             OGMIOS_PORT=1338
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
+            export CARDANO_NODE_VERSION=1.35.2
             ;;
-        alonzo-qa)
+        preprod)
             API_PORT=3102
             HASURA_PORT=8092
             METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
             OGMIOS_PORT=1339
             PG_ADMIN_PORT=8444
             POSTGRES_PORT=5444
+            ;;
+        preview)
+            API_PORT=3103
+            HASURA_PORT=8093
+            METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
+            OGMIOS_PORT=1340
+            PG_ADMIN_PORT=8445
+            POSTGRES_PORT=5445
+            ;;
+        vasil-dev)
+            API_PORT=3104
+            HASURA_PORT=8094
+            METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
+            OGMIOS_PORT=1341
+            PG_ADMIN_PORT=8446
+            POSTGRES_PORT=5446
             ;;
 esac
 
