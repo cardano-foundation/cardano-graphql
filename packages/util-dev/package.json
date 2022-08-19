@@ -1,6 +1,6 @@
 {
   "name": "@cardano-graphql/util-dev",
-  "version": "6.2.0",
+  "version": "7.0.0",
   "description": "Common development utilities",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/util-dev/README.md",
   "devDependencies": {
-    "@cardano-graphql/util": "6.2.0",
+    "@cardano-graphql/util": "7.0.0",
     "shx": "^0.3.2"
   },
   "directories": {
