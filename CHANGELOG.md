@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [7.0.0](https://github.com/input-output-hk/cardano-graphql/compare/6.2.0...7.0.0) (2022-08-19)
+
+### Compatible with:
+
+- [`cardano-node`: `1.35.3`](https://github.com/input-output-hk/cardano-node/releases/tag/1.35.3)
+- [`cardano-ogmios`: `v5.5.5`](https://github.com/CardanoSolutions/ogmios/releases/tag/v5.5.5)
+- [`cardano-db-sync`: `13.0.4`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/13.0.4) - Note: The database must be recreated using the new version.
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### ⚠ BREAKING CHANGES
+
+* collateral outputs
+* add ProtocolParams type to better represent current protocol params
+* remove remnants of previously deprecated config
+* Reward.receivedIn nullability
+* `Reward.stakePool` is now nullable to handle rewards of type
+  `treasury` or `reserves`.
+
+### Features
+
+* add `TransactionOutput`|`CollateralOutput`.`paymentCredential` ([e6e2d45](https://github.com/input-output-hk/cardano-graphql/commit/e6e2d45cdd4c82f40495c39197f3ef79a287add2))
+* add Transaction.referenceInputs ([2c5e0b5](https://github.com/input-output-hk/cardano-graphql/commit/2c5e0b5409c783805ec8e0795f322bd1a3d154f7))
+* collateral outputs ([a222cb4](https://github.com/input-output-hk/cardano-graphql/commit/a222cb4305b6d3bbd96c1bf82d0252baa09f1af4))
+* support Babbage block ([fe484e1](https://github.com/input-output-hk/cardano-graphql/commit/fe484e1a607a61ac413df7736490ea0d6644c1e5))
+* support Plutus data ([58f6c48](https://github.com/input-output-hk/cardano-graphql/commit/58f6c48e5786ab97027c1c4ba2ae8a5554035408))
+* remove remnants of previously deprecated config ([c3fc2aa](https://github.com/input-output-hk/cardano-graphql/commit/c3fc2aabe0d29e50393906b2aa5947de9b6b0fc1))
+* update to Ogmios v5.5.0 cardano-db-sync 13.0.0 ([b821f21](https://github.com/input-output-hk/cardano-graphql/commit/b821f21ade1f1365f1fd4b4012bbb2c982a1fe9a))
+
+
+### Bug Fixes
+
+* `Redeemer.fee` is nullable in the Babbage era ([813a7ae](https://github.com/input-output-hk/cardano-graphql/commit/813a7ae55b87a9c651cc7cb9e7e4e2141877e6fd))
+* add ProtocolParams type to better represent current protocol params ([73cf785](https://github.com/input-output-hk/cardano-graphql/commit/73cf785d266568b4f1c19025a025a22e228c9d7a))
+* **api-cardano-db-hasura:** define response as optional in metadata server errors ([ca5d556](https://github.com/input-output-hk/cardano-graphql/commit/ca5d556bcf0c2bd0b022ee3c293851b7ddd8f6f7))
+* **cli:** correct services option ([f600d31](https://github.com/input-output-hk/cardano-graphql/commit/f600d31028afe9d3452855be3e8638d56488e4f1))
+* gracefully shutdown cardano-db-sync ([2f02e56](https://github.com/input-output-hk/cardano-graphql/commit/2f02e562b26818e8c57ca1fde08a30daf3c4d436)), closes [/github.com/CardanoSolutions/ogmios/blob/c32341e56ccbeb1cf1e803d4607699668a1e2cc2/Dockerfile#L73](https://github.com/input-output-hk//github.com/CardanoSolutions/ogmios/blob/c32341e56ccbeb1cf1e803d4607699668a1e2cc2/Dockerfile/issues/L73)
+* Reward.receivedIn nullability ([9a3dcf5](https://github.com/input-output-hk/cardano-graphql/commit/9a3dcf538fb6878cb1977f308adb3aa8322408f6))
+* trim whitespace from credentials in server config ([b40a596](https://github.com/input-output-hk/cardano-graphql/commit/b40a5960c9c312141618c77106457d6bae1eeb87))
+
+
 ## [6.2.0](https://github.com/input-output-hk/cardano-graphql/compare/6.1.0...6.2.0) (2022-01-26)
 
 ### Compatible with:

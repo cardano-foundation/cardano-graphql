@@ -1,6 +1,6 @@
 {
   "name": "@cardano-graphql/client-ts",
-  "version": "6.2.0",
+  "version": "7.0.0",
   "description": "A client package for Cardano GraphQL, including the GraphQL schema and TypeScript definitions generated from it",
   "repository": {
     "type": "git",
