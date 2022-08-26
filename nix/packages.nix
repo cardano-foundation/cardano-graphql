@@ -17,7 +17,7 @@ let
       ];
     });
     vgo2nix = pkgs.vgo2nix;
-    hasuraHaskellPackages = pkgs.haskell.packages.ghc8102.override {
+    hasuraHaskellPackages = pkgs.haskell.packages.ghc8107.override {
       overrides = import ./graphql-engine/hs-overlay.nix { inherit (pkgs) haskell sources postgresql openssl; };
     };
     graphql-engine = pkgs.haskell.lib.justStaticExecutables self.hasuraHaskellPackages.graphql-engine;
