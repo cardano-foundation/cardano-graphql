@@ -10,11 +10,11 @@ let
       src = pkgs.sources.graphql-engine;
       name = "hasura-${version}";
       version = "1.3.3";
-      buildFlagsArray = [''-ldflags=
-        -X github.com/hasura/graphql-engine/cli/version.BuildVersion=${version}
-        -s
-        -w
-      ''];
+      ldflags= [
+        "-X github.com/hasura/graphql-engine/cli/version.BuildVersion=${version}"
+        "-s"
+        "-w"
+      ];
     });
     vgo2nix = pkgs.vgo2nix;
     hasuraHaskellPackages = pkgs.haskell.packages.ghc8102.override {
