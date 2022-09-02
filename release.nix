@@ -27,7 +27,7 @@ lib.fix (self: {
   required = releaseTools.aggregate {
     name = "required";
     constituents = with self; [
-      cardano-graphql
+      self.cardano-graphql
       graphql-engine
       hasura-cli
       hasura-cli-ext
