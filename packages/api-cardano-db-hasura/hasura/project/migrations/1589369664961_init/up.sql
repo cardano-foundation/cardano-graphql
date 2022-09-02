@@ -55,7 +55,7 @@ CREATE OR REPLACE VIEW "Cardano" AS
     block.epoch_no AS "currentEpochNo"
    FROM block
   WHERE (block.block_no IS NOT NULL)
-  ORDER BY block.block_no DESC
+  ORDER BY block.id DESC
  LIMIT 1;
  
 CREATE OR REPLACE VIEW "CollateralInput" AS
@@ -268,11 +268,10 @@ FROM pool_update AS pool
 CREATE OR REPLACE VIEW "StakePoolOwner" AS
 SELECT
   stake_address.hash_raw as "hash",
-  pool_hash.id as "pool_hash_id"
+  pool_update.hash_id as "pool_hash_id"
 FROM pool_owner
-  LEFT JOIN stake_address ON pool_owner.addr_id = stake_address.id
-  LEFT JOIN pool_update ON pool_owner.pool_update_id = pool_update.id
-  LEFT JOIN pool_hash ON pool_update.hash_id = pool_hash.id;
+JOIN stake_address ON stake_address.id = pool_owner.addr_id
+JOIN pool_update ON pool_owner.pool_update_id = pool_update.id;
 
 CREATE OR REPLACE VIEW "StakePoolRetirement" AS
 SELECT
