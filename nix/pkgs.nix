@@ -14,9 +14,14 @@ let
       sources.nixpkgs)
     else (import sources.iohk-nix {}).nixpkgs;
 
+  nixpkgs2205 = import sources."nixpkgs-22.05" {
+    inherit system crossSystem config;
+  };
+
   overlay = self: super: {
-    packages = self.callPackages ./packages.nix {};
-    nodejs = super.nodejs-14_x;
+    packages = self.callPackages ./packages.nix { };
+    #nodejs = super.nodejs-14_x;
+    nodejs = nixpkgs2205.nodejs-16_x;
     inherit sources;
   };
   pkgs = import nixpkgs {

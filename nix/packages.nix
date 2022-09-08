@@ -5,7 +5,7 @@ let
     nix-inclusive = pkgs.callPackage "${pkgs.sources.nix-inclusive}/inclusive.nix" {};
     cardano-graphql = self.callPackage ./cardano-graphql.nix {};
     hasura-cli-ext = self.callPackage ./hasura-cli-ext/impure.nix {};
-    persistgraphql = (self.callPackage ./persistgraphql {}).persistgraphql;
+    persistgraphql = (self.callPackage ./persistgraphql { nodejs = pkgs.nodejs-14_x; }).persistgraphql;
     hasura-cli = pkgs.hasura-cli.overrideAttrs (_: rec {
       src = pkgs.sources.graphql-engine;
       name = "hasura-${version}";

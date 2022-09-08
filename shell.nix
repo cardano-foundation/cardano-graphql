@@ -21,7 +21,7 @@ let
       nodejs                 # Event-driven I/O framework for the V8 JavaScript engine
       packages.cardano-graphql
       pkgconfig              # Allows packages to find out information about other packages
-      persistgraphql
+      packages.persistgraphql
       hasura-cli
       python                 # The Python Programming language
       tmux                   # Terminal multiplexer
