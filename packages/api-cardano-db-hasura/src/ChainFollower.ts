@@ -1,7 +1,6 @@
 import {
   ChainSync,
   createChainSyncClient,
-  createInteractionContext,
   isAlonzoBlock,
   isBabbageBlock,
   isMaryBlock,
@@ -13,6 +12,7 @@ import util, { assetFingerprint, errors, RunnableModuleState } from '@cardano-gr
 import { HasuraClient } from './HasuraClient'
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'
+import { createInteractionContextWithLogger } from './util'
 
 const MODULE_NAME = 'ChainFollower'
 
@@ -38,16 +38,7 @@ export class ChainFollower {
     this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing')
     await pRetry(async () => {
-      const context = await createInteractionContext(
-        this.logger.error,
-        (code, reason) => {
-          this.logger.error({ module: MODULE_NAME, code }, reason)
-        },
-        {
-          connection: ogmiosConfig,
-          interactionType: 'LongRunning'
-        }
-      )
+      const context = await createInteractionContextWithLogger(ogmiosConfig, this.logger, MODULE_NAME)
       this.chainSyncClient = await createChainSyncClient(
         context,
         {
