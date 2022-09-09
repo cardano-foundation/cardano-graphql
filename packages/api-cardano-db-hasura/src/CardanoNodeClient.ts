@@ -2,7 +2,8 @@ import { AssetSupply, Transaction } from './graphql_types'
 import pRetry from 'p-retry'
 import util, { DataFetcher, errors, ModuleState } from '@cardano-graphql/util'
 import {
-  ConnectionConfig, createConnectionObject, createInteractionContext,
+  ConnectionConfig,
+  createConnectionObject,
   createStateQueryClient,
   createTxSubmissionClient,
   getServerHealth,
@@ -12,6 +13,7 @@ import {
   TxSubmission
 } from '@cardano-ogmios/client'
 import { dummyLogger, Logger } from 'ts-log'
+import { createInteractionContextWithLogger } from './util'
 
 const MODULE_NAME = 'CardanoNodeClient'
 
@@ -61,28 +63,10 @@ export class CardanoNodeClient {
     await pRetry(async () => {
       await this.serverHealthFetcher.initialize()
       this.stateQueryClient = await createStateQueryClient(
-        await createInteractionContext(
-          (error) => {
-            this.logger.error({ module: MODULE_NAME, error: error.name }, error.message)
-          },
-          this.logger.info,
-          {
-            connection: ogmiosConnectionConfig,
-            interactionType: 'LongRunning'
-          }
-        )
+        await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME)
       )
       this.txSubmissionClient = await createTxSubmissionClient(
-        await createInteractionContext(
-          (error) => {
-            this.logger.error({ module: MODULE_NAME, error: error.name }, error.message)
-          },
-          this.logger.info,
-          {
-            connection: ogmiosConnectionConfig,
-            interactionType: 'LongRunning'
-          }
-        )
+        await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME)
       )
     }, {
       factor: 1.2,
