@@ -44,6 +44,7 @@ services:
     volumes:
       - node-db:/db
       - node-ipc:/ipc
+      - ./config/network/${NETWORK:-mainnet}:/config
 
   cardano-db-sync:
     image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.0.4}
