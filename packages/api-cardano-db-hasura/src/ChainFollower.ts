@@ -38,7 +38,10 @@ export class ChainFollower {
     this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing')
     await pRetry(async () => {
-      const context = await createInteractionContextWithLogger(ogmiosConfig, this.logger, MODULE_NAME)
+      const context = await createInteractionContextWithLogger(ogmiosConfig, this.logger, MODULE_NAME, async () => {
+        await this.shutdown()
+        await this.initialize(ogmiosConfig)
+      })
       this.chainSyncClient = await createChainSyncClient(
         context,
         {
@@ -122,7 +125,7 @@ export class ChainFollower {
     this.logger.info({ module: MODULE_NAME }, 'Shutting down')
     await this.chainSyncClient.shutdown()
     await this.queue.stop()
-    this.state = 'initialized'
+    this.state = null
     this.logger.info(
       { module: MODULE_NAME },
       'Shutdown complete')

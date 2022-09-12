@@ -1,16 +1,17 @@
 import { ConnectionConfig, createInteractionContext } from '@cardano-ogmios/client'
 import { Logger } from 'ts-log'
 
-export const createInteractionContextWithLogger = (connection: ConnectionConfig, logger: Logger, module: string) =>
+export const createInteractionContextWithLogger = (connection: ConnectionConfig, logger: Logger, module: string, onClose?: () => Promise<void>) =>
   createInteractionContext(
     (error) => {
       logger.error({ module, error }, error.message)
     },
-    (code, reason) => {
-      if (code === 1006) {
-        logger.error({ module, code }, 'Connection was closed abnormally')
-      } else {
+    async (code, reason) => {
+      if (code === 1000) {
         logger.info({ module, code }, reason)
+      } else {
+        logger.error({ module, code }, 'Connection closed')
+        await onClose?.()
       }
     },
     {
