@@ -62,11 +62,15 @@ export class CardanoNodeClient {
     )
     await pRetry(async () => {
       await this.serverHealthFetcher.initialize()
+      const onClose = async () => {
+        await this.shutdown()
+        await this.initialize(ogmiosConnectionConfig)
+      }
       this.stateQueryClient = await createStateQueryClient(
-        await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME)
+        await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME, onClose)
       )
       this.txSubmissionClient = await createTxSubmissionClient(
-        await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME)
+        await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME, onClose)
       )
     }, {
       factor: 1.2,
@@ -86,6 +90,7 @@ export class CardanoNodeClient {
       this.stateQueryClient.shutdown,
       this.txSubmissionClient.shutdown
     ])
+    this.state = null
   }
 
   public async submitTransaction (transaction: string): Promise<Transaction['hash']> {
