@@ -57,7 +57,7 @@ ENV \
   POSTGRES_USER_FILE=/run/secrets/postgres_user
 WORKDIR /src
 
-FROM ubuntu-nodejs as server
+FROM ubuntu-nodejs as db-manager
 ARG NETWORK=mainnet
 ARG METADATA_SERVER_URI="https://tokens.cardano.org"
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
@@ -66,19 +66,37 @@ RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/key
   ca-certificates
 COPY --from=downloader /usr/local/bin/hasura /usr/local/bin/hasura
 ENV \
-  CARDANO_NODE_CONFIG_PATH=/config/cardano-node/config.json \
   HASURA_CLI_PATH=/usr/local/bin/hasura \
-  HASURA_GRAPHQL_ENABLE_TELEMETRY=false \
   HASURA_URI="http://hasura:8080" \
   LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
-  METADATA_SERVER_URI=${METADATA_SERVER_URI} \
-  NETWORK=${NETWORK} \
-  OGMIOS_HOST="cardano-node-ogmios" \
   POSTGRES_DB_FILE=/run/secrets/postgres_db \
   POSTGRES_HOST=postgres \
   POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password \
   POSTGRES_PORT=5432 \
   POSTGRES_USER_FILE=/run/secrets/postgres_user
+COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/dist /app/packages/api-cardano-db-hasura/dist
+COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/hasura/project /app/packages/api-cardano-db-hasura/hasura/project
+COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/package.json /app/packages/api-cardano-db-hasura/package.json
+COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/schema.graphql /app/packages/api-cardano-db-hasura/schema.graphql
+COPY --from=cardano-graphql-builder /app/packages/util/dist /app/packages/util/dist
+COPY --from=cardano-graphql-builder /app/packages/util/package.json /app/packages/util/package.json
+COPY --from=cardano-graphql-production-deps /app/node_modules /app/node_modules
+COPY --from=cardano-graphql-production-deps /app/packages/api-cardano-db-hasura/node_modules /app/packages/api-cardano-db-hasura/node_modules
+WORKDIR /app/packages/api-cardano-db-hasura/dist
+CMD ["node", "db-manager/run.js"]
+
+FROM ubuntu-nodejs as server
+ARG NETWORK=mainnet
+ARG METADATA_SERVER_URI="https://tokens.cardano.org"
+COPY --from=downloader /usr/local/bin/hasura /usr/local/bin/hasura
+ENV \
+  CARDANO_NODE_CONFIG_PATH=/config/cardano-node/config.json \
+  HASURA_GRAPHQL_ENABLE_TELEMETRY=false \
+  HASURA_URI="http://hasura:8080" \
+  LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
+  METADATA_SERVER_URI=${METADATA_SERVER_URI} \
+  NETWORK=${NETWORK} \
+  OGMIOS_HOST="cardano-node-ogmios"
 COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/dist /app/packages/api-cardano-db-hasura/dist
 COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/hasura/project /app/packages/api-cardano-db-hasura/hasura/project
 COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/package.json /app/packages/api-cardano-db-hasura/package.json

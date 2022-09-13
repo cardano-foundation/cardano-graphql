@@ -14,9 +14,6 @@ export async function getConfig (): Promise<Config> {
   if (!env.cardanoNodeConfigPath) {
     throw new MissingConfig('CARDANO_NODE_CONFIG_PATH env not set')
   }
-  if (!env.hasuraCliPath) {
-    throw new MissingConfig('HASURA_CLI_PATH env not set')
-  }
   if (!env.hasuraUri) {
     throw new MissingConfig('HASURA_URI env not set')
   }
@@ -79,7 +76,6 @@ function filterAndTypecastEnvs (env: any) {
     ASSET_METADATA_UPDATE_INTERVAL,
     CACHE_ENABLED,
     CARDANO_NODE_CONFIG_PATH,
-    HASURA_CLI_PATH,
     HASURA_URI,
     LISTEN_ADDRESS,
     LOGGER_MIN_SEVERITY,
@@ -107,7 +103,6 @@ function filterAndTypecastEnvs (env: any) {
     apiPort: Number(API_PORT),
     cacheEnabled: CACHE_ENABLED === 'true',
     cardanoNodeConfigPath: CARDANO_NODE_CONFIG_PATH,
-    hasuraCliPath: HASURA_CLI_PATH,
     hasuraUri: HASURA_URI,
     listenAddress: LISTEN_ADDRESS,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
