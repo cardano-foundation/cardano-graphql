@@ -23,7 +23,7 @@ export class Db {
     onDbInit,
     onDbSetup
   }: {
-    onDbInit: () => void,
+    onDbInit?: () => void,
     onDbSetup: () => void
   }): Promise<void> {
     if (this.state !== null) return

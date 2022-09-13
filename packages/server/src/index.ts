@@ -7,7 +7,6 @@ import {
   ByronGenesis,
   CardanoNodeClient,
   ChainFollower,
-  Db,
   Genesis,
   HasuraClient,
   MetadataClient,
@@ -50,12 +49,10 @@ export * from './config'
       logger
     )
     const hasuraClient = new HasuraClient(
-      config.hasuraCliPath,
       config.hasuraUri,
       config.pollingInterval.adaSupply,
       logger
     )
-    const db = new Db(config.db, logger)
     const chainFollower = new ChainFollower(
       hasuraClient,
       logger,
@@ -83,32 +80,20 @@ export * from './config'
       return mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
     }
     await cardanoNodeClient.initialize(config.ogmios)
-    await db.init({
-      onDbInit: async () => {
-        await Promise.all([
-          hasuraClient.shutdown,
-          worker.shutdown,
-          chainFollower.shutdown
-        ])
-        await server.shutdown()
-      },
-      onDbSetup: async () => {
-        try {
-          await server.init()
-          await hasuraClient.initialize()
-          await metadataClient.initialize()
-          await chainFollower.initialize(config.ogmios, getChainSyncPoints)
-          await worker.start()
-          await chainFollower.start(await getChainSyncPoints())
-          await server.start()
-        } catch (error) {
-          logger.error(error.message)
-          if (error instanceof errors.HostDoesNotExist) {
-            process.exit(1)
-          }
-        }
+    try {
+      await server.init()
+      await hasuraClient.initialize()
+      await metadataClient.initialize()
+      await chainFollower.initialize(config.ogmios, getChainSyncPoints)
+      await worker.start()
+      await chainFollower.start(await getChainSyncPoints())
+      await server.start()
+    } catch (error) {
+      logger.error(error.message)
+      if (error instanceof errors.HostDoesNotExist) {
+        process.exit(1)
       }
-    })
+    }
     onDeath(async () => {
       await Promise.all([
         hasuraClient.shutdown,
@@ -116,7 +101,6 @@ export * from './config'
         worker.shutdown,
         chainFollower.shutdown
       ])
-      await db.shutdown()
       await server.shutdown()
       process.exit(1)
     })

@@ -98,7 +98,29 @@ services:
         max-size: "200k"
         max-file: "10"
 
-  cardano-graphql:
+  db-manager:
+    build:
+      cache_from: [ inputoutput/cardano-graphql-db-manager:latest ]
+      context: .
+      target: db-manager
+    image: inputoutput/cardano-graphql-db-manager:${CARDANO_GRAPHQL_VERSION:-7.0.2}-${NETWORK:-mainnet}
+    depends_on:
+      - "hasura"
+      - "postgres"
+    environment:
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+    restart: on-failure
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  http-server:
     build:
       args:
         - NETWORK=${NETWORK:-mainnet}
@@ -116,10 +138,6 @@ services:
     ports:
       - ${API_PORT:-3100}:3100
     restart: on-failure
-    secrets:
-      - postgres_db
-      - postgres_password
-      - postgres_user
     logging:
       driver: "json-file"
       options:

@@ -114,7 +114,8 @@ your use-case.
 Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=mainnet &&\
-docker pull inputoutput/cardano-graphql:7.0.2-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-server:7.0.2-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-background:7.0.2-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:7.0.2 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
 RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
@@ -128,7 +129,8 @@ docker compose logs -f
 
 ``` console
 export NETWORK=preprod &&\
-docker pull inputoutput/cardano-graphql:7.0.2-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-server:7.0.2-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-background:7.0.2-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:7.0.2 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
 API_PORT=3101 \
@@ -146,7 +148,8 @@ docker compose -p ${NETWORK} logs -f
 
 ``` console
 export NETWORK=preview &&\
-docker pull inputoutput/cardano-graphql:7.0.2-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-server:7.0.2-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-background:7.0.2-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:7.0.2 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
 API_PORT=3102 \

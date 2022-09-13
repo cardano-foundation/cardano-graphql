@@ -1,14 +1,12 @@
-
 export interface Config {
   cardanoNodeConfigPath: string,
-  db: {
-    database: string,
-    host: string,
-    password: string,
-    port: number
-    user: string,
+  db?: {
+    database?: string,
+    host?: string,
+    password?: string,
+    port?: number
+    user?: string,
   },
-  hasuraCliPath: string,
   hasuraUri: string,
   metadataServerUri: string,
   metadataUpdateInterval?: {
