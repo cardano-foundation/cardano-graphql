@@ -1,12 +1,10 @@
 import { Schema } from '@cardano-ogmios/client'
-import { exec } from 'child_process'
 import util, { DataFetcher, ModuleState } from '@cardano-graphql/util'
 import fetch from 'cross-fetch'
 import { DocumentNode, GraphQLSchema, print } from 'graphql'
 import { GraphQLClient, gql } from 'graphql-request'
 import { introspectSchema, wrapSchema } from '@graphql-tools/wrap'
 import pRetry from 'p-retry'
-import path from 'path'
 import {
   AdaPots,
   Asset,
@@ -34,19 +32,16 @@ const withHexPrefix = (value: string) => `\\x${value !== undefined ? value : ''}
 
 export class HasuraClient {
   private client: GraphQLClient
-  private applyingSchemaAndMetadata: boolean
   public adaPotsToCalculateSupplyFetcher: DataFetcher<AdaPotsToCalculateSupply>
   private state: ModuleState
   public schema: GraphQLSchema
 
   constructor (
-    readonly hasuraCliPath: string,
     readonly hasuraUri: string,
     pollingInterval: number,
     private logger: Logger = dummyLogger
   ) {
     this.state = null
-    this.applyingSchemaAndMetadata = false
     this.adaPotsToCalculateSupplyFetcher = new DataFetcher<AdaPotsToCalculateSupply>(
       'AdaPotsToCalculateSupply',
       () => {
@@ -123,26 +118,10 @@ export class HasuraClient {
     }
   }
 
-  private async hasuraCli (command: string) {
-    return new Promise((resolve, reject) => {
-      exec(
-        `${this.hasuraCliPath} --skip-update-check --project ${path.resolve(__dirname, '..', 'hasura', 'project')} --endpoint ${this.hasuraUri} ${command}`,
-        (error, stdout) => {
-          if (error) {
-            reject(error)
-          }
-          this.logger.debug({ module: 'HasuraClient' }, stdout)
-          resolve()
-        }
-      )
-    })
-  }
-
   public async initialize () {
     if (this.state !== null) return
     this.state = 'initializing'
     this.logger.info({ module: 'HasuraClient' }, 'Initializing')
-    await this.applySchemaAndMetadata()
     await pRetry(async () => {
       this.schema = await this.buildHasuraSchema()
     }, {
@@ -154,27 +133,6 @@ export class HasuraClient {
       )
     })
     this.logger.debug({ module: 'HasuraClient' }, 'graphql-engine setup')
-    await pRetry(async () => {
-      const result = await this.client.request(
-        gql`query {
-            epochs (limit: 1, order_by: { number: desc }) {
-                number
-            }
-        }`
-      )
-      if (result.epochs.length === 0) {
-        this.logger.debug({ module: 'HasuraClient' }, epochInformationNotYetAvailable)
-        throw new Error(epochInformationNotYetAvailable)
-      }
-    }, {
-      factor: 1.05,
-      retries: 100,
-      onFailedAttempt: util.onFailedAttemptFor(
-        'Detecting DB sync state has reached minimum progress',
-        this.logger
-      )
-    })
-    this.logger.debug({ module: 'HasuraClient' }, 'DB sync state has reached minimum progress')
     await this.adaPotsToCalculateSupplyFetcher.initialize()
     this.state = 'initialized'
     this.logger.info({ module: 'HasuraClient' }, 'Initialized')
@@ -182,31 +140,6 @@ export class HasuraClient {
 
   public async shutdown () {
     await this.adaPotsToCalculateSupplyFetcher.shutdown()
-  }
-
-  public async applySchemaAndMetadata (): Promise<void> {
-    if (this.applyingSchemaAndMetadata) return
-    this.applyingSchemaAndMetadata = true
-    await pRetry(async () => {
-      await this.hasuraCli('migrate apply --down all')
-      await this.hasuraCli('migrate apply --up all')
-    }, {
-      factor: 1.75,
-      retries: 9,
-      onFailedAttempt: util.onFailedAttemptFor(
-        'Applying PostgreSQL schema migrations',
-        this.logger
-      )
-    })
-    await pRetry(async () => {
-      await this.hasuraCli('metadata clear')
-      await this.hasuraCli('metadata apply')
-    }, {
-      factor: 1.75,
-      retries: 9,
-      onFailedAttempt: util.onFailedAttemptFor('Applying Hasura metadata', this.logger)
-    })
-    this.applyingSchemaAndMetadata = false
   }
 
   public async buildHasuraSchema () {
