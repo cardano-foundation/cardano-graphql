@@ -13,6 +13,7 @@ import { HasuraClient } from './HasuraClient'
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'
 import { createInteractionContextWithLogger } from './util'
+import { PointOrOrigin } from '@cardano-ogmios/schema'
 
 const MODULE_NAME = 'ChainFollower'
 
@@ -24,23 +25,24 @@ export class ChainFollower {
   constructor (
     readonly hasuraClient: HasuraClient,
     private logger: Logger = dummyLogger,
-    queueConfig: Config['db']
+    private queueConfig: Config['db']
   ) {
     this.state = null
-    this.queue = new PgBoss({
-      application_name: 'cardano-graphql',
-      ...queueConfig
-    })
   }
 
-  public async initialize (ogmiosConfig: Config['ogmios']) {
+  public async initialize (ogmiosConfig: Config['ogmios'], getMostRecentPoint: () => Promise<PointOrOrigin[]>) {
     if (this.state !== null) return
     this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing')
+    this.queue = new PgBoss({
+      application_name: 'cardano-graphql',
+      ...this.queueConfig
+    })
     await pRetry(async () => {
       const context = await createInteractionContextWithLogger(ogmiosConfig, this.logger, MODULE_NAME, async () => {
         await this.shutdown()
-        await this.initialize(ogmiosConfig)
+        await this.initialize(ogmiosConfig, getMostRecentPoint)
+        await this.start(await getMostRecentPoint())
       })
       this.chainSyncClient = await createChainSyncClient(
         context,
@@ -115,6 +117,7 @@ export class ChainFollower {
     this.logger.info({ module: MODULE_NAME }, 'Starting')
     await this.queue.start()
     await this.chainSyncClient.startSync(points)
+    this.state = 'running'
     this.logger.info({ module: MODULE_NAME }, 'Started')
   }
 
@@ -123,8 +126,10 @@ export class ChainFollower {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'shutdown')
     }
     this.logger.info({ module: MODULE_NAME }, 'Shutting down')
-    await this.chainSyncClient.shutdown()
     await this.queue.stop()
+    if (this.chainSyncClient.context.socket.readyState === this.chainSyncClient.context.socket.OPEN) {
+      await this.chainSyncClient.shutdown()
+    }
     this.state = null
     this.logger.info(
       { module: MODULE_NAME },
