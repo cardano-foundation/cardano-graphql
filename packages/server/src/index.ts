@@ -78,11 +78,15 @@ export * from './config'
     )
     const server = new Server(schemas, config, logger)
     schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis, cardanoNodeClient))
+    const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
+      const mostRecentPoint = await hasuraClient.getMostRecentPointWithNewAsset()
+      return mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
+    }
+    await cardanoNodeClient.initialize(config.ogmios)
     await db.init({
       onDbInit: async () => {
         await Promise.all([
           hasuraClient.shutdown,
-          cardanoNodeClient.shutdown,
           worker.shutdown,
           chainFollower.shutdown
         ])
@@ -92,13 +96,10 @@ export * from './config'
         try {
           await server.init()
           await hasuraClient.initialize()
-          await cardanoNodeClient.initialize(config.ogmios)
           await metadataClient.initialize()
-          await chainFollower.initialize(config.ogmios)
-          const mostRecentPoint = await hasuraClient.getMostRecentPointWithNewAsset()
-          const points: PointOrOrigin[] = mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
+          await chainFollower.initialize(config.ogmios, getChainSyncPoints)
           await worker.start()
-          await chainFollower.start(points)
+          await chainFollower.start(await getChainSyncPoints())
           await server.start()
         } catch (error) {
           logger.error(error.message)
