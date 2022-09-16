@@ -55,23 +55,28 @@ export class CardanoNodeClient {
     if (this.state !== null) return
     this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing. This can take a few minutes...')
-    this.serverHealthFetcher = new DataFetcher(
+    this.serverHealthFetcher = this.serverHealthFetcher || new DataFetcher(
       'ServerHealth',
       () => getServerHealth({ connection: createConnectionObject(ogmiosConnectionConfig) }),
       30000, this.logger
     )
     await pRetry(async () => {
       await this.serverHealthFetcher.initialize()
-      const onClose = async () => {
+    }, {
+      factor: 1.2,
+      retries: 3,
+      onFailedAttempt: util.onFailedAttemptFor(
+        'Establishing connection to Ogmios server',
+        this.logger
+      )
+    })
+    await pRetry(async () => {
+      const interactionContext = await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME, async () => {
         await this.shutdown()
         await this.initialize(ogmiosConnectionConfig)
-      }
-      this.stateQueryClient = await createStateQueryClient(
-        await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME, onClose)
-      )
-      this.txSubmissionClient = await createTxSubmissionClient(
-        await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME, onClose)
-      )
+      })
+      this.stateQueryClient = await createStateQueryClient(interactionContext)
+      this.txSubmissionClient = await createTxSubmissionClient(interactionContext)
     }, {
       factor: 1.2,
       retries: 100,
@@ -85,12 +90,17 @@ export class CardanoNodeClient {
   }
 
   public async shutdown (): Promise<void> {
-    await Promise.all([
-      this.serverHealthFetcher.shutdown,
-      this.stateQueryClient.shutdown,
-      this.txSubmissionClient.shutdown
-    ])
+    if (this.state !== 'initialized') return
+    this.logger.info({ module: MODULE_NAME }, 'Shutting down')
+    await this.serverHealthFetcher.shutdown()
+    if (this.stateQueryClient.context.socket.readyState === this.stateQueryClient.context.socket.OPEN) {
+      await this.stateQueryClient.shutdown()
+    }
+    if (this.txSubmissionClient.context.socket.readyState === this.txSubmissionClient.context.socket.OPEN) {
+      await this.txSubmissionClient.shutdown()
+    }
     this.state = null
+    this.logger.info({ module: MODULE_NAME }, 'Shutdown')
   }
 
   public async submitTransaction (transaction: string): Promise<Transaction['hash']> {

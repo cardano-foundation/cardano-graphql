@@ -21,7 +21,7 @@ export class Worker {
     readonly hasuraClient: HasuraClient,
     private logger: Logger = dummyLogger,
     private metadataFetchClient: MetadataClient,
-    queueConfig: Config['db'],
+    private queueConfig: Config['db'],
     private options?: {
       metadataUpdateInterval?: {
         assets?: Config['metadataUpdateInterval']['assets']
@@ -29,10 +29,6 @@ export class Worker {
     }
   ) {
     this.state = 'initialized'
-    this.queue = new PgBoss({
-      application_name: 'cardano-graphql',
-      ...queueConfig
-    })
   }
 
   public async start () {
@@ -40,6 +36,10 @@ export class Worker {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'start')
     }
     this.logger.info({ module: MODULE_NAME }, 'Starting')
+    this.queue = new PgBoss({
+      application_name: 'cardano-graphql',
+      ...this.queueConfig
+    })
     const subscriptionHandler: PgBoss.SubscribeHandler<AssetJobPayload, void> = async (data: JobWithDoneCallback<AssetJobPayload, void>) => {
       // The TypeDef doesn't cover the valid batch data, so a user-defined guard is used.
       if ('length' in data) {
