@@ -33,6 +33,6 @@ describe('withdrawals', () => {
       query: await loadQueryNode('aggregateWithdrawals')
     })
     const { withdrawals_aggregate } = result.data
-    expect(parseInt(withdrawals_aggregate.aggregate.count)).toBeGreaterThan(900)
+    expect(parseInt(withdrawals_aggregate.aggregate.count)).toBeGreaterThan(200)
   })
 })

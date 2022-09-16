@@ -52,9 +52,9 @@ describe('transactions', () => {
   it('Can return ordered by block index', async () => {
     const result = await client.query({
       query: await loadQueryNode('orderedTransactionsInBlock'),
-      variables: { blockNumber: 3037760 }
+      variables: { blockNumber: 24366 }
     })
-    expect(result.data.transactions.length).toBe(22)
+    expect(result.data.transactions.length).toBe(267)
     expect(result.data.transactions[0].blockIndex).toBe(0)
     expect(result.data.transactions[1].blockIndex).toBe(1)
     expect(result.data.transactions[2].blockIndex).toBe(2)
@@ -86,7 +86,7 @@ describe('transactions', () => {
               totalOutput
           }
       }`,
-      variables: { hash: '0576d6e3fabccabe120f19368bdc0b5a181759f845704e7b5eb01a2bfe948610' }
+      variables: { hash: '7adb3c5dc48d2c5e27a1b8809a05a2fce432d795ec692fa164d1e5aa398f22bd' }
     })
     expect(result.data.transactions.length).toBe(1)
     expect(result.data.transactions[0].outputs_aggregate.aggregate.count).toBe('0')
@@ -100,7 +100,7 @@ describe('transactions', () => {
       query: await loadQueryNode('aggregateDataWithinTransaction'),
       variables: {
         hashes: [
-          'b5aff847f8cefe95f3ae06ae5850d19d33301a5aa3aedc618a3729558403e3db'
+          '327196faecffd59550d506c1a452b09667ea4a85644d26ca25759e33e3804e76'
         ]
       }
     })
@@ -115,7 +115,7 @@ describe('transactions', () => {
       variables: {
         hash: '2819f6a34f9029251eb91309c85d4b42d7d8dd26ed00ea0693463176bac62c45',
         inputsValueGt: '3842014',
-        outputsAddress: 'addr_test1vzhv4acdxm6v00m2h62pllw4l6qtymh3pwkpr9urptp8zxccuawfr'
+        outputsAddress: 'addr_test1vpeapc7wf8tep752lvaaxd8e9dfl2cs2sgpc72nwtekm8xspzgj0u'
       }
     })
     expect(result.data).toMatchSnapshot()
@@ -163,9 +163,26 @@ describe('transactions', () => {
     it('shows the reference inputs', async () => {
       const result = await client.query({
         query: await loadQueryNode('transactionsByHashesWithReferenceInputs'),
-        variables: { hashes: ['067e84ddc353faefcbd29f11586d854146b3df43f89b3c1a64a3ff9fbb3c05bd'] }
+        variables: { hashes: ['ceaada570dd66d575cb813caa5146fa3c86c9aa88e4b23b7087cd44b70c65bc5'] }
       })
       expect(result.data).toMatchSnapshot()
     })
   })
+
+  // TODO: not finishes correctly
+  // describe('transactions with invalid inputs', () => {
+  //   it('can recover from ogmios disconnect after invalid tx', async () => {
+  //     // submit tx that triggers ogmios disconnect with error 1006
+  //     client.mutate({
+  //       mutation: await loadQueryNode('submitTransaction'),
+  //       variables: { transaction: '83a40081825820bebc3522ae5de98b371e4f9ef6349456558aabf63acc8a23fc9e9d78d82e18a300018382583282d818582883581cc4b20dbcc149a58d0d56194d94f5405d31d2b03a223c4a7c0cd62f11a102451a4170cb17001aa8dcbbd21a01ba814082583282d818582883581c98465c3fe4b23992f94a9fdf6d290481bb02fffc6dd08a2ccf1b5eb6a102451a4170cb17001af8dc48ca1b000000012926ef8382583282d818582883581c98465c3fe4b23992f94a9fdf6d290481bb02fffc6dd08a2ccf1b5eb6a102451a4170cb17001af8dc48ca1b000000012926ef82021a000383bb031a0069db33a10281845820078061be0ed1b55a9e18711c24c678288eb0d01544325a4edd24278ff72d0e45584077c1d0c0ad8838377c69f0c17a8739375dfa740c64c0d00d553225ac71d1e30f821cd8cef7ddd2d367e2c744b027b6f7d80653a1b6e4dfaf05ddc89b5b5114045820b6ed5cad26f7d7da7b0ebcfe5955fc4df995a330b2be52f9dcb3687a0c78d4d448a102451a4170cbabcd' }
+  //     })
+  //     // check that client successfully reconnected
+  //     const result = await client.query({
+  //       query: await loadQueryNode('transactionsByHashesWithReferenceInputs'),
+  //       variables: { hashes: ['067e84ddc353faefcbd29f11586d854146b3df43f89b3c1a64a3ff9fbb3c05bd'] }
+  //     })
+  //     expect(result.data.transactions.length).toBeGreaterThan(0)
+  //   })
+  // })
 })

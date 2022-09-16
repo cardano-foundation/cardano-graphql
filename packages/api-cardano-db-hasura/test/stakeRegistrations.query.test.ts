@@ -31,6 +31,6 @@ describe('stakeRegistrations', () => {
       query: await loadQueryNode('aggregateStakeRegistrations')
     })
     const { stakeRegistrations_aggregate } = result.data
-    expect(parseInt(stakeRegistrations_aggregate.aggregate.count)).toBeGreaterThan(10000)
+    expect(parseInt(stakeRegistrations_aggregate.aggregate.count)).toBeGreaterThan(1000)
   })
 })

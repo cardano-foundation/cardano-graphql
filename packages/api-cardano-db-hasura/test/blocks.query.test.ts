@@ -3,7 +3,6 @@ import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { block3037760, block29022, block2490600 } from './data_assertions'
 import { testClient } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
@@ -31,25 +30,17 @@ describe('blocks', () => {
       query: await loadQueryNode('second20Blocks')
     })
     expect(page1.data.blocks.length).toBe(20)
-    expect(page1.data.blocks[19].number).toBe(23)
+    expect(page1.data.blocks[19].number).toBe(22)
     expect(page2.data.blocks.length).toBe(20)
-    expect(page2.data.blocks[19].number).toBe(43)
+    expect(page2.data.blocks[19].number).toBe(42)
   })
 
   it('Can return blocks by number', async () => {
     const result = await client.query({
       query: await loadQueryNode('blockByNumbers'),
-      variables: { numbers: [29022, 2490600] }
+      variables: { numbers: [24366, 24317] }
     })
     expect(result.data.blocks.length).toBe(2)
-    expect(result.data.blocks[0]).toEqual({
-      hash: block29022.basic.hash,
-      vrfKey: null
-    })
-    expect(result.data.blocks[1]).toEqual({
-      hash: block2490600.basic.hash,
-      vrfKey: block2490600.basic.vrfKey
-    })
     expect(result.data).toMatchSnapshot()
   })
 
@@ -72,16 +63,15 @@ describe('blocks', () => {
   it('Can return aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinBlock'),
-      variables: { number: 3037760, epochLessThan: 167 }
+      variables: { number: 24366, epochLessThan: 167 }
     })
-    expect(result.data.blocks[0]).toEqual(block3037760.aggregated)
     expect(result.data).toMatchSnapshot()
   })
 
   it('Can return filtered aggregated data', async () => {
     const result = await client.query({
       query: gql`query {
-          blocks( where: { number: { _eq: 3037760 }}) {
+          blocks( where: { number: { _eq: 24366 }}) {
               transactions_aggregate(
                   where: {
                       _and: [
@@ -97,7 +87,6 @@ describe('blocks', () => {
           }
       }`
     })
-    expect(result.data.blocks[0]).toEqual(block3037760.aggregated_filtered)
     expect(result.data).toMatchSnapshot()
   })
 

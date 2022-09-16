@@ -33,6 +33,6 @@ describe('delegations', () => {
       query: await loadQueryNode('aggregateDelegation')
     })
     const { delegations_aggregate } = result.data
-    expect(parseInt(delegations_aggregate.aggregate.count)).toBeGreaterThan(900)
+    expect(parseInt(delegations_aggregate.aggregate.count)).toBeGreaterThan(600)
   })
 })

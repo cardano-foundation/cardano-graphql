@@ -19,7 +19,7 @@ describe('rewards', () => {
   it('can return details for rewards scoped to an address', async () => {
     const result = await client.query({
       query: await loadQueryNode('rewardsForAddress'),
-      variables: { limit: 5, offset: 4, where: { address: { _eq: 'stake_test1uzxpncx82vfkl5ml00ws44hzfdh64r22kr93e79jqsumv0q8g8cy0' } } }
+      variables: { limit: 5, offset: 4, where: { address: { _eq: 'stake_test1uq2zmg63v2wgqj3upt39z4k4xm6kn009mupex6a3fttd7fqpds4df' } } }
     })
     const { rewards } = result.data
     expect(rewards.length).toBeGreaterThan(4)
@@ -38,6 +38,6 @@ describe('rewards', () => {
     expect(parseInt(rewards_aggregate.aggregate.max.amount)).toBeDefined()
     expect(parseInt(rewards_aggregate.aggregate.min.amount)).toBeDefined()
     expect(parseInt(rewards_aggregate.aggregate.sum.amount)).toBeDefined()
-    expect(parseInt(rewards_aggregate.aggregate.count)).toBeGreaterThan(30000)
+    expect(parseInt(rewards_aggregate.aggregate.count)).toBeGreaterThan(3000)
   })
 })

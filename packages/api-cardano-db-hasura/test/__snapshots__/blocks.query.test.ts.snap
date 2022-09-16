@@ -4,30 +4,30 @@ exports[`blocks Can return aggregated data 1`] = `
 Object {
   "blocks": Array [
     Object {
-      "number": 3037760,
+      "number": 24366,
       "transactions_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "fee": 176129,
-            "size": 313.27272727272725,
-            "totalOutput": 421674965437.5455,
+            "fee": 165816.4157303371,
+            "size": 237.1685393258427,
+            "totalOutput": 6816622.775280898,
           },
-          "count": "22",
+          "count": "267",
           "max": Object {
-            "fee": "204045",
-            "size": "858",
-            "totalOutput": "9223859752216",
+            "fee": "165853",
+            "size": "238",
+            "totalOutput": "9834191",
           },
           "min": Object {
-            "fee": "167085",
+            "fee": "165809",
             "size": "237",
-            "totalOutput": "12806911",
+            "totalOutput": "3336720",
           },
           "sum": Object {
             "deposit": "0",
-            "fee": "3874838",
-            "size": "6892",
-            "totalOutput": "9276849239626",
+            "fee": "44272983",
+            "size": "63324",
+            "totalOutput": "1820038281",
           },
         },
       },
@@ -40,12 +40,12 @@ exports[`blocks Can return blocks by number 1`] = `
 Object {
   "blocks": Array [
     Object {
-      "hash": "36f4d3e433e54c43d2a13e22b6b7168dcf672d446b14f1fcc725eaf13d8c102b",
-      "vrfKey": null,
+      "hash": "36df626fe5fef1a0b0ecbc7ee50a1d1a1eff71da4996b3175a0628fe5c5f66b3",
+      "vrfKey": "vrf_vk1g8j3ckz2mq80xg75jvhp5qrny5428j0ufmd8xh0y9g6jc5da4mrqu4m9e5",
     },
     Object {
-      "hash": "94f99e9dadd818a49d7966f788bbe1a7b31fd109217ffc015d450db9b262aa90",
-      "vrfKey": "vrf_vk16t90lzn5arxkz5det5yzwty0ja9vq6weupade2gfp8nc4gy3llrsd6nkwe",
+      "hash": "6f6648c7fc6862a6f05c9f63851c547a4ea4d9f3f6e70ad4739d82385379a844",
+      "vrfKey": "vrf_vk1g8j3ckz2mq80xg75jvhp5qrny5428j0ufmd8xh0y9g6jc5da4mrqu4m9e5",
     },
   ],
 }
@@ -55,10 +55,10 @@ exports[`blocks Can return filtered aggregated data 1`] = `
 Object {
   "blocks": Array [
     Object {
-      "number": 3037760,
+      "number": 24366,
       "transactions_aggregate": Object {
         "aggregate": Object {
-          "count": "21",
+          "count": "267",
         },
       },
     },
@@ -70,7 +70,7 @@ exports[`blocks are linked to their predecessor, and the chain can be traversed 
 Object {
   "blocks": Array [
     Object {
-      "hash": "36f4d3e433e54c43d2a13e22b6b7168dcf672d446b14f1fcc725eaf13d8c102b",
+      "hash": "9fdc0c7749e6604108de336fabb4af252898dae4c0475b1504f9775ebf35330b",
       "previousBlock": Object {
         "number": 29021,
         "previousBlock": Object {
@@ -89,7 +89,7 @@ exports[`blocks are linked to their successor, and the chain can be traversed 1`
 Object {
   "blocks": Array [
     Object {
-      "hash": "36f4d3e433e54c43d2a13e22b6b7168dcf672d446b14f1fcc725eaf13d8c102b",
+      "hash": "9fdc0c7749e6604108de336fabb4af252898dae4c0475b1504f9775ebf35330b",
       "nextBlock": Object {
         "nextBlock": Object {
           "nextBlock": Object {

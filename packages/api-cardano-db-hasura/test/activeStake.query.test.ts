@@ -19,7 +19,7 @@ describe('activeStake', () => {
   it('can return active stake snapshots for an address', async () => {
     const result = await client.query({
       query: await loadQueryNode('activeStakeForAddress'),
-      variables: { limit: 5, where: { address: { _eq: 'stake_test1up5tgntagnfp04l07waka5p0duv6uw9eujf4axl7jw2wc8gnm6eh0' } } }
+      variables: { limit: 5, where: { address: { _eq: 'stake_test1upch4zfr4v2p3y5mp8h6g9r7gmav3s50q86294h3cxl8f6g5rhthq' } } }
     })
     const { activeStake } = result.data
     expect(activeStake.length).toBe(5)

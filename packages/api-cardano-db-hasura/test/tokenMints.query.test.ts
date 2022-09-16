@@ -36,7 +36,7 @@ describe('tokenMints', () => {
       query: await loadQueryNode('tokenMints'),
       variables: {
         where: {
-          asset: { fingerprint: { _eq: 'asset1325zj0yt3dxccmxk8g9429l4krg4yz6tyaxpnk' } }
+          asset: { fingerprint: { _eq: 'asset1yn220qknjguqgca45muqr4jgsl20zmn4czndq5' } }
         },
         orderBy: {
           transaction: { includedAt: 'desc' }

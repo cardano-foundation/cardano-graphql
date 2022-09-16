@@ -52,10 +52,9 @@ describe('epochs', () => {
   })
 
   it('Returns epoch details by number range', async () => {
-    // Todo: Convert this into an actual ranged query now the performance issue is resolved.
     const result = await client.query({
       query: await loadQueryNode('epochDetailsInRange'),
-      variables: { numbers: [1] }
+      variables: { numbers: [10, 15, 20] }
     })
     expect(result.data).toMatchSnapshot()
   })
@@ -63,7 +62,7 @@ describe('epochs', () => {
   it('Can return aggregated Epoch data', async () => {
     const result = await client.query({
       query: await loadQueryNode('aggregateEpochData'),
-      variables: { epochNumberLessThan: 165 }
+      variables: { epochNumberLessThan: 10 }
     })
     expect(result.data).toMatchSnapshot()
   })
