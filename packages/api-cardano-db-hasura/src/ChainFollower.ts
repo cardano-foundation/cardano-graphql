@@ -25,19 +25,19 @@ export class ChainFollower {
   constructor (
     readonly hasuraClient: HasuraClient,
     private logger: Logger = dummyLogger,
-    queueConfig: Config['db']
+    private queueConfig: Config['db']
   ) {
     this.state = null
-    this.queue = new PgBoss({
-      application_name: 'cardano-graphql',
-      ...queueConfig
-    })
   }
 
   public async initialize (ogmiosConfig: Config['ogmios'], getMostRecentPoint: () => Promise<PointOrOrigin[]>) {
     if (this.state !== null) return
     this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing')
+    this.queue = new PgBoss({
+      application_name: 'cardano-graphql',
+      ...this.queueConfig
+    })
     await pRetry(async () => {
       const context = await createInteractionContextWithLogger(ogmiosConfig, this.logger, MODULE_NAME, async () => {
         await this.shutdown()
