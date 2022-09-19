@@ -17,8 +17,7 @@ import {
 } from './errors'
 import { allowListMiddleware } from './express_middleware'
 import { dummyLogger, Logger } from 'ts-log'
-import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic'
-import { clearIntervalAsync } from 'set-interval-async'
+import { clearIntervalAsync, setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic'
 import { RunnableModuleState } from '@cardano-graphql/util'
 
 export type Config = {
