@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.1](https://github.com/input-output-hk/cardano-graphql/compare/7.0.0...7.0.1) (2022-09-19)
+
+### Compatible with:
+
+- [`cardano-node`: `1.35.3`](https://github.com/input-output-hk/cardano-node/releases/tag/1.35.3)
+- [`cardano-ogmios`: `v5.5.5`](https://github.com/CardanoSolutions/ogmios/releases/tag/v5.5.5)
+- [`cardano-db-sync`: `13.0.4`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/13.0.4)
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+
+### Bug Fixes
+
+* **api-cardano-db-hasura:** correct close and error handling of Ogmios connection ([df82008](https://github.com/input-output-hk/cardano-graphql/commit/df82008eb78ca2d231eed2c4490a28c7176c3333))
+* **api-cardano-db-hasura:** mitigate unexpected Ogmios socket disconnect ([3d81bf5](https://github.com/input-output-hk/cardano-graphql/commit/3d81bf55d815cff21f8eb29746f6e579f0477571))
+* gracefully handle Ogmios socket disconnection ([18bf3e1](https://github.com/input-output-hk/cardano-graphql/commit/18bf3e1cf36949408df941f67af2d21029b32927))
+* mount local config into cardano-node-ogmios ([f055378](https://github.com/input-output-hk/cardano-graphql/commit/f055378bfcd16e8dec60d78459a0d215b5ade924))
+
 ## [7.0.0](https://github.com/input-output-hk/cardano-graphql/compare/6.2.0...7.0.0) (2022-08-19)
 
 ### Compatible with:
