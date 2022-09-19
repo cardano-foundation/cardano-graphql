@@ -37,6 +37,7 @@ RUN apk add curl
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | sh
 ENV HASURA_GRAPHQL_ENABLE_TELEMETRY=false
 RUN hasura --skip-update-check update-cli --version v1.3.3
+RUN hasura --skip-update-check plugins install cli-ext
 
 FROM nodejs-builder as dev
 RUN apt-get update && apt-get install yarn -y
