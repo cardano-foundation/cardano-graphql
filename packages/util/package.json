@@ -27,6 +27,7 @@
     "graphql-bigint": "^1.0.0",
     "graphql-tag": "^2.10.3",
     "p-retry": "^4.2.0",
+    "set-interval-async": "^2.0.3",
     "ts-log": "^2.2.3"
   },
   "devDependencies": {
