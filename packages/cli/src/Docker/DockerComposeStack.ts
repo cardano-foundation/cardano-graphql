@@ -59,7 +59,7 @@ export class DockerComposeStack {
   private async up (): Promise<IDockerComposeResult> {
     const currentState = await this.currentState()
     if (currentState === StackState.up) return
-    this.logger.info('docker-compose up')
+    this.logger.info('docker compose up')
     return upAll({
       composeOptions: ['-p', this.projectName]
     })
@@ -68,7 +68,7 @@ export class DockerComposeStack {
   private async down (): Promise<void> {
     const currentState = await this.currentState()
     if (currentState === StackState.down) return
-    this.logger.info('docker-compose down')
+    this.logger.info('docker compose down')
     await down({
       composeOptions: ['-p', this.projectName]
     })
@@ -77,7 +77,7 @@ export class DockerComposeStack {
   private async stop (): Promise<void> {
     const currentState = await this.currentState()
     if (currentState === StackState.stopped || currentState === StackState.down) return
-    this.logger.info('docker-compose stop')
+    this.logger.info('docker compose stop')
     await stop({
       composeOptions: ['-p', this.projectName]
     })
