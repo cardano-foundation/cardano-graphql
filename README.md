@@ -13,7 +13,7 @@
 ## Overview
 
 Cross-platform, _typed_, and **queryable** API for Cardano. The project contains multiple [packages] for composing 
-GraphQL services to meet specific application demands, and a [docker-compose stack] serving the included 
+GraphQL services to meet specific application demands, and a [docker compose stack] serving the included 
 [cardano-graphql-server Dockerfile], the extended [hasura Dockerfile], [cardano-node-ogmios]. The [schema] is defined in
 native `.graphql`, and used to generate a [TypeScript package for client-side static typing]. A mutation is available to 
 submit a signed and serialized transaction to the local node.
@@ -50,7 +50,7 @@ git clone \
 Choose **one** of the following:
 
 #### A) Build and Run via Docker Compose
-Boot the [docker-compose stack] using a convention for container and volume scoping based on the network, as well as
+Boot the [docker compose stack] using a convention for container and volume scoping based on the network, as well as
 optionally hitting the remote cache to speed up the build. The containers are detached, so you can terminate the log
 console session freely. See [Docker Compose docs] to tailor for your use-case
  
@@ -62,8 +62,8 @@ Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.i
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
 RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
-docker-compose up -d --build &&\
-docker-compose logs -f
+docker compose up -d --build &&\
+docker compose logs -f
 ```
 </details>
 
@@ -79,8 +79,8 @@ HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
 POSTGRES_PORT=5433 \
 METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
-docker-compose -p preprod up -d --build &&\
-docker-compose -p preprod logs -f
+docker compose -p preprod up -d --build &&\
+docker compose -p preprod logs -f
 ```
 
 </details>
@@ -97,8 +97,8 @@ HASURA_PORT=8092 \
 OGMIOS_PORT=1339 \
 POSTGRES_PORT=5434 \
 METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
-docker-compose -p preview up -d --build &&\
-docker-compose -p preview logs -f
+docker compose -p preview up -d --build &&\
+docker compose -p preview logs -f
 ```
 
 </details>
@@ -118,8 +118,8 @@ docker pull inputoutput/cardano-graphql:7.0.2-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:7.0.2 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
 RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
-docker-compose up -d &&\
-docker-compose logs -f
+docker compose up -d &&\
+docker compose logs -f
 ```
 </details>
 
@@ -135,8 +135,8 @@ API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
 POSTGRES_PORT=5433 \
-docker-compose -p ${NETWORK} up -d &&\
-docker-compose -p ${NETWORK} logs -f
+docker compose -p ${NETWORK} up -d &&\
+docker compose -p ${NETWORK} logs -f
 ```
 
 </details>
@@ -150,11 +150,11 @@ docker pull inputoutput/cardano-graphql:7.0.2-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:7.0.2 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
 API_PORT=3102 \
-HASURA_PORT=8092 \ 
+HASURA_PORT=8092 \
 OGMIOS_PORT=1339 \
 POSTGRES_PORT=5434 \
-docker-compose -p ${NETWORK} up -d &&\
-docker-compose -p ${NETWORK} logs -f
+docker compose -p ${NETWORK} up -d &&\
+docker compose -p ${NETWORK} logs -f
 ```
 
 </details>
@@ -166,7 +166,7 @@ The following commands will not remove volumes, however should you wish to do so
   <summary><i>mainnet</i></summary>
 
 ``` console
-docker-compose down
+docker compose down
 ```
 </details>
 
@@ -174,7 +174,7 @@ docker-compose down
   <summary><i>preprod</i></summary>
 
 ``` console
-docker-compose -p preprod down
+docker compose -p preprod down
 ```
 
 </details>
@@ -183,7 +183,7 @@ docker-compose -p preprod down
   <summary><i>preview</i></summary>
 
 ``` console
-docker-compose -p preview down
+docker compose -p preview down
 ```
 
 </details>
@@ -202,7 +202,7 @@ curl \
   http://localhost:3100/graphql
 ```
 :information_source: _Wait for `initialized` to be `true` to ensure the epoch dataset is complete. After the first sync
-you may need to restart the services using `docker-compose restart cardano-graphql` if the GraphQL server isn't
+you may need to restart the services using `docker compose restart cardano-graphql` if the GraphQL server isn't
 running._
 
 ### Query the full dataset
@@ -249,7 +249,7 @@ See [Building].
 [img_src_CI]: https://github.com/input-output-hk/cardano-graphql/workflows/CI/badge.svg
 [workflow_CI]: https://github.com/input-output-hk/cardano-graphql/actions?query=workflow%3ACI
 [packages]: ./packages
-[docker-compose stack]: ./docker-compose.yml
+[docker compose stack]: ./docker-compose.yml
 [Docker Compose docs]: https://docs.docker.com/compose/
 [cardano-graphql-server Dockerfile]: ./Dockerfile
 [hasura Dockerfile]: ./packages/api-cardano-db-hasura/hasura/Dockerfile
