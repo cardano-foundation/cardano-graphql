@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [7.0.2](https://github.com/input-output-hk/cardano-graphql/compare/7.0.1...7.0.2) (2022-10-03)
+
+### Compatible with:
+
+- [`cardano-node`: `1.35.3`](https://github.com/input-output-hk/cardano-node/releases/tag/1.35.3)
+- [`cardano-ogmios`: `v5.5.7`](https://github.com/CardanoSolutions/ogmios/releases/tag/v5.5.7)
+- [`cardano-db-sync`: `13.0.5`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/13.0.5)
+- [`hasura/graphql-engine`: `1.3.3`](https://github.com/hasura/graphql-engine/releases/tag/v1.3.3)
+  
+* bump cardano-configurations ([a386938](https://github.com/input-output-hk/cardano-graphql/commit/a3869386932c4cd5c53012882c30ed150931a148))
+* remove upper Node.js engines constraint ([7eb733f](https://github.com/input-output-hk/cardano-graphql/commit/7eb733f5c5434202a3ccb8fe5a51a4f52a0ed66b))
+
+
 ### [7.0.1](https://github.com/input-output-hk/cardano-graphql/compare/7.0.0...7.0.1) (2022-09-19)
 
 ### Compatible with:
