@@ -603,12 +603,12 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@cardano-ogmios/client@5.5.5":
-  version "5.5.5"
-  resolved "https://registry.yarnpkg.com/@cardano-ogmios/client/-/client-5.5.5.tgz#8aaf864a833ba4918ad3e560da52ec98a7280553"
-  integrity sha512-6omG1sSdR841E+NY0wFF1O+NnR0ZKpUhkW584i1d3bW8jaYaTKapyQgPDbC1YN4M3mD5mBCgGU8uLo3jF6DAIg==
+"@cardano-ogmios/client@5.5.7":
+  version "5.5.7"
+  resolved "https://registry.yarnpkg.com/@cardano-ogmios/client/-/client-5.5.7.tgz#14da00628f327967afe6b5637a0935eb88d0a449"
+  integrity sha512-sOoDl2V60M1qFgffbv/9hNvKjPjunbPQnCLaXUpPexULgimeXjmmH/aoKarBEjM6hRjWIB7ZjFH4HsGMxs7gGg==
   dependencies:
-    "@cardano-ogmios/schema" "5.5.5"
+    "@cardano-ogmios/schema" "5.5.7"
     "@cardanosolutions/json-bigint" "^1.0.0"
     "@types/json-bigint" "^1.0.1"
     cross-fetch "^3.1.4"
@@ -618,10 +618,10 @@
     ts-custom-error "^3.2.0"
     ws "^7.4.6"
 
-"@cardano-ogmios/schema@5.5.5":
-  version "5.5.5"
-  resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-5.5.5.tgz#6686c6d86531f3e0f51df719970a456e2b6495a6"
-  integrity sha512-hFxsiqu5/4WG2rpWM7WpAF/3h5S5AT51k/G3b82Bzs/TbPAgyMiwPeeB+M9mROitmMem+m4PFwreJMCXrSRAgw==
+"@cardano-ogmios/schema@5.5.7":
+  version "5.5.7"
+  resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-5.5.7.tgz#02322c69ad23420215588fcd63bd4e3b45360cdd"
+  integrity sha512-FIO0ZC87m0wjZXW3e3qz2+Ouug2DgwOJuMxU0XiqpbC2dRecuA8g57a6ECYfbK0WhgkGybVOsUX0s7Tt4XzxTA==
 
 "@cardanosolutions/json-bigint@1.0.0", "@cardanosolutions/json-bigint@^1.0.0":
   version "1.0.0"
