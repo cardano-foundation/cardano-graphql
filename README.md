@@ -117,7 +117,7 @@ export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql:7.0.1-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:7.0.1 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.5.7_1.35.3-${NETWORK} &&\
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-7643447-x86_64.tgz \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-7960123-x86_64.tgz \
 docker-compose up -d &&\
 docker-compose logs -f
 ```
