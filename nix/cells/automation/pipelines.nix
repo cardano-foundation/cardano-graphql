@@ -18,7 +18,11 @@
     };
 
     command.text = config.preset.github.status.lib.reportBulk {
-      bulk.text = "nix eval .#hydraJobs --apply __attrNames --json | nix-systems -i";
+      bulk.text = ''
+        nix eval .#hydraJobs --apply __attrNames --json |
+        nix-systems -i |
+        jq 'with_entries(select(.value))' # filter out systems that we cannot build for
+      '';
       each.text = ''nix build -L .#hydraJobs."$1".required'';
       skippedDescription = lib.escapeShellArg "No nix builder for this system";
     };
