@@ -71,6 +71,7 @@ docker-compose logs -f
   <summary><i>preprod</i></summary>
 
 ``` console
+CARDANO_NODE_VERSION=1.35.4 \
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
 NETWORK=preprod \
@@ -89,6 +90,7 @@ docker-compose -p preprod logs -f
   <summary><i>preview</i></summary>
 
 ``` console
+CARDANO_NODE_VERSION=1.35.4 \
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
 NETWORK=preview \
