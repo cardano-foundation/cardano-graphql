@@ -7,7 +7,8 @@
 #
 ############################################################################
 { cardano-graphql ? { rev = null; }
-, pkgs ? import ./nix/pkgs.nix {}
+, system ? builtins.currentSystem
+, pkgs ? import ./nix/pkgs.nix { inherit system; }
 }:
 with pkgs;
 let
