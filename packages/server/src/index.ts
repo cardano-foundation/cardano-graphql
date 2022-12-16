@@ -1,17 +1,13 @@
 import { createLogger } from 'bunyan'
-import { PointOrOrigin } from '@cardano-ogmios/schema'
 import { getConfig } from './config'
 import {
   AlonzoGenesis,
   buildSchema as buildCardanoDbHasuraSchema,
   ByronGenesis,
   CardanoNodeClient,
-  ChainFollower,
   Genesis,
   HasuraClient,
-  MetadataClient,
-  ShelleyGenesis,
-  Worker
+  ShelleyGenesis
 } from '@cardano-graphql/api-cardano-db-hasura'
 import { errors } from '@cardano-graphql/util'
 import onDeath from 'death'
@@ -53,40 +49,12 @@ export * from './config'
       config.pollingInterval.adaSupply,
       logger
     )
-    const chainFollower = new ChainFollower(
-      hasuraClient,
-      logger,
-      config.db
-    )
-    const metadataClient = new MetadataClient(
-      config.metadataServerUri,
-      logger
-    )
-    const worker = new Worker(
-      hasuraClient,
-      logger,
-      metadataClient,
-      config.db,
-      {
-        metadataUpdateInterval: {
-          assets: config.metadataUpdateInterval?.assets
-        }
-      }
-    )
     const server = new Server(schemas, config, logger)
     schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis, cardanoNodeClient))
-    const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
-      const mostRecentPoint = await hasuraClient.getMostRecentPointWithNewAsset()
-      return mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
-    }
     await cardanoNodeClient.initialize(config.ogmios)
     try {
       await server.init()
       await hasuraClient.initialize()
-      await metadataClient.initialize()
-      await chainFollower.initialize(config.ogmios, getChainSyncPoints)
-      await worker.start()
-      await chainFollower.start(await getChainSyncPoints())
       await server.start()
     } catch (error) {
       logger.error(error.message)
@@ -97,9 +65,7 @@ export * from './config'
     onDeath(async () => {
       await Promise.all([
         hasuraClient.shutdown,
-        cardanoNodeClient.shutdown,
-        worker.shutdown,
-        chainFollower.shutdown
+        cardanoNodeClient.shutdown
       ])
       await server.shutdown()
       process.exit(1)

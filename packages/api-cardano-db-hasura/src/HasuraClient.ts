@@ -1,4 +1,3 @@
-import { Schema } from '@cardano-ogmios/client'
 import util, { DataFetcher, ModuleState } from '@cardano-graphql/util'
 import fetch from 'cross-fetch'
 import { DocumentNode, GraphQLSchema, print } from 'graphql'
@@ -10,7 +9,6 @@ import {
   Asset,
   AssetBalance,
   AssetSupply,
-  Block,
   PaymentAddressSummary,
   ProtocolParams,
   Token,
@@ -18,17 +16,10 @@ import {
 } from './graphql_types'
 import { dummyLogger, Logger } from 'ts-log'
 import BigNumber from 'bignumber.js'
-import {
-  AssetMetadataAndHash,
-  AssetMetadataHashAndId,
-  AssetWithoutTokens
-} from './typeAliases'
 
 export type AdaPotsToCalculateSupply = { circulating: AssetSupply['circulating'], reserves: AdaPots['reserves']}
 
 const epochInformationNotYetAvailable = 'Epoch information not yet available. This is expected during the initial chain-sync.'
-
-const withHexPrefix = (value: string) => `\\x${value !== undefined ? value : ''}`
 
 export class HasuraClient {
   private client: GraphQLClient
@@ -180,31 +171,6 @@ export class HasuraClient {
     return schema
   }
 
-  public async deleteAssetsAfterSlot (slotNo: Block['slotNo']): Promise<number> {
-    this.logger.debug(
-      { module: 'HasuraClient', slotNo },
-      'deleting assets found in tokens after slot'
-    )
-
-    const result = await this.client.request(
-      gql`mutation DeleteAssetsAfterSlot($slotNo: Int!) {
-          delete_assets(
-              where: {
-                  firstAppearedInSlot: {
-                      _gt: $slotNo
-                  }
-              }
-          ) {
-              affected_rows
-          }
-      }`,
-      {
-        slotNo
-      }
-    )
-    return result.delete_assets.affected_rows
-  }
-
   public async getCurrentProtocolVersion (): Promise<ProtocolParams['protocolVersion']> {
     const result = await this.client.request(
       gql`query {
@@ -216,52 +182,6 @@ export class HasuraClient {
       }`
     )
     return result.epochs[0]?.protocolParams.protocolVersion
-  }
-
-  public async getMostRecentPointWithNewAsset (): Promise<Schema.Point | null> {
-    let point: Schema.Point | null
-    // Handles possible race condition between the internal chain-follower, which manages the Asset table,
-    // and cardano-db-sync's which managed the block table.
-    await pRetry(async () => {
-      // An offset of 1 is applied to ensure a partial block extraction is not skipped
-      const result = await this.client.request(
-        gql`query {
-            assets (
-                limit: 1
-                offset: 1
-                order_by: { firstAppearedInSlot: desc }
-            ) {
-                firstAppearedInBlock {
-                    hash
-                    slotNo
-                }
-            }
-        }`
-      )
-      if (result.errors !== undefined) {
-        throw new Error(result.errors)
-      }
-      if (result.assets.length !== 0) {
-        if (result.assets[0].firstAppearedInBlock === null) {
-          throw new Error('cardano-db-sync is lagging behind the asset sync operation.')
-        }
-        const { hash, slotNo } = result.assets[0].firstAppearedInBlock
-        point = {
-          hash: hash.substring(2),
-          slot: slotNo
-        }
-      } else {
-        point = null
-      }
-    }, {
-      factor: 1.5,
-      retries: 1000,
-      onFailedAttempt: util.onFailedAttemptFor(
-        'Getting the most recent point with a new asset',
-        this.logger
-      )
-    })
-    return point
   }
 
   public async getPaymentAddressSummary (address: string, atBlock?: number): Promise<PaymentAddressSummary> {
@@ -428,125 +348,5 @@ export class HasuraClient {
       // we cannot assume that actual db-sync syncPercentage will be less or equal to node sync state due to race condition at the query time
       syncPercentage: syncPercentage > 100 ? 100 : syncPercentage
     }
-  }
-
-  public async hasAsset (assetId: Asset['assetId']): Promise<boolean> {
-    const result = await this.client.request(
-      gql`query HasAsset (
-          $assetId: bytea!
-      ) {
-          assets (
-              where: { assetId: { _eq: $assetId }}
-          ) {
-              assetId
-          }
-      }`, {
-        assetId: withHexPrefix(assetId)
-      }
-    )
-    const response = result.assets.length > 0
-    this.logger.debug(
-      { module: 'HasuraClient', assetId, hasAsset: response },
-      'Has asset?'
-    )
-    return response
-  }
-
-  public async getAssetMetadataHashesById (assetIds: Asset['assetId'][]): Promise<AssetMetadataHashAndId[]> {
-    const result = await this.client.request(
-      gql`query AssetMetadataHashes (
-          $assetIds: [bytea!]!
-      ){
-          assets (
-              where: {
-                  assetId: { _in: $assetIds }
-              }) {
-              assetId
-              metadataHash
-          }
-      }`,
-      {
-        assetIds: assetIds.map(id => withHexPrefix(id))
-      }
-    )
-    return result.assets
-  }
-
-  public async addAssetMetadata (asset: AssetMetadataAndHash) {
-    this.logger.info(
-      { module: 'HasuraClient', assetId: asset.assetId },
-      'Adding metadata to asset'
-    )
-    const result = await this.client.request(
-      gql`mutation AddAssetMetadata(
-          $assetId: bytea!
-          $decimals: Int
-          $description: String
-          $logo: String
-          $metadataHash: bpchar!
-          $name: String
-          $ticker: String
-          $url: String
-      ) {
-          update_assets(
-              where: {
-                  assetId: { _eq: $assetId }
-              },
-              _set: {
-                  decimals: $decimals
-                  description: $description
-                  logo: $logo
-                  metadataHash: $metadataHash
-                  name: $name
-                  ticker: $ticker
-                  url: $url
-              }
-          ) {
-              affected_rows
-              returning {
-                  assetId
-              }
-          }
-      }`,
-      {
-        ...asset,
-        ...{ assetId: withHexPrefix(asset.assetId) }
-      }
-    )
-    if (result.errors !== undefined) {
-      throw new Error(result.errors)
-    }
-  }
-
-  public async insertAssets (assets: AssetWithoutTokens[]) {
-    this.logger.debug(
-      { module: 'HasuraClient', qty: assets.length },
-      'inserting assets found in tokens'
-    )
-    const result = await this.client.request(
-      gql`mutation InsertAssets($assets: [Asset_insert_input!]!) {
-          insert_assets(objects: $assets) {
-              returning {
-                  name
-                  policyId
-                  description
-                  assetName
-                  assetId
-              }
-              affected_rows
-          }
-      }`,
-      {
-        assets: assets.map(asset => ({
-          ...asset,
-          ...{
-            assetId: withHexPrefix(asset.assetId),
-            assetName: withHexPrefix(asset.assetName),
-            policyId: withHexPrefix(asset.policyId)
-          }
-        }))
-      }
-    )
-    return result
   }
 }
