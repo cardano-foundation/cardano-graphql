@@ -165,6 +165,7 @@ function filterAndTypecastEnvs (env: any) {
           await worker.start()
           await chainFollower.start(await getChainSyncPoints())
         } catch (error) {
+          logger.error(error.message)
           process.exit(1)
         }
       }
@@ -179,7 +180,7 @@ function filterAndTypecastEnvs (env: any) {
       process.exit(1)
     })
   } catch (error) {
-    logger.error(error)
+    logger.error('Exiting due to uncaught exception', error.message)
     process.exit(1)
   }
 })()
