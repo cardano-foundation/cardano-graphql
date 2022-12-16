@@ -1,0 +1,62 @@
+table:
+  name: Epoch
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: epochs
+    select_aggregate: epochs_aggregate
+object_relationships:
+  - name: adaPots
+    using:
+      manual_configuration:
+        column_mapping:
+          number: epochNo
+        insertion_order: null
+        remote_table:
+          name: AdaPots
+          schema: public
+  - name: protocolParams
+    using:
+      manual_configuration:
+        column_mapping:
+          number: epoch_no
+        insertion_order: null
+        remote_table:
+          name: ProtocolParams
+          schema: public
+array_relationships:
+  - name: activeStake
+    using:
+      manual_configuration:
+        column_mapping:
+          number: epochNo
+        insertion_order: null
+        remote_table:
+          name: ActiveStake
+          schema: public
+  - name: blocks
+    using:
+      manual_configuration:
+        column_mapping:
+          number: epochNo
+        insertion_order: null
+        remote_table:
+          name: Block
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - blocksCount
+        - fees
+        - lastBlockTime
+        - nonce
+        - number
+        - output
+        - startedAt
+        - transactionsCount
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

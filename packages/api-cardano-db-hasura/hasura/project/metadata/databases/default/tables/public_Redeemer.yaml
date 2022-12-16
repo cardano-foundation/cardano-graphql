@@ -1,0 +1,41 @@
+table:
+  name: Redeemer
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: redeemers
+    select_aggregate: redeemers_aggregate
+object_relationships:
+  - name: datum
+    using:
+      manual_configuration:
+        column_mapping:
+          redeemer_datum_id: id
+        insertion_order: null
+        remote_table:
+          name: RedeemerDatum
+          schema: public
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          txId: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - fee
+        - index
+        - purpose
+        - scriptHash
+        - unitMem
+        - unitSteps
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

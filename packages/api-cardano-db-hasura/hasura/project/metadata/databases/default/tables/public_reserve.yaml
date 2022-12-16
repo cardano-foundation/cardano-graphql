@@ -1,0 +1,14 @@
+table:
+  name: reserve
+  schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - addr_id
+        - amount
+        - cert_index
+        - tx_id
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

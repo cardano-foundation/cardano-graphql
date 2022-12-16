@@ -1,0 +1,16 @@
+table:
+  name: AdaPots
+  schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - deposits
+        - fees
+        - reserves
+        - rewards
+        - slotNo
+        - treasury
+        - utxo
+      filter: {}
+      allow_aggregations: true

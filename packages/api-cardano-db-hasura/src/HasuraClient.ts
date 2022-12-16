@@ -229,7 +229,7 @@ export class HasuraClient {
             assets (
                 limit: 1
                 offset: 1
-                order_by: { firstAppearedInBlock: { slotNo: desc }}
+                order_by: { firstAppearedInSlot: desc }
             ) {
                 firstAppearedInBlock {
                     hash

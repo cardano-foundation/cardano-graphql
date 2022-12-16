@@ -1,0 +1,98 @@
+table:
+  name: StakePool
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: stakePools
+    select_aggregate: stakePools_aggregate
+object_relationships:
+  - name: updatedIn
+    using:
+      manual_configuration:
+        column_mapping:
+          updated_in_tx_id: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+array_relationships:
+  - name: activeStake
+    using:
+      manual_configuration:
+        column_mapping:
+          hash: stakePoolHash
+        insertion_order: null
+        remote_table:
+          name: ActiveStake
+          schema: public
+  - name: blocks
+    using:
+      manual_configuration:
+        column_mapping:
+          hash_id: pool_hash_id
+        insertion_order: null
+        remote_table:
+          name: Block
+          schema: public
+  - name: delegators
+    using:
+      manual_configuration:
+        column_mapping:
+          hash_id: pool_hash_id
+        insertion_order: null
+        remote_table:
+          name: Delegation
+          schema: public
+  - name: owners
+    using:
+      manual_configuration:
+        column_mapping:
+          hash_id: pool_hash_id
+        insertion_order: null
+        remote_table:
+          name: StakePoolOwner
+          schema: public
+  - name: relays
+    using:
+      manual_configuration:
+        column_mapping:
+          update_id: update_id
+        insertion_order: null
+        remote_table:
+          name: pool_relay
+          schema: public
+  - name: retirements
+    using:
+      manual_configuration:
+        column_mapping:
+          hash_id: pool_hash_id
+        insertion_order: null
+        remote_table:
+          name: StakePoolRetirement
+          schema: public
+  - name: rewards
+    using:
+      manual_configuration:
+        column_mapping:
+          hash_id: pool_hash_id
+        insertion_order: null
+        remote_table:
+          name: Reward
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - fixedCost
+        - hash
+        - id
+        - margin
+        - metadataHash
+        - pledge
+        - rewardAddress
+        - url
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
