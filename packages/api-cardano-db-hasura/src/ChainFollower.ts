@@ -9,11 +9,12 @@ import {
 import pRetry from 'p-retry'
 import { Config } from './Config'
 import util, { assetFingerprint, errors, RunnableModuleState } from '@cardano-graphql/util'
-import { HasuraClient } from './HasuraClient'
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'
 import { createInteractionContextWithLogger } from './util'
 import { PointOrOrigin } from '@cardano-ogmios/schema'
+import { HasuraBackgroundClient } from './HasuraBackgroundClient'
+import { DbConfig } from './typeAliases'
 
 const MODULE_NAME = 'ChainFollower'
 
@@ -23,9 +24,9 @@ export class ChainFollower {
   private state: RunnableModuleState
 
   constructor (
-    readonly hasuraClient: HasuraClient,
+    readonly hasuraClient: HasuraBackgroundClient,
     private logger: Logger = dummyLogger,
-    private queueConfig: Config['db']
+    private queueConfig: DbConfig
   ) {
     this.state = null
   }
