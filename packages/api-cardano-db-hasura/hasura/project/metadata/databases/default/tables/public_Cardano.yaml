@@ -1,0 +1,35 @@
+table:
+  name: Cardano
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: cardano
+object_relationships:
+  - name: currentEpoch
+    using:
+      manual_configuration:
+        column_mapping:
+          currentEpochNo: number
+        insertion_order: null
+        remote_table:
+          name: Epoch
+          schema: public
+  - name: tip
+    using:
+      manual_configuration:
+        column_mapping:
+          tipBlockNo: number
+        insertion_order: null
+        remote_table:
+          name: Block
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - currentEpochNo
+        - tipBlockNo
+      filter: {}
+      limit: 1

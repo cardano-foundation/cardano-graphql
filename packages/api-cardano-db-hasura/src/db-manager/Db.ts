@@ -1,4 +1,4 @@
-import { ClientConfig } from 'pg'
+import { ClientConfig, Client } from 'pg'
 import createSubscriber, { Subscriber } from 'pg-listen'
 import { dummyLogger, Logger } from 'ts-log'
 import { ModuleState } from '@cardano-graphql/util'
@@ -6,15 +6,17 @@ import { ModuleState } from '@cardano-graphql/util'
 const MODULE_NAME = 'Db'
 
 export class Db {
+  private config: ClientConfig
   private state: ModuleState
   pgSubscriber: Subscriber
 
   constructor (
-    pgClientConfig: ClientConfig,
+    config: ClientConfig,
     private logger: Logger = dummyLogger
   ) {
     this.state = null
-    this.pgSubscriber = createSubscriber(pgClientConfig, {
+    this.config = config
+    this.pgSubscriber = createSubscriber(config, {
       parse: (value) => value
     })
   }
@@ -28,6 +30,8 @@ export class Db {
   }): Promise<void> {
     if (this.state !== null) return
     this.state = 'initializing'
+    this.logger.info({ module: MODULE_NAME }, 'Initializing...')
+    await this.setupDb()
     this.pgSubscriber.events.on('connected', async () => {
       this.logger.debug({ module: MODULE_NAME }, 'pgSubscriber: Connected')
       await onDbSetup()
@@ -63,6 +67,44 @@ export class Db {
 
   public async shutdown () {
     if (this.state !== 'initialized') return
+    this.logger.info({ module: MODULE_NAME }, 'Shutting down...')
     await this.pgSubscriber.close()
+    this.state = null
+    this.logger.info({ module: MODULE_NAME }, 'Shut down')
+  }
+
+  private async setupDb () {
+    let client: Client
+    try {
+      client = new Client(this.config)
+      await client.connect()
+      const dbQuery = await client.query("SELECT FROM pg_database WHERE datname = 'cgql'")
+      if (dbQuery.rows.length === 0) {
+        await client.query('CREATE DATABASE cgql')
+        this.logger.info({ module: MODULE_NAME }, 'cgql DB created')
+      }
+      client = new Client({ ...this.config, database: 'cgql' })
+      await client.connect()
+      await client.query(`
+        CREATE TABLE IF NOT EXISTS "Asset" (
+          "assetId" BYTEA PRIMARY KEY,
+          "assetName" BYTEA,
+          "decimals" INT,
+          "description" VARCHAR(500),
+          "fingerprint" CHAR(44),
+          "firstAppearedInSlot" INT,
+          "logo" VARCHAR(65536),
+          "metadataHash" CHAR(40),
+          "name" VARCHAR(50),
+          "policyId" BYTEA,
+          "ticker" VARCHAR(9),
+          "url" VARCHAR(250)
+        );`
+      )
+    } catch (error) {
+      this.logger.error({ err: error })
+    } finally {
+      await client?.end()
+    }
   }
 }

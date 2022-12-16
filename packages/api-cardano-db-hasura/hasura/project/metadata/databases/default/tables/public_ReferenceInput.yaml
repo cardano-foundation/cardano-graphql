@@ -1,0 +1,43 @@
+table:
+  name: ReferenceInput
+  schema: public
+object_relationships:
+  - name: sourceTransaction
+    using:
+      manual_configuration:
+        column_mapping:
+          sourceTxHash: hash
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          txHash: hash
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+array_relationships:
+  - name: tokens
+    using:
+      manual_configuration:
+        column_mapping:
+          source_tx_out_id: tx_out_id
+        insertion_order: null
+        remote_table:
+          name: TokenInOutput
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - address
+        - sourceTxHash
+        - sourceTxIndex
+        - txHash
+        - value
+      filter: {}
+      allow_aggregations: true

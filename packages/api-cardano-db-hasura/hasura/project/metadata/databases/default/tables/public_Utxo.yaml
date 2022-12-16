@@ -1,0 +1,59 @@
+table:
+  name: Utxo
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: utxos
+    select_aggregate: utxos_aggregate
+object_relationships:
+  - name: datum
+    using:
+      manual_configuration:
+        column_mapping:
+          inline_datum_id: id
+        insertion_order: null
+        remote_table:
+          name: Datum
+          schema: public
+  - name: script
+    using:
+      manual_configuration:
+        column_mapping:
+          reference_script_id: id
+        insertion_order: null
+        remote_table:
+          name: Script
+          schema: public
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          txHash: hash
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+array_relationships:
+  - name: tokens
+    using:
+      manual_configuration:
+        column_mapping:
+          id: tx_out_id
+        insertion_order: null
+        remote_table:
+          name: TokenInOutput
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - address
+        - addressHasScript
+        - index
+        - txHash
+        - value
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

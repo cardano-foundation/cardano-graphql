@@ -1,0 +1,37 @@
+table:
+  name: Withdrawal
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: withdrawals
+    select_aggregate: withdrawals_aggregate
+object_relationships:
+  - name: redeemer
+    using:
+      manual_configuration:
+        column_mapping:
+          redeemerId: id
+        insertion_order: null
+        remote_table:
+          name: Redeemer
+          schema: public
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_id: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - amount
+        - address
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

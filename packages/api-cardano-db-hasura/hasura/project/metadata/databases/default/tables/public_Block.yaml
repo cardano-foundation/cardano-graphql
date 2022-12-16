@@ -1,0 +1,78 @@
+table:
+  name: Block
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: blocks
+    select_aggregate: blocks_aggregate
+object_relationships:
+  - name: epoch
+    using:
+      manual_configuration:
+        column_mapping:
+          epochNo: number
+        insertion_order: null
+        remote_table:
+          name: Epoch
+          schema: public
+  - name: nextBlock
+    using:
+      manual_configuration:
+        column_mapping:
+          nextBlockHash: hash
+        insertion_order: null
+        remote_table:
+          name: Block
+          schema: public
+  - name: previousBlock
+    using:
+      manual_configuration:
+        column_mapping:
+          previousBlockHash: hash
+        insertion_order: null
+        remote_table:
+          name: Block
+          schema: public
+  - name: slotLeader
+    using:
+      manual_configuration:
+        column_mapping:
+          slot_leader_id: id
+        insertion_order: null
+        remote_table:
+          name: SlotLeader
+          schema: public
+array_relationships:
+  - name: transactions
+    using:
+      manual_configuration:
+        column_mapping:
+          hash: blockHash
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - epochNo
+        - fees
+        - forgedAt
+        - hash
+        - nextBlockHash
+        - number
+        - opCert
+        - pool_hash_id
+        - previousBlockHash
+        - protocolVersion
+        - size
+        - slotInEpoch
+        - slotNo
+        - transactionsCount
+        - vrfKey
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

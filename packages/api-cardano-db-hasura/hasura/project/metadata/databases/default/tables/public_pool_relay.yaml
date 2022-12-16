@@ -1,0 +1,35 @@
+table:
+  name: pool_relay
+  schema: public
+configuration:
+  column_config:
+    dns_name:
+      custom_name: dnsName
+    dns_srv_name:
+      custom_name: dnsSrvName
+  custom_column_names:
+    dns_name: dnsName
+    dns_srv_name: dnsSrvName
+  custom_root_fields: {}
+object_relationships:
+  - name: stakePool
+    using:
+      manual_configuration:
+        column_mapping:
+          update_id: update_id
+        insertion_order: null
+        remote_table:
+          name: StakePool
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - dns_name
+        - dns_srv_name
+        - ipv4
+        - ipv6
+        - port
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

@@ -11,21 +11,6 @@ CREATE OR REPLACE VIEW "AdaPots" AS
     utxo
 FROM ada_pots;
 
-CREATE TABLE IF NOT EXISTS "Asset" (
-    "assetId" BYTEA PRIMARY KEY,
-    "assetName" BYTEA,
-    "decimals" INT,
-    "description" VARCHAR(500),
-    "fingerprint" CHAR(44),
-    "firstAppearedInSlot" INT,
-    "logo" VARCHAR(65536),
-    "metadataHash" CHAR(40),
-    "name" VARCHAR(50),
-    "policyId" BYTEA,
-    "ticker" VARCHAR(9),
-    "url" VARCHAR(250)
-);
-
 CREATE OR REPLACE VIEW "Block" AS
  SELECT (COALESCE(( SELECT sum((tx.fee)::bigint) AS sum
            FROM tx

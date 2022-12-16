@@ -1,0 +1,38 @@
+table:
+  name: ProtocolParams
+  schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - a0
+        - coinsPerUtxoByte
+        - collateralPercent
+        - costModels
+        - decentralisationParam
+        - eMax
+        - epoch_no
+        - extraEntropy
+        - keyDeposit
+        - maxBlockBodySize
+        - maxBlockExMem
+        - maxBlockExSteps
+        - maxBlockHeaderSize
+        - maxCollateralInputs
+        - maxTxExMem
+        - maxTxExSteps
+        - maxTxSize
+        - maxValSize
+        - minFeeA
+        - minFeeB
+        - minPoolCost
+        - minUTxOValue
+        - nOpt
+        - poolDeposit
+        - priceMem
+        - priceStep
+        - protocolVersion
+        - rho
+        - tau
+      filter: {}
+      limit: 2500

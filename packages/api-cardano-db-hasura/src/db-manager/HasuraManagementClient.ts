@@ -85,8 +85,8 @@ export class HasuraManagementClient {
     if (this.applyingSchemaAndMetadata) return
     this.applyingSchemaAndMetadata = true
     await pRetry(async () => {
-      await this.hasuraCli('migrate apply --down all')
-      await this.hasuraCli('migrate apply --up all')
+      await this.hasuraCli('migrate --database-name default apply --down all')
+      await this.hasuraCli('migrate --database-name default apply --up all')
     }, {
       factor: 1.75,
       retries: 9,
