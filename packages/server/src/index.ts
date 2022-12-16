@@ -71,7 +71,7 @@ export * from './config'
       process.exit(1)
     })
   } catch (error) {
-    logger.error(error)
+    logger.error('Exiting due to uncaught exception', error.message)
     process.exit(1)
   }
 })()
