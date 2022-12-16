@@ -1,0 +1,21 @@
+table:
+  name: Datum
+  schema: public
+object_relationships:
+  - name: firstIncludedIn
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_id: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - bytes
+        - hash
+        - value
+      filter: {}

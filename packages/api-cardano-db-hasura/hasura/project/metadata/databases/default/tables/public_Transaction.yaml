@@ -1,0 +1,129 @@
+table:
+  name: Transaction
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: transactions
+    select_aggregate: transactions_aggregate
+object_relationships:
+  - name: block
+    using:
+      manual_configuration:
+        column_mapping:
+          blockHash: hash
+        insertion_order: null
+        remote_table:
+          name: Block
+          schema: public
+array_relationships:
+  - name: collateralInputs
+    using:
+      manual_configuration:
+        column_mapping:
+          hash: txHash
+        insertion_order: null
+        remote_table:
+          name: CollateralInput
+          schema: public
+  - name: collateralOutputs
+    using:
+      manual_configuration:
+        column_mapping:
+          hash: txHash
+        insertion_order: null
+        remote_table:
+          name: CollateralOutput
+          schema: public
+  - name: inputs
+    using:
+      manual_configuration:
+        column_mapping:
+          hash: txHash
+        insertion_order: null
+        remote_table:
+          name: TransactionInput
+          schema: public
+  - name: metadata
+    using:
+      manual_configuration:
+        column_mapping:
+          id: tx_id
+        insertion_order: null
+        remote_table:
+          name: tx_metadata
+          schema: public
+  - name: mint
+    using:
+      manual_configuration:
+        column_mapping:
+          id: tx_id
+        insertion_order: null
+        remote_table:
+          name: TokenMint
+          schema: public
+  - name: outputs
+    using:
+      manual_configuration:
+        column_mapping:
+          hash: txHash
+        insertion_order: null
+        remote_table:
+          name: TransactionOutput
+          schema: public
+  - name: redeemers
+    using:
+      manual_configuration:
+        column_mapping:
+          id: txId
+        insertion_order: null
+        remote_table:
+          name: Redeemer
+          schema: public
+  - name: referenceInputs
+    using:
+      manual_configuration:
+        column_mapping:
+          hash: txHash
+        insertion_order: null
+        remote_table:
+          name: ReferenceInput
+          schema: public
+  - name: scripts
+    using:
+      manual_configuration:
+        column_mapping:
+          id: txId
+        insertion_order: null
+        remote_table:
+          name: Script
+          schema: public
+  - name: withdrawals
+    using:
+      manual_configuration:
+        column_mapping:
+          id: tx_id
+        insertion_order: null
+        remote_table:
+          name: Withdrawal
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - blockHash
+        - blockIndex
+        - deposit
+        - fee
+        - hash
+        - includedAt
+        - invalidBefore
+        - invalidHereafter
+        - scriptSize
+        - size
+        - totalOutput
+        - validContract
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

@@ -1,0 +1,92 @@
+table:
+  name: Asset
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    delete: delete_assets
+    insert: insert_assets
+    select: assets
+    select_aggregate: assets_aggregate
+    update: update_assets
+object_relationships:
+  - name: firstAppearedInBlock
+    using:
+      manual_configuration:
+        column_mapping:
+          firstAppearedInSlot: slotNo
+        insertion_order: null
+        remote_table:
+          name: Block
+          schema: public
+array_relationships:
+  - name: tokenMints
+    using:
+      manual_configuration:
+        column_mapping:
+          assetName: assetName
+          policyId: policyId
+        insertion_order: null
+        remote_table:
+          name: TokenMint
+          schema: public
+insert_permissions:
+  - role: cardano-graphql
+    permission:
+      check: {}
+      columns:
+        - assetId
+        - assetName
+        - decimals
+        - description
+        - fingerprint
+        - firstAppearedInSlot
+        - logo
+        - metadataHash
+        - name
+        - policyId
+        - ticker
+        - url
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - assetId
+        - assetName
+        - policyId
+        - fingerprint
+        - metadataHash
+        - description
+        - logo
+        - name
+        - ticker
+        - url
+        - decimals
+        - firstAppearedInSlot
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
+update_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - assetId
+        - assetName
+        - policyId
+        - fingerprint
+        - metadataHash
+        - description
+        - logo
+        - name
+        - ticker
+        - url
+        - decimals
+        - firstAppearedInSlot
+      filter: {}
+      check: {}
+delete_permissions:
+  - role: cardano-graphql
+    permission:
+      backend_only: false
+      filter: {}

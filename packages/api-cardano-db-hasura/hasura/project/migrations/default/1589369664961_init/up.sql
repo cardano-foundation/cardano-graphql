@@ -57,7 +57,7 @@ CREATE OR REPLACE VIEW "Cardano" AS
   WHERE (block.block_no IS NOT NULL)
   ORDER BY block.id DESC
  LIMIT 1;
- 
+
 CREATE OR REPLACE VIEW "CollateralInput" AS
 SELECT
   source_tx_out.address,

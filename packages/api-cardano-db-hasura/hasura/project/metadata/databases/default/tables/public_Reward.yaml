@@ -1,0 +1,47 @@
+table:
+  name: Reward
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: rewards
+    select_aggregate: rewards_aggregate
+object_relationships:
+  - name: earnedIn
+    using:
+      manual_configuration:
+        column_mapping:
+          earnedInEpochNo: number
+        insertion_order: null
+        remote_table:
+          name: Epoch
+          schema: public
+  - name: receivedIn
+    using:
+      manual_configuration:
+        column_mapping:
+          receivedInEpochNo: number
+        insertion_order: null
+        remote_table:
+          name: Epoch
+          schema: public
+  - name: stakePool
+    using:
+      manual_configuration:
+        column_mapping:
+          pool_hash_id: hash_id
+        insertion_order: null
+        remote_table:
+          name: StakePool
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - address
+        - amount
+        - type
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

@@ -1,0 +1,21 @@
+table:
+  name: StakePoolOwner
+  schema: public
+object_relationships:
+  - name: stakePool
+    using:
+      manual_configuration:
+        column_mapping:
+          hash: hash
+        insertion_order: null
+        remote_table:
+          name: StakePool
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - hash
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

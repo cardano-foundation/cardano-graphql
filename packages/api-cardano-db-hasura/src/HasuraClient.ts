@@ -229,7 +229,7 @@ export class HasuraClient {
             assets (
                 limit: 1
                 offset: 1
-                order_by: { firstAppearedInBlock: { slotNo: desc }}
+                order_by: { firstAppearedInSlot: desc }
             ) {
                 firstAppearedInBlock {
                     hash
@@ -265,16 +265,18 @@ export class HasuraClient {
   }
 
   public async getPaymentAddressSummary (address: string, atBlock?: number): Promise<PaymentAddressSummary> {
-    const result = await this.client.request(
-      gql`query PaymentAddressSummary (
+    let args = 'address: { _eq: $address }'
+    if (atBlock) {
+      args = args + '\n transaction: { block: { number: { _lte: $atBlock }}}'
+    }
+    const query = `query PaymentAddressSummary (
           $address: String!
           $atBlock: Int
       ){
           utxos (
               where: {
                   _and: {
-                      address: { _eq: $address },
-                      transaction: { block: { number: { _lte: $atBlock }}}
+                      ${args}
                   }
               }
           ) {
@@ -322,8 +324,7 @@ export class HasuraClient {
           utxos_aggregate (
               where: {
                   _and: {
-                      address: { _eq: $address },
-                      transaction: { block: { number: { _lte: $atBlock }}}
+                      ${args}
                   }
               }
           ) {
@@ -331,11 +332,10 @@ export class HasuraClient {
                   count
               }
           }
-      }`,
-      {
-        address,
-        atBlock
-      }
+      }`
+    const result = await this.client.request(
+      gql`${query}`,
+      { address, atBlock }
     )
     const map = new Map<Asset['assetId'], AssetBalance>()
     for (const utxo of result.utxos as TransactionOutput[]) {

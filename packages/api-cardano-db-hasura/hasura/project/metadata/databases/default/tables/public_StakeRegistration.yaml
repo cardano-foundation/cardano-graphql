@@ -1,0 +1,27 @@
+table:
+  name: StakeRegistration
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: stakeRegistrations
+    select_aggregate: stakeRegistrations_aggregate
+object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_id: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - address
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

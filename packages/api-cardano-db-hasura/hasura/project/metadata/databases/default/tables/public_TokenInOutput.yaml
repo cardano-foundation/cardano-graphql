@@ -1,0 +1,33 @@
+table:
+  name: TokenInOutput
+  schema: public
+object_relationships:
+  - name: asset
+    using:
+      manual_configuration:
+        column_mapping:
+          assetId: assetId
+        insertion_order: null
+        remote_table:
+          name: Asset
+          schema: public
+  - name: transactionOutput
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_out_id: id
+        insertion_order: null
+        remote_table:
+          name: TransactionOutput
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - assetId
+        - assetName
+        - policyId
+        - quantity
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

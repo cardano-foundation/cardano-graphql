@@ -10,11 +10,11 @@ export class Db {
   pgSubscriber: Subscriber
 
   constructor (
-    pgClientConfig: ClientConfig,
+    config: ClientConfig,
     private logger: Logger = dummyLogger
   ) {
     this.state = null
-    this.pgSubscriber = createSubscriber(pgClientConfig, {
+    this.pgSubscriber = createSubscriber(config, {
       parse: (value) => value
     })
   }
@@ -28,6 +28,7 @@ export class Db {
   }): Promise<void> {
     if (this.state !== null) return
     this.state = 'initializing'
+    this.logger.info({ module: MODULE_NAME }, 'Initializing...')
     this.pgSubscriber.events.on('connected', async () => {
       this.logger.debug({ module: MODULE_NAME }, 'pgSubscriber: Connected')
       await onDbSetup()
@@ -63,6 +64,9 @@ export class Db {
 
   public async shutdown () {
     if (this.state !== 'initialized') return
+    this.logger.info({ module: MODULE_NAME }, 'Shutting down...')
     await this.pgSubscriber.close()
+    this.state = null
+    this.logger.info({ module: MODULE_NAME }, 'Shut down')
   }
 }

@@ -1,0 +1,40 @@
+table:
+  name: ActiveStake
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: activeStake
+    select_aggregate: activeStake_aggregate
+object_relationships:
+  - name: epoch
+    using:
+      manual_configuration:
+        column_mapping:
+          epochNo: number
+        insertion_order: null
+        remote_table:
+          name: Epoch
+          schema: public
+  - name: registeredWith
+    using:
+      manual_configuration:
+        column_mapping:
+          stakePoolHash: hash
+        insertion_order: null
+        remote_table:
+          name: StakePool
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - address
+        - amount
+        - epochNo
+        - stakePoolHash
+        - stakePoolId
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
