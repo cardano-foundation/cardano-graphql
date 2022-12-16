@@ -55,5 +55,11 @@ in stdenv.mkDerivation {
     exec ${nodejs}/bin/node $out/packages/server/dist/index.js
     EOF
     chmod +x $out/bin/cardano-graphql
+
+    cat <<EOF > $out/bin/cardano-graphql-background
+    #!${runtimeShell}
+    exec ${nodejs}/bin/node $out/packages/api-cardano-db-hasura/dist/background.js
+    EOF
+    chmod +x $out/bin/cardano-graphql-background
   '';
 }
