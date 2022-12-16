@@ -1,10 +1,11 @@
 import { createLogger, LogLevelString } from 'bunyan'
-import { Db, HasuraManagementClient } from '../index'
+import { ChainFollower, Db, HasuraBackgroundClient, MetadataClient, Worker } from './index'
 import onDeath from 'death'
 import { Logger } from 'ts-log'
 import { CustomError } from 'ts-custom-error'
 import fs from 'fs-extra'
-import { DbConfig } from '../typeAliases'
+import { DbConfig } from './typeAliases'
+import { PointOrOrigin } from '@cardano-ogmios/schema'
 // Todo: Hoist to util package next major version
 export class MissingConfig extends CustomError {
   public constructor (message: string) {
@@ -13,20 +14,31 @@ export class MissingConfig extends CustomError {
   }
 }
 
-export interface DbManagerConfig {
+export interface BackgroundConfig {
   db: DbConfig,
   hasuraCliPath: string,
   hasuraUri: string,
-  loggerMinSeverity: LogLevelString
+  loggerMinSeverity: LogLevelString,
+  metadataServerUri: string,
+  metadataUpdateInterval?: {
+    assets: number
+  },
+  ogmios?: {
+    host?: string
+    port?: number
+  }
 }
 
-async function getConfig (): Promise<DbManagerConfig> {
+async function getConfig (): Promise<BackgroundConfig> {
   const env = filterAndTypecastEnvs(process.env)
   if (!env.hasuraCliPath) {
     throw new MissingConfig('HASURA_CLI_PATH env not set')
   }
   if (!env.hasuraUri) {
     throw new MissingConfig('HASURA_URI env not set')
+  }
+  if (!env.metadataServerUri) {
+    throw new MissingConfig('METADATA_SERVER_URI env not set')
   }
   if (!env.postgres.dbFile && !env.postgres.db) {
     throw new MissingConfig('POSTGRES_DB_FILE or POSTGRES_DB env not set')
@@ -43,7 +55,7 @@ async function getConfig (): Promise<DbManagerConfig> {
   if (!env.postgres.userFile && !env.postgres.user) {
     throw new MissingConfig('POSTGRES_USER_FILE or POSTGRES_USER env not set')
   }
-  let db: DbManagerConfig['db']
+  let db: BackgroundConfig['db']
   try {
     db = {
       database: env.postgres.db || (await fs.readFile(env.postgres.dbFile, 'utf8')).toString().trim(),
@@ -65,9 +77,13 @@ async function getConfig (): Promise<DbManagerConfig> {
 
 function filterAndTypecastEnvs (env: any) {
   const {
+    ASSET_METADATA_UPDATE_INTERVAL,
     HASURA_CLI_PATH,
     HASURA_URI,
     LOGGER_MIN_SEVERITY,
+    METADATA_SERVER_URI,
+    OGMIOS_HOST,
+    OGMIOS_PORT,
     POSTGRES_DB,
     POSTGRES_DB_FILE,
     POSTGRES_HOST,
@@ -81,6 +97,14 @@ function filterAndTypecastEnvs (env: any) {
     hasuraCliPath: HASURA_CLI_PATH,
     hasuraUri: HASURA_URI,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
+    metadataServerUri: METADATA_SERVER_URI,
+    metadataUpdateInterval: {
+      assets: ASSET_METADATA_UPDATE_INTERVAL ? Number(ASSET_METADATA_UPDATE_INTERVAL) : undefined
+    },
+    ogmios: {
+      host: OGMIOS_HOST,
+      port: OGMIOS_PORT ? Number(OGMIOS_PORT) : undefined
+    },
     postgres: {
       db: POSTGRES_DB,
       dbFile: POSTGRES_DB_FILE,
@@ -97,30 +121,61 @@ function filterAndTypecastEnvs (env: any) {
 (async function () {
   const config = await getConfig()
   const logger: Logger = createLogger({
-    name: 'db-manager',
+    name: 'background',
     level: config.loggerMinSeverity
   })
   try {
-    const hasuraManagementClient = new HasuraManagementClient(
+    const hasuraBackgroundClient = new HasuraBackgroundClient(
       config.hasuraCliPath,
       config.hasuraUri,
       logger
     )
+    const chainFollower = new ChainFollower(
+      hasuraBackgroundClient,
+      logger,
+      config.db
+    )
+    const metadataClient = new MetadataClient(
+      config.metadataServerUri,
+      logger
+    )
+    const worker = new Worker(
+      hasuraBackgroundClient,
+      logger,
+      metadataClient,
+      config.db,
+      {
+        metadataUpdateInterval: {
+          assets: config.metadataUpdateInterval?.assets
+        }
+      }
+    )
     const db = new Db(config.db, logger)
+    const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
+      const mostRecentPoint = await hasuraBackgroundClient.getMostRecentPointWithNewAsset()
+      return mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
+    }
     await db.init({
-      onDbInit: () => hasuraManagementClient.shutdown(),
+      onDbInit: () => hasuraBackgroundClient.shutdown(),
       onDbSetup: async () => {
         try {
-          await hasuraManagementClient.initialize()
+          await hasuraBackgroundClient.initialize()
+          await metadataClient.initialize()
+          await chainFollower.initialize(config.ogmios, getChainSyncPoints)
+          await worker.start()
+          await chainFollower.start(await getChainSyncPoints())
         } catch (error) {
           process.exit(1)
         }
       }
     })
-    await hasuraManagementClient.initialize()
     onDeath(async () => {
-      await hasuraManagementClient.shutdown()
-      await db.shutdown()
+      await Promise.all([
+        hasuraBackgroundClient.shutdown,
+        worker.shutdown,
+        chainFollower.shutdown,
+        db.shutdown
+      ])
       process.exit(1)
     })
   } catch (error) {

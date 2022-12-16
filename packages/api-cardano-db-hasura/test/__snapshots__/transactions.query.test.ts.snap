@@ -447,16 +447,16 @@ Object {
       "hash": "c1bb6a765ac42c5bb80e531d1feaa5bd4a4f0d55c331baffa9b014b942995947",
       "inputs": Array [
         Object {
-          "address": "addr_test1zrrryp45pgzvkha6hkxhsann0wcntvgjmznr6uwz2v0uvfcye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqnghs3t",
-          "sourceTxHash": "5b7e7789b5a71101d12c7d8070b74bb4576c361529a089176bf6c073650b9b5e",
-          "sourceTxIndex": 1,
-          "value": "1006657521",
-        },
-        Object {
           "address": "addr_test1qzu4zx26m7067am9g3zpkt3mh86j33vd6vtv5r35rxdcxwsye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqpwmzcx",
           "sourceTxHash": "5b7e7789b5a71101d12c7d8070b74bb4576c361529a089176bf6c073650b9b5e",
           "sourceTxIndex": 0,
           "value": "7413772505",
+        },
+        Object {
+          "address": "addr_test1zrrryp45pgzvkha6hkxhsann0wcntvgjmznr6uwz2v0uvfcye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqnghs3t",
+          "sourceTxHash": "5b7e7789b5a71101d12c7d8070b74bb4576c361529a089176bf6c073650b9b5e",
+          "sourceTxIndex": 1,
+          "value": "1006657521",
         },
       ],
       "inputs_aggregate": Object {

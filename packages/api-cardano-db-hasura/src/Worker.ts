@@ -1,10 +1,10 @@
 import { errors, RunnableModuleState } from '@cardano-graphql/util'
 import hash from 'object-hash'
 import { dummyLogger, Logger } from 'ts-log'
-import { Config } from './Config'
-import { HasuraClient } from './HasuraClient'
 import PgBoss, { JobWithDoneCallback } from 'pg-boss'
 import { MetadataClient } from './MetadataClient'
+import { DbConfig } from './typeAliases'
+import { HasuraBackgroundClient } from './HasuraBackgroundClient'
 
 const ASSET_METADATA_FETCH_INITIAL = 'asset-metadata-fetch-initial'
 const ASSET_METADATA_FETCH_UPDATE = 'asset-metadata-fetch-update'
@@ -18,13 +18,13 @@ export class Worker {
   private state: RunnableModuleState
 
   constructor (
-    readonly hasuraClient: HasuraClient,
+    readonly hasuraClient: HasuraBackgroundClient,
     private logger: Logger = dummyLogger,
     private metadataFetchClient: MetadataClient,
-    private queueConfig: Config['db'],
+    private queueConfig: DbConfig,
     private options?: {
       metadataUpdateInterval?: {
-        assets?: Config['metadataUpdateInterval']['assets']
+        assets?: number
       }
     }
   ) {
