@@ -7,6 +7,9 @@
       url = "github:input-output-hk/flake-compat/fixes";
       flake = false;
     };
+    bitte-cells = {
+      url = github:input-output-hk/bitte-cells;
+    };
     haskellNix = {
       url = github:input-output-hk/haskell.nix/fix-input-map-support-with-no-rev;
     };
@@ -60,6 +63,7 @@
       cellBlocks = [
         (std.functions "library")
         (std.installables "packages")
+        (std.runnables "entrypoints")
         (std.functions "hydraJobs")
         (tullia.tasks "pipelines")
         (std.functions "actions")
