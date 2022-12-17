@@ -1,7 +1,7 @@
 
 { lib, pkgs, config, ... }:
 let
-  cfg = config.services.cardano-graphql;
+  cfg = config.services.cardano-graphql-background;
   selfPkgs = import ../pkgs.nix {};
 in {
   options = {
