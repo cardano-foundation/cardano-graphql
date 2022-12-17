@@ -9,13 +9,13 @@ let
     nixpkgs
     ;
   filteredSrc = std.incl inputs.self [
-    "${inputs.self}/yarn.lock"
-    "${inputs.self}/.yarnrc"
-    "${inputs.self}/package.json"
-    "${inputs.self}/packages"
-    "${inputs.self}/packages-cache"
-    "${inputs.self}/tsconfig.json"
-    "${inputs.self}/docker-compose.yml"
+    "yarn.lock"
+    ".yarnrc"
+    "package.json"
+    "packages"
+    "packages-cache"
+    "tsconfig.json"
+    "docker-compose.yml"
   ];
 
 in {
