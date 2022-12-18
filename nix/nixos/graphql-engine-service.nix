@@ -9,7 +9,7 @@ in {
 
       host = lib.mkOption {
         type = lib.types.str;
-        default = "/var/run/postgresql";
+        default = "";
       };
 
       dbUser = lib.mkOption {
@@ -19,7 +19,7 @@ in {
 
       password = lib.mkOption {
         type = lib.types.str;
-        default = ''""'';
+        default = "";
       };
 
       dbAdminUser = lib.mkOption {
@@ -54,7 +54,7 @@ in {
       GRANT SELECT ON ALL TABLES IN SCHEMA information_schema TO ${cfg.dbUser};
       GRANT SELECT ON ALL TABLES IN SCHEMA pg_catalog TO ${cfg.dbUser};
     '';
-    postgresqlIp = if ((__head (pkgs.lib.stringToCharacters cfg.host)) == "/")
+    postgresqlIp = if (cfg.host == "" || (__head (pkgs.lib.stringToCharacters cfg.host)) == "/")
                    then "127.0.0.1"
                    else cfg.host;
   in lib.mkIf cfg.enable {
@@ -62,6 +62,10 @@ in {
       wantedBy = [ "multi-user.target" ];
       requires = [ "postgresql.service" ];
       path = with pkgs; [ curl netcat postgresql sudo ];
+      environment = {
+        HASURA_GRAPHQL_DATABASE_URL = "postgres://${cfg.dbUser}:${cfg.password}@${cfg.host}${if cfg.host == "" then "" else toString ":${toString cfg.dbPort}"}/${cfg.db}";
+        CARDANO_GRAPHQL_DB_URL = "postgres://${cfg.dbUser}:${cfg.password}@${cfg.host}${if cfg.host == "" then "" else ":${toString cfg.dbPort}"}/cgql";
+      };
       preStart = ''
         for x in {1..10}; do
           nc -z ${postgresqlIp} ${toString cfg.dbPort} && break
@@ -72,11 +76,6 @@ in {
       '';
       script = ''
         exec ${graphqlEngine}/bin/graphql-engine \
-          --host ${cfg.host} \
-          -u ${cfg.dbUser} \
-          --password ${cfg.password} \
-          -d ${cfg.db} \
-          --port ${toString cfg.dbPort} \
           serve \
           --server-port ${toString cfg.enginePort} \
           --enable-telemetry=false \

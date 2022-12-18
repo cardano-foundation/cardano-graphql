@@ -90,15 +90,15 @@ export class Db {
           "assetId" BYTEA PRIMARY KEY,
           "assetName" BYTEA,
           "decimals" INT,
-          "description" VARCHAR(),
+          "description" VARCHAR,
           "fingerprint" CHAR(44),
           "firstAppearedInSlot" INT,
-          "logo" VARCHAR(),
+          "logo" VARCHAR,
           "metadataHash" CHAR(40),
-          "name" VARCHAR(),
+          "name" VARCHAR,
           "policyId" BYTEA,
           "ticker" VARCHAR(9),
-          "url" VARCHAR()
+          "url" VARCHAR
         );`
       )
     } catch (error) {
