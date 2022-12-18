@@ -65,8 +65,10 @@ RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/key
   apt-get update && apt-get install -y --no-install-recommends \
   ca-certificates
 COPY --from=downloader /usr/local/bin/hasura /usr/local/bin/hasura
+COPY --from=downloader  /root/.hasura/plugins/bin/hasura-cli_ext /usr/local/bin/hasura-cli_ext
 ENV \
   HASURA_CLI_PATH=/usr/local/bin/hasura \
+  HASURA_CLI_EXT_PATH=/usr/local/bin/hasura-cli_ext \
   HASURA_URI="http://hasura:8080" \
   LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
   METADATA_SERVER_URI=${METADATA_SERVER_URI} \
