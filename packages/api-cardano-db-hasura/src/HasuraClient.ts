@@ -124,7 +124,18 @@ export class HasuraClient {
       )
     })
     this.logger.debug({ module: 'HasuraClient' }, 'graphql-engine setup')
-    await this.adaPotsToCalculateSupplyFetcher.initialize()
+    await pRetry(async () => {
+      await this.adaPotsToCalculateSupplyFetcher.initialize()
+    }, {
+      factor: 1.1,
+      forever: true,
+      maxTimeout: 15000,
+      onFailedAttempt: util.onFailedAttemptFor(
+        'Initializing data fetchers',
+        this.logger
+      )
+    })
+    this.logger.debug({ module: 'HasuraClient' }, 'Data fetchers initialized')
     this.state = 'initialized'
     this.logger.info({ module: 'HasuraClient' }, 'Initialized')
   }
