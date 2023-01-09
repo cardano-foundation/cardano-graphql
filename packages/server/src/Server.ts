@@ -18,7 +18,7 @@ import {
 import { allowListMiddleware } from './express_middleware'
 import { dummyLogger, Logger } from 'ts-log'
 import { clearIntervalAsync, setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic'
-import { RunnableModuleState } from '@cardano-graphql/util'
+import { clamp, RunnableModuleState } from '@cardano-graphql/util'
 
 export type Config = {
   allowIntrospection: boolean
@@ -144,7 +144,9 @@ export class Server {
         this.logger.debug({ module: 'Server' }, JSON.stringify(result.errors))
         return
       }
-      const assetSyncPercentage = Math.round(Number(result.data.assets_aggregate.aggregate.count) / Number(result.data.tokenMints_aggregate.aggregate.count) * 100)
+      const assetSyncPercentage = Number(result.data.tokenMints_aggregate.aggregate.count) === 0
+        ? 0
+        : clamp(Math.max(Math.round(Number(result.data.assets_aggregate.aggregate.count) / Number(result.data.tokenMints_aggregate.aggregate.count) * 100)), 0, 100)
       if (result.data.cardanoDbMeta.initialized && assetSyncPercentage > 99) {
         this.logger.info({ module: 'Server' }, 'DB ready')
         // Promise not awaited purposely
