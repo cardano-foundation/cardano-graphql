@@ -8,7 +8,7 @@ export const testClient = {
     'http://localhost:3100'
   ),
   testnet: buildClient.bind(this,
-    'http://localhost:3101'
+    'http://localhost:3102'
   )
 }
 

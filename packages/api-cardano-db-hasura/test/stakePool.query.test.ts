@@ -19,7 +19,7 @@ describe('stakePools', () => {
   it('can lookup stake pools by ID', async () => {
     const result = await client.query({
       query: await loadQueryNode('stakePoolById'),
-      variables: { id: 'pool16kc6ck4clmhg2aykwhkymnz2ypk54yuvk0txt3p6mrw05hrsj3a' }
+      variables: { id: 'pool1547tew8vmuj0g6vj3k5jfddudextcw6hsk2hwgg6pkhk7lwphe6' }
     })
     const { stakePools } = result.data
     expect(stakePools.length).toBe(1)
@@ -66,7 +66,7 @@ describe('stakePools', () => {
       query: await loadQueryNode('aggregateStakePoolSummary')
     })
     const { stakePools_aggregate } = result.data
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(900)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(150)
   })
 
   it('can return aggregated data on active stake pools', async () => {
@@ -75,7 +75,7 @@ describe('stakePools', () => {
       variables: { where: { _not: { retirements: {} } } }
     })
     const { stakePools_aggregate } = result.data
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(500)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(150)
   })
 
   it('can return aggregated data on retiring stake pools', async () => {

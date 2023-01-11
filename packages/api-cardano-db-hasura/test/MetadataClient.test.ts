@@ -25,7 +25,7 @@ describe('MetadataClient', () => {
       }
     })
     it('can return all metadata by assetId', async () => {
-      client = new MetadataClient('https://tokens.cardano.org')
+      client = new MetadataClient('https://tokens.cardano.org/')
       await client.initialize()
       const response = await client.fetch(['f43a62fdc3965df486de8a0d32fe800963589c41b38946602a0dc53541474958'])
       expect(response).toBeDefined()

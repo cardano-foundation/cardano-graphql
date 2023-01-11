@@ -30,56 +30,56 @@ Object {
     "byron": Object {
       "blockVersionData": Object {
         "maxBlockSize": 2000000,
-        "maxHeaderSize": 2000,
-        "maxProposalSize": 70000,
-        "maxTxSize": 65536,
+        "maxHeaderSize": 2000000,
+        "maxProposalSize": 700,
+        "maxTxSize": 4096,
         "scriptVersion": 0,
         "slotDuration": 20000,
       },
       "protocolConsts": Object {
         "k": 2160,
-        "protocolMagic": 1097911063,
+        "protocolMagic": 1,
       },
-      "startTime": 1563999616,
+      "startTime": 1654041600,
     },
     "shelley": Object {
       "activeSlotsCoeff": 0.05,
       "epochLength": 432000,
       "genDelegs": Object {
-        "0d06d2547ed371fdf95fb5c4c735eecdd53e6a5bb831561bd0fcfd3d": Object {
-          "delegate": "6df3e1b4b8a84c63c805076a85e5aa00924997a4eae85fddf0aee3ca",
-          "vrf": "0774e5810fe02a014ec97ef424797172f2b8c5dcfb6e4cfc98b411c31d5096d8",
+        "637f2e950b0fd8f8e3e811c5fbeb19e411e7a2bf37272b84b29c1a0b": Object {
+          "delegate": "aae9293510344ddd636364c2673e34e03e79e3eefa8dbaa70e326f7d",
+          "vrf": "227116365af2ed943f1a8b5e6557bfaa34996f1578eec667a5e2b361c51e4ce7",
         },
-        "2f56e87d67b8e5216582cfeb95dbdc9083110a3ef68faaa51bef3a80": Object {
-          "delegate": "bd5933d3c5417f17a64c7214711a26abc3bc03e2c90dc1bb38e0c39f",
-          "vrf": "9a0b0f537874d089cedfa9e250150405e47ea29acee87c40a223ae0a175d26f8",
+        "8a4b77c4f534f8b8cc6f269e5ebb7ba77fa63a476e50e05e66d7051c": Object {
+          "delegate": "d15422b2e8b60e500a82a8f4ceaa98b04e55a0171d1125f6c58f8758",
+          "vrf": "0ada6c25d62db5e1e35d3df727635afa943b9e8a123ab83785e2281605b09ce2",
         },
-        "2fca486b4d8f1a0432f5bf18ef473ee4294c795a1a32e3132bc6b90f": Object {
-          "delegate": "de665a71064706f946030505eae950583f08c316f0f58997961092b1",
-          "vrf": "c3fde629add60e30142cd7ef3c680610975208b08aee42203a5c40ad5992e8f6",
+        "b00470cd193d67aac47c373602fccd4195aad3002c169b5570de1126": Object {
+          "delegate": "b3b539e9e7ed1b32fbf778bf2ebf0a6b9f980eac90ac86623d11881a",
+          "vrf": "0ff0ce9b820376e51c03b27877cd08f8ba40318f1a9f85a3db0b60dd03f71a7a",
         },
-        "4ee98623920698b77c1c7f77288cbdac5f9011ff8970b1f507567d0d": Object {
-          "delegate": "bf07107c6f632de95e34af7e009d2aafa19916c7ba89b944fbedcd72",
-          "vrf": "9d7d12e3d6b02835be3e76cfc6ae93d937035ee0e006d04a0eef9dea19754e21",
+        "b260ffdb6eba541fcf18601923457307647dce807851b9d19da133ab": Object {
+          "delegate": "7c64eb868b4ef566391a321c85323f41d2b95480d7ce56ad2abcb022",
+          "vrf": "7fb22abd39d550c9a022ec8104648a26240a9ff9c88b8b89a6e20d393c03098e",
         },
-        "514e81afb082fce01678809eebd90eda4f7918354ec7d0433ad16274": Object {
-          "delegate": "eff1b5b26e65b791d6f236c7c0264012bd1696759d22bdb4dd0f6f56",
-          "vrf": "e6f70fb10c7523aa76648e20d17e65fd9b2ed53960fbd20b308f223b703f2e23",
+        "ced1599fd821a39593e00592e5292bdc1437ae0f7af388ef5257344a": Object {
+          "delegate": "de7ca985023cf892f4de7f5f1d0a7181668884752d9ebb9e96c95059",
+          "vrf": "c301b7fc4d1b57fb60841bcec5e3d2db89602e5285801e522fce3790987b1124",
         },
-        "581e23030b6038bae716e5d64b9e053db10541b12e6b0b4eff485454": Object {
-          "delegate": "b0dca078b823cde627da136200d6618c49ad712b77972a1c5e135763",
-          "vrf": "16a4e883b72ddbd09a4f8a1170fc346ab11e4202f814faa73e9d2433ee03e7b0",
+        "dd2a7d71a05bed11db61555ba4c658cb1ce06c8024193d064f2a66ae": Object {
+          "delegate": "1e113c218899ee7807f4028071d0e108fc790dade9fd1a0d0b0701ee",
+          "vrf": "faf2702aa4893c877c622ab22dfeaf1d0c8aab98b837fe2bf667314f0d043822",
         },
-        "e5f27655371b54aed91cc916b2569060978be80056768fee2cc5ce1b": Object {
-          "delegate": "b3873a254459f506e47b9a252ee7912e538b364447f31576a170db65",
-          "vrf": "cc5c897fdf5db0017326656fe35aeb20c72b175540793f9b9b8dc9ade001bbc4",
+        "f3b9e74f7d0f24d2314ea5dfbca94b65b2059d1ff94d97436b82d5b4": Object {
+          "delegate": "fd637b08cc379ef7b99c83b416458fcda8a01a606041779331008fb9",
+          "vrf": "37f2ea7c843a688159ddc2c38a2f997ab465150164a9136dca69564714b73268",
         },
       },
       "initialFunds": Object {},
       "maxKESEvolutions": 62,
       "maxLovelaceSupply": "45000000000000000",
       "networkId": "Testnet",
-      "networkMagic": 1097911063,
+      "networkMagic": 1,
       "protocolParams": Object {
         "a0": 0.3,
         "decentralisationParam": 1,
@@ -107,8 +107,11 @@ Object {
       "securityParam": 2160,
       "slotLength": 1,
       "slotsPerKESPeriod": 129600,
-      "staking": null,
-      "systemStart": "2019-07-24T20:20:16Z",
+      "staking": Object {
+        "pools": Object {},
+        "stake": Object {},
+      },
+      "systemStart": "2022-06-01T00:00:00Z",
       "updateQuorum": 5,
     },
   },

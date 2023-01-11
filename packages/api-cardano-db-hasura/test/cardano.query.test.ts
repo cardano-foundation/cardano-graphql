@@ -19,7 +19,7 @@ describe('cardano', () => {
     const result = await client.query({
       query: await loadQueryNode('chainTipAndCurrentEpochNumber')
     })
-    expect(result.data.cardano.tip.number).toBeGreaterThan(3037572)
-    expect(result.data.cardano.currentEpoch.number).toBeGreaterThan(165)
+    expect(result.data.cardano.tip.number).toBeGreaterThan(478480)
+    expect(result.data.cardano.currentEpoch.number).toBeGreaterThan(42)
   })
 })

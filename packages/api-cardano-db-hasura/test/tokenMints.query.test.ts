@@ -36,11 +36,10 @@ describe('tokenMints', () => {
       query: await loadQueryNode('tokenMints'),
       variables: {
         where: {
-          asset: { fingerprint: { _eq: 'asset1325zj0yt3dxccmxk8g9429l4krg4yz6tyaxpnk' } }
+          asset: { fingerprint: { _eq: 'asset132r28qxkhg0wddjjpt2qffzd9m7g37arndlxsv' } }
         },
-        orderBy: {
-          transaction: { includedAt: 'desc' }
-        }
+        limit: 10,
+        offset: 0
       }
     })
     const { tokenMints } = result.data

@@ -50,7 +50,7 @@ exports[`transactions Can return filtered aggregated data 1`] = `
 Object {
   "transactions": Array [
     Object {
-      "hash": "2819f6a34f9029251eb91309c85d4b42d7d8dd26ed00ea0693463176bac62c45",
+      "hash": "a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758",
       "outputs_aggregate": Object {
         "aggregate": Object {
           "count": "1",
@@ -66,42 +66,70 @@ Object {
   "transactions": Array [
     Object {
       "block": Object {
-        "number": null,
+        "number": 48,
       },
       "blockIndex": 0,
       "collateralInputs": Array [],
-      "deposit": 0,
-      "fee": 0,
-      "hash": "d13e153c6df662e565b4d5608d4224de21fb387c5371f499d788e82912069324",
-      "inputs": Array [],
+      "deposit": 1506000000,
+      "fee": 238057,
+      "hash": "a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758",
+      "inputs": Array [
+        Object {
+          "address": "addr_test1vz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzclgmzkket",
+          "sourceTxHash": "b75ec46c406113372efeb1e57d9880856c240c9b531e3c680c1c4d8bf2253625",
+          "sourceTxIndex": 0,
+          "value": "29999999999800000",
+        },
+      ],
       "inputs_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "value": null,
+            "value": "29999999999800000",
           },
         },
       },
       "outputs": Array [
         Object {
-          "address": "37btjrVyb4KDHDPBVenqrh8tUTVNYX5ZGwjd4r3svqdnwWicGnMZZV1E7nBJVQsDY69co936H9onHpmA3PYSabYH4ibbULphL1CitDgArH9KknBARc",
+          "address": "addr_test1vz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzclgmzkket",
           "addressHasScript": false,
           "index": 0,
-          "paymentCredential": null,
-          "value": "19999999999999",
+          "paymentCredential": "9e5614893238cf85e284c61ec56d5efd9f9cdc4863ba7e1bf00c2c7d",
+          "value": "29699998493561944",
+        },
+        Object {
+          "address": "addr_test1qz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzclvk35gzr67hz78plv88jemfs2p9e2780xm98cfrf4vvu0rq83pdz2",
+          "addressHasScript": false,
+          "index": 1,
+          "paymentCredential": "9e5614893238cf85e284c61ec56d5efd9f9cdc4863ba7e1bf00c2c7d",
+          "value": "100000000000000",
+        },
+        Object {
+          "address": "addr_test1qz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzcl03xqsyk5v0wrqen92yncmn0m0d8k0lcvwt2rkqu3gppw3sdexkvh",
+          "addressHasScript": false,
+          "index": 2,
+          "paymentCredential": "9e5614893238cf85e284c61ec56d5efd9f9cdc4863ba7e1bf00c2c7d",
+          "value": "100000000000000",
+        },
+        Object {
+          "address": "addr_test1qz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzclfe9t57q689t694cfavck9sh2uw545vp2hz7m7yn03r57kslz5rjf",
+          "addressHasScript": false,
+          "index": 3,
+          "paymentCredential": "9e5614893238cf85e284c61ec56d5efd9f9cdc4863ba7e1bf00c2c7d",
+          "value": "100000000000000",
         },
       ],
       "outputs_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "value": "19999999999999",
+            "value": "29999998493561944",
           },
         },
       },
       "redeemers": Array [],
       "scriptSize": 0,
       "scripts": Array [],
-      "size": 0,
-      "totalOutput": "19999999999999",
+      "size": 1879,
+      "totalOutput": "29999998493561944",
       "validContract": true,
       "withdrawals_aggregate": Object {
         "aggregate": Object {
@@ -113,54 +141,54 @@ Object {
     },
     Object {
       "block": Object {
-        "number": 1936322,
+        "number": 50,
       },
-      "blockIndex": 2,
+      "blockIndex": 0,
       "collateralInputs": Array [],
       "deposit": 0,
-      "fee": 179757,
-      "hash": "657ac5fa926f9f047360cbc908a4f6177f2ac9b52d4254c63dcb1312127217f4",
+      "fee": 206245,
+      "hash": "a00696a0c2d70c381a265a845e43c55e1d00f96b27c06defc015dc92eb206240",
       "inputs": Array [
         Object {
-          "address": "addr_test1qpjettexkjevymrluxr6lvrrq3f4whdq43g78zk93s27cc3hryxtv2vgjpqnxlhqnvc96le2u7mc8gsasmq34nerfjcqrk4smr",
-          "sourceTxHash": "e411a2886de918f7c3b9f9a9a12f32b2c64488b3363291d7146ab21f36a29ae7",
+          "address": "addr_test1vz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzclgmzkket",
+          "sourceTxHash": "a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758",
           "sourceTxIndex": 0,
-          "value": "10000007624162",
+          "value": "29699998493561944",
         },
       ],
       "inputs_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "value": "10000007624162",
+            "value": "29699998493561944",
           },
         },
       },
       "outputs": Array [
         Object {
-          "address": "addr_test1qpjettexkjevymrluxr6lvrrq3f4whdq43g78zk93s27cc3hryxtv2vgjpqnxlhqnvc96le2u7mc8gsasmq34nerfjcqrk4smr",
+          "address": "addr_test1vz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzclgmzkket",
           "addressHasScript": false,
           "index": 0,
-          "paymentCredential": "6595af26b4b2c26c7fe187afb0630453575da0ac51e38ac58c15ec62",
-          "value": "10000876045027",
+          "paymentCredential": "9e5614893238cf85e284c61ec56d5efd9f9cdc4863ba7e1bf00c2c7d",
+          "value": "29699998493355696",
         },
       ],
       "outputs_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "value": "10000876045027",
+            "value": "29699998493355696",
           },
         },
       },
       "redeemers": Array [],
       "scriptSize": 0,
       "scripts": Array [],
-      "size": 367,
-      "totalOutput": "10000876045027",
+      "size": 1156,
+      "totalOutput": "29699998493355696",
       "validContract": true,
       "withdrawals_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "amount": "868600622",
+            "amount": null,
           },
         },
       },
@@ -176,77 +204,66 @@ Object {
       "transactions": Array [
         Object {
           "block": Object {
-            "number": 2993776,
+            "number": 212294,
           },
-          "blockIndex": 17,
+          "blockIndex": 0,
           "collateralInputs": Array [
             Object {
-              "value": "10000000",
+              "value": "9993865987",
             },
           ],
           "deposit": 0,
-          "fee": 432963,
-          "hash": "39f065894a51ddf75f58f577e648de5990d9eddf239619e969ebb8aa3a0ea551",
+          "fee": 922864,
+          "hash": "750eed6d314f64d8d5b5fe10a4bc34fe21bbf9c657660e061b26f091dac21717",
           "inputs": Array [
             Object {
-              "address": "addr_test1qr8a6n53n63payfj8yk3wyne55drg676ypzf2wtfj4ndymhw05f4lcyppn6jqe2dffwum65fpsv037wsl0luszgvkz2q2z9e85",
-              "sourceTxHash": "b3587dba3b74f35025f75fac0232fb9df739722a8b65851d8756914607b47eee",
+              "address": "addr_test1wrp082rs5aa6a2pp55heu56gtmashrwx373230exgjm09vcygvy48",
+              "sourceTxHash": "1ac7c37eda5e446a10066fddaae5a1bdbedbc828cfc1ecf21f8308d4714b192a",
               "sourceTxIndex": 0,
-              "value": "100000000",
+              "value": "1387820",
+            },
+            Object {
+              "address": "addr_test1qzmh55q6yrdvy52jyze9amqm28v26svjqstwgyhyfm9936z8cxm47kgqa3pgqvxhtfec076jmhfzj5v8pav5eewqxymqqpatlt",
+              "sourceTxHash": "b1d3ace8421a7d1549577054d1e7f437cbcf9fd91a54361fd7ab940a90778b92",
+              "sourceTxIndex": 0,
+              "value": "9993865987",
             },
           ],
           "inputs_aggregate": Object {
             "aggregate": Object {
               "sum": Object {
-                "value": "100000000",
+                "value": "9995253807",
               },
             },
           },
           "outputs": Array [
             Object {
-              "address": "addr_test1qzrsw4n8nn4p3gchk796swhjq5hhs94cxcq6d3ee3ufj63lw05f4lcyppn6jqe2dffwum65fpsv037wsl0luszgvkz2qdudpd3",
+              "address": "addr_test1qzmh55q6yrdvy52jyze9amqm28v26svjqstwgyhyfm9936z8cxm47kgqa3pgqvxhtfec076jmhfzj5v8pav5eewqxymqqpatlt",
               "addressHasScript": false,
               "index": 0,
-              "paymentCredential": "870756679cea18a317b78ba83af2052f7816b83601a6c7398f132d47",
-              "value": "96118837",
-            },
-            Object {
-              "address": "addr_test1qzrsw4n8nn4p3gchk796swhjq5hhs94cxcq6d3ee3ufj63lw05f4lcyppn6jqe2dffwum65fpsv037wsl0luszgvkz2qdudpd3",
-              "addressHasScript": false,
-              "index": 1,
-              "paymentCredential": "870756679cea18a317b78ba83af2052f7816b83601a6c7398f132d47",
-              "value": "1724100",
-            },
-            Object {
-              "address": "addr_test1wqr0gpnql52gez5jfgsm28accs8yd6nkwhue2gtggskkr3cw62h5u",
-              "addressHasScript": true,
-              "index": 2,
-              "paymentCredential": "06f40660fd148c8a924a21b51fb8c40e46ea7675f9952168442d61c7",
-              "value": "1724100",
+              "paymentCredential": "b77a501a20dac2515220b25eec1b51d8ad41920416e412e44eca58e8",
+              "value": "9994330943",
             },
           ],
           "outputs_aggregate": Object {
             "aggregate": Object {
               "sum": Object {
-                "value": "99567037",
+                "value": "9994330943",
               },
             },
           },
           "redeemers": Array [
             Object {
-              "scriptHash": "82f065f4f62986d9add2c9418a559bd88fa26325d7996307a67545dd",
+              "scriptHash": "c2f3a870a77baea821a52f9e53485efb0b8dc68fa2a8bf2644b6f2b3",
             },
-          ],
-          "scriptSize": 3602,
-          "scripts": Array [
             Object {
-              "hash": "82f065f4f62986d9add2c9418a559bd88fa26325d7996307a67545dd",
-              "serialisedSize": 3602,
-              "type": "plutusV1",
+              "scriptHash": "7348135a9aa87bff1beba4e7fe72e66dd4cf785fcb2f221002b90ede",
             },
           ],
-          "size": 4294,
-          "totalOutput": "99567037",
+          "scriptSize": 15677,
+          "scripts": Array [],
+          "size": 16313,
+          "totalOutput": "9994330943",
           "validContract": true,
           "withdrawals_aggregate": Object {
             "aggregate": Object {
@@ -264,68 +281,7 @@ Object {
   },
   "timelockResult": Object {
     "data": Object {
-      "transactions": Array [
-        Object {
-          "block": Object {
-            "number": 2288957,
-          },
-          "blockIndex": 0,
-          "collateralInputs": Array [],
-          "deposit": 0,
-          "fee": 180637,
-          "hash": "c4f2f4ec91d2afe932c022b9f671cdf44ab62c35e9b6e582335ed01c82d167b0",
-          "inputs": Array [
-            Object {
-              "address": "addr_test1vzge9w95jgxlyh0l49fs0ugk736deu8tl5r2fqx4qg05jjqfpu5va",
-              "sourceTxHash": "94c10df5fceb3567b9d969319dabe07c8d40cdea11a5169df164571a043ad5b0",
-              "sourceTxIndex": 0,
-              "value": "1000000000",
-            },
-          ],
-          "inputs_aggregate": Object {
-            "aggregate": Object {
-              "sum": Object {
-                "value": "1000000000",
-              },
-            },
-          },
-          "outputs": Array [
-            Object {
-              "address": "addr_test1vzge9w95jgxlyh0l49fs0ugk736deu8tl5r2fqx4qg05jjqfpu5va",
-              "addressHasScript": false,
-              "index": 0,
-              "paymentCredential": "9192b8b4920df25dffa95307f116f474dcf0ebfd06a480d5021f4948",
-              "value": "999819363",
-            },
-          ],
-          "outputs_aggregate": Object {
-            "aggregate": Object {
-              "sum": Object {
-                "value": "999819363",
-              },
-            },
-          },
-          "redeemers": Array [],
-          "scriptSize": 0,
-          "scripts": Array [
-            Object {
-              "hash": "4b03642a00b1f25ff66508ebdcc400cbcec9b0527bd2c39838f820e0",
-              "serialisedSize": null,
-              "type": "timelock",
-            },
-          ],
-          "size": 429,
-          "totalOutput": "999819363",
-          "validContract": true,
-          "withdrawals_aggregate": Object {
-            "aggregate": Object {
-              "sum": Object {
-                "amount": null,
-              },
-            },
-          },
-        },
-      ],
+      "transactions": Array [],
     },
     "loading": false,
     "networkStatus": 7,
@@ -340,14 +296,9 @@ Object {
     Object {
       "metadata": Array [
         Object {
-          "key": "721",
+          "key": "1",
           "value": Object {
-            "57cdc42f2041cf67ceea61be6a25e913aff31f7f0bb5e59b8b6ad18b": Object {
-              "NEWNFTxx0": Object {
-                "image": "ipfs://XXXXYYYYZZZZ",
-                "name": "Test NFT #0",
-              },
-            },
+            "cardano": "First Metadata from cardanocli-js",
           },
         },
       ],
@@ -362,12 +313,12 @@ Object {
     Object {
       "collateralInputs": Array [
         Object {
-          "address": "addr_test1vzmvs72wnfazvkv5gzjdpltee5rkgng4j9llzd5578m8ydgkp6edr",
+          "address": "addr_test1qzu4zx26m7067am9g3zpkt3mh86j33vd6vtv5r35rxdcxwsye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqpwmzcx",
           "sourceTransaction": Object {
-            "hash": "ada4fb7984252af87faf71de9e94c66f24851b0e6dd509df2d1ea9c795694188",
+            "hash": "5b7e7789b5a71101d12c7d8070b74bb4576c361529a089176bf6c073650b9b5e",
           },
-          "sourceTxHash": "ada4fb7984252af87faf71de9e94c66f24851b0e6dd509df2d1ea9c795694188",
-          "sourceTxIndex": 1,
+          "sourceTxHash": "5b7e7789b5a71101d12c7d8070b74bb4576c361529a089176bf6c073650b9b5e",
+          "sourceTxIndex": 0,
           "tokens": Array [],
           "tokens_aggregate": Object {
             "aggregate": Object {
@@ -376,55 +327,55 @@ Object {
               },
             },
           },
-          "value": "11492321",
+          "value": "7413772505",
         },
       ],
       "collateralInputs_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "value": "11492321",
+            "value": "7413772505",
           },
           "count": "1",
           "max": Object {
-            "value": "11492321",
+            "value": "7413772505",
           },
           "min": Object {
-            "value": "11492321",
+            "value": "7413772505",
           },
           "sum": Object {
-            "value": "11492321",
+            "value": "7413772505",
           },
         },
       },
       "collateralOutputs": Array [
         Object {
-          "address": "addr_test1vzmvs72wnfazvkv5gzjdpltee5rkgng4j9llzd5578m8ydgkp6edr",
+          "address": "addr_test1qzu4zx26m7067am9g3zpkt3mh86j33vd6vtv5r35rxdcxwsye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqpwmzcx",
           "addressHasScript": false,
           "datum": null,
-          "index": 1,
-          "paymentCredential": "b6c8794e9a7a26599440a4d0fd79cd07644d15917ff13694f1f67235",
+          "index": 2,
+          "paymentCredential": "b951195adf9faf776544441b2e3bb9f528c58dd316ca0e34199b833a",
           "script": null,
-          "value": "11232872",
+          "value": "7408772505",
         },
       ],
       "collateralOutputs_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "value": "11232872",
+            "value": "7408772505",
           },
           "count": "1",
           "max": Object {
-            "value": "11232872",
+            "value": "7408772505",
           },
           "min": Object {
-            "value": "11232872",
+            "value": "7408772505",
           },
           "sum": Object {
-            "value": "11232872",
+            "value": "7408772505",
           },
         },
       },
-      "hash": "3fca8f8be6efba69327388dac1d0b37a72f8803ada94f724aa8bbf17b7e38eee",
+      "hash": "c1bb6a765ac42c5bb80e531d1feaa5bd4a4f0d55c331baffa9b014b942995947",
     },
   ],
 }
@@ -434,31 +385,47 @@ exports[`transactions transactions with reference inputs shows the reference inp
 Object {
   "transactions": Array [
     Object {
-      "hash": "067e84ddc353faefcbd29f11586d854146b3df43f89b3c1a64a3ff9fbb3c05bd",
+      "hash": "93818dc2e98d924c7379e9a65a44e4890981e675d7e0d23601194c7dff01b0b3",
       "referenceInputs": Array [
         Object {
-          "address": "addr_test1wqag3rt979nep9g2wtdwu8mr4gz6m4kjdpp5zp705km8wys6t2kla",
+          "address": "addr_test1wr8h9xuednt82rmw7ptcdzqw7d65chtqr0e5mnkju09c0mqjz722h",
           "sourceTransaction": Object {
-            "hash": "62a8a3c215d1241e6407ec7422ec0878ea533b2db436e4d099bdd226a08fe7e1",
+            "hash": "03d2fdb6407dc21bda7037a88c65da250766acd02327727dcf4d12fe7268833c",
           },
-          "sourceTxHash": "62a8a3c215d1241e6407ec7422ec0878ea533b2db436e4d099bdd226a08fe7e1",
+          "sourceTxHash": "03d2fdb6407dc21bda7037a88c65da250766acd02327727dcf4d12fe7268833c",
+          "sourceTxIndex": 1,
+        },
+        Object {
+          "address": "addr_test1wp63gyh62h77wfaa35c8u5zynulzp2afkl7yrpcr2zkk34gkwah0z",
+          "sourceTransaction": Object {
+            "hash": "5fb81bcabefefdb725a26fc9825d517ba79a05f86f845fda42b3f0f54b7ab90b",
+          },
+          "sourceTxHash": "5fb81bcabefefdb725a26fc9825d517ba79a05f86f845fda42b3f0f54b7ab90b",
+          "sourceTxIndex": 1,
+        },
+        Object {
+          "address": "addr_test1wp63gyh62h77wfaa35c8u5zynulzp2afkl7yrpcr2zkk34gkwah0z",
+          "sourceTransaction": Object {
+            "hash": "c3e9dcc6c638b78c2591f74cfca27fba728e56c18e0b5a61a2a0cc900592c59f",
+          },
+          "sourceTxHash": "c3e9dcc6c638b78c2591f74cfca27fba728e56c18e0b5a61a2a0cc900592c59f",
           "sourceTxIndex": 1,
         },
       ],
       "referenceInputs_aggregate": Object {
         "aggregate": Object {
           "avg": Object {
-            "value": "1094740",
+            "value": "27799500",
           },
-          "count": "1",
+          "count": "3",
           "max": Object {
-            "value": "1094740",
+            "value": "27989140",
           },
           "min": Object {
-            "value": "1094740",
+            "value": "27704680",
           },
           "sum": Object {
-            "value": "1094740",
+            "value": "83398500",
           },
         },
       },
@@ -472,63 +439,66 @@ Object {
   "transactions": Array [
     Object {
       "block": Object {
-        "number": 2455718,
+        "number": 234850,
       },
-      "blockIndex": 0,
+      "blockIndex": 1,
       "deposit": 0,
-      "fee": 181693,
-      "hash": "fad76833b223b1ba778c4de016c6224cb56f29f48d286ee84090aa80afec1a58",
+      "fee": 451312,
+      "hash": "c1bb6a765ac42c5bb80e531d1feaa5bd4a4f0d55c331baffa9b014b942995947",
       "inputs": Array [
         Object {
-          "address": "addr_test1qqzekmfvn8vnphl2ny42pglp7fzmg60zuahscsfwalmz7u6sh5k8hkh7ntx7v92qgeyvtrzd96wp0uf5shvhht7rxxqqnt89ae",
-          "sourceTxHash": "18401eeaf66d2c5cf65a13f449f5b22046610bf490e9e54c5253208a13a8b1b8",
+          "address": "addr_test1zrrryp45pgzvkha6hkxhsann0wcntvgjmznr6uwz2v0uvfcye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqnghs3t",
+          "sourceTxHash": "5b7e7789b5a71101d12c7d8070b74bb4576c361529a089176bf6c073650b9b5e",
+          "sourceTxIndex": 1,
+          "value": "1006657521",
+        },
+        Object {
+          "address": "addr_test1qzu4zx26m7067am9g3zpkt3mh86j33vd6vtv5r35rxdcxwsye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqpwmzcx",
+          "sourceTxHash": "5b7e7789b5a71101d12c7d8070b74bb4576c361529a089176bf6c073650b9b5e",
           "sourceTxIndex": 0,
-          "value": "10000000",
+          "value": "7413772505",
         },
       ],
       "inputs_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "value": "10000000",
+            "value": "8420430026",
           },
         },
       },
-      "mint": Array [
-        Object {
-          "asset": Object {
-            "assetId": "34250edd1e9836f5378702fbf9416b709bc140e04f668cc3552085184154414441636f696e",
-            "assetName": "4154414441636f696e",
-            "policyId": "34250edd1e9836f5378702fbf9416b709bc140e04f668cc355208518",
-          },
-          "quantity": "100",
-        },
-      ],
+      "mint": Array [],
       "outputs": Array [
         Object {
-          "address": "addr_test1qqzekmfvn8vnphl2ny42pglp7fzmg60zuahscsfwalmz7u6sh5k8hkh7ntx7v92qgeyvtrzd96wp0uf5shvhht7rxxqqnt89ae",
+          "address": "addr_test1qzu4zx26m7067am9g3zpkt3mh86j33vd6vtv5r35rxdcxwsye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqpwmzcx",
           "index": 0,
+          "tokens": Array [],
+          "value": "7412988317",
+        },
+        Object {
+          "address": "addr_test1zrrryp45pgzvkha6hkxhsann0wcntvgjmznr6uwz2v0uvfcye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqnghs3t",
+          "index": 1,
           "tokens": Array [
             Object {
               "asset": Object {
-                "assetId": "34250edd1e9836f5378702fbf9416b709bc140e04f668cc3552085184154414441636f696e",
-                "assetName": "4154414441636f696e",
-                "policyId": "34250edd1e9836f5378702fbf9416b709bc140e04f668cc355208518",
+                "assetId": "87aa0c11bb8f94d523a74fe7badded9c4908d1a65c8a6443e9f98db4b5966c13f108a088b3866cf685862f78817291c413ccbb4e4f47a630a2fb653a",
+                "assetName": "b5966c13f108a088b3866cf685862f78817291c413ccbb4e4f47a630a2fb653a",
+                "policyId": "87aa0c11bb8f94d523a74fe7badded9c4908d1a65c8a6443e9f98db4",
               },
-              "quantity": "100",
+              "quantity": "1",
             },
           ],
-          "value": "9818307",
+          "value": "1006990397",
         },
       ],
       "outputs_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "value": "9818307",
+            "value": "8419978714",
           },
         },
       },
-      "size": 449,
-      "totalOutput": "9818307",
+      "size": 5639,
+      "totalOutput": "8419978714",
       "withdrawals_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
