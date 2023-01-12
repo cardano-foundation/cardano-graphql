@@ -13,7 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('rewards', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('can return details for rewards scoped to an address', async () => {

@@ -12,7 +12,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('cardano', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('Returns core information about the current state of the network', async () => {

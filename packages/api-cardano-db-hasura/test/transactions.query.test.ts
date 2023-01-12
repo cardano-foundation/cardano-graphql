@@ -13,7 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('transactions', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('Returns transactions by hashes', async () => {

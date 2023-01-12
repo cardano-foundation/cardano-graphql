@@ -7,7 +7,7 @@ export const testClient = {
   mainnet: buildClient.bind(this,
     'http://localhost:3100'
   ),
-  testnet: buildClient.bind(this,
+  preprod: buildClient.bind(this,
     'http://localhost:3102'
   )
 }

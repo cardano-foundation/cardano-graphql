@@ -13,7 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('activeStake', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('can return active stake snapshots for an address', async () => {

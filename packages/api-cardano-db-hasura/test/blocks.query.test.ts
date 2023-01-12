@@ -9,10 +9,22 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'blocks'), name)
 }
 
+const allFieldsPopulated = (obj: any) => {
+  let k: keyof typeof obj
+  for (k in obj) {
+    if (
+      typeof k === 'object'
+    ) {
+      allFieldsPopulated(k)
+    }
+    expect(k).not.toBeNull()
+  }
+}
+
 describe('blocks', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('caps the response to 100 blocks', async () => {
@@ -66,22 +78,8 @@ describe('blocks', () => {
       query: await loadQueryNode('aggregateDataWithinBlock'),
       variables: { number: 283413, epochLessThan: 50 }
     })
-    // expect(result.data.blocks[0]).toEqual(block3037760.aggregated)
     allFieldsPopulated(result.data.blocks[0])
-    // expect(result.data).toMatchSnapshot();
   })
-
-  const allFieldsPopulated = (obj: any) => {
-    let k: keyof typeof obj
-    for (k in obj) {
-      if (
-        typeof k === 'object'
-      ) {
-        allFieldsPopulated(k)
-      }
-      expect(k).not.toBeNull()
-    }
-  }
 
   it('Can return filtered aggregated data', async () => {
     const result = await client.query({
@@ -102,7 +100,6 @@ describe('blocks', () => {
           }
       }`
     })
-    // expect(result.data.blocks[0]).toEqual(block3037760.aggregated_filtered)
     expect(result.data).toMatchSnapshot()
   })
 
