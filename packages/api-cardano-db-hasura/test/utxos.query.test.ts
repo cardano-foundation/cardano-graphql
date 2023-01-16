@@ -16,7 +16,7 @@ function loadTestOperationDocument (name: string): Promise<DocumentNode> {
 describe('utxos', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('Can be scoped by address', async () => {

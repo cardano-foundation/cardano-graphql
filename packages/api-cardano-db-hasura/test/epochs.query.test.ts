@@ -13,13 +13,13 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('epochs', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('Returns epoch details by number', async () => {
     const result = await client.query({
       query: await loadQueryNode('epochDetailsByNumber'),
-      variables: { number: 150 }
+      variables: { number: 42 }
     })
     expect(result.data).toMatchSnapshot()
   })
@@ -27,7 +27,7 @@ describe('epochs', () => {
   it('Includes protocol params in effect for the epoch', async () => {
     const result = await client.query({
       query: await loadQueryNode('epochProtocolParams'),
-      variables: { where: { number: { _eq: 166 } } }
+      variables: { where: { number: { _eq: 42 } } }
     })
     expect(result.data).toMatchSnapshot()
   })
@@ -37,7 +37,7 @@ describe('epochs', () => {
       query: await loadQueryNode('aggregateDataWithinEpoch'),
       variables: {
         orderBy: { number: 'asc' },
-        where: { number: { _in: [1, 150] } }
+        where: { number: { _in: [1, 42] } }
       }
     })
     expect(result.data).toMatchSnapshot()
@@ -46,7 +46,7 @@ describe('epochs', () => {
   it('Can return filtered aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('numberOfBlocksProducedByLeaderInEpoch'),
-      variables: { number: 1, slotLeader: 'ByronGenesis-0df4205606dcb8ad' }
+      variables: { number: 42, slotLeader: 'ByronGenesis-0df4205606dcb8ad' }
     })
     expect(result.data).toMatchSnapshot()
   })
@@ -55,7 +55,7 @@ describe('epochs', () => {
     // Todo: Convert this into an actual ranged query now the performance issue is resolved.
     const result = await client.query({
       query: await loadQueryNode('epochDetailsInRange'),
-      variables: { numbers: [1] }
+      variables: { numbers: [42] }
     })
     expect(result.data).toMatchSnapshot()
   })
@@ -63,7 +63,7 @@ describe('epochs', () => {
   it('Can return aggregated Epoch data', async () => {
     const result = await client.query({
       query: await loadQueryNode('aggregateEpochData'),
-      variables: { epochNumberLessThan: 165 }
+      variables: { epochNumberLessThan: 30 }
     })
     expect(result.data).toMatchSnapshot()
   })

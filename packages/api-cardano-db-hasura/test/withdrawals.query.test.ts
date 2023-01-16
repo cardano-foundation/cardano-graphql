@@ -13,7 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('withdrawals', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('can return details for withdrawals', async () => {
@@ -33,6 +33,6 @@ describe('withdrawals', () => {
       query: await loadQueryNode('aggregateWithdrawals')
     })
     const { withdrawals_aggregate } = result.data
-    expect(parseInt(withdrawals_aggregate.aggregate.count)).toBeGreaterThan(900)
+    expect(parseInt(withdrawals_aggregate.aggregate.count)).toBeGreaterThan(400)
   })
 })

@@ -13,7 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('stakeRegistrations', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('can return details for stake registrations', async () => {
@@ -31,6 +31,6 @@ describe('stakeRegistrations', () => {
       query: await loadQueryNode('aggregateStakeRegistrations')
     })
     const { stakeRegistrations_aggregate } = result.data
-    expect(parseInt(stakeRegistrations_aggregate.aggregate.count)).toBeGreaterThan(10000)
+    expect(parseInt(stakeRegistrations_aggregate.aggregate.count)).toBeGreaterThan(1000)
   })
 })

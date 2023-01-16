@@ -12,7 +12,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('collateralOutputs', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('can return an array of collateral outputs', async () => {

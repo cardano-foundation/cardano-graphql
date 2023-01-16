@@ -13,13 +13,13 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('activeStake', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('can return active stake snapshots for an address', async () => {
     const result = await client.query({
       query: await loadQueryNode('activeStakeForAddress'),
-      variables: { limit: 5, where: { address: { _eq: 'stake_test1up5tgntagnfp04l07waka5p0duv6uw9eujf4axl7jw2wc8gnm6eh0' } } }
+      variables: { limit: 5, where: { address: { _eq: 'stake_test1upxue2rk4tp0e3tp7l0nmfmj6ar7y9yvngzu0vn7fxs9ags2apttt' } } }
     })
     const { activeStake } = result.data
     expect(activeStake.length).toBe(5)
@@ -33,7 +33,7 @@ describe('activeStake', () => {
   it('can return aggregated active stake information for an address', async () => {
     const result = await client.query({
       query: await loadQueryNode('averageActiveStakeForAddress'),
-      variables: { address: 'stake_test1up5tgntagnfp04l07waka5p0duv6uw9eujf4axl7jw2wc8gnm6eh0' }
+      variables: { address: 'stake_test1uq4l6kqvvhxywxxae04u4g6uv9sa0yymscuql5an693p53g4qz4rk' }
     })
     const { activeStake_aggregate } = result.data
     expect(activeStake_aggregate.aggregate.count).toBeDefined()

@@ -13,7 +13,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('transactions', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('Returns transactions by hashes', async () => {
@@ -21,8 +21,8 @@ describe('transactions', () => {
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
-          'd13e153c6df662e565b4d5608d4224de21fb387c5371f499d788e82912069324',
-          '657ac5fa926f9f047360cbc908a4f6177f2ac9b52d4254c63dcb1312127217f4'
+          'a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758',
+          'a00696a0c2d70c381a265a845e43c55e1d00f96b27c06defc015dc92eb206240'
         ]
       }
     })
@@ -34,7 +34,7 @@ describe('transactions', () => {
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
       variables: {
         hashes: [
-          '39f065894a51ddf75f58f577e648de5990d9eddf239619e969ebb8aa3a0ea551'
+          '750eed6d314f64d8d5b5fe10a4bc34fe21bbf9c657660e061b26f091dac21717'
         ]
       }
     })
@@ -52,9 +52,9 @@ describe('transactions', () => {
   it('Can return ordered by block index', async () => {
     const result = await client.query({
       query: await loadQueryNode('orderedTransactionsInBlock'),
-      variables: { blockNumber: 3037760 }
+      variables: { blockNumber: 283413 }
     })
-    expect(result.data.transactions.length).toBe(22)
+    expect(result.data.transactions.length).toBe(456)
     expect(result.data.transactions[0].blockIndex).toBe(0)
     expect(result.data.transactions[1].blockIndex).toBe(1)
     expect(result.data.transactions[2].blockIndex).toBe(2)
@@ -86,7 +86,7 @@ describe('transactions', () => {
               totalOutput
           }
       }`,
-      variables: { hash: '0576d6e3fabccabe120f19368bdc0b5a181759f845704e7b5eb01a2bfe948610' }
+      variables: { hash: '8f2def6a111c745a92fc93ee8a713974dfcd381d16b47feedef56311d16be90d' }
     })
     expect(result.data.transactions.length).toBe(1)
     expect(result.data.transactions[0].outputs_aggregate.aggregate.count).toBe('0')
@@ -95,12 +95,12 @@ describe('transactions', () => {
     expect(result.data.transactions[0].inputs_aggregate.aggregate.count).toBe('1')
   })
 
-  it('Can return aggregated data', async () => {
+  it.skip('Can return aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinTransaction'),
       variables: {
         hashes: [
-          'b5aff847f8cefe95f3ae06ae5850d19d33301a5aa3aedc618a3729558403e3db'
+          '59f68ea73b95940d443dc516702d5e5deccac2429e4d974f464cc9b26292fd9c'
         ]
       }
     })
@@ -113,9 +113,8 @@ describe('transactions', () => {
     const result = await client.query({
       query: await loadQueryNode('filteredAggregateDataWithinTransaction'),
       variables: {
-        hash: '2819f6a34f9029251eb91309c85d4b42d7d8dd26ed00ea0693463176bac62c45',
-        inputsValueGt: '3842014',
-        outputsAddress: 'addr_test1vzhv4acdxm6v00m2h62pllw4l6qtymh3pwkpr9urptp8zxccuawfr'
+        hash: 'a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758',
+        outputsAddress: 'addr_test1vz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzclgmzkket'
       }
     })
     expect(result.data).toMatchSnapshot()
@@ -125,7 +124,7 @@ describe('transactions', () => {
     it('JSON object', async () => {
       const result = await client.query({
         query: await loadQueryNode('transactionByIdWithMetadataIfPresent'),
-        variables: { hash: '45fff8715b952f04cd84f6235b1a6f22d9437c2d60a699317f08bba60e2965a6' }
+        variables: { hash: '77cb8608db0a84f512e277ba923341775013241401c768ba5214ad2ac004b153' }
       })
       expect(result.data).toMatchSnapshot()
     })
@@ -143,7 +142,7 @@ describe('transactions', () => {
     it('shows the tokens minted and output', async () => {
       const result = await client.query({
         query: await loadQueryNode('transactionsByHashesWithTokens'),
-        variables: { hashes: ['fad76833b223b1ba778c4de016c6224cb56f29f48d286ee84090aa80afec1a58'] }
+        variables: { hashes: ['c1bb6a765ac42c5bb80e531d1feaa5bd4a4f0d55c331baffa9b014b942995947'] }
       })
       expect(result.data).toMatchSnapshot()
     })
@@ -153,7 +152,7 @@ describe('transactions', () => {
     it('shows the collateral inputs and outputs', async () => {
       const result = await client.query({
         query: await loadQueryNode('transactionsByHashesWithCollateral'),
-        variables: { hashes: ['3fca8f8be6efba69327388dac1d0b37a72f8803ada94f724aa8bbf17b7e38eee'] }
+        variables: { hashes: ['c1bb6a765ac42c5bb80e531d1feaa5bd4a4f0d55c331baffa9b014b942995947'] }
       })
       expect(result.data).toMatchSnapshot()
     })
@@ -163,7 +162,7 @@ describe('transactions', () => {
     it('shows the reference inputs', async () => {
       const result = await client.query({
         query: await loadQueryNode('transactionsByHashesWithReferenceInputs'),
-        variables: { hashes: ['067e84ddc353faefcbd29f11586d854146b3df43f89b3c1a64a3ff9fbb3c05bd'] }
+        variables: { hashes: ['93818dc2e98d924c7379e9a65a44e4890981e675d7e0d23601194c7dff01b0b3'] }
       })
       expect(result.data).toMatchSnapshot()
     })

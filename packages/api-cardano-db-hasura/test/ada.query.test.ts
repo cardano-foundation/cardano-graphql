@@ -19,7 +19,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('ada', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.testnet()
+    client = await testClient.preprod()
   })
 
   it('returns ada supply information', async () => {
