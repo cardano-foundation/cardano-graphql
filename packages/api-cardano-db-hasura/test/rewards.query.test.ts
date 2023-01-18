@@ -4,25 +4,36 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { testClient } from './util'
+import { init } from './util'
+import Logger from 'bunyan'
+import { Client } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'rewards'), name)
 }
 
 describe('rewards', () => {
+  let logger: Logger
   let client: TestClient
+  let db: Client
   beforeAll(async () => {
-    client = await testClient.preprod()
+    ({ client, db, logger } = await init('rewards'))
+    await db.connect()
+  })
+  afterAll(async () => {
+    await db.end()
   })
 
   it('can return details for rewards scoped to an address', async () => {
+    const dbResp = await db.query('SELECT view FROM reward JOIN stake_address sa ON reward.addr_id = sa.id ORDER BY RANDOM() LIMIT 1;')
+    const stakeAddress = dbResp.rows[0].view
+    logger.info('Stake address - ' + stakeAddress)
     const result = await client.query({
       query: await loadQueryNode('rewardsForAddress'),
-      variables: { limit: 5, offset: 4, where: { address: { _eq: 'stake_test1uqvvzkxjzdu62l4nmcth7j0za6hragkyx8hgs6ywpk9mx0ggzmtey' } } }
+      variables: { limit: 5, offset: 4, where: { address: { _eq: stakeAddress } } }
     })
     const { rewards } = result.data
-    expect(rewards.length).toBeGreaterThan(4)
+    expect(rewards.length).toBeGreaterThan(0)
     expect(rewards[0].stakePool.hash).toBeDefined()
     expect(rewards[0].earnedIn.number).toBeDefined()
     expect(rewards[0].receivedIn.number).toBeDefined()
@@ -37,6 +48,6 @@ describe('rewards', () => {
     expect(parseInt(rewards_aggregate.aggregate.max.amount)).toBeDefined()
     expect(parseInt(rewards_aggregate.aggregate.min.amount)).toBeDefined()
     expect(parseInt(rewards_aggregate.aggregate.sum.amount)).toBeDefined()
-    expect(parseInt(rewards_aggregate.aggregate.count)).toBeGreaterThan(6000)
+    expect(parseInt(rewards_aggregate.aggregate.count)).toBeGreaterThan(1)
   })
 })

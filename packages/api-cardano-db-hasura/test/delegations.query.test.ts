@@ -4,7 +4,8 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { testClient } from './util'
+import { init } from './util'
+import { Client } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'delegations'), name)
@@ -12,8 +13,13 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 
 describe('delegations', () => {
   let client: TestClient
+  let db: Client
   beforeAll(async () => {
-    client = await testClient.preprod()
+    ({ client, db } = await init('delegations'))
+    await db.connect()
+  })
+  afterAll(async () => {
+    await db.end()
   })
 
   it('can return details for stake delegation', async () => {
@@ -29,10 +35,11 @@ describe('delegations', () => {
   })
 
   it('can return aggregated data on all delegations', async () => {
+    const dbResp = await db.query('SELECT COUNT(*) as count FROM delegation;')
     const result = await client.query({
       query: await loadQueryNode('aggregateDelegation')
     })
     const { delegations_aggregate } = result.data
-    expect(parseInt(delegations_aggregate.aggregate.count)).toBeGreaterThan(900)
+    expect(delegations_aggregate.aggregate.count).toEqual(dbResp.rows[0].count)
   })
 })

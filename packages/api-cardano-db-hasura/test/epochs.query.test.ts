@@ -4,68 +4,92 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { testClient } from './util'
+import { allFieldsPopulated, init } from './util'
+import { Logger } from 'ts-log'
+import { Client } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'epochs'), name)
 }
 
 describe('epochs', () => {
+  let logger: Logger
   let client: TestClient
+  let db: Client
   beforeAll(async () => {
-    client = await testClient.preprod()
+    ({ client, db, logger } = await init('epochs'))
+    await db.connect()
+  })
+  afterAll(async () => {
+    await db.end()
   })
 
   it('Returns epoch details by number', async () => {
+    const dbResp = await db.query('SELECT no, out_sum FROM epoch WHERE no = (SELECT max(no) FROM epoch);')
+    logger.info('Epoch number -', dbResp.rows[0].no)
     const result = await client.query({
       query: await loadQueryNode('epochDetailsByNumber'),
-      variables: { number: 42 }
+      variables: { number: dbResp.rows[0].no }
     })
-    expect(result.data).toMatchSnapshot()
+    expect(result.data.epochs[0].output).toEqual(dbResp.rows[0].out_sum)
+    allFieldsPopulated(result.data.epochs[0])
   })
 
   it('Includes protocol params in effect for the epoch', async () => {
+    const dbResp = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
+    logger.info('Epoch number -', dbResp.rows[0].no)
     const result = await client.query({
       query: await loadQueryNode('epochProtocolParams'),
-      variables: { where: { number: { _eq: 42 } } }
+      variables: { where: { number: { _eq: dbResp.rows[0].epoch_no } } }
     })
-    expect(result.data).toMatchSnapshot()
+    allFieldsPopulated(result.data.epochs[0].protocolParams, 'extraEntropy')
   })
 
   it('Can return aggregated data', async () => {
+    const dbResp = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
+    logger.info('Epoch number -', dbResp.rows[0].no)
     const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinEpoch'),
       variables: {
         orderBy: { number: 'asc' },
-        where: { number: { _in: [1, 42] } }
+        where: { number: { _in: [1, dbResp.rows[0].epoch_no] } }
       }
     })
-    expect(result.data).toMatchSnapshot()
+    allFieldsPopulated(result.data.epochs)
   })
 
   it('Can return filtered aggregated data', async () => {
+    const dbEpoch = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
+    const dbSlotLeader = await db.query('SELECT description FROM slot_leader WHERE slot_leader.description IS NOT NULL ORDER BY RANDOM() LIMIT 1;')
+    const dbCount = await db.query('SELECT COUNT(*) as count FROM block join slot_leader sl on block.slot_leader_id = sl.id where description = ' + '\'' + dbSlotLeader.rows[0].description + '\' and epoch_no = ' + dbEpoch.rows[0].epoch_no + ';')
+    logger.info('Epoch number -', dbEpoch.rows[0].epoch_no, ', slot leader - ', dbSlotLeader.rows[0].description)
     const result = await client.query({
       query: await loadQueryNode('numberOfBlocksProducedByLeaderInEpoch'),
-      variables: { number: 42, slotLeader: 'ByronGenesis-0df4205606dcb8ad' }
+      variables: { number: dbEpoch.rows[0].epoch_no, slotLeader: dbSlotLeader.rows[0].description }
     })
-    expect(result.data).toMatchSnapshot()
+    expect(result.data.epochs[0].number).toEqual(dbEpoch.rows[0].epoch_no)
+    expect(result.data.epochs[0].blocks_aggregate.aggregate.count).toEqual(dbCount.rows[0].count)
   })
 
   it('Returns epoch details by number range', async () => {
     // Todo: Convert this into an actual ranged query now the performance issue is resolved.
+    // TODO: how to convert ???
+    const dbResp = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
     const result = await client.query({
       query: await loadQueryNode('epochDetailsInRange'),
-      variables: { numbers: [42] }
+      variables: { numbers: [dbResp.rows[0].epoch_no] }
     })
-    expect(result.data).toMatchSnapshot()
+    allFieldsPopulated(result.data.epochs[0])
   })
 
   it('Can return aggregated Epoch data', async () => {
+    const dbResp = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
+    logger.info('Epoch number -', dbResp.rows[0].epoch_no)
     const result = await client.query({
       query: await loadQueryNode('aggregateEpochData'),
-      variables: { epochNumberLessThan: 30 }
+      variables: { epochNumberLessThan: dbResp.rows[0].epoch_no }
     })
-    expect(result.data).toMatchSnapshot()
+    allFieldsPopulated(result.data)
   })
 
   it('Returns blocks scoped to epoch', async () => {

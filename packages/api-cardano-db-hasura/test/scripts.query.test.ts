@@ -3,7 +3,7 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { testClient } from './util'
+import { init } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'scripts'), name)
@@ -12,7 +12,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('scripts', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.preprod()
+    ({ client } = await init('scripts'))
   })
 
   it('can return an array of timelock scripts', async () => {

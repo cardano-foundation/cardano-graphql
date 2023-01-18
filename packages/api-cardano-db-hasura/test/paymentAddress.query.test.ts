@@ -3,7 +3,7 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { testClient } from './util'
+import { init } from './util'
 import BigNumber from 'bignumber.js'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
@@ -17,7 +17,7 @@ function loadTestOperationDocument (name: string): Promise<DocumentNode> {
 describe('paymentAddress', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.preprod()
+    ({ client } = await init('paymentAddress'))
   })
 
   it('returns payment address summary for the provided addresses', async () => {

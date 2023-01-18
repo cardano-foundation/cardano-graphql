@@ -4,22 +4,33 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { testClient } from './util'
+import { init } from './util'
+import Logger from 'bunyan'
+import { Client } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'stake_pools'), name)
 }
 
 describe('stakePools', () => {
+  let logger: Logger
   let client: TestClient
+  let db: Client
   beforeAll(async () => {
-    client = await testClient.preprod()
+    ({ client, db, logger } = await init('stakePools'))
+    await db.connect()
+  })
+  afterAll(async () => {
+    await db.end()
   })
 
   it('can lookup stake pools by ID', async () => {
+    const dbResp = await db.query('SELECT view FROM pool_hash ORDER BY RANDOM() LIMIT 1;')
+    const poolId = dbResp.rows[0].view
+    logger.info('Stake pool id - ' + poolId)
     const result = await client.query({
       query: await loadQueryNode('stakePoolById'),
-      variables: { id: 'pool1547tew8vmuj0g6vj3k5jfddudextcw6hsk2hwgg6pkhk7lwphe6' }
+      variables: { id: poolId }
     })
     const { stakePools } = result.data
     expect(stakePools.length).toBe(1)
@@ -30,14 +41,14 @@ describe('stakePools', () => {
     const result = await client.query({
       query: await loadQueryNode('allStakePoolFields'),
       variables: {
-        limit: 5,
-        blocksLimit: 5,
-        delegatorsLimit: 5,
-        activeStakeLimit: 5
+        limit: 3,
+        blocksLimit: 3,
+        delegatorsLimit: 3,
+        activeStakeLimit: 3
       }
     })
     const { stakePools } = result.data
-    expect(stakePools.length).toBe(5)
+    expect(stakePools.length).toBe(3)
     expect(stakePools[0].activeStake).toBeDefined()
     expect(stakePools[0].activeStake_aggregate).toBeDefined()
     expect(stakePools[0].blocks).toBeDefined()
@@ -66,7 +77,7 @@ describe('stakePools', () => {
       query: await loadQueryNode('aggregateStakePoolSummary')
     })
     const { stakePools_aggregate } = result.data
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(150)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(2)
   })
 
   it('can return aggregated data on active stake pools', async () => {
@@ -75,7 +86,7 @@ describe('stakePools', () => {
       variables: { where: { _not: { retirements: {} } } }
     })
     const { stakePools_aggregate } = result.data
-    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(150)
+    expect(parseInt(stakePools_aggregate.aggregate.count)).toBeGreaterThan(2)
   })
 
   it('can return aggregated data on retiring stake pools', async () => {

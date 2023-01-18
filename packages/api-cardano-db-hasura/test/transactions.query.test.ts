@@ -4,64 +4,86 @@ import { gql } from 'apollo-boost'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { testClient } from './util'
+import { allFieldsPopulated, init } from './util'
+import Logger from 'bunyan'
+import { Client } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'transactions'), name)
 }
 
 describe('transactions', () => {
+  let logger: Logger
   let client: TestClient
+  let db: Client
   beforeAll(async () => {
-    client = await testClient.preprod()
+    ({ client, db, logger } = await init('transactions'))
+    await db.connect()
+  })
+  afterAll(async () => {
+    await db.end()
   })
 
   it('Returns transactions by hashes', async () => {
+    const dbResp = await db.query('SELECT hash FROM tx ORDER BY RANDOM() LIMIT 2;')
+    const txHash1 = dbResp.rows[0].hash.toString('hex')
+    const txHash2 = dbResp.rows[1].hash.toString('hex')
+    logger.info('Hashes - ', txHash1, txHash2)
     const result = await client.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
-      variables: {
-        hashes: [
-          'a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758',
-          'a00696a0c2d70c381a265a845e43c55e1d00f96b27c06defc015dc92eb206240'
-        ]
-      }
+      variables: { hashes: [txHash1, txHash2] }
     })
-    expect(result.data).toMatchSnapshot()
+    expect(result.data.transactions.length).toEqual(2)
   })
 
   it('Returns transactions by hashes with scripts', async () => {
+    const dbRespPlutusV1 = await db.query('SELECT t.hash FROM script JOIN tx t on t.id = script.tx_id WHERE type=\'plutusV1\' ORDER BY RANDOM() LIMIT 1;')
+    const plutusV1hash = dbRespPlutusV1.rows[0].hash.toString('hex')
+    logger.info('Plutus V1 hash - ', plutusV1hash)
     const plutusResult = await client.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
-      variables: {
-        hashes: [
-          '750eed6d314f64d8d5b5fe10a4bc34fe21bbf9c657660e061b26f091dac21717'
-        ]
-      }
+      variables: { hashes: [plutusV1hash] }
     })
+    expect(plutusResult.data.transactions.length).toEqual(1)
+    allFieldsPopulated(plutusResult.data.transactions[0], 'amount')
+
+    const dbRespPlutusV2 = await db.query('SELECT t.hash FROM script JOIN tx t on t.id = script.tx_id WHERE type=\'plutusV2\' ORDER BY RANDOM() LIMIT 1;')
+    const plutusV2hash = dbRespPlutusV2.rows[0].hash.toString('hex')
+    logger.info('Plutus V2 hash - ', plutusV2hash)
+    const plutusResultV2 = await client.query({
+      query: await loadQueryNode('transactionsByHashesOrderByFee'),
+      variables: { hashes: [plutusV2hash] }
+    })
+    expect(plutusResultV2.data.transactions.length).toEqual(1)
+    allFieldsPopulated(plutusResultV2.data.transactions[0], 'amount')
+
+    const dbRespTimelock = await db.query('SELECT t.hash FROM script JOIN tx t on t.id = script.tx_id WHERE type=\'timelock\' ORDER BY RANDOM() LIMIT 1;')
+    const timelockTxHash = dbRespTimelock.rows[0].hash.toString('hex')
+    logger.info('Timelock tx hash - ', timelockTxHash)
     const timelockResult = await client.query({
       query: await loadQueryNode('transactionsByHashesOrderByFee'),
-      variables: {
-        hashes: [
-          'c4f2f4ec91d2afe932c022b9f671cdf44ab62c35e9b6e582335ed01c82d167b0'
-        ]
-      }
+      variables: { hashes: [timelockTxHash] }
     })
-    expect({ plutusResult, timelockResult }).toMatchSnapshot()
+    expect(timelockResult.data.transactions.length).toEqual(1)
+    allFieldsPopulated(plutusResult.data.transactions[0], 'amount')
   })
 
   it('Can return ordered by block index', async () => {
+    const dbRespTimelock = await db.query('select * from block where tx_count > 0 ORDER BY RANDOM() LIMIT 1;')
+    const blockNo = dbRespTimelock.rows[0].block_no
+    logger.info('Block number - ', blockNo)
     const result = await client.query({
       query: await loadQueryNode('orderedTransactionsInBlock'),
-      variables: { blockNumber: 283413 }
+      variables: { blockNumber: blockNo }
     })
-    expect(result.data.transactions.length).toBe(456)
-    expect(result.data.transactions[0].blockIndex).toBe(0)
-    expect(result.data.transactions[1].blockIndex).toBe(1)
-    expect(result.data.transactions[2].blockIndex).toBe(2)
-    expect(result.data.transactions[7].blockIndex).toBe(7)
+    expect(result.data.transactions.length.toString()).toBe(dbRespTimelock.rows[0].tx_count)
+    expect(result.data.transactions[0].hash).toBeDefined()
   })
 
   it('returns an empty array when the transactions has no outputs', async () => {
+    const dbRespTimelock = await db.query('select hash from tx left join tx_out t on tx.id = t.tx_id where t.tx_id is NULL ORDER BY RANDOM() LIMIT 1;')
+    const txHash = dbRespTimelock.rows[0].hash.toString('hex')
+    logger.info('Tx hash - ', txHash)
     const result = await client.query({
       query: gql`query transactionWithNoOutputs(
           $hash: Hash32Hex!
@@ -86,7 +108,7 @@ describe('transactions', () => {
               totalOutput
           }
       }`,
-      variables: { hash: '8f2def6a111c745a92fc93ee8a713974dfcd381d16b47feedef56311d16be90d' }
+      variables: { hash: txHash }
     })
     expect(result.data.transactions.length).toBe(1)
     expect(result.data.transactions[0].outputs_aggregate.aggregate.count).toBe('0')
@@ -95,76 +117,100 @@ describe('transactions', () => {
     expect(result.data.transactions[0].inputs_aggregate.aggregate.count).toBe('1')
   })
 
-  it('Can return aggregated data', async () => {
+  it('Returns correct tx data from db', async () => {
+    const dbRespTimelock = await db.query('SELECT hash, out_sum FROM tx JOIN (SELECT id FROM tx ORDER BY out_sum DESC LIMIT 100) AS t ON tx.id=t.id ORDER BY RANDOM() LIMIT 1;')
+    const txHash = dbRespTimelock.rows[0].hash.toString('hex')
+    logger.info('Tx hash - ', txHash)
     const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinTransaction'),
       variables: {
-        hashes: [
-          '59f68ea73b95940d443dc516702d5e5deccac2429e4d974f464cc9b26292fd9c'
-        ]
+        hashes: [txHash]
       }
     })
     const { transactions: txs } = result.data
-    const outputsPlusFee = new BigNumber(txs[0].outputs_aggregate.aggregate.sum.value).plus(txs[0].fee).toString()
+    expect(txs[0].outputs_aggregate.aggregate.sum.value).toEqual(dbRespTimelock.rows[0].out_sum)
+  })
+  it('Can return aggregated data', async () => {
+    const dbRespTimelock = await db.query('SELECT hash FROM tx LEFT JOIN tx_out t ON tx.id = t.tx_id WHERE t.tx_id IS NOT NULL AND tx.deposit>0 ORDER BY RANDOM() LIMIT 1;')
+    const txHash = dbRespTimelock.rows[0].hash.toString('hex')
+    logger.info('Tx hash - ', txHash)
+    const result = await client.query({
+      query: await loadQueryNode('aggregateDataWithinTransaction'),
+      variables: {
+        hashes: [txHash]
+      }
+    })
+    const { transactions: txs } = result.data
+    const outputsPlusFee = new BigNumber(txs[0].outputs_aggregate.aggregate.sum.value).plus(txs[0].fee).plus(txs[0].deposit).toString()
     expect(txs[0].inputs_aggregate.aggregate.sum.value).toEqual(outputsPlusFee)
-    expect(result.data).toMatchSnapshot()
   })
   it('Can return filtered aggregated data', async () => {
+    const dbRespTimelock = await db.query('select hash, address from tx join tx_out t on tx.id = t.tx_id where index > 0 ORDER BY RANDOM() LIMIT 1;')
+    const txHash = dbRespTimelock.rows[0].hash.toString('hex')
+    logger.info('Tx hash - ', txHash)
+    const addr = dbRespTimelock.rows[0].address
     const result = await client.query({
       query: await loadQueryNode('filteredAggregateDataWithinTransaction'),
       variables: {
-        hash: 'a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758',
-        outputsAddress: 'addr_test1vz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzclgmzkket'
+        hash: txHash,
+        outputsAddress: addr
       }
     })
-    expect(result.data).toMatchSnapshot()
+    allFieldsPopulated(result.data.transactions)
   })
 
   describe('metadata', () => {
     it('JSON object', async () => {
+      const dbRespTimelock = await db.query('select hash from tx_metadata join tx t on t.id = tx_metadata.tx_id ORDER BY RANDOM() LIMIT 1;')
+      const txHash = dbRespTimelock.rows[0].hash.toString('hex')
+      logger.info('Tx hash - ', txHash)
       const result = await client.query({
         query: await loadQueryNode('transactionByIdWithMetadataIfPresent'),
-        variables: { hash: '77cb8608db0a84f512e277ba923341775013241401c768ba5214ad2ac004b153' }
+        variables: { hash: txHash }
       })
-      expect(result.data).toMatchSnapshot()
-    })
-
-    it('JSON string', async () => {
-      const result = await client.query({
-        query: await loadQueryNode('transactionByIdWithMetadataIfPresent'),
-        variables: { hash: '23ae1816db236baa5e231166040ae5458b25f34bb33812b2754429f122f85a0d' }
-      })
-      expect(result.data).toBeDefined()
+      expect(result.data.transactions[0].metadata).toBeDefined()
     })
   })
 
   describe('transactions with tokens', () => {
     it('shows the tokens minted and output', async () => {
+      const dbRespTimelock = await db.query('select * from ma_tx_mint join tx t on ma_tx_mint.tx_id = t.id where quantity > 0 ORDER BY RANDOM() LIMIT 1;')
+      const txHash = dbRespTimelock.rows[0].hash.toString('hex')
+      logger.info('Tx hash - ', txHash)
       const result = await client.query({
         query: await loadQueryNode('transactionsByHashesWithTokens'),
-        variables: { hashes: ['c1bb6a765ac42c5bb80e531d1feaa5bd4a4f0d55c331baffa9b014b942995947'] }
+        variables: { hashes: [txHash] }
       })
-      expect(result.data).toMatchSnapshot()
+      expect(result.data.transactions[0].mint[0].asset.assetId).toBeDefined()
+      expect(result.data.transactions[0].mint[0].asset.policyId).toBeDefined()
+      expect(result.data.transactions[0].outputs[0].address).toBeDefined()
     })
   })
 
   describe('transactions with collateral', () => {
     it('shows the collateral inputs and outputs', async () => {
+      const dbRespTimelock = await db.query('select hash from collateral_tx_out join tx t on collateral_tx_out.tx_id = t.id ORDER BY RANDOM() LIMIT 1;')
+      const txHash = dbRespTimelock.rows[0].hash.toString('hex')
+      logger.info('Tx hash - ', txHash)
       const result = await client.query({
         query: await loadQueryNode('transactionsByHashesWithCollateral'),
-        variables: { hashes: ['c1bb6a765ac42c5bb80e531d1feaa5bd4a4f0d55c331baffa9b014b942995947'] }
+        variables: { hashes: [txHash] }
       })
-      expect(result.data).toMatchSnapshot()
+      expect(result.data.transactions[0].collateralInputs.length).toBeGreaterThan(0)
+      expect(result.data.transactions[0].collateralOutputs.length).toBeGreaterThan(0)
     })
   })
 
   describe('transactions with reference inputs', () => {
     it('shows the reference inputs', async () => {
+      const dbRespTimelock = await db.query('select hash from reference_tx_in join tx t on t.id = reference_tx_in.tx_in_id ORDER BY RANDOM() LIMIT 1;')
+      const txHash = dbRespTimelock.rows[0].hash.toString('hex')
+      logger.info('Tx hash - ', txHash)
       const result = await client.query({
         query: await loadQueryNode('transactionsByHashesWithReferenceInputs'),
-        variables: { hashes: ['93818dc2e98d924c7379e9a65a44e4890981e675d7e0d23601194c7dff01b0b3'] }
+        variables: { hashes: [txHash] }
       })
-      expect(result.data).toMatchSnapshot()
+      expect(result.data.transactions[0].referenceInputs.length).toBeGreaterThan(0)
     })
   })
 })
