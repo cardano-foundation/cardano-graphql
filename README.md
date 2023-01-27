@@ -61,7 +61,7 @@ Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.i
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-7643447-x86_64.tgz \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
 docker-compose up -d --build &&\
 docker-compose logs -f
 ```
@@ -116,8 +116,8 @@ Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.i
 export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql:7.0.2-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:7.0.2 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.7_1.35.3-${NETWORK} &&\
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-7960123-x86_64.tgz \
+docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
 docker-compose up -d &&\
 docker-compose logs -f
 ```
@@ -130,7 +130,7 @@ docker-compose logs -f
 export NETWORK=preprod &&\
 docker pull inputoutput/cardano-graphql:7.0.2-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:7.0.2 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.7_1.35.3-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
@@ -148,9 +148,9 @@ docker-compose -p ${NETWORK} logs -f
 export NETWORK=preview &&\
 docker pull inputoutput/cardano-graphql:7.0.2-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:7.0.2 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.7_1.35.3-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
 API_PORT=3102 \
-HASURA_PORT=8092 \
+HASURA_PORT=8092 \ 
 OGMIOS_PORT=1339 \
 POSTGRES_PORT=5434 \
 docker-compose -p ${NETWORK} up -d &&\
