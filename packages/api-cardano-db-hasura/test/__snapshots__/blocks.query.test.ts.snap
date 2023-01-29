@@ -1,56 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`blocks Can return aggregated data 1`] = `
-Object {
-  "blocks": Array [
-    Object {
-      "number": 283413,
-      "transactions_aggregate": Object {
-        "aggregate": Object {
-          "avg": Object {
-            "fee": 191461,
-            "size": 191.33333333333334,
-            "totalOutput": 3427531610,
-          },
-          "count": "456",
-          "max": Object {
-            "fee": "191461",
-            "size": "194",
-            "totalOutput": "9264215377",
-          },
-          "min": Object {
-            "fee": "191461",
-            "size": "190",
-            "totalOutput": "476354165",
-          },
-          "sum": Object {
-            "deposit": "0",
-            "fee": "87306216",
-            "size": "87248",
-            "totalOutput": "1562954414160",
-          },
-        },
-      },
-    },
-  ],
-}
-`;
-
-exports[`blocks Can return blocks by number 1`] = `
-Object {
-  "blocks": Array [
-    Object {
-      "hash": "fe1cf5316ec62103f20e327d121fcc3a5c39513444cb77223cb96c13ea9c83ad",
-      "vrfKey": "vrf_vk19l8wnyn3ls74yye4tg3qclq9zmzxpj7p32a5jnrw9zk05rl2xxusjn9ws0",
-    },
-    Object {
-      "hash": "cfd35ab1bf52d0f032ca2b6ef2cec3eb71acafd4b9fe94b0a2c4c88b1aa337ca",
-      "vrfKey": "vrf_vk1skwdprw4zmjdk34vs3pg6pdel4azpyt639l78k9yjqvd6t8xqhcqj0dkfw",
-    },
-  ],
-}
-`;
-
 exports[`blocks Can return filtered aggregated data 1`] = `
 Object {
   "blocks": Array [

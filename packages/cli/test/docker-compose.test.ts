@@ -10,7 +10,7 @@ describe('Docker Compose Test', () => {
   beforeAll(setup)
   afterAll(teardown)
 
-  describe('booting the docker-compose stack after initialising via docker command', () => {
+  describe('booting the docker compose stack after initialising via docker command', () => {
     beforeAll(dockerCommandCleanup)
     afterEach(dockerCommandCleanup)
 
@@ -21,16 +21,16 @@ describe('Docker Compose Test', () => {
         cgqlInit.stdin.write(acceptDefault)
       })
       cgqlInit.on('close', () => {
-        exec(`docker-compose -p ${projectName} up -d`, (error) => {
+        exec(`docker compose -p ${projectName} up -d`, (error) => {
           if (error) {
-            exec(`docker-compose -p ${projectName} down -v`, () => {
+            exec(`docker compose -p ${projectName} down -v`, () => {
               return done(error)
             })
           }
           exec(`${countRunningContainersScript} ${projectName}`, (error, stdout) => {
             if (error) return done(error)
             expect(parseInt(stdout.toString())).toBe(5)
-            exec(`docker-compose -p ${projectName} down -v`, (error) => {
+            exec(`docker compose -p ${projectName} down -v`, (error) => {
               if (error) return done(error)
               done()
             })
