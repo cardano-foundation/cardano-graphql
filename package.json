@@ -49,7 +49,7 @@
     "lint": "yarn workspaces run lint",
     "loadtest:byron-staging": "artillery run test/loadtest/byron-staging-config.yml",
     "publish-packages": "yarn workspaces run publish",
-    "service-dependencies": "docker-compose config --services | grep -vE \"server|background\" | xargs docker-compose",
+    "service-dependencies": "docker compose config --services | grep -vE \"server|background\" | xargs docker compose",
     "test": "yarn workspaces run test"
   },
   "contributors": [
