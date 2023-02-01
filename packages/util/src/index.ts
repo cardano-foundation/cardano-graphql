@@ -5,6 +5,7 @@ export * from './assetFingerprint'
 export * from './batching'
 export * from './data_fetching'
 export * as errors from './errors'
+export * from './number'
 export * from './stringModifiers'
 export * from './types'
 

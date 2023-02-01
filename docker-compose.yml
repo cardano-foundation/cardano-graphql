@@ -98,15 +98,37 @@ services:
         max-size: "200k"
         max-file: "10"
 
-  cardano-graphql:
+  background:
+    build:
+      cache_from: [ inputoutput/cardano-graphql-background:latest ]
+      context: .
+      target: background
+    image: inputoutput/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-7.0.2}-${NETWORK:-mainnet}
+    depends_on:
+      - "hasura"
+      - "postgres"
+    environment:
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-https://tokens.cardano.org}
+    restart: on-failure
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  server:
     build:
       args:
         - NETWORK=${NETWORK:-mainnet}
-        - METADATA_SERVER_URI=${METADATA_SERVER_URI:-https://tokens.cardano.org}
-      cache_from: [ inputoutput/cardano-graphql:latest ]
+      cache_from: [ inputoutput/cardano-graphql-server:latest ]
       context: .
       target: server
-    image: inputoutput/cardano-graphql:${CARDANO_GRAPHQL_VERSION:-7.0.2}-${NETWORK:-mainnet}
+    image: inputoutput/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-7.0.2}-${NETWORK:-mainnet}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
@@ -116,10 +138,6 @@ services:
     ports:
       - ${API_PORT:-3100}:3100
     restart: on-failure
-    secrets:
-      - postgres_db
-      - postgres_password
-      - postgres_user
     logging:
       driver: "json-file"
       options:

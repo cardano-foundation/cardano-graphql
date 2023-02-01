@@ -1,0 +1,39 @@
+table:
+  name: StakePoolRetirement
+  schema: public
+object_relationships:
+  - name: announcedIn
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_id: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+  - name: retiredInEpoch
+    using:
+      manual_configuration:
+        column_mapping:
+          inEffectFrom: transactionsCount
+        insertion_order: null
+        remote_table:
+          name: Epoch
+          schema: public
+  - name: stakePool
+    using:
+      manual_configuration:
+        column_mapping:
+          pool_hash_id: hash_id
+        insertion_order: null
+        remote_table:
+          name: StakePool
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - inEffectFrom
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

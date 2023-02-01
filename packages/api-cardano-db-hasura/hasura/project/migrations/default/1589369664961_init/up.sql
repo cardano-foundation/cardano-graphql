@@ -15,15 +15,15 @@ CREATE TABLE IF NOT EXISTS "Asset" (
     "assetId" BYTEA PRIMARY KEY,
     "assetName" BYTEA,
     "decimals" INT,
-    "description" VARCHAR(500),
+    "description" VARCHAR,
     "fingerprint" CHAR(44),
     "firstAppearedInSlot" INT,
-    "logo" VARCHAR(65536),
+    "logo" VARCHAR,
     "metadataHash" CHAR(40),
-    "name" VARCHAR(50),
+    "name" VARCHAR,
     "policyId" BYTEA,
     "ticker" VARCHAR(9),
-    "url" VARCHAR(250)
+    "url" VARCHAR
 );
 
 CREATE OR REPLACE VIEW "Block" AS
@@ -57,7 +57,7 @@ CREATE OR REPLACE VIEW "Cardano" AS
   WHERE (block.block_no IS NOT NULL)
   ORDER BY block.id DESC
  LIMIT 1;
- 
+
 CREATE OR REPLACE VIEW "CollateralInput" AS
 SELECT
   source_tx_out.address,

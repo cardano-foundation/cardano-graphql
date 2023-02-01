@@ -1,28 +1,19 @@
 { stdenv
-, nix-inclusive
 , nodejs
 , nodePackages
 , runtimeShell
-, sources
 , yarn
+, filteredSrc
 }:
 
 let
-  packageJSON = builtins.fromJSON (builtins.readFile ../package.json);
+  packageJSON = builtins.fromJSON (builtins.readFile "${filteredSrc}/package.json");
 
   src = stdenv.mkDerivation {
     pname = "${packageJSON.name}-src";
     version = packageJSON.version;
     buildInputs = [ yarn nodejs ];
-    src = nix-inclusive ./.. [
-      ../yarn.lock
-      ../.yarnrc
-      ../package.json
-      ../packages
-      ../packages-cache
-      ../tsconfig.json
-      ../docker-compose.yml
-    ];
+    src = filteredSrc;
     buildCommand = ''
       mkdir -p $out
       cp -r $src/. $out/
@@ -55,5 +46,11 @@ in stdenv.mkDerivation {
     exec ${nodejs}/bin/node $out/packages/server/dist/index.js
     EOF
     chmod +x $out/bin/cardano-graphql
+
+    cat <<EOF > $out/bin/cardano-graphql-background
+    #!${runtimeShell}
+    exec ${nodejs}/bin/node $out/packages/api-cardano-db-hasura/dist/background.js
+    EOF
+    chmod +x $out/bin/cardano-graphql-background
   '';
 }

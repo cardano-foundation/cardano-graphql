@@ -8,6 +8,7 @@
   },
   "references": [
     { "path": "../src"},
-    { "path": "../../util-dev/src"}
+    { "path": "../../util-dev/src"},
+    { "path": "../../util/src"}
   ]
 }

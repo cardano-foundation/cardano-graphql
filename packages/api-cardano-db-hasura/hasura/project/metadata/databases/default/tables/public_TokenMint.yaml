@@ -1,0 +1,39 @@
+table:
+  name: TokenMint
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: tokenMints
+    select_aggregate: tokenMints_aggregate
+object_relationships:
+  - name: asset
+    using:
+      manual_configuration:
+        column_mapping:
+          assetId: assetId
+        insertion_order: null
+        remote_table:
+          name: Asset
+          schema: public
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_id: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - assetId
+        - assetName
+        - policyId
+        - quantity
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

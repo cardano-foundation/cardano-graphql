@@ -1,0 +1,29 @@
+table:
+  name: Script
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: scripts
+    select_aggregate: scripts_aggregate
+object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          txId: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - hash
+        - serialisedSize
+        - type
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

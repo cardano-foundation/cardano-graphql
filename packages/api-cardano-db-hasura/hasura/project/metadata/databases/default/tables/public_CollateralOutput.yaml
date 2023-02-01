@@ -1,0 +1,49 @@
+table:
+  name: CollateralOutput
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: collateralOutputs
+    select_aggregate: collateralOutputs_aggregate
+object_relationships:
+  - name: datum
+    using:
+      manual_configuration:
+        column_mapping:
+          inline_datum_id: id
+        insertion_order: null
+        remote_table:
+          name: Datum
+          schema: public
+  - name: script
+    using:
+      manual_configuration:
+        column_mapping:
+          reference_script_id: id
+        insertion_order: null
+        remote_table:
+          name: Script
+          schema: public
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          txHash: hash
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - address
+        - addressHasScript
+        - index
+        - paymentCredential
+        - txHash
+        - value
+      filter: {}
+      allow_aggregations: true

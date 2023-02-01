@@ -1,0 +1,22 @@
+table:
+  name: SlotLeader
+  schema: public
+object_relationships:
+  - name: stakePool
+    using:
+      manual_configuration:
+        column_mapping:
+          pool_hash_id: hash_id
+        insertion_order: null
+        remote_table:
+          name: StakePool
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - description
+        - hash
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
