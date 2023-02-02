@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+---
+## [8.0.0](https://github.com/input-output-hk/cardano-graphql/compare/7.0.2...8.0.0) (2023-02-03)
+
+### Compatible with:
+
+- [`cardano-node`: `1.35.5`](https://github.com/input-output-hk/cardano-node/releases/tag/1.35.5)
+- [`cardano-ogmios`: `v5.5.8`](https://github.com/CardanoSolutions/ogmios/releases/tag/v5.5.8)
+- [`cardano-db-sync`: `13.0.5`](https://github.com/input-output-hk/cardano-db-sync/releases/tag/13.0.5)
+- [`hasura/graphql-engine`: `2.17.1`](https://github.com/hasura/graphql-engine/releases/tag/v2.17.1)
+
+### ⚠ BREAKING CHANGES
+
+* drop support for average aggregation fields
+* align GraphQL types to conform with database and Hasura string casts
+* **api-cardano-db-hasura:** separate DB and Hasura management tasks to new process
+
+### Features
+
+* **api-cardano-db-hasura:** separate DB and Hasura management tasks to new process ([8acb58f](https://github.com/input-output-hk/cardano-graphql/commit/8acb58fa2a8907a1b98eb3c5d1a04ba91257ae77))
+* improve uncaught exception logging ([800a587](https://github.com/input-output-hk/cardano-graphql/commit/800a587788dac6810bc64ef249a5653e0d936f01))
+
+
+### Bug Fixes
+
+* **api-cardano-db-hasura:** remove VARCHAR limits from Asset table ([a4092f8](https://github.com/input-output-hk/cardano-graphql/commit/a4092f878e8b548d34f9fc0c5bddaa559d5a16f5))
+* **api-cardano-db-hasura:** retry initialization of data fetcher ([d5a794d](https://github.com/input-output-hk/cardano-graphql/commit/d5a794d257f09c4373a938f9828597d11d523370))
+* **server:** avoid producing NaN in asset sync percentage calc, and clamp to max 100% ([b48e804](https://github.com/input-output-hk/cardano-graphql/commit/b48e80439cf7c6930b3cf144f02e542f779c8b0b))
+* align GraphQL types to conform with database and Hasura string casts ([ad4e736](https://github.com/input-output-hk/cardano-graphql/commit/ad4e736e528160acbed52b5e14722f6c35ec0332))
+* drop support for average aggregation fields ([3cd6445](https://github.com/input-output-hk/cardano-graphql/commit/3cd6445e6c1c26718f218409df722c54c28c011d))
+
 ### [7.0.2](https://github.com/input-output-hk/cardano-graphql/compare/7.0.1...7.0.2) (2022-10-03)
 
 ### Compatible with:
