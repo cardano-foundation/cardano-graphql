@@ -95,7 +95,7 @@ describe('transactions', () => {
     expect(result.data.transactions[0].inputs_aggregate.aggregate.count).toBe('1')
   })
 
-  it.skip('Can return aggregated data', async () => {
+  it('Can return aggregated data', async () => {
     const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinTransaction'),
       variables: {
