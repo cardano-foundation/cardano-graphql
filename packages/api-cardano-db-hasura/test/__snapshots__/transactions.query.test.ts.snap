@@ -9,9 +9,6 @@ Object {
       "hash": "59f68ea73b95940d443dc516702d5e5deccac2429e4d974f464cc9b26292fd9c",
       "inputs_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "value": null,
-          },
           "count": "1",
           "max": Object {
             "value": "29699998493355698",
@@ -26,9 +23,6 @@ Object {
       },
       "outputs_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "value": null,
-          },
           "count": "1",
           "max": Object {
             "value": "29699998493147869",
@@ -332,9 +326,6 @@ Object {
       ],
       "collateralInputs_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "value": null,
-          },
           "count": "1",
           "max": Object {
             "value": "7413772505",
@@ -360,9 +351,6 @@ Object {
       ],
       "collateralOutputs_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "value": null,
-          },
           "count": "1",
           "max": Object {
             "value": "7408772505",
@@ -414,9 +402,6 @@ Object {
       ],
       "referenceInputs_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "value": null,
-          },
           "count": "3",
           "max": Object {
             "value": "27989140",

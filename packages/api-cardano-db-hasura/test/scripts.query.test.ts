@@ -45,7 +45,6 @@ describe('scripts', () => {
     const result = await client.query({
       query: await loadQueryNode('scriptsAggregate')
     })
-    expect(result.data.scripts_aggregate.aggregate.avg.serialisedSize).not.toBeNull()
     expect(result.data.scripts_aggregate.aggregate.max.serialisedSize).not.toBeNull()
     expect(result.data.scripts_aggregate.aggregate.min.serialisedSize).not.toBeNull()
     expect(result.data.scripts_aggregate.aggregate.sum.serialisedSize).not.toBeNull()

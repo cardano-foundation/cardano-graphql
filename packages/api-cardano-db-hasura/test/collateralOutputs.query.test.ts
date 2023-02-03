@@ -31,7 +31,6 @@ describe('collateralOutputs', () => {
     const result = await client.query({
       query: await loadQueryNode('collateralOutputsAggregate')
     })
-    expect(result.data.collateralOutputs_aggregate.aggregate.avg.value).not.toBeNull()
     expect(result.data.collateralOutputs_aggregate.aggregate.max.value).not.toBeNull()
     expect(result.data.collateralOutputs_aggregate.aggregate.min.value).not.toBeNull()
     expect(result.data.collateralOutputs_aggregate.aggregate.sum.value).not.toBeNull()

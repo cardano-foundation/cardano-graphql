@@ -16,10 +16,6 @@ query aggregatedDataWithinEpoch (
         }
         blocks_aggregate {
             aggregate {
-                avg {
-                    fees
-                    size
-                }
                 count
                 max {
                     fees

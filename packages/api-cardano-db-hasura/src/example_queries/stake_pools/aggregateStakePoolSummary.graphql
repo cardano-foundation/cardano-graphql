@@ -4,11 +4,6 @@ query stakePoolsSummary (
     stakePools_aggregate (where: $where){
         aggregate {
             count
-            avg {
-                fixedCost
-                margin
-                pledge
-            }
             max {
                 fixedCost
                 margin

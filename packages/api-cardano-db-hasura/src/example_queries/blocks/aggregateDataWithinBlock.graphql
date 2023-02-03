@@ -19,11 +19,6 @@ query aggregatedDataWithinBlock (
     ]}) {
         transactions_aggregate {
             aggregate {
-                avg {
-                    fee
-                    size
-                    totalOutput
-                }
                 count
                 max {
                     fee

@@ -33,9 +33,6 @@ query transactionsByHashesWithCollateral(
         }
         collateralInputs_aggregate(order_by: { sourceTxHash: asc }) {
             aggregate {
-                avg {
-                    value
-                }
                 count
                 max {
                     value
@@ -70,9 +67,6 @@ query transactionsByHashesWithCollateral(
         }
         collateralOutputs_aggregate(order_by: { index: asc }) {
             aggregate {
-                avg {
-                    value
-                }
                 count
                 max {
                     value

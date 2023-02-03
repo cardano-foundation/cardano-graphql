@@ -10,9 +10,6 @@ query aggregatedDataWithinTransaction(
         hash
         inputs_aggregate {
             aggregate {
-                avg {
-                    value
-                }
                 count
                 max {
                     value
@@ -27,9 +24,6 @@ query aggregatedDataWithinTransaction(
         }
         outputs_aggregate {
             aggregate {
-                avg {
-                    value
-                }
                 count
                 max {
                     value

@@ -4,9 +4,6 @@ query averageActiveStakeForAddress (
     activeStake_aggregate (where: { address: { _eq: $address }}) {
         aggregate {
             count
-            avg {
-                amount
-            }
         }
     }
 }

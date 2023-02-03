@@ -281,15 +281,10 @@ type ActiveStake_aggregate {
 }
 
 type ActiveStake_aggregate_fields {
-  avg: ActiveStake_avg_fields!
   count: String!
   max: ActiveStake_max_fields!
   min: ActiveStake_min_fields!
   sum: ActiveStake_sum_fields!
-}
-
-type ActiveStake_avg_fields {
-  amount: String
 }
 
 type ActiveStake_max_fields {
@@ -516,16 +511,10 @@ type CollateralInput_aggregate {
 }
 
 type CollateralInput_aggregate_fields {
-  avg: CollateralInput_avg_fields!
   count: String!
   max: CollateralInput_max_fields!
   min: CollateralInput_min_fields!
   sum: CollateralInput_sum_fields!
-}
-
-type CollateralInput_avg_fields {
-  tokens: Token_avg_fields
-  value: String
 }
 
 type CollateralInput_max_fields {
@@ -586,15 +575,10 @@ type CollateralOutput_aggregate {
 }
 
 type CollateralOutput_aggregate_fields {
-  avg: CollateralOutput_avg_fields!
   count: String!
   max: CollateralOutput_max_fields!
   min: CollateralOutput_min_fields!
   sum: CollateralOutput_sum_fields!
-}
-
-type CollateralOutput_avg_fields {
-  value: String
 }
 
 type CollateralOutput_max_fields {
@@ -691,17 +675,10 @@ type Redeemer_aggregate {
 }
 
 type Redeemer_aggregate_fields {
-  avg: Redeemer_avg_fields!
   count: String!
   max: Redeemer_max_fields!
   min: Redeemer_min_fields!
   sum: Redeemer_sum_fields!
-}
-
-type Redeemer_avg_fields {
-  fee: String
-  unitMem: String
-  unitSteps: String
 }
 
 type Redeemer_max_fields {
@@ -777,15 +754,10 @@ type Reward_aggregate {
 }
 
 type Reward_aggregate_fields {
-  avg: Reward_avg_fields!
   count: String!
   max: Reward_max_fields!
   min: Reward_min_fields!
   sum: Reward_sum_fields!
-}
-
-type Reward_avg_fields {
-  amount: String
 }
 
 type Reward_max_fields {
@@ -833,15 +805,10 @@ type Script_aggregate {
 }
 
 type Script_aggregate_fields {
-  avg: Script_avg_fields!
   count: String!
   max: Script_max_fields!
   min: Script_min_fields!
   sum: Script_sum_fields!
-}
-
-type Script_avg_fields {
-  serialisedSize: Float
 }
 
 type Script_max_fields {
@@ -1091,17 +1058,10 @@ type StakePool_aggregate {
 }
 
 type StakePool_aggregate_fields {
-  avg: StakePool_avg_fields!
   count: String!
   max: StakePool_max_fields!
   min: StakePool_min_fields!
   sum: StakePool_sum_fields!
-}
-
-type StakePool_avg_fields {
-  fixedCost: Lovelace
-  margin: Float
-  pledge: Lovelace
 }
 
 type StakePool_max_fields {
@@ -1207,15 +1167,10 @@ type Token_aggregate {
 }
 
 type Token_aggregate_fields {
-  avg: Token_avg_fields!
   count: String!
   max: Token_max_fields!
   min: Token_min_fields!
   sum: Token_sum_fields!
-}
-
-type Token_avg_fields {
-  quantity: String
 }
 
 type Token_max_fields {
@@ -1262,15 +1217,10 @@ enum TokenMint_aggregate_distinct_on {
 }
 
 type TokenMint_aggregate_fields {
-  avg: TokenMint_avg_fields!
   count: String!
   max: TokenMint_max_fields!
   min: TokenMint_min_fields!
   sum: TokenMint_sum_fields!
-}
-
-type TokenMint_avg_fields {
-  quantity: String
 }
 
 type TokenMint_max_fields {
@@ -1428,21 +1378,10 @@ type Transaction_aggregate {
 }
 
 type Transaction_aggregate_fields {
-  avg: Transaction_avg_fields!
   count: String!
   max: Transaction_max_fields!
   min: Transaction_min_fields!
   sum: Transaction_sum_fields!
-}
-
-type Transaction_avg_fields {
-  deposit: String
-  fee: String
-  mint: Token_avg_fields
-  scriptSize: Float
-  size: Float
-  totalOutput: String
-  withdrawals: Withdrawal_avg_fields
 }
 
 type Transaction_max_fields {
@@ -1516,16 +1455,10 @@ type TransactionInput_aggregate {
 }
 
 type TransactionInput_aggregate_fields {
-  avg: TransactionInput_avg_fields!
   count: String!
   max: TransactionInput_max_fields!
   min: TransactionInput_min_fields!
   sum: TransactionInput_sum_fields!
-}
-
-type TransactionInput_avg_fields {
-  tokens: Token_avg_fields
-  value: String
 }
 
 type TransactionInput_max_fields {
@@ -1598,16 +1531,10 @@ type TransactionOutput_aggregate {
 }
 
 type TransactionOutput_aggregate_fields {
-  avg: TransactionOutput_avg_fields!
   count: String!
   max: TransactionOutput_max_fields!
   min: TransactionOutput_min_fields!
   sum: TransactionOutput_sum_fields!
-}
-
-type TransactionOutput_avg_fields {
-  tokens: Token_avg_fields
-  value: String
 }
 
 type TransactionOutput_max_fields {
@@ -1701,16 +1628,10 @@ type Block_aggregate {
 }
 
 type Block_aggregate_fields {
-  avg: Block_avg_fields!
   count: String!
   max: Block_max_fields!
   min: Block_min_fields!
   sum: Block_sum_fields!
-}
-
-type Block_avg_fields {
-  fees: String
-  size: Float
 }
 
 type Block_max_fields {
@@ -1781,17 +1702,10 @@ type Epoch_aggregate {
 }
 
 type Epoch_aggregate_fields {
-  avg: Epoch_avg_fields!
   count: String!
   max: Epoch_max_fields!
   min: Epoch_min_fields!
   sum: Epoch_sum_fields!
-}
-
-type Epoch_avg_fields {
-  fees: String!
-  output: String!
-  transactionsCount: Float!
 }
 
 type Epoch_max_fields {
@@ -1844,14 +1758,9 @@ type Withdrawal_aggregate {
 
 type Withdrawal_aggregate_fields {
   count: String!
-  avg: Withdrawal_avg_fields!
   max: Withdrawal_max_fields!
   min: Withdrawal_min_fields!
   sum: Withdrawal_sum_fields!
-}
-
-type Withdrawal_avg_fields {
-  amount: Lovelace
 }
 
 type Withdrawal_max_fields {

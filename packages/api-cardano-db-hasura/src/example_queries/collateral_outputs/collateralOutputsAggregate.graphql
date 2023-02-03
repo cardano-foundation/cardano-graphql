@@ -1,9 +1,6 @@
 query collateralOutputsAggregate {
     collateralOutputs_aggregate {
         aggregate {
-          avg {
-              value
-          }
           max {
               value
           }

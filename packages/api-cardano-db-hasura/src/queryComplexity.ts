@@ -20,17 +20,15 @@ export type FieldsComplexityMapping = {
 };
 
 const aggregateFieldsCosts = (
-  pick: Array<'avg' | 'count' | 'max' | 'min' | 'sum'> = [],
+  pick: Array<'count' | 'max' | 'min' | 'sum'> = [],
   costs: {
     count?: number;
-    avg?: number;
     max?: number;
     min?: number;
     sum?: number;
   } = {}
 ) => {
   const defaultCosts: { [key: string]: ComplexityExtension } = {
-    avg: { extensions: { complexity: costs.avg || 2 } },
     count: { extensions: { complexity: costs.count || 1 } },
     max: { extensions: { complexity: costs.max || 2 } },
     min: { extensions: { complexity: costs.min || 2 } },
