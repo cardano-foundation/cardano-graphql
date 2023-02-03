@@ -40,7 +40,6 @@ describe('redeemers', () => {
     const result = await client.query({
       query: await loadQueryNode('redeemersAggregate')
     })
-    expect(result.data.redeemers_aggregate.aggregate.avg.value).not.toBeNull()
     expect(result.data.redeemers_aggregate.aggregate.max.value).not.toBeNull()
     expect(result.data.redeemers_aggregate.aggregate.min.value).not.toBeNull()
     expect(result.data.redeemers_aggregate.aggregate.sum.value).not.toBeNull()

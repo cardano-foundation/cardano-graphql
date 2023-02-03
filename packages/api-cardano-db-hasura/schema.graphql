@@ -13,6 +13,7 @@ scalar IPv4
 scalar IPv6
 scalar JSON
 scalar JSONObject
+scalar Lovelace
 scalar Percentage
 scalar StakeAddress
 scalar StakePoolID
@@ -244,7 +245,7 @@ type Query {
 
 type ActiveStake {
   address: StakeAddress!
-  amount: String!
+  amount: Lovelace!
   epoch: Epoch
   epochNo: Int!
   stakePoolHash: Hash28Hex!
@@ -280,27 +281,22 @@ type ActiveStake_aggregate {
 }
 
 type ActiveStake_aggregate_fields {
-  avg: ActiveStake_avg_fields!
   count: String!
   max: ActiveStake_max_fields!
   min: ActiveStake_min_fields!
   sum: ActiveStake_sum_fields!
 }
 
-type ActiveStake_avg_fields {
-  amount: Float
-}
-
 type ActiveStake_max_fields {
-  amount: String
+  amount: Lovelace
 }
 
 type ActiveStake_min_fields {
-  amount: String
+  amount: Lovelace
 }
 
 type ActiveStake_sum_fields {
-  amount: String
+  amount: Lovelace
 }
 
 type Ada {
@@ -308,21 +304,21 @@ type Ada {
 }
 
 type AdaPots {
-  deposits: String!
-  fees: String!
-  reserves: String!
-  rewards: String!
-  slotNo: Int!
-  treasury: String!
-  utxo: String!
+  deposits: Lovelace!
+  fees: Lovelace!
+  reserves: Lovelace!
+  rewards: Lovelace!
+  slotNo: String!
+  treasury: Lovelace!
+  utxo: Lovelace!
 }
 
 type AlonzoGenesis {
-  lovelacePerUTxOWord: Int!
+  lovelacePerUTxOWord: Lovelace!
   executionPrices: ExecutionPrices!
   maxTxExUnits: ExecutionUnits!
   maxBlockExUnits: ExecutionUnits!
-  maxValueSize: Int!
+  maxValueSize: Lovelace!
   collateralPercentage: Int!
   maxCollateralInputs: Int!
 }
@@ -338,8 +334,8 @@ type ExecutionPrice {
 }
 
 type ExecutionUnits {
-  exUnitsMem: BigInt!
-  exUnitsSteps: BigInt!
+  exUnitsMem: String!
+  exUnitsSteps: String!
 }
 
 type Asset {
@@ -488,7 +484,7 @@ type CollateralInput {
   tokens_aggregate: Token_aggregate!
   transaction: Transaction!
   txHash: Hash32Hex!
-  value: String!
+  value: Lovelace!
 }
 
 input CollateralInput_order_by {
@@ -515,31 +511,25 @@ type CollateralInput_aggregate {
 }
 
 type CollateralInput_aggregate_fields {
-  avg: CollateralInput_avg_fields!
   count: String!
   max: CollateralInput_max_fields!
   min: CollateralInput_min_fields!
   sum: CollateralInput_sum_fields!
 }
 
-type CollateralInput_avg_fields {
-  tokens: Token_avg_fields
-  value: String
-}
-
 type CollateralInput_max_fields {
   tokens: Token_max_fields
-  value: String
+  value: Lovelace
 }
 
 type CollateralInput_min_fields {
   tokens: Token_min_fields
-  value: String
+  value: Lovelace
 }
 
 type CollateralInput_sum_fields {
   tokens: Token_sum_fields
-  value: String
+  value: Lovelace
 }
 
 type CollateralOutput {
@@ -551,7 +541,7 @@ type CollateralOutput {
   script: Script
   transaction: Transaction!
   txHash: Hash32Hex!
-  value: String!
+  value: Lovelace!
 }
 
 enum CollateralOutput_distinct_on {
@@ -585,27 +575,22 @@ type CollateralOutput_aggregate {
 }
 
 type CollateralOutput_aggregate_fields {
-  avg: CollateralOutput_avg_fields!
   count: String!
   max: CollateralOutput_max_fields!
   min: CollateralOutput_min_fields!
   sum: CollateralOutput_sum_fields!
 }
 
-type CollateralOutput_avg_fields {
-  value: String
-}
-
 type CollateralOutput_max_fields {
-  value: String
+  value: Lovelace
 }
 
 type CollateralOutput_min_fields {
-  value: String
+  value: Lovelace
 }
 
 type CollateralOutput_sum_fields {
-  value: String
+  value: Lovelace
 }
 
 type Datum {
@@ -676,13 +661,13 @@ type PaymentAddressSummary {
 
 type Redeemer {
   datum: Datum
-  fee: BigInt
+  fee: Lovelace
   index: Int!
   purpose: String! # Todo: Make scalar
   scriptHash: Hash28Hex!
   transaction: Transaction!
-  unitMem: BigInt!
-  unitSteps: BigInt!
+  unitMem: String!
+  unitSteps: String!
 }
 
 type Redeemer_aggregate {
@@ -690,35 +675,28 @@ type Redeemer_aggregate {
 }
 
 type Redeemer_aggregate_fields {
-  avg: Redeemer_avg_fields!
   count: String!
   max: Redeemer_max_fields!
   min: Redeemer_min_fields!
   sum: Redeemer_sum_fields!
 }
 
-type Redeemer_avg_fields {
-  fee: Float
-  unitMem: Float
-  unitSteps: Float
-}
-
 type Redeemer_max_fields {
-  fee: BigInt
-  unitMem: BigInt
-  unitSteps: BigInt
+  fee: String
+  unitMem: String
+  unitSteps: String
 }
 
 type Redeemer_min_fields {
-  fee: BigInt
-  unitMem: BigInt
-  unitSteps: BigInt
+  fee: String
+  unitMem: String
+  unitSteps: String
 }
 
 type Redeemer_sum_fields {
-  fee: BigInt
-  unitMem: BigInt
-  unitSteps: BigInt
+  fee: String
+  unitMem: String
+  unitSteps: String
 }
 
 input Redeemer_bool_exp {
@@ -726,13 +704,13 @@ input Redeemer_bool_exp {
   _not: Redeemer_bool_exp
   _or: [Redeemer_bool_exp]
   datum: Datum_bool_exp
-  fee: BigInt_comparison_exp
+  fee: text_comparison_exp
   index: Int_comparison_exp
   purpose: text_comparison_exp
   scriptHash: text_comparison_exp
   transaction: Transaction_bool_exp
-  unitMem: BigInt_comparison_exp
-  unitSteps: BigInt_comparison_exp
+  unitMem: text_comparison_exp
+  unitSteps: text_comparison_exp
 }
 
 input Redeemer_order_by {
@@ -764,7 +742,7 @@ input Relay_bool_exp {
 
 type Reward {
   address: StakeAddress!
-  amount: String!
+  amount: Lovelace!
   earnedIn: Epoch!
   receivedIn: Epoch
   stakePool: StakePool
@@ -776,27 +754,22 @@ type Reward_aggregate {
 }
 
 type Reward_aggregate_fields {
-  avg: Reward_avg_fields!
   count: String!
   max: Reward_max_fields!
   min: Reward_min_fields!
   sum: Reward_sum_fields!
 }
 
-type Reward_avg_fields {
-  amount: Float
-}
-
 type Reward_max_fields {
-  amount: String
+  amount: Lovelace
 }
 
 type Reward_min_fields {
-  amount: String
+  amount: Lovelace
 }
 
 type Reward_sum_fields {
-  amount: String
+  amount: Lovelace
 }
 
 input Reward_bool_exp {
@@ -822,7 +795,7 @@ input Reward_order_by {
 
 type Script {
   hash: Hash28Hex!
-  serialisedSize: BigInt
+  serialisedSize: Int
   transaction: Transaction!
   type: String! # Todo: Make scalar
 }
@@ -832,23 +805,18 @@ type Script_aggregate {
 }
 
 type Script_aggregate_fields {
-  avg: Script_avg_fields!
   count: String!
   max: Script_max_fields!
   min: Script_min_fields!
   sum: Script_sum_fields!
 }
 
-type Script_avg_fields {
-  serialisedSize: Float
-}
-
 type Script_max_fields {
-  serialisedSize: BigInt
+  serialisedSize: Int
 }
 
 type Script_min_fields {
-  serialisedSize: BigInt
+  serialisedSize: Int
 }
 
 type Script_sum_fields {
@@ -859,7 +827,7 @@ input Script_bool_exp {
   _and: [Script_bool_exp]
   _not: Script_bool_exp
   _or: [Script_bool_exp]
-  serialisedSize: BigInt_comparison_exp
+  serialisedSize: Int_comparison_exp
   transaction: Transaction_bool_exp
   type: text_comparison_exp
 }
@@ -876,7 +844,7 @@ type ShelleyGenesis {
   genDelegs: JSONObject
   initialFunds: JSONObject!
   maxKESEvolutions: Int!
-  maxLovelaceSupply: String!
+  maxLovelaceSupply: Lovelace!
   networkId: String!
   networkMagic: Int!
   protocolParams: ShelleyProtocolParams!
@@ -895,13 +863,13 @@ type ShelleyGenesisStaking {
 
 type ProtocolParams {
   a0: Float!
-  coinsPerUtxoByte: Int
+  coinsPerUtxoByte: Lovelace
   collateralPercent: Int
   costModels: JSONObject
   decentralisationParam: Float!
   eMax: Int!
   extraEntropy: JSONObject
-  keyDeposit: Int!
+  keyDeposit: Lovelace!
   maxBlockBodySize: Int!
   maxBlockExMem: String
   maxBlockExSteps: String
@@ -913,10 +881,10 @@ type ProtocolParams {
   maxValSize: String
   minFeeA: Int!
   minFeeB: Int!
-  minPoolCost: Int!
-  minUTxOValue: Int!
+  minPoolCost: Lovelace!
+  minUTxOValue: Lovelace!
   nOpt: Int!
-  poolDeposit: Int!
+  poolDeposit: Lovelace!
   priceMem: Float
   priceStep: Float
   protocolVersion: JSONObject!
@@ -929,16 +897,16 @@ type ShelleyProtocolParams {
   decentralisationParam: Float!
   eMax: Int!
   extraEntropy: JSONObject
-  keyDeposit: Int!
+  keyDeposit: Lovelace!
   maxBlockBodySize: Int!
   maxBlockHeaderSize: Int!
   maxTxSize: Int!
   minFeeA: Int!
   minFeeB: Int!
-  minPoolCost: Int!
-  minUTxOValue: Int!
+  minPoolCost: Lovelace!
+  minUTxOValue: Lovelace!
   nOpt: Int!
-  poolDeposit: Int!
+  poolDeposit: Lovelace!
   protocolVersion: JSONObject!
   rho: Float!
   tau: Float!
@@ -1035,13 +1003,13 @@ type StakePool {
     offset: Int
     where: Delegation_bool_exp
   ): Delegation_aggregate!
-  fixedCost: String!
+  fixedCost: Lovelace!
   hash: Hash28Hex!
   id: StakePoolID!
   margin: Float!
   metadataHash: Hash32Hex
   owners: [StakePoolOwner!]!
-  pledge: String!
+  pledge: Lovelace!
   relays: [Relay]
   retirements: [StakePoolRetirement]
   rewardAddress: StakeAddress!
@@ -1090,35 +1058,28 @@ type StakePool_aggregate {
 }
 
 type StakePool_aggregate_fields {
-  avg: StakePool_avg_fields!
   count: String!
   max: StakePool_max_fields!
   min: StakePool_min_fields!
   sum: StakePool_sum_fields!
 }
 
-type StakePool_avg_fields {
-  fixedCost: String
-  margin: Float
-  pledge: String
-}
-
 type StakePool_max_fields {
-  fixedCost: String
+  fixedCost: Lovelace
   margin: Float
-  pledge: String
+  pledge: Lovelace
 }
 
 type StakePool_min_fields {
-  fixedCost: String
+  fixedCost: Lovelace
   margin: Float
-  pledge: String
+  pledge: Lovelace
 }
 
 type StakePool_sum_fields {
-  fixedCost: String
+  fixedCost: Lovelace
   margin: Float
-  pledge: String
+  pledge: Lovelace
 }
 
 input StakePoolID_comparison_exp {
@@ -1206,15 +1167,10 @@ type Token_aggregate {
 }
 
 type Token_aggregate_fields {
-  avg: Token_avg_fields!
   count: String!
   max: Token_max_fields!
   min: Token_min_fields!
   sum: Token_sum_fields!
-}
-
-type Token_avg_fields {
-  quantity: String
 }
 
 type Token_max_fields {
@@ -1261,15 +1217,10 @@ enum TokenMint_aggregate_distinct_on {
 }
 
 type TokenMint_aggregate_fields {
-  avg: TokenMint_avg_fields!
   count: String!
   max: TokenMint_max_fields!
   min: TokenMint_min_fields!
   sum: TokenMint_sum_fields!
-}
-
-type TokenMint_avg_fields {
-  quantity: String
 }
 
 type TokenMint_max_fields {
@@ -1311,8 +1262,8 @@ type Transaction {
     offset: Int
     where: CollateralOutput_bool_exp
   ): CollateralOutput_aggregate!
-  deposit: BigInt!
-  fee: BigInt!
+  deposit: Lovelace!
+  fee: Lovelace!
   hash: Hash32Hex!
   inputs (
     limit: Int
@@ -1368,8 +1319,8 @@ type Transaction {
   ): TransactionInput_aggregate!
   scripts: [Script]
   scriptSize: Int!
-  size: BigInt!
-  totalOutput: String!
+  size: Int!
+  totalOutput: Lovelace!
   includedAt: DateTime!
   # True unless a contract is invalid
   validContract: Boolean!
@@ -1405,8 +1356,8 @@ input Transaction_bool_exp {
   block: Block_bool_exp
   blockIndex: Int_comparison_exp
   collateral: TransactionInput_bool_exp
-  deposit: BigInt_comparison_exp
-  fee: BigInt_comparison_exp
+  deposit: text_comparison_exp
+  fee: text_comparison_exp
   hash: Hash32Hex_comparison_exp
   includedAt: Date_comparison_exp
   inputs: TransactionInput_bool_exp
@@ -1416,7 +1367,7 @@ input Transaction_bool_exp {
   mint: Token_bool_exp
   outputs: TransactionOutput_bool_exp
   scriptSize: Int_comparison_exp
-  size: BigInt_comparison_exp
+  size: Int_comparison_exp
   totalOutput: text_comparison_exp
   validContract: Boolean_comparison_exp
   withdrawals: Withdrawal_bool_exp
@@ -1427,54 +1378,43 @@ type Transaction_aggregate {
 }
 
 type Transaction_aggregate_fields {
-  avg: Transaction_avg_fields!
   count: String!
   max: Transaction_max_fields!
   min: Transaction_min_fields!
   sum: Transaction_sum_fields!
 }
 
-type Transaction_avg_fields {
-  deposit: Float
-  fee: Float
-  mint: Token_avg_fields
-  scriptSize: Float
-  size: Float
-  totalOutput: Float
-  withdrawals: Withdrawal_avg_fields
-}
-
 type Transaction_max_fields {
-  deposit: String
-  fee: String
+  deposit: Lovelace
+  fee: Lovelace
   invalidBefore: String
   invalidHereafter: String
   mint: Token_max_fields
   scriptSize: Int
-  size: String
-  totalOutput: String
+  size: Int
+  totalOutput: Lovelace
   withdrawals: Withdrawal_max_fields
 }
 
 type Transaction_min_fields {
-  deposit: String
-  fee: String
+  deposit: Lovelace
+  fee: Lovelace
   invalidBefore: String
   invalidHereafter: String
   mint: Token_min_fields
   scriptSize: Int
-  size: String
-  totalOutput: String
+  size: Int
+  totalOutput: Lovelace
   withdrawals: Withdrawal_min_fields
 }
 
 type Transaction_sum_fields {
-  deposit: String
-  fee: String
+  deposit: Lovelace
+  fee: Lovelace
   mint: Token_sum_fields
   scriptSize: BigInt
-  size: String
-  totalOutput: String
+  size: BigInt
+  totalOutput: Lovelace
   withdrawals: Withdrawal_sum_fields
 }
 
@@ -1488,7 +1428,7 @@ type TransactionInput {
   tokens_aggregate: Token_aggregate!
   transaction: Transaction!
   txHash: Hash32Hex!
-  value: String!
+  value: Lovelace!
 }
 
 input TransactionInput_order_by {
@@ -1515,31 +1455,25 @@ type TransactionInput_aggregate {
 }
 
 type TransactionInput_aggregate_fields {
-  avg: TransactionInput_avg_fields!
   count: String!
   max: TransactionInput_max_fields!
   min: TransactionInput_min_fields!
   sum: TransactionInput_sum_fields!
 }
 
-type TransactionInput_avg_fields {
-  tokens: Token_avg_fields
-  value: String
-}
-
 type TransactionInput_max_fields {
   tokens: Token_max_fields
-  value: String
+  value: Lovelace
 }
 
 type TransactionInput_min_fields {
   tokens: Token_min_fields
-  value: String
+  value: Lovelace
 }
 
 type TransactionInput_sum_fields {
   tokens: Token_sum_fields
-  value: String
+  value: Lovelace
 }
 
 type TransactionMetadata {
@@ -1562,7 +1496,7 @@ type TransactionOutput {
   txHash: Hash32Hex!
   tokens: [Token!]!
   tokens_aggregate: Token_aggregate!
-  value: String!
+  value: Lovelace!
 }
 
 enum TransactionOutput_distinct_on {
@@ -1597,31 +1531,25 @@ type TransactionOutput_aggregate {
 }
 
 type TransactionOutput_aggregate_fields {
-  avg: TransactionOutput_avg_fields!
   count: String!
   max: TransactionOutput_max_fields!
   min: TransactionOutput_min_fields!
   sum: TransactionOutput_sum_fields!
 }
 
-type TransactionOutput_avg_fields {
-  tokens: Token_avg_fields
-  value: String
-}
-
 type TransactionOutput_max_fields {
   tokens: Token_max_fields
-  value: String
+  value: Lovelace
 }
 
 type TransactionOutput_min_fields {
   tokens: Token_min_fields
-  value: String
+  value: Lovelace
 }
 
 type TransactionOutput_sum_fields {
   tokens: Token_sum_fields
-  value: String
+  value: Lovelace
 }
 
 type TransactionSubmitResponse {
@@ -1632,20 +1560,20 @@ type Block {
   # Genesis block does not belong to the 0th epoch, therefore it could be null
   epoch: Epoch
   epochNo: Int
-  fees: BigInt!
+  fees: Lovelace!
   forgedAt: DateTime!
   slotLeader: SlotLeader!
   hash: Hash32Hex!
   number: Int
   opCert: Hash32Hex
-  slotInEpoch: Int
+  slotInEpoch: String
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
-  slotNo: Int
+  slotNo: String
   # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
   previousBlock: Block
   protocolVersion: JSONObject
   nextBlock: Block
-  size: BigInt!
+  size: Int!
   transactions(
     limit: Int
     order_by: [Transaction_order_by!]
@@ -1669,14 +1597,14 @@ input Block_bool_exp {
   forgedAt: Date_comparison_exp
   slotLeader: SlotLeader_bool_exp
   epoch: Epoch_bool_exp
-  fees: BigInt_comparison_exp
+  fees: text_comparison_exp
   hash: Hash32Hex_comparison_exp
   number: Int_comparison_exp
   previousBlock: Block_bool_exp
   nextBlock: Block_bool_exp
-  size: BigInt_comparison_exp
+  size: Int_comparison_exp
   slotInEpoch: Int_comparison_exp
-  slotNo: Int_comparison_exp
+  slotNo: text_comparison_exp
   transactions: Transaction_bool_exp
   transactionsCount: text_comparison_exp
   vrfKey: VRFVerificationKey_comparison_exp
@@ -1700,31 +1628,25 @@ type Block_aggregate {
 }
 
 type Block_aggregate_fields {
-  avg: Block_avg_fields!
   count: String!
   max: Block_max_fields!
   min: Block_min_fields!
   sum: Block_sum_fields!
 }
 
-type Block_avg_fields {
-  fees: Float
-  size: Float
-}
-
 type Block_max_fields {
-  fees: String
-  size: String
+  fees: Lovelace
+  size: Int
 }
 
 type Block_min_fields {
-  fees: String
-  size: String
+  fees: Lovelace
+  size: Int
 }
 
 type Block_sum_fields {
-  fees: String
-  size: String
+  fees: Lovelace
+  size: BigInt
 }
 
 type Epoch {
@@ -1744,8 +1666,8 @@ type Epoch {
     where: Block_bool_exp
   ): Block_aggregate!
   blocksCount: String!
-  fees: BigInt!
-  output: String!
+  fees: Lovelace!
+  output: Lovelace!
   nonce: Hash32Hex
   number: Int!
   protocolParams: ProtocolParams
@@ -1760,7 +1682,7 @@ input Epoch_bool_exp {
   _or: [Epoch_bool_exp]
   blocks: Block_bool_exp
   blocksCount: text_comparison_exp
-  fees: BigInt_comparison_exp
+  fees: text_comparison_exp
   number: Int_comparison_exp
   output: text_comparison_exp
   startedAt: Date_comparison_exp
@@ -1780,44 +1702,37 @@ type Epoch_aggregate {
 }
 
 type Epoch_aggregate_fields {
-  avg: Epoch_avg_fields!
   count: String!
   max: Epoch_max_fields!
   min: Epoch_min_fields!
   sum: Epoch_sum_fields!
 }
 
-type Epoch_avg_fields {
-  fees: Float!
-  output: Float!
-  transactionsCount: Float!
-}
-
 type Epoch_max_fields {
-  blocksCount: String!
-  fees: String!
+  blocksCount: Int!
+  fees: Lovelace!
   number: Int!
-  output: String!
+  output: Lovelace!
   transactionsCount: String!
 }
 
 type Epoch_min_fields {
   blocksCount: String!
-  fees: String!
-  output: String!
+  fees: Lovelace!
+  output: Lovelace!
   transactionsCount: String!
 }
 
 type Epoch_sum_fields {
   blocksCount: String!
-  fees: String!
-  output: String!
+  fees: Lovelace!
+  output: Lovelace!
   transactionsCount: String!
 }
 
 type Withdrawal {
   address: StakeAddress!
-  amount: String!
+  amount: Lovelace!
   redeemer: Redeemer
   transaction: Transaction!
 }
@@ -1843,26 +1758,21 @@ type Withdrawal_aggregate {
 
 type Withdrawal_aggregate_fields {
   count: String!
-  avg: Withdrawal_avg_fields!
   max: Withdrawal_max_fields!
   min: Withdrawal_min_fields!
   sum: Withdrawal_sum_fields!
 }
 
-type Withdrawal_avg_fields {
-  amount: String
-}
-
 type Withdrawal_max_fields {
-  amount: String
+  amount: Lovelace
 }
 
 type Withdrawal_min_fields {
-  amount: String
+  amount: Lovelace
 }
 
 type Withdrawal_sum_fields {
-  amount: String
+  amount: Lovelace
 }
 
 input Boolean_comparison_exp {
@@ -1913,19 +1823,6 @@ input Int_comparison_exp {
   _lte: Int
   _neq: Int
   _nin: [Int!]
-}
-
-# expression to compare data of type BigInt. All fields are combined with logical 'AND'.
-input BigInt_comparison_exp {
-  _eq: BigInt
-  _gt: BigInt
-  _gte: BigInt
-  _in: [BigInt!]
-  _is_null: Boolean
-  _lt: BigInt
-  _lte: BigInt
-  _neq: BigInt
-  _nin: [BigInt!]
 }
 
 # All fields are combined with logical 'AND'.

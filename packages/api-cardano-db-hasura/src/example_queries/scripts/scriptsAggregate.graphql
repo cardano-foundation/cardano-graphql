@@ -1,9 +1,6 @@
 query scriptsAggregate {
     scripts_aggregate {
         aggregate {
-          avg {
-              serialisedSize
-          }
           max {
               serialisedSize
           }

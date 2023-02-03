@@ -36,7 +36,7 @@ FROM frolvlad/alpine-glibc:alpine-3.11_glibc-2.30 as downloader
 RUN apk add curl
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | sh
 ENV HASURA_GRAPHQL_ENABLE_TELEMETRY=false
-RUN hasura --skip-update-check update-cli --version v2.15.0
+RUN hasura --skip-update-check update-cli --version v2.17.1
 RUN hasura --skip-update-check plugins install cli-ext
 
 FROM nodejs-builder as dev

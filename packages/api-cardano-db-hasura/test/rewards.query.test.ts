@@ -34,7 +34,6 @@ describe('rewards', () => {
       query: await loadQueryNode('aggregateRewards')
     })
     const { rewards_aggregate } = result.data
-    expect(parseInt(rewards_aggregate.aggregate.avg.amount)).toBeDefined()
     expect(parseInt(rewards_aggregate.aggregate.max.amount)).toBeDefined()
     expect(parseInt(rewards_aggregate.aggregate.min.amount)).toBeDefined()
     expect(parseInt(rewards_aggregate.aggregate.sum.amount)).toBeDefined()

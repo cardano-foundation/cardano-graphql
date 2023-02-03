@@ -53,11 +53,11 @@ export class ChainFollower {
               this.logger.info(
                 { module: MODULE_NAME, tip, rollbackPoint: point }, 'Rolling back'
               )
-              const deleteResult = await this.hasuraClient.deleteAssetsAfterSlot(point.slot)
+              const deleteResult = await this.hasuraClient.deleteAssetsAfterSlot(point.slot.toString())
               this.logger.info({ module: MODULE_NAME }, `Deleted ${deleteResult} assets`)
             } else {
               this.logger.info({ module: MODULE_NAME }, 'Rolling back to genesis')
-              const deleteResult = await this.hasuraClient.deleteAssetsAfterSlot(0)
+              const deleteResult = await this.hasuraClient.deleteAssetsAfterSlot('0')
               this.logger.info({ module: MODULE_NAME }, `Deleted ${deleteResult} assets`)
             }
             requestNext()

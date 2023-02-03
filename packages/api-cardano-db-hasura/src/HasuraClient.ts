@@ -231,9 +231,6 @@ export class HasuraClient {
                       }
                       tokenMints_aggregate {
                           aggregate {
-                              avg {
-                                  quantity
-                              }
                               count
                               max {
                                   quantity
@@ -290,9 +287,6 @@ export class HasuraClient {
             tokenMints: [],
             tokenMints_aggregate: {
               aggregate: {
-                avg: {
-                  quantity: 'na'
-                },
                 count: 'na',
                 max: {
                   quantity: 'na'

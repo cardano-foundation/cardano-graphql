@@ -37,6 +37,5 @@ describe('activeStake', () => {
     })
     const { activeStake_aggregate } = result.data
     expect(activeStake_aggregate.aggregate.count).toBeDefined()
-    expect(activeStake_aggregate.aggregate.avg.amount).toBeDefined()
   })
 })

@@ -1,9 +1,6 @@
 query allRewardsAggregateFields {
     rewards_aggregate {
         aggregate {
-            avg {
-                amount
-            }
             count
             max {
                 amount

@@ -34,6 +34,7 @@ export const scalarResolvers = {
   IPv6: IPv6Resolver,
   JSON: JSONResolver,
   JSONObject: JSONObjectResolver,
+  Lovelace: util.scalars.Lovelace,
   Percentage: util.scalars.Percentage,
   StakeAddress: util.scalars.StakeAddress,
   StakePoolID: util.scalars.StakePoolID,

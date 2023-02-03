@@ -1,11 +1,6 @@
 query redeemersAggregate {
     redeemers_aggregate {
         aggregate {
-          avg {
-              fee
-              unitMem
-              unitSteps
-          }
           max {
               fee
               unitMem

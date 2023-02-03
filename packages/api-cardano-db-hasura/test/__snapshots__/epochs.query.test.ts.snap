@@ -7,7 +7,7 @@ Object {
       "count": "30",
       "max": Object {
         "number": 29,
-        "output": "17847453521738725000",
+        "output": "17847453521738724661",
         "transactionsCount": "14188",
       },
       "min": Object {
@@ -15,7 +15,7 @@ Object {
         "transactionsCount": "0",
       },
       "sum": Object {
-        "output": "18115468917597078000",
+        "output": "18115468917597078469",
         "transactionsCount": "18242",
       },
     },
@@ -37,26 +37,22 @@ Object {
       "blocksCount": "10",
       "blocks_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "fees": 0,
-            "size": 624.8,
-          },
           "count": "10",
           "max": Object {
             "fees": "0",
-            "size": "625",
+            "size": 625,
           },
           "min": Object {
             "fees": "0",
-            "size": "623",
+            "size": 623,
           },
           "sum": Object {
             "fees": "0",
-            "size": "6248",
+            "size": 6248,
           },
         },
       },
-      "fees": 0,
+      "fees": "0",
       "number": 1,
     },
     Object {
@@ -70,26 +66,22 @@ Object {
       "blocksCount": "20282",
       "blocks_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "fees": 97478.32260132137,
-            "size": 570.8367517996253,
-          },
           "count": "20282",
           "max": Object {
             "fees": "5965850",
-            "size": "84865",
+            "size": 84865,
           },
           "min": Object {
             "fees": "0",
-            "size": "4",
+            "size": 4,
           },
           "sum": Object {
             "fees": "1977055339",
-            "size": "11577711",
+            "size": 11577711,
           },
         },
       },
-      "fees": 1977055339,
+      "fees": "1977055339",
       "number": 42,
     },
   ],
@@ -105,7 +97,7 @@ Object {
           "count": "0",
         },
       },
-      "fees": 1977055339,
+      "fees": "1977055339",
       "number": 42,
     },
   ],
@@ -118,7 +110,7 @@ Object {
     Object {
       "protocolParams": Object {
         "a0": 0.3,
-        "coinsPerUtxoByte": 4310,
+        "coinsPerUtxoByte": "4310",
         "collateralPercent": 150,
         "costModels": Object {
           "PlutusV1": Object {
@@ -470,7 +462,7 @@ Object {
         "decentralisationParam": 0,
         "eMax": 18,
         "extraEntropy": null,
-        "keyDeposit": 2000000,
+        "keyDeposit": "2000000",
         "maxBlockBodySize": 90112,
         "maxBlockExMem": "62000000",
         "maxBlockExSteps": "40000000000",
@@ -482,10 +474,10 @@ Object {
         "maxValSize": "5000",
         "minFeeA": 44,
         "minFeeB": 155381,
-        "minPoolCost": 340000000,
-        "minUTxOValue": 4310,
+        "minPoolCost": "340000000",
+        "minUTxOValue": "4310",
         "nOpt": 500,
-        "poolDeposit": 500000000,
+        "poolDeposit": "500000000",
         "priceMem": 0.0577,
         "priceStep": 0.0000721,
         "protocolVersion": Object {
@@ -507,14 +499,14 @@ Object {
       "adaPots": Object {
         "deposits": "82582000000",
         "fees": "2033934733",
-        "reserves": "14809461163109860",
+        "reserves": "14809461163109861",
         "rewards": "658670556880",
-        "slotNo": 16502442,
+        "slotNo": "16502442",
         "treasury": "189886602312461",
-        "utxo": "29999908948086064",
+        "utxo": "29999908948086065",
       },
       "blocksCount": "20282",
-      "fees": 1977055339,
+      "fees": "1977055339",
       "lastBlockTime": "2023-01-01T23:59:38Z",
       "number": 42,
       "output": "487684785231030",
@@ -532,14 +524,14 @@ Object {
       "adaPots": Object {
         "deposits": "82582000000",
         "fees": "2033934733",
-        "reserves": "14809461163109860",
+        "reserves": "14809461163109861",
         "rewards": "658670556880",
-        "slotNo": 16502442,
+        "slotNo": "16502442",
         "treasury": "189886602312461",
-        "utxo": "29999908948086064",
+        "utxo": "29999908948086065",
       },
       "blocksCount": "20282",
-      "fees": 1977055339,
+      "fees": "1977055339",
       "lastBlockTime": "2023-01-01T23:59:38Z",
       "number": 42,
       "output": "487684785231030",

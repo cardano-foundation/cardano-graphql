@@ -16,9 +16,6 @@ query transactionsByHashesWithReferenceInputs(
         }
         referenceInputs_aggregate(order_by: { sourceTxHash: asc }) {
             aggregate {
-                avg {
-                    value
-                }
                 count
                 max {
                     value

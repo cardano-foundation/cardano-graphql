@@ -4,40 +4,34 @@ exports[`transactions Can return aggregated data 1`] = `
 Object {
   "transactions": Array [
     Object {
-      "deposit": 0,
-      "fee": 174609,
-      "hash": "b5aff847f8cefe95f3ae06ae5850d19d33301a5aa3aedc618a3729558403e3db",
+      "deposit": "0",
+      "fee": "207829",
+      "hash": "59f68ea73b95940d443dc516702d5e5deccac2429e4d974f464cc9b26292fd9c",
       "inputs_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "value": "2375822822",
-          },
           "count": "1",
           "max": Object {
-            "value": "2375822822",
+            "value": "29699998493355698",
           },
           "min": Object {
-            "value": "2375822822",
+            "value": "29699998493355698",
           },
           "sum": Object {
-            "value": "2375822822",
+            "value": "29699998493355698",
           },
         },
       },
       "outputs_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "value": "1187824106.5",
-          },
-          "count": "2",
+          "count": "1",
           "max": Object {
-            "value": "2372148213",
+            "value": "29699998493147869",
           },
           "min": Object {
-            "value": "3500000",
+            "value": "29699998493147869",
           },
           "sum": Object {
-            "value": "2375648213",
+            "value": "29699998493147869",
           },
         },
       },
@@ -70,8 +64,8 @@ Object {
       },
       "blockIndex": 0,
       "collateralInputs": Array [],
-      "deposit": 1506000000,
-      "fee": 238057,
+      "deposit": "1506000000",
+      "fee": "238057",
       "hash": "a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758",
       "inputs": Array [
         Object {
@@ -94,7 +88,7 @@ Object {
           "addressHasScript": false,
           "index": 0,
           "paymentCredential": "9e5614893238cf85e284c61ec56d5efd9f9cdc4863ba7e1bf00c2c7d",
-          "value": "29699998493561944",
+          "value": "29699998493561943",
         },
         Object {
           "address": "addr_test1qz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzclvk35gzr67hz78plv88jemfs2p9e2780xm98cfrf4vvu0rq83pdz2",
@@ -121,7 +115,7 @@ Object {
       "outputs_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "value": "29999998493561944",
+            "value": "29999998493561943",
           },
         },
       },
@@ -129,7 +123,7 @@ Object {
       "scriptSize": 0,
       "scripts": Array [],
       "size": 1879,
-      "totalOutput": "29999998493561944",
+      "totalOutput": "29999998493561943",
       "validContract": true,
       "withdrawals_aggregate": Object {
         "aggregate": Object {
@@ -145,21 +139,21 @@ Object {
       },
       "blockIndex": 0,
       "collateralInputs": Array [],
-      "deposit": 0,
-      "fee": 206245,
+      "deposit": "0",
+      "fee": "206245",
       "hash": "a00696a0c2d70c381a265a845e43c55e1d00f96b27c06defc015dc92eb206240",
       "inputs": Array [
         Object {
           "address": "addr_test1vz09v9yfxguvlp0zsnrpa3tdtm7el8xufp3m5lsm7qxzclgmzkket",
           "sourceTxHash": "a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758",
           "sourceTxIndex": 0,
-          "value": "29699998493561944",
+          "value": "29699998493561943",
         },
       ],
       "inputs_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "value": "29699998493561944",
+            "value": "29699998493561943",
           },
         },
       },
@@ -169,13 +163,13 @@ Object {
           "addressHasScript": false,
           "index": 0,
           "paymentCredential": "9e5614893238cf85e284c61ec56d5efd9f9cdc4863ba7e1bf00c2c7d",
-          "value": "29699998493355696",
+          "value": "29699998493355698",
         },
       ],
       "outputs_aggregate": Object {
         "aggregate": Object {
           "sum": Object {
-            "value": "29699998493355696",
+            "value": "29699998493355698",
           },
         },
       },
@@ -183,7 +177,7 @@ Object {
       "scriptSize": 0,
       "scripts": Array [],
       "size": 1156,
-      "totalOutput": "29699998493355696",
+      "totalOutput": "29699998493355698",
       "validContract": true,
       "withdrawals_aggregate": Object {
         "aggregate": Object {
@@ -212,8 +206,8 @@ Object {
               "value": "9993865987",
             },
           ],
-          "deposit": 0,
-          "fee": 922864,
+          "deposit": "0",
+          "fee": "922864",
           "hash": "750eed6d314f64d8d5b5fe10a4bc34fe21bbf9c657660e061b26f091dac21717",
           "inputs": Array [
             Object {
@@ -332,9 +326,6 @@ Object {
       ],
       "collateralInputs_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "value": "7413772505",
-          },
           "count": "1",
           "max": Object {
             "value": "7413772505",
@@ -360,9 +351,6 @@ Object {
       ],
       "collateralOutputs_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "value": "7408772505",
-          },
           "count": "1",
           "max": Object {
             "value": "7408772505",
@@ -414,9 +402,6 @@ Object {
       ],
       "referenceInputs_aggregate": Object {
         "aggregate": Object {
-          "avg": Object {
-            "value": "27799500",
-          },
           "count": "3",
           "max": Object {
             "value": "27989140",
@@ -442,21 +427,21 @@ Object {
         "number": 234850,
       },
       "blockIndex": 1,
-      "deposit": 0,
-      "fee": 451312,
+      "deposit": "0",
+      "fee": "451312",
       "hash": "c1bb6a765ac42c5bb80e531d1feaa5bd4a4f0d55c331baffa9b014b942995947",
       "inputs": Array [
-        Object {
-          "address": "addr_test1qzu4zx26m7067am9g3zpkt3mh86j33vd6vtv5r35rxdcxwsye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqpwmzcx",
-          "sourceTxHash": "5b7e7789b5a71101d12c7d8070b74bb4576c361529a089176bf6c073650b9b5e",
-          "sourceTxIndex": 0,
-          "value": "7413772505",
-        },
         Object {
           "address": "addr_test1zrrryp45pgzvkha6hkxhsann0wcntvgjmznr6uwz2v0uvfcye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqnghs3t",
           "sourceTxHash": "5b7e7789b5a71101d12c7d8070b74bb4576c361529a089176bf6c073650b9b5e",
           "sourceTxIndex": 1,
           "value": "1006657521",
+        },
+        Object {
+          "address": "addr_test1qzu4zx26m7067am9g3zpkt3mh86j33vd6vtv5r35rxdcxwsye5pj8aafutn263fps7hk9vgkyfx7r7gfnmxfpn2v8zrqpwmzcx",
+          "sourceTxHash": "5b7e7789b5a71101d12c7d8070b74bb4576c361529a089176bf6c073650b9b5e",
+          "sourceTxIndex": 0,
+          "value": "7413772505",
         },
       ],
       "inputs_aggregate": Object {
