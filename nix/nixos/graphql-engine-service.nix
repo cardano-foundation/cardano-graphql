@@ -7,6 +7,11 @@ in {
     services.graphql-engine = {
       enable = lib.mkEnableOption "graphql engine service";
 
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.graphql-engine;
+      };
+
       host = lib.mkOption {
         type = lib.types.str;
         default = "";
@@ -44,7 +49,6 @@ in {
     };
   };
   config = let
-    graphqlEngine = (import ../pkgs.nix {}).packages.graphql-engine;
     hasuraDbPerms = pkgs.writeScript "hasuraDbPerms.sql" ''
       CREATE EXTENSION IF NOT EXISTS pgcrypto;
       CREATE SCHEMA IF NOT EXISTS hdb_catalog;
@@ -75,7 +79,7 @@ in {
         sudo -u ${cfg.dbAdminUser} -- psql ${cfg.db} < ${hasuraDbPerms}
       '';
       script = ''
-        exec ${graphqlEngine}/bin/graphql-engine \
+        exec ${cfg.package}/bin/graphql-engine \
           serve \
           --server-port ${toString cfg.enginePort} \
           --enable-telemetry=false \

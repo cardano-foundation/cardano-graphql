@@ -2,11 +2,30 @@
 { lib, pkgs, config, ... }:
 let
   cfg = config.services.cardano-graphql-background;
-  selfPkgs = import ../pkgs.nix {};
 in {
   options = {
     services.cardano-graphql-background = {
       enable = lib.mkEnableOption "cardano-explorer graphql background service";
+
+      frontendPkg = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.cardano-graphql;
+      };
+
+      persistPkg = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.persistgraphql;
+      };
+
+      hasuraCliPkg = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.hasura-cli;
+      };
+
+      hasuraCliExtPkg = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.hasura-cli-ext;
+      };
 
       assetMetadataUpdateInterval = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
@@ -76,10 +95,10 @@ in {
   };
   config = let
     boolToNodeJSEnv = bool: if bool then "true" else "false";
-    frontend = selfPkgs.packages.cardano-graphql;
-    persistgraphql = selfPkgs.packages.persistgraphql;
-    hasura-cli = selfPkgs.packages.hasura-cli;
-    hasura-cli-ext = selfPkgs.packages.hasura-cli-ext;
+    frontend = cfg.frontendPkg;
+    persistgraphql = cfg.persistPkg;
+    hasura-cli = cfg.hasuraCliPkg;
+    hasura-cli-ext = cfg.hasuraCliExtPkg;
     hasuraBaseUri = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}";
     pluginLibPath = pkgs.lib.makeLibraryPath [
       pkgs.stdenv.cc.cc.lib
