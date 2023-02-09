@@ -72,13 +72,12 @@ describe('epochs', () => {
   })
 
   it('Returns epoch details by number range', async () => {
-    // Todo: Convert this into an actual ranged query now the performance issue is resolved.
-    // TODO: how to convert ???
     const dbResp = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
     const result = await client.query({
       query: await loadQueryNode('epochDetailsInRange'),
-      variables: { numbers: [dbResp.rows[0].epoch_no] }
+      variables: { from: dbResp.rows[0].epoch_no - 2, to: dbResp.rows[0].epoch_no }
     })
+    expect(result.data.epochs.length).toEqual(3)
     allFieldsPopulated(result.data.epochs[0])
   })
 
