@@ -21,7 +21,7 @@ jobs:
 
       - name: 🧰 Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-        
+
       - name: 🐳 Login to DockerHub
         uses: docker/login-action@v1
         with:
@@ -31,7 +31,8 @@ jobs:
       - name: 📝 Base Variables
         id: base-variables
         run: |
-          echo ::set-output name=cardano-graphql-server-image::inputoutput/cardano-graphql
+          echo ::set-output name=cardano-graphql-server-image::inputoutput/cardano-graphql-server
+          echo ::set-output name=cardano-graphql-background-image::inputoutput/cardano-graphql-background
           echo ::set-output name=cardano-graphql-hasura-image::inputoutput/cardano-graphql-hasura
 
       - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (default)
@@ -45,7 +46,7 @@ jobs:
           target: server
           cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest
           cache-to: type=inline
-      
+
       - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (network)
         uses: docker/build-push-action@v2
         with:
@@ -56,7 +57,30 @@ jobs:
           target: server
           cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-server-image }}:master-${{ matrix.network }}
           cache-to: type=inline
-      
+
+      - name: 🔨 Build and push Cardano GraphQL Background Dockerfile (mainnet)
+        if: ${{ matrix.network == 'mainnet' }}
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:${{ github.sha }}, ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:master, ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:${{ github.sha }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:master-${{ matrix.network }}
+          target: background
+          cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-background-image }}:master-${{ matrix.network }}
+          cache-to: type=inline
+
+      - name: 🔨 Build and push Cardano GraphQL Background Dockerfile (testnets)
+        if: ${{ matrix.network != 'mainnet' }}
+        uses: docker/build-push-action@v2
+        with:
+          build-args: METADATA_SERVER_URI=https://metadata.cardano-testnet.iohkdev.io
+          context: .
+          push: true
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:${{ github.sha }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:master-${{ matrix.network }}
+          target: background
+          cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-background-image }}:master-${{ matrix.network }}
+          cache-to: type=inline
+
       - name: 🔨 Build and push Cardano GraphQL Hasura Dockerfile
         uses: docker/build-push-action@v2
         with:
@@ -66,5 +90,5 @@ jobs:
           push: true
           tags: ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:${{ github.sha }}, ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:master
           cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:master-${{ matrix.network }}
-          cache-to: type=inline    
-          
+          cache-to: type=inline
+
