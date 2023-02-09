@@ -68,7 +68,6 @@ in {
       path = with pkgs; [ curl netcat postgresql sudo ];
       environment = {
         HASURA_GRAPHQL_DATABASE_URL = "postgres://${cfg.dbUser}:${cfg.password}@${cfg.host}${if cfg.host == "" then "" else toString ":${toString cfg.dbPort}"}/${cfg.db}";
-        CARDANO_GRAPHQL_DB_URL = "postgres://${cfg.dbUser}:${cfg.password}@${cfg.host}${if cfg.host == "" then "" else ":${toString cfg.dbPort}"}/cgql";
       };
       preStart = ''
         for x in {1..10}; do
