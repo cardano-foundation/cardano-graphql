@@ -115,7 +115,7 @@ Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.i
 ``` console
 export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-background:8.0.0 &&\
 docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
 RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
@@ -130,7 +130,7 @@ docker compose logs -f
 ``` console
 export NETWORK=preprod &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-background:8.0.0 &&\
 docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
 API_PORT=3101 \
@@ -149,7 +149,7 @@ docker compose -p ${NETWORK} logs -f
 ``` console
 export NETWORK=preview &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
+docker pull inputoutput/cardano-graphql-background:8.0.0 &&\
 docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
 API_PORT=3102 \

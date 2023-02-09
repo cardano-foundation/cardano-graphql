@@ -103,7 +103,7 @@ services:
       cache_from: [ inputoutput/cardano-graphql-background:latest ]
       context: .
       target: background
-    image: inputoutput/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.0.0}-${NETWORK:-mainnet}
+    image: inputoutput/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.0.0}
     depends_on:
       - "hasura"
       - "postgres"

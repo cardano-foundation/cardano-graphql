@@ -58,7 +58,6 @@ ENV \
 WORKDIR /src
 
 FROM ubuntu-nodejs as background
-ARG NETWORK=mainnet
 ARG METADATA_SERVER_URI="https://tokens.cardano.org"
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
   echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list &&\
