@@ -14,8 +14,9 @@
 
 Cross-platform, _typed_, and **queryable** API for Cardano. The project contains multiple [packages] for composing 
 GraphQL services to meet specific application demands, and a [docker compose stack] serving the included 
-[cardano-graphql-server Dockerfile], the extended [hasura Dockerfile], [cardano-node-ogmios]. The [schema] is defined in
-native `.graphql`, and used to generate a [TypeScript package for client-side static typing]. A mutation is available to 
+[Dockerfile] services, `server` and `background`, the extended [hasura Dockerfile], [cardano-node-ogmios],
+[cardano-db-sync], and [PostgreSQL]. The [schema] is defined in native `.graphql`, and used to generate a 
+[TypeScript package for client-side static typing]. A mutation is available to 
 submit a signed and serialized transaction to the local node.
  
 [Apollo Server] exposes the NodeJS execution engine over a HTTP endpoint, and includes support for open source metrics
@@ -57,7 +58,7 @@ console session freely. See [Docker Compose docs] to tailor for your use-case
 <details open>
   <summary><i>mainnet</i></summary>
 
-Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#12/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
+Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#13/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
@@ -111,7 +112,7 @@ your use-case.
 <details open>
   <summary><i>mainnet</i></summary>
 
-Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
+Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#13/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
@@ -254,9 +255,11 @@ See [Building].
 [packages]: ./packages
 [docker compose stack]: ./docker-compose.yml
 [Docker Compose docs]: https://docs.docker.com/compose/
-[cardano-graphql-server Dockerfile]: ./Dockerfile
+[Dockerfile]: ./Dockerfile
 [hasura Dockerfile]: ./packages/api-cardano-db-hasura/hasura/Dockerfile
 [cardano-node-ogmios]: https://ogmios.dev/getting-started/docker/
+[cardano-db-sync]: https://github.com/input-output-hk/cardano-db-sync
+[PostgreSQL]: https://www.postgresql.org/
 [schema]: ./packages/api-cardano-db-hasura/schema.graphql
 [TypeScript package for client-side static typing]: ./packages/client-ts/README.md
 [Apollo Server]: https://www.apollographql.com/docs/apollo-server/
