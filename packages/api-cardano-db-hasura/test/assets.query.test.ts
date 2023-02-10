@@ -6,7 +6,7 @@ import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
 import { init } from './util'
 import { Logger } from 'ts-log'
-import { Client } from 'pg'
+import { Client, QueryResult } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'assets'), name)
@@ -20,10 +20,15 @@ describe('assets', () => {
     ({ client, db, logger } = await init('assets'))
     await db.connect()
   })
-
   afterAll(async () => {
     await db.end()
   })
+  const getTestData = async (sql: string) :Promise<QueryResult> => {
+    const resp = await db.query(sql)
+    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
+    expect(resp.rows.length).toBeGreaterThan(0)
+    return resp
+  }
 
   it('can return information on assets', async () => {
     const result = await client.query({
@@ -42,7 +47,7 @@ describe('assets', () => {
   })
 
   it('can return information on assets by fingerprint', async () => {
-    const dbResp = await db.query('SELECT fingerprint FROM "Asset" ORDER BY RANDOM() LIMIT 1;')
+    const dbResp = await getTestData('SELECT fingerprint FROM "Asset" ORDER BY RANDOM() LIMIT 1;')
     const assetFingerprint = dbResp.rows[0].fingerprint
     logger.info('Asset fingerprint - ' + assetFingerprint)
     const result = await client.query({
@@ -65,7 +70,7 @@ describe('assets', () => {
     expect(assets[0].url).toBeDefined()
   })
   it('can return information on assets by assetId', async () => {
-    const dbResp = (await db.query('SELECT * FROM "Asset" ORDER BY RANDOM() LIMIT 1;')).rows[0]
+    const dbResp = (await getTestData('SELECT * FROM "Asset" ORDER BY RANDOM() LIMIT 1;')).rows[0]
     const assetId = dbResp.assetId.toString('hex')
     logger.info('assetId - ' + assetId)
     const result = await client.query({

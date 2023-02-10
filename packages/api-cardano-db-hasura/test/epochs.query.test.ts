@@ -6,7 +6,7 @@ import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
 import { allFieldsPopulated, init } from './util'
 import { Logger } from 'ts-log'
-import { Client } from 'pg'
+import { Client, QueryResult } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'epochs'), name)
@@ -23,9 +23,15 @@ describe('epochs', () => {
   afterAll(async () => {
     await db.end()
   })
+  const getTestData = async (sql: string) :Promise<QueryResult> => {
+    const resp = await db.query(sql)
+    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
+    expect(resp.rows.length).toBeGreaterThan(0)
+    return resp
+  }
 
   it('Returns epoch details by number', async () => {
-    const dbResp = await db.query('SELECT no, out_sum FROM epoch WHERE no = (SELECT max(no) FROM epoch);')
+    const dbResp = await getTestData('SELECT no, out_sum FROM epoch WHERE no = (SELECT max(no) FROM epoch);')
     logger.info('Epoch number -', dbResp.rows[0].no)
     const result = await client.query({
       query: await loadQueryNode('epochDetailsByNumber'),
@@ -36,7 +42,7 @@ describe('epochs', () => {
   })
 
   it('Includes protocol params in effect for the epoch', async () => {
-    const dbResp = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
+    const dbResp = await getTestData('SELECT max(epoch_no) AS epoch_no FROM block;')
     logger.info('Epoch number -', dbResp.rows[0].no)
     const result = await client.query({
       query: await loadQueryNode('epochProtocolParams'),
@@ -46,7 +52,7 @@ describe('epochs', () => {
   })
 
   it('Can return aggregated data', async () => {
-    const dbResp = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
+    const dbResp = await getTestData('SELECT max(epoch_no) AS epoch_no FROM block;')
     logger.info('Epoch number -', dbResp.rows[0].no)
     const result = await client.query({
       query: await loadQueryNode('aggregateDataWithinEpoch'),
@@ -59,9 +65,9 @@ describe('epochs', () => {
   })
 
   it('Can return filtered aggregated data', async () => {
-    const dbEpoch = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
-    const dbSlotLeader = await db.query('SELECT description FROM slot_leader WHERE slot_leader.description IS NOT NULL ORDER BY RANDOM() LIMIT 1;')
-    const dbCount = await db.query('SELECT COUNT(*) as count FROM block join slot_leader sl on block.slot_leader_id = sl.id where description = ' + '\'' + dbSlotLeader.rows[0].description + '\' and epoch_no = ' + dbEpoch.rows[0].epoch_no + ';')
+    const dbEpoch = await getTestData('SELECT max(epoch_no) AS epoch_no FROM block;')
+    const dbSlotLeader = await getTestData('SELECT description FROM slot_leader WHERE slot_leader.description IS NOT NULL ORDER BY RANDOM() LIMIT 1;')
+    const dbCount = await getTestData('SELECT COUNT(*) as count FROM block join slot_leader sl on block.slot_leader_id = sl.id where description = ' + '\'' + dbSlotLeader.rows[0].description + '\' and epoch_no = ' + dbEpoch.rows[0].epoch_no + ';')
     logger.info('Epoch number -', dbEpoch.rows[0].epoch_no, ', slot leader - ', dbSlotLeader.rows[0].description)
     const result = await client.query({
       query: await loadQueryNode('numberOfBlocksProducedByLeaderInEpoch'),
@@ -72,7 +78,7 @@ describe('epochs', () => {
   })
 
   it('Returns epoch details by number range', async () => {
-    const dbResp = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
+    const dbResp = await getTestData('SELECT max(epoch_no) AS epoch_no FROM block;')
     const result = await client.query({
       query: await loadQueryNode('epochDetailsInRange'),
       variables: { from: dbResp.rows[0].epoch_no - 2, to: dbResp.rows[0].epoch_no }
@@ -82,7 +88,7 @@ describe('epochs', () => {
   })
 
   it('Can return aggregated Epoch data', async () => {
-    const dbResp = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
+    const dbResp = await getTestData('SELECT max(epoch_no) AS epoch_no FROM block;')
     logger.info('Epoch number -', dbResp.rows[0].epoch_no)
     const result = await client.query({
       query: await loadQueryNode('aggregateEpochData'),

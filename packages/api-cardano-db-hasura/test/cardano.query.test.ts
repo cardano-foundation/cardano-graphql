@@ -4,7 +4,7 @@ import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
 import { init } from './util'
-import { Client } from 'pg'
+import { Client, QueryResult } from 'pg'
 import Logger from 'bunyan'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
@@ -22,10 +22,16 @@ describe('cardano', () => {
   afterAll(async () => {
     await db.end()
   })
+  const getTestData = async (sql: string) :Promise<QueryResult> => {
+    const resp = await db.query(sql)
+    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
+    expect(resp.rows.length).toBeGreaterThan(0)
+    return resp
+  }
 
   it('Returns core information about the current state of the network', async () => {
-    const dbTip = await db.query('SELECT max(block_no) AS block_no FROM block;')
-    const dbEpoch = await db.query('SELECT max(epoch_no) AS epoch_no FROM block;')
+    const dbTip = await getTestData('SELECT max(block_no) AS block_no FROM block;')
+    const dbEpoch = await getTestData('SELECT max(epoch_no) AS epoch_no FROM block;')
     logger.info('Tip - ', dbTip.rows[0].block_no, ' epoch - ', dbEpoch.rows[0].epoch_no)
     const result = await client.query({
       query: await loadQueryNode('chainTipAndCurrentEpochNumber')

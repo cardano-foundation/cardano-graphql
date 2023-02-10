@@ -6,7 +6,7 @@ import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
 import { init } from './util'
 import Logger from 'bunyan'
-import { Client } from 'pg'
+import { Client, QueryResult } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'token_mints'), name)
@@ -23,6 +23,12 @@ describe('tokenMints', () => {
   afterAll(async () => {
     await db.end()
   })
+  const getTestData = async (sql: string) :Promise<QueryResult> => {
+    const resp = await db.query(sql)
+    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
+    expect(resp.rows.length).toBeGreaterThan(0)
+    return resp
+  }
 
   it('can return information on token minting and burning', async () => {
     const result = await client.query({
@@ -40,7 +46,7 @@ describe('tokenMints', () => {
   })
 
   it('can return information on assets by fingerprint', async () => {
-    const dbResp = await db.query('SELECT fingerprint FROM "Asset" ORDER BY RANDOM() LIMIT 1;')
+    const dbResp = await getTestData('SELECT fingerprint FROM "Asset" ORDER BY RANDOM() LIMIT 1;')
     const fingerprint = dbResp.rows[0].fingerprint
     logger.info('Fingerprint - ' + fingerprint)
     const result = await client.query({

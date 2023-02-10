@@ -6,7 +6,7 @@ import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
 import { init } from './util'
 import Logger from 'bunyan'
-import { Client } from 'pg'
+import { Client, QueryResult } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'rewards'), name)
@@ -23,9 +23,15 @@ describe('rewards', () => {
   afterAll(async () => {
     await db.end()
   })
+  const getTestData = async (sql: string) :Promise<QueryResult> => {
+    const resp = await db.query(sql)
+    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
+    expect(resp.rows.length).toBeGreaterThan(0)
+    return resp
+  }
 
   it('can return details for rewards scoped to an address', async () => {
-    const dbResp = await db.query('SELECT view FROM reward JOIN stake_address sa ON reward.addr_id = sa.id ORDER BY RANDOM() LIMIT 1;')
+    const dbResp = await getTestData('SELECT * FROM reward JOIN stake_address sa ON reward.addr_id = sa.id WHERE amount>0 ORDER BY RANDOM() LIMIT 1;')
     const stakeAddress = dbResp.rows[0].view
     logger.info('Stake address - ' + stakeAddress)
     const result = await client.query({

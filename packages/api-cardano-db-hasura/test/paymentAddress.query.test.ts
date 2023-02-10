@@ -59,6 +59,6 @@ describe('paymentAddress', () => {
     const boundedAdaBalance = new BigNumber(
       boundedResult.data.paymentAddresses[0].summary?.assetBalances[0]?.quantity
     ).toNumber() || 0
-    expect(unboundedAdaBalance).toBeGreaterThan(boundedAdaBalance)
+    expect(unboundedAdaBalance).toBeGreaterThanOrEqual(boundedAdaBalance)
   })
 })

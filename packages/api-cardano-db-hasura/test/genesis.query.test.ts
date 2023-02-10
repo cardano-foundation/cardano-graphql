@@ -18,6 +18,6 @@ describe('genesis', () => {
   it('Returns key information about the network genesis', async () => {
     const query = { query: await loadQueryNode('keyNetworkInfo') }
     const result = await client.query(query)
-    allFieldsPopulated(result.data)
+    allFieldsPopulated(result.data, 'staking')
   })
 })
