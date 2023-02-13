@@ -17,6 +17,7 @@ export class MissingConfig extends CustomError {
 export interface BackgroundConfig {
   db: DbConfig,
   hasuraCliPath: string,
+  hasuraCliExtPath: string,
   hasuraUri: string,
   loggerMinSeverity: LogLevelString,
   metadataServerUri: string,
@@ -33,6 +34,9 @@ async function getConfig (): Promise<BackgroundConfig> {
   const env = filterAndTypecastEnvs(process.env)
   if (!env.hasuraCliPath) {
     throw new MissingConfig('HASURA_CLI_PATH env not set')
+  }
+  if (!env.hasuraCliExtPath) {
+    throw new MissingConfig('HASURA_CLI_EXT_PATH env not set')
   }
   if (!env.hasuraUri) {
     throw new MissingConfig('HASURA_URI env not set')
@@ -79,6 +83,7 @@ function filterAndTypecastEnvs (env: any) {
   const {
     ASSET_METADATA_UPDATE_INTERVAL,
     HASURA_CLI_PATH,
+    HASURA_CLI_EXT_PATH,
     HASURA_URI,
     LOGGER_MIN_SEVERITY,
     METADATA_SERVER_URI,
@@ -95,6 +100,7 @@ function filterAndTypecastEnvs (env: any) {
   } = env as NodeJS.ProcessEnv
   return {
     hasuraCliPath: HASURA_CLI_PATH,
+    hasuraCliExtPath: HASURA_CLI_EXT_PATH,
     hasuraUri: HASURA_URI,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
     metadataServerUri: METADATA_SERVER_URI,
@@ -127,6 +133,7 @@ function filterAndTypecastEnvs (env: any) {
   try {
     const hasuraBackgroundClient = new HasuraBackgroundClient(
       config.hasuraCliPath,
+      config.hasuraCliExtPath,
       config.hasuraUri,
       logger
     )

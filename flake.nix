@@ -59,6 +59,7 @@
   } @ inputs:
     std.growOn {
       inherit inputs;
+      systems = ["x86_64-linux"];
       cellsFrom = nix/cells;
       cellBlocks = [
         (std.functions "library")

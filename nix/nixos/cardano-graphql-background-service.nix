@@ -2,11 +2,30 @@
 { lib, pkgs, config, ... }:
 let
   cfg = config.services.cardano-graphql-background;
-  selfPkgs = import ../pkgs.nix {};
 in {
   options = {
     services.cardano-graphql-background = {
       enable = lib.mkEnableOption "cardano-explorer graphql background service";
+
+      frontendPkg = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.cardano-graphql;
+      };
+
+      persistPkg = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.persistgraphql;
+      };
+
+      hasuraCliPkg = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.hasura-cli;
+      };
+
+      hasuraCliExtPkg = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.hasura-cli-ext;
+      };
 
       assetMetadataUpdateInterval = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
@@ -76,30 +95,27 @@ in {
   };
   config = let
     boolToNodeJSEnv = bool: if bool then "true" else "false";
-    frontend = selfPkgs.packages.cardano-graphql;
-    persistgraphql = selfPkgs.packages.persistgraphql;
-    hasura-cli = selfPkgs.packages.hasura-cli;
-    hasura-cli-ext = selfPkgs.packages.hasura-cli-ext;
+    frontend = cfg.frontendPkg;
+    persistgraphql = cfg.persistPkg;
+    hasura-cli = cfg.hasuraCliPkg;
+    hasura-cli-ext = cfg.hasuraCliExtPkg;
     hasuraBaseUri = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}";
     pluginLibPath = pkgs.lib.makeLibraryPath [
       pkgs.stdenv.cc.cc.lib
     ];
-    installHasuraCLI = ''
-      # always start with no plugins so future upgrades will work
-      rm -rf ~/.hasura/plugins
-      mkdir -p ~/.hasura/plugins/store/cli-ext/v${hasura-cli-ext.version}
-      ln -s ${hasura-cli-ext}/bin/cli-ext-hasura-linux ~/.hasura/plugins/store/cli-ext/v${hasura-cli-ext.version}/cli-ext-hasura-linux
-    '';
   in lib.mkIf cfg.enable {
-    systemd.services.cardano-graphql = {
+    systemd.services.cardano-graphql-background = {
       wantedBy = [ "multi-user.target" ];
       wants = [ "graphql-engine.service" ];
       after = [ "graphql-engine.service" ];
       environment = lib.filterAttrs (k: v: v != null) {
         HASURA_CLI_PATH = hasura-cli + "/bin/hasura";
+        HASURA_CLI_EXT_PATH = hasura-cli-ext + "/bin/cli-ext-hasura-linux";
         HASURA_GRAPHQL_ENABLE_TELEMETRY = toString false;
         HASURA_URI = hasuraBaseUri;
         LOGGER_MIN_SEVERITY = cfg.loggerMinSeverity;
+        OGMIOS_HOST = cfg.ogmiosHost;
+        OGMIOS_PORT = toString cfg.ogmiosPort;
         POSTGRES_DB = cfg.db;
         POSTGRES_HOST = cfg.dbHost;
         POSTGRES_PASSWORD = cfg.dbPassword;
@@ -109,10 +125,6 @@ in {
       (lib.optionalAttrs (cfg.assetMetadataUpdateInterval != null) { ASSET_METADATA_UPDATE_INTERVAL = toString cfg.assetMetadataUpdateInterval; }) //
       (lib.optionalAttrs (cfg.metadataServerUri != null) { METADATA_SERVER_URI = toString cfg.metadataServerUri; });
       path = with pkgs; [ netcat curl postgresql frontend hasura-cli glibc.bin patchelf ];
-      preStart = ''
-        set -exuo pipefail
-        ${installHasuraCLI}
-      '';
       script = ''
         exec cardano-graphql-background
       '';

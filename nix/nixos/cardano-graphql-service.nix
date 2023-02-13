@@ -2,11 +2,20 @@
 { lib, pkgs, config, ... }:
 let
   cfg = config.services.cardano-graphql;
-  selfPkgs = import ../pkgs.nix {};
 in {
   options = {
     services.cardano-graphql = {
       enable = lib.mkEnableOption "cardano-explorer graphql service";
+
+      frontendPkg = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.cardano-graphql;
+      };
+
+      persistPkg = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.persistgraphql;
+      };
 
       enginePort = lib.mkOption {
         type = lib.types.int;
@@ -93,8 +102,8 @@ in {
   config = let
     # TODO: there has to be a better way to handle boolean env vars in nodejs???
     boolToNodeJSEnv = bool: if bool then "true" else "false";
-    frontend = selfPkgs.packages.cardano-graphql;
-    persistgraphql = selfPkgs.packages.persistgraphql;
+    frontend = cfg.frontendPkg;
+    persistgraphql = cfg.persistPkg;
     hasuraBaseUri = "${cfg.hasuraProtocol}://${cfg.hasuraIp}:${toString cfg.enginePort}";
     pluginLibPath = pkgs.lib.makeLibraryPath [
       pkgs.stdenv.cc.cc.lib

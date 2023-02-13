@@ -7,9 +7,14 @@ in {
     services.graphql-engine = {
       enable = lib.mkEnableOption "graphql engine service";
 
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = (import ../pkgs.nix {}).packages.graphql-engine;
+      };
+
       host = lib.mkOption {
         type = lib.types.str;
-        default = "/var/run/postgresql";
+        default = "";
       };
 
       dbUser = lib.mkOption {
@@ -19,7 +24,7 @@ in {
 
       password = lib.mkOption {
         type = lib.types.str;
-        default = ''""'';
+        default = "";
       };
 
       dbAdminUser = lib.mkOption {
@@ -44,7 +49,6 @@ in {
     };
   };
   config = let
-    graphqlEngine = (import ../pkgs.nix {}).packages.graphql-engine;
     hasuraDbPerms = pkgs.writeScript "hasuraDbPerms.sql" ''
       CREATE EXTENSION IF NOT EXISTS pgcrypto;
       CREATE SCHEMA IF NOT EXISTS hdb_catalog;
@@ -54,7 +58,7 @@ in {
       GRANT SELECT ON ALL TABLES IN SCHEMA information_schema TO ${cfg.dbUser};
       GRANT SELECT ON ALL TABLES IN SCHEMA pg_catalog TO ${cfg.dbUser};
     '';
-    postgresqlIp = if ((__head (pkgs.lib.stringToCharacters cfg.host)) == "/")
+    postgresqlIp = if (cfg.host == "" || (__head (pkgs.lib.stringToCharacters cfg.host)) == "/")
                    then "127.0.0.1"
                    else cfg.host;
   in lib.mkIf cfg.enable {
@@ -62,6 +66,9 @@ in {
       wantedBy = [ "multi-user.target" ];
       requires = [ "postgresql.service" ];
       path = with pkgs; [ curl netcat postgresql sudo ];
+      environment = {
+        HASURA_GRAPHQL_DATABASE_URL = "postgres://${cfg.dbUser}:${cfg.password}@${cfg.host}${if cfg.host == "" then "" else toString ":${toString cfg.dbPort}"}/${cfg.db}";
+      };
       preStart = ''
         for x in {1..10}; do
           nc -z ${postgresqlIp} ${toString cfg.dbPort} && break
@@ -71,12 +78,7 @@ in {
         sudo -u ${cfg.dbAdminUser} -- psql ${cfg.db} < ${hasuraDbPerms}
       '';
       script = ''
-        exec ${graphqlEngine}/bin/graphql-engine \
-          --host ${cfg.host} \
-          -u ${cfg.dbUser} \
-          --password ${cfg.password} \
-          -d ${cfg.db} \
-          --port ${toString cfg.dbPort} \
+        exec ${cfg.package}/bin/graphql-engine \
           serve \
           --server-port ${toString cfg.enginePort} \
           --enable-telemetry=false \

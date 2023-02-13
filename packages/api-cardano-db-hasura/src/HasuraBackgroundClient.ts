@@ -21,6 +21,7 @@ export class HasuraBackgroundClient {
 
   constructor (
     readonly hasuraCliPath: string,
+    readonly hasuraCliExtPath: string,
     readonly hasuraUri: string,
     private logger: Logger = dummyLogger
   ) {
@@ -39,7 +40,7 @@ export class HasuraBackgroundClient {
   private async hasuraCli (command: string) {
     return new Promise((resolve, reject) => {
       exec(
-        `${this.hasuraCliPath} --skip-update-check --project ${path.resolve(__dirname, '..', 'hasura', 'project')} --endpoint ${this.hasuraUri} ${command}`,
+        `${this.hasuraCliPath} --cli-ext-path ${this.hasuraCliExtPath} --skip-update-check --project ${path.resolve(__dirname, '..', 'hasura', 'project')} --endpoint ${this.hasuraUri} ${command}`,
         (error, stdout) => {
           if (error) {
             reject(error)
