@@ -4,9 +4,9 @@ import { gql } from 'apollo-boost'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { allFieldsPopulated, init } from './util'
+import { allFieldsPopulated, init, queryDB } from './util'
 import Logger from 'bunyan'
-import { Client, QueryResult } from 'pg'
+import { Client } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'transactions'), name)
@@ -23,12 +23,7 @@ describe('transactions', () => {
   afterAll(async () => {
     await db.end()
   })
-  const getTestData = async (sql: string) :Promise<QueryResult> => {
-    const resp = await db.query(sql)
-    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
-    expect(resp.rows.length).toBeGreaterThan(0)
-    return resp
-  }
+  const getTestData = async (sql: string) => queryDB(db, logger, sql)
 
   it('Returns transactions by hashes', async () => {
     const dbResp = await getTestData('SELECT hash FROM tx ORDER BY RANDOM() LIMIT 2;')

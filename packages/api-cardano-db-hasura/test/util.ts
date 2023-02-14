@@ -2,9 +2,9 @@ import utilDev from '@cardano-graphql/util-dev'
 import pRetry from 'p-retry'
 import { gql } from 'apollo-boost'
 import util from '@cardano-graphql/util'
-import { Client } from 'pg'
+import { Client, QueryResult } from 'pg'
 import { getTestConfig } from './env.config'
-import { createLogger } from 'bunyan'
+import Logger, { createLogger } from 'bunyan'
 
 export async function buildClient (
   apiUri: string
@@ -46,6 +46,13 @@ export async function init (name: string) {
     db: dbClient,
     logger
   }
+}
+
+export const queryDB = async (db: Client, logger: Logger, sql: string) :Promise<QueryResult> => {
+  const resp = await db.query(sql)
+  if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
+  expect(resp.rows.length).toBeGreaterThan(0)
+  return resp
 }
 
 export const allFieldsPopulated = (obj: any, except : any = []) => {

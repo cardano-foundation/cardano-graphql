@@ -4,9 +4,9 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { init } from './util'
-import { Logger } from 'ts-log'
-import { Client, QueryResult } from 'pg'
+import { init, queryDB } from './util'
+import { Client } from 'pg'
+import Logger from 'bunyan'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'assets'), name)
@@ -23,12 +23,7 @@ describe('assets', () => {
   afterAll(async () => {
     await db.end()
   })
-  const getTestData = async (sql: string) :Promise<QueryResult> => {
-    const resp = await db.query(sql)
-    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
-    expect(resp.rows.length).toBeGreaterThan(0)
-    return resp
-  }
+  const getTestData = async (sql: string) => queryDB(db, logger, sql)
 
   it('can return information on assets', async () => {
     const result = await client.query({

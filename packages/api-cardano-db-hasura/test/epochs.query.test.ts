@@ -4,9 +4,9 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { allFieldsPopulated, init } from './util'
-import { Logger } from 'ts-log'
-import { Client, QueryResult } from 'pg'
+import { allFieldsPopulated, init, queryDB } from './util'
+import Logger from 'bunyan'
+import { Client } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'epochs'), name)
@@ -23,12 +23,7 @@ describe('epochs', () => {
   afterAll(async () => {
     await db.end()
   })
-  const getTestData = async (sql: string) :Promise<QueryResult> => {
-    const resp = await db.query(sql)
-    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
-    expect(resp.rows.length).toBeGreaterThan(0)
-    return resp
-  }
+  const getTestData = async (sql: string) => queryDB(db, logger, sql)
 
   it('Returns epoch details by number', async () => {
     const dbResp = await getTestData('SELECT no, out_sum FROM epoch WHERE no = (SELECT max(no) FROM epoch);')

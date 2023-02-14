@@ -3,8 +3,8 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { init } from './util'
-import { Client, QueryResult } from 'pg'
+import { init, queryDB } from './util'
+import { Client } from 'pg'
 import Logger from 'bunyan'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
@@ -22,12 +22,7 @@ describe('cardano', () => {
   afterAll(async () => {
     await db.end()
   })
-  const getTestData = async (sql: string) :Promise<QueryResult> => {
-    const resp = await db.query(sql)
-    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
-    expect(resp.rows.length).toBeGreaterThan(0)
-    return resp
-  }
+  const getTestData = async (sql: string) => queryDB(db, logger, sql)
 
   it('Returns core information about the current state of the network', async () => {
     const dbTip = await getTestData('SELECT max(block_no) AS block_no FROM block;')

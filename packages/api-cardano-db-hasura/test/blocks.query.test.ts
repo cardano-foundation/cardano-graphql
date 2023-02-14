@@ -3,9 +3,9 @@ import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { allFieldsPopulated, init } from './util'
-import { Logger } from 'ts-log'
-import { Client, QueryResult } from 'pg'
+import { allFieldsPopulated, init, queryDB } from './util'
+import { Client } from 'pg'
+import Logger from 'bunyan'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'blocks'), name)
@@ -20,17 +20,10 @@ describe('blocks', () => {
     ({ client, db, logger } = await init('blocks'))
     await db.connect()
   })
-
   afterAll(async () => {
     await db.end()
   })
-
-  const getTestData = async (sql: string) :Promise<QueryResult> => {
-    const resp = await db.query(sql)
-    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
-    expect(resp.rows.length).toBeGreaterThan(0)
-    return resp
-  }
+  const getTestData = async (sql: string) => queryDB(db, logger, sql)
 
   it('caps the response to 100 blocks', async () => {
     const result = await client.query({
@@ -91,7 +84,7 @@ describe('blocks', () => {
   })
 
   it('Can return filtered aggregated data', async () => {
-    const dbResp = await getTestData('SELECT block_no, tx_count FROM block WHERE block_no IS NOT NULL AND tx_count > 10 ORDER BY RANDOM() LIMIT 1;')
+    const dbResp = await getTestData('SELECT block_id, block_no, tx_count, fee FROM block JOIN tx t ON block.id = t.block_id WHERE block_no IS NOT NULL AND tx_count>0 GROUP BY block_id, block_no, tx_count, fee HAVING sum(fee)>0 ORDER BY RANDOM() LIMIT 1;')
     logger.info('Block number -', dbResp.rows[0].block_no)
     let fee = 0
     let query = gql`query {

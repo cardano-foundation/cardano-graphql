@@ -4,9 +4,9 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { init } from './util'
+import { init, queryDB } from './util'
 import Logger from 'bunyan'
-import { Client, QueryResult } from 'pg'
+import { Client } from 'pg'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'token_mints'), name)
@@ -23,12 +23,7 @@ describe('tokenMints', () => {
   afterAll(async () => {
     await db.end()
   })
-  const getTestData = async (sql: string) :Promise<QueryResult> => {
-    const resp = await db.query(sql)
-    if (resp.rows.length === 0) logger.error('Can not find suitable data in db')
-    expect(resp.rows.length).toBeGreaterThan(0)
-    return resp
-  }
+  const getTestData = async (sql: string) => queryDB(db, logger, sql)
 
   it('can return information on token minting and burning', async () => {
     const result = await client.query({
