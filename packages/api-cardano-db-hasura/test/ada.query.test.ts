@@ -3,7 +3,7 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { testClient } from './util'
+import { init } from './util'
 import { Genesis } from '@src/graphql_types'
 import BigNumber from 'bignumber.js'
 
@@ -19,7 +19,7 @@ function loadQueryNode (name: string): Promise<DocumentNode> {
 describe('ada', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.preprod()
+    ({ client } = await init('ada'))
   })
 
   it('returns ada supply information', async () => {

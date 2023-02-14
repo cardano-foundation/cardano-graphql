@@ -3,7 +3,7 @@ import path from 'path'
 import { DocumentNode } from 'graphql'
 import util from '@cardano-graphql/util'
 import { TestClient } from '@cardano-graphql/util-dev'
-import { testClient } from './util'
+import { init } from './util'
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
   return util.loadQueryNode(path.resolve(__dirname, '..', 'src', 'example_queries', 'utxos'), name)
@@ -16,7 +16,7 @@ function loadTestOperationDocument (name: string): Promise<DocumentNode> {
 describe('utxos', () => {
   let client: TestClient
   beforeAll(async () => {
-    client = await testClient.preprod()
+    ({ client } = await init('utxos'))
   })
 
   it('Can be scoped by address', async () => {
