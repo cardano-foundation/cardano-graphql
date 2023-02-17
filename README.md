@@ -111,7 +111,7 @@ your use-case.
 <details open>
   <summary><i>mainnet</i></summary>
 
-Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
+Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#13/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
