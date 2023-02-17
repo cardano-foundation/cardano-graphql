@@ -1,0 +1,23 @@
+{
+	"passphrase": "passphrase",
+	"payments": [{
+		"address": "addr_test1vrgylrse49du60jdy7h46mg5mwft6kw8r0l4v5pklkj324cm247gf",
+		"amount": {
+			"quantity": 42000000,
+			"unit": "lovelace"
+		},
+		"assets": []
+	}],
+	"withdrawal": "self",
+	"metadata": {
+		"0": {},
+		"1": {},
+		"2": {},
+		"3": {},
+		"4": {}
+	},
+	"time_to_live": {
+		"quantity": 10,
+		"unit": "second"
+	}
+}

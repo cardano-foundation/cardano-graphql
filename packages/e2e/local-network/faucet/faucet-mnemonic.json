@@ -1,0 +1,6 @@
+{
+	"name": "Faucet",
+	"mnemonic_sentence": ["fire", "method", "repair", "aware", "foot", "tray", "accuse", "brother", "popular", "olive", "find", "account", "sick", "rocket", "next"],
+	"passphrase": "passphrase",
+	"address_pool_gap": 20
+}

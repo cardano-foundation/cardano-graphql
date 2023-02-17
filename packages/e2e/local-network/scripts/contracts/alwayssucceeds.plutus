@@ -1,0 +1,5 @@
+{
+  "type": "PlutusScriptV1",
+  "description": "This validator script always returns true",
+  "cborHex": "4e4d01000033222220051200120011"
+}

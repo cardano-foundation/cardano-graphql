@@ -1,0 +1,16 @@
+{
+  "name": "@cardano-graphql/e2e",
+  "version": "0.1.0",
+  "description": "End to end tests for the cardano-graphql.",
+  "engines": {
+    "node": ">=14.0"
+  },
+  "scripts": {
+    "local-network:up": "docker compose -p localnet up --build -d",
+    "local-network:down": "docker compose -p localnet down -v --remove-orphans"
+  },
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  }
+}

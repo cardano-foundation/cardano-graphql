@@ -16,14 +16,14 @@ case "$NETWORK" in
             PG_ADMIN_PORT=8442
             POSTGRES_PORT=5442
             ;;
-        testnet)
+        localnet)
             API_PORT=3101
             HASURA_PORT=8091
             METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io"
             OGMIOS_PORT=1338
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
-            export CARDANO_NODE_VERSION=1.35.2
+            export CARDANO_NODE_VERSION=1.35.4
             ;;
         preprod)
             API_PORT=3102

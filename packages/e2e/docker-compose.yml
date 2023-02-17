@@ -1,0 +1,202 @@
+version: "3.9"
+
+services:
+  local-testnet:
+    build:
+      context: ./local-network
+    ports:
+      - 3001:3001
+    volumes:
+      - ./local-network/network-files/node-sp1/:/root/network-files/node-sp1
+      - ./local-network/config:/root/config
+    depends_on:
+      # We need the file server here in order to calculate the pool metadata hashes
+      file-server:
+        condition: service_healthy
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-11.5-alpine}
+    environment:
+      - POSTGRES_LOGGING=true
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+    ports:
+      - ${POSTGRES_PORT:-5432}:5432
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    shm_size: '2gb'
+    restart: on-failure
+    healthcheck:
+      # Use pg_isready to check postgres is running. Substitute different
+      # user `postgres` if you've setup differently to config/pgpass-mainnet
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  file-server:
+    image: nginx:${NGINX_VERSION:-1.22.1-alpine}
+    volumes:
+      - ./local-network/file-server:/usr/share/nginx/html
+    ports:
+      - "${FILE_SERVER_PORT:-7890}:80"
+    environment:
+      - NGINX_PORT=80
+    healthcheck:
+      test: [ "CMD-SHELL", "wget -O /dev/null http://localhost || exit 1" ]
+      timeout: 10s
+  cardano-node-ogmios:
+    image: cardanosolutions/cardano-node-ogmios:${CARDANO_NODE_OGMIOS_VERSION:-v5.5.7_1.35.3}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "400k"
+        max-file: "20"
+    ports:
+      - ${OGMIOS_PORT:-1337}:1337
+    restart: on-failure
+    depends_on:
+      local-testnet:
+        condition: service_healthy
+    volumes:
+      - ./local-network/config/network:/config
+      - node-db:/db
+      - node-ipc:/ipc
+  cardano-db-sync:
+    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.1.0.0}
+    command:
+      [
+        "--config",
+        "/config/cardano-db-sync/config.json",
+        "--socket-path",
+        "/node-ipc/node.socket"
+      ]
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
+      - RESTORE_RECREATE_DB=N
+    depends_on:
+      cardano-node-ogmios:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      file-server:
+        condition: service_healthy
+    secrets:
+      - postgres_password
+      - postgres_user
+      - postgres_db
+    volumes:
+      - ./local-network/config/network:/config
+      - ./local-network/scripts:/scripts
+      - db-sync-data:/var/lib/cexplorer
+      - node-ipc:/node-ipc
+    restart: on-failure
+    stop_signal: SIGINT
+    healthcheck:
+      test: ["CMD", "/scripts/is-db-synced.sh"]
+      interval: 5s
+      timeout: 1s
+      retries: 120
+      start_period: 100ms
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  hasura:
+    build:
+      context: ../api-cardano-db-hasura/hasura
+    image: inputoutput/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-8.0.0}
+    ports:
+      - ${HASURA_PORT:-8090}:8080
+    depends_on:
+      - "postgres"
+    restart: on-failure
+    environment:
+      - HASURA_GRAPHQL_ENABLE_CONSOLE=true
+      - HASURA_GRAPHQL_CORS_DOMAIN=http://localhost:9695
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  background:
+    build:
+      cache_from: [ inputoutput/cardano-graphql-background:latest ]
+      context: ../../
+      target: background
+    image: inputoutput/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.0.0}-${NETWORK:-mainnet}
+    depends_on:
+      - "hasura"
+      - "postgres"
+    environment:
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-https://tokens.cardano.org}
+    restart: on-failure
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  server:
+    build:
+      args:
+        - NETWORK=${NETWORK:-mainnet}
+      cache_from: [ inputoutput/cardano-graphql-server:latest ]
+      context: ../../
+      target: server
+    depends_on:
+      local-testnet:
+        condition: service_healthy
+    image: inputoutput/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.0.0}-${NETWORK:-mainnet}
+    environment:
+      - ALLOW_INTROSPECTION=true
+      - CACHE_ENABLED=true
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+    expose:
+      - ${API_PORT:-3100}
+    ports:
+      - ${API_PORT:-3100}:3100
+    volumes:
+      - ./local-network/config/network/genesis:/config/genesis/
+      - ./local-network/config/network/cardano-node:/config/cardano-node/
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+secrets:
+  postgres_db:
+    file: ./local-network/placeholder-secrets/postgres_db
+  postgres_password:
+    file: ./local-network/placeholder-secrets/postgres_password
+  postgres_user:
+    file: ./local-network/placeholder-secrets/postgres_user
+volumes:
+  db-sync-data:
+  node-db:
+  node-ipc:
+  postgres-data:
+  wallet-db:
+  rabbitmq-db:

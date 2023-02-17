@@ -1,0 +1,113 @@
+{
+  "ByronGenesisFile": "genesis/byron.json",
+  "ShelleyGenesisFile": "genesis/shelley.json",
+  "AlonzoGenesisFile": "genesis/alonzo.json",
+  "ByronGenesisHash": "a300c7ae1b124f53a80d86c6e43ff28c8d0369d7aa5512d5a3328a668b0e15e8",
+  "ShelleyGenesisHash": "6baf33f913dffe311033bd7a7199060cb421234bf12cb99ef448bfd4fe47e305",
+  "AlonzoGenesisHash": "eaa32942a4f2b3028928cb47be679bb36fa128f6d7dddc04ae592d27f2818c16",
+  "MaxConcurrencyBulkSync": 1,
+  "MaxConcurrencyDeadline": 2,
+  "Protocol": "Cardano",
+  "RequiresNetworkMagic": "RequiresMagic",
+  "LastKnownBlockVersion-Major": 6,
+  "LastKnownBlockVersion-Minor": 0,
+  "LastKnownBlockVersion-Alt": 0,
+  "ApplicationName": "cardano-sl",
+  "ApplicationVersion": 1,
+  "TurnOnLogging": true,
+  "TurnOnLogMetrics": true,
+  "minSeverity": "Info",
+  "TracingVerbosity": "MinimalVerbosity",
+  "setupBackends": [
+    "KatipBK"
+  ],
+  "defaultBackends": [
+    "KatipBK"
+  ],
+  "setupScribes": [
+    {
+      "scKind": "FileSK",
+      "scName": "logs/testnet.log",
+      "scFormat": "ScText"
+    },
+    {
+      "scKind": "StdoutSK",
+      "scName": "stdout",
+      "scFormat": "ScText"
+    }
+  ],
+  "defaultScribes": [
+    [
+      "FileSK",
+      "logs/testnet.log"
+    ],
+    [
+      "StdoutSK",
+      "stdout"
+    ]
+  ],
+  "rotation": {
+    "rpLogLimitBytes": 5000000,
+    "rpKeepFilesNum": 3,
+    "rpMaxAgeHours": 24
+  },
+  "TraceBlockFetchClient": false,
+  "TraceBlockFetchDecisions": false,
+  "TraceBlockFetchProtocol": false,
+  "TraceBlockFetchProtocolSerialised": false,
+  "TraceBlockFetchServer": false,
+  "TraceBlockchainTime": false,
+  "TraceChainDb": true,
+  "TraceChainSyncClient": false,
+  "TraceChainSyncBlockServer": false,
+  "TraceChainSyncHeaderServer": false,
+  "TraceChainSyncProtocol": false,
+  "TraceDNSResolver": true,
+  "TraceDNSSubscription": true,
+  "TraceErrorPolicy": true,
+  "TraceLocalErrorPolicy": true,
+  "TraceForge": false,
+  "TraceHandshake": false,
+  "TraceIpSubscription": true,
+  "TraceLocalRootPeers": true,
+  "TracePublicRootPeers": true,
+  "TracePeerSelection": true,
+  "TraceDebugPeerSelection": false,
+  "TracePeerSelectionActions": true,
+  "TraceConnectionManager": true,
+  "TraceServer": true,
+  "TraceLocalConnectionManager": false,
+  "TraceLocalServer": false,
+  "TraceLocalChainSyncProtocol": false,
+  "TraceLocalHandshake": false,
+  "TraceLocalTxSubmissionProtocol": false,
+  "TraceLocalTxSubmissionServer": false,
+  "TraceMempool": true,
+  "TraceMux": false,
+  "TraceTxInbound": false,
+  "TraceTxOutbound": false,
+  "TraceTxSubmissionProtocol": false,
+  "options": {
+    "mapBackends": {
+      "cardano.node.metrics": [
+        "EKGViewBK"
+      ]
+    },
+    "mapScribes": {
+      "cardano.node.metrics": [
+        "FileSK::logs/testnet.log"
+      ]
+    },
+    "mapSeverity": {
+      "cardano.node.ChainDB": "Notice",
+      "cardano.node.DnsSubscription": "Debug"
+    }
+  },
+  "PBftSignatureThreshold": 0.6,
+  "TestShelleyHardForkAtEpoch": 0,
+  "TestAllegraHardForkAtEpoch": 0,
+  "TestMaryHardForkAtEpoch": 0,
+  "TestAlonzoHardForkAtEpoch": 0,
+  "TestBabbageHardForkAtEpoch": 0,
+  "TestEnableDevelopmentNetworkProtocols": true
+}

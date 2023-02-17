@@ -11,3 +11,5 @@ result*
 *yarn-error.log
 bin
 state
+/packages/e2e/local-network/config
+/packages/e2e/local-network/network-files
