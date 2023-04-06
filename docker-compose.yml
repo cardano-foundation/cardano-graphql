@@ -44,8 +44,7 @@ services:
     volumes:
       - node-db:/db
       - node-ipc:/ipc
-      - ./config/network/${NETWORK:-mainnet}:/config
-
+      - ${CARDANO_GRAPHQL_NETWORK_CONFIG_PATH}/${NETWORK:-mainnet}:/config
   cardano-db-sync:
     image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.0.5}
     command: [
@@ -56,7 +55,7 @@ services:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
-      - RESTORE_RECREATE_DB=N
+      - RESTORE_RECREATE_DB=Y
     depends_on:
       - cardano-node-ogmios
       - postgres
@@ -65,7 +64,7 @@ services:
       - postgres_user
       - postgres_db
     volumes:
-      - ./config/network/${NETWORK:-mainnet}:/config
+      - ${CARDANO_GRAPHQL_NETWORK_CONFIG_PATH}/${NETWORK:-mainnet}:/config
       - db-sync-data:/var/lib/cexplorer
       - node-ipc:/node-ipc
     restart: on-failure
