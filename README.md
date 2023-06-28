@@ -1,5 +1,5 @@
 <p align="center">
-  <big><strong>Cardano GraphQL</strong></big>
+  <big><strong>Cardano GraphQL</strong></big> 
 </p>
 
 <p align="center">
