@@ -10,7 +10,7 @@
 
       let github = {
         #input: "${cell.library.actionCiInputName}"
-        #repo: "input-output-hk/cardano-graphql"
+        #repo: "cardano-foundation/cardano-graphql"
       }
 
       #lib.merge

@@ -150,7 +150,7 @@ export class Server {
       if (result.data.cardanoDbMeta.initialized && assetSyncPercentage > 99) {
         this.logger.info({ module: 'Server' }, 'DB ready')
         // Promise not awaited purposely
-        // https://github.com/input-output-hk/cardano-graphql/issues/459
+        // https://github.com/cardano-foundation/cardano-graphql/issues/459
         clearIntervalAsync(this.syncProgress)
       } else {
         this.logger.info({ module: 'Server' }, `Sync Progress: cardano-db-sync: ${result.data.cardanoDbMeta.syncPercentage}% | Asset: ${assetSyncPercentage}%`)

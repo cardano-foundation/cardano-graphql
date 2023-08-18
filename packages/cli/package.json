@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
+    "url": "git+https://github.com/cardano-foundation/cardano-graphql.git"
   },
   "keywords": [
     "Cardano",
@@ -37,9 +37,9 @@
   ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/input-output-hk/cardano-graphql/issues"
+    "url": "https://github.com/cardano-foundation/cardano-graphql/issues"
   },
-  "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/cli/README.md",
+  "homepage": "https://github.com/cardano-foundation/cardano-graphql/blob/master/packages/cli/README.md",
   "dependencies": {
     "appdirectory": "^0.1.0",
     "chalk": "^3.0.0",

@@ -12,7 +12,7 @@
         # When running locally, the current directory is already bind-mounted into the container,
         # so we don't need to fetch the source from GitHub and we don't want to report a GitHub status.
         enable = config.actionRun.facts != {};
-        repository = "input-output-hk/cardano-graphql";
+        repository = "cardano-foundation/cardano-graphql";
         revision = config.preset.github.lib.readRevision inputs.cells.cloud.library.actionCiInputName null;
       };
     };
