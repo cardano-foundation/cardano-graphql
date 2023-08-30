@@ -28,7 +28,7 @@
     "@cardano-ogmios/schema": "5.5.7",
     "@graphql-tools/merge": "^6.0.10",
     "apollo-metrics": "^1.0.1",
-    "apollo-server-core": "^2.14.3",
+    "apollo-server-core": "^2.26.2",
     "apollo-server-errors": "^2.4.1",
     "apollo-server-express": "^2.14.3",
     "body-parser": "^1.19.0",
