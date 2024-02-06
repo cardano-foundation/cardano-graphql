@@ -61,7 +61,7 @@ Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.i
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.1/db-sync-snapshot-schema-13.1-block-9891665-x86_64.tgz \
 docker compose up -d --build &&\
 docker compose logs -f
 ```
@@ -78,7 +78,7 @@ API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
 POSTGRES_PORT=5433 \
-METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
+METADATA_SERVER_URI="https://metadata.world.dev.cardano.org" \
 docker compose -p preprod up -d --build &&\
 docker compose -p preprod logs -f
 ```
@@ -96,7 +96,7 @@ API_PORT=3102 \
 HASURA_PORT=8092 \
 OGMIOS_PORT=1339 \
 POSTGRES_PORT=5434 \
-METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
+METADATA_SERVER_URI="https://metadata.world.dev.cardano.org" \
 docker compose -p preview up -d --build &&\
 docker compose -p preview logs -f
 ```
@@ -117,8 +117,8 @@ export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
+docker pull cardanosolutions/cardano-node-ogmios:v5.6.0_1.35.5-${NETWORK} &&\
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.1/db-sync-snapshot-schema-13.1-block-9891665-x86_64.tgz \
 docker compose up -d &&\
 docker compose logs -f
 ```
@@ -132,7 +132,7 @@ export NETWORK=preprod &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v5.6.0_1.35.5-${NETWORK} &&\
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
@@ -151,7 +151,7 @@ export NETWORK=preview &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v5.6.0_1.35.5-${NETWORK} &&\
 API_PORT=3102 \
 HASURA_PORT=8092 \
 OGMIOS_PORT=1339 \
