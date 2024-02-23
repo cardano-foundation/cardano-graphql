@@ -1,7 +1,7 @@
 ARG UBUNTU_VERSION=20.04
 
 FROM ubuntu:${UBUNTU_VERSION} as ubuntu-nodejs
-ARG NODEJS_MAJOR_VERSION=14
+ARG NODEJS_MAJOR_VERSION=18
 ENV DEBIAN_FRONTEND=nonintercative
 RUN apt-get update && apt-get install curl -y &&\
   curl --proto '=https' --tlsv1.2 -sSf -L https://deb.nodesource.com/setup_${NODEJS_MAJOR_VERSION}.x | bash - &&\
@@ -60,6 +60,7 @@ WORKDIR /src
 FROM ubuntu-nodejs as background
 ARG NETWORK=mainnet
 ARG METADATA_SERVER_URI="https://tokens.cardano.org"
+RUN apt-get update -y && apt-get install lsb-release -y
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
   echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list &&\
   apt-get update && apt-get install -y --no-install-recommends \
