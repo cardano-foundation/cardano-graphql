@@ -16,7 +16,7 @@ services:
       - postgres_user
     shm_size: '2gb'
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
     restart: on-failure
     logging:
       driver: "json-file"
@@ -26,7 +26,7 @@ services:
 
   cardano-node-ogmios:
     platform: linux/x86_64
-    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v5.6.0}_${CARDANO_NODE_VERSION:-1.35.5}-${NETWORK:-mainnet}
+    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v6.1.0}_${CARDANO_NODE_VERSION:-8.7.3}-${NETWORK:-mainnet}
     logging:
       driver: "json-file"
       options:
@@ -36,9 +36,9 @@ services:
       - ${OGMIOS_PORT:-1337}:1337
     restart: on-failure
     volumes:
-      - node-db:/db
-      - node-ipc:/ipc
-      - ./config/network/${NETWORK:-mainnet}:/config
+      - ./node-db:/db
+      - ./node-ipc:/ipc
+#      - ./config/network/${NETWORK:-mainnet}:/config
 
   cardano-db-sync:
     image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.1.0.2}
@@ -47,7 +47,7 @@ services:
       "--socket-path", "/node-ipc/node.socket"
     ]
     environment:
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST=host.docker.internal
       - POSTGRES_PORT=5432
       - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
       - RESTORE_RECREATE_DB=N
@@ -60,8 +60,8 @@ services:
       - postgres_db
     volumes:
       - ./config/network/${NETWORK:-mainnet}:/config
-      - db-sync-data:/var/lib/cexplorer
-      - node-ipc:/node-ipc
+      - ./db-sync-data:/var/lib/cexplorer
+      - ./node-ipc:/node-ipc
     restart: on-failure
     stop_signal: SIGINT
     logging:

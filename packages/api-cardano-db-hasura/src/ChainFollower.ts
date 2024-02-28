@@ -1,10 +1,10 @@
-import {
-  ChainSync,
-  createChainSyncClient,
-  isAlonzoBlock,
-  isBabbageBlock,
-  isMaryBlock,
-  Schema
+import  {
+  ChainSynchronization,
+    createChainSynchronizationClient,
+
+  // isAlonzoBlock,
+  // isBabbageBlock,
+  // isMaryBlock,
 } from '@cardano-ogmios/client'
 import pRetry from 'p-retry'
 import { Config } from './Config'
@@ -19,7 +19,7 @@ import { DbConfig } from './typeAliases'
 const MODULE_NAME = 'ChainFollower'
 
 export class ChainFollower {
-  private chainSyncClient: ChainSync.ChainSyncClient
+  private chainSyncClient: ChainSynchronization.ChainSynchronizationClient
   private queue: PgBoss
   private state: RunnableModuleState
 
@@ -45,7 +45,7 @@ export class ChainFollower {
         await this.initialize(ogmiosConfig, getMostRecentPoint)
         await this.start(await getMostRecentPoint())
       })
-      this.chainSyncClient = await createChainSyncClient(
+      this.chainSyncClient = await createChainSynchronizationClient(
         context,
         {
           rollBackward: async ({ point, tip }, requestNext) => {
@@ -63,14 +63,7 @@ export class ChainFollower {
             requestNext()
           },
           rollForward: async ({ block }, requestNext) => {
-            let b: Schema.BlockBabbage | Schema.BlockAlonzo | Schema.BlockMary
-            if (isBabbageBlock(block)) {
-              b = block.babbage as Schema.BlockBabbage
-            } else if (isAlonzoBlock(block)) {
-              b = block.alonzo as Schema.BlockAlonzo
-            } else if (isMaryBlock(block)) {
-              b = block.mary as Schema.BlockMary
-            }
+
             if (b !== undefined) {
               for (const tx of b.body) {
                 for (const entry of Object.entries(tx.body.mint.assets)) {
@@ -111,13 +104,13 @@ export class ChainFollower {
     this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
-  public async start (points: Schema.PointOrOrigin[]) {
+  public async start (points: PointOrOrigin[]) {
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'start')
     }
     this.logger.info({ module: MODULE_NAME }, 'Starting')
     await this.queue.start()
-    await this.chainSyncClient.startSync(points)
+    await this.chainSyncClient.resume(points)
     this.state = 'running'
     this.logger.info({ module: MODULE_NAME }, 'Started')
   }

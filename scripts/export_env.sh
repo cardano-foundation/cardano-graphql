@@ -13,8 +13,9 @@ case "$NETWORK" in
             API_PORT=3100
             HASURA_PORT=8090
             METADATA_SERVER_URI="https://tokens.cardano.org"
+            OGMIOS_PORT=1337
             PG_ADMIN_PORT=8442
-            POSTGRES_PORT=5442
+            POSTGRES_PORT=5432
             ;;
         testnet)
             API_PORT=3101
@@ -54,9 +55,11 @@ esac
 export ALLOW_INTROSPECTION=true
 export API_PORT
 export CARDANO_NODE_CONFIG_PATH=${CONFIG_DIR}/cardano-node/config.json
+export CARDANO_NODE_SOCKET_PATH=${CONTEXT}/node-ipc/node.socket
 export COMPOSE_DOCKER_CLI_BUILD=1
 export DOCKER_BUILDKIT=1
 export HASURA_CLI_PATH=${BIN_DIR}/hasura
+export HASURA_CLI_EXT_PATH=${HASURA_CLI_PATH}
 export HASURA_PORT
 export HASURA_URI=http://localhost:${HASURA_PORT}
 export METADATA_SERVER_URI
