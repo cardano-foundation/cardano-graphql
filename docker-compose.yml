@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   postgres:
-    image: postgres:${POSTGRES_VERSION:-11.5-alpine}
+    image: postgres:${POSTGRES_VERSION:-14.10-alpine}
     environment:
       - POSTGRES_LOGGING=true
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
@@ -16,7 +16,7 @@ services:
       - postgres_user
     shm_size: '2gb'
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     restart: on-failure
     logging:
       driver: "json-file"
@@ -36,8 +36,8 @@ services:
       - ${OGMIOS_PORT:-1337}:1337
     restart: on-failure
     volumes:
-      - ./node-db:/db
-      - ./node-ipc:/ipc
+      - node-db:/db
+      - node-ipc:/ipc
       - ./config/network/${NETWORK:-mainnet}:/config
 
   cardano-db-sync:
@@ -60,8 +60,8 @@ services:
       - postgres_db
     volumes:
       - ./config/network/${NETWORK:-mainnet}:/config
-      - ./db-sync-data:/var/lib/cexplorer
-      - ./node-ipc:/node-ipc
+      - db-sync-data:/var/lib/cexplorer
+      - node-ipc:/node-ipc
     restart: on-failure
     stop_signal: SIGINT
     logging:
