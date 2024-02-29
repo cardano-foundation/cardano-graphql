@@ -3,25 +3,21 @@ import pRetry from 'p-retry'
 import util, { DataFetcher, errors, ModuleState } from '@cardano-graphql/util'
 import {
   ConnectionConfig,
-  createConnectionObject,
-  createStateQueryClient,
-  createTxSubmissionClient,
-  getServerHealth,
-  ServerHealth,
-  // Schema,
-  StateQuery,
-  TxSubmission
+  createConnectionObject, createLedgerStateQueryClient, createTransactionSubmissionClient, getServerHealth,
+  ServerHealth
 } from '@cardano-ogmios/client'
 import { dummyLogger, Logger } from 'ts-log'
 import { createInteractionContextWithLogger } from './util'
+import {TransactionSubmissionClient} from "@cardano-ogmios/client/dist/TransactionSubmission";
+import {LedgerStateQueryClient} from "@cardano-ogmios/client/dist/LedgerStateQuery";
 
 const MODULE_NAME = 'CardanoNodeClient'
 
 export class CardanoNodeClient {
   readonly networkParams: string[]
   public adaCirculatingSupply: AssetSupply['circulating']
-  private stateQueryClient: StateQuery.StateQueryClient
-  private txSubmissionClient: TxSubmission.TxSubmissionClient
+  private stateQueryClient: LedgerStateQueryClient
+  private txSubmissionClient: TransactionSubmissionClient
   private state: ModuleState
   private serverHealthFetcher: DataFetcher<ServerHealth>
 
@@ -75,8 +71,8 @@ export class CardanoNodeClient {
         await this.shutdown()
         await this.initialize(ogmiosConnectionConfig)
       })
-      this.stateQueryClient = await createStateQueryClient(interactionContext)
-      this.txSubmissionClient = await createTxSubmissionClient(interactionContext)
+      this.stateQueryClient = await createLedgerStateQueryClient(interactionContext)
+      this.txSubmissionClient = await createTransactionSubmissionClient(interactionContext)
     }, {
       factor: 1.2,
       retries: 100,
@@ -110,7 +106,7 @@ export class CardanoNodeClient {
     if (this.serverHealthFetcher.value.networkSynchronization < 0.95) {
       throw new errors.OperationRequiresSyncedNode('submitTransaction')
     }
-    const hash = await this.txSubmissionClient.submitTx(transaction)
+    const hash = await this.txSubmissionClient.submitTransaction(transaction)
     this.logger.info({ module: MODULE_NAME, hash }, 'submitTransaction')
     return hash
   }

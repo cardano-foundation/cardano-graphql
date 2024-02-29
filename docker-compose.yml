@@ -16,7 +16,7 @@ services:
       - postgres_user
     shm_size: '2gb'
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - ./postgres-data:/var/lib/postgresql/data
     restart: on-failure
     logging:
       driver: "json-file"
@@ -25,14 +25,8 @@ services:
         max-file: "10"
 
   cardano-node-ogmios:
-    build:
-      args:
-        - CARDANO_CONFIG_REV=${CARDANO_CONFIG_REV:-303f3a3035c52eb753b533d53ef439c6b4cde9c9}
-        - CARDANO_NODE_VERSION=${CARDANO_NODE_VERSION:-1.35.5}
-        - NETWORK=${NETWORK:-mainnet}
-      cache_from: [ cardanosolutions/cardano-node-ogmios:latest ]
-      context: ./ogmios
-    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v5.5.8}_${CARDANO_NODE_VERSION:-1.35.5}-${NETWORK:-mainnet}
+    platform: linux/x86_64
+    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v6.1.0}_${CARDANO_NODE_VERSION:-8.7.3}-${NETWORK:-mainnet}
     logging:
       driver: "json-file"
       options:
@@ -42,18 +36,18 @@ services:
       - ${OGMIOS_PORT:-1337}:1337
     restart: on-failure
     volumes:
-      - node-db:/db
-      - node-ipc:/ipc
+      - ./node-db:/db
+      - ./node-ipc:/ipc
       - ./config/network/${NETWORK:-mainnet}:/config
 
   cardano-db-sync:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.0.5}
+    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.2.0.1}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket"
     ]
     environment:
-      - POSTGRES_HOST=postgres
+      - POSTGRES_HOST=host.docker.internal
       - POSTGRES_PORT=5432
       - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
       - RESTORE_RECREATE_DB=N
@@ -66,8 +60,8 @@ services:
       - postgres_db
     volumes:
       - ./config/network/${NETWORK:-mainnet}:/config
-      - db-sync-data:/var/lib/cexplorer
-      - node-ipc:/node-ipc
+      - ./db-sync-data:/var/lib/cexplorer
+      - ./node-ipc:/node-ipc
     restart: on-failure
     stop_signal: SIGINT
     logging:
