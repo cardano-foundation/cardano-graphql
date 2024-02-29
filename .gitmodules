@@ -1,3 +1,7 @@
 [submodule "config"]
 	path = config
 	url = https://github.com/input-output-hk/cardano-configurations.git
+
+[submodule "ogmios"]
+	path = ogmios
+	url = https://github.com/CardanoSolutions/ogmios.git
