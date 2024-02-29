@@ -1,10 +1,6 @@
 import  {
   ChainSynchronization,
     createChainSynchronizationClient,
-
-  // isAlonzoBlock,
-  // isBabbageBlock,
-  // isMaryBlock,
 } from '@cardano-ogmios/client'
 import pRetry from 'p-retry'
 import { Config } from './Config'
@@ -12,7 +8,7 @@ import util, { assetFingerprint, errors, RunnableModuleState } from '@cardano-gr
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'
 import { createInteractionContextWithLogger } from './util'
-import { PointOrOrigin } from '@cardano-ogmios/schema'
+import { PointOrOrigin, BlockPraos } from '@cardano-ogmios/schema'
 import { HasuraBackgroundClient } from './HasuraBackgroundClient'
 import { DbConfig } from './typeAliases'
 
@@ -63,17 +59,18 @@ export class ChainFollower {
             requestNext()
           },
           rollForward: async ({ block }, requestNext) => {
+            let b = block as BlockPraos;
 
             if (b !== undefined) {
-              for (const tx of b.body) {
-                for (const entry of Object.entries(tx.body.mint.assets)) {
+              for (const tx of b.transactions) {
+                for (const entry of Object.entries(tx.mint.assets)) {
                   const [policyId, assetName] = entry[0].split('.')
                   const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
                   if (!(await this.hasuraClient.hasAsset(assetId))) {
                     const asset = {
                       assetId,
                       assetName,
-                      firstAppearedInSlot: b.header.slot,
+                      firstAppearedInSlot: b.slot,
                       fingerprint: assetFingerprint(policyId, assetName),
                       policyId
                     }
