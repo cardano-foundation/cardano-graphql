@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   postgres:
-    image: postgres:${POSTGRES_VERSION:-11.5-alpine}
+    image: postgres:${POSTGRES_VERSION:-14.10-alpine}
     environment:
       - POSTGRES_LOGGING=true
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
@@ -26,7 +26,7 @@ services:
 
   cardano-node-ogmios:
     platform: linux/x86_64
-    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v5.6.0}_${CARDANO_NODE_VERSION:-1.35.5}-${NETWORK:-mainnet}
+    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v6.1.0}_${CARDANO_NODE_VERSION:-8.7.3}-${NETWORK:-mainnet}
     logging:
       driver: "json-file"
       options:
@@ -41,7 +41,7 @@ services:
       - ./config/network/${NETWORK:-mainnet}:/config
 
   cardano-db-sync:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.1.0.2}
+    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.2.0.1}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket"
