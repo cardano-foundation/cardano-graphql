@@ -40,10 +40,10 @@ export class Worker {
       application_name: 'cardano-graphql',
       ...this.queueConfig
     })
-    const subscriptionHandler: PgBoss.SubscribeHandler<AssetJobPayload, void> = async (data: JobWithDoneCallback<AssetJobPayload, void>) => {
+    const subscriptionHandler: PgBoss.SubscribeHandler<AssetJobPayload, void> = async (data: object) => {
       // The TypeDef doesn't cover the valid batch data, so a user-defined guard is used.
       if ('length' in data) {
-        const jobs = data as JobWithDoneCallback<AssetJobPayload, AssetJobPayload>[]
+        const jobs = data as JobWithDoneCallback<AssetJobPayload, void>[]
         this.logger.debug({ module: MODULE_NAME, qty: jobs.length }, 'Processing jobs')
         const assetIds = jobs.map((job) => job.data.assetId)
         const fetchedMetadata = await this.metadataFetchClient.fetch(assetIds)

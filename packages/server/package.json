@@ -25,7 +25,7 @@
   "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/server/README.md",
   "dependencies": {
     "@cardano-graphql/api-cardano-db-hasura": "8.0.0",
-    "@cardano-ogmios/schema": "^6.0.0",
+    "@cardano-ogmios/schema": "6.1.0",
     "@graphql-tools/merge": "^6.2.17",
     "apollo-metrics": "^1.0.1",
     "apollo-server-core": "^2.25.3",
@@ -53,7 +53,7 @@
     "@types/graphql-depth-limit": "^1.1.2",
     "@types/node": "^14.0.13",
     "shx": "^0.3.2",
-    "typescript": "^3.9.5"
+    "typescript": "^4.2.3"
   },
   "directories": {
     "lib": "src",

@@ -46,7 +46,7 @@ export class HasuraBackgroundClient {
             reject(error)
           }
           if (stdout !== '') this.logger.debug({ module: 'HasuraBackgroundClient' }, stdout)
-          resolve()
+          resolve({ module: 'HasuraBackgroundClient' })
         }
       )
     })

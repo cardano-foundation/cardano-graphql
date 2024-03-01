@@ -3,12 +3,12 @@ import pRetry from 'p-retry'
 import util, { DataFetcher, errors, ModuleState } from '@cardano-graphql/util'
 import {
   ConnectionConfig,
-  createConnectionObject, createLedgerStateQueryClient, createTransactionSubmissionClient,
+  createConnectionObject, createInteractionContext, createLedgerStateQueryClient, createTransactionSubmissionClient,
   getServerHealth,
   ServerHealth,
 } from '@cardano-ogmios/client'
 import { dummyLogger, Logger } from 'ts-log'
-import { createInteractionContextWithLogger } from './util'
+// import { createInteractionContextWithLogger } from './util'
 import {LedgerStateQueryClient} from "@cardano-ogmios/client/dist/LedgerStateQuery";
 import {TransactionSubmissionClient} from "@cardano-ogmios/client/dist/TransactionSubmission";
 
@@ -29,10 +29,12 @@ export class CardanoNodeClient {
   }
 
   public async getTipSlotNo () {
+    this.logger.info({ module: MODULE_NAME }, this.state)
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getTipSlotNo')
     }
-    const tip = await this.stateQueryClient.ledgerTip()
+    const tip = await this.stateQueryClient.networkTip()
+    this.logger.info({ module: MODULE_NAME, tip }, tip)
     const slotNo = tip === 'origin' ? 0 : tip.slot
     this.logger.debug({ module: MODULE_NAME, slotNo }, 'getTipSlotNo')
     return slotNo
@@ -68,11 +70,17 @@ export class CardanoNodeClient {
       )
     })
     await pRetry(async () => {
-      const interactionContext = await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME, async () => {
-        await this.shutdown()
-        await this.initialize(ogmiosConnectionConfig)
-      })
+      // const interactionContext = await createInteractionContextWithLogger({host: "localhost", port: 1337}, this.logger, MODULE_NAME, async () => {
+      //   await this.shutdown()
+      //   await this.initialize(ogmiosConnectionConfig)
+      // })
+      const interactionContext = await createInteractionContext(err => console.error(err),
+          () => console.log("Connection closed."),
+          { connection: { host: process.env.OGMIOS_HOST, port: parseInt(process.env.OGMIOS_PORT, 10) } })
+      this.logger.info({ module: MODULE_NAME }, ogmiosConnectionConfig)
       this.stateQueryClient = await createLedgerStateQueryClient(interactionContext)
+      let tip = await this.stateQueryClient.ledgerTip();
+      this.logger.info({ module: MODULE_NAME }, tip)
       this.txSubmissionClient = await createTransactionSubmissionClient(interactionContext)
     }, {
       factor: 1.2,

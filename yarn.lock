@@ -840,7 +840,7 @@
     ts-custom-error "^3.2.0"
     ws "^7.4.6"
 
-"@cardano-ogmios/schema@6.1.0", "@cardano-ogmios/schema@^6.0.0":
+"@cardano-ogmios/schema@6.1.0":
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@cardano-ogmios/schema/-/schema-6.1.0.tgz#1ee2798ed81428e89826bd3a432b40144f9bc39f"
   integrity sha512-rwNlU51CYgbJJYueM5E76G1OhfrR4GXLvaEis1446/HATJdFJQNc4P/RiEHauEgBOqArI7oFTuTSgJLahQ8/Zw==
@@ -9905,6 +9905,11 @@ typescript@^3.9.5:
   version "3.9.6"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.6.tgz#8f3e0198a34c3ae17091b35571d3afd31999365a"
   integrity sha512-Pspx3oKAPJtjNwE92YS05HQoY7z2SFyOpHo9MqJor3BXAGNaPUs83CuVp9VISFkSjyRfiTpmKuAYGJB7S7hOxw==
+
+typescript@^4.2.3:
+  version "4.9.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
+  integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
 ua-parser-js@^1.0.35:
   version "1.0.37"

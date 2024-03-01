@@ -26,11 +26,11 @@ COPY \
   /app/
 
 FROM nodejs-builder as cardano-graphql-builder
-RUN yarn --offline --frozen-lockfile --non-interactive &&\
+RUN yarn --frozen-lockfile --non-interactive &&\
   yarn build
 
 FROM nodejs-builder as cardano-graphql-production-deps
-RUN yarn --offline --frozen-lockfile --non-interactive --production
+RUN yarn --frozen-lockfile --non-interactive --production
 
 FROM frolvlad/alpine-glibc:alpine-3.11_glibc-2.30 as downloader
 RUN apk add curl

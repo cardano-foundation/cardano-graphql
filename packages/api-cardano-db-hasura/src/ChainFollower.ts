@@ -61,26 +61,28 @@ export class ChainFollower {
           },
           rollForward: async ({ block }, requestNext) => {
             let b = block as BlockPraos;
-            if (b !== undefined) {
+            if (b !== undefined && b.transactions !== undefined) {
               for (const tx of b.transactions) {
-                for (const entry of Object.entries(tx.mint.assets)) {
-                  const [policyId, assetName] = entry[0].split('.')
-                  const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
-                  if (!(await this.hasuraClient.hasAsset(assetId))) {
-                    const asset = {
-                      assetId,
-                      assetName,
-                      firstAppearedInSlot: b.slot,
-                      fingerprint: assetFingerprint(policyId, assetName),
-                      policyId
+                if(tx.mint !== undefined) {
+                  for (const entry of Object.entries(tx.mint.assets)) {
+                    const [policyId, assetName] = entry[0].split('.')
+                    const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
+                    if (!(await this.hasuraClient.hasAsset(assetId))) {
+                      const asset = {
+                        assetId,
+                        assetName,
+                        firstAppearedInSlot: b.slot,
+                        fingerprint: assetFingerprint(policyId, assetName),
+                        policyId
+                      }
+                      await this.hasuraClient.insertAssets([asset])
+                      const SIX_HOURS = 21600
+                      const THREE_MONTHS = 365
+                      await this.queue.publish('asset-metadata-fetch-initial', {assetId}, {
+                        retryDelay: SIX_HOURS,
+                        retryLimit: THREE_MONTHS
+                      })
                     }
-                    await this.hasuraClient.insertAssets([asset])
-                    const SIX_HOURS = 21600
-                    const THREE_MONTHS = 365
-                    await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
-                      retryDelay: SIX_HOURS,
-                      retryLimit: THREE_MONTHS
-                    })
                   }
                 }
               }
