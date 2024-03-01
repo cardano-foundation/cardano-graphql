@@ -3,7 +3,7 @@ import pRetry from 'p-retry'
 import util, { DataFetcher, errors, ModuleState } from '@cardano-graphql/util'
 import {
   ConnectionConfig,
-  createConnectionObject, createInteractionContext, createLedgerStateQueryClient, createTransactionSubmissionClient,
+  createConnectionObject, createLedgerStateQueryClient, createTransactionSubmissionClient,
   getServerHealth,
   ServerHealth,
 } from '@cardano-ogmios/client'
@@ -11,6 +11,7 @@ import { dummyLogger, Logger } from 'ts-log'
 // import { createInteractionContextWithLogger } from './util'
 import {LedgerStateQueryClient} from "@cardano-ogmios/client/dist/LedgerStateQuery";
 import {TransactionSubmissionClient} from "@cardano-ogmios/client/dist/TransactionSubmission";
+import {createInteractionContextWithLogger} from "./util";
 
 const MODULE_NAME = 'CardanoNodeClient'
 
@@ -70,13 +71,10 @@ export class CardanoNodeClient {
       )
     })
     await pRetry(async () => {
-      // const interactionContext = await createInteractionContextWithLogger({host: "localhost", port: 1337}, this.logger, MODULE_NAME, async () => {
-      //   await this.shutdown()
-      //   await this.initialize(ogmiosConnectionConfig)
-      // })
-      const interactionContext = await createInteractionContext(err => console.error(err),
-          () => console.log("Connection closed."),
-          { connection: { host: process.env.OGMIOS_HOST, port: parseInt(process.env.OGMIOS_PORT, 10) } })
+      const interactionContext = await createInteractionContextWithLogger(ogmiosConnectionConfig, this.logger, MODULE_NAME, async () => {
+        await this.shutdown()
+        await this.initialize(ogmiosConnectionConfig)
+      })
       this.logger.info({ module: MODULE_NAME }, ogmiosConnectionConfig)
       this.stateQueryClient = await createLedgerStateQueryClient(interactionContext)
       let tip = await this.stateQueryClient.ledgerTip();

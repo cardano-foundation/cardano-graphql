@@ -91,52 +91,52 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
-#
-#  background:
-#    build:
-#      cache_from: [ inputoutput/cardano-graphql-background:latest ]
-#      context: .
-#      target: background
-#    image: inputoutput/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.0.0}-${NETWORK:-mainnet}
-#    depends_on:
-#      - "hasura"
-#      - "postgres"
-#    environment:
-#      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
-#      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-https://tokens.cardano.org}
-#    restart: on-failure
-#    secrets:
-#      - postgres_db
-#      - postgres_password
-#      - postgres_user
-#    logging:
-#      driver: "json-file"
-#      options:
-#        max-size: "200k"
-#        max-file: "10"
-#
-#  server:
-#    build:
-#      args:
-#        - NETWORK=${NETWORK:-mainnet}
-#      cache_from: [ inputoutput/cardano-graphql-server:latest ]
-#      context: .
-#      target: server
-#    image: inputoutput/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.0.0}-${NETWORK:-mainnet}
-#    environment:
-#      - ALLOW_INTROSPECTION=true
-#      - CACHE_ENABLED=true
-#      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
-#    expose:
-#      - ${API_PORT:-3100}
-#    ports:
-#      - ${API_PORT:-3100}:3100
-#    restart: on-failure
-#    logging:
-#      driver: "json-file"
-#      options:
-#        max-size: "200k"
-#        max-file: "10"
+
+  background:
+    build:
+      cache_from: [ inputoutput/cardano-graphql-background:latest ]
+      context: .
+      target: background
+    image: inputoutput/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.0.0}-${NETWORK:-mainnet}
+    depends_on:
+      - "hasura"
+      - "postgres"
+    environment:
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-https://tokens.cardano.org}
+    restart: on-failure
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  server:
+    build:
+      args:
+        - NETWORK=${NETWORK:-mainnet}
+      cache_from: [ inputoutput/cardano-graphql-server:latest ]
+      context: .
+      target: server
+    image: inputoutput/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.0.0}-${NETWORK:-mainnet}
+    environment:
+      - ALLOW_INTROSPECTION=true
+      - CACHE_ENABLED=true
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+    expose:
+      - ${API_PORT:-3100}
+    ports:
+      - ${API_PORT:-3100}:3100
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
 secrets:
   postgres_db:
