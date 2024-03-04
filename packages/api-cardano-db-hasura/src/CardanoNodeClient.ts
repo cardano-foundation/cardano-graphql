@@ -5,13 +5,12 @@ import {
   ConnectionConfig,
   createConnectionObject, createLedgerStateQueryClient, createTransactionSubmissionClient,
   getServerHealth,
-  ServerHealth,
+  ServerHealth
 } from '@cardano-ogmios/client'
 import { dummyLogger, Logger } from 'ts-log'
-// import { createInteractionContextWithLogger } from './util'
-import {LedgerStateQueryClient} from "@cardano-ogmios/client/dist/LedgerStateQuery";
-import {TransactionSubmissionClient} from "@cardano-ogmios/client/dist/TransactionSubmission";
-import {createInteractionContextWithLogger} from "./util";
+import { LedgerStateQueryClient } from '@cardano-ogmios/client/dist/LedgerStateQuery'
+import { TransactionSubmissionClient } from '@cardano-ogmios/client/dist/TransactionSubmission'
+import { createInteractionContextWithLogger } from './util'
 
 const MODULE_NAME = 'CardanoNodeClient'
 
@@ -76,12 +75,12 @@ export class CardanoNodeClient {
         await this.initialize(ogmiosConnectionConfig)
       })
       this.stateQueryClient = await createLedgerStateQueryClient(interactionContext)
-      let tip;
+      let tip
       try {
-        tip = await this.stateQueryClient.ledgerTip();
+        tip = await this.stateQueryClient.ledgerTip()
       } catch (e) {
-        this.logger.error({ module: MODULE_NAME }, "Querying ledger tip not yet available. Wait for later epoch. Ogmios Error Message: " + e.message);
-        throw e;
+        this.logger.error({ module: MODULE_NAME }, 'Querying ledger tip not yet available. Wait for later epoch. Ogmios Error Message: ' + e.message)
+        throw e
       }
 
       this.logger.info({ module: MODULE_NAME }, tip)

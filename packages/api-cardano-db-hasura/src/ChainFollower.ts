@@ -11,7 +11,7 @@ import { createInteractionContextWithLogger } from './util'
 import { PointOrOrigin, BlockPraos } from '@cardano-ogmios/schema'
 import { HasuraBackgroundClient } from './HasuraBackgroundClient'
 import { DbConfig } from './typeAliases'
-import {ChainSynchronizationClient} from "@cardano-ogmios/client/dist/ChainSynchronization";
+import { ChainSynchronizationClient } from '@cardano-ogmios/client/dist/ChainSynchronization'
 
 const MODULE_NAME = 'ChainFollower'
 
@@ -60,10 +60,10 @@ export class ChainFollower {
             requestNext()
           },
           rollForward: async ({ block }, requestNext) => {
-            let b = block as BlockPraos;
+            const b = block as BlockPraos
             if (b !== undefined && b.transactions !== undefined) {
               for (const tx of b.transactions) {
-                if(tx.mint !== undefined) {
+                if (tx.mint !== undefined) {
                   for (const entry of Object.entries(tx.mint.assets)) {
                     const [policyId, assetName] = entry[0].split('.')
                     const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
@@ -78,7 +78,7 @@ export class ChainFollower {
                       await this.hasuraClient.insertAssets([asset])
                       const SIX_HOURS = 21600
                       const THREE_MONTHS = 365
-                      await this.queue.publish('asset-metadata-fetch-initial', {assetId}, {
+                      await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
                         retryDelay: SIX_HOURS,
                         retryLimit: THREE_MONTHS
                       })
