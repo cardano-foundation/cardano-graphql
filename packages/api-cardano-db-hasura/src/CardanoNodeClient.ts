@@ -75,9 +75,15 @@ export class CardanoNodeClient {
         await this.shutdown()
         await this.initialize(ogmiosConnectionConfig)
       })
-      this.logger.info({ module: MODULE_NAME }, ogmiosConnectionConfig)
       this.stateQueryClient = await createLedgerStateQueryClient(interactionContext)
-      let tip = await this.stateQueryClient.ledgerTip();
+      let tip;
+      try {
+        tip = await this.stateQueryClient.ledgerTip();
+      } catch (e) {
+        this.logger.error({ module: MODULE_NAME }, "Querying ledger tip not yet available. Wait for later epoch. Ogmios Error Message: " + e.message);
+        throw e;
+      }
+
       this.logger.info({ module: MODULE_NAME }, tip)
       this.txSubmissionClient = await createTransactionSubmissionClient(interactionContext)
     }, {

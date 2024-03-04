@@ -193,6 +193,7 @@ docker compose -p preview down
 
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
+> **_Note_** This Query is not in early Era's of Cardano. Check Points of Interest here: [Link](https://ogmios.dev/mini-protocols/local-chain-sync/#points-of-interest) 
 ``` graphql 
 { cardanoDbMeta { initialized syncPercentage }}
 ```
