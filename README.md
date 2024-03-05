@@ -191,6 +191,20 @@ docker compose -p preview down
 
 </details>
 
+### Upgrade Database to Postgres 14
+If you are upgrading from Postgres 11 to 14, you will need to run the following command to upgrade the database:
+
+- Add your Database password + User into the `./scripts/db-upgrade-docker-compose.yml` file
+- Adjust volumes if needed - standard is migration from volume `postgres-data` to `postgres14-data`
+- Run the following command to upgrade the database:
+``` console
+# Start upgrading container
+docker compose -f ./scripts/db-upgrade-docker-compose.yml up
+# Stop it manually after the upgrade is done with cmd + c
+```
+- Adjust volume to the upgraded volume `postgres14-data` in the `docker-compose.yml` file
+- Start the stack again
+
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
 > **_Note_** This Query is not available in early Era's of Cardano. Check Points of Interest here: [Link](https://ogmios.dev/mini-protocols/local-chain-sync/#points-of-interest) 
