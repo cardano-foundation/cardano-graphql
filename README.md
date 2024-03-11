@@ -42,7 +42,7 @@ git clone \
   --single-branch \
   --branch 8.0.0 \
   --recurse-submodules \
-  https://github.com/input-output-hk/cardano-graphql.git \
+  https://github.com/cardano-foundation/cardano-graphql.git \
   && cd cardano-graphql
 ```
 
@@ -101,6 +101,22 @@ docker compose -p preview up -d --build &&\
 docker compose -p preview logs -f
 ```
 
+</details>
+
+<details>
+  <summary><i>sanchonet</i></summary>
+``` console
+DOCKER_BUILDKIT=1 \
+COMPOSE_DOCKER_CLI_BUILD=1 \
+NETWORK=sanchonet \
+API_PORT=3102 \
+HASURA_PORT=8092 \
+OGMIOS_PORT=1339 \
+POSTGRES_PORT=5434 \
+METADATA_SERVER_URI="https://metadata.world.dev.cardano.org" \
+docker compose -p preview up -d --build &&\
+docker compose -p preview logs -f
+```
 </details>
 
 #### B) Pull and Run via Docker Compose
