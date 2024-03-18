@@ -61,7 +61,7 @@ Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.i
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.1/db-sync-snapshot-schema-13.1-block-9891665-x86_64.tgz \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.2/db-sync-snapshot-schema-13.2-block-10060706-x86_64.tgz \
 docker compose up -d --build &&\
 docker compose logs -f
 ```
@@ -134,7 +134,7 @@ docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.6.0_1.35.5-${NETWORK} &&\
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.1/db-sync-snapshot-schema-13.1-block-9891665-x86_64.tgz \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.2/db-sync-snapshot-schema-13.2-block-10060706-x86_64.tgz \
 docker compose up -d &&\
 docker compose logs -f
 ```
@@ -208,18 +208,10 @@ docker compose -p preview down
 </details>
 
 ### Upgrade Database to Postgres 14
-If you are upgrading from Postgres 11 to 14, you will need to run the following command to upgrade the database:
-
-- Add your Database password + User into the `./scripts/db-upgrade-docker-compose.yml` file
-- Adjust volumes if needed - standard is migration from volume `postgres-data` to `postgres14-data`
-- Run the following command to upgrade the database:
-``` console
-# Start upgrading container
-docker compose -f ./scripts/db-upgrade-docker-compose.yml up
-# Stop it manually after the upgrade is done with cmd + c
-```
-- Adjust volume to the upgraded volume `postgres14-data` in the `docker-compose.yml` file
-- Start the stack again
+If you are upgrading from Postgres 11 to 14: A resync will be needed.
+To speed up the process you can use the following snapshots:
+- [DB-Sync](https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.2/db-sync-snapshot-schema-13.2-block-10060706-x86_64.tgz)
+- [Node](https://csnapshots.io/about#Manual_download)
 
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
