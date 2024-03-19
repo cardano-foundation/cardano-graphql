@@ -1,7 +1,7 @@
 ARG UBUNTU_VERSION=20.04
 
 FROM ubuntu:${UBUNTU_VERSION} as ubuntu-nodejs
-ARG NODEJS_MAJOR_VERSION=14
+ARG NODEJS_MAJOR_VERSION=18
 ENV DEBIAN_FRONTEND=nonintercative
 RUN apt-get update && apt-get install curl -y &&\
   curl --proto '=https' --tlsv1.2 -sSf -L https://deb.nodesource.com/setup_${NODEJS_MAJOR_VERSION}.x | bash - &&\
@@ -26,11 +26,11 @@ COPY \
   /app/
 
 FROM nodejs-builder as cardano-graphql-builder
-RUN yarn --offline --frozen-lockfile --non-interactive &&\
+RUN yarn --frozen-lockfile --non-interactive &&\
   yarn build
 
 FROM nodejs-builder as cardano-graphql-production-deps
-RUN yarn --offline --frozen-lockfile --non-interactive --production
+RUN yarn --frozen-lockfile --non-interactive --production
 
 FROM frolvlad/alpine-glibc:alpine-3.11_glibc-2.30 as downloader
 RUN apk add curl
@@ -60,6 +60,7 @@ WORKDIR /src
 FROM ubuntu-nodejs as background
 ARG NETWORK=mainnet
 ARG METADATA_SERVER_URI="https://tokens.cardano.org"
+RUN apt-get update -y && apt-get install lsb-release -y
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
   echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list &&\
   apt-get update && apt-get install -y --no-install-recommends \
@@ -108,7 +109,6 @@ COPY --from=cardano-graphql-builder /app/packages/util/dist /app/packages/util/d
 COPY --from=cardano-graphql-builder /app/packages/util/package.json /app/packages/util/package.json
 COPY --from=cardano-graphql-production-deps /app/node_modules /app/node_modules
 COPY --from=cardano-graphql-production-deps /app/packages/api-cardano-db-hasura/node_modules /app/packages/api-cardano-db-hasura/node_modules
-COPY config/network/${NETWORK}/genesis /config/genesis/
 COPY config/network/${NETWORK}/cardano-node /config/cardano-node/
 WORKDIR /app/packages/server/dist
 EXPOSE 3100

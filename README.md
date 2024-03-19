@@ -42,7 +42,7 @@ git clone \
   --single-branch \
   --branch 8.0.0 \
   --recurse-submodules \
-  https://github.com/input-output-hk/cardano-graphql.git \
+  https://github.com/cardano-foundation/cardano-graphql.git \
   && cd cardano-graphql
 ```
 
@@ -61,7 +61,7 @@ Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.i
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.2/db-sync-snapshot-schema-13.2-block-10060706-x86_64.tgz \
 docker compose up -d --build &&\
 docker compose logs -f
 ```
@@ -78,7 +78,7 @@ API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
 POSTGRES_PORT=5433 \
-METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
+METADATA_SERVER_URI="https://metadata.world.dev.cardano.org" \
 docker compose -p preprod up -d --build &&\
 docker compose -p preprod logs -f
 ```
@@ -96,11 +96,27 @@ API_PORT=3102 \
 HASURA_PORT=8092 \
 OGMIOS_PORT=1339 \
 POSTGRES_PORT=5434 \
-METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
+METADATA_SERVER_URI="https://metadata.world.dev.cardano.org" \
 docker compose -p preview up -d --build &&\
 docker compose -p preview logs -f
 ```
 
+</details>
+
+<details>
+  <summary><i>sanchonet</i></summary>
+``` console
+DOCKER_BUILDKIT=1 \
+COMPOSE_DOCKER_CLI_BUILD=1 \
+NETWORK=sanchonet \
+API_PORT=3102 \
+HASURA_PORT=8092 \
+OGMIOS_PORT=1339 \
+POSTGRES_PORT=5434 \
+METADATA_SERVER_URI="https://metadata.world.dev.cardano.org" \
+docker compose -p preview up -d --build &&\
+docker compose -p preview logs -f
+```
 </details>
 
 #### B) Pull and Run via Docker Compose
@@ -117,8 +133,8 @@ export NETWORK=mainnet &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
+docker pull cardanosolutions/cardano-node-ogmios:v5.6.0_1.35.5-${NETWORK} &&\
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.2/db-sync-snapshot-schema-13.2-block-10060706-x86_64.tgz \
 docker compose up -d &&\
 docker compose logs -f
 ```
@@ -132,7 +148,7 @@ export NETWORK=preprod &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v5.6.0_1.35.5-${NETWORK} &&\
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
@@ -151,7 +167,7 @@ export NETWORK=preview &&\
 docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
 docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
+docker pull cardanosolutions/cardano-node-ogmios:v5.6.0_1.35.5-${NETWORK} &&\
 API_PORT=3102 \
 HASURA_PORT=8092 \
 OGMIOS_PORT=1339 \
@@ -191,8 +207,15 @@ docker compose -p preview down
 
 </details>
 
+### Upgrade Database to Postgres 14
+If you are upgrading from Postgres 11 to 14: A resync will be needed.
+To speed up the process you can use the following snapshots:
+- [DB-Sync](https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.2/db-sync-snapshot-schema-13.2-block-10060706-x86_64.tgz)
+- [Node](https://csnapshots.io/about#Manual_download)
+
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
+> **_Note_** This Query is not available in early Era's of Cardano. Check Points of Interest here: [Link](https://ogmios.dev/mini-protocols/local-chain-sync/#points-of-interest) 
 ``` graphql 
 { cardanoDbMeta { initialized syncPercentage }}
 ```

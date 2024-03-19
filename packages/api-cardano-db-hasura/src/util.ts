@@ -15,7 +15,6 @@ export const createInteractionContextWithLogger = (connection: ConnectionConfig,
       }
     },
     {
-      connection,
-      interactionType: 'LongRunning'
+      connection
     }
   )

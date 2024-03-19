@@ -1,0 +1,21 @@
+{
+  "localRoots": [
+    {
+      "accessPoints": [],
+      "advertise": false,
+      "valency": 1
+    }
+  ],
+  "publicRoots": [
+    {
+      "accessPoints": [
+        {
+          "address": "preview-node.play.dev.cardano.org",
+          "port": 3001
+        }
+      ],
+      "advertise": false
+    }
+  ],
+  "useLedgerAfterSlot": 31536600
+}

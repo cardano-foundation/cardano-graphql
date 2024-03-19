@@ -46,7 +46,7 @@ export class HasuraBackgroundClient {
             reject(error)
           }
           if (stdout !== '') this.logger.debug({ module: 'HasuraBackgroundClient' }, stdout)
-          resolve()
+          resolve({ module: 'HasuraBackgroundClient' })
         }
       )
     })
@@ -188,8 +188,8 @@ export class HasuraBackgroundClient {
         }
         const { hash, slotNo } = result.assets[0].firstAppearedInBlock
         point = {
-          hash: hash.substring(2),
-          slot: Number(slotNo)
+          slot: Number(slotNo),
+          id: hash.substring(2)
         }
       } else {
         point = null

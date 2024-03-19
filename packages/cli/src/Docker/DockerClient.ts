@@ -1,7 +1,6 @@
 import Docker from 'dockerode'
 import path from 'path'
 import { dummyLogger, Logger } from 'ts-log'
-import { Stream } from 'stream'
 import { DockerState, DockerStore } from './DockerStore'
 import { StatefulServiceMap } from './DockerComposeStack'
 import { StatefulService } from './services'
@@ -145,7 +144,7 @@ export class DockerClient {
 
   private pullPromise (imageName: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.docker.pull(imageName, {}, (error: Error, stream: Stream) => {
+      this.docker.pull(imageName, {}, (error: Error, stream: NodeJS.ReadableStream) => {
         if (error) return reject(error)
         const onFinished = (error: Error, output: any) => {
           if (error) return reject(error)
