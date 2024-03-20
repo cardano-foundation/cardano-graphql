@@ -130,9 +130,9 @@ your use-case.
 Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=mainnet &&\
-docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
+docker pull cardanofoundation/cardano-graphql-server:8.0.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-background:8.0.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-hasura:8.0.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.6.0_1.35.5-${NETWORK} &&\
 RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.2/db-sync-snapshot-schema-13.2-block-10060706-x86_64.tgz \
 docker compose up -d &&\
@@ -145,9 +145,9 @@ docker compose logs -f
 
 ``` console
 export NETWORK=preprod &&\
-docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
+docker pull cardanofoundation/cardano-graphql-server:8.0.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-background:8.0.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-hasura:8.0.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.6.0_1.35.5-${NETWORK} &&\
 API_PORT=3101 \
 HASURA_PORT=8091 \
@@ -164,9 +164,9 @@ docker compose -p ${NETWORK} logs -f
 
 ``` console
 export NETWORK=preview &&\
-docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
+docker pull cardanofoundation/cardano-graphql-server:8.0.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-background:8.0.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-hasura:8.0.0 &&\
 docker pull cardanosolutions/cardano-node-ogmios:v5.6.0_1.35.5-${NETWORK} &&\
 API_PORT=3102 \
 HASURA_PORT=8092 \
@@ -269,11 +269,11 @@ See [Building].
 <hr/>
 
 <p align="center">
-  <a href="https://github.com/input-output-hk/cardano-graphql/blob/master/LICENSE"><img src="https://img.shields.io/github/license/input-output-hk/cardano-graphql.svg?style=for-the-badge" /></a>
+  <a href="https://github.com/cardano-foundation/cardano-graphql/blob/master/LICENSE"><img src="https://img.shields.io/github/license/cardano-foundation/cardano-graphql.svg?style=for-the-badge" /></a>
 </p>
 
-[img_src_CI]: https://github.com/input-output-hk/cardano-graphql/workflows/CI/badge.svg
-[workflow_CI]: https://github.com/input-output-hk/cardano-graphql/actions?query=workflow%3ACI
+[img_src_CI]: https://github.com/cardano-foundation/cardano-graphql/workflows/CI/badge.svg
+[workflow_CI]: https://github.com/cardano-foundation/cardano-graphql/actions?query=workflow%3ACI
 [packages]: ./packages
 [docker compose stack]: ./docker-compose.yml
 [Docker Compose docs]: https://docs.docker.com/compose/
@@ -286,9 +286,9 @@ See [Building].
 [GraphQL Code Generator]: https://graphql-code-generator.com
 [available on npm]: https://www.npmjs.com/package/cardano-graphql-ts
 [Ogmios]: https://ogmios.dev/
-[releases]: https://github.com/input-output-hk/cardano-graphql/releases
-[Wiki :book:]: https://github.com/input-output-hk/cardano-graphql/wiki
-[Using Docker]: https://github.com/input-output-hk/cardano-graphql/wiki/Docker
-[Building]: https://github.com/input-output-hk/cardano-graphql/wiki/Building
-[API Documentation]: https://input-output-hk.github.io/cardano-graphql
+[releases]: https://github.com/cardano-foundation/cardano-graphql/releases
+[Wiki :book:]: https://github.com/cardano-foundation/cardano-graphql/wiki
+[Using Docker]: https://github.com/cardano-foundation/cardano-graphql/wiki/Docker
+[Building]: https://github.com/cardano-foundation/cardano-graphql/wiki/Building
+[API Documentation]: https://cardano-foundation.github.io/cardano-graphql
 [Example Queries - Cardano DB Hasura]: ./packages/api-cardano-db-hasura/src/example_queries

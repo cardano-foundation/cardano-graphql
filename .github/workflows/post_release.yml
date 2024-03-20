@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-20.04 ]
-        network: [ "mainnet", "preprod", "preview" ]
+        network: [ "mainnet", "preprod", "preview", "sanchonet" ]
         
     runs-on: ${{ matrix.os }}
     steps:
