@@ -31,8 +31,8 @@ jobs:
       - name: 📝 Base Variables
         id: base-variables
         run: |
-          echo ::set-output name=cardano-graphql-server-image::inputoutput/cardano-graphql
-          echo ::set-output name=cardano-graphql-hasura-image::inputoutput/cardano-graphql-hasura
+          echo ::set-output name=cardano-graphql-server-image::cardanofoundation/cardano-graphql
+          echo ::set-output name=cardano-graphql-hasura-image::cardanofoundation/cardano-graphql-hasura
 
       - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (default)
         if: ${{ matrix.network == 'mainnet' }}
