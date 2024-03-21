@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-20.04 ]
-        network: [ "mainnet", "preprod", "preview" ]
+        network: [ "mainnet", "preprod", "preview", "sanchonet" ]
         
     runs-on: ${{ matrix.os }}
     steps:
@@ -36,8 +36,8 @@ jobs:
       - name: 📝 Base Variables
         id: base-variables
         run: |
-          echo ::set-output name=cardano-graphql-server-image::inputoutput/cardano-graphql
-          echo ::set-output name=cardano-graphql-hasura-image::inputoutput/cardano-graphql-hasura
+          echo ::set-output name=cardano-graphql-server-image::cardanofoundation/cardano-graphql
+          echo ::set-output name=cardano-graphql-hasura-image::cardanofoundation/cardano-graphql-hasura
           
       - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (default)
         if: ${{ matrix.network == 'mainnet' }}
@@ -65,7 +65,7 @@ jobs:
           context: ./packages/api-cardano-db-hasura/hasura
           file: ./packages/api-cardano-db-hasura/hasura/Dockerfile
           push: true
-          tags: ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:${{ github.sha }}, inputoutput/cardano-graphql-hasura:${{ github.event.release.tag_name }}, inputoutput/cardano-graphql-hasura:latest
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:${{ github.sha }}, cardanofoundation/cardano-graphql-hasura:${{ github.event.release.tag_name }}, cardanofoundation/cardano-graphql-hasura:latest
       
       - name: 📤 Publish packages to npm registry
         if: ${{ matrix.network == 'mainnet' }}
