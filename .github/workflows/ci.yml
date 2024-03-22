@@ -31,13 +31,13 @@ jobs:
           ALLOW_INTROSPECTION: true
           CACHE_ENABLED: false
           CARDANO_GRAPHQL_VERSION: ${{ github.sha }}
-          
+
       - name: 🔨 Build Cardano GraphQL Server Dockerfile
         uses: docker/build-push-action@v2
         with:
-          cache-from: type=registry,ref=inputoutput/cardano-graphql:master
+          cache-from: type=registry,ref=cardanofoundation/cardano-graphql-server:master
           cache-to: type=inline
-          tags: inputoutput/cardano-graphql:${{ github.sha }}
+          tags: cardanofoundation/cardano-graphql:${{ github.sha }}
           target: server
           
       - name: 🔨 Build Cardano GraphQL Hasura Dockerfile
@@ -45,4 +45,12 @@ jobs:
         with:
           context: ./packages/api-cardano-db-hasura/hasura
           file: ./packages/api-cardano-db-hasura/hasura/Dockerfile
-          tags: inputoutput/cardano-graphql-hasura:${{ github.sha }}
+          tags: cardanofoundation/cardano-graphql-hasura:${{ github.sha }}
+
+      - name: 🔨 Build Cardano GraphQL Background Dockerfile
+        uses: docker/build-push-action@v2
+        with:
+          cache-from: type=registry,ref=cardanofoundation/cardano-graphql-background:master
+          cache-to: type=inline
+          tags: cardanofoundation/cardano-graphql:${{ github.sha }}
+          target: background

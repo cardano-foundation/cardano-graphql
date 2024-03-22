@@ -36,17 +36,19 @@ jobs:
       - name: 📝 Base Variables
         id: base-variables
         run: |
-          echo ::set-output name=cardano-graphql-server-image::cardanofoundation/cardano-graphql
+          echo ::set-output name=cardano-graphql-image::cardanofoundation/cardano-graphql
           echo ::set-output name=cardano-graphql-hasura-image::cardanofoundation/cardano-graphql-hasura
+          echo ::set-output name=cardano-graphql-background-image::cardanofoundation/cardano-graphql-background
+          echo ::set-output name=cardano-graphql-server-image::cardanofoundation/cardano-graphql-server
           
       - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (default)
         if: ${{ matrix.network == 'mainnet' }}
         uses: docker/build-push-action@v2
         with:
-          cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest
+          cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-image }}:latest
           cache-to: type=inline
           push: true
-          tags: ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.sha }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.event.release.tag_name }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-image }}:${{ github.sha }}, ${{ steps.base-variables.outputs.cardano-graphql-image }}:${{ github.event.release.tag_name }}, ${{ steps.base-variables.outputs.cardano-graphql-image }}:latest
           target: server
       
       - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (network tags)
@@ -58,6 +60,16 @@ jobs:
           push: true
           tags: ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.sha }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.event.release.tag_name }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest-${{ matrix.network }}
           target: server
+
+      - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (network tags)
+        uses: docker/build-push-action@v2
+        with:
+          build-args: NETWORK=${{ matrix.network }}
+          cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-background-image }}:latest
+          cache-to: type=inline
+          push: true
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:${{ github.sha }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:${{ github.event.release.tag_name }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:latest-${{ matrix.network }}
+          target: background
           
       - name: 🔨 Build and push Cardano GraphQL Hasura Dockerfile
         uses: docker/build-push-action@v2
