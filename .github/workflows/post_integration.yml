@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - feat/add-docker-images-for-background-and-server-to-pipeline
 
 jobs:
   push-docker-build:
