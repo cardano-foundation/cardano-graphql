@@ -38,9 +38,12 @@ services:
     volumes:
       - node-db:/db
       - node-ipc:/ipc
-      - ./config/network/${NETWORK:-mainnet}:/config
+# Uncomment if you want to use your own config files or the provided ones.
+# Current configs are also available at: https://book.world.dev.cardano.org/
+#      - ./config/network/${NETWORK:-mainnet}:/config
 
   cardano-db-sync:
+    platform: linux/x86_64
     image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.2.0.1}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
@@ -116,6 +119,7 @@ services:
         max-file: "10"
 
   server:
+    platform: linux/x86_64
     build:
       args:
         - NETWORK=${NETWORK:-mainnet}
