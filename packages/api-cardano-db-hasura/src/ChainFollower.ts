@@ -64,7 +64,7 @@ export class ChainFollower {
             if (b !== undefined && b.transactions !== undefined) {
               for (const tx of b.transactions) {
                 if (tx.mint !== undefined) {
-                  for (const entry of Object.entries(tx.mint.assets)) {
+                  for (const entry of Object.entries(tx.mint)) {
                     const [policyId, assetName] = entry[0].split('.')
                     const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
                     if (!(await this.hasuraClient.hasAsset(assetId))) {
