@@ -72,7 +72,7 @@ export class HasuraBackgroundClient {
       }
     }, {
       factor: 1.05,
-      retries: 100,
+      retries: 1,
       onFailedAttempt: util.onFailedAttemptFor(
         'Detecting DB sync state has reached minimum progress',
         this.logger
