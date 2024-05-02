@@ -10,7 +10,7 @@
 - "!include public_Epoch.yaml"
 - "!include public_ProtocolParams.yaml"
 - "!include public_Redeemer.yaml"
-#- "!include public_RedeemerDatum.yaml"
+- "!include public_RedeemerDatum.yaml"
 - "!include public_ReferenceInput.yaml"
 - "!include public_Reward.yaml"
 - "!include public_Script.yaml"
