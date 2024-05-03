@@ -65,23 +65,12 @@ export class ChainFollower {
               for (const tx of b.transactions) {
                 if (tx.mint !== undefined) {
                   for (const entry of Object.entries(tx.mint)) {
-                    const [policyId, assetName] = entry[0].split('.')
-                    const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
-                    if (!(await this.hasuraClient.hasAsset(assetId))) {
-                      const asset = {
-                        assetId,
-                        assetName,
-                        firstAppearedInSlot: b.slot,
-                        fingerprint: assetFingerprint(policyId, assetName),
-                        policyId
-                      }
-                      await this.hasuraClient.insertAssets([asset])
-                      const SIX_HOURS = 21600
-                      const THREE_MONTHS = 365
-                      await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
-                        retryDelay: SIX_HOURS,
-                        retryLimit: THREE_MONTHS
-                      })
+                    const policyId = entry[0]
+                    const assetNames = Object.keys(entry[1])
+                    console.log('PolicyID:', policyId)
+                    console.log('AssetNames:', assetNames)
+                    for (const assetName of assetNames) {
+                      await this.saveAsset(policyId, assetName, b)
                     }
                   }
                 }
@@ -101,6 +90,26 @@ export class ChainFollower {
     })
     this.state = 'initialized'
     this.logger.info({ module: MODULE_NAME }, 'Initialized')
+  }
+
+  async saveAsset (policyId: string, assetName: string | undefined, b: BlockPraos) {
+    const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
+    if (!(await this.hasuraClient.hasAsset(assetId))) {
+      const asset = {
+        assetId,
+        assetName,
+        firstAppearedInSlot: b.slot,
+        fingerprint: assetFingerprint(policyId, assetName),
+        policyId
+      }
+      await this.hasuraClient.insertAssets([asset])
+      const SIX_HOURS = 21600
+      const THREE_MONTHS = 365
+      await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
+        retryDelay: SIX_HOURS,
+        retryLimit: THREE_MONTHS
+      })
+    }
   }
 
   public async start (points: Schema.PointOrOrigin[]) {
