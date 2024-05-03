@@ -67,8 +67,6 @@ export class ChainFollower {
                   for (const entry of Object.entries(tx.mint)) {
                     const policyId = entry[0]
                     const assetNames = Object.keys(entry[1])
-                    console.log('PolicyID:', policyId)
-                    console.log('AssetNames:', assetNames)
                     for (const assetName of assetNames) {
                       await this.saveAsset(policyId, assetName, b)
                     }
