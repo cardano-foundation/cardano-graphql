@@ -26,7 +26,7 @@ services:
 
   cardano-node-ogmios:
     platform: linux/x86_64
-    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v6.1.0}_${CARDANO_NODE_VERSION:-8.7.3}-${NETWORK:-mainnet}
+    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v6.2.0}_${CARDANO_NODE_VERSION:-8.9.0}-${NETWORK:-mainnet}
     logging:
       driver: "json-file"
       options:
@@ -44,7 +44,7 @@ services:
 
   cardano-db-sync:
     platform: linux/x86_64
-    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.2.0.1}
+    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.2.0.2}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket"
