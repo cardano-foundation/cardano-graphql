@@ -76,7 +76,7 @@ services:
   hasura:
     build:
       context: ./packages/api-cardano-db-hasura/hasura
-    image: cardanofoundation/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-8.0.1}
+    image: cardanofoundation/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-8.0.3}
     ports:
       - ${HASURA_PORT:-8090}:8080
     depends_on:
@@ -100,7 +100,7 @@ services:
       cache_from: [ cardanofoundation/cardano-graphql-background:latest ]
       context: .
       target: background
-    image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.0.1}-${NETWORK:-mainnet}
+    image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.0.3}-${NETWORK:-mainnet}
     depends_on:
       - "hasura"
       - "postgres"
@@ -126,7 +126,7 @@ services:
       cache_from: [ inputoutput/cardano-graphql-server:latest ]
       context: .
       target: server
-    image: cardanofoundation/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.0.1}-${NETWORK:-mainnet}
+    image: cardanofoundation/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.0.3}-${NETWORK:-mainnet}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
