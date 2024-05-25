@@ -207,6 +207,16 @@ docker compose -p preview down
 
 </details>
 
+### Use local Token Metadata Registry
+The public Token metadata registry has a limit of daily requests, this can lead to long sync times, when resyncing from scratch.
+To avoid this we introduced the possibility to use a local token metadata registry.
+This will be started within docker-compose and will save all data in an additional schema within the local postgres database.
+To start it use the following command:
+```
+docker compose -f docker-compose-local-registry.yml up -d
+```
+To build all containers from source use `--build`. All environment variables and extra commands can be used as described above. 
+
 ### Upgrade Database to Postgres 14
 If you are upgrading from Postgres 11 to 14: A resync will be needed.
 To speed up the process you can use the following snapshots:

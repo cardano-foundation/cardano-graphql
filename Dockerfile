@@ -113,3 +113,7 @@ COPY config/network/${NETWORK}/cardano-node /config/cardano-node/
 WORKDIR /app/packages/server/dist
 EXPOSE 3100
 CMD ["node", "index.js"]
+
+FROM cardanofoundation/cf-token-metadata-registry-api:latest as token-registry
+ADD scripts/token-registry-init.sh /app/entrypoint.sh
+ENTRYPOINT sh /app/entrypoint.sh

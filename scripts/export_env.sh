@@ -11,10 +11,11 @@ case "$NETWORK" in
         mainnet)
             API_PORT=3100
             HASURA_PORT=8090
-            METADATA_SERVER_URI="https://tokens.cardano.org"
+            METADATA_SERVER_URI="http://localhost:8080"
             OGMIOS_PORT=1337
             PG_ADMIN_PORT=8442
             POSTGRES_PORT=5432
+            TOKEN_REGISTRY_PORT=8080
             ;;
         testnet)
             API_PORT=3101
@@ -23,6 +24,7 @@ case "$NETWORK" in
             OGMIOS_PORT=1338
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
+            TOKEN_REGISTRY_PORT=8081
             export CARDANO_NODE_VERSION=8.7.3
             ;;
         preprod)
@@ -32,6 +34,7 @@ case "$NETWORK" in
             OGMIOS_PORT=1339
             PG_ADMIN_PORT=8444
             POSTGRES_PORT=5444
+            TOKEN_REGISTRY_PORT=8082
             ;;
         preview)
             API_PORT=3103
@@ -40,6 +43,7 @@ case "$NETWORK" in
             OGMIOS_PORT=1340
             PG_ADMIN_PORT=8445
             POSTGRES_PORT=5445
+            TOKEN_REGISTRY_PORT=8083
             ;;
         vasil-dev)
             API_PORT=3104
@@ -48,6 +52,7 @@ case "$NETWORK" in
             OGMIOS_PORT=1341
             PG_ADMIN_PORT=8446
             POSTGRES_PORT=5446
+            TOKEN_REGISTRY_PORT=8084
             ;;
 esac
 
@@ -70,3 +75,4 @@ export PG_ADMIN_PORT
 export POSTGRES_PORT
 export POSTGRES_USER_FILE=${SECRETS_DIR}/postgres_user
 export POSTGRES_HOST=localhost
+export TOKEN_REGISTRY_TAG=latest
