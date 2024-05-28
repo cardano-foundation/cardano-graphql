@@ -143,15 +143,20 @@ services:
         max-file: "10"
 
   token-metadata-registry:
-    image: cardanofoundation/cf-token-metadata-registry-api:${TOKEN_REGISTRY_TAG:-latest}
+    build:
+      context: .
+      target: token-registry
     ports:
       - ${TOKEN_REGISTRY_PORT:-8080}:8080
     environment:
       - TOKEN_METADATA_SYNC_JOB=true
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=doNoUseThisSecret!
-      - DB_NAME=cexplorer
-      - DB_URL=jdbc:postgresql://postgres:${POSTGRES_PORT:-5432}/${DB_NAME:-cexplorer}?currentSchema=token
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_HOST=postgres
+      - DB_SCHEMA=tokenregistry
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
 
 secrets:
   postgres_db:
