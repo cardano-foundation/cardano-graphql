@@ -74,6 +74,7 @@ ENV \
   LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
   METADATA_SERVER_URI=${METADATA_SERVER_URI} \
   OGMIOS_HOST="cardano-node-ogmios" \
+  OGMIOS_PORT=1337 \
   POSTGRES_DB_FILE=/run/secrets/postgres_db \
   POSTGRES_HOST=postgres \
   POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password \
@@ -98,7 +99,8 @@ ENV \
   HASURA_URI="http://hasura:8080" \
   LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
   NETWORK=${NETWORK} \
-  OGMIOS_HOST="cardano-node-ogmios"
+  OGMIOS_HOST="cardano-node-ogmios" \
+  OGMIOS_PORT=1337
 COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/dist /app/packages/api-cardano-db-hasura/dist
 COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/hasura/project /app/packages/api-cardano-db-hasura/hasura/project
 COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/package.json /app/packages/api-cardano-db-hasura/package.json
