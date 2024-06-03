@@ -62,7 +62,7 @@ export class CardanoNodeClient {
     await this.serverHealthFetcher.initialize()
     await pRetry(async () => {
       const serverHealth = await getServerHealth({ connection: createConnectionObject(ogmiosConnectionConfig) })
-      this.logger.info(serverHealth)
+      this.logger.info('Waiting for Ogmios Serverhealth to be available')
       if (serverHealth === undefined) {
         throw new Error()
       }
