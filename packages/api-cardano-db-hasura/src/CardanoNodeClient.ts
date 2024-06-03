@@ -57,12 +57,14 @@ export class CardanoNodeClient {
     this.serverHealthFetcher = this.serverHealthFetcher || new DataFetcher(
       'ServerHealth',
       () => getServerHealth({ connection: createConnectionObject(ogmiosConnectionConfig) }),
-      30000, this.logger
+      5000, this.logger
     )
+    await this.serverHealthFetcher.initialize()
     await pRetry(async () => {
-      await this.serverHealthFetcher.initialize()
-      if (this.serverHealthFetcher.value === undefined || this.serverHealthFetcher.value.networkSynchronization === undefined) {
-        throw Error('Ogmios Server Health Fetcher not initialized. Check your network config.')
+      const serverHealth = await getServerHealth({ connection: createConnectionObject(ogmiosConnectionConfig) })
+      this.logger.info(serverHealth)
+      if (serverHealth === undefined) {
+        throw new Error()
       }
     }, {
       factor: 1.2,
