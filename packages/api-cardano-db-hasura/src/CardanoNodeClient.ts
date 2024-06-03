@@ -61,9 +61,12 @@ export class CardanoNodeClient {
     )
     await pRetry(async () => {
       await this.serverHealthFetcher.initialize()
+      if (this.serverHealthFetcher.value === undefined || this.serverHealthFetcher.value.networkSynchronization === undefined) {
+        throw Error('Ogmios Server Health Fetcher not initialized. Check your network config.')
+      }
     }, {
       factor: 1.2,
-      retries: 3,
+      retries: 100,
       onFailedAttempt: util.onFailedAttemptFor(
         'Establishing connection to Ogmios server',
         this.logger
