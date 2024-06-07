@@ -18,7 +18,11 @@ export class DataFetcher<DataValue> {
     this.fetch = async () => {
       if (this.isFetching) return
       this.isFetching = true
-      this.value = await fetchFn()
+      try {
+        this.value = await fetchFn()
+      } catch (e) {
+        this.logger.debug('Tried fetching...')
+      }
       this.isFetching = false
     }
   }
