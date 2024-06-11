@@ -1,7 +1,8 @@
 query epochDetailsInRange (
-    $numbers: [Int!]
+    $from: Int!,
+    $to: Int!
 ) {
-    epochs( where: { number: { _in: $numbers }}) {
+    epochs( where: { number: {_gte: $from, _lte: $to } } ) {
         adaPots {
             deposits,
             fees,
