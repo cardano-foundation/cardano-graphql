@@ -8,7 +8,7 @@ import util, { assetFingerprint, errors, RunnableModuleState } from '@cardano-gr
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'
 import { createInteractionContextWithLogger } from './util'
-import { PointOrOrigin, BlockPraos } from '@cardano-ogmios/schema'
+import { PointOrOrigin, BlockPraos, BlockBFT } from '@cardano-ogmios/schema'
 import { HasuraBackgroundClient } from './HasuraBackgroundClient'
 import { DbConfig } from './typeAliases'
 import { ChainSynchronizationClient } from '@cardano-ogmios/client/dist/ChainSynchronization'
@@ -60,7 +60,17 @@ export class ChainFollower {
             requestNext()
           },
           rollForward: async ({ block }, requestNext) => {
-            const b = block as BlockPraos
+            let b
+            switch (block.type) {
+              case 'praos':
+                b = block as BlockPraos
+                break
+              case 'bft':
+                b = block as BlockBFT
+                break
+              case 'ebb': // No transaction in there
+                return
+            }
             if (b !== undefined && b.transactions !== undefined) {
               for (const tx of b.transactions) {
                 if (tx.mint !== undefined) {
@@ -90,7 +100,7 @@ export class ChainFollower {
     this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
-  async saveAsset (policyId: string, assetName: string | undefined, b: BlockPraos) {
+  async saveAsset (policyId: string, assetName: string | undefined, b: BlockPraos | BlockBFT) {
     const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
     if (!(await this.hasuraClient.hasAsset(assetId))) {
       const asset = {
