@@ -207,6 +207,14 @@ docker compose -p preview down
 
 </details>
 
+### Use global Token Metadata Registry
+The public Token metadata registry has a limit of daily requests, this can lead to long sync times, when resyncing from scratch.
+If it's still needed to run with the global environment it's possible by removing the `token-metadata-registry` from `docker-compose.yml`.
+And start it with:
+```
+METADATA_SERVER_URI="https://tokens.cardano.org" docker compose up -d
+```
+
 ### Upgrade Database to Postgres 14
 If you are upgrading from Postgres 11 to 14: A resync will be needed.
 To speed up the process you can use the following snapshots:

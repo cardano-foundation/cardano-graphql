@@ -59,7 +59,8 @@ WORKDIR /src
 
 FROM ubuntu-nodejs as background
 ARG NETWORK=mainnet
-ARG METADATA_SERVER_URI="https://tokens.cardano.org"
+# using local token registry as default
+ARG METADATA_SERVER_URI="http://token-metadata-registry:8091"
 RUN apt-get update -y && apt-get install lsb-release -y
 RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
   echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list &&\
@@ -115,3 +116,7 @@ COPY config/network/${NETWORK}/cardano-node /config/cardano-node/
 WORKDIR /app/packages/server/dist
 EXPOSE 3100
 CMD ["node", "index.js"]
+
+FROM cardanofoundation/cf-token-metadata-registry-api:latest as token-registry
+ADD scripts/token-registry-init.sh /app/entrypoint.sh
+ENTRYPOINT sh /app/entrypoint.sh

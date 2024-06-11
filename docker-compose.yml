@@ -106,7 +106,7 @@ services:
       - "postgres"
     environment:
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
-      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-https://tokens.cardano.org}
+      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-http://token-metadata-registry:8080}
     restart: on-failure
     secrets:
       - postgres_db
@@ -141,6 +141,23 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+
+  token-metadata-registry:
+    build:
+      context: .
+      target: token-registry
+    ports:
+      - ${TOKEN_REGISTRY_PORT:-8080}:8080
+    environment:
+      - TOKEN_METADATA_SYNC_JOB=true
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_HOST=postgres
+      - DB_SCHEMA=tokenregistry
+      - NETWORK=${NETWORK:-mainnet}
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
 
 secrets:
   postgres_db:
