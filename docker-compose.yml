@@ -16,7 +16,7 @@ services:
       - postgres_user
     shm_size: '2gb'
     volumes:
-      - postgres14-data:/var/lib/postgresql/data
+      - /opt/graphql/postgres14-data:/var/lib/postgresql/data
     restart: on-failure
     logging:
       driver: "json-file"
@@ -26,7 +26,7 @@ services:
 
   cardano-node-ogmios:
     platform: linux/x86_64
-    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v6.4.0}_${CARDANO_NODE_VERSION:-8.9.3}-${NETWORK:-mainnet}
+    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v6.5.0}_${CARDANO_NODE_VERSION:-9.0.0}-${NETWORK:-mainnet}
     logging:
       driver: "json-file"
       options:
@@ -36,15 +36,15 @@ services:
       - ${OGMIOS_PORT:-1337}:1337
     restart: on-failure
     volumes:
-      - node-db:/db
-      - node-ipc:/ipc
+      - /opt/graphql/node/db:/db
+      - /opt/graphql/node/node-ipc:/ipc
 # Uncomment if you want to use your own config files or the provided ones.
 # Current configs are also available at: https://book.world.dev.cardano.org/
 #      - ./config/network/${NETWORK:-mainnet}:/config
 
   cardano-db-sync:
     platform: linux/x86_64
-    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.2.0.2}
+    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.3.0.0}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket"
@@ -63,8 +63,10 @@ services:
       - postgres_db
     volumes:
       - ./config/network/${NETWORK:-mainnet}:/config
-      - db-sync-data:/var/lib/cexplorer
-      - node-ipc:/node-ipc
+      - /opt/graphql/db-sync-data:/var/lib/cexplorer
+      - /opt/graphql/node/node-ipc:/node-ipc
+      - /opt/db-sync-snapshot-schema-13.2-block-10526958-x86_64.tgz:/db-sync-snapshot-schema-13.2-block-10526958-x86_64.tgz
+      - /opt/db:/db
     restart: on-failure
     stop_signal: SIGINT
     logging:
