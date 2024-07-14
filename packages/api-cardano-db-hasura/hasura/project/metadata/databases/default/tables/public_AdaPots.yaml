@@ -5,7 +5,9 @@ select_permissions:
   - role: cardano-graphql
     permission:
       columns:
-        - deposits
+        - deposits_stake
+        - deposits_drep
+        - deposits_proposal
         - fees
         - reserves
         - rewards
