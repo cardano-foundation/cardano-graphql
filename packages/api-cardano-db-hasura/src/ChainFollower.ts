@@ -126,6 +126,11 @@ export class ChainFollower {
     }
     this.logger.info({ module: MODULE_NAME }, 'Starting')
     await this.queue.start()
+    //slot added so that ogmios does not start from origin, instead start just before the asset minting started
+    points = [{ 
+      slot: 23068800,
+      id: "a650a3f398ba4a9427ec8c293e9f7156d81fd2f7ca849014d8d2c1156c359b3a"
+   }];
     await this.chainSyncClient.resume(points)
     this.state = 'running'
     this.logger.info({ module: MODULE_NAME }, 'Started')
