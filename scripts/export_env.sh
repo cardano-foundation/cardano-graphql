@@ -28,13 +28,13 @@ case "$NETWORK" in
             export CARDANO_NODE_VERSION=8.7.3
             ;;
         preprod)
-            API_PORT=3102
-            HASURA_PORT=8092
-            METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
-            OGMIOS_PORT=1339
-            PG_ADMIN_PORT=8444
-            POSTGRES_PORT=5444
-            TOKEN_REGISTRY_PORT=8082
+            API_PORT=3100
+            HASURA_PORT=8090
+            METADATA_SERVER_URI="http://localhost:8080"
+            OGMIOS_PORT=1337
+            PG_ADMIN_PORT=8442
+            POSTGRES_PORT=5432
+            TOKEN_REGISTRY_PORT=8080
             ;;
         preview)
             API_PORT=3103

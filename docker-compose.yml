@@ -38,6 +38,8 @@ services:
     volumes:
       - /opt/graphql/node/db:/db
       - /opt/graphql/node/node-ipc:/ipc
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
 # Uncomment if you want to use your own config files or the provided ones.
 # Current configs are also available at: https://book.world.dev.cardano.org/
 #      - ./config/network/${NETWORK:-mainnet}:/config
@@ -65,8 +67,6 @@ services:
       - ./config/network/${NETWORK:-mainnet}:/config
       - /opt/graphql/db-sync-data:/var/lib/cexplorer
       - /opt/graphql/node/node-ipc:/node-ipc
-      - /opt/db-sync-snapshot-schema-13.2-block-10526958-x86_64.tgz:/db-sync-snapshot-schema-13.2-block-10526958-x86_64.tgz
-      - /opt/db:/db
     restart: on-failure
     stop_signal: SIGINT
     logging:
