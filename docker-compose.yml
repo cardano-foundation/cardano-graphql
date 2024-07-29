@@ -16,7 +16,7 @@ services:
       - postgres_user
     shm_size: '2gb'
     volumes:
-      - /opt/graphql/postgres14-data:/var/lib/postgresql/data
+      - postgres14-data:/var/lib/postgresql/data
     restart: on-failure
     logging:
       driver: "json-file"
@@ -36,8 +36,8 @@ services:
       - ${OGMIOS_PORT:-1337}:1337
     restart: on-failure
     volumes:
-      - /opt/graphql/node/db:/db
-      - /opt/graphql/node/node-ipc:/ipc
+      - node-db:/db
+      - node-ipc:/ipc
     environment:
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
 # Uncomment if you want to use your own config files or the provided ones.
@@ -65,8 +65,8 @@ services:
       - postgres_db
     volumes:
       - ./config/network/${NETWORK:-mainnet}:/config
-      - /opt/graphql/db-sync-data:/var/lib/cexplorer
-      - /opt/graphql/node/node-ipc:/node-ipc
+      - db-sync-data:/var/lib/cexplorer
+      - node-ipc:/node-ipc
     restart: on-failure
     stop_signal: SIGINT
     logging:

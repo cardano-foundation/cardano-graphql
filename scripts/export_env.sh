@@ -16,6 +16,8 @@ case "$NETWORK" in
             PG_ADMIN_PORT=8442
             POSTGRES_PORT=5432
             TOKEN_REGISTRY_PORT=8080
+            CHAIN_FOLLOWER_START_SLOT=23068800
+            CHAIN_FOLLOWER_START_ID="a650a3f398ba4a9427ec8c293e9f7156d81fd2f7ca849014d8d2c1156c359b3a"
             ;;
         testnet)
             API_PORT=3101
@@ -25,7 +27,6 @@ case "$NETWORK" in
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
             TOKEN_REGISTRY_PORT=8081
-            export CARDANO_NODE_VERSION=8.7.3
             ;;
         preprod)
             API_PORT=3100
@@ -76,3 +77,5 @@ export POSTGRES_PORT
 export POSTGRES_USER_FILE=${SECRETS_DIR}/postgres_user
 export POSTGRES_HOST=localhost
 export TOKEN_REGISTRY_TAG=latest
+export CHAIN_FOLLOWER_START_SLOT
+export CHAIN_FOLLOWER_START_ID
