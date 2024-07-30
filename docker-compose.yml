@@ -24,25 +24,30 @@ services:
         max-size: "200k"
         max-file: "10"
 
-  cardano-node-ogmios:
-    platform: linux/x86_64
-    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v6.5.0}_${CARDANO_NODE_VERSION:-9.0.0}-${NETWORK:-mainnet}
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "400k"
-        max-file: "20"
+  cardano-node:
+    image: ghcr.io/intersectmbo/cardano-node:${CARDANO_NODE_VERSION:-9.1.0}
+    environment:
+      - NETWORK=${NETWORK:-mainnet}
+    volumes:
+      - node-ipc:/ipc
+      - node-db:/node/db
+      - ./config/network/${NETWORK:-mainnet}:/config
+    entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
+  ogmios:
+    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.5.0}
+    command:
+      - --host
+      - 0.0.0.0
+      - --node-socket
+      - /ipc/node.socket
+      - --node-config
+      - /config/cardano-node/config.json
+    volumes:
+      - node-ipc:/ipc
+      - ./config/network/${NETWORK:-mainnet}:/config
     ports:
       - ${OGMIOS_PORT:-1337}:1337
     restart: on-failure
-    volumes:
-      - node-db:/db
-      - node-ipc:/ipc
-    environment:
-      - LOG_LEVEL=${LOG_LEVEL:-INFO}
-# Uncomment if you want to use your own config files or the provided ones.
-# Current configs are also available at: https://book.world.dev.cardano.org/
-#      - ./config/network/${NETWORK:-mainnet}:/config
 
   cardano-db-sync:
     platform: linux/x86_64
@@ -57,7 +62,7 @@ services:
       - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
       - RESTORE_RECREATE_DB=N
     depends_on:
-      - cardano-node-ogmios
+      - cardano-node
       - postgres
     secrets:
       - postgres_password
