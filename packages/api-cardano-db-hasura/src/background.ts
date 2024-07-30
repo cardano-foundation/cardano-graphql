@@ -37,7 +37,6 @@ export interface BackgroundConfig {
 
 async function getConfig (): Promise<BackgroundConfig> {
   const env = filterAndTypecastEnvs(process.env)
-  console.log(env)
   if (!env.hasuraCliPath) {
     throw new MissingConfig('HASURA_CLI_PATH env not set')
   }
