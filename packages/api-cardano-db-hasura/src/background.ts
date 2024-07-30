@@ -181,10 +181,14 @@ function filterAndTypecastEnvs (env: any) {
     const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
       const chainSyncPoint = (config.chainfollower) as Schema.Point
       const mostRecentPoint = await hasuraBackgroundClient.getMostRecentPointWithNewAsset()
-      if (mostRecentPoint !== null && chainSyncPoint.slot && chainSyncPoint.slot > mostRecentPoint.slot) {
-        return [chainSyncPoint, 'origin']
+      if (mostRecentPoint !== null) {
+        if (chainSyncPoint.slot && chainSyncPoint.slot > mostRecentPoint.slot) {
+          return [chainSyncPoint, 'origin']
+        } else {
+          return [mostRecentPoint, 'origin']
+        }
       } else {
-        return mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
+        return ['origin']
       }
     }
     await db.init({
