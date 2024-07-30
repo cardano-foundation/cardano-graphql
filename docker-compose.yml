@@ -99,7 +99,6 @@ services:
 
   background:
     build:
-      cache_from: [ cardanofoundation/cardano-graphql-background:latest ]
       context: .
       target: background
     image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.1.0}-${NETWORK:-mainnet}
@@ -125,7 +124,6 @@ services:
     build:
       args:
         - NETWORK=${NETWORK:-mainnet}
-      cache_from: [ inputoutput/cardano-graphql-server:latest ]
       context: .
       target: server
     image: cardanofoundation/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.1.0}-${NETWORK:-mainnet}
