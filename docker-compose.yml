@@ -170,6 +170,9 @@ services:
       - postgres_db
       - postgres_password
       - postgres_user
+    restart: on-failure
+    depends_on:
+      - postgres
 
 secrets:
   postgres_db:
