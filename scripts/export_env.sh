@@ -22,25 +22,25 @@ case "$NETWORK" in
         testnet)
             API_PORT=3101
             HASURA_PORT=8091
-            METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
+            METADATA_SERVER_URI="http://localhost:8081"
             OGMIOS_PORT=1338
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
             TOKEN_REGISTRY_PORT=8081
             ;;
         preprod)
-            API_PORT=3100
-            HASURA_PORT=8090
-            METADATA_SERVER_URI="http://localhost:8080"
-            OGMIOS_PORT=1337
-            PG_ADMIN_PORT=8442
-            POSTGRES_PORT=5432
-            TOKEN_REGISTRY_PORT=8080
+            API_PORT=3102
+            HASURA_PORT=8092
+            METADATA_SERVER_URI="http://localhost:8082"
+            OGMIOS_PORT=1339
+            PG_ADMIN_PORT=8444
+            POSTGRES_PORT=5444
+            TOKEN_REGISTRY_PORT=8082
             ;;
         preview)
             API_PORT=3103
             HASURA_PORT=8093
-            METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
+            METADATA_SERVER_URI="http://localhost:8083"
             OGMIOS_PORT=1340
             PG_ADMIN_PORT=8445
             POSTGRES_PORT=5445
@@ -49,7 +49,7 @@ case "$NETWORK" in
         vasil-dev)
             API_PORT=3104
             HASURA_PORT=8094
-            METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
+            METADATA_SERVER_URI="http://localhost:8084"
             OGMIOS_PORT=1341
             PG_ADMIN_PORT=8446
             POSTGRES_PORT=5446
