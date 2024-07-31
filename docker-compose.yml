@@ -9,7 +9,8 @@ services:
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
     ports:
-      - ${POSTGRES_PORT:-5432}:5432
+      - ${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}
+    command: -p ${POSTGRES_PORT:-5432}
     secrets:
       - postgres_db
       - postgres_password
@@ -33,6 +34,7 @@ services:
       - node-db:/node/db
       - ./config/network/${NETWORK:-mainnet}:/config
     entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
+    
   ogmios:
     image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.5.0}
     command:
@@ -42,6 +44,8 @@ services:
       - /ipc/node.socket
       - --node-config
       - /config/cardano-node/config.json
+      - --log-level-websocket
+      - error
     volumes:
       - node-ipc:/ipc
       - ./config/network/${NETWORK:-mainnet}:/config
@@ -58,7 +62,7 @@ services:
     ]
     environment:
       - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
       - RESTORE_RECREATE_DB=N
     depends_on:
@@ -92,6 +96,7 @@ services:
     environment:
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
       - HASURA_GRAPHQL_CORS_DOMAIN=http://localhost:9695
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
     secrets:
       - postgres_db
       - postgres_password
@@ -113,6 +118,7 @@ services:
     environment:
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
       - METADATA_SERVER_URI=${METADATA_SERVER_URI:-http://token-metadata-registry:8080}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
     restart: on-failure
     secrets:
       - postgres_db
@@ -136,6 +142,7 @@ services:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
     expose:
       - ${API_PORT:-3100}
     ports:
