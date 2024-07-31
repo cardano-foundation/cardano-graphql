@@ -117,7 +117,7 @@ services:
       - "postgres"
     environment:
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
-      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-http://token-metadata-registry:8080}
+      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-http://token-metadata-registry:${TOKEN_REGISTRY_PORT:-8080}}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
     restart: on-failure
     secrets:
