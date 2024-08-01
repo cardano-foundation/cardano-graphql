@@ -124,7 +124,7 @@ export class ChainFollower {
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'start')
     }
-    this.logger.info({ module: MODULE_NAME }, 'Starting from ' + points)
+    this.logger.info({ module: MODULE_NAME }, 'Starting from ' + JSON.stringify(points))
     await this.queue.start()
     await this.chainSyncClient.resume(points)
     this.state = 'running'
