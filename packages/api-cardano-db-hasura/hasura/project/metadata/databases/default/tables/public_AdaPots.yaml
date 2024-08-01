@@ -1,5 +1,5 @@
 table:
-  name: AdaPots
+  name: ada_pots
   schema: public
 select_permissions:
   - role: cardano-graphql
@@ -11,7 +11,7 @@ select_permissions:
         - fees
         - reserves
         - rewards
-        - slotNo
+        - slot_no
         - treasury
         - utxo
       filter: {}
