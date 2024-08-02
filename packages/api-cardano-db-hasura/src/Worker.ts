@@ -89,13 +89,13 @@ export class Worker {
     await this.queue.start()
     await this.queue.subscribe<AssetJobPayload, void>(ASSET_METADATA_FETCH_INITIAL,
       {
-        batchSize: 500,
+        batchSize: 10000,
         newJobCheckIntervalSeconds: 5
       },
       subscriptionHandler)
     await this.queue.subscribe<AssetJobPayload, void>(ASSET_METADATA_FETCH_UPDATE,
       {
-        batchSize: 500,
+        batchSize: 10000,
         newJobCheckIntervalSeconds: 5
       },
       subscriptionHandler)
