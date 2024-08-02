@@ -119,6 +119,8 @@ services:
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
       - METADATA_SERVER_URI=${METADATA_SERVER_URI:-http://token-metadata-registry:${TOKEN_REGISTRY_PORT:-8080}}
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - CHAIN_FOLLOWER_START_SLOT=${CHAIN_FOLLOWER_START_SLOT:-0}
+      - CHAIN_FOLLOWER_START_ID=${CHAIN_FOLLOWER_START_ID:-}
     restart: on-failure
     secrets:
       - postgres_db
