@@ -179,6 +179,7 @@ function filterAndTypecastEnvs (env: any) {
     const db = new Db(config.db, logger)
     const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
       const chainSyncPoint = (config.chainfollower) as Schema.Point
+      logger.info(chainSyncPoint)
       const mostRecentPoint = await hasuraBackgroundClient.getMostRecentPointWithNewAsset()
       if (mostRecentPoint !== null) {
         if (chainSyncPoint.slot && chainSyncPoint.slot > mostRecentPoint.slot) {
@@ -186,6 +187,8 @@ function filterAndTypecastEnvs (env: any) {
         } else {
           return [mostRecentPoint, 'origin']
         }
+      } if(chainSyncPoint.slot && chainSyncPoint.id) {
+        return [chainSyncPoint, 'origin']
       } else {
         return ['origin']
       }
