@@ -187,7 +187,7 @@ function filterAndTypecastEnvs (env: any) {
         } else {
           return [mostRecentPoint, 'origin']
         }
-      } if(chainSyncPoint.slot && chainSyncPoint.id) {
+      } else if (chainSyncPoint.slot && chainSyncPoint.id) {
         return [chainSyncPoint, 'origin']
       } else {
         return ['origin']
