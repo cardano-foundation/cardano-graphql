@@ -14,7 +14,7 @@
 
 Cross-platform, _typed_, and **queryable** API for Cardano. The project contains multiple [packages] for composing 
 GraphQL services to meet specific application demands, and a [docker compose stack] serving the included 
-[cardano-graphql-server Dockerfile], the extended [hasura Dockerfile], [ogmios] and [cardano-node]. The [schema] is defined in
+[cardano-graphql-server Dockerfile], the extended [hasura Dockerfile], [cardano-node-ogmios]. The [schema] is defined in
 native `.graphql`, and used to generate a [TypeScript package for client-side static typing]. A mutation is available to 
 submit a signed and serialized transaction to the local node.
  
@@ -40,7 +40,7 @@ Check the [releases] for the latest version.
 ``` console
 git clone \
   --single-branch \
-  --branch 8.2.0 \
+  --branch 8.1.0 \
   --recurse-submodules \
   https://github.com/cardano-foundation/cardano-graphql.git \
   && cd cardano-graphql
@@ -57,15 +57,16 @@ console session freely. See [Docker Compose docs] to tailor for your use-case
 <details open>
   <summary><i>mainnet</i></summary>
 
-Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#12/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
-> **Disclaimer:** There is currently a known issue with `cardano-db-sync` which hinders using a snapshot.
-> We will provide an update once the issue is resolved.
+> **Disclaimer:** The Chainfollower environment variables are currently mandatory.
+> Otherwise the Token registry will get stuck. 
+> We will provide a fix as soon as possible.
 
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.3/db-sync-snapshot-schema-13.3-block-10611621-x86_64.tgz \
-docker compose up -d --build &&\
+CHAIN_FOLLOWER_START_SLOT=23068800 \
+CHAIN_FOLLOWER_START_ID=a650a3f398ba4a9427ec8c293e9f7156d81fd2f7ca849014d8d2c1156c359b3a
+</span>docker compose up -d --build &&\
 docker compose logs -f
 ```
 </details>
@@ -130,12 +131,11 @@ your use-case.
 Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
 export NETWORK=mainnet &&\
-docker pull cardanofoundation/cardano-graphql-server:8.2.0-${NETWORK} &&\
-docker pull cardanofoundation/cardano-graphql-background:8.2.0-${NETWORK} &&\
-docker pull cardanofoundation/cardano-graphql-hasura:8.2.0 &&\
-docker pull ghcr.io/intersectmbo/cardano-node:9.1.0 &&\
-docker pull cardanosolutions/ogmios:v6.5 &&\
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.3/db-sync-snapshot-schema-13.3-block-10611621-x86_64.tgz \
+docker pull cardanofoundation/cardano-graphql-server:8.1.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-background:8.1.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-hasura:8.1.0 &&\
+docker pull cardanosolutions/cardano-node-ogmios:v6.4.0_8.9.3-${NETWORK} &&\
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.2/db-sync-snapshot-schema-13.2-block-10060706-x86_64.tgz \
 docker compose up -d &&\
 docker compose logs -f
 ```
@@ -146,11 +146,10 @@ docker compose logs -f
 
 ``` console
 export NETWORK=preprod &&\
-docker pull cardanofoundation/cardano-graphql-server:8.2.0-${NETWORK} &&\
-docker pull cardanofoundation/cardano-graphql-background:8.2.0-${NETWORK} &&\
-docker pull cardanofoundation/cardano-graphql-hasura:8.2.0 &&\
-docker pull ghcr.io/intersectmbo/cardano-node:9.1.0 &&\
-docker pull cardanosolutions/ogmios:v6.5 &&\
+docker pull cardanofoundation/cardano-graphql-server:8.1.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-background:8.1.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-hasura:8.1.0 &&\
+docker pull cardanosolutions/cardano-node-ogmios:v6.4.0_8.9.3-${NETWORK} &&\
 API_PORT=3101 \
 HASURA_PORT=8091 \
 OGMIOS_PORT=1338 \
@@ -166,11 +165,10 @@ docker compose -p ${NETWORK} logs -f
 
 ``` console
 export NETWORK=preview &&\
-docker pull cardanofoundation/cardano-graphql-server:8.2.0-${NETWORK} &&\
-docker pull cardanofoundation/cardano-graphql-background:8.2.0-${NETWORK} &&\
-docker pull cardanofoundation/cardano-graphql-hasura:8.2.0 &&\
-docker pull ghcr.io/intersectmbo/cardano-node:9.1.0 &&\
-docker pull cardanosolutions/ogmios:v6.5 &&\
+docker pull cardanofoundation/cardano-graphql-server:8.1.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-background:8.1.0-${NETWORK} &&\
+docker pull cardanofoundation/cardano-graphql-hasura:8.1.0 &&\
+docker pull cardanosolutions/cardano-node-ogmios:v6.4.0_8.9.3-${NETWORK} &&\
 API_PORT=3102 \
 HASURA_PORT=8092 \
 OGMIOS_PORT=1339 \
@@ -226,7 +224,7 @@ METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
 If you are upgrading from Postgres 11 to 14: A resync will be needed.
 To speed up the process you can use the following snapshots:
 - [DB-Sync](https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.2/db-sync-snapshot-schema-13.2-block-10060706-x86_64.tgz)
-- [Node](https://mithril.network/doc/manual/getting-started/bootstrap-cardano-node/)
+- [Node](https://csnapshots.io/about#Manual_download)
 
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
@@ -294,12 +292,12 @@ See [Building].
 [Docker Compose docs]: https://docs.docker.com/compose/
 [cardano-graphql-server Dockerfile]: ./Dockerfile
 [hasura Dockerfile]: ./packages/api-cardano-db-hasura/hasura/Dockerfile
-[ogmios]: https://ogmios.dev/getting-started/docker/
-[cardano-node]: https://github.com/IntersectMBO/cardano-node
+[cardano-node-ogmios]: https://ogmios.dev/getting-started/docker/
 [schema]: ./packages/api-cardano-db-hasura/schema.graphql
 [TypeScript package for client-side static typing]: ./packages/client-ts/README.md
 [Apollo Server]: https://www.apollographql.com/docs/apollo-server/
 [GraphQL Code Generator]: https://graphql-code-generator.com
+[available on npm]: https://www.npmjs.com/package/cardano-graphql-ts
 [Ogmios]: https://ogmios.dev/
 [releases]: https://github.com/cardano-foundation/cardano-graphql/releases
 [Wiki :book:]: https://github.com/cardano-foundation/cardano-graphql/wiki
