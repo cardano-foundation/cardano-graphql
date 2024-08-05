@@ -58,6 +58,9 @@ console session freely. See [Docker Compose docs] to tailor for your use-case
   <summary><i>mainnet</i></summary>
 
 Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#12/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
+> **Disclaimer:** There is currently a known issue with `cardano-db-sync` which hinders using a snapshot.
+> We will provide an update once the issue is resolved.
+
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
