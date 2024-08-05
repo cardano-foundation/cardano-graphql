@@ -9,7 +9,8 @@ services:
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
     ports:
-      - ${POSTGRES_PORT:-5432}:5432
+      - ${POSTGRES_PORT:-5432}:${POSTGRES_PORT:-5432}
+    command: -p ${POSTGRES_PORT:-5432}
     secrets:
       - postgres_db
       - postgres_password
@@ -24,38 +25,48 @@ services:
         max-size: "200k"
         max-file: "10"
 
-  cardano-node-ogmios:
-    platform: linux/x86_64
-    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v6.4.0}_${CARDANO_NODE_VERSION:-8.9.3}-${NETWORK:-mainnet}
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "400k"
-        max-file: "20"
+  cardano-node:
+    image: ghcr.io/intersectmbo/cardano-node:${CARDANO_NODE_VERSION:-9.1.0}
+    environment:
+      - NETWORK=${NETWORK:-mainnet}
+    volumes:
+      - node-ipc:/ipc
+      - node-db:/node/db
+      - ./config/network/${NETWORK:-mainnet}:/config
+    entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
+    
+  ogmios:
+    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.5.0}
+    command:
+      - --host
+      - 0.0.0.0
+      - --node-socket
+      - /ipc/node.socket
+      - --node-config
+      - /config/cardano-node/config.json
+      - --log-level-websocket
+      - error
+    volumes:
+      - node-ipc:/ipc
+      - ./config/network/${NETWORK:-mainnet}:/config
     ports:
       - ${OGMIOS_PORT:-1337}:1337
     restart: on-failure
-    volumes:
-      - node-db:/db
-      - node-ipc:/ipc
-# Uncomment if you want to use your own config files or the provided ones.
-# Current configs are also available at: https://book.world.dev.cardano.org/
-#      - ./config/network/${NETWORK:-mainnet}:/config
 
   cardano-db-sync:
     platform: linux/x86_64
-    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.2.0.2}
+    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.3.0.0}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket"
     ]
     environment:
       - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
       - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
       - RESTORE_RECREATE_DB=N
     depends_on:
-      - cardano-node-ogmios
+      - cardano-node
       - postgres
     secrets:
       - postgres_password
@@ -85,6 +96,7 @@ services:
     environment:
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
       - HASURA_GRAPHQL_CORS_DOMAIN=http://localhost:9695
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
     secrets:
       - postgres_db
       - postgres_password
@@ -97,7 +109,6 @@ services:
 
   background:
     build:
-      cache_from: [ cardanofoundation/cardano-graphql-background:latest ]
       context: .
       target: background
     image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.1.0}-${NETWORK:-mainnet}
@@ -106,7 +117,10 @@ services:
       - "postgres"
     environment:
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
-      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-http://token-metadata-registry:8080}
+      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-http://token-metadata-registry:${TOKEN_REGISTRY_PORT:-8080}}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
+      - CHAIN_FOLLOWER_START_SLOT=${CHAIN_FOLLOWER_START_SLOT:-0}
+      - CHAIN_FOLLOWER_START_ID=${CHAIN_FOLLOWER_START_ID:-}
     restart: on-failure
     secrets:
       - postgres_db
@@ -123,7 +137,6 @@ services:
     build:
       args:
         - NETWORK=${NETWORK:-mainnet}
-      cache_from: [ inputoutput/cardano-graphql-server:latest ]
       context: .
       target: server
     image: cardanofoundation/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.1.0}-${NETWORK:-mainnet}
@@ -131,6 +144,7 @@ services:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+      - POSTGRES_PORT=${POSTGRES_PORT:-5432}
     expose:
       - ${API_PORT:-3100}
     ports:
@@ -158,6 +172,9 @@ services:
       - postgres_db
       - postgres_password
       - postgres_user
+    restart: on-failure
+    depends_on:
+      - postgres
 
 secrets:
   postgres_db:

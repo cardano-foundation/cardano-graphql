@@ -50,7 +50,7 @@ export class MetadataClient {
         try {
           const result = await this.axiosClient.get('/health')
           if (!result.data.synced) {
-            this.logger.info('Metadata registry is still syncing. This can take up to 15min...')
+            this.logger.info('Metadata registry is still syncing. This can take up to 90 min...')
             throw new Error('')
           }
         } catch (error) {

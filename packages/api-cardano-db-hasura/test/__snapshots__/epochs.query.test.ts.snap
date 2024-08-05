@@ -497,7 +497,7 @@ Object {
   "epochs": Array [
     Object {
       "adaPots": Object {
-        "deposits": "82582000000",
+        "deposits_stake": "82582000000",
         "fees": "2033934733",
         "reserves": "14809461163109861",
         "rewards": "658670556880",
@@ -522,7 +522,7 @@ Object {
   "epochs": Array [
     Object {
       "adaPots": Object {
-        "deposits": "82582000000",
+        "deposits_stake": "82582000000",
         "fees": "2033934733",
         "reserves": "14809461163109861",
         "rewards": "658670556880",

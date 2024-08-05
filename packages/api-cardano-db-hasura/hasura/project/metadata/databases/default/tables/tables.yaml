@@ -1,5 +1,5 @@
 - "!include public_ActiveStake.yaml"
-- "!include public_AdaPots.yaml"
+- "!include public_ada_pots.yaml"
 - "!include public_Asset.yaml"
 - "!include public_Block.yaml"
 - "!include public_Cardano.yaml"

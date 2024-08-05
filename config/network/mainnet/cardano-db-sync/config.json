@@ -1,4 +1,5 @@
 {
+  "EnableFutureGenesis": true,
   "EnableLogMetrics": false,
   "EnableLogging": true,
   "NetworkName": "mainnet",

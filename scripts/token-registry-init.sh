@@ -7,14 +7,14 @@ export DB_URL=jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${DB_NAME}?cur
 
 case "$NETWORK" in
     mainnet)
-      GITHUB_ORGANIZATION=cardano-foundation
-      GITHUB_PROJECT_NAME=cardano-token-registry
-      GITHUB_MAPPINGS_FOLDER=mappings
+      export GITHUB_ORGANIZATION=cardano-foundation
+      export GITHUB_PROJECT_NAME=cardano-token-registry
+      export GITHUB_MAPPINGS_FOLDER=mappings
       ;;
     preprod|preview|testnet)
-      GITHUB_ORGANIZATION=input-output-hk
-      GITHUB_PROJECT_NAME=metadata-registry-testnet
-      GITHUB_MAPPINGS_FOLDER=registry
+      export GITHUB_ORGANIZATION=input-output-hk
+      export GITHUB_PROJECT_NAME=metadata-registry-testnet
+      export GITHUB_MAPPINGS_FOLDER=registry
       ;;
 esac
 echo Using Github Repository $GITHUB_ORGANIZATION/$GITHUB_PROJECT_NAME as token registry
