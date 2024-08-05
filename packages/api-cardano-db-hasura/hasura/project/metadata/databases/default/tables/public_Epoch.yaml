@@ -12,10 +12,10 @@ object_relationships:
     using:
       manual_configuration:
         column_mapping:
-          number: epochNo
+          number: epoch_no
         insertion_order: null
         remote_table:
-          name: AdaPots
+          name: ada_pots
           schema: public
   - name: protocolParams
     using:

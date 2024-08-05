@@ -1,8 +1,13 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
+-- noinspection SqlDialectInspectionForFile
 
 CREATE OR REPLACE VIEW "AdaPots" AS
   SELECT
     epoch_no AS "epochNo",
-    deposits,
+    deposits_stake,
+    deposits_drep,
+    deposits_proposal
     fees,
     reserves,
     rewards,

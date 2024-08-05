@@ -6,6 +6,7 @@ import { CustomError } from 'ts-custom-error'
 import fs from 'fs-extra'
 import { DbConfig } from './typeAliases'
 import { PointOrOrigin } from '@cardano-ogmios/schema'
+import { Schema } from '@cardano-ogmios/client'
 // Todo: Hoist to util package next major version
 export class MissingConfig extends CustomError {
   public constructor (message: string) {
@@ -19,6 +20,10 @@ export interface BackgroundConfig {
   hasuraCliPath: string,
   hasuraCliExtPath: string,
   hasuraUri: string,
+  chainfollower?: {
+    id: string,
+    slot: number
+  }
   loggerMinSeverity: LogLevelString,
   metadataServerUri: string,
   metadataUpdateInterval?: {
@@ -71,10 +76,18 @@ async function getConfig (): Promise<BackgroundConfig> {
   } catch (error) {
     throw new MissingConfig('Database configuration cannot be read')
   }
+  let chainfollower
+  if (env.chainfollower) {
+    chainfollower = {
+      id: env.chainfollower.id,
+      slot: env.chainfollower.slot
+    }
+  }
   const { postgres, ...selectedEnv } = env
   return {
     ...selectedEnv,
     db,
+    chainfollower,
     loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString
   }
 }
@@ -96,7 +109,9 @@ function filterAndTypecastEnvs (env: any) {
     POSTGRES_PASSWORD_FILE,
     POSTGRES_PORT,
     POSTGRES_USER,
-    POSTGRES_USER_FILE
+    POSTGRES_USER_FILE,
+    CHAIN_FOLLOWER_START_ID,
+    CHAIN_FOLLOWER_START_SLOT
   } = env as NodeJS.ProcessEnv
   return {
     hasuraCliPath: HASURA_CLI_PATH,
@@ -120,6 +135,10 @@ function filterAndTypecastEnvs (env: any) {
       port: POSTGRES_PORT ? Number(POSTGRES_PORT) : undefined,
       user: POSTGRES_USER,
       userFile: POSTGRES_USER_FILE
+    },
+    chainfollower: {
+      id: CHAIN_FOLLOWER_START_ID,
+      slot: CHAIN_FOLLOWER_START_SLOT ? Number(CHAIN_FOLLOWER_START_SLOT) : undefined
     }
   }
 }
@@ -159,8 +178,20 @@ function filterAndTypecastEnvs (env: any) {
     )
     const db = new Db(config.db, logger)
     const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
+      const chainSyncPoint = (config.chainfollower) as Schema.Point
+      logger.info(chainSyncPoint)
       const mostRecentPoint = await hasuraBackgroundClient.getMostRecentPointWithNewAsset()
-      return mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
+      if (mostRecentPoint !== null) {
+        if (chainSyncPoint.slot && chainSyncPoint.slot > mostRecentPoint.slot) {
+          return [chainSyncPoint, 'origin']
+        } else {
+          return [mostRecentPoint, 'origin']
+        }
+      } else if (chainSyncPoint.slot && chainSyncPoint.id) {
+        return [chainSyncPoint, 'origin']
+      } else {
+        return ['origin']
+      }
     }
     await db.init({
       onDbInit: () => hasuraBackgroundClient.shutdown(),

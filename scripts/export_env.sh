@@ -16,21 +16,22 @@ case "$NETWORK" in
             PG_ADMIN_PORT=8442
             POSTGRES_PORT=5432
             TOKEN_REGISTRY_PORT=8080
+            CHAIN_FOLLOWER_START_SLOT=23068800
+            CHAIN_FOLLOWER_START_ID="a650a3f398ba4a9427ec8c293e9f7156d81fd2f7ca849014d8d2c1156c359b3a"
             ;;
         testnet)
             API_PORT=3101
             HASURA_PORT=8091
-            METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
+            METADATA_SERVER_URI="http://localhost:8081"
             OGMIOS_PORT=1338
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
             TOKEN_REGISTRY_PORT=8081
-            export CARDANO_NODE_VERSION=8.7.3
             ;;
         preprod)
             API_PORT=3102
             HASURA_PORT=8092
-            METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
+            METADATA_SERVER_URI="http://localhost:8082"
             OGMIOS_PORT=1339
             PG_ADMIN_PORT=8444
             POSTGRES_PORT=5444
@@ -39,7 +40,7 @@ case "$NETWORK" in
         preview)
             API_PORT=3103
             HASURA_PORT=8093
-            METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
+            METADATA_SERVER_URI="http://localhost:8083"
             OGMIOS_PORT=1340
             PG_ADMIN_PORT=8445
             POSTGRES_PORT=5445
@@ -48,7 +49,7 @@ case "$NETWORK" in
         vasil-dev)
             API_PORT=3104
             HASURA_PORT=8094
-            METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
+            METADATA_SERVER_URI="http://localhost:8084"
             OGMIOS_PORT=1341
             PG_ADMIN_PORT=8446
             POSTGRES_PORT=5446
@@ -76,3 +77,5 @@ export POSTGRES_PORT
 export POSTGRES_USER_FILE=${SECRETS_DIR}/postgres_user
 export POSTGRES_HOST=localhost
 export TOKEN_REGISTRY_TAG=latest
+export CHAIN_FOLLOWER_START_SLOT
+export CHAIN_FOLLOWER_START_ID
