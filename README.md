@@ -40,7 +40,7 @@ Check the [releases] for the latest version.
 ``` console
 git clone \
   --single-branch \
-  --branch 8.2.0 \
+  --branch 8.2.1 \
   --recurse-submodules \
   https://github.com/cardano-foundation/cardano-graphql.git \
   && cd cardano-graphql
@@ -65,8 +65,9 @@ console session freely. See [Docker Compose docs] to tailor for your use-case
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
 CHAIN_FOLLOWER_START_SLOT=23068800 \
-CHAIN_FOLLOWER_START_ID=a650a3f398ba4a9427ec8c293e9f7156d81fd2f7ca849014d8d2c1156c359b3a
-</span>docker compose up -d --build &&\
+CHAIN_FOLLOWER_START_ID=a650a3f398ba4a9427ec8c293e9f7156d81fd2f7ca849014d8d2c1156c359b3a \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.4/db-sync-snapshot-schema-13.4-block-10683068-x86_64.tgz \
+docker compose up -d --build &&\
 docker compose logs -f
 ```
 </details>
