@@ -40,7 +40,7 @@ Check the [releases] for the latest version.
 ``` console
 git clone \
   --single-branch \
-  --branch 8.2.0 \
+  --branch 8.2.1 \
   --recurse-submodules \
   https://github.com/cardano-foundation/cardano-graphql.git \
   && cd cardano-graphql
@@ -53,9 +53,14 @@ Choose **one** of the following:
 Boot the [docker compose stack] using a convention for container and volume scoping based on the network, as well as
 optionally hitting the remote cache to speed up the build. The containers are detached, so you can terminate the log
 console session freely. See [Docker Compose docs] to tailor for your use-case
- 
+
+##### Node snapshots
+If you want to speed up the node syncing processes you can use a snapshot. The snapshot is a compressed file that contains the database of a node at a certain block.
+You can download snapshots using Mithril, which are available for mainnet, preprod, and preview networks.
+A detailed explanation can be found [here](https://mithril.network/doc/manual/getting-started/bootstrap-cardano-node)
 <details open>
   <summary><i>mainnet</i></summary>
+Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#13.4/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 
 > **Disclaimer:** The Chainfollower environment variables are currently mandatory.
 > Otherwise the Token registry will get stuck. 
@@ -65,8 +70,9 @@ console session freely. See [Docker Compose docs] to tailor for your use-case
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
 CHAIN_FOLLOWER_START_SLOT=23068800 \
-CHAIN_FOLLOWER_START_ID=a650a3f398ba4a9427ec8c293e9f7156d81fd2f7ca849014d8d2c1156c359b3a
-</span>docker compose up -d --build &&\
+CHAIN_FOLLOWER_START_ID=a650a3f398ba4a9427ec8c293e9f7156d81fd2f7ca849014d8d2c1156c359b3a \
+RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.4/db-sync-snapshot-schema-13.4-block-10683068-x86_64.tgz \
+docker compose up -d --build &&\
 docker compose logs -f
 ```
 </details>
@@ -205,12 +211,6 @@ For other networks:
 ```
 METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
 ```
-
-### Upgrade Database to Postgres 14
-If you are upgrading from Postgres 11 to 14: A resync will be needed.
-To speed up the process you can use the following snapshots:
-- [DB-Sync](https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.2/db-sync-snapshot-schema-13.2-block-10060706-x86_64.tgz)
-- [Node](https://mithril.network/doc/manual/getting-started/bootstrap-cardano-node)
 
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:

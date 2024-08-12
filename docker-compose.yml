@@ -55,7 +55,7 @@ services:
 
   cardano-db-sync:
     platform: linux/x86_64
-    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.3.0.0}
+    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.4.0.0}
     command: [
       "--config", "/config/cardano-db-sync/config.json",
       "--socket-path", "/node-ipc/node.socket"
@@ -66,8 +66,11 @@ services:
       - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
       - RESTORE_RECREATE_DB=N
     depends_on:
-      - cardano-node
-      - postgres
+      # Depend on both services to be healthy before starting.
+      cardano-node:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     secrets:
       - postgres_password
       - postgres_user
@@ -87,7 +90,7 @@ services:
   hasura:
     build:
       context: ./packages/api-cardano-db-hasura/hasura
-    image: cardanofoundation/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-8.2.0}
+    image: cardanofoundation/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-8.2.1}
     ports:
       - ${HASURA_PORT:-8090}:8080
     depends_on:
@@ -111,7 +114,7 @@ services:
     build:
       context: .
       target: background
-    image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.2.0}-${NETWORK:-mainnet}
+    image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.2.1}-${NETWORK:-mainnet}
     depends_on:
       - "hasura"
       - "postgres"
@@ -139,7 +142,7 @@ services:
         - NETWORK=${NETWORK:-mainnet}
       context: .
       target: server
-    image: cardanofoundation/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.2.0}-${NETWORK:-mainnet}
+    image: cardanofoundation/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.2.1}-${NETWORK:-mainnet}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
