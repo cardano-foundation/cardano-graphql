@@ -34,9 +34,9 @@ services:
       - node-db:/node/db
       - ./config/network/${NETWORK:-mainnet}:/config
     entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
-    
+
   ogmios:
-    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.6.0}
+    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.6.1}
     command:
       - --host
       - 0.0.0.0
@@ -56,10 +56,7 @@ services:
   cardano-db-sync:
     platform: linux/x86_64
     image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.5.0.1}
-    command: [
-      "--config", "/config/cardano-db-sync/config.json",
-      "--socket-path", "/node-ipc/node.socket"
-    ]
+    command: [ "--config", "/config/cardano-db-sync/config.json", "--socket-path", "/node-ipc/node.socket" ]
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
