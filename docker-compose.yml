@@ -55,7 +55,7 @@ services:
 
   cardano-db-sync:
     platform: linux/x86_64
-    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.5.0.1}
+    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.5.0.2}
     command: [ "--config", "/config/cardano-db-sync/config.json", "--socket-path", "/node-ipc/node.socket" ]
     environment:
       - POSTGRES_HOST=postgres
