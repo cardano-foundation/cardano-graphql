@@ -26,7 +26,7 @@ services:
         max-file: "10"
 
   cardano-node:
-    image: ghcr.io/intersectmbo/cardano-node:${CARDANO_NODE_VERSION:-9.1.0}
+    image: ghcr.io/intersectmbo/cardano-node:${CARDANO_NODE_VERSION:-9.1.1}
     environment:
       - NETWORK=${NETWORK:-mainnet}
     volumes:
@@ -34,9 +34,9 @@ services:
       - node-db:/node/db
       - ./config/network/${NETWORK:-mainnet}:/config
     entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
-    
+
   ogmios:
-    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.5.0}
+    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.6.1}
     command:
       - --host
       - 0.0.0.0
@@ -55,11 +55,8 @@ services:
 
   cardano-db-sync:
     platform: linux/x86_64
-    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.4.0.0}
-    command: [
-      "--config", "/config/cardano-db-sync/config.json",
-      "--socket-path", "/node-ipc/node.socket"
-    ]
+    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.5.0.2}
+    command: [ "--config", "/config/cardano-db-sync/config.json", "--socket-path", "/node-ipc/node.socket" ]
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=${POSTGRES_PORT:-5432}
@@ -90,7 +87,7 @@ services:
   hasura:
     build:
       context: ./packages/api-cardano-db-hasura/hasura
-    image: cardanofoundation/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-8.2.1}
+    image: cardanofoundation/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-8.2.2}
     ports:
       - ${HASURA_PORT:-8090}:8080
     depends_on:
@@ -114,7 +111,7 @@ services:
     build:
       context: .
       target: background
-    image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.2.1}-${NETWORK:-mainnet}
+    image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.2.2}-${NETWORK:-mainnet}
     depends_on:
       - "hasura"
       - "postgres"
@@ -142,7 +139,7 @@ services:
         - NETWORK=${NETWORK:-mainnet}
       context: .
       target: server
-    image: cardanofoundation/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.2.1}-${NETWORK:-mainnet}
+    image: cardanofoundation/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.2.2}-${NETWORK:-mainnet}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
