@@ -42,3 +42,7 @@
 - "!include public_committee_hash.yaml"
 - "!include public_pool_hash.yaml"
 - "!include public_off_chain_vote_data.yaml"
+- "!include public_committee.yaml"
+- "!include public_committee_de_registration.yaml"
+- "!include public_committee_member.yaml"
+- "!include public_committee_registration.yaml"

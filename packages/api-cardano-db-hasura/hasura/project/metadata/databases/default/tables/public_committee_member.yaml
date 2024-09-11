@@ -1,0 +1,21 @@
+table:
+  name: committee_member
+  schema: public
+object_relationships:
+  - name: committee
+    using:
+      manual_configuration:
+        column_mapping:
+          committee_id: id
+        insertion_order: null
+        remote_table:
+          name: committee
+          schema: public
+  - name: committeeHash
+    using:
+      manual_configuration:
+        column_mapping:
+          committee_hash_id: id
+        remote_table:
+          name: committee_hash
+          schema: public
