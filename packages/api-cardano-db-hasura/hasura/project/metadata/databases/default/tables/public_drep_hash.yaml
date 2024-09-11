@@ -1,0 +1,3 @@
+table:
+  name: drep_hash
+  schema: public

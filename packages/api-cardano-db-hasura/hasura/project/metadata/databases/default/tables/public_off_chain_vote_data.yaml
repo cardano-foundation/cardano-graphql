@@ -1,0 +1,3 @@
+table:
+  name: off_chain_vote_data
+  schema: public

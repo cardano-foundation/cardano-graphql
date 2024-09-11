@@ -1,0 +1,13 @@
+table:
+  name: voting_anchor
+  schema: public
+object_relationships:
+  - name: OffChainData
+    using:
+      manual_configuration:
+        column_mapping:
+          id: voting_anchor_id
+        insertion_order: null
+        remote_table:
+          name: off_chain_vote_data
+          schema: public

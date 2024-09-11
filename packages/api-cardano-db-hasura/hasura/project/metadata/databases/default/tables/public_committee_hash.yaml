@@ -1,0 +1,3 @@
+table:
+  name: committee_hash
+  schema: public

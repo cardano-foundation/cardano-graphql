@@ -1,0 +1,59 @@
+table:
+  name: voting_procedure
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: vote_procedure
+    select_aggregate: vote_procedure_aggregate
+object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_id: id
+        insertion_order: null
+        remote_table:
+          name: tx
+          schema: public
+  - name: GovActionProposal
+    using:
+      manual_configuration:
+        column_mapping:
+          gov_action_proposal_id: id
+        remote_table:
+          name: gov_action_proposal
+          schema: public
+  - name: DrepVoter
+    using:
+      manual_configuration:
+        column_mapping:
+          drep_voter: id
+        remote_table:
+          name: drep_hash
+          schema: public
+  - name: PoolVoter
+    using:
+      manual_configuration:
+        column_mapping:
+          pool_voter: id
+        remote_table:
+          name: pool_hash
+          schema: public
+  - name: VotingAnchor
+    using:
+      manual_configuration:
+        column_mapping:
+          voting_anchor_id: id
+        remote_table:
+          name: voting_anchor
+          schema: public
+  - name: CommitteeVoter
+    using:
+      manual_configuration:
+        column_mapping:
+          committee_voter: id
+        remote_table:
+          name: committee_hash
+          schema: public
