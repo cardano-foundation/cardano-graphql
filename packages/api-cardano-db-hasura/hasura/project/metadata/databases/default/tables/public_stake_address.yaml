@@ -1,0 +1,3 @@
+table:
+  name: stake_address
+  schema: public
