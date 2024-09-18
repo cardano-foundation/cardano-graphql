@@ -1,0 +1,3 @@
+table:
+  name: pool_stat
+  schema: public

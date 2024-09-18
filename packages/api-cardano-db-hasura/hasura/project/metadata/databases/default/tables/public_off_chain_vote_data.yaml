@@ -1,0 +1,36 @@
+table:
+  name: off_chain_vote_data
+  schema: public
+object_relationships:
+  - name: OffChainVoteGovActionData
+    using:
+      manual_configuration:
+        column_mapping:
+          id: off_chain_vote_data_id
+        remote_table:
+          name: off_chain_vote_gov_action_data
+          schema: public
+  - name: OffChainDrepData
+    using:
+      manual_configuration:
+        column_mapping:
+          id: off_chain_vote_data_id
+        remote_table:
+          name: off_chain_vote_drep_data
+          schema: public
+  - name: OffChainVoteAuthor
+    using:
+      manual_configuration:
+        column_mapping:
+          id: off_chain_vote_data_id
+        remote_table:
+          name: off_chain_vote_author
+          schema: public
+  - name: OffChainVoteReference
+    using:
+      manual_configuration:
+        column_mapping:
+          id: off_chain_vote_data_id
+        remote_table:
+          name: off_chain_vote_reference
+          schema: public

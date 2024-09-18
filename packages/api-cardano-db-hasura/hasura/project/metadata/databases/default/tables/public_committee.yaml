@@ -1,0 +1,13 @@
+table:
+  name: committee
+  schema: public
+object_relationships:
+  - name: committeeMembers
+    using:
+      manual_configuration:
+        column_mapping:
+          id: committee_id
+        insertion_order: null
+        remote_table:
+          name: committee_member
+          schema: public
