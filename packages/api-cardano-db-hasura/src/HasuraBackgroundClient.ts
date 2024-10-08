@@ -5,7 +5,7 @@ import { GraphQLClient, gql } from 'graphql-request'
 import pRetry from 'p-retry'
 import path from 'path'
 import { dummyLogger, Logger } from 'ts-log'
-import { Asset, Block } from './graphql_types'
+import { Asset, AssetMint, Block } from './graphql_types'
 import { AssetMetadataAndHash, AssetMetadataHashAndId, AssetWithoutTokens } from './typeAliases'
 import { Schema } from '@cardano-ogmios/client'
 
@@ -135,6 +135,49 @@ export class HasuraBackgroundClient {
       }
     )
     return result.delete_assets.affected_rows
+  }
+
+  public async getMaximumSlotFromAssets () : Promise<number> {
+    this.logger.debug(
+      { module: 'HasuraClient' },
+      'getting maximum slot from assets'
+    )
+
+    const result = await this.client.request(
+      gql`query Assets {
+          assets(limit: 1, order_by: {firstAppearedInSlot: desc}) {
+            firstAppearedInSlot
+          }
+        }`
+    )
+    return result.assets.length > 0 ? result.assets[0].firstAppearedInSlot : 0
+  }
+
+  public async getTokenMintsAfterSlot (slot: number) : Promise<AssetWithoutTokens[]> {
+    this.logger.debug(
+      { module: 'HasuraClient' },
+      `getting token mints after slot ${slot}`
+    )
+
+    const result = await this.client.request(
+      gql`query Assets {
+            tokenMints(
+            limit: 10
+            ) 
+            {
+              assetName
+          }
+        }`
+    )
+    const assets : AssetWithoutTokens[] = result.tokenMints.map((tokenMint : AssetMint) => {
+      return {
+        assetId: tokenMint.assetId.replace('\\x', ''),
+        assetName: tokenMint.assetName.replace('\\x', ''),
+        policyId: tokenMint.policyId.replace('\\x', ''),
+        firstAppearedInSlot: tokenMint.transaction.block.slotNo
+      }
+    })
+    return assets
   }
 
   public async hasAsset (assetId: Asset['assetId']): Promise<boolean> {
