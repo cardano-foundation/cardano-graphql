@@ -145,23 +145,30 @@ export class HasuraBackgroundClient {
     )
     // ToDo - Implement a proper retry handling
     let tokens : AssetWithoutTokens[] = []
-    const maxSlotResult = await this.client.request(
-      gql`
-          query Assets {
-              assets(order_by: {firstAppearedInSlot: desc}, limit: 1) {
-                  firstAppearedInSlot
-              }
-          }
-      `)
     let maxSlot = 0
-    if (maxSlotResult.assets.length > 0) {
-      maxSlot = maxSlotResult.assets[0].firstAppearedInSlot
-    }
+    await pRetry(async () => {
+      const maxSlotResult = await this.client.request(
+        gql`
+            query Assets {
+                assets(order_by: {firstAppearedInSlot: desc}, limit: 1) {
+                    firstAppearedInSlot
+                }
+            }
+        `)
+      if (maxSlotResult.assets.length > 0) {
+        maxSlot = maxSlotResult.assets[0].firstAppearedInSlot
+      }
+    },
+    {
+      factor: 1.5,
+      retries: 1000
+    })
+
     await pRetry(async () => {
       const resultTokens = await this.client.request(
         gql`
           query Assets {
-              tokenMints(limit: 100, order_by: {transaction: {block: {slotNo: asc}}}, where: {transaction: {block: {slotNo: {_gt: ${maxSlot}}}}}) {
+              tokenMints(limit: 1000, order_by: {transaction: {block: {slotNo: asc}}}, where: {transaction: {block: {slotNo: {_gt: ${maxSlot}}}}}) {
                   assetId
                   assetName
                   policyId
