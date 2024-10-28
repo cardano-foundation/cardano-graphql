@@ -85,8 +85,9 @@ export class AssetCreator {
         }
       }
     }
-
-    this.logger.info({ module: MODULE_NAME }, 'Saved Assets ' + tokensFiltered.length)
+    if (tokensFiltered.length > 0) {
+      this.logger.info({ module: MODULE_NAME }, 'Saved Assets ' + tokensFiltered.length)
+    }
     return tokensFiltered.length
   }
 }
