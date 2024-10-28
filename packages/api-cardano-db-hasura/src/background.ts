@@ -19,10 +19,6 @@ export interface BackgroundConfig {
   hasuraCliPath: string,
   hasuraCliExtPath: string,
   hasuraUri: string,
-  chainfollower?: {
-    id: string,
-    slot: number
-  }
   loggerMinSeverity: LogLevelString,
   metadataServerUri: string,
   metadataUpdateInterval?: {
@@ -75,18 +71,10 @@ async function getConfig (): Promise<BackgroundConfig> {
   } catch (error) {
     throw new MissingConfig('Database configuration cannot be read')
   }
-  let chainfollower
-  if (env.chainfollower) {
-    chainfollower = {
-      id: env.chainfollower.id,
-      slot: env.chainfollower.slot
-    }
-  }
   const { postgres, ...selectedEnv } = env
   return {
     ...selectedEnv,
     db,
-    chainfollower,
     loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString
   }
 }
@@ -108,9 +96,7 @@ function filterAndTypecastEnvs (env: any) {
     POSTGRES_PASSWORD_FILE,
     POSTGRES_PORT,
     POSTGRES_USER,
-    POSTGRES_USER_FILE,
-    CHAIN_FOLLOWER_START_ID,
-    CHAIN_FOLLOWER_START_SLOT
+    POSTGRES_USER_FILE
   } = env as NodeJS.ProcessEnv
   return {
     hasuraCliPath: HASURA_CLI_PATH,
@@ -134,10 +120,6 @@ function filterAndTypecastEnvs (env: any) {
       port: POSTGRES_PORT ? Number(POSTGRES_PORT) : undefined,
       user: POSTGRES_USER,
       userFile: POSTGRES_USER_FILE
-    },
-    chainfollower: {
-      id: CHAIN_FOLLOWER_START_ID,
-      slot: CHAIN_FOLLOWER_START_SLOT ? Number(CHAIN_FOLLOWER_START_SLOT) : undefined
     }
   }
 }
