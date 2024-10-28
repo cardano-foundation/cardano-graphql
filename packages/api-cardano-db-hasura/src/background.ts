@@ -1,5 +1,5 @@
 import { createLogger, LogLevelString } from 'bunyan'
-import { Db, HasuraBackgroundClient } from './index'
+import { Db, HasuraBackgroundClient, MetadataClient, Worker } from './index'
 import onDeath from 'death'
 import { Logger } from 'ts-log'
 import { CustomError } from 'ts-custom-error'
@@ -158,59 +158,37 @@ function filterAndTypecastEnvs (env: any) {
 
     const db = new Db(config.db, logger)
 
-    const assetCreater = new AssetCreator(
+    const assetCreator = new AssetCreator(
       logger,
-      hasuraBackgroundClient
+      hasuraBackgroundClient,
+      config.db
     )
 
-    // we want to get rid of the chainfollower
-    // const chainFollower = new ChainFollower(
-    //   hasuraBackgroundClient,
-    //   logger,
-    //   config.db
-    // )
-    // const metadataClient = new MetadataClient(
-    //   config.metadataServerUri,
-    //   logger
-    // )
-    // const worker = new Worker(
-    //   hasuraBackgroundClient,
-    //   logger,
-    //   metadataClient,
-    //   config.db,
-    //   {
-    //     metadataUpdateInterval: {
-    //       assets: config.metadataUpdateInterval?.assets
-    //     }
-    //   }
-    // )
+    const metadataClient = new MetadataClient(
+      config.metadataServerUri,
+      logger
+    )
+    const worker = new Worker(
+      hasuraBackgroundClient,
+      logger,
+      metadataClient,
+      config.db,
+      {
+        metadataUpdateInterval: {
+          assets: config.metadataUpdateInterval?.assets
+        }
+      }
+    )
 
-    // const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
-    //   const chainSyncPoint = (config.chainfollower) as Schema.Point
-    //   logger.info(chainSyncPoint)
-    //   const mostRecentPoint = await hasuraBackgroundClient.getMostRecentPointWithNewAsset()
-    //   if (mostRecentPoint !== null) {
-    //     if (chainSyncPoint.slot && chainSyncPoint.slot > mostRecentPoint.slot) {
-    //       return [chainSyncPoint, 'origin']
-    //     } else {
-    //       return [mostRecentPoint, 'origin']
-    //     }
-    //   } else if (chainSyncPoint.slot && chainSyncPoint.id) {
-    //     return [chainSyncPoint, 'origin']
-    //   } else {
-    //     return ['origin']
-    //   }
-    // }
     await db.init({
       onDbInit: () => hasuraBackgroundClient.shutdown(),
       onDbSetup: async () => {
         try {
           await hasuraBackgroundClient.initialize()
-          await assetCreater.initialize()
-          // await metadataClient.initialize()
-          // await chainFollower.initialize(config.ogmios, getChainSyncPoints)
-          // await worker.start()
-          // await chainFollower.start(await getChainSyncPoints())
+          await assetCreator.initialize()
+          await metadataClient.initialize()
+          await worker.start()
+          await assetCreator.start()
         } catch (error) {
           logger.error(error.message)
           process.exit(1)
@@ -220,8 +198,7 @@ function filterAndTypecastEnvs (env: any) {
     onDeath(async () => {
       await Promise.all([
         hasuraBackgroundClient.shutdown,
-        // worker.shutdown,
-        // chainFollower.shutdown,
+        worker.shutdown,
         db.shutdown
       ])
       process.exit(1)

@@ -34,7 +34,7 @@ case "$NETWORK" in
             METADATA_SERVER_URI="http://localhost:8082"
             OGMIOS_PORT=1339
             PG_ADMIN_PORT=8444
-            POSTGRES_PORT=5444
+            POSTGRES_PORT=5443
             TOKEN_REGISTRY_PORT=8082
             ;;
         preview)
@@ -79,3 +79,4 @@ export POSTGRES_HOST=localhost
 export TOKEN_REGISTRY_TAG=latest
 export CHAIN_FOLLOWER_START_SLOT
 export CHAIN_FOLLOWER_START_ID
+echo "exported env vars for ${NETWORK}"

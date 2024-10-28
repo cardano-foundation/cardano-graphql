@@ -1,11 +1,11 @@
 import { exec } from 'child_process'
-import util, { ModuleState } from '@cardano-graphql/util'
+import util, { assetFingerprint, ModuleState } from '@cardano-graphql/util'
 import { GraphQLSchema } from 'graphql'
-import { GraphQLClient, gql } from 'graphql-request'
+import { gql, GraphQLClient } from 'graphql-request'
 import pRetry from 'p-retry'
 import path from 'path'
 import { dummyLogger, Logger } from 'ts-log'
-import { Asset, AssetMint, Block } from './graphql_types'
+import { Asset, Block } from './graphql_types'
 import { AssetMetadataAndHash, AssetMetadataHashAndId, AssetWithoutTokens } from './typeAliases'
 import { Schema } from '@cardano-ogmios/client'
 
@@ -32,7 +32,8 @@ export class HasuraBackgroundClient {
       {
         headers: {
           'X-Hasura-Role': 'cardano-graphql'
-        }
+        },
+        keepalive: true
       }
     )
   }
@@ -137,47 +138,56 @@ export class HasuraBackgroundClient {
     return result.delete_assets.affected_rows
   }
 
-  public async getMaximumSlotFromAssets () : Promise<number> {
+  public async getTokenMintsForMaxSlot () : Promise<AssetWithoutTokens[]> {
     this.logger.debug(
       { module: 'HasuraClient' },
-      'getting maximum slot from assets'
+      'getting token mints for max slot'
     )
-
-    const result = await this.client.request(
-      gql`query Assets {
-          assets(limit: 1, order_by: {firstAppearedInSlot: desc}) {
-            firstAppearedInSlot
+    // ToDo - Implement a proper retry handling
+    let tokens : AssetWithoutTokens[] = []
+    const maxSlotResult = await this.client.request(
+      gql`
+          query Assets {
+              assets(order_by: {firstAppearedInSlot: desc}, limit: 1) {
+                  firstAppearedInSlot
+              }
           }
-        }`
-    )
-    return result.assets.length > 0 ? result.assets[0].firstAppearedInSlot : 0
-  }
-
-  public async getTokenMintsAfterSlot (slot: number) : Promise<AssetWithoutTokens[]> {
-    this.logger.debug(
-      { module: 'HasuraClient' },
-      `getting token mints after slot ${slot}`
-    )
-
-    const result = await this.client.request(
-      gql`query Assets {
-            tokenMints(
-            limit: 10
-            ) 
-            {
-              assetName
+      `)
+    let maxSlot = 0
+    if (maxSlotResult.assets.length > 0) {
+      maxSlot = maxSlotResult.assets[0].firstAppearedInSlot
+    }
+    await pRetry(async () => {
+      const resultTokens = await this.client.request(
+        gql`
+          query Assets {
+              tokenMints(limit: 100, order_by: {transaction: {block: {slotNo: asc}}}, where: {transaction: {block: {slotNo: {_gt: ${maxSlot}}}}}) {
+                  assetId
+                  assetName
+                  policyId
+                  transaction {
+                      block {
+                          slotNo
+                      }
+                  }
+              }
           }
-        }`
-    )
-    const assets : AssetWithoutTokens[] = result.tokenMints.map((tokenMint : AssetMint) => {
-      return {
-        assetId: tokenMint.assetId.replace('\\x', ''),
-        assetName: tokenMint.assetName.replace('\\x', ''),
-        policyId: tokenMint.policyId.replace('\\x', ''),
-        firstAppearedInSlot: tokenMint.transaction.block.slotNo
-      }
+      `)
+      tokens = resultTokens.tokenMints.map((tokenMint: any) => {
+        return {
+          assetId: tokenMint.assetId,
+          assetName: tokenMint.assetName,
+          policyId: tokenMint.policyId,
+          firstAppearedInSlot: tokenMint.transaction.block.slotNo,
+          fingerprint: assetFingerprint(tokenMint.policyId, tokenMint.assetName)
+        }
+      })
+    },
+    {
+      factor: 1.5,
+      retries: 1000
     })
-    return assets
+    return tokens
   }
 
   public async hasAsset (assetId: Asset['assetId']): Promise<boolean> {
@@ -191,7 +201,7 @@ export class HasuraBackgroundClient {
               assetId
           }
       }`, {
-        assetId: withHexPrefix(assetId)
+        assetId: assetId
       }
     )
     const response = result.assets.length > 0
@@ -316,9 +326,9 @@ export class HasuraBackgroundClient {
         assets: assets.map(asset => ({
           ...asset,
           ...{
-            assetId: withHexPrefix(asset.assetId),
-            assetName: withHexPrefix(asset.assetName),
-            policyId: withHexPrefix(asset.policyId)
+            assetId: asset.assetId,
+            assetName: asset.assetName,
+            policyId: asset.policyId
           }
         }))
       }

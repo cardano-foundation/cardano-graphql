@@ -69,4 +69,7 @@ export class Db {
     this.state = null
     this.logger.info({ module: MODULE_NAME }, 'Shut down')
   }
+
+  public async test () {
+  }
 }

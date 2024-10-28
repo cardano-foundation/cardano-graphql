@@ -11,7 +11,8 @@
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
     "prepack": "yarn build",
     "predb-manager": "yarn build",
-    "background": "node dist/background.js",
+    "background": "source ./../../scripts/dev_env.sh && node dist/background.js",
+    "ts-watch": "tsc -b ./src --watch",
     "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js"
   },
   "repository": {
