@@ -63,6 +63,7 @@ export class AssetCreator {
 
   private async saveAssets () {
     const tokenMintsAfterSlot = await this.hasuraBackgroundClient.getTokenMintsForMaxSlot()
+    this.logger.info({ module: MODULE_NAME }, 'Token Mints After Slot ' + tokenMintsAfterSlot.length)
     const tokensFiltered: AssetWithoutTokens[] = []
     const reversed = tokenMintsAfterSlot.reverse()
     while (reversed.length > 0) {
@@ -74,7 +75,7 @@ export class AssetCreator {
         return false
       })
       // Asset wasn't processed yet
-      if (index === -1 && !this.hasuraBackgroundClient.hasAsset(asset.assetId)) {
+      if (index === -1) {
         const assetId = asset.assetId
         await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
           retryDelay: SIX_HOURS,

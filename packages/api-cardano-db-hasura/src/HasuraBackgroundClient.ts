@@ -166,18 +166,21 @@ export class HasuraBackgroundClient {
     await pRetry(async () => {
       const resultTokens = await this.client.request(
         gql`
-          query Assets {
-              tokenMints(limit: 1000, order_by: {transaction: {block: {slotNo: asc}}}, where: {transaction: {block: {slotNo: {_gt: ${maxSlot}}}}}) {
-                  assetId
-                  assetName
-                  policyId
-                  transaction {
-                      block {
-                          slotNo
-                      }
-                  }
-              }
-          }
+            query Assets {
+                assets {
+                    assetId
+                }
+                tokenMints(limit: 100, order_by: {transaction: {block: {slotNo: asc}}}, where: {transaction: {block: {slotNo: {_gt: ${maxSlot}}}}, assetId: {_nin: [assets]}}) {
+                    assetId
+                    assetName
+                    policyId
+                    transaction {
+                        block {
+                            slotNo
+                        }
+                    }
+                }
+            }
       `)
       tokens = resultTokens.tokenMints.map((tokenMint: any) => {
         return {
