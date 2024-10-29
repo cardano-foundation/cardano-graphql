@@ -310,7 +310,7 @@ SELECT
     drep_registration.id AS "id",
     drep_hash.view AS "DRepId",
     drep_registration.tx_id AS "tx_id",
-    drep_registration.deposit AS "deposit"
+    drep_registration.deposit AS "deposit",
     drep_registration.voting_anchor_id AS "voting_anchor_id"
 FROM drep_registration
 JOIN drep_hash on drep_registration.drep_hash_id = drep_hash.id;
