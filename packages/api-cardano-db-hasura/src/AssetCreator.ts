@@ -77,11 +77,14 @@ export class AssetCreator {
       // Asset wasn't processed yet
       if (index === -1) {
         const assetId = asset.assetId
-        await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
-          retryDelay: SIX_HOURS,
-          retryLimit: THREE_MONTHS
-        })
-        tokensFiltered.push(asset)
+        const hasAsset = await this.hasuraBackgroundClient.hasAsset(assetId)
+        if (hasAsset === false) {
+          await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
+            retryDelay: SIX_HOURS,
+            retryLimit: THREE_MONTHS
+          })
+          tokensFiltered.push(asset)
+        }
       }
     }
     await this.hasuraBackgroundClient.insertAssets(tokensFiltered)

@@ -144,33 +144,13 @@ export class HasuraBackgroundClient {
       'getting token mints for max slot'
     )
     let tokens : AssetWithoutTokens[] = []
-    let maxSlot = 0
+    const point = await this.getMostRecentPointWithNewAsset()
     await pRetry(async () => {
-      const maxSlotResult = await this.client.request(
-        gql`
-            query Assets {
-                assets(order_by: {firstAppearedInSlot: desc}, limit: 1) {
-                    firstAppearedInSlot
-                }
-            }
-        `)
-      if (maxSlotResult.assets.length > 0) {
-        maxSlot = maxSlotResult.assets[0].firstAppearedInSlot
-      }
-    },
-    {
-      factor: 1.5,
-      retries: 1000
-    })
 
-    await pRetry(async () => {
       const resultTokens = await this.client.request(
         gql`
             query Assets {
-                assets {
-                    assetId
-                }
-                tokenMints(limit: 100, order_by: {transaction: {block: {slotNo: asc}}}, where: {transaction: {block: {slotNo: {_gt: ${maxSlot}}}}, assetId: {_nin: [assets]}}) {
+                tokenMints(limit: 100, order_by: {transaction: {block: {slotNo: asc}}}, where: {transaction: {block: {slotNo: {_gt: ${point.slot}}}}}) {
                     assetId
                     assetName
                     policyId
