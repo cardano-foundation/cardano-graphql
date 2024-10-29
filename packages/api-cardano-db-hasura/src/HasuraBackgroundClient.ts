@@ -146,7 +146,6 @@ export class HasuraBackgroundClient {
     let tokens : AssetWithoutTokens[] = []
     const point = await this.getMostRecentPointWithNewAsset()
     await pRetry(async () => {
-
       const resultTokens = await this.client.request(
         gql`
             query Assets {
@@ -180,19 +179,26 @@ export class HasuraBackgroundClient {
   }
 
   public async hasAsset (assetId: Asset['assetId']): Promise<boolean> {
-    const result = await this.client.request(
-      gql`query HasAsset (
-          $assetId: bytea!
-      ) {
-          assets (
-              where: { assetId: { _eq: $assetId }}
+    let result : any = {}
+    pRetry(async () => {
+      result = await this.client.request(
+        gql`query HasAsset (
+              $assetId: bytea!
           ) {
-              assetId
-          }
-      }`, {
-        assetId: assetId
-      }
-    )
+              assets (
+                  where: { assetId: { _eq: $assetId }}
+              ) {
+                  assetId
+              }
+          }`, {
+          assetId: assetId
+        }
+      )
+    },
+    {
+      factor: 1.5,
+      retries: 1000
+    })
     const response = result.assets.length > 0
     this.logger.debug(
       { module: 'HasuraClient', assetId, hasAsset: response },
