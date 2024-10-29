@@ -4,7 +4,6 @@ import { HasuraBackgroundClient } from './HasuraBackgroundClient'
 import { AssetWithoutTokens, DbConfig } from './typeAliases'
 import PgBoss from 'pg-boss'
 import pRetry from 'p-retry'
-import delay from 'delay'
 
 const MODULE_NAME = 'AssetCreator'
 const SIX_HOURS = 21600
@@ -36,6 +35,10 @@ export class AssetCreator {
     await this.hasuraBackgroundClient.applySchemaAndMetadata()
   }
 
+  public async delay (ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
   public async start () {
     if (this.state !== 'initializing') return
     this.state = 'running'
@@ -45,7 +48,7 @@ export class AssetCreator {
       while (true) {
         const assetsSavedCount = await this.saveAssets()
         if (assetsSavedCount === 0) {
-          delay(60000) // then wait a minute, for new assets to be minted
+          await this.delay(60000)// then wait a minute, for new assets to be minted
         }
       }
     },
@@ -71,20 +74,16 @@ export class AssetCreator {
         return false
       })
       // Asset wasn't processed yet
-      if (index === -1) {
-        try {
-          await this.hasuraBackgroundClient.insertAssets([asset])
-          const assetId = asset.assetId
-          await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
-            retryDelay: SIX_HOURS,
-            retryLimit: THREE_MONTHS
-          })
-          tokensFiltered.push(asset)
-        } catch (e) {
-          this.logger.debug({ module: MODULE_NAME }, 'Duplicate asset. Skipping.')
-        }
+      if (index === -1 && !this.hasuraBackgroundClient.hasAsset(asset.assetId)) {
+        const assetId = asset.assetId
+        await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
+          retryDelay: SIX_HOURS,
+          retryLimit: THREE_MONTHS
+        })
+        tokensFiltered.push(asset)
       }
     }
+    await this.hasuraBackgroundClient.insertAssets(tokensFiltered)
     if (tokensFiltered.length > 0) {
       this.logger.info({ module: MODULE_NAME }, 'Saved Assets ' + tokensFiltered.length)
     }

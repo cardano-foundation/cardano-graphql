@@ -143,7 +143,6 @@ export class HasuraBackgroundClient {
       { module: 'HasuraClient' },
       'getting token mints for max slot'
     )
-    // ToDo - Implement a proper retry handling
     let tokens : AssetWithoutTokens[] = []
     let maxSlot = 0
     await pRetry(async () => {
