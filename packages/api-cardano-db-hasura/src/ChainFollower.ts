@@ -19,6 +19,8 @@ export class ChainFollower {
   private chainSyncClient: ChainSynchronizationClient
   private queue: PgBoss
   private state: RunnableModuleState
+  private cacheAssets : { assetId: string; assetName: string; firstAppearedInSlot: number; fingerprint: string; policyId: string; }[]
+  private cacheTimer : number
 
   constructor (
     readonly hasuraClient: HasuraBackgroundClient,
@@ -26,6 +28,8 @@ export class ChainFollower {
     private queueConfig: DbConfig
   ) {
     this.state = null
+    this.cacheAssets = []
+    this.cacheTimer = Date.now()
   }
 
   public async initialize (ogmiosConfig: Config['ogmios'], getMostRecentPoint: () => Promise<PointOrOrigin[]>) {
@@ -109,17 +113,36 @@ export class ChainFollower {
       fingerprint: assetFingerprint(policyId, assetName),
       policyId
     }
-    const response = await this.hasuraClient.insertAssets([asset])
-    const SIX_HOURS = 21600
-    const THREE_MONTHS = 365
-    if (response.insert_assets.affected_rows > 0) {
-      const savedAsset = response.insert_assets.returning[0]
-      const savedAssetId = savedAsset.assetId
-      await this.queue.publish('asset-metadata-fetch-initial', { savedAssetId }, {
-        retryDelay: SIX_HOURS,
-        retryLimit: THREE_MONTHS
-      })
+    // introducing a caching to speed things up. The GraphQL insertAssets takes a lot of time.
+    // Saving when > 1000 assets in the cache or every minute
+    this.cacheAssets.push(asset)
+    if (this.cacheAssets.length > 1000 || (Date.now() - this.cacheTimer) / 1000 > 60) {
+      this.cacheTimer = Date.now() // resetting the timer
+      const response = await this.hasuraClient.insertAssets(this.cacheAssets)
+      this.cacheAssets = []
+      if (response.insert_assets.affected_rows > 0) {
+        for (let i = 0; i < response.insert_assets.affected_rows; i++) {
+          const savedAssetId = response.insert_assets.returning[i]
+          const SIX_HOURS = 21600
+          const THREE_MONTHS = 365
+          await this.queue.publish('asset-metadata-fetch-initial', { savedAssetId }, {
+            retryDelay: SIX_HOURS,
+            retryLimit: THREE_MONTHS
+          })
+        }
+      }
     }
+    // const response = await this.hasuraClient.insertAssets([asset])
+    // const SIX_HOURS = 21600
+    // const THREE_MONTHS = 365
+    // if (response.insert_assets.affected_rows > 0) {
+    //   const savedAsset = response.insert_assets.returning[0]
+    //   const savedAssetId = savedAsset.assetId
+    //   await this.queue.publish('asset-metadata-fetch-initial', { savedAssetId }, {
+    //     retryDelay: SIX_HOURS,
+    //     retryLimit: THREE_MONTHS
+    //   })
+    // }
   }
 
   public async start (points: Schema.PointOrOrigin[]) {
