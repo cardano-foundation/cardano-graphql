@@ -102,18 +102,20 @@ export class ChainFollower {
 
   async saveAsset (policyId: string, assetName: string | undefined, b: BlockPraos | BlockBFT) {
     const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
-    if (!(await this.hasuraClient.hasAsset(assetId))) {
-      const asset = {
-        assetId,
-        assetName,
-        firstAppearedInSlot: b.slot,
-        fingerprint: assetFingerprint(policyId, assetName),
-        policyId
-      }
-      await this.hasuraClient.insertAssets([asset])
-      const SIX_HOURS = 21600
-      const THREE_MONTHS = 365
-      await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
+    const asset = {
+      assetId,
+      assetName,
+      firstAppearedInSlot: b.slot,
+      fingerprint: assetFingerprint(policyId, assetName),
+      policyId
+    }
+    const response = await this.hasuraClient.insertAssets([asset])
+    console.log(response)
+    const SIX_HOURS = 21600
+    const THREE_MONTHS = 365
+    if (response && response.length > 0) {
+      const savedAsset = response[0].id
+      await this.queue.publish('asset-metadata-fetch-initial', { savedAsset }, {
         retryDelay: SIX_HOURS,
         retryLimit: THREE_MONTHS
       })

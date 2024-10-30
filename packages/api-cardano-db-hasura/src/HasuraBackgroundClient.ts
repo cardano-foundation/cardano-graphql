@@ -258,7 +258,13 @@ export class HasuraBackgroundClient {
     )
     const result = await this.client.request(
       gql`mutation InsertAssets($assets: [Asset_insert_input!]!) {
-          insert_assets(objects: $assets) {
+          insert_assets(
+              objects: $assets,
+              on_conflict: {
+                  constraint: Assets_pkey,
+                  update_columns: []
+              }
+          ) {
               returning {
                   name
                   policyId
