@@ -261,7 +261,7 @@ export class HasuraBackgroundClient {
           insert_assets(
               objects: $assets,
               on_conflict: {
-                  constraint: Assets_pkey,
+                  constraint: Asset_pkey,
                   update_columns: []
               }
           ) {

@@ -110,12 +110,12 @@ export class ChainFollower {
       policyId
     }
     const response = await this.hasuraClient.insertAssets([asset])
-    console.log(response)
     const SIX_HOURS = 21600
     const THREE_MONTHS = 365
-    if (response && response.length > 0) {
-      const savedAsset = response[0].id
-      await this.queue.publish('asset-metadata-fetch-initial', { savedAsset }, {
+    if (response.insert_assets.affected_rows > 0) {
+      const savedAsset = response.insert_assets.returning[0]
+      const savedAssetId = savedAsset.assetId
+      await this.queue.publish('asset-metadata-fetch-initial', { savedAssetId }, {
         retryDelay: SIX_HOURS,
         retryLimit: THREE_MONTHS
       })
