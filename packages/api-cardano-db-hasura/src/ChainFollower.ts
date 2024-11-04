@@ -64,31 +64,36 @@ export class ChainFollower {
             requestNext()
           },
           rollForward: async ({ block }, requestNext) => {
-            let b
-            switch (block.type) {
-              case 'praos':
-                b = block as BlockPraos
-                break
-              case 'bft':
-                b = block as BlockBFT
-                break
-              case 'ebb': // No transaction in there
-                return
-            }
-            if (b !== undefined && b.transactions !== undefined) {
-              for (const tx of b.transactions) {
-                if (tx.mint !== undefined) {
-                  for (const entry of Object.entries(tx.mint)) {
-                    const policyId = entry[0]
-                    const assetNames = Object.keys(entry[1])
-                    for (const assetName of assetNames) {
-                      await this.saveAsset(policyId, assetName, b)
+            try {
+              let b
+              switch (block.type) {
+                case 'praos':
+                  b = block as BlockPraos
+                  break
+                case 'bft':
+                  b = block as BlockBFT
+                  break
+                case 'ebb': // No transaction in there
+                  return
+              }
+              if (b !== undefined && b.transactions !== undefined) {
+                for (const tx of b.transactions) {
+                  if (tx.mint !== undefined) {
+                    for (const entry of Object.entries(tx.mint)) {
+                      const policyId = entry[0]
+                      const assetNames = Object.keys(entry[1])
+                      for (const assetName of assetNames) {
+                        await this.saveAsset(policyId, assetName, b)
+                      }
                     }
                   }
                 }
               }
+            } catch (e) {
+              console.log(e)
+            } finally {
+              requestNext()
             }
-            requestNext()
           }
         }
       )
