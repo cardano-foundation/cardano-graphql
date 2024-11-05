@@ -125,29 +125,15 @@ export class ChainFollower {
       this.cacheTimer = Date.now() // resetting the timer
       const response = await this.hasuraClient.insertAssets(this.cacheAssets)
       this.cacheAssets = []
-      if (response.insert_assets.affected_rows > 0) {
-        for (let i = 0; i < response.insert_assets.affected_rows; i++) {
-          const savedAssetId = response.insert_assets.returning[i]
-          const SIX_HOURS = 21600
-          const THREE_MONTHS = 365
-          await this.queue.publish('asset-metadata-fetch-initial', { savedAssetId }, {
-            retryDelay: SIX_HOURS,
-            retryLimit: THREE_MONTHS
-          })
-        }
-      }
+      response.insert_assets.returning.forEach((asset: { assetId: string }) => {
+        const SIX_HOURS = 21600
+        const THREE_MONTHS = 365
+        this.queue.publish('asset-metadata-fetch-initial', { assetId: asset.assetId }, {
+          retryDelay: SIX_HOURS,
+          retryLimit: THREE_MONTHS
+        })
+      })
     }
-    // const response = await this.hasuraClient.insertAssets([asset])
-    // const SIX_HOURS = 21600
-    // const THREE_MONTHS = 365
-    // if (response.insert_assets.affected_rows > 0) {
-    //   const savedAsset = response.insert_assets.returning[0]
-    //   const savedAssetId = savedAsset.assetId
-    //   await this.queue.publish('asset-metadata-fetch-initial', { savedAssetId }, {
-    //     retryDelay: SIX_HOURS,
-    //     retryLimit: THREE_MONTHS
-    //   })
-    // }
   }
 
   public async start (points: Schema.PointOrOrigin[]) {
