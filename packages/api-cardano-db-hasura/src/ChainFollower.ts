@@ -128,7 +128,7 @@ export class ChainFollower {
       response.insert_assets.returning.forEach((asset: { assetId: string }) => {
         const SIX_HOURS = 21600
         const THREE_MONTHS = 365
-        this.queue.publish('asset-metadata-fetch-initial', { assetId: asset.assetId }, {
+        this.queue.publish('asset-metadata-fetch-initial', { assetId: asset.assetId.replace('\\x', '') }, {
           retryDelay: SIX_HOURS,
           retryLimit: THREE_MONTHS
         })
