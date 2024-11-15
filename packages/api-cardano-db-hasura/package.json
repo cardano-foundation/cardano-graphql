@@ -1,6 +1,6 @@
 {
   "name": "@cardano-graphql/api-cardano-db-hasura",
-  "version": "8.0.0",
+  "version": "8.3.0",
   "description": "Module for interfacing with the Cardano DB, populated by cardano-db-sync that utilises Hasura for a powerful query interface",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -11,7 +11,7 @@
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",
     "prepack": "yarn build",
     "predb-manager": "yarn build",
-    "background": "node dist/background.js",
+    "background": "source ./../../scripts/export_env.sh && node dist/background.js",
     "test": "yarn build && NODE_ENV=test jest -c ./test/jest.config.js"
   },
   "repository": {
