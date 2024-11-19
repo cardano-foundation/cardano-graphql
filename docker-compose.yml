@@ -26,7 +26,7 @@ services:
         max-file: "10"
 
   cardano-node:
-    image: ghcr.io/intersectmbo/cardano-node:${CARDANO_NODE_VERSION:-9.1.1}
+    image: ghcr.io/intersectmbo/cardano-node:${CARDANO_NODE_VERSION:-10.1.2}
     environment:
       - NETWORK=${NETWORK:-mainnet}
     volumes:
@@ -36,7 +36,7 @@ services:
     entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
 
   ogmios:
-    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.6.1}
+    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.9.0}
     command:
       - --host
       - 0.0.0.0
@@ -55,7 +55,7 @@ services:
 
   cardano-db-sync:
     platform: linux/x86_64
-    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.5.0.2}
+    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.6.0.1}
     command: [ "--config", "/config/cardano-db-sync/config.json", "--socket-path", "/node-ipc/node.socket" ]
     environment:
       - POSTGRES_HOST=postgres
