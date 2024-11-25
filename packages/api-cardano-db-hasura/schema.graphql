@@ -95,18 +95,19 @@ type Query {
     offset: Int
     where: Delegation_bool_exp
   ): [Delegation]
+    delegationvotes (
+      limit: Int
+      order_by: [delegationvote_order_by!]
+      offset: Int
+      where: delegationvote_bool_exp
+    ): [delegationvote]
   delegations_aggregate (
     limit: Int
     order_by: [Delegation_order_by!]
     offset: Int
     where: Delegation_bool_exp
   ): Delegation_aggregate
-  delegationVotes (
-    limit: Int
-    order_by: [DelegationVote_order_by!]
-    offset: Int
-    where: DelegationVote_bool_exp
-  ): DelegationVote
+
   epochs (
     limit: Int
     order_by: [Epoch_order_by!]
@@ -630,7 +631,7 @@ input Delegation_order_by {
   transaction: Transaction_order_by
 }
 
-input DelegationVote_order_by {
+input delegationvote_order_by {
   address: order_by
   transaction: Transaction_order_by
 }
@@ -646,10 +647,10 @@ input Delegation_bool_exp {
   transaction: Transaction_bool_exp
 }
 
-input DelegationVote_bool_exp {
-  _and: [DelegationVote_bool_exp]
-  _not: DelegationVote_bool_exp
-  _or: [DelegationVote_bool_exp]
+input delegationvote_bool_exp {
+  _and: [delegationvote_bool_exp]
+  _not: delegationvote_bool_exp
+  _or: [delegationvote_bool_exp]
   address: StakeAddress_comparison_exp
   transaction: Transaction_bool_exp
 }
@@ -658,7 +659,15 @@ type Delegation_aggregate {
   aggregate: Delegation_aggregate_fields
 }
 
+type delegationvote_aggregate {
+  aggregate: delegationvote_aggregate_fields
+}
+
 type Delegation_aggregate_fields {
+  count: String
+}
+
+type delegationvote_aggregate_fields {
   count: String
 }
 
@@ -1936,7 +1945,7 @@ input VRFVerificationKey_comparison_exp {
   _nin: [VRFVerificationKey]
 }
 
-type DelegationVote {
+type delegationvote {
   address: String
 
   """An object relationship"""

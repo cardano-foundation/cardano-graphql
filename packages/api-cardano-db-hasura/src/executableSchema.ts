@@ -75,7 +75,7 @@ export async function buildSchema (
     resolvers: Object.assign({}, scalarResolvers, customFieldsComplexity, {
       Mutation: {
         submitTransaction: {
-          resolve: async (_root, args) => {
+          resolve: async (_root: any, args: { transaction: string }) => {
             try {
               const hash = await cardanoNodeClient.submitTransaction(
                 args.transaction
@@ -100,7 +100,7 @@ export async function buildSchema (
       },
       PaymentAddress: {
         summary: {
-          resolve: async (parent, args) => {
+          resolve: async (parent: { address: string }, args: { atBlock: number }) => {
             try {
               return await hasuraClient.getPaymentAddressSummary(
                 parent.address,
@@ -116,7 +116,7 @@ export async function buildSchema (
       },
       Query: {
         activeStake: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -130,7 +130,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'activeStake')
         },
         activeStake_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -165,7 +165,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'ada')
         },
         assets: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -179,7 +179,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'assets')
         },
         assets_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -193,7 +193,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'assets_aggregate')
         },
         blocks: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -207,7 +207,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'blocks')
         },
         blocks_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -221,7 +221,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'blocks_aggregate')
         },
         cardano: {
-          resolve: async (_root, _args, context, info) => {
+          resolve: async (_root: any, _args: any, context: any, info: any) => {
             try {
               const result = await delegateToSchema({
                 context,
@@ -260,7 +260,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'cardanoDbMeta')
         },
         collateralInputs: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -274,7 +274,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'collateralInputs')
         },
         collateralInputs_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -288,7 +288,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'collateralInputs_aggregate')
         },
         collateralOutputs: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -302,7 +302,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'collateralOutputs')
         },
         collateralOutputs_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -316,7 +316,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'collateralOutputs_aggregate')
         },
         delegations: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -329,22 +329,22 @@ export async function buildSchema (
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'delegations')
         },
-        delegationVotes: {
+        delegationvotes: {
           resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
-              fieldName: 'delegationVotes',
+              fieldName: 'delegationvotes',
               info,
               operation: 'query',
               schema: hasuraClient.schema
             })
           },
           selectionSet: null,
-          extensions: getComplexityExtension('Query', 'delegationVotes')
+          extensions: getComplexityExtension('Query', 'delegationvotes')
         },
         delegations_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -358,7 +358,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'delegations_aggregate')
         },
         epochs: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -372,7 +372,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'epochs')
         },
         epochs_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -391,7 +391,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'genesis')
         },
         paymentAddresses: {
-          resolve: async (_root, args) => {
+          resolve: async (_root: any, args: { addresses: any[] }) => {
             return args.addresses.map(async (address) => {
               return { address }
             })
@@ -400,7 +400,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'paymentAddresses')
         },
         redeemers: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -414,7 +414,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'redeemers')
         },
         redeemers_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -428,7 +428,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'redeemers_aggregate')
         },
         rewards: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -442,7 +442,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'rewards')
         },
         rewards_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -456,7 +456,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'rewards_aggregate')
         },
         scripts: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -470,7 +470,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'scripts')
         },
         scripts_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -484,7 +484,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'scripts_aggregate')
         },
         stakeDeregistrations: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -498,7 +498,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'stakeDeregistrations')
         },
         stakeDeregistrations_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -515,7 +515,7 @@ export async function buildSchema (
           )
         },
         stakePools: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -529,7 +529,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'stakePools')
         },
         stakePools_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -543,7 +543,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'stakePools_aggregate')
         },
         stakeRegistrations: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -557,7 +557,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'stakeRegistrations')
         },
         stakeRegistrations_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -574,7 +574,7 @@ export async function buildSchema (
           )
         },
         transactions: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -588,7 +588,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'transactions')
         },
         transactions_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -602,7 +602,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'transactions_aggregate')
         },
         tokenMints: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -616,7 +616,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'tokenMints')
         },
         tokenMints_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -630,7 +630,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'tokenMints_aggregate')
         },
         utxos: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -644,7 +644,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'utxos')
         },
         utxos_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -658,7 +658,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'utxos_aggregate')
         },
         withdrawals: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
@@ -672,7 +672,7 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'withdrawals')
         },
         withdrawals_aggregate: {
-          resolve: (_root, args, context, info) => {
+          resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
