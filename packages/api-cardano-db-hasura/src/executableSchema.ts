@@ -329,6 +329,20 @@ export async function buildSchema (
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'delegations')
         },
+        delegationVotes: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'delegationVotes',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'delegationVotes')
+        },
         delegations_aggregate: {
           resolve: (_root, args, context, info) => {
             return delegateToSchema({

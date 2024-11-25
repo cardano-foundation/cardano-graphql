@@ -101,6 +101,12 @@ type Query {
     offset: Int
     where: Delegation_bool_exp
   ): Delegation_aggregate
+  delegationVotes (
+    limit: Int
+    order_by: [DelegationVote_order_by!]
+    offset: Int
+    where: DelegationVote_bool_exp
+  ): DelegationVote
   epochs (
     limit: Int
     order_by: [Epoch_order_by!]
@@ -624,6 +630,11 @@ input Delegation_order_by {
   transaction: Transaction_order_by
 }
 
+input DelegationVote_order_by {
+  address: order_by
+  transaction: Transaction_order_by
+}
+
 input Delegation_bool_exp {
   _and: [Delegation_bool_exp]
   _not: Delegation_bool_exp
@@ -632,6 +643,14 @@ input Delegation_bool_exp {
   stakePool: StakePool_bool_exp
   stakePoolHash: Hash28Hex_comparison_exp
   stakePoolId: StakePoolID_comparison_exp
+  transaction: Transaction_bool_exp
+}
+
+input DelegationVote_bool_exp {
+  _and: [DelegationVote_bool_exp]
+  _not: DelegationVote_bool_exp
+  _or: [DelegationVote_bool_exp]
+  address: StakeAddress_comparison_exp
   transaction: Transaction_bool_exp
 }
 
@@ -1915,4 +1934,27 @@ input VRFVerificationKey_comparison_exp {
   _is_null: Boolean
   _neq: VRFVerificationKey
   _nin: [VRFVerificationKey]
+}
+
+type DelegationVote {
+  address: String
+
+  """An object relationship"""
+  drep: drep_hash
+  drep_hash_id: Int!
+  id: Int!
+
+  """An object relationship"""
+  redeemer: Redeemer
+  redeemerId: Int!
+
+  """An object relationship"""
+  transaction: Transaction
+  tx_id: Int!
+}
+
+type drep_hash {
+  has_script: Boolean!
+  id: Int!
+  view: String!
 }
