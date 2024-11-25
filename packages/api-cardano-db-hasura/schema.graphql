@@ -19,6 +19,7 @@ scalar StakeAddress
 scalar StakePoolID
 scalar Timestamp
 scalar VRFVerificationKey
+scalar anchortype
 
 type Mutation {
   # Submit a signed transaction to the network
@@ -89,25 +90,46 @@ type Query {
     offset: Int
     where: CollateralOutput_bool_exp
   ): CollateralOutput_aggregate!
+  committee (
+    limit: Int
+    offset: Int
+    order_by: [committee_order_by!]
+    where: committee_bool_exp
+  ): [committee!]
+  committee_de_registration (
+    limit: Int
+    offset: Int
+    where: Delegation_bool_exp
+  ): [committee_de_registration]
+  committee_registration (
+    limit: Int
+    offset: Int
+    where: Delegation_bool_exp
+  ): [committee_registration]
   delegations (
     limit: Int
     order_by: [Delegation_order_by!]
     offset: Int
     where: Delegation_bool_exp
   ): [Delegation]
-    delegationvotes (
+  delegationvotes (
       limit: Int
       order_by: [delegationvote_order_by!]
       offset: Int
       where: delegationvote_bool_exp
     ): [delegationvote]
+  drepRegistrations (
+    limit: Int
+    order_by: [drepRegistrations_order_by!]
+    offset: Int
+    where: drepregistration_bool_exp
+  ): [DrepRegistration]
   delegations_aggregate (
     limit: Int
     order_by: [Delegation_order_by!]
     offset: Int
     where: Delegation_bool_exp
   ): Delegation_aggregate
-
   epochs (
     limit: Int
     order_by: [Epoch_order_by!]
@@ -222,6 +244,11 @@ type Query {
     offset: Int
     where: Transaction_bool_exp
   ): Transaction_aggregate!
+  treasury_withdrawal (
+    limit: Int
+    offset: Int
+    where: treasury_withdrawal_bool_exp
+  ): [treasury_withdrawal]
   utxos (
     distinct_on: [TransactionOutput_distinct_on!]
     limit: Int
@@ -236,6 +263,16 @@ type Query {
     offset: Int
     where: TransactionOutput_bool_exp
   ): TransactionOutput_aggregate!
+  voting_anchor (
+      limit: Int
+      offset: Int
+      where: voting_anchor_bool_exp
+    ): [voting_anchor!]
+  voting_procedure (
+    limit: Int
+    offset: Int
+    where: voting_procedure_bool_exp
+  ): [voting_procedure!]
   withdrawals (
     limit: Int
     order_by: [Withdrawal_order_by!]
@@ -579,6 +616,51 @@ input CollateralOutput_bool_exp {
   value: text_comparison_exp
 }
 
+input committee_bool_exp {
+  _and: [committee_bool_exp]
+  _not: committee_bool_exp
+  _or: [committee_bool_exp]
+  id: Int_comparison_exp
+}
+
+input drepregistration_bool_exp {
+    _and: [drepregistration_bool_exp]
+    _not: drepregistration_bool_exp
+    _or: [drepregistration_bool_exp]
+    id: Int_comparison_exp
+    transaction: Transaction_bool_exp
+}
+
+input treasury_withdrawal_bool_exp {
+    _and: [treasury_withdrawal_bool_exp]
+    _not: treasury_withdrawal_bool_exp
+    _or: [treasury_withdrawal_bool_exp]
+    id: Int_comparison_exp
+    stakeaddress: stake_address_bool_exp
+}
+
+input voting_anchor_bool_exp {
+    _and: [voting_anchor_bool_exp]
+    _not: voting_anchor_bool_exp
+    _or: [voting_anchor_bool_exp]
+    id: Int_comparison_exp
+}
+
+input voting_procedure_bool_exp {
+    _and: [voting_procedure_bool_exp]
+    _not: voting_procedure_bool_exp
+    _or: [voting_procedure_bool_exp]
+    id: Int_comparison_exp
+    transaction: Transaction_bool_exp
+}
+
+input stake_address_bool_exp {
+    _and: [stake_address_bool_exp]
+    _not: stake_address_bool_exp
+    _or: [stake_address_bool_exp]
+    id: Int_comparison_exp
+}
+
 type CollateralOutput_aggregate {
   aggregate: CollateralOutput_aggregate_fields
 }
@@ -632,6 +714,15 @@ input Delegation_order_by {
 }
 
 input delegationvote_order_by {
+  address: order_by
+  transaction: Transaction_order_by
+}
+
+input committee_order_by {
+    id: order_by
+}
+
+input drepRegistrations_order_by {
   address: order_by
   transaction: Transaction_order_by
 }
@@ -1966,4 +2057,208 @@ type drep_hash {
   has_script: Boolean!
   id: Int!
   view: String!
+}
+
+type DrepRegistration {
+  DRepId: String
+  deposit: Int!
+  id: Int!
+
+  """An object relationship"""
+  transaction: Transaction
+  tx_id: Int!
+
+  """An object relationship"""
+  votingAnchor: voting_anchor
+  voting_anchor_id: Int!
+}
+
+type voting_anchor {
+  """An object relationship"""
+  OffChainData: off_chain_vote_data
+  block_id: Int!
+  id: Int!
+  type: anchortype!
+  url: Int!
+}
+
+type off_chain_vote_data {
+  OffChainDrepData: off_chain_vote_drep_data
+
+  OffChainVoteAuthor: off_chain_vote_author
+
+  OffChainVoteGovActionData: off_chain_vote_gov_action_data
+
+  OffChainVoteReference: off_chain_vote_reference
+  comment: String
+  hash: Hex!
+  id: Int!
+  is_valid: Boolean
+  json(
+    path: String
+  ): JSONObject!
+  language: String!
+  voting_anchor_id: Int!
+  warning: String
+}
+
+type off_chain_vote_drep_data {
+  OffChainVoteData: off_chain_vote_data
+  given_name: String!
+  id: Int!
+  image_hash: String
+  image_url: String
+  motivations: String
+  objectives: String
+  off_chain_vote_data_id: Int!
+  payment_address: String
+  qualifications: String
+}
+
+type off_chain_vote_author {
+  OffChainVoteData: off_chain_vote_data
+  id: Int!
+  name: String
+  off_chain_vote_data_id: Int!
+  public_key: String!
+  signature: String!
+  warning: String
+  witness_algorithm: String!
+}
+
+type off_chain_vote_gov_action_data {
+  OffChainVoteData: off_chain_vote_data
+  abstract: String!
+  id: Int!
+  motivation: String!
+  off_chain_vote_data_id: Int!
+  rationale: String!
+  title: String!
+}
+
+type off_chain_vote_reference {
+  OffChainVoteData: off_chain_vote_data
+  hash_algorithm: String
+  hash_digest: String
+  id: Int!
+  label: String!
+  off_chain_vote_data_id: Int!
+  uri: String!
+}
+
+type committee {
+  committeeMembers: committee_member
+  gov_action_proposal_id: Int
+  id: Int!
+  quorum_denominator: Int!
+  quorum_numerator: Int!
+}
+
+type committee_member {
+  committee: committee
+  committeeHash: committee_hash
+  committee_hash_id: Int!
+  committee_id: Int!
+  expiration_epoch: Int!
+  id: Int!
+}
+
+type committee_hash {
+  has_script: Boolean!
+  id: Int!
+  raw: Hex!
+}
+
+type committee_de_registration {
+  VotingAnchor: voting_anchor
+  cert_index: Int!
+  cold_key_id: Int!
+  id: Int!
+  transaction: Transaction
+  tx_id: Int!
+  voting_anchor_id: Int
+}
+
+type committee_registration {
+  cert_index: Int!
+  cold_key_id: Int!
+  hot_key_id: Int!
+  id: Int!
+  transaction: Transaction
+  tx_id: Int!
+}
+
+type treasury_withdrawal {
+  GovActionProposal: gov_action_proposal
+  StakeAddress: stake_address
+  amount: Int!
+  gov_action_proposal_id: Int!
+  id: Int!
+  stake_address_id: Int!
+}
+
+type stake_address {
+  hash_raw: Hex!
+  id: Int!
+  script_hash: Int
+  view: String!
+}
+
+scalar govactiontype
+
+type gov_action_proposal {
+  PreviousGovAction: gov_action_proposal
+  VotingAnchor: voting_anchor
+  deposit: Int!
+  description(
+    path: String
+  ): JSONObject!
+  dropped_epoch: Int
+  enacted_epoch: Int
+  expiration: Int
+  expired_epoch: Int
+  id: Int!
+  index: Int!
+  param_proposal: Int
+  prev_gov_action_proposal: Int
+  ratified_epoch: Int
+  return_address: Int!
+  transaction: Transaction
+  tx_id: Int!
+  type: govactiontype!
+  voting_anchor_id: Int
+}
+
+scalar voterrole
+scalar vote
+
+type voting_procedure {
+  """An object relationship"""
+  CommitteeVoter: committee_hash
+
+  """An object relationship"""
+  DrepVoter: drep_hash
+
+  """An object relationship"""
+  GovActionProposal: gov_action_proposal
+
+  """An object relationship"""
+  PoolVoter: Hash28Hex!
+
+  """An object relationship"""
+  VotingAnchor: voting_anchor
+  committee_voter: Int
+  drep_voter: Int
+  gov_action_proposal_id: Int!
+  id: Int!
+  index: Int!
+  invalid: Int
+  pool_voter: Int
+
+  """An object relationship"""
+  transaction: Transaction
+  tx_id: Int!
+  vote: vote!
+  voter_role: voterrole!
+  voting_anchor_id: Int
 }
