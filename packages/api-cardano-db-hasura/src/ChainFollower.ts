@@ -126,6 +126,7 @@ export class ChainFollower {
     try {
       isTip = (tip as Tip).slot === b.slot
       this.logger.info({ module: MODULE_NAME, tip }, 'Sync is at tip. Saving Assets')
+      this.logger.info({ module: MODULE_NAME, isTip }, 'Is Tip')
     } catch (e) {
       this.logger.info({ module: MODULE_NAME }, 'Sync is not at tip. Using a cache to save Assets every minute to increase catching up speed.')
     }
