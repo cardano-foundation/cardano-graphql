@@ -125,10 +125,8 @@ export class ChainFollower {
     let isTip = false
     try {
       isTip = (tip as Tip).slot === b.slot
-      this.logger.info({ module: MODULE_NAME, tip }, 'Sync is at tip. Saving Assets')
-      this.logger.info({ module: MODULE_NAME, isTip }, 'Is Tip')
     } catch (e) {
-      this.logger.info({ module: MODULE_NAME }, 'Sync is not at tip. Using a cache to save Assets every minute to increase catching up speed.')
+      this.logger.debug({ module: MODULE_NAME }, 'Sync is not at tip. Using a cache to save Assets every minute to increase catching up speed.')
     }
     if (isTip || this.cacheAssets.length > 1000 || (Date.now() - this.cacheTimer) / 1000 > 60) {
       this.cacheTimer = Date.now() // resetting the timer
