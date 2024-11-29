@@ -6,7 +6,6 @@ import { CustomError } from 'ts-custom-error'
 import fs from 'fs-extra'
 import { DbConfig } from './typeAliases'
 import { PointOrOrigin } from '@cardano-ogmios/schema'
-import { Schema } from '@cardano-ogmios/client'
 // Todo: Hoist to util package next major version
 export class MissingConfig extends CustomError {
   public constructor (message: string) {
@@ -178,20 +177,8 @@ function filterAndTypecastEnvs (env: any) {
     )
     const db = new Db(config.db, logger)
     const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
-      const chainSyncPoint = (config.chainfollower) as Schema.Point
-      logger.info(chainSyncPoint)
       const mostRecentPoint = await hasuraBackgroundClient.getMostRecentPointWithNewAsset()
-      if (mostRecentPoint !== null) {
-        if (chainSyncPoint.slot && chainSyncPoint.slot > mostRecentPoint.slot) {
-          return [chainSyncPoint, 'origin']
-        } else {
-          return [mostRecentPoint, 'origin']
-        }
-      } else if (chainSyncPoint.slot && chainSyncPoint.id) {
-        return [chainSyncPoint, 'origin']
-      } else {
-        return ['origin']
-      }
+      return mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
     }
     await db.init({
       onDbInit: () => hasuraBackgroundClient.shutdown(),
