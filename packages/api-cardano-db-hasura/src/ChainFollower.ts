@@ -8,7 +8,7 @@ import util, { assetFingerprint, errors, RunnableModuleState } from '@cardano-gr
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'
 import { createInteractionContextWithLogger } from './util'
-import { PointOrOrigin, BlockPraos, BlockBFT } from '@cardano-ogmios/schema'
+import { PointOrOrigin, BlockPraos, BlockBFT, Tip, Origin } from '@cardano-ogmios/schema'
 import { HasuraBackgroundClient } from './HasuraBackgroundClient'
 import { DbConfig } from './typeAliases'
 import { ChainSynchronizationClient } from '@cardano-ogmios/client/dist/ChainSynchronization'
@@ -40,6 +40,7 @@ export class ChainFollower {
       application_name: 'cardano-graphql',
       ...this.queueConfig
     })
+    this.logger.info({ module: MODULE_NAME }, 'Connecting to queue')
     await pRetry(async () => {
       const context = await createInteractionContextWithLogger(ogmiosConfig, this.logger, MODULE_NAME, async () => {
         await this.shutdown()
@@ -63,7 +64,7 @@ export class ChainFollower {
             }
             requestNext()
           },
-          rollForward: async ({ block }, requestNext) => {
+          rollForward: async ({ block, tip }, requestNext) => {
             try {
               let b
               switch (block.type) {
@@ -83,7 +84,7 @@ export class ChainFollower {
                       const policyId = entry[0]
                       const assetNames = Object.keys(entry[1])
                       for (const assetName of assetNames) {
-                        await this.saveAsset(policyId, assetName, b)
+                        await this.saveAsset(policyId, assetName, b, tip)
                       }
                     }
                   }
@@ -109,7 +110,7 @@ export class ChainFollower {
     this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
-  async saveAsset (policyId: string, assetName: string | undefined, b: BlockPraos | BlockBFT) {
+  async saveAsset (policyId: string, assetName: string | undefined, b: BlockPraos | BlockBFT, tip: Tip | Origin) {
     const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
     const asset = {
       assetId,
@@ -121,7 +122,13 @@ export class ChainFollower {
     // introducing a caching to speed things up. The GraphQL insertAssets takes a lot of time.
     // Saving when > 1000 assets in the cache or every minute
     this.cacheAssets.push(asset)
-    if (this.cacheAssets.length > 1000 || (Date.now() - this.cacheTimer) / 1000 > 60) {
+    let isTip = false
+    try {
+      isTip = (tip as Tip).slot === b.slot
+    } catch (e) {
+      this.logger.debug({ module: MODULE_NAME }, 'Sync is not at tip. Using a cache to save Assets every minute to increase catching up speed.')
+    }
+    if (isTip || this.cacheAssets.length > 1000 || (Date.now() - this.cacheTimer) / 1000 > 60) {
       this.cacheTimer = Date.now() // resetting the timer
       const response = await this.hasuraClient.insertAssets(this.cacheAssets)
       this.cacheAssets = []
