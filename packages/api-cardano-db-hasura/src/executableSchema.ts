@@ -343,19 +343,19 @@ export async function buildSchema (
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'delegationvotes')
         },
-        drep_hash: {
+        drepHashes: {
           resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
               args,
               context,
-              fieldName: 'drep_hash',
+              fieldName: 'drepHashes',
               info,
               operation: 'query',
               schema: hasuraClient.schema
             })
           },
           selectionSet: null,
-          extensions: getComplexityExtension('Query', 'drep_hash')
+          extensions: getComplexityExtension('Query', 'drepHashes')
         },
         delegations_aggregate: {
           resolve: (_root: any, args: any, context: any, info: any) => {
