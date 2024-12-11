@@ -89,30 +89,48 @@ type Query {
         offset: Int
         where: CollateralOutput_bool_exp
     ): CollateralOutput_aggregate!
+    committees (
+        limit: Int
+        order_by: [Committee_order_by!]
+        offset: Int
+        where: Committee_bool_exp
+    ): [Committee]!
+    committeeHashes (
+        limit: Int
+        order_by: [CommitteeHash_order_by!]
+        offset: Int
+        where: CommitteeHash_bool_exp
+    ): [CommitteeHash]!
+    committeeMembers (
+        limit: Int
+        order_by: [CommitteeMember_order_by!]
+        offset: Int
+        where: CommitteeMember_bool_exp
+    ): [CommitteeMember]!
     delegations (
         limit: Int
         order_by: [Delegation_order_by!]
         offset: Int
         where: Delegation_bool_exp
     ): [Delegation]
-    delegationvotes (
+    delegationVotes (
         limit: Int
-        order_by: [Delegationvote_order_by!]
+        order_by: [DelegationVote_order_by!]
         offset: Int
-        where: Delegationvote_bool_exp
-    ): [Delegationvote]!
-    drepHashes (
-        limit: Int
-        order_by: [DrepHash_order_by!]
-        offset: Int
-        where: DrepHash_bool_exp
-    ): [DrepHash]!
+        where: DelegationVote_bool_exp
+    ): [DelegationVote]!
     delegations_aggregate (
         limit: Int
         order_by: [Delegation_order_by!]
         offset: Int
         where: Delegation_bool_exp
     ): Delegation_aggregate
+    drepHashes (
+        limit: Int
+        order_by: [DrepHash_order_by!]
+        offset: Int
+        where: DrepHash_bool_exp
+    ): [DrepHash]!
     epochs (
         limit: Int
         order_by: [Epoch_order_by!]
@@ -315,16 +333,17 @@ type Ada {
     supply: AssetSupply!
 }
 
-type Delegationvote {
+type DelegationVote {
     address: String!
     transaction: Transaction
     drep: DrepHash
+    redeemer: Redeemer
 }
 
 type DrepHash {
-    raw: Hex!
-    view: String!
-    hasScript: Boolean!
+    view: String
+    has_script: Boolean
+    raw: Hex
 }
 
 type AdaPots {
@@ -619,6 +638,67 @@ type CollateralOutput_sum_fields {
     value: Lovelace
 }
 
+type CommiteeHash {
+    view: String
+    has_script: Boolean
+    raw: Hex
+}
+
+input CommitteeHash_order_by {
+    view: order_by
+    hasScript: order_by
+    raw: order_by
+}
+
+input CommiteeHash_bool_exp {
+    _and: [CommiteeHash_bool_exp]
+    _not: CommiteeHash_bool_exp
+    _or: [CommiteeHash_bool_exp]
+    view: text_comparison_exp
+    hasScript: Boolean_comparison_exp
+    raw: Hex_comparison_exp
+}
+
+type CommitteeMember {
+    expiration_epoch: Int
+    commitee: Committee
+    commiteeHash: CommiteeHash
+}
+
+input CommitteeMember_order_by {
+    expiration_epoch: order_by
+    commitee: Committee_order_by
+    commiteeHash: CommitteeHash_order_by
+}
+
+input CommitteeMember_bool_exp {
+    _and: [CommitteeMember_bool_exp]
+    _not: CommitteeMember_bool_exp
+    _or: [CommitteeMember_bool_exp]
+    expiration_epoch: Int_comparison_exp
+    committee: Committee_bool_exp
+    committeeHash: CommiteeHash_bool_exp
+}
+
+type Committee {
+    committeeMembers: [CommitteeMember]
+    quorum_denominator: String!
+    quorum_numerator: String!
+}
+
+input Committee_order_by {
+    quorum_denominator: order_by
+    quorum_numerator: StakePool_order_by
+}
+
+input Committee_bool_exp {
+    _and: [Committee_bool_exp]
+    _not: Committee_bool_exp
+    _or: [Committee_bool_exp]
+    quorum_denominator: text_comparison_exp
+    quorum_numerator: text_comparison_exp
+}
+
 type Datum {
     bytes: Hex!
     hash: Hash32Hex!
@@ -648,15 +728,24 @@ input Delegation_order_by {
     transaction: Transaction_order_by
 }
 
-input Delegationvote_order_by {
+input DelegationVote_order_by {
     address: order_by
     transaction: Transaction_order_by
 }
 
 input DrepHash_order_by {
-    raw: order_by
     view: order_by
     hasScript: order_by
+    raw: order_by
+}
+
+input DrepHash_bool_exp {
+    _and: [DrepHash_bool_exp]
+    _not: DrepHash_bool_exp
+    _or: [DrepHash_bool_exp]
+    view: text_comparison_exp
+    hasScript: Boolean_comparison_exp
+    raw: Hex_comparison_exp
 }
 
 input Delegation_bool_exp {
@@ -670,19 +759,10 @@ input Delegation_bool_exp {
     transaction: Transaction_bool_exp
 }
 
-input DrepHash_bool_exp {
-    _and: [DrepHash_bool_exp]
-    _not: DrepHash_bool_exp
-    _or: [DrepHash_bool_exp]
-    raw: Hex_comparison_exp
-    view: text_comparison_exp
-    hasScript: Boolean_comparison_exp
-}
-
-input Delegationvote_bool_exp {
-    _and: [Delegationvote_bool_exp]
-    _not: Delegationvote_bool_exp
-    _or: [Delegationvote_bool_exp]
+input DelegationVote_bool_exp {
+    _and: [DelegationVote_bool_exp]
+    _not: DelegationVote_bool_exp
+    _or: [DelegationVote_bool_exp]
     address: text_comparison_exp
     transaction: Transaction_bool_exp
 }

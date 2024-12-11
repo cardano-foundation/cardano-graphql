@@ -1,6 +1,12 @@
 table:
   name: committee_registration
   schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: committeeRegistration
+    select_aggregate: committeeRegistration_aggregate
 object_relationships:
   - name: transaction
     using:

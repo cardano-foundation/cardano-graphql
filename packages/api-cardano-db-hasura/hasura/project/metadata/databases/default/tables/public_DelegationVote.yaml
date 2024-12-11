@@ -5,8 +5,8 @@ configuration:
   column_config: {}
   custom_column_names: {}
   custom_root_fields:
-    select: delegationvotes
-    select_aggregate: delegationvotes_aggregate
+    select: delegationVotes
+    select_aggregate: delegationVotes_aggregate
 object_relationships:
   - name: redeemer
     using:
@@ -40,6 +40,9 @@ select_permissions:
     permission:
       columns:
         - address
+        - drep_hash_id
+        - tx_id
+        - redeemerId
       filter: {}
       limit: 2500
       allow_aggregations: true

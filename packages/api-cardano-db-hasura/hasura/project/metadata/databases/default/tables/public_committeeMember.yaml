@@ -1,6 +1,12 @@
 table:
   name: committee_member
   schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: committeeMember
+    select_aggregate: committeeMember_aggregate
 object_relationships:
   - name: committee
     using:

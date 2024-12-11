@@ -1,6 +1,12 @@
 table:
   name: committee_de_registration
   schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: committeeDeRegistration
+    select_aggregate: committeeDeRegistration_aggregate
 object_relationships:
   - name: transaction
     using:
@@ -11,7 +17,7 @@ object_relationships:
         remote_table:
           name: Transaction
           schema: public
-  - name: VotingAnchor
+  - name: votingAnchor
     using:
       manual_configuration:
         column_mapping:
