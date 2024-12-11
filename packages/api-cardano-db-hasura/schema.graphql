@@ -638,7 +638,7 @@ type CollateralOutput_sum_fields {
     value: Lovelace
 }
 
-type CommiteeHash {
+type CommitteeHash {
     view: String
     has_script: Boolean
     raw: Hex
@@ -650,10 +650,10 @@ input CommitteeHash_order_by {
     raw: order_by
 }
 
-input CommiteeHash_bool_exp {
-    _and: [CommiteeHash_bool_exp]
-    _not: CommiteeHash_bool_exp
-    _or: [CommiteeHash_bool_exp]
+input CommitteeHash_bool_exp {
+    _and: [CommitteeHash_bool_exp]
+    _not: CommitteeHash_bool_exp
+    _or: [CommitteeHash_bool_exp]
     view: text_comparison_exp
     hasScript: Boolean_comparison_exp
     raw: Hex_comparison_exp
@@ -662,7 +662,7 @@ input CommiteeHash_bool_exp {
 type CommitteeMember {
     expiration_epoch: Int
     commitee: Committee
-    commiteeHash: CommiteeHash
+    commiteeHash: CommitteeHash
 }
 
 input CommitteeMember_order_by {
@@ -677,7 +677,7 @@ input CommitteeMember_bool_exp {
     _or: [CommitteeMember_bool_exp]
     expiration_epoch: Int_comparison_exp
     committee: Committee_bool_exp
-    committeeHash: CommiteeHash_bool_exp
+    committeeHash: CommitteeMember_bool_exp
 }
 
 type Committee {
