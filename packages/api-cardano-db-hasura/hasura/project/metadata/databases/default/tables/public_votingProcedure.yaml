@@ -5,8 +5,8 @@ configuration:
   column_config: {}
   custom_column_names: {}
   custom_root_fields:
-    select: vote_procedure
-    select_aggregate: vote_procedure_aggregate
+    select: voteProcedure
+    select_aggregate: voteProcedure_aggregate
 object_relationships:
   - name: transaction
     using:
@@ -57,3 +57,20 @@ object_relationships:
         remote_table:
           name: committee_hash
           schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - committee_voter
+        - drep_voter
+        - gov_action_proposal_id
+        - index
+        - invalid
+        - pool_voter
+        - tx_id
+        - vote
+        - voter_role
+        - voting_anchor_id
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
