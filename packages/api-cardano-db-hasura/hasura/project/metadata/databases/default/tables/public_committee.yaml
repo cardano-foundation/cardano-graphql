@@ -11,3 +11,23 @@ object_relationships:
         remote_table:
           name: committee_member
           schema: public
+  - name: govActionProposal
+    using:
+      manual_configuration:
+        column_mapping:
+          gov_action_proposal_id: id
+        insertion_order: null
+        remote_table:
+          name: gov_action_proposal
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - gov_action_proposal_id
+        - quorum_denominator
+        - quorum_numerator
+        - id
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

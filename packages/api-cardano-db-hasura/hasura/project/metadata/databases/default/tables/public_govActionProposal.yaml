@@ -5,8 +5,8 @@ configuration:
   column_config: {}
   custom_column_names: {}
   custom_root_fields:
-    select: gov_action_proposal
-    select_aggregate: gov_action_proposal_aggregate
+    select: govActionProposal
+    select_aggregate: govActionProposal_aggregate
 object_relationships:
   - name: transaction
     using:

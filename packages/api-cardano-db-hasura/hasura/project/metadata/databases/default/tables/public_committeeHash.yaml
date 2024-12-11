@@ -7,3 +7,13 @@ configuration:
   custom_root_fields:
     select: committeeHash
     select_aggregate: committeeHash_aggregate
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - view
+        - has_script
+        - raw
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

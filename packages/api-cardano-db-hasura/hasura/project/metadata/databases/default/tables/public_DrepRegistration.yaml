@@ -26,3 +26,14 @@ object_relationships:
         remote_table:
           name: voting_anchor
           schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - DRepId
+        - deposit
+        - tx_id
+        - voting_anchor_id
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
