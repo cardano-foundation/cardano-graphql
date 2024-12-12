@@ -1,6 +1,12 @@
 table:
   name: committee_member
   schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: committeeMember
+    select_aggregate: committeeMember_aggregate
 object_relationships:
   - name: committee
     using:
@@ -19,3 +25,14 @@ object_relationships:
         remote_table:
           name: committee_hash
           schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - committee_hash_id
+        - committee_id
+        - expiration_epoch
+        - id
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

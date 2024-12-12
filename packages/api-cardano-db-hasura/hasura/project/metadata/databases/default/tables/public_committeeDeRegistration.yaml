@@ -1,12 +1,12 @@
 table:
-  name: DrepRegistration
+  name: committee_de_registration
   schema: public
 configuration:
   column_config: {}
   custom_column_names: {}
   custom_root_fields:
-    select: drepRegistrations
-    select_aggregate: drepRegistrations_aggregate
+    select: committeeDeRegistration
+    select_aggregate: committeeDeRegistration_aggregate
 object_relationships:
   - name: transaction
     using:
@@ -22,7 +22,6 @@ object_relationships:
       manual_configuration:
         column_mapping:
           voting_anchor_id: id
-        insertion_order: null
         remote_table:
           name: voting_anchor
           schema: public
@@ -30,8 +29,8 @@ select_permissions:
   - role: cardano-graphql
     permission:
       columns:
-        - DRepId
-        - deposit
+        - cert_index
+        - cold_key_id
         - tx_id
         - voting_anchor_id
       filter: {}

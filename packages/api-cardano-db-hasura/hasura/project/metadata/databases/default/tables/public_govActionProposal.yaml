@@ -5,8 +5,8 @@ configuration:
   column_config: {}
   custom_column_names: {}
   custom_root_fields:
-    select: gov_action_proposal
-    select_aggregate: gov_action_proposal_aggregate
+    select: govActionProposal
+    select_aggregate: govActionProposal_aggregate
 object_relationships:
   - name: transaction
     using:
@@ -33,3 +33,19 @@ object_relationships:
         remote_table:
           name: voting_anchor
           schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - tx_id
+        - index
+        - prev_gov_action_proposal
+        - deposit
+        - return_address
+        - expiration
+        - voting_anchor_id
+        - type
+        - description
+      filter: {}
+      limit: 2500
+      allow_aggregations: true
