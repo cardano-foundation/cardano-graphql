@@ -15,9 +15,9 @@ object_relationships:
           tx_id: id
         insertion_order: null
         remote_table:
-          name: tx
+          name: Transaction
           schema: public
-  - name: GovActionProposal
+  - name: govActionProposal
     using:
       manual_configuration:
         column_mapping:
@@ -25,7 +25,7 @@ object_relationships:
         remote_table:
           name: gov_action_proposal
           schema: public
-  - name: DrepVoter
+  - name: drepVoter
     using:
       manual_configuration:
         column_mapping:
@@ -33,7 +33,7 @@ object_relationships:
         remote_table:
           name: drep_hash
           schema: public
-  - name: PoolVoter
+  - name: poolVoter
     using:
       manual_configuration:
         column_mapping:
@@ -41,7 +41,7 @@ object_relationships:
         remote_table:
           name: pool_hash
           schema: public
-  - name: VotingAnchor
+  - name: votingAnchor
     using:
       manual_configuration:
         column_mapping:
@@ -49,7 +49,7 @@ object_relationships:
         remote_table:
           name: voting_anchor
           schema: public
-  - name: CommitteeVoter
+  - name: committeeVoter
     using:
       manual_configuration:
         column_mapping:

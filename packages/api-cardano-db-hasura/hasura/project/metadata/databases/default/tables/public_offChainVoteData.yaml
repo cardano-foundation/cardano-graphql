@@ -8,7 +8,7 @@ configuration:
     select: offChainVoteData
     select_aggregate: offChainVoteData_aggregate
 object_relationships:
-  - name: OffChainVoteGovActionData
+  - name: offChainVoteGovActionData
     using:
       manual_configuration:
         column_mapping:
@@ -16,7 +16,7 @@ object_relationships:
         remote_table:
           name: off_chain_vote_gov_action_data
           schema: public
-  - name: OffChainDrepData
+  - name: offChainVoteDrepData
     using:
       manual_configuration:
         column_mapping:
@@ -24,7 +24,7 @@ object_relationships:
         remote_table:
           name: off_chain_vote_drep_data
           schema: public
-  - name: OffChainVoteAuthor
+  - name: offChainVoteAuthor
     using:
       manual_configuration:
         column_mapping:
@@ -32,7 +32,7 @@ object_relationships:
         remote_table:
           name: off_chain_vote_author
           schema: public
-  - name: OffChainVoteReference
+  - name: ofChainVoteReference
     using:
       manual_configuration:
         column_mapping:

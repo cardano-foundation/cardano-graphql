@@ -8,7 +8,7 @@ configuration:
     select: votingAnchor
     select_aggregate: votingAnchor_aggregate
 object_relationships:
-  - name: OffChainData
+  - name: offChainData
     using:
       manual_configuration:
         column_mapping:
@@ -17,15 +17,6 @@ object_relationships:
         remote_table:
           name: off_chain_vote_data
           schema: public
-  - name: Block
-    using:
-      manual_configuration:
-        column_mapping:
-            block_id: id
-            insertion_order: null
-            remote_table:
-            name: block
-            schema: public
 select_permissions:
   - role: cardano-graphql
     permission:

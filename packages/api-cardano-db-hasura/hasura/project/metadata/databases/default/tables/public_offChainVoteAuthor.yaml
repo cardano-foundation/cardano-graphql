@@ -8,7 +8,7 @@ configuration:
     select: offChainVoteAuthor
     select_aggregate: offChainVoteAuthor_aggregate
 object_relationships:
-  - name: OffChainVoteData
+  - name: offChainVoteData
     using:
       manual_configuration:
         column_mapping:
