@@ -113,6 +113,18 @@ type Query {
         offset: Int
         where: Delegation_bool_exp
     ): [Delegation]
+    committeeRegistration (
+        limit: Int
+        order_by: [CommitteeRegistration_order_by!]
+        offset: Int
+        where: CommitteeRegistration_bool_exp
+    ): [CommitteeRegistration]!
+    committeeDeRegistration (
+        limit: Int
+        order_by: [CommitteeDeRegistration_order_by!]
+        offset: Int
+        where: CommitteeDeRegistration_bool_exp
+    ): [CommitteeDeRegistration]!
     delegationVotes (
         limit: Int
         order_by: [DelegationVote_order_by!]
@@ -144,6 +156,36 @@ type Query {
         where: Epoch_bool_exp
     ): Epoch_aggregate!
     genesis: Genesis!
+    offChainVoteData (
+        limit: Int
+        order_by: [OffChainVoteData_order_by!]
+        offset: Int
+        where: OffChainVoteData_bool_exp
+    ): [OffChainVoteData]!
+    offChainVoteAuthor (
+        limit: Int
+        order_by: [OffChainVoteAuthor_order_by!]
+        offset: Int
+        where: OffChainVoteAuthor_bool_exp
+    ): [OffChainVoteAuthor]!
+    offChainVoteReference (
+        limit: Int
+        order_by: [OffChainVoteReference_order_by!]
+        offset: Int
+        where: OffChainVoteReference_bool_exp
+    ): [OffChainVoteReference]!
+    offChainVoteGovActionData (
+        limit: Int
+        order_by: [OffChainVoteGovActionData_order_by!]
+        offset: Int
+        where: OffChainVoteGovActionData_bool_exp
+    ): [OffChainVoteGovActionData]!
+    offChainVoteDrepData (
+        limit: Int
+        order_by: [OffChainVoteDrepData_order_by!]
+        offset: Int
+        where: OffChainVoteDrepData_bool_exp
+    ): [OffChainVoteDrepData]!
     paymentAddresses (
         addresses: [String]!
     ): [PaymentAddress]
@@ -259,6 +301,12 @@ type Query {
         offset: Int
         where: TransactionOutput_bool_exp
     ): TransactionOutput_aggregate!
+    votingAnchor (
+        limit: Int
+        order_by: [VotingAnchor_order_by!]
+        offset: Int
+        where: VotingAnchor_bool_exp
+    ): [VotingAnchor]!
     withdrawals (
         limit: Int
         order_by: [Withdrawal_order_by!]
@@ -638,8 +686,239 @@ type CollateralOutput_sum_fields {
     value: Lovelace
 }
 
+type CommitteeRegistration {
+    cert_index: Int
+    cold_key_id: String
+    hot_key_id: String
+    transaction: Transaction!
+}
+
+input CommitteeRegistration_order_by {
+    cert_index: order_by
+    cold_key_id: order_by
+    hot_key_id: order_by
+    transaction: Transaction_order_by
+}
+
+input CommitteeRegistration_bool_exp {
+    _and: [CommitteeRegistration_bool_exp]
+    _not: CommitteeRegistration_bool_exp
+    _or: [CommitteeRegistration_bool_exp]
+    cert_index: Int_comparison_exp
+    cold_key_id: text_comparison_exp
+    hot_key_id: text_comparison_exp
+    transaction: Transaction_bool_exp
+}
+
+type CommitteeDeRegistration {
+    cert_index: Int
+    cold_key_id: String
+    transaction: Transaction!
+    votingAnchor: VotingAnchor
+}
+
+input CommitteeDeRegistration_order_by {
+    cert_index: order_by
+    cold_key_id: order_by
+    transaction: Transaction_order_by
+    votingAnchor: VotingAnchor_order_by
+}
+
+input CommitteeDeRegistration_bool_exp {
+    _and: [CommitteeDeRegistration_bool_exp]
+    _not: CommitteeDeRegistration_bool_exp
+    _or: [CommitteeDeRegistration_bool_exp]
+    cert_index: Int_comparison_exp
+    cold_key_id: text_comparison_exp
+    transaction: Transaction_bool_exp
+    votingAnchor: VotingAnchor_bool_exp
+}
+
+type VotingAnchor {
+    data_hash: Hex
+    type: String
+    url: String
+    offChainData: OffChainVoteData
+}
+
+input VotingAnchor_order_by {
+    data_hash: order_by
+    type: order_by
+    url: order_by
+    offChainData: OffChainVoteData_order_by
+}
+
+input VotingAnchor_bool_exp {
+    _and: [VotingAnchor_bool_exp]
+    _not: VotingAnchor_bool_exp
+    _or: [VotingAnchor_bool_exp]
+    data_hash: Hex_comparison_exp
+    type: text_comparison_exp
+    url: text_comparison_exp
+    offChainData: OffChainVoteData_bool_exp
+}
+
+type OffChainVoteData {
+    bytes: Hex
+    comment: String
+    hash: Hex
+    is_valid: Boolean
+    json: JSON
+    language: String
+    warning: String
+    offChainVoteReference: OffChainVoteReference
+    offChainVoteAuthor: OffChainVoteAuthor
+    offChainVoteDrepData: OffChainVoteDrepData
+    offChainVoteGovActionData: OffChainVoteGovActionData
+}
+
+input OffChainVoteData_order_by {
+    bytes: order_by
+    comment: order_by
+    hash: order_by
+    is_valid: order_by
+    json: order_by
+    offChainVoteReference: OffChainVoteReference_order_by
+    offChainVoteAuthor: OffChainVoteAuthor_order_by
+    offChainVoteDrepData: OffChainVoteDrepData_order_by
+    offChainVoteGovActionData: OffChainVoteGovActionData_order_by
+}
+
+input OffChainVoteData_bool_exp {
+    _and: [OffChainVoteData_bool_exp]
+    _not: OffChainVoteData_bool_exp
+    _or: [OffChainVoteData_bool_exp]
+    bytes: Hex_comparison_exp
+    comment: text_comparison_exp
+    hash: Hex_comparison_exp
+    is_valid: Boolean_comparison_exp
+    offChainVoteReference: OffChainVoteReference_bool_exp
+    offChainVoteAuthor: OffChainVoteAuthor_bool_exp
+    offChainVoteDrepData: OffChainVoteDrepData_bool_exp
+    offChainVoteGovActionData: OffChainVoteGovActionData_bool_exp
+}
+
+type OffChainVoteGovActionData {
+    abstract: String
+    motivation: String
+    OffChainVoteData: OffChainVoteData
+    rationale: String
+    title: String
+}
+
+input OffChainVoteGovActionData_order_by {
+    abstract: order_by
+    motivation: order_by
+    rationale: order_by
+    title: order_by
+    offChainVoteData: OffChainVoteData_order_by
+}
+
+input OffChainVoteGovActionData_bool_exp {
+    _and: [OffChainVoteGovActionData_bool_exp]
+    _not: OffChainVoteGovActionData_bool_exp
+    _or: [OffChainVoteGovActionData_bool_exp]
+    abstract: text_comparison_exp
+    motivation: text_comparison_exp
+    rationale: text_comparison_exp
+    title: text_comparison_exp
+    offChainVoteData: OffChainVoteData_bool_exp
+}
+
+type OffChainVoteDrepData {
+    given_name: String
+    image_hash: Hex
+    image_url: String
+    motivations: String
+    objectives: String
+    offChainVoteData: OffChainVoteData
+    payment_address: String
+    qualifications: String
+}
+
+input OffChainVoteDrepData_order_by {
+    given_name: order_by
+    image_hash: order_by
+    image_url: order_by
+    motivations: order_by
+    objectives: order_by
+    payment_address: order_by
+    qualifications: order_by
+    offChainVoteData: OffChainVoteData_order_by
+}
+
+input OffChainVoteDrepData_bool_exp {
+    _and: [OffChainVoteDrepData_bool_exp]
+    _not: OffChainVoteDrepData_bool_exp
+    _or: [OffChainVoteDrepData_bool_exp]
+    given_name: text_comparison_exp
+    image_hash: Hex_comparison_exp
+    image_url: text_comparison_exp
+    motivations: text_comparison_exp
+    objectives: text_comparison_exp
+    payment_address: text_comparison_exp
+    qualifications: text_comparison_exp
+    offChainVoteData: OffChainVoteData_bool_exp
+}
+
+type OffChainVoteAuthor {
+    name: String
+    public_key: String
+    signature: String
+    warning: String
+    witness_algorithm: String
+    offChainVoteData: OffChainVoteData
+}
+
+input OffChainVoteAuthor_order_by {
+    name: order_by
+    public_key: order_by
+    signature: order_by
+    warning: order_by
+    witness_algorithm: order_by
+    offChainVoteData: OffChainVoteData_order_by
+}
+
+input OffChainVoteAuthor_bool_exp {
+    _and: [OffChainVoteAuthor_bool_exp]
+    _not: OffChainVoteAuthor_bool_exp
+    _or: [OffChainVoteAuthor_bool_exp]
+    name: text_comparison_exp
+    public_key: text_comparison_exp
+    signature: text_comparison_exp
+    warning: text_comparison_exp
+    witness_algorithm: text_comparison_exp
+    offChainVoteData: OffChainVoteData_bool_exp
+}
+
+type OffChainVoteReference {
+    hash_algorithm: String
+    hash_digest: String
+    label: String
+    uri: String
+    offChainVoteData: OffChainVoteData
+}
+
+input OffChainVoteReference_order_by {
+    hash_algorithm: order_by
+    hash_digest: order_by
+    label: order_by
+    uri: order_by
+    offChainVoteData: OffChainVoteData_order_by
+}
+
+input OffChainVoteReference_bool_exp {
+    _and: [OffChainVoteReference_bool_exp]
+    _not: OffChainVoteReference_bool_exp
+    _or: [OffChainVoteReference_bool_exp]
+    hash_algorithm: text_comparison_exp
+    hash_digest: text_comparison_exp
+    label: text_comparison_exp
+    uri: text_comparison_exp
+    offChainVoteData: OffChainVoteData_bool_exp
+}
+
 type CommitteeHash {
-    view: String
     has_script: Boolean
     raw: Hex
 }
@@ -661,8 +940,8 @@ input CommitteeHash_bool_exp {
 
 type CommitteeMember {
     expiration_epoch: Int
-    commitee: Committee
-    commiteeHash: CommitteeHash
+    committee: Committee
+    committeeHash: CommitteeHash
 }
 
 input CommitteeMember_order_by {
@@ -681,7 +960,12 @@ input CommitteeMember_bool_exp {
 }
 
 type Committee {
-    committeeMembers: [CommitteeMember]
+    committeeMembers (
+        limit: Int
+        order_by: [CommitteeMember_order_by!]
+        offset: Int
+        where: CommitteeMember_bool_exp
+    ): [CommitteeMember]!
     quorum_denominator: String!
     quorum_numerator: String!
 }
