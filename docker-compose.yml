@@ -36,7 +36,7 @@ services:
     entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
 
   ogmios:
-    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.9.0}
+    image: cardanosolutions/ogmios:${OGMIOS_VERSION:-v6.10.0}
     command:
       - --host
       - 0.0.0.0
