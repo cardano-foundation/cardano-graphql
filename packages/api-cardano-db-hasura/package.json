@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "yarn codegen && tsc -b ./src",
+    "build": "tsc -b ./src",
     "codegen": "graphql-codegen",
     "cleanup": "shx rm -rf dist node_modules src/graphql_types.ts",
     "lint": "eslint --ignore-path ../../.eslintignore \"**/*.ts\"",

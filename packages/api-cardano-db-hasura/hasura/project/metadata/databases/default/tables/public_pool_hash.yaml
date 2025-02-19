@@ -1,3 +1,19 @@
 table:
   name: pool_hash
   schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: voteProcedure
+    select_aggregate: voteProcedure_aggregate
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - id
+        - hash_raw
+        - view
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

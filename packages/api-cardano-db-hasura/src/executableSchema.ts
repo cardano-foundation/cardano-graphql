@@ -474,6 +474,20 @@ export async function buildSchema (
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'genesis')
         },
+        govActionProposal: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'govActionProposal',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'govActionProposal')
+        },
         offChainVoteData: {
           resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
@@ -552,6 +566,20 @@ export async function buildSchema (
           },
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'paymentAddresses')
+        },
+        poolHashes: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'poolHashes',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'poolHashes')
         },
         redeemers: {
           resolve: (_root: any, args: any, context: any, info: any) => {
@@ -824,6 +852,20 @@ export async function buildSchema (
           },
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'votingAnchor')
+        },
+        votingProcedure: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'votingProcedure',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'votingProcedure')
         },
         withdrawals: {
           resolve: (_root: any, args: any, context: any, info: any) => {

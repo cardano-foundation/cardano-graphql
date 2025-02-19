@@ -156,6 +156,12 @@ type Query {
         where: Epoch_bool_exp
     ): Epoch_aggregate!
     genesis: Genesis!
+    govActionProposal (
+        limit: Int
+        order_by: [GovActionProposal_order_by!]
+        offset: Int
+        where: GovActionProposal_bool_exp
+    ): [GovActionProposal]!
     offChainVoteData (
         limit: Int
         order_by: [OffChainVoteData_order_by!]
@@ -189,6 +195,12 @@ type Query {
     paymentAddresses (
         addresses: [String]!
     ): [PaymentAddress]
+    poolHashes (
+        limit: Int
+        order_by: [PoolHash_order_by!]
+        offset: Int
+        where: PoolHash_bool_exp
+    ): [PoolHash]!
     redeemers (
         limit: Int
         order_by: [Redeemer_order_by!]
@@ -307,6 +319,12 @@ type Query {
         offset: Int
         where: VotingAnchor_bool_exp
     ): [VotingAnchor]!
+    votingProcedure (
+        limit: Int
+        order_by: [VotingProcedure_order_by!]
+        offset: Int
+        where: VotingProcedure_bool_exp
+    ): [VotingProcedure]!
     withdrawals (
         limit: Int
         order_by: [Withdrawal_order_by!]
@@ -758,6 +776,50 @@ input VotingAnchor_bool_exp {
     offChainData: OffChainVoteData_bool_exp
 }
 
+type VotingProcedure {
+    transaction: Transaction!
+    govActionProposal: GovActionProposal
+    drepVoter: DrepHash
+    poolVoter: PoolHash
+    votingAnchor: VotingAnchor
+    committeeVoter: CommitteeHash
+}
+
+input VotingProcedure_order_by {
+    transaction: Transaction_order_by
+    govActionProposal: GovActionProposal_order_by
+    drepVoter: DrepHash_order_by
+    votingAnchor: VotingAnchor_order_by
+    committeeVoter: CommitteeHash_order_by
+}
+
+input VotingProcedure_bool_exp {
+    _and: [VotingProcedure_bool_exp]
+    _not: VotingProcedure_bool_exp
+    _or: [VotingProcedure_bool_exp]
+    transaction: Transaction_bool_exp
+    govActionProposal: GovActionProposal_bool_exp
+    drepVoter: DrepHash_bool_exp
+    votingAnchor: VotingAnchor_bool_exp
+    committeeVoter: CommitteeHash_bool_exp
+}
+
+type PoolHash {
+    hash_raw: Hex
+    view: String
+}
+
+input PoolHash_order_by {
+    hash_raw: order_by
+    view: order_by
+}
+
+input PoolHash_bool_exp {
+    _and: [PoolHash_bool_exp]
+    _not: PoolHash_bool_exp
+    _or: [PoolHash_bool_exp]
+}
+
 type OffChainVoteData {
     bytes: Hex
     comment: String
@@ -1063,6 +1125,32 @@ type Genesis {
     alonzo: AlonzoGenesis
     byron: ByronGenesis
     shelley: ShelleyGenesis
+}
+
+type GovActionProposal {
+    transaction: Transaction!
+    PreviousGovAction: GovActionProposal
+    VotingAnchor: VotingAnchor
+}
+
+input GovActionProposal_order_by {
+    transaction: Transaction_order_by
+}
+
+
+input GovActionProposal_bool_exp {
+    _and: [GovActionProposal_bool_exp]
+    _not: GovActionProposal_bool_exp
+    _or: [GovActionProposal_bool_exp]
+    transaction: Transaction_bool_exp
+}
+
+type GovActionProposal_aggregate {
+    aggregate: GovActionProposal_aggregate_fields
+}
+
+type GovActionProposal_aggregate_fields {
+    count: String
 }
 
 type PaymentAddress {
