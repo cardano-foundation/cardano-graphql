@@ -1,0 +1,12 @@
+#Look up descriptive information about DREP based on DREP Name
+query dRep_Offchain(
+  $drep_name: String
+){
+    offChainVoteDrepData ( limit: 1, where:{given_name:{_eq:$drep_name}}){
+      motivations
+    	objectives
+    	qualifications 	 
+    
+    }
+    }
+    
