@@ -60,7 +60,9 @@ You can download snapshots using Mithril, which are available for mainnet, prepr
 A detailed explanation can be found [here](https://mithril.network/doc/manual/getting-started/bootstrap-cardano-node)
 <details open>
   <summary><i>mainnet</i></summary>
-Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#13.5/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
+Get the most recent weekly snapshot link from https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#13.6/ , and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
+
+Example - RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.6/db-sync-snapshot-schema-13.6-block-11822103-x86_64.tgz
 
 > **Disclaimer:** The Chainfollower environment variables are currently mandatory.
 > Otherwise the Token registry will get stuck. 
@@ -69,7 +71,7 @@ Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.i
 ``` console
 DOCKER_BUILDKIT=1 \
 COMPOSE_DOCKER_CLI_BUILD=1 \
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.6/db-sync-snapshot-schema-13.6-block-11090788-x86_64.tgz \
+RESTORE_SNAPSHOT=use latest snapshot file from above link (.tgz file) \
 docker compose up -d --build &&\
 docker compose logs -f
 ```
