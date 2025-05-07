@@ -1,0 +1,16 @@
+# Calculate the total number of active stakes in a stake pool at a given epoch
+query stakePool_activeStake(
+  $poolID: StakePoolID
+  $epochNo: Int
+) {
+   activeStake_aggregate  (where:{
+    epochNo:{_eq:$epochNo}, 
+    stakePoolId:{_eq:$poolID}})
+    {
+          aggregate {
+            	sum {
+                    amount
+                }
+            	 }
+}
+}
