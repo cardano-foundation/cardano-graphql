@@ -62,10 +62,8 @@ ARG NETWORK=mainnet
 # using local token registry as default
 ARG METADATA_SERVER_URI="http://token-metadata-registry:8091"
 RUN apt-get update -y && apt-get install lsb-release -y
-RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
-  echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list &&\
-  apt-get update && apt-get install -y --no-install-recommends \
-  ca-certificates
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
 COPY --from=downloader /usr/local/bin/hasura /usr/local/bin/hasura
 COPY --from=downloader  /root/.hasura/plugins/bin/hasura-cli_ext /usr/local/bin/hasura-cli_ext
 ENV \
