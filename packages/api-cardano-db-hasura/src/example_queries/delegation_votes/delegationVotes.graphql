@@ -1,0 +1,21 @@
+#This query allows to find out which address is delegating votes to which DREP at what epoch.
+query Delegation_Vote (
+  $addr: String
+  $epoch: Int
+) {
+  delegationVotes (where: {address:{_eq:$addr}
+   , transaction:{block:{epoch:{number:{_eq:$epoch}}}}
+  }  ) {
+      address
+      drep  {
+        view
+      }
+    transaction {
+      block  {
+        epochNo
+      }
+      
+    }
+    
+  }
+}
