@@ -57,6 +57,7 @@ ENV \
   POSTGRES_USER_FILE=/run/secrets/postgres_user
 WORKDIR /src
 
+# BACKGROUND
 FROM ubuntu-nodejs AS background
 ARG NETWORK=mainnet
 # using local token registry as default
@@ -90,6 +91,7 @@ COPY --from=cardano-graphql-production-deps /app/packages/api-cardano-db-hasura/
 WORKDIR /app/packages/api-cardano-db-hasura/dist
 CMD ["node", "background.js"]
 
+# SERVER
 FROM ubuntu-nodejs AS server
 ARG NETWORK=mainnet
 ENV \
@@ -114,7 +116,3 @@ COPY config/network/${NETWORK}/cardano-node /config/cardano-node/
 WORKDIR /app/packages/server/dist
 EXPOSE 3100
 CMD ["node", "index.js"]
-
-FROM cardanofoundation/cf-token-metadata-registry-api:latest AS token-registry
-ADD scripts/token-registry-init.sh /app/entrypoint.sh
-ENTRYPOINT sh /app/entrypoint.sh
