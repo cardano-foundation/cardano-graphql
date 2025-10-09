@@ -25,6 +25,23 @@ services:
         max-size: "200k"
         max-file: "10"
 
+  mithril:
+    image: cardanofoundation/cardano-graph-ql-mithril:${MITHRIL_VERSION}
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/mithril/Dockerfile
+      args: 
+        MITHRIL_VERSION: ${MITHRIL_VERSION}
+    environment:
+      - NETWORK=${NETWORK}
+      - MITHRIL_SYNC=${MITHRIL_SYNC}
+      - SNAPSHOT_DIGEST=${SNAPSHOT_DIGEST}
+      - AGGREGATOR_ENDPOINT=${AGGREGATOR_ENDPOINT}
+      - GENESIS_VERIFICATION_KEY=${GENESIS_VERIFICATION_KEY}
+      - ANCILLARY_VERIFICATION_KEY=${ANCILLARY_VERIFICATION_KEY}
+    volumes:
+      - ${CARDANO_NODE_DIR}:/node
+
   cardano-node:
     image: ghcr.io/intersectmbo/cardano-node:${CARDANO_NODE_VERSION}
     environment:
@@ -34,6 +51,9 @@ services:
       - ${CARDANO_NODE_DB}:/node/db
       - ./config/network/${NETWORK}:/config
     entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
+    depends_on:
+      mithril:
+        condition: service_completed_successfully
 
   ogmios:
     image: cardanosolutions/ogmios:${OGMIOS_VERSION}
