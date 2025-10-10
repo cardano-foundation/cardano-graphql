@@ -54,10 +54,7 @@ Boot the [docker compose stack] using a convention for container and volume scop
 optionally hitting the remote cache to speed up the build. The containers are detached, so you can terminate the log
 console session freely. See [Docker Compose docs] to tailor for your use-case
 
-##### Node snapshots
-If you want to speed up the node syncing processes you can use a snapshot. The snapshot is a compressed file that contains the database of a node at a certain block.
-You can download snapshots using Mithril, which are available for mainnet, preprod, and preview networks.
-A detailed explanation can be found [here](https://mithril.network/doc/manual/getting-started/bootstrap-cardano-node)
+##### DB Sync snapshots
 <details open>
   <summary><i>mainnet</i></summary>
 Get the most recent weekly snapshot link from https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#13.6/ , and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
@@ -69,62 +66,18 @@ Example - RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-syn
 > We will provide a fix as soon as possible.
 
 ``` console
-DOCKER_BUILDKIT=1 \
-COMPOSE_DOCKER_CLI_BUILD=1 \
-RESTORE_SNAPSHOT=use latest snapshot file from above link (.tgz file) \
-docker compose up -d --build &&\
-docker compose logs -f
+docker compose --env-file .env.docker-compose up -d --build
 ```
+
 </details>
 
 <details>
   <summary><i>preprod</i></summary>
 
 ``` console
-DOCKER_BUILDKIT=1 \
-COMPOSE_DOCKER_CLI_BUILD=1 \
-NETWORK=preprod \
-API_PORT=3101 \
-HASURA_PORT=8091 \
-OGMIOS_PORT=1338 \
-POSTGRES_PORT=5433 \
-docker compose -p preprod up -d --build &&\
-docker compose -p preprod logs -f
+docker compose --env-file .env.docker-compose-preprod up -d --build
 ```
 
-</details>
-
-<details>
-  <summary><i>preview</i></summary>
-
-``` console
-DOCKER_BUILDKIT=1 \
-COMPOSE_DOCKER_CLI_BUILD=1 \
-NETWORK=preview \
-API_PORT=3102 \
-HASURA_PORT=8092 \
-OGMIOS_PORT=1339 \
-POSTGRES_PORT=5434 \
-docker compose -p preview up -d --build &&\
-docker compose -p preview logs -f
-```
-
-</details>
-
-<details>
-  <summary><i>sanchonet</i></summary>
-
-``` console
-DOCKER_BUILDKIT=1 \
-COMPOSE_DOCKER_CLI_BUILD=1 \
-NETWORK=sanchonet \
-API_PORT=3102 \
-HASURA_PORT=8092 \
-OGMIOS_PORT=1339 \
-POSTGRES_PORT=5434 \
-docker compose -p preview up -d --build &&\
-docker compose -p preview logs -f
-```
 </details>
 
 #### B) Pull and Run via Docker Compose
@@ -136,38 +89,16 @@ your use-case.
   <summary><i>mainnet</i></summary>
 
 ``` console
-export NETWORK=mainnet &&\
-docker compose up -d &&\
-docker compose logs -f
+docker compose --env-file .env.docker-compose up -d
 ```
+
 </details>
 
 <details>
   <summary><i>preprod</i></summary>
 
 ``` console
-export NETWORK=preprod &&\
-API_PORT=3101 \
-HASURA_PORT=8091 \
-OGMIOS_PORT=1338 \
-POSTGRES_PORT=5433 \
-docker compose -p ${NETWORK} up -d &&\
-docker compose -p ${NETWORK} logs -f
-```
-
-</details>
-
-<details>
-  <summary><i>preview</i></summary>
-
-``` console
-export NETWORK=preview &&\
-API_PORT=3102 \
-HASURA_PORT=8092 \
-OGMIOS_PORT=1339 \
-POSTGRES_PORT=5434 \
-docker compose -p ${NETWORK} up -d &&\
-docker compose -p ${NETWORK} logs -f
+docker compose --env-file .env.docker-compose-preprod up -d
 ```
 
 </details>
@@ -179,7 +110,7 @@ The following commands will not remove volumes, however should you wish to do so
   <summary><i>mainnet</i></summary>
 
 ``` console
-docker compose down
+docker compose --env-file .env.docker-compose down
 ```
 </details>
 
@@ -187,16 +118,7 @@ docker compose down
   <summary><i>preprod</i></summary>
 
 ``` console
-docker compose -p preprod down
-```
-
-</details>
-
-<details>
-  <summary><i>preview</i></summary>
-
-``` console
-docker compose -p preview down
+docker compose --env-file .env.docker-compose-preprod down
 ```
 
 </details>
@@ -204,11 +126,11 @@ docker compose -p preview down
 ### Use global Token Metadata Registry
 The public Token metadata registry has a limit of daily requests, this can lead to long sync times, when resyncing from scratch.
 If it's still needed to run with the global environment it's possible by removing the `token-metadata-registry` from `docker-compose.yml`.
-And start it with for Mainnet:
+And change the variable in `.env.docker-compose` for Mainnet:
 ```
 METADATA_SERVER_URI="https://tokens.cardano.org" docker compose up -d
 ```
-For other networks:
+For Preprod `.env.docker-compose-preprod` (other networks):
 ```
 METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
 ```
