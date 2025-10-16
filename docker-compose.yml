@@ -136,6 +136,7 @@ services:
       - "hasura"
       - "postgres"
     environment:
+      - COMPOSE_PROFILES=${COMPOSE_PROFILES}
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY}
       - METADATA_SERVER_URI=${METADATA_SERVER_URI}
       - POSTGRES_PORT=${POSTGRES_PORT}
@@ -178,6 +179,7 @@ services:
 
   token-metadata-registry:
     image: cardanofoundation/cf-token-metadata-registry-api:${TOKEN_REGISTRY_VERSION}
+    profiles: ["token-registry"]
     volumes: 
       - ./scripts/:/app/scripts/:ro
     entrypoint: ["sh", "/app/scripts/token-registry-init.sh"]
