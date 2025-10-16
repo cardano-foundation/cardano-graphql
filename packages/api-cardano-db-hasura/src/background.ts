@@ -1,22 +1,22 @@
-import { createLogger, LogLevelString } from "bunyan";
+import { createLogger, LogLevelString } from 'bunyan'
 import {
   ChainFollower,
   Db,
   HasuraBackgroundClient,
   MetadataClient,
-  Worker,
-} from "./index";
-import onDeath from "death";
-import { Logger } from "ts-log";
-import { CustomError } from "ts-custom-error";
-import fs from "fs-extra";
-import { DbConfig } from "./typeAliases";
-import { PointOrOrigin } from "@cardano-ogmios/schema";
+  Worker
+} from './index'
+import onDeath from 'death'
+import { Logger } from 'ts-log'
+import { CustomError } from 'ts-custom-error'
+import fs from 'fs-extra'
+import { DbConfig } from './typeAliases'
+import { PointOrOrigin } from '@cardano-ogmios/schema'
 // Todo: Hoist to util package next major version
 export class MissingConfig extends CustomError {
-  public constructor(message: string) {
-    super();
-    this.message = message;
+  public constructor (message: string) {
+    super()
+    this.message = message
   }
 }
 
@@ -41,74 +41,74 @@ export interface BackgroundConfig {
   };
 }
 
-async function getConfig(): Promise<BackgroundConfig> {
-  const env = filterAndTypecastEnvs(process.env);
+async function getConfig (): Promise<BackgroundConfig> {
+  const env = filterAndTypecastEnvs(process.env)
   if (!env.hasuraCliPath) {
-    throw new MissingConfig("HASURA_CLI_PATH env not set");
+    throw new MissingConfig('HASURA_CLI_PATH env not set')
   }
   if (!env.hasuraCliExtPath) {
-    throw new MissingConfig("HASURA_CLI_EXT_PATH env not set");
+    throw new MissingConfig('HASURA_CLI_EXT_PATH env not set')
   }
   if (!env.hasuraUri) {
-    throw new MissingConfig("HASURA_URI env not set");
+    throw new MissingConfig('HASURA_URI env not set')
   }
   if (!env.metadataServerUri) {
-    throw new MissingConfig("METADATA_SERVER_URI env not set");
+    throw new MissingConfig('METADATA_SERVER_URI env not set')
   }
   if (!env.postgres.dbFile && !env.postgres.db) {
-    throw new MissingConfig("POSTGRES_DB_FILE or POSTGRES_DB env not set");
+    throw new MissingConfig('POSTGRES_DB_FILE or POSTGRES_DB env not set')
   }
   if (!env.postgres.host) {
-    throw new MissingConfig("POSTGRES_HOST env not set");
+    throw new MissingConfig('POSTGRES_HOST env not set')
   }
   if (!env.postgres.passwordFile && !env.postgres.password) {
     throw new MissingConfig(
-      "POSTGRES_PASSWORD_FILE or POSTGRES_PASSWORD env not set",
-    );
+      'POSTGRES_PASSWORD_FILE or POSTGRES_PASSWORD env not set'
+    )
   }
   if (!env.postgres.port) {
-    throw new MissingConfig("POSTGRES_PORT env not set");
+    throw new MissingConfig('POSTGRES_PORT env not set')
   }
   if (!env.postgres.userFile && !env.postgres.user) {
-    throw new MissingConfig("POSTGRES_USER_FILE or POSTGRES_USER env not set");
+    throw new MissingConfig('POSTGRES_USER_FILE or POSTGRES_USER env not set')
   }
-  let db: BackgroundConfig["db"];
+  let db: BackgroundConfig['db']
   try {
     db = {
       database:
         env.postgres.db ||
-        (await fs.readFile(env.postgres.dbFile, "utf8")).toString().trim(),
+        (await fs.readFile(env.postgres.dbFile, 'utf8')).toString().trim(),
       host: env.postgres.host,
       password:
         env.postgres.password ||
-        (await fs.readFile(env.postgres.passwordFile, "utf8"))
+        (await fs.readFile(env.postgres.passwordFile, 'utf8'))
           .toString()
           .trim(),
       port: env.postgres.port,
       user:
         env.postgres.user ||
-        (await fs.readFile(env.postgres.userFile, "utf8")).toString().trim(),
-    };
+        (await fs.readFile(env.postgres.userFile, 'utf8')).toString().trim()
+    }
   } catch (error) {
-    throw new MissingConfig("Database configuration cannot be read");
+    throw new MissingConfig('Database configuration cannot be read')
   }
-  let chainfollower;
+  let chainfollower
   if (env.chainfollower) {
     chainfollower = {
       id: env.chainfollower.id,
-      slot: env.chainfollower.slot,
-    };
+      slot: env.chainfollower.slot
+    }
   }
-  const { postgres, ...selectedEnv } = env;
+  const { postgres, ...selectedEnv } = env
   return {
     ...selectedEnv,
     db,
     chainfollower,
-    loggerMinSeverity: env.loggerMinSeverity || ("info" as LogLevelString),
-  };
+    loggerMinSeverity: env.loggerMinSeverity || ('info' as LogLevelString)
+  }
 }
 
-function filterAndTypecastEnvs(env: any) {
+function filterAndTypecastEnvs (env: any) {
   const {
     COMPOSE_PROFILES,
     ASSET_METADATA_UPDATE_INTERVAL,
@@ -128,8 +128,8 @@ function filterAndTypecastEnvs(env: any) {
     POSTGRES_USER,
     POSTGRES_USER_FILE,
     CHAIN_FOLLOWER_START_ID,
-    CHAIN_FOLLOWER_START_SLOT,
-  } = env as NodeJS.ProcessEnv;
+    CHAIN_FOLLOWER_START_SLOT
+  } = env as NodeJS.ProcessEnv
   return {
     composeProfiles: COMPOSE_PROFILES,
     hasuraCliPath: HASURA_CLI_PATH,
@@ -140,11 +140,11 @@ function filterAndTypecastEnvs(env: any) {
     metadataUpdateInterval: {
       assets: ASSET_METADATA_UPDATE_INTERVAL
         ? Number(ASSET_METADATA_UPDATE_INTERVAL)
-        : undefined,
+        : undefined
     },
     ogmios: {
       host: OGMIOS_HOST,
-      port: OGMIOS_PORT ? Number(OGMIOS_PORT) : undefined,
+      port: OGMIOS_PORT ? Number(OGMIOS_PORT) : undefined
     },
     postgres: {
       db: POSTGRES_DB,
@@ -154,41 +154,41 @@ function filterAndTypecastEnvs(env: any) {
       passwordFile: POSTGRES_PASSWORD_FILE,
       port: POSTGRES_PORT ? Number(POSTGRES_PORT) : undefined,
       user: POSTGRES_USER,
-      userFile: POSTGRES_USER_FILE,
+      userFile: POSTGRES_USER_FILE
     },
     chainfollower: {
       id: CHAIN_FOLLOWER_START_ID,
       slot: CHAIN_FOLLOWER_START_SLOT
         ? Number(CHAIN_FOLLOWER_START_SLOT)
-        : undefined,
-    },
-  };
+        : undefined
+    }
+  }
 }
 
-(async function() {
-  const config = await getConfig();
+(async function () {
+  const config = await getConfig()
   const logger: Logger = createLogger({
-    name: "background",
-    level: config.loggerMinSeverity,
-  });
+    name: 'background',
+    level: config.loggerMinSeverity
+  })
   try {
     const hasuraBackgroundClient = new HasuraBackgroundClient(
       config.hasuraCliPath,
       config.hasuraCliExtPath,
       config.hasuraUri,
-      logger,
-    );
+      logger
+    )
     const chainFollower = new ChainFollower(
       hasuraBackgroundClient,
       logger,
-      config.db,
-    );
+      config.db
+    )
 
     const isTokenRegistryEnabled =
       config.composeProfiles &&
-      config.composeProfiles.split(",").includes("token-registry");
+      config.composeProfiles.split(',').includes('token-registry')
 
-    const metadataClient = new MetadataClient(isTokenRegistryEnabled, config.metadataServerUri, logger);
+    const metadataClient = new MetadataClient(isTokenRegistryEnabled, config.metadataServerUri, logger)
     const worker = new Worker(
       hasuraBackgroundClient,
       logger,
@@ -196,44 +196,44 @@ function filterAndTypecastEnvs(env: any) {
       config.db,
       {
         metadataUpdateInterval: {
-          assets: config.metadataUpdateInterval?.assets,
-        },
-      },
-    );
-    const db = new Db(config.db, logger);
+          assets: config.metadataUpdateInterval?.assets
+        }
+      }
+    )
+    const db = new Db(config.db, logger)
     const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
       const mostRecentPoint =
-        await hasuraBackgroundClient.getMostRecentPointWithNewAsset();
+        await hasuraBackgroundClient.getMostRecentPointWithNewAsset()
       return mostRecentPoint !== null
-        ? [mostRecentPoint, "origin"]
-        : ["origin"];
-    };
+        ? [mostRecentPoint, 'origin']
+        : ['origin']
+    }
     await db.init({
       onDbInit: () => hasuraBackgroundClient.shutdown(),
       onDbSetup: async () => {
         try {
-          await hasuraBackgroundClient.initialize();
-          await metadataClient.initialize();
-          await chainFollower.initialize(config.ogmios, getChainSyncPoints);
-          await worker.start();
-          await chainFollower.start(await getChainSyncPoints());
+          await hasuraBackgroundClient.initialize()
+          await metadataClient.initialize()
+          await chainFollower.initialize(config.ogmios, getChainSyncPoints)
+          await worker.start()
+          await chainFollower.start(await getChainSyncPoints())
         } catch (error) {
-          logger.error(error.message);
-          process.exit(1);
+          logger.error(error.message)
+          process.exit(1)
         }
-      },
-    });
+      }
+    })
     onDeath(async () => {
       await Promise.all([
         hasuraBackgroundClient.shutdown,
         worker.shutdown,
         chainFollower.shutdown,
-        db.shutdown,
-      ]);
-      process.exit(1);
-    });
+        db.shutdown
+      ])
+      process.exit(1)
+    })
   } catch (error) {
-    logger.error("Exiting due to uncaught exception", error.message);
-    process.exit(1);
+    logger.error('Exiting due to uncaught exception', error.message)
+    process.exit(1)
   }
-})();
+})()

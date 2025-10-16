@@ -12,7 +12,7 @@ export class MetadataClient {
   private axiosClient: AxiosInstance
   public state: RunnableModuleState
 
-  constructor(
+  constructor (
     enabled = false,
     private metadataServerUri: string,
     private logger: Logger = dummyLogger
@@ -29,7 +29,7 @@ export class MetadataClient {
     }
   }
 
-  private async ensureLocalMetadataServerIsAvailable(): Promise<void> {
+  private async ensureLocalMetadataServerIsAvailable (): Promise<void> {
     if (!this.enabled) return
     await pRetry(
       async () => {
@@ -47,13 +47,13 @@ export class MetadataClient {
           }
         }
       }, {
-      factor: 1.5,
-      retries: 10
-    }
+        factor: 1.5,
+        retries: 10
+      }
     )
   }
 
-  private async waitForLocalMetadataServerSynced(): Promise<void> {
+  private async waitForLocalMetadataServerSynced (): Promise<void> {
     if (!this.enabled) return
     await pRetry(
       async () => {
@@ -71,14 +71,14 @@ export class MetadataClient {
           }
         }
       }, {
-      factor: 1.5,
-      retries: 1000,
-      minTimeout: 60000 // first try after one minute
-    }
+        factor: 1.5,
+        retries: 1000,
+        minTimeout: 60000 // first try after one minute
+      }
     )
   }
 
-  public async fetch(assetIds: Asset['assetId'][]): Promise<AssetMetadata[]> {
+  public async fetch (assetIds: Asset['assetId'][]): Promise<AssetMetadata[]> {
     if (!this.enabled) {
       this.logger.debug({ module: MODULE_NAME }, 'Skipping metadata fetch — client disabled.')
       return []
@@ -108,7 +108,7 @@ export class MetadataClient {
     }
   }
 
-  public async initialize() {
+  public async initialize () {
     if (!this.enabled) {
       this.logger.info({ module: MODULE_NAME }, 'Skipping initialization — MetadataClient disabled.')
       this.state = 'initialized'
