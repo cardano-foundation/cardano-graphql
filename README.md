@@ -123,8 +123,11 @@ docker compose --env-file .env.docker-compose-preprod down
 
 </details>
 
+### Disable Token Metadata Registry
+The local Token Metadata Registry synchronization process can be disabled by removing the `COMPOSE_PROFILES` variable from the `.env.docker-compose` file.
+
 ### Use global Token Metadata Registry
-The public Token metadata registry has a limit of daily requests, this can lead to long sync times, when resyncing from scratch.
+The public Token Metadata Registry has a limit of daily requests, this can lead to long sync times, when resyncing from scratch.
 If it's still needed to run with the global environment it's possible by removing the `token-metadata-registry` from `docker-compose.yml`.
 And change the variable in `.env.docker-compose` for Mainnet:
 ```
