@@ -57,15 +57,14 @@ ENV \
   POSTGRES_USER_FILE=/run/secrets/postgres_user
 WORKDIR /src
 
+# BACKGROUND
 FROM ubuntu-nodejs AS background
 ARG NETWORK=mainnet
 # using local token registry as default
 ARG METADATA_SERVER_URI="http://token-metadata-registry:8091"
 RUN apt-get update -y && apt-get install lsb-release -y
-RUN curl --proto '=https' --tlsv1.2 -sSf -L https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - &&\
-  echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" | tee  /etc/apt/sources.list.d/pgdg.list &&\
-  apt-get update && apt-get install -y --no-install-recommends \
-  ca-certificates
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
 COPY --from=downloader /usr/local/bin/hasura /usr/local/bin/hasura
 COPY --from=downloader  /root/.hasura/plugins/bin/hasura-cli_ext /usr/local/bin/hasura-cli_ext
 ENV \
@@ -92,6 +91,7 @@ COPY --from=cardano-graphql-production-deps /app/packages/api-cardano-db-hasura/
 WORKDIR /app/packages/api-cardano-db-hasura/dist
 CMD ["node", "background.js"]
 
+# SERVER
 FROM ubuntu-nodejs AS server
 ARG NETWORK=mainnet
 ENV \
@@ -116,7 +116,3 @@ COPY config/network/${NETWORK}/cardano-node /config/cardano-node/
 WORKDIR /app/packages/server/dist
 EXPOSE 3100
 CMD ["node", "index.js"]
-
-FROM cardanofoundation/cf-token-metadata-registry-api:latest AS token-registry
-ADD scripts/token-registry-init.sh /app/entrypoint.sh
-ENTRYPOINT sh /app/entrypoint.sh
