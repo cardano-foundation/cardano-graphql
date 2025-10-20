@@ -58,9 +58,9 @@
   ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/input-output-hk/cardano-graphql/issues"
+    "url": "https://github.com/cardano-foundation/cardano-graphql/issues"
   },
-  "homepage": "https://github.com/input-output-hk/cardano-graphql#README.md",
+  "homepage": "https://github.com/cardano-foundation/cardano-graphql#README.md",
   "devDependencies": {
     "@graphql-codegen/cli": "^1.21.8",
     "@graphql-codegen/typescript": "^1.23.0",

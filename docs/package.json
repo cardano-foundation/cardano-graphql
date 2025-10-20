@@ -2,7 +2,7 @@
   "name": "cardano-graphql-docs",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://input-output-hk.github.io/cardano-graphql",
+  "homepage": "http://cardano-foundation.github.io/cardano-graphql",
   "dependencies": {
     "@babel/core": "7.9.0",
     "@svgr/webpack": "4.3.3",

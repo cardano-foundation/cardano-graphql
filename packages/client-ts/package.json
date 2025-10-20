@@ -4,7 +4,7 @@
   "description": "A client package for Cardano GraphQL, including the GraphQL schema and TypeScript definitions generated from it",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/input-output-hk/cardano-graphql.git"
+    "url": "git+https://github.com/cardano-foundation/cardano-graphql.git"
   },
   "main": "api/index.js",
   "typings": "api/index.d.ts",
@@ -26,9 +26,9 @@
   ],
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/input-output-hk/cardano-graphql/issues"
+    "url": "https://github.com/cardano-foundation/cardano-graphql/issues"
   },
-  "homepage": "https://github.com/input-output-hk/cardano-graphql/blob/master/packages/client-ts/README.md",
+  "homepage": "https://github.com/cardano-foundation/cardano-graphql/blob/master/packages/client-ts/README.md",
   "files": [
     "api",
     "LICENSE",
