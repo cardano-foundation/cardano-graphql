@@ -12,10 +12,10 @@
 
 ## Overview
 
-Cross-platform, _typed_, and **queryable** API for Cardano. The project contains multiple [packages] for composing
-GraphQL services to meet specific application demands, and a [docker compose stack] serving the included
-[cardano-graphql-server Dockerfile], the extended [hasura Dockerfile], [cardano-node-ogmios]. The [schema] is defined in
-native `.graphql`, and used to generate a [TypeScript package for client-side static typing]. A mutation is available to
+Cross-platform, _typed_, and **queryable** API for Cardano. The project contains multiple [packages] for composing 
+GraphQL services to meet specific application demands, and a [docker compose stack] serving the included 
+[cardano-graphql-server Dockerfile], the extended [hasura Dockerfile], [ogmios], [cardano-node]. The [schema] is defined in
+native `.graphql`, and used to generate a [TypeScript package for client-side static typing]. A mutation is available to 
 submit a signed and serialized transaction to the local node.
 
 [Apollo Server] exposes the NodeJS execution engine over a HTTP endpoint, and includes support for open source metrics
@@ -40,7 +40,7 @@ Check the [releases] for the latest version.
 ``` console
 git clone \
   --single-branch \
-  --branch 8.0.0 \
+  --branch 8.3.3 \
   --recurse-submodules \
   https://github.com/cardano-foundation/cardano-graphql.git \
   && cd cardano-graphql
@@ -54,51 +54,28 @@ Boot the [docker compose stack] using a convention for container and volume scop
 optionally hitting the remote cache to speed up the build. The containers are detached, so you can terminate the log
 console session freely. See [Docker Compose docs] to tailor for your use-case
 
+##### DB Sync snapshots
 <details open>
   <summary><i>mainnet</i></summary>
+Get the most recent weekly snapshot link from https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#13.6/ , and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 
-Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#12/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
+Example - RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.6/db-sync-snapshot-schema-13.6-block-11822103-x86_64.tgz
+
+> **Disclaimer:** The Chainfollower environment variables are currently mandatory.
+> Otherwise the Token registry will get stuck. 
+> We will provide a fix as soon as possible.
+
 ``` console
-DOCKER_BUILDKIT=1 \
-COMPOSE_DOCKER_CLI_BUILD=1 \
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
-docker compose up -d --build &&\
-docker compose logs -f
+docker compose --env-file .env.docker-compose up -d --build
 ```
+
 </details>
 
 <details>
   <summary><i>preprod</i></summary>
 
 ``` console
-DOCKER_BUILDKIT=1 \
-COMPOSE_DOCKER_CLI_BUILD=1 \
-NETWORK=preprod \
-API_PORT=3101 \
-HASURA_PORT=8091 \
-OGMIOS_PORT=1338 \
-POSTGRES_PORT=5433 \
-METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
-docker compose -p preprod up -d --build &&\
-docker compose -p preprod logs -f
-```
-
-</details>
-
-<details>
-  <summary><i>preview</i></summary>
-
-``` console
-DOCKER_BUILDKIT=1 \
-COMPOSE_DOCKER_CLI_BUILD=1 \
-NETWORK=preview \
-API_PORT=3102 \
-HASURA_PORT=8092 \
-OGMIOS_PORT=1339 \
-POSTGRES_PORT=5434 \
-METADATA_SERVER_URI="https://metadata.cardano-testnet.iohkdev.io" \
-docker compose -p preview up -d --build &&\
-docker compose -p preview logs -f
+docker compose --env-file .env.docker-compose-preprod up -d --build
 ```
 
 </details>
@@ -111,53 +88,17 @@ your use-case.
 <details open>
   <summary><i>mainnet</i></summary>
 
-Get the most recent weekly snapshot link [here](https://update-cardano-mainnet.iohk.io/cardano-db-sync/index.html#11/), and set it as `RESTORE_SNAPSHOT` below, or omit if you wish to sync from genesis.
 ``` console
-export NETWORK=mainnet &&\
-docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
-RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13/db-sync-snapshot-schema-13-block-8291499-x86_64.tgz \
-docker compose up -d &&\
-docker compose logs -f
+docker compose --env-file .env.docker-compose up -d
 ```
+
 </details>
 
 <details>
   <summary><i>preprod</i></summary>
 
 ``` console
-export NETWORK=preprod &&\
-docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
-API_PORT=3101 \
-HASURA_PORT=8091 \
-OGMIOS_PORT=1338 \
-POSTGRES_PORT=5433 \
-docker compose -p ${NETWORK} up -d &&\
-docker compose -p ${NETWORK} logs -f
-```
-
-</details>
-
-<details>
-  <summary><i>preview</i></summary>
-
-``` console
-export NETWORK=preview &&\
-docker pull inputoutput/cardano-graphql-server:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-background:8.0.0-${NETWORK} &&\
-docker pull inputoutput/cardano-graphql-hasura:8.0.0 &&\
-docker pull cardanosolutions/cardano-node-ogmios:v5.5.8_1.35.5-${NETWORK} &&\
-API_PORT=3102 \
-HASURA_PORT=8092 \
-OGMIOS_PORT=1339 \
-POSTGRES_PORT=5434 \
-docker compose -p ${NETWORK} up -d &&\
-docker compose -p ${NETWORK} logs -f
+docker compose --env-file .env.docker-compose-preprod up -d
 ```
 
 </details>
@@ -169,7 +110,7 @@ The following commands will not remove volumes, however should you wish to do so
   <summary><i>mainnet</i></summary>
 
 ``` console
-docker compose down
+docker compose --env-file .env.docker-compose down
 ```
 </details>
 
@@ -177,23 +118,30 @@ docker compose down
   <summary><i>preprod</i></summary>
 
 ``` console
-docker compose -p preprod down
+docker compose --env-file .env.docker-compose-preprod down
 ```
 
 </details>
 
-<details>
-  <summary><i>preview</i></summary>
+### Disable Token Metadata Registry
+The local Token Metadata Registry synchronization process can be disabled by removing the `COMPOSE_PROFILES` variable from the `.env.docker-compose` file.
 
-``` console
-docker compose -p preview down
+### Use global Token Metadata Registry
+The public Token Metadata Registry has a limit of daily requests, this can lead to long sync times, when resyncing from scratch.
+If it's still needed to run with the global environment it's possible by removing the `token-metadata-registry` from `docker-compose.yml`.
+And change the variable in `.env.docker-compose` for Mainnet:
 ```
-
-</details>
+METADATA_SERVER_URI="https://tokens.cardano.org" docker compose up -d
+```
+For Preprod `.env.docker-compose-preprod` (other networks):
+```
+METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
+```
 
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
-``` graphql
+> **_Note_** This Query is not available in early Era's of Cardano. Check Points of Interest here: [Link](https://ogmios.dev/mini-protocols/local-chain-sync/#points-of-interest) 
+``` graphql 
 { cardanoDbMeta { initialized syncPercentage }}
 ```
 or via command line:
@@ -256,7 +204,8 @@ See [Building].
 [Docker Compose docs]: https://docs.docker.com/compose/
 [cardano-graphql-server Dockerfile]: ./Dockerfile
 [hasura Dockerfile]: ./packages/api-cardano-db-hasura/hasura/Dockerfile
-[cardano-node-ogmios]: https://ogmios.dev/getting-started/docker/
+[ogmios]: https://ogmios.dev/getting-started/docker/
+[cardano-node]: https://github.com/IntersectMBO/cardano-node
 [schema]: ./packages/api-cardano-db-hasura/schema.graphql
 [TypeScript package for client-side static typing]: ./packages/client-ts/README.md
 [Apollo Server]: https://www.apollographql.com/docs/apollo-server/

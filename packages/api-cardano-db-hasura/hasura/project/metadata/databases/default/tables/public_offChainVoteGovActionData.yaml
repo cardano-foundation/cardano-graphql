@@ -1,0 +1,30 @@
+table:
+  name: off_chain_vote_gov_action_data
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: offChainVoteGovActionData
+    select_aggregate: offChainVoteGovActionData_aggregate
+object_relationships:
+  - name: OffChainVoteData
+    using:
+      manual_configuration:
+        column_mapping:
+          off_chain_vote_data_id: id
+        remote_table:
+          name: off_chain_vote_data
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - abstract
+        - motivation
+        - off_chain_vote_data_id
+        - rationale
+        - title
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

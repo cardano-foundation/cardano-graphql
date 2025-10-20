@@ -1,0 +1,3 @@
+table:
+  name: pool_hash
+  schema: public

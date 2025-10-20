@@ -46,7 +46,7 @@ export class HasuraBackgroundClient {
             reject(error)
           }
           if (stdout !== '') this.logger.debug({ module: 'HasuraBackgroundClient' }, stdout)
-          resolve()
+          resolve({ module: 'HasuraBackgroundClient' })
         }
       )
     })
@@ -72,7 +72,7 @@ export class HasuraBackgroundClient {
       }
     }, {
       factor: 1.05,
-      retries: 100,
+      retries: 10,
       onFailedAttempt: util.onFailedAttemptFor(
         'Detecting DB sync state has reached minimum progress',
         this.logger
@@ -188,8 +188,8 @@ export class HasuraBackgroundClient {
         }
         const { hash, slotNo } = result.assets[0].firstAppearedInBlock
         point = {
-          hash: hash.substring(2),
-          slot: Number(slotNo)
+          slot: Number(slotNo),
+          id: hash.substring(2)
         }
       } else {
         point = null
@@ -258,7 +258,13 @@ export class HasuraBackgroundClient {
     )
     const result = await this.client.request(
       gql`mutation InsertAssets($assets: [Asset_insert_input!]!) {
-          insert_assets(objects: $assets) {
+          insert_assets(
+              objects: $assets,
+              on_conflict: {
+                  constraint: Asset_pkey,
+                  update_columns: []
+              }
+          ) {
               returning {
                   name
                   policyId

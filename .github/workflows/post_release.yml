@@ -9,8 +9,8 @@ jobs:
   publish:
     strategy:
       matrix:
-        os: [ ubuntu-20.04 ]
-        network: [ "mainnet", "preprod", "preview" ]
+        os: [ ubuntu-24.04 ]
+        network: [ "mainnet", "preprod", "preview", "sanchonet" ]
         
     runs-on: ${{ matrix.os }}
     steps:
@@ -36,17 +36,19 @@ jobs:
       - name: 📝 Base Variables
         id: base-variables
         run: |
-          echo ::set-output name=cardano-graphql-server-image::inputoutput/cardano-graphql
-          echo ::set-output name=cardano-graphql-hasura-image::inputoutput/cardano-graphql-hasura
+          echo ::set-output name=cardano-graphql-image::cardanofoundation/cardano-graphql
+          echo ::set-output name=cardano-graphql-hasura-image::cardanofoundation/cardano-graphql-hasura
+          echo ::set-output name=cardano-graphql-background-image::cardanofoundation/cardano-graphql-background
+          echo ::set-output name=cardano-graphql-server-image::cardanofoundation/cardano-graphql-server
           
       - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (default)
         if: ${{ matrix.network == 'mainnet' }}
         uses: docker/build-push-action@v2
         with:
-          cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest
+          cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-image }}:latest
           cache-to: type=inline
           push: true
-          tags: ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.sha }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.event.release.tag_name }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-image }}:${{ github.sha }}, ${{ steps.base-variables.outputs.cardano-graphql-image }}:${{ github.event.release.tag_name }}, ${{ steps.base-variables.outputs.cardano-graphql-image }}:latest
           target: server
       
       - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (network tags)
@@ -58,6 +60,16 @@ jobs:
           push: true
           tags: ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.sha }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:${{ github.event.release.tag_name }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-server-image }}:latest-${{ matrix.network }}
           target: server
+
+      - name: 🔨 Build and push Cardano GraphQL Server Dockerfile (network tags)
+        uses: docker/build-push-action@v2
+        with:
+          build-args: NETWORK=${{ matrix.network }}
+          cache-from: type=registry,ref=${{ steps.base-variables.outputs.cardano-graphql-background-image }}:latest
+          cache-to: type=inline
+          push: true
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:${{ github.sha }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:${{ github.event.release.tag_name }}-${{ matrix.network }}, ${{ steps.base-variables.outputs.cardano-graphql-background-image }}:latest-${{ matrix.network }}
+          target: background
           
       - name: 🔨 Build and push Cardano GraphQL Hasura Dockerfile
         uses: docker/build-push-action@v2
@@ -65,15 +77,16 @@ jobs:
           context: ./packages/api-cardano-db-hasura/hasura
           file: ./packages/api-cardano-db-hasura/hasura/Dockerfile
           push: true
-          tags: ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:${{ github.sha }}, inputoutput/cardano-graphql-hasura:${{ github.event.release.tag_name }}, inputoutput/cardano-graphql-hasura:latest
-      
-      - name: 📤 Publish packages to npm registry
-        if: ${{ matrix.network == 'mainnet' }}
-        run: |
-          yarn install --offline --frozen-lockfile --non-interactive --logevel=error
-          npx npm-cli-login -u ${{ secrets.NPM_REGISTRY_USER }} -e ${{ secrets.NPM_REGISTRY_EMAIL }} -p ${{ secrets.NPM_REGISTRY_TOKEN }}
-          scripts/publish_packages.sh
-          rm -f .npmrc
+          tags: ${{ steps.base-variables.outputs.cardano-graphql-hasura-image }}:${{ github.sha }}, cardanofoundation/cardano-graphql-hasura:${{ github.event.release.tag_name }}, cardanofoundation/cardano-graphql-hasura:latest
+
+# Removed push to npm for now, will add it later again
+#      - name: 📤 Publish packages to npm registry
+#        if: ${{ matrix.network == 'mainnet' }}
+#        run: |
+#          yarn install --offline --frozen-lockfile --non-interactive --logevel=error
+#          npx npm-cli-login -u ${{ secrets.NPM_REGISTRY_USER }} -e ${{ secrets.NPM_REGISTRY_EMAIL }} -p ${{ secrets.NPM_REGISTRY_TOKEN }}
+#          scripts/publish_packages.sh
+#          rm -f .npmrc
         
       - name: 🔨 Build docs
         if: ${{ matrix.network == 'mainnet' }}

@@ -1,0 +1,76 @@
+table:
+  name: voting_procedure
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: voteProcedure
+    select_aggregate: voteProcedure_aggregate
+object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_id: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+  - name: govActionProposal
+    using:
+      manual_configuration:
+        column_mapping:
+          gov_action_proposal_id: id
+        remote_table:
+          name: gov_action_proposal
+          schema: public
+  - name: drepVoter
+    using:
+      manual_configuration:
+        column_mapping:
+          drep_voter: id
+        remote_table:
+          name: drep_hash
+          schema: public
+  - name: poolVoter
+    using:
+      manual_configuration:
+        column_mapping:
+          pool_voter: id
+        remote_table:
+          name: pool_hash
+          schema: public
+  - name: votingAnchor
+    using:
+      manual_configuration:
+        column_mapping:
+          voting_anchor_id: id
+        remote_table:
+          name: voting_anchor
+          schema: public
+  - name: committeeVoter
+    using:
+      manual_configuration:
+        column_mapping:
+          committee_voter: id
+        remote_table:
+          name: committee_hash
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - committee_voter
+        - drep_voter
+        - gov_action_proposal_id
+        - index
+        - invalid
+        - pool_voter
+        - tx_id
+        - vote
+        - voter_role
+        - voting_anchor_id
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

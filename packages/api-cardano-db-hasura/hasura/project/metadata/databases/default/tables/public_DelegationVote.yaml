@@ -1,0 +1,48 @@
+table:
+  name: DelegationVote
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: delegationVotes
+    select_aggregate: delegationVotes_aggregate
+object_relationships:
+  - name: redeemer
+    using:
+      manual_configuration:
+        column_mapping:
+          redeemerId: id
+        insertion_order: null
+        remote_table:
+          name: Redeemer
+          schema: public
+  - name: drep
+    using:
+      manual_configuration:
+        column_mapping:
+          drep_hash_id: id
+        insertion_order: null
+        remote_table:
+          name: drep_hash
+          schema: public
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_id: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - address
+        - drep_hash_id
+        - tx_id
+        - redeemerId
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

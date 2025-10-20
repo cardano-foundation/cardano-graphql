@@ -1,0 +1,39 @@
+table:
+  name: DrepRegistration
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: drepRegistrations
+    select_aggregate: drepRegistrations_aggregate
+object_relationships:
+  - name: transaction
+    using:
+      manual_configuration:
+        column_mapping:
+          tx_id: id
+        insertion_order: null
+        remote_table:
+          name: Transaction
+          schema: public
+  - name: votingAnchor
+    using:
+      manual_configuration:
+        column_mapping:
+          voting_anchor_id: id
+        insertion_order: null
+        remote_table:
+          name: voting_anchor
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - DRepId
+        - deposit
+        - tx_id
+        - voting_anchor_id
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

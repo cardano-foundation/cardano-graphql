@@ -1,5 +1,11 @@
 import { createLogger, LogLevelString } from 'bunyan'
-import { ChainFollower, Db, HasuraBackgroundClient, MetadataClient, Worker } from './index'
+import {
+  ChainFollower,
+  Db,
+  HasuraBackgroundClient,
+  MetadataClient,
+  Worker
+} from './index'
 import onDeath from 'death'
 import { Logger } from 'ts-log'
 import { CustomError } from 'ts-custom-error'
@@ -15,19 +21,24 @@ export class MissingConfig extends CustomError {
 }
 
 export interface BackgroundConfig {
-  db: DbConfig,
-  hasuraCliPath: string,
-  hasuraCliExtPath: string,
-  hasuraUri: string,
-  loggerMinSeverity: LogLevelString,
-  metadataServerUri: string,
+  db: DbConfig;
+  composeProfiles: string;
+  hasuraCliPath: string;
+  hasuraCliExtPath: string;
+  hasuraUri: string;
+  chainfollower?: {
+    id: string;
+    slot: number;
+  };
+  loggerMinSeverity: LogLevelString;
+  metadataServerUri: string;
   metadataUpdateInterval?: {
-    assets: number
-  },
+    assets: number;
+  };
   ogmios?: {
-    host?: string
-    port?: number
-  }
+    host?: string;
+    port?: number;
+  };
 }
 
 async function getConfig (): Promise<BackgroundConfig> {
@@ -51,7 +62,9 @@ async function getConfig (): Promise<BackgroundConfig> {
     throw new MissingConfig('POSTGRES_HOST env not set')
   }
   if (!env.postgres.passwordFile && !env.postgres.password) {
-    throw new MissingConfig('POSTGRES_PASSWORD_FILE or POSTGRES_PASSWORD env not set')
+    throw new MissingConfig(
+      'POSTGRES_PASSWORD_FILE or POSTGRES_PASSWORD env not set'
+    )
   }
   if (!env.postgres.port) {
     throw new MissingConfig('POSTGRES_PORT env not set')
@@ -62,25 +75,42 @@ async function getConfig (): Promise<BackgroundConfig> {
   let db: BackgroundConfig['db']
   try {
     db = {
-      database: env.postgres.db || (await fs.readFile(env.postgres.dbFile, 'utf8')).toString().trim(),
+      database:
+        env.postgres.db ||
+        (await fs.readFile(env.postgres.dbFile, 'utf8')).toString().trim(),
       host: env.postgres.host,
-      password: env.postgres.password || (await fs.readFile(env.postgres.passwordFile, 'utf8')).toString().trim(),
+      password:
+        env.postgres.password ||
+        (await fs.readFile(env.postgres.passwordFile, 'utf8'))
+          .toString()
+          .trim(),
       port: env.postgres.port,
-      user: env.postgres.user || (await fs.readFile(env.postgres.userFile, 'utf8')).toString().trim()
+      user:
+        env.postgres.user ||
+        (await fs.readFile(env.postgres.userFile, 'utf8')).toString().trim()
     }
   } catch (error) {
     throw new MissingConfig('Database configuration cannot be read')
+  }
+  let chainfollower
+  if (env.chainfollower) {
+    chainfollower = {
+      id: env.chainfollower.id,
+      slot: env.chainfollower.slot
+    }
   }
   const { postgres, ...selectedEnv } = env
   return {
     ...selectedEnv,
     db,
-    loggerMinSeverity: env.loggerMinSeverity || 'info' as LogLevelString
+    chainfollower,
+    loggerMinSeverity: env.loggerMinSeverity || ('info' as LogLevelString)
   }
 }
 
 function filterAndTypecastEnvs (env: any) {
   const {
+    COMPOSE_PROFILES,
     ASSET_METADATA_UPDATE_INTERVAL,
     HASURA_CLI_PATH,
     HASURA_CLI_EXT_PATH,
@@ -96,16 +126,21 @@ function filterAndTypecastEnvs (env: any) {
     POSTGRES_PASSWORD_FILE,
     POSTGRES_PORT,
     POSTGRES_USER,
-    POSTGRES_USER_FILE
+    POSTGRES_USER_FILE,
+    CHAIN_FOLLOWER_START_ID,
+    CHAIN_FOLLOWER_START_SLOT
   } = env as NodeJS.ProcessEnv
   return {
+    composeProfiles: COMPOSE_PROFILES,
     hasuraCliPath: HASURA_CLI_PATH,
     hasuraCliExtPath: HASURA_CLI_EXT_PATH,
     hasuraUri: HASURA_URI,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
     metadataServerUri: METADATA_SERVER_URI,
     metadataUpdateInterval: {
-      assets: ASSET_METADATA_UPDATE_INTERVAL ? Number(ASSET_METADATA_UPDATE_INTERVAL) : undefined
+      assets: ASSET_METADATA_UPDATE_INTERVAL
+        ? Number(ASSET_METADATA_UPDATE_INTERVAL)
+        : undefined
     },
     ogmios: {
       host: OGMIOS_HOST,
@@ -120,6 +155,12 @@ function filterAndTypecastEnvs (env: any) {
       port: POSTGRES_PORT ? Number(POSTGRES_PORT) : undefined,
       user: POSTGRES_USER,
       userFile: POSTGRES_USER_FILE
+    },
+    chainfollower: {
+      id: CHAIN_FOLLOWER_START_ID,
+      slot: CHAIN_FOLLOWER_START_SLOT
+        ? Number(CHAIN_FOLLOWER_START_SLOT)
+        : undefined
     }
   }
 }
@@ -142,10 +183,12 @@ function filterAndTypecastEnvs (env: any) {
       logger,
       config.db
     )
-    const metadataClient = new MetadataClient(
-      config.metadataServerUri,
-      logger
-    )
+
+    const isTokenRegistryEnabled =
+      config.composeProfiles &&
+      config.composeProfiles.split(',').includes('token-registry')
+
+    const metadataClient = new MetadataClient(isTokenRegistryEnabled, config.metadataServerUri, logger)
     const worker = new Worker(
       hasuraBackgroundClient,
       logger,
@@ -159,8 +202,11 @@ function filterAndTypecastEnvs (env: any) {
     )
     const db = new Db(config.db, logger)
     const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
-      const mostRecentPoint = await hasuraBackgroundClient.getMostRecentPointWithNewAsset()
-      return mostRecentPoint !== null ? [mostRecentPoint, 'origin'] : ['origin']
+      const mostRecentPoint =
+        await hasuraBackgroundClient.getMostRecentPointWithNewAsset()
+      return mostRecentPoint !== null
+        ? [mostRecentPoint, 'origin']
+        : ['origin']
     }
     await db.init({
       onDbInit: () => hasuraBackgroundClient.shutdown(),

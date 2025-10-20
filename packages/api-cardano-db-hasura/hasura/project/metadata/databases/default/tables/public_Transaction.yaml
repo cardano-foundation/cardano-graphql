@@ -124,6 +124,7 @@ select_permissions:
         - size
         - totalOutput
         - validContract
+        - treasuryDonation
       filter: {}
       limit: 2500
       allow_aggregations: true

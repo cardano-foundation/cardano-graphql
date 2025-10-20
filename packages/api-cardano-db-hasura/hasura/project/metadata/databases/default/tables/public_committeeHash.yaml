@@ -1,0 +1,18 @@
+table:
+  name: committee_hash
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: committeeHash
+    select_aggregate: committeeHash_aggregate
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - has_script
+        - raw
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

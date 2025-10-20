@@ -1,0 +1,30 @@
+table:
+  name: off_chain_vote_reference
+  schema: public
+configuration:
+  column_config: {}
+  custom_column_names: {}
+  custom_root_fields:
+    select: offChainVoteReference
+    select_aggregate: offChainVoteReference_aggregate
+object_relationships:
+  - name: OffChainVoteData
+    using:
+      manual_configuration:
+        column_mapping:
+          off_chain_vote_data_id: id
+        remote_table:
+          name: off_chain_vote_data
+          schema: public
+select_permissions:
+  - role: cardano-graphql
+    permission:
+      columns:
+        - hash_algorithm
+        - hash_digest
+        - label
+        - off_chain_vote_data_id
+        - uri
+      filter: {}
+      limit: 2500
+      allow_aggregations: true

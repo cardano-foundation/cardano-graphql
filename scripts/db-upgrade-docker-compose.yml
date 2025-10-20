@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  db-upgrade:
+    platform: linux/x86_64
+    image: pgautoupgrade/pgautoupgrade:latest
+    environment:
+      - POSTGRES_LOGGING=true
+      - POSTGRES_PASSWORD=doNoUseThisSecret!
+      - POSTGRES_USER=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/11/data
+      - postgres14-data:/var/lib/postgresql/14/data
+volumes:
+  postgres-data:
+  postgres14-data:

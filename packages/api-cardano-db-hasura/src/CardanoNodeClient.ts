@@ -3,16 +3,13 @@ import pRetry from 'p-retry'
 import util, { DataFetcher, errors, ModuleState } from '@cardano-graphql/util'
 import {
   ConnectionConfig,
-  createConnectionObject,
-  createStateQueryClient,
-  createTxSubmissionClient,
+  createConnectionObject, createLedgerStateQueryClient, createTransactionSubmissionClient,
   getServerHealth,
-  ServerHealth,
-  // Schema,
-  StateQuery,
-  TxSubmission
+  ServerHealth
 } from '@cardano-ogmios/client'
 import { dummyLogger, Logger } from 'ts-log'
+import { LedgerStateQueryClient } from '@cardano-ogmios/client/dist/LedgerStateQuery'
+import { TransactionSubmissionClient } from '@cardano-ogmios/client/dist/TransactionSubmission'
 import { createInteractionContextWithLogger } from './util'
 
 const MODULE_NAME = 'CardanoNodeClient'
@@ -20,8 +17,8 @@ const MODULE_NAME = 'CardanoNodeClient'
 export class CardanoNodeClient {
   readonly networkParams: string[]
   public adaCirculatingSupply: AssetSupply['circulating']
-  private stateQueryClient: StateQuery.StateQueryClient
-  private txSubmissionClient: TxSubmission.TxSubmissionClient
+  private stateQueryClient: LedgerStateQueryClient
+  private txSubmissionClient: TransactionSubmissionClient
   private state: ModuleState
   private serverHealthFetcher: DataFetcher<ServerHealth>
 
@@ -32,10 +29,12 @@ export class CardanoNodeClient {
   }
 
   public async getTipSlotNo () {
+    this.logger.info({ module: MODULE_NAME }, this.state)
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getTipSlotNo')
     }
-    const tip = await this.stateQueryClient.ledgerTip()
+    const tip = await this.stateQueryClient.networkTip()
+    this.logger.info({ module: MODULE_NAME, tip }, tip)
     const slotNo = tip === 'origin' ? 0 : tip.slot
     this.logger.debug({ module: MODULE_NAME, slotNo }, 'getTipSlotNo')
     return slotNo
@@ -58,13 +57,18 @@ export class CardanoNodeClient {
     this.serverHealthFetcher = this.serverHealthFetcher || new DataFetcher(
       'ServerHealth',
       () => getServerHealth({ connection: createConnectionObject(ogmiosConnectionConfig) }),
-      30000, this.logger
+      5000, this.logger
     )
     await pRetry(async () => {
-      await this.serverHealthFetcher.initialize()
+      try {
+        await this.serverHealthFetcher.initialize()
+      } catch (e) {
+        this.logger.info('Waiting for Ogmios to be ready...')
+        throw e
+      }
     }, {
       factor: 1.2,
-      retries: 3,
+      retries: 100,
       onFailedAttempt: util.onFailedAttemptFor(
         'Establishing connection to Ogmios server',
         this.logger
@@ -75,8 +79,17 @@ export class CardanoNodeClient {
         await this.shutdown()
         await this.initialize(ogmiosConnectionConfig)
       })
-      this.stateQueryClient = await createStateQueryClient(interactionContext)
-      this.txSubmissionClient = await createTxSubmissionClient(interactionContext)
+      this.stateQueryClient = await createLedgerStateQueryClient(interactionContext)
+      let tip
+      try {
+        tip = await this.stateQueryClient.ledgerTip()
+      } catch (e) {
+        this.logger.error({ module: MODULE_NAME }, 'Querying ledger tip not yet available. Wait for later epoch. Ogmios Error Message: ' + e.message)
+        throw e
+      }
+
+      this.logger.info({ module: MODULE_NAME }, tip)
+      this.txSubmissionClient = await createTransactionSubmissionClient(interactionContext)
     }, {
       factor: 1.2,
       retries: 100,
@@ -110,7 +123,7 @@ export class CardanoNodeClient {
     if (this.serverHealthFetcher.value.networkSynchronization < 0.95) {
       throw new errors.OperationRequiresSyncedNode('submitTransaction')
     }
-    const hash = await this.txSubmissionClient.submitTx(transaction)
+    const hash = await this.txSubmissionClient.submitTransaction(transaction)
     this.logger.info({ module: MODULE_NAME, hash }, 'submitTransaction')
     return hash
   }

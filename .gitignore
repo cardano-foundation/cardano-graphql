@@ -11,3 +11,4 @@ result*
 *yarn-error.log
 bin
 state
+packages-cache/**

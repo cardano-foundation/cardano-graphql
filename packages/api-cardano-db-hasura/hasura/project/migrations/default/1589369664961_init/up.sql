@@ -1,8 +1,13 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+
+-- noinspection SqlDialectInspectionForFile
 
 CREATE OR REPLACE VIEW "AdaPots" AS
   SELECT
     epoch_no AS "epochNo",
-    deposits,
+    deposits_stake,
+    deposits_drep,
+    deposits_proposal
     fees,
     reserves,
     rewards,
@@ -100,6 +105,16 @@ SELECT
   pool_hash_id AS "pool_hash_id"
 FROM delegation
 JOIN stake_address on delegation.addr_id = stake_address.id;
+
+CREATE OR REPLACE VIEW "DelegationVote" AS
+SELECT
+    delegation_vote.id AS "id",
+    stake_address.view AS "address",
+    delegation_vote.redeemer_id AS "redeemerId",
+    delegation_vote.tx_id AS "tx_id",
+    delegation_vote.drep_hash_id AS "drep_hash_id"
+FROM delegation_vote
+         JOIN stake_address on delegation_vote.addr_id = stake_address.id;
 
 CREATE OR REPLACE VIEW "Epoch" AS
 SELECT
@@ -256,7 +271,8 @@ SELECT
   pool.registered_tx_id AS "updated_in_tx_id",
   pool.pledge AS "pledge",
   stake_address.view AS "rewardAddress",
-  pool_metadata_ref.url AS "url"
+  pool_metadata_ref.url AS "url",
+  pool.deposit AS deposit
 FROM pool_update AS pool
   LEFT JOIN pool_metadata_ref ON pool.meta_id = pool_metadata_ref.id
   INNER JOIN tx ON pool.registered_tx_id = tx.id
@@ -284,9 +300,20 @@ CREATE OR REPLACE VIEW "StakeRegistration" AS
 SELECT
   stake_registration.id AS "id",
   stake_address.view AS "address",
-  stake_registration.tx_id AS "tx_id"
+  stake_registration.tx_id AS "tx_id",
+  stake_registration.deposit AS "deposit"
 FROM stake_registration
 JOIN stake_address on stake_registration.addr_id = stake_address.id;
+
+CREATE OR REPLACE VIEW "DrepRegistration" AS
+SELECT
+    drep_registration.id AS "id",
+    drep_hash.view AS "DRepId",
+    drep_registration.tx_id AS "tx_id",
+    drep_registration.deposit AS "deposit",
+    drep_registration.voting_anchor_id AS "voting_anchor_id"
+FROM drep_registration
+JOIN drep_hash on drep_registration.drep_hash_id = drep_hash.id;
 
 CREATE OR REPLACE VIEW "ActiveStake" AS
 SELECT
@@ -337,7 +364,8 @@ SELECT
   tx.script_size AS "scriptSize",
   tx.size,
   CAST(COALESCE((SELECT SUM("value") FROM tx_out WHERE tx_id = tx.id), 0) AS bigint) AS "totalOutput",
-  tx.valid_contract AS "validContract"
+  tx.valid_contract AS "validContract",
+  tx.treasury_donation AS "treasuryDonation"
 FROM
   tx
 INNER JOIN block

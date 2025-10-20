@@ -1,6 +1,6 @@
 schema {
-  mutation: Mutation
-  query: Query
+    mutation: Mutation
+    query: Query
 }
 
 scalar AssetFingerprint
@@ -21,1896 +21,2314 @@ scalar Timestamp
 scalar VRFVerificationKey
 
 type Mutation {
-  # Submit a signed transaction to the network
-  submitTransaction (transaction: String!): TransactionSubmitResponse!
+    # Submit a signed transaction to the network
+    submitTransaction (transaction: String!): TransactionSubmitResponse!
 }
 
 type Query {
-  activeStake (
-    limit: Int
-    order_by: [ActiveStake_order_by!]
-    offset: Int
-    where: ActiveStake_bool_exp
-  ): [ActiveStake]!
-  activeStake_aggregate (
-    limit: Int
-    order_by: [ActiveStake_order_by!]
-    offset: Int
-    where: ActiveStake_bool_exp
-  ): ActiveStake_aggregate!
-  ada: Ada!
-  assets (
-    limit: Int
-    order_by: [Asset_order_by!]
-    offset: Int
-    where: Asset_bool_exp
-  ): [Asset]!
-  assets_aggregate (
-    limit: Int
-    order_by: [Asset_order_by!]
-    offset: Int
-    where: Asset_bool_exp
-  ): Asset_aggregate!
-  blocks (
-    limit: Int
-    order_by: [Block_order_by!]
-    offset: Int
-    where: Block_bool_exp
-  ): [Block]!
-  blocks_aggregate (
-    limit: Int
-    order_by: [Block_order_by!]
-    offset: Int
-    where: Block_bool_exp
-  ): Block_aggregate!
-  cardano: Cardano!
-  cardanoDbMeta: CardanoDbMeta!
-  collateralInputs (
-    limit: Int
-    order_by: [CollateralInput_order_by!]
-    offset: Int
-    where: CollateralInput_bool_exp
-  ): [CollateralInput]!
-  collateralInputs_aggregate (
-    limit: Int
-    order_by: [CollateralInput_order_by!]
-    offset: Int
-    where: CollateralInput_bool_exp
-  ): CollateralInput_aggregate!
-  collateralOutputs (
-    limit: Int
-    order_by: [CollateralOutput_order_by!]
-    offset: Int
-    where: CollateralOutput_bool_exp
-  ): [CollateralOutput]!
-  collateralOutputs_aggregate (
-    limit: Int
-    order_by: [CollateralOutput_order_by!]
-    offset: Int
-    where: CollateralOutput_bool_exp
-  ): CollateralOutput_aggregate!
-  delegations (
-    limit: Int
-    order_by: [Delegation_order_by!]
-    offset: Int
-    where: Delegation_bool_exp
-  ): [Delegation]
-  delegations_aggregate (
-    limit: Int
-    order_by: [Delegation_order_by!]
-    offset: Int
-    where: Delegation_bool_exp
-  ): Delegation_aggregate
-  epochs (
-    limit: Int
-    order_by: [Epoch_order_by!]
-    offset: Int
-    where: Epoch_bool_exp
-  ): [Epoch]!
-  epochs_aggregate (
-    limit: Int
-    order_by: [Epoch_order_by!]
-    offset: Int
-    where: Epoch_bool_exp
-  ): Epoch_aggregate!
-  genesis: Genesis!
-  paymentAddresses (
-    addresses: [String]!
-  ): [PaymentAddress]
-  redeemers (
-    limit: Int
-    order_by: [Redeemer_order_by!]
-    offset: Int
-    where: Redeemer_bool_exp
-  ): [Redeemer]!
-  redeemers_aggregate (
-    limit: Int
-    order_by: [Redeemer_order_by!]
-    offset: Int
-    where: Redeemer_bool_exp
-  ): Redeemer_aggregate!
-  rewards (
-    limit: Int
-    order_by: [Reward_order_by!]
-    offset: Int
-    where: Reward_bool_exp
-  ): [Reward]!
-  rewards_aggregate (
-    limit: Int
-    order_by: [Reward_order_by!]
-    offset: Int
-    where: Reward_bool_exp
-  ): Reward_aggregate!
-  scripts (
-    limit: Int
-    order_by: [Script_order_by!]
-    offset: Int
-    where: Script_bool_exp
-  ): [Script]!
-  scripts_aggregate (
-    limit: Int
-    order_by: [Script_order_by!]
-    offset: Int
-    where: Script_bool_exp
-  ): Script_aggregate!
-  stakeDeregistrations (
-    limit: Int
-    order_by: [StakeDeregistration_order_by!]
-    offset: Int
-    where: StakeDeregistration_bool_exp
-  ): [StakeDeregistration]
-  stakeDeregistrations_aggregate (
-    limit: Int
-    order_by: [StakeDeregistration_order_by!]
-    offset: Int
-    where: StakeDeregistration_bool_exp
-  ): StakeDeregistration_aggregate
-  stakePools (
-    limit: Int
-    order_by: [StakePool_order_by!]
-    offset: Int
-    where: StakePool_bool_exp
-  ): [StakePool]
-  stakePools_aggregate (
-    limit: Int
-    order_by: [StakePool_order_by!]
-    offset: Int
-    where: StakePool_bool_exp
-  ): StakePool_aggregate
-  stakeRegistrations (
-    limit: Int
-    order_by: [StakeRegistration_order_by!]
-    offset: Int
-    where: StakeRegistration_bool_exp
-  ): [StakeRegistration]
-  stakeRegistrations_aggregate (
-    limit: Int
-    order_by: [StakeRegistration_order_by!]
-    offset: Int
-    where: StakeRegistration_bool_exp
-  ): StakeRegistration_aggregate
-  tokenMints (
-    distinct_on: [TokenMint_aggregate_distinct_on!]
-    limit: Int
-    order_by: [TokenMint_order_by!]
-    offset: Int
-    where: TokenMint_bool_exp
-  ): [TokenMint]!
-  tokenMints_aggregate (
-    distinct_on: [TokenMint_aggregate_distinct_on!]
-    limit: Int
-    order_by: [TokenMint_order_by!]
-    offset: Int
-    where: TokenMint_bool_exp
-  ): TokenMint_aggregate!
-  transactions (
-    limit: Int
-    order_by: [Transaction_order_by!]
-    offset: Int
-    where: Transaction_bool_exp
-  ): [Transaction]!
-  transactions_aggregate (
-    limit: Int
-    order_by: [Transaction_order_by!]
-    offset: Int
-    where: Transaction_bool_exp
-  ): Transaction_aggregate!
-  utxos (
-    distinct_on: [TransactionOutput_distinct_on!]
-    limit: Int
-    order_by: [TransactionOutput_order_by!]
-    offset: Int
-    where: TransactionOutput_bool_exp
-  ): [TransactionOutput]!
-  utxos_aggregate (
-    distinct_on: [TransactionOutput_distinct_on!]
-    limit: Int
-    order_by: [TransactionOutput_order_by!]
-    offset: Int
-    where: TransactionOutput_bool_exp
-  ): TransactionOutput_aggregate!
-  withdrawals (
-    limit: Int
-    order_by: [Withdrawal_order_by!]
-    offset: Int
-    where: Withdrawal_bool_exp
-  ): [Withdrawal]!
-  withdrawals_aggregate (
-    limit: Int
-    order_by: [Withdrawal_order_by!]
-    offset: Int
-    where: Withdrawal_bool_exp
-  ): Withdrawal_aggregate
+    activeStake (
+        limit: Int
+        order_by: [ActiveStake_order_by!]
+        offset: Int
+        where: ActiveStake_bool_exp
+    ): [ActiveStake]!
+    activeStake_aggregate (
+        limit: Int
+        order_by: [ActiveStake_order_by!]
+        offset: Int
+        where: ActiveStake_bool_exp
+    ): ActiveStake_aggregate!
+    ada: Ada!
+    assets (
+        limit: Int
+        order_by: [Asset_order_by!]
+        offset: Int
+        where: Asset_bool_exp
+    ): [Asset]!
+    assets_aggregate (
+        limit: Int
+        order_by: [Asset_order_by!]
+        offset: Int
+        where: Asset_bool_exp
+    ): Asset_aggregate!
+    blocks (
+        limit: Int
+        order_by: [Block_order_by!]
+        offset: Int
+        where: Block_bool_exp
+    ): [Block]!
+    blocks_aggregate (
+        limit: Int
+        order_by: [Block_order_by!]
+        offset: Int
+        where: Block_bool_exp
+    ): Block_aggregate!
+    cardano: Cardano!
+    cardanoDbMeta: CardanoDbMeta!
+    collateralInputs (
+        limit: Int
+        order_by: [CollateralInput_order_by!]
+        offset: Int
+        where: CollateralInput_bool_exp
+    ): [CollateralInput]!
+    collateralInputs_aggregate (
+        limit: Int
+        order_by: [CollateralInput_order_by!]
+        offset: Int
+        where: CollateralInput_bool_exp
+    ): CollateralInput_aggregate!
+    collateralOutputs (
+        limit: Int
+        order_by: [CollateralOutput_order_by!]
+        offset: Int
+        where: CollateralOutput_bool_exp
+    ): [CollateralOutput]!
+    collateralOutputs_aggregate (
+        limit: Int
+        order_by: [CollateralOutput_order_by!]
+        offset: Int
+        where: CollateralOutput_bool_exp
+    ): CollateralOutput_aggregate!
+    committees (
+        limit: Int
+        order_by: [Committee_order_by!]
+        offset: Int
+        where: Committee_bool_exp
+    ): [Committee]!
+    committeeHashes (
+        limit: Int
+        order_by: [CommitteeHash_order_by!]
+        offset: Int
+        where: CommitteeHash_bool_exp
+    ): [CommitteeHash]!
+    committeeMembers (
+        limit: Int
+        order_by: [CommitteeMember_order_by!]
+        offset: Int
+        where: CommitteeMember_bool_exp
+    ): [CommitteeMember]!
+    delegations (
+        limit: Int
+        order_by: [Delegation_order_by!]
+        offset: Int
+        where: Delegation_bool_exp
+    ): [Delegation]
+    committeeRegistration (
+        limit: Int
+        order_by: [CommitteeRegistration_order_by!]
+        offset: Int
+        where: CommitteeRegistration_bool_exp
+    ): [CommitteeRegistration]!
+    committeeDeRegistration (
+        limit: Int
+        order_by: [CommitteeDeRegistration_order_by!]
+        offset: Int
+        where: CommitteeDeRegistration_bool_exp
+    ): [CommitteeDeRegistration]!
+    delegationVotes (
+        limit: Int
+        order_by: [DelegationVote_order_by!]
+        offset: Int
+        where: DelegationVote_bool_exp
+    ): [DelegationVote]!
+    delegations_aggregate (
+        limit: Int
+        order_by: [Delegation_order_by!]
+        offset: Int
+        where: Delegation_bool_exp
+    ): Delegation_aggregate
+    drepHashes (
+        limit: Int
+        order_by: [DrepHash_order_by!]
+        offset: Int
+        where: DrepHash_bool_exp
+    ): [DrepHash]!
+    epochs (
+        limit: Int
+        order_by: [Epoch_order_by!]
+        offset: Int
+        where: Epoch_bool_exp
+    ): [Epoch]!
+    epochs_aggregate (
+        limit: Int
+        order_by: [Epoch_order_by!]
+        offset: Int
+        where: Epoch_bool_exp
+    ): Epoch_aggregate!
+    genesis: Genesis!
+    offChainVoteData (
+        limit: Int
+        order_by: [OffChainVoteData_order_by!]
+        offset: Int
+        where: OffChainVoteData_bool_exp
+    ): [OffChainVoteData]!
+    offChainVoteAuthor (
+        limit: Int
+        order_by: [OffChainVoteAuthor_order_by!]
+        offset: Int
+        where: OffChainVoteAuthor_bool_exp
+    ): [OffChainVoteAuthor]!
+    offChainVoteReference (
+        limit: Int
+        order_by: [OffChainVoteReference_order_by!]
+        offset: Int
+        where: OffChainVoteReference_bool_exp
+    ): [OffChainVoteReference]!
+    offChainVoteGovActionData (
+        limit: Int
+        order_by: [OffChainVoteGovActionData_order_by!]
+        offset: Int
+        where: OffChainVoteGovActionData_bool_exp
+    ): [OffChainVoteGovActionData]!
+    offChainVoteDrepData (
+        limit: Int
+        order_by: [OffChainVoteDrepData_order_by!]
+        offset: Int
+        where: OffChainVoteDrepData_bool_exp
+    ): [OffChainVoteDrepData]!
+    paymentAddresses (
+        addresses: [String]!
+    ): [PaymentAddress]
+    redeemers (
+        limit: Int
+        order_by: [Redeemer_order_by!]
+        offset: Int
+        where: Redeemer_bool_exp
+    ): [Redeemer]!
+    redeemers_aggregate (
+        limit: Int
+        order_by: [Redeemer_order_by!]
+        offset: Int
+        where: Redeemer_bool_exp
+    ): Redeemer_aggregate!
+    rewards (
+        limit: Int
+        order_by: [Reward_order_by!]
+        offset: Int
+        where: Reward_bool_exp
+    ): [Reward]!
+    rewards_aggregate (
+        limit: Int
+        order_by: [Reward_order_by!]
+        offset: Int
+        where: Reward_bool_exp
+    ): Reward_aggregate!
+    scripts (
+        limit: Int
+        order_by: [Script_order_by!]
+        offset: Int
+        where: Script_bool_exp
+    ): [Script]!
+    scripts_aggregate (
+        limit: Int
+        order_by: [Script_order_by!]
+        offset: Int
+        where: Script_bool_exp
+    ): Script_aggregate!
+    stakeDeregistrations (
+        limit: Int
+        order_by: [StakeDeregistration_order_by!]
+        offset: Int
+        where: StakeDeregistration_bool_exp
+    ): [StakeDeregistration]
+    stakeDeregistrations_aggregate (
+        limit: Int
+        order_by: [StakeDeregistration_order_by!]
+        offset: Int
+        where: StakeDeregistration_bool_exp
+    ): StakeDeregistration_aggregate
+    stakePools (
+        limit: Int
+        order_by: [StakePool_order_by!]
+        offset: Int
+        where: StakePool_bool_exp
+    ): [StakePool]
+    stakePools_aggregate (
+        limit: Int
+        order_by: [StakePool_order_by!]
+        offset: Int
+        where: StakePool_bool_exp
+    ): StakePool_aggregate
+    stakeRegistrations (
+        limit: Int
+        order_by: [StakeRegistration_order_by!]
+        offset: Int
+        where: StakeRegistration_bool_exp
+    ): [StakeRegistration]
+    stakeRegistrations_aggregate (
+        limit: Int
+        order_by: [StakeRegistration_order_by!]
+        offset: Int
+        where: StakeRegistration_bool_exp
+    ): StakeRegistration_aggregate
+    tokenMints (
+        distinct_on: [TokenMint_aggregate_distinct_on!]
+        limit: Int
+        order_by: [TokenMint_order_by!]
+        offset: Int
+        where: TokenMint_bool_exp
+    ): [TokenMint]!
+    tokenMints_aggregate (
+        distinct_on: [TokenMint_aggregate_distinct_on!]
+        limit: Int
+        order_by: [TokenMint_order_by!]
+        offset: Int
+        where: TokenMint_bool_exp
+    ): TokenMint_aggregate!
+    transactions (
+        limit: Int
+        order_by: [Transaction_order_by!]
+        offset: Int
+        where: Transaction_bool_exp
+    ): [Transaction]!
+    transactions_aggregate (
+        limit: Int
+        order_by: [Transaction_order_by!]
+        offset: Int
+        where: Transaction_bool_exp
+    ): Transaction_aggregate!
+    utxos (
+        distinct_on: [TransactionOutput_distinct_on!]
+        limit: Int
+        order_by: [TransactionOutput_order_by!]
+        offset: Int
+        where: TransactionOutput_bool_exp
+    ): [TransactionOutput]!
+    utxos_aggregate (
+        distinct_on: [TransactionOutput_distinct_on!]
+        limit: Int
+        order_by: [TransactionOutput_order_by!]
+        offset: Int
+        where: TransactionOutput_bool_exp
+    ): TransactionOutput_aggregate!
+    votingAnchor (
+        limit: Int
+        order_by: [VotingAnchor_order_by!]
+        offset: Int
+        where: VotingAnchor_bool_exp
+    ): [VotingAnchor]!
+    withdrawals (
+        limit: Int
+        order_by: [Withdrawal_order_by!]
+        offset: Int
+        where: Withdrawal_bool_exp
+    ): [Withdrawal]!
+    withdrawals_aggregate (
+        limit: Int
+        order_by: [Withdrawal_order_by!]
+        offset: Int
+        where: Withdrawal_bool_exp
+    ): Withdrawal_aggregate
 }
 
 type ActiveStake {
-  address: StakeAddress!
-  amount: Lovelace!
-  epoch: Epoch
-  epochNo: Int!
-  stakePoolHash: Hash28Hex!
-  stakePoolId: StakePoolID!
-  registeredWith: StakePool!
+    address: StakeAddress!
+    amount: Lovelace!
+    epoch: Epoch
+    epochNo: Int!
+    stakePoolHash: Hash28Hex!
+    stakePoolId: StakePoolID!
+    registeredWith: StakePool!
 }
 
 input ActiveStake_bool_exp {
-  _and: [ActiveStake_bool_exp]
-  _not: ActiveStake_bool_exp
-  _or: [ActiveStake_bool_exp]
-  address: StakeAddress_comparison_exp
-  amount: text_comparison_exp
-  epoch: Epoch_bool_exp
-  epochNo: Int_comparison_exp
-  stakePoolHash: Hash28Hex_comparison_exp
-  stakePoolId: StakePoolID_comparison_exp
-  registeredWith: StakePool_bool_exp
+    _and: [ActiveStake_bool_exp]
+    _not: ActiveStake_bool_exp
+    _or: [ActiveStake_bool_exp]
+    address: StakeAddress_comparison_exp
+    amount: text_comparison_exp
+    epoch: Epoch_bool_exp
+    epochNo: Int_comparison_exp
+    stakePoolHash: Hash28Hex_comparison_exp
+    stakePoolId: StakePoolID_comparison_exp
+    registeredWith: StakePool_bool_exp
 }
 
 input ActiveStake_order_by {
-  address: order_by
-  amount: order_by
-  epoch: Epoch_order_by
-  epochNo: order_by
-  stakePoolHash: order_by
-  stakePoolId: order_by
-  registeredWith: StakePool_order_by
+    address: order_by
+    amount: order_by
+    epoch: Epoch_order_by
+    epochNo: order_by
+    stakePoolHash: order_by
+    stakePoolId: order_by
+    registeredWith: StakePool_order_by
 }
 
 type ActiveStake_aggregate {
-  aggregate: ActiveStake_aggregate_fields
+    aggregate: ActiveStake_aggregate_fields
 }
 
 type ActiveStake_aggregate_fields {
-  count: String!
-  max: ActiveStake_max_fields!
-  min: ActiveStake_min_fields!
-  sum: ActiveStake_sum_fields!
+    count: String!
+    max: ActiveStake_max_fields!
+    min: ActiveStake_min_fields!
+    sum: ActiveStake_sum_fields!
 }
 
 type ActiveStake_max_fields {
-  amount: Lovelace
+    amount: Lovelace
 }
 
 type ActiveStake_min_fields {
-  amount: Lovelace
+    amount: Lovelace
 }
 
 type ActiveStake_sum_fields {
-  amount: Lovelace
+    amount: Lovelace
 }
 
 type Ada {
-  supply: AssetSupply!
+    supply: AssetSupply!
+}
+
+type DelegationVote {
+    address: String!
+    transaction: Transaction
+    drep: DrepHash
+    redeemer: Redeemer
+}
+
+type DrepHash {
+    view: String
+    has_script: Boolean
+    raw: Hex
 }
 
 type AdaPots {
-  deposits: Lovelace!
-  fees: Lovelace!
-  reserves: Lovelace!
-  rewards: Lovelace!
-  slotNo: String!
-  treasury: Lovelace!
-  utxo: Lovelace!
+    deposits_stake: Lovelace!
+    deposits_drep: Lovelace!
+    deposits_proposal: Lovelace!
+    fees: Lovelace!
+    reserves: Lovelace!
+    rewards: Lovelace!
+    slotNo: String!
+    treasury: Lovelace!
+    utxo: Lovelace!
 }
 
 type AlonzoGenesis {
-  lovelacePerUTxOWord: Lovelace!
-  executionPrices: ExecutionPrices!
-  maxTxExUnits: ExecutionUnits!
-  maxBlockExUnits: ExecutionUnits!
-  maxValueSize: Lovelace!
-  collateralPercentage: Int!
-  maxCollateralInputs: Int!
+    lovelacePerUTxOWord: Lovelace!
+    executionPrices: ExecutionPrices!
+    maxTxExUnits: ExecutionUnits!
+    maxBlockExUnits: ExecutionUnits!
+    maxValueSize: Lovelace!
+    collateralPercentage: Int!
+    maxCollateralInputs: Int!
 }
 
 type ExecutionPrices {
-  prSteps: ExecutionPrice!
-  prMem: ExecutionPrice!
+    prSteps: ExecutionPrice!
+    prMem: ExecutionPrice!
 }
 
 type ExecutionPrice {
-  numerator: Int!
-  denominator: Int!
+    numerator: Int!
+    denominator: Int!
 }
 
 type ExecutionUnits {
-  exUnitsMem: String!
-  exUnitsSteps: String!
+    exUnitsMem: String!
+    exUnitsSteps: String!
 }
 
 type Asset {
-  assetId: Hex!
-  assetName: Hex
-  decimals: Int
-  description: String
-  fingerprint: AssetFingerprint
-  logo: String
-  metadataHash: String
-  tokenMints (
-    limit: Int
-    order_by: [TokenMint_order_by!]
-    offset: Int
-    where: TokenMint_bool_exp
-  ): [TokenMint]!
-  tokenMints_aggregate (
-    limit: Int
-    order_by: [TokenMint_order_by!]
-    offset: Int
-    where: TokenMint_bool_exp
-  ): TokenMint_aggregate!
-  name: String
-  policyId: Hash28Hex!
-  ticker: String
-  url: String
+    assetId: Hex!
+    assetName: Hex
+    decimals: Int
+    description: String
+    fingerprint: AssetFingerprint
+    logo: String
+    metadataHash: String
+    tokenMints (
+        limit: Int
+        order_by: [TokenMint_order_by!]
+        offset: Int
+        where: TokenMint_bool_exp
+    ): [TokenMint]!
+    tokenMints_aggregate (
+        limit: Int
+        order_by: [TokenMint_order_by!]
+        offset: Int
+        where: TokenMint_bool_exp
+    ): TokenMint_aggregate!
+    name: String
+    policyId: Hash28Hex!
+    ticker: String
+    url: String
 }
 
 input Asset_bool_exp {
-  _and: [Asset_bool_exp]
-  _not: Asset_bool_exp
-  _or: [Asset_bool_exp]
-  ticker: text_comparison_exp
-  assetId: Hex_comparison_exp
-  assetName: Hex_comparison_exp
-  decimals: Int_comparison_exp
-  description: text_comparison_exp
-  fingerprint: AssetFingerprint_comparison_exp
-  logo: text_comparison_exp
-  name: text_comparison_exp
-  policyId: Hash28Hex_comparison_exp
-  tokenMints: TokenMint_bool_exp
-  url: text_comparison_exp
+    _and: [Asset_bool_exp]
+    _not: Asset_bool_exp
+    _or: [Asset_bool_exp]
+    ticker: text_comparison_exp
+    assetId: Hex_comparison_exp
+    assetName: Hex_comparison_exp
+    decimals: Int_comparison_exp
+    description: text_comparison_exp
+    fingerprint: AssetFingerprint_comparison_exp
+    logo: text_comparison_exp
+    name: text_comparison_exp
+    policyId: Hash28Hex_comparison_exp
+    tokenMints: TokenMint_bool_exp
+    url: text_comparison_exp
 }
 
 input Asset_order_by {
-  assetId: order_by
-  decimals: order_by
-  fingerprint: order_by
-  name: order_by
+    assetId: order_by
+    decimals: order_by
+    fingerprint: order_by
+    name: order_by
 }
 
 type Asset_aggregate {
-  aggregate:Asset_aggregate_fields
+    aggregate:Asset_aggregate_fields
 }
 
 type Asset_aggregate_fields {
-  count: String!
+    count: String!
 }
 
 type AssetBalance {
-  asset: Asset!
-  quantity: String!
+    asset: Asset!
+    quantity: String!
 }
 
 type AssetSupply {
-  circulating: String!
-  max: String!
-  total: String
+    circulating: String!
+    max: String!
+    total: String
 }
 
 input AssetSupply_bool_exp {
-  _and: [AssetSupply_bool_exp]
-  _not: AssetSupply_bool_exp
-  _or: [AssetSupply_bool_exp]
-  circulating: text_comparison_exp
-  max: text_comparison_exp
-  total: text_comparison_exp
+    _and: [AssetSupply_bool_exp]
+    _not: AssetSupply_bool_exp
+    _or: [AssetSupply_bool_exp]
+    circulating: text_comparison_exp
+    max: text_comparison_exp
+    total: text_comparison_exp
 }
 
 input AssetSupply_order_by {
-  circulating: order_by
-  max: order_by
-  total: order_by
+    circulating: order_by
+    max: order_by
+    total: order_by
 }
 
 type ByronBlockVersionData {
-  scriptVersion: Int!
-  slotDuration: Int!
-  maxBlockSize: Int!
-  maxHeaderSize: Int!
-  maxTxSize: Int!
-  maxProposalSize: Int!
-  mpcThd: String!
-  heavyDelThd: String!
-  updateVoteThd: String!
-  updateProposalThd: String!
-  updateImplicit: String!
-  softforkRule: ByronSoftForkRule!
-  txFeePolicy: ByronTxFeePolicy!
-  unlockStakeEpoch: String!
+    scriptVersion: Int!
+    slotDuration: Int!
+    maxBlockSize: Int!
+    maxHeaderSize: Int!
+    maxTxSize: Int!
+    maxProposalSize: Int!
+    mpcThd: String!
+    heavyDelThd: String!
+    updateVoteThd: String!
+    updateProposalThd: String!
+    updateImplicit: String!
+    softforkRule: ByronSoftForkRule!
+    txFeePolicy: ByronTxFeePolicy!
+    unlockStakeEpoch: String!
 }
 
 type ByronGenesis {
-  bootStakeholders: JSONObject!
-  heavyDelegation: JSONObject!
-  startTime: Timestamp!
-  nonAvvmBalances: JSONObject!
-  blockVersionData: ByronBlockVersionData!
-  protocolConsts: ByronProtocolConsts!
-  avvmDistr: JSONObject!
+    bootStakeholders: JSONObject!
+    heavyDelegation: JSONObject!
+    startTime: Timestamp!
+    nonAvvmBalances: JSONObject!
+    blockVersionData: ByronBlockVersionData!
+    protocolConsts: ByronProtocolConsts!
+    avvmDistr: JSONObject!
 }
 
 type ByronProtocolConsts {
-  k: Int!
-  protocolMagic: Int
+    k: Int!
+    protocolMagic: Int
 }
 
 type ByronSoftForkRule {
-  initThd: String!
-  minThd: String!
-  thdDecrement: String!
+    initThd: String!
+    minThd: String!
+    thdDecrement: String!
 }
 
 type ByronTxFeePolicy {
-  summand: String!
-  multiplier: String!
+    summand: String!
+    multiplier: String!
 }
 
 type Cardano {
-  tip: Block!
-  currentEpoch: Epoch!
+    tip: Block!
+    currentEpoch: Epoch!
 }
 
 type CardanoDbMeta {
-  initialized: Boolean!
-  syncPercentage: Percentage!
+    initialized: Boolean!
+    syncPercentage: Percentage!
 }
 
 type CollateralInput {
-  address: String!
-  sourceTransaction: Transaction!
-  sourceTxHash: Hash32Hex!
-  sourceTxIndex: Int!
-  tokens: [Token]!
-  tokens_aggregate: Token_aggregate!
-  transaction: Transaction!
-  txHash: Hash32Hex!
-  value: Lovelace!
+    address: String!
+    sourceTransaction: Transaction!
+    sourceTxHash: Hash32Hex!
+    sourceTxIndex: Int!
+    tokens: [Token]!
+    tokens_aggregate: Token_aggregate!
+    transaction: Transaction!
+    txHash: Hash32Hex!
+    value: Lovelace!
 }
 
 input CollateralInput_order_by {
-  address: order_by
-  sourceTxHash: order_by
-  transaction: Transaction_order_by
-  txHash: order_by
-  value: order_by
+    address: order_by
+    sourceTxHash: order_by
+    transaction: Transaction_order_by
+    txHash: order_by
+    value: order_by
 }
 
 input CollateralInput_bool_exp {
-  _and: [CollateralInput_bool_exp]
-  _not: CollateralInput_bool_exp
-  _or: [CollateralInput_bool_exp]
-  address: text_comparison_exp
-  sourceTransaction: Transaction_bool_exp
-  tokens: Token_bool_exp
-  transaction: Transaction_bool_exp
-  value: text_comparison_exp
+    _and: [CollateralInput_bool_exp]
+    _not: CollateralInput_bool_exp
+    _or: [CollateralInput_bool_exp]
+    address: text_comparison_exp
+    sourceTransaction: Transaction_bool_exp
+    tokens: Token_bool_exp
+    transaction: Transaction_bool_exp
+    value: text_comparison_exp
 }
 
 type CollateralInput_aggregate {
-  aggregate: TransactionInput_aggregate_fields
+    aggregate: TransactionInput_aggregate_fields
 }
 
 type CollateralInput_aggregate_fields {
-  count: String!
-  max: CollateralInput_max_fields!
-  min: CollateralInput_min_fields!
-  sum: CollateralInput_sum_fields!
+    count: String!
+    max: CollateralInput_max_fields!
+    min: CollateralInput_min_fields!
+    sum: CollateralInput_sum_fields!
 }
 
 type CollateralInput_max_fields {
-  tokens: Token_max_fields
-  value: Lovelace
+    tokens: Token_max_fields
+    value: Lovelace
 }
 
 type CollateralInput_min_fields {
-  tokens: Token_min_fields
-  value: Lovelace
+    tokens: Token_min_fields
+    value: Lovelace
 }
 
 type CollateralInput_sum_fields {
-  tokens: Token_sum_fields
-  value: Lovelace
+    tokens: Token_sum_fields
+    value: Lovelace
 }
 
 type CollateralOutput {
-  address: String!
-  addressHasScript: Boolean!
-  datum: Datum
-  index: Int!
-  paymentCredential: Hash28Hex
-  script: Script
-  transaction: Transaction!
-  txHash: Hash32Hex!
-  value: Lovelace!
+    address: String!
+    addressHasScript: Boolean!
+    datum: Datum
+    index: Int!
+    paymentCredential: Hash28Hex
+    script: Script
+    transaction: Transaction!
+    txHash: Hash32Hex!
+    value: Lovelace!
 }
 
 enum CollateralOutput_distinct_on {
-  address
+    address
 }
 
 input CollateralOutput_order_by {
-  address: order_by
-  addressHasScript: order_by
-  datum: Transaction_order_by
-  index: order_by
-  txHash: order_by
-  value: order_by
+    address: order_by
+    addressHasScript: order_by
+    datum: Transaction_order_by
+    index: order_by
+    txHash: order_by
+    value: order_by
 }
 
 input CollateralOutput_bool_exp {
-  _and: [CollateralOutput_bool_exp]
-  _not: CollateralOutput_bool_exp
-  _or: [CollateralOutput_bool_exp]
-  address: text_comparison_exp
-  addressHasScript: Boolean_comparison_exp
-  datum: Datum_bool_exp
-  index: Int_comparison_exp
-  script: Script_bool_exp
-  transaction: Transaction_bool_exp
-  value: text_comparison_exp
+    _and: [CollateralOutput_bool_exp]
+    _not: CollateralOutput_bool_exp
+    _or: [CollateralOutput_bool_exp]
+    address: text_comparison_exp
+    addressHasScript: Boolean_comparison_exp
+    datum: Datum_bool_exp
+    index: Int_comparison_exp
+    script: Script_bool_exp
+    transaction: Transaction_bool_exp
+    value: text_comparison_exp
 }
 
 type CollateralOutput_aggregate {
-  aggregate: CollateralOutput_aggregate_fields
+    aggregate: CollateralOutput_aggregate_fields
 }
 
 type CollateralOutput_aggregate_fields {
-  count: String!
-  max: CollateralOutput_max_fields!
-  min: CollateralOutput_min_fields!
-  sum: CollateralOutput_sum_fields!
+    count: String!
+    max: CollateralOutput_max_fields!
+    min: CollateralOutput_min_fields!
+    sum: CollateralOutput_sum_fields!
 }
 
 type CollateralOutput_max_fields {
-  value: Lovelace
+    value: Lovelace
 }
 
 type CollateralOutput_min_fields {
-  value: Lovelace
+    value: Lovelace
 }
 
 type CollateralOutput_sum_fields {
-  value: Lovelace
+    value: Lovelace
+}
+
+type CommitteeRegistration {
+    cert_index: Int
+    cold_key_id: String
+    hot_key_id: String
+    transaction: Transaction!
+}
+
+input CommitteeRegistration_order_by {
+    cert_index: order_by
+    cold_key_id: order_by
+    hot_key_id: order_by
+    transaction: Transaction_order_by
+}
+
+input CommitteeRegistration_bool_exp {
+    _and: [CommitteeRegistration_bool_exp]
+    _not: CommitteeRegistration_bool_exp
+    _or: [CommitteeRegistration_bool_exp]
+    cert_index: Int_comparison_exp
+    cold_key_id: text_comparison_exp
+    hot_key_id: text_comparison_exp
+    transaction: Transaction_bool_exp
+}
+
+type CommitteeDeRegistration {
+    cert_index: Int
+    cold_key_id: String
+    transaction: Transaction!
+    votingAnchor: VotingAnchor
+}
+
+input CommitteeDeRegistration_order_by {
+    cert_index: order_by
+    cold_key_id: order_by
+    transaction: Transaction_order_by
+    votingAnchor: VotingAnchor_order_by
+}
+
+input CommitteeDeRegistration_bool_exp {
+    _and: [CommitteeDeRegistration_bool_exp]
+    _not: CommitteeDeRegistration_bool_exp
+    _or: [CommitteeDeRegistration_bool_exp]
+    cert_index: Int_comparison_exp
+    cold_key_id: text_comparison_exp
+    transaction: Transaction_bool_exp
+    votingAnchor: VotingAnchor_bool_exp
+}
+
+type VotingAnchor {
+    data_hash: Hex
+    type: String
+    url: String
+    offChainData: OffChainVoteData
+}
+
+input VotingAnchor_order_by {
+    data_hash: order_by
+    type: order_by
+    url: order_by
+    offChainData: OffChainVoteData_order_by
+}
+
+input VotingAnchor_bool_exp {
+    _and: [VotingAnchor_bool_exp]
+    _not: VotingAnchor_bool_exp
+    _or: [VotingAnchor_bool_exp]
+    data_hash: Hex_comparison_exp
+    type: text_comparison_exp
+    url: text_comparison_exp
+    offChainData: OffChainVoteData_bool_exp
+}
+
+type OffChainVoteData {
+    bytes: Hex
+    comment: String
+    hash: Hex
+    is_valid: Boolean
+    json: JSON
+    language: String
+    warning: String
+    offChainVoteReference: OffChainVoteReference
+    offChainVoteAuthor: OffChainVoteAuthor
+    offChainVoteDrepData: OffChainVoteDrepData
+    offChainVoteGovActionData: OffChainVoteGovActionData
+}
+
+input OffChainVoteData_order_by {
+    bytes: order_by
+    comment: order_by
+    hash: order_by
+    is_valid: order_by
+    json: order_by
+    offChainVoteReference: OffChainVoteReference_order_by
+    offChainVoteAuthor: OffChainVoteAuthor_order_by
+    offChainVoteDrepData: OffChainVoteDrepData_order_by
+    offChainVoteGovActionData: OffChainVoteGovActionData_order_by
+}
+
+input OffChainVoteData_bool_exp {
+    _and: [OffChainVoteData_bool_exp]
+    _not: OffChainVoteData_bool_exp
+    _or: [OffChainVoteData_bool_exp]
+    bytes: Hex_comparison_exp
+    comment: text_comparison_exp
+    hash: Hex_comparison_exp
+    is_valid: Boolean_comparison_exp
+    offChainVoteReference: OffChainVoteReference_bool_exp
+    offChainVoteAuthor: OffChainVoteAuthor_bool_exp
+    offChainVoteDrepData: OffChainVoteDrepData_bool_exp
+    offChainVoteGovActionData: OffChainVoteGovActionData_bool_exp
+}
+
+type OffChainVoteGovActionData {
+    abstract: String
+    motivation: String
+    OffChainVoteData: OffChainVoteData
+    rationale: String
+    title: String
+}
+
+input OffChainVoteGovActionData_order_by {
+    abstract: order_by
+    motivation: order_by
+    rationale: order_by
+    title: order_by
+    offChainVoteData: OffChainVoteData_order_by
+}
+
+input OffChainVoteGovActionData_bool_exp {
+    _and: [OffChainVoteGovActionData_bool_exp]
+    _not: OffChainVoteGovActionData_bool_exp
+    _or: [OffChainVoteGovActionData_bool_exp]
+    abstract: text_comparison_exp
+    motivation: text_comparison_exp
+    rationale: text_comparison_exp
+    title: text_comparison_exp
+    offChainVoteData: OffChainVoteData_bool_exp
+}
+
+type OffChainVoteDrepData {
+    given_name: String
+    image_hash: Hex
+    image_url: String
+    motivations: String
+    objectives: String
+    offChainVoteData: OffChainVoteData
+    payment_address: String
+    qualifications: String
+}
+
+input OffChainVoteDrepData_order_by {
+    given_name: order_by
+    image_hash: order_by
+    image_url: order_by
+    motivations: order_by
+    objectives: order_by
+    payment_address: order_by
+    qualifications: order_by
+    offChainVoteData: OffChainVoteData_order_by
+}
+
+input OffChainVoteDrepData_bool_exp {
+    _and: [OffChainVoteDrepData_bool_exp]
+    _not: OffChainVoteDrepData_bool_exp
+    _or: [OffChainVoteDrepData_bool_exp]
+    given_name: text_comparison_exp
+    image_hash: Hex_comparison_exp
+    image_url: text_comparison_exp
+    motivations: text_comparison_exp
+    objectives: text_comparison_exp
+    payment_address: text_comparison_exp
+    qualifications: text_comparison_exp
+    offChainVoteData: OffChainVoteData_bool_exp
+}
+
+type OffChainVoteAuthor {
+    name: String
+    public_key: String
+    signature: String
+    warning: String
+    witness_algorithm: String
+    offChainVoteData: OffChainVoteData
+}
+
+input OffChainVoteAuthor_order_by {
+    name: order_by
+    public_key: order_by
+    signature: order_by
+    warning: order_by
+    witness_algorithm: order_by
+    offChainVoteData: OffChainVoteData_order_by
+}
+
+input OffChainVoteAuthor_bool_exp {
+    _and: [OffChainVoteAuthor_bool_exp]
+    _not: OffChainVoteAuthor_bool_exp
+    _or: [OffChainVoteAuthor_bool_exp]
+    name: text_comparison_exp
+    public_key: text_comparison_exp
+    signature: text_comparison_exp
+    warning: text_comparison_exp
+    witness_algorithm: text_comparison_exp
+    offChainVoteData: OffChainVoteData_bool_exp
+}
+
+type OffChainVoteReference {
+    hash_algorithm: String
+    hash_digest: String
+    label: String
+    uri: String
+    offChainVoteData: OffChainVoteData
+}
+
+input OffChainVoteReference_order_by {
+    hash_algorithm: order_by
+    hash_digest: order_by
+    label: order_by
+    uri: order_by
+    offChainVoteData: OffChainVoteData_order_by
+}
+
+input OffChainVoteReference_bool_exp {
+    _and: [OffChainVoteReference_bool_exp]
+    _not: OffChainVoteReference_bool_exp
+    _or: [OffChainVoteReference_bool_exp]
+    hash_algorithm: text_comparison_exp
+    hash_digest: text_comparison_exp
+    label: text_comparison_exp
+    uri: text_comparison_exp
+    offChainVoteData: OffChainVoteData_bool_exp
+}
+
+type CommitteeHash {
+    has_script: Boolean
+    raw: Hex
+}
+
+input CommitteeHash_order_by {
+    view: order_by
+    hasScript: order_by
+    raw: order_by
+}
+
+input CommitteeHash_bool_exp {
+    _and: [CommitteeHash_bool_exp]
+    _not: CommitteeHash_bool_exp
+    _or: [CommitteeHash_bool_exp]
+    view: text_comparison_exp
+    hasScript: Boolean_comparison_exp
+    raw: Hex_comparison_exp
+}
+
+type CommitteeMember {
+    expiration_epoch: Int
+    committee: Committee
+    committeeHash: CommitteeHash
+}
+
+input CommitteeMember_order_by {
+    expiration_epoch: order_by
+    commitee: Committee_order_by
+    commiteeHash: CommitteeHash_order_by
+}
+
+input CommitteeMember_bool_exp {
+    _and: [CommitteeMember_bool_exp]
+    _not: CommitteeMember_bool_exp
+    _or: [CommitteeMember_bool_exp]
+    expiration_epoch: Int_comparison_exp
+    committee: Committee_bool_exp
+    committeeHash: CommitteeMember_bool_exp
+}
+
+type Committee {
+    committeeMembers (
+        limit: Int
+        order_by: [CommitteeMember_order_by!]
+        offset: Int
+        where: CommitteeMember_bool_exp
+    ): [CommitteeMember]!
+    quorum_denominator: String!
+    quorum_numerator: String!
+}
+
+input Committee_order_by {
+    quorum_denominator: order_by
+    quorum_numerator: StakePool_order_by
+}
+
+input Committee_bool_exp {
+    _and: [Committee_bool_exp]
+    _not: Committee_bool_exp
+    _or: [Committee_bool_exp]
+    quorum_denominator: text_comparison_exp
+    quorum_numerator: text_comparison_exp
 }
 
 type Datum {
-  bytes: Hex!
-  hash: Hash32Hex!
-  firstIncludedIn: Transaction!
-  value: JSONObject!
+    bytes: Hex!
+    hash: Hash32Hex!
+    firstIncludedIn: Transaction!
+    value: JSONObject!
 }
 
 input Datum_bool_exp {
-  firstIncludedIn: Transaction_bool_exp
-  hash: Hex_comparison_exp
+    firstIncludedIn: Transaction_bool_exp
+    hash: Hex_comparison_exp
 }
 
 type Delegation {
-  address: StakeAddress!
-  redeemer: Redeemer
-  stakePool: StakePool!
-  stakePoolHash: Hash28Hex!
-  stakePoolId: StakePoolID!
-  transaction: Transaction
+    address: StakeAddress!
+    redeemer: Redeemer
+    stakePool: StakePool!
+    stakePoolHash: Hash28Hex!
+    stakePoolId: StakePoolID!
+    transaction: Transaction
 }
 
 input Delegation_order_by {
-  address: order_by
-  stakePool: StakePool_order_by
-  stakePoolHash: order_by
-  stakePoolId: order_by
-  transaction: Transaction_order_by
+    address: order_by
+    stakePool: StakePool_order_by
+    stakePoolHash: order_by
+    stakePoolId: order_by
+    transaction: Transaction_order_by
+}
+
+input DelegationVote_order_by {
+    address: order_by
+    transaction: Transaction_order_by
+}
+
+input DrepHash_order_by {
+    view: order_by
+    hasScript: order_by
+    raw: order_by
+}
+
+input DrepHash_bool_exp {
+    _and: [DrepHash_bool_exp]
+    _not: DrepHash_bool_exp
+    _or: [DrepHash_bool_exp]
+    view: text_comparison_exp
+    hasScript: Boolean_comparison_exp
+    raw: Hex_comparison_exp
 }
 
 input Delegation_bool_exp {
-  _and: [Delegation_bool_exp]
-  _not: Delegation_bool_exp
-  _or: [Delegation_bool_exp]
-  address: StakeAddress_comparison_exp
-  stakePool: StakePool_bool_exp
-  stakePoolHash: Hash28Hex_comparison_exp
-  stakePoolId: StakePoolID_comparison_exp
-  transaction: Transaction_bool_exp
+    _and: [Delegation_bool_exp]
+    _not: Delegation_bool_exp
+    _or: [Delegation_bool_exp]
+    address: StakeAddress_comparison_exp
+    stakePool: StakePool_bool_exp
+    stakePoolHash: Hash28Hex_comparison_exp
+    stakePoolId: StakePoolID_comparison_exp
+    transaction: Transaction_bool_exp
+}
+
+input DelegationVote_bool_exp {
+    _and: [DelegationVote_bool_exp]
+    _not: DelegationVote_bool_exp
+    _or: [DelegationVote_bool_exp]
+    address: text_comparison_exp
+    transaction: Transaction_bool_exp
 }
 
 type Delegation_aggregate {
-  aggregate: Delegation_aggregate_fields
+    aggregate: Delegation_aggregate_fields
 }
 
 type Delegation_aggregate_fields {
-  count: String
+    count: String
 }
 
 type Genesis {
-  alonzo: AlonzoGenesis
-  byron: ByronGenesis
-  shelley: ShelleyGenesis
+    alonzo: AlonzoGenesis
+    byron: ByronGenesis
+    shelley: ShelleyGenesis
 }
 
 type PaymentAddress {
-  address: String!
-  summary(
-    atBlock: Int
-  ): PaymentAddressSummary
+    address: String!
+    summary(
+        atBlock: Int
+    ): PaymentAddressSummary
 }
 
 type PaymentAddressSummary {
-  assetBalances: [AssetBalance]!
-  utxosCount: Int!
+    assetBalances: [AssetBalance]!
+    utxosCount: Int!
 }
 
 type Redeemer {
-  datum: Datum
-  fee: Lovelace
-  index: Int!
-  purpose: String! # Todo: Make scalar
-  scriptHash: Hash28Hex!
-  transaction: Transaction!
-  unitMem: String!
-  unitSteps: String!
+    datum: Datum
+    fee: Lovelace
+    index: Int!
+    purpose: String! # Todo: Make scalar
+    scriptHash: Hash28Hex!
+    transaction: Transaction!
+    unitMem: String!
+    unitSteps: String!
 }
 
 type Redeemer_aggregate {
-  aggregate: Redeemer_aggregate_fields
+    aggregate: Redeemer_aggregate_fields
 }
 
 type Redeemer_aggregate_fields {
-  count: String!
-  max: Redeemer_max_fields!
-  min: Redeemer_min_fields!
-  sum: Redeemer_sum_fields!
+    count: String!
+    max: Redeemer_max_fields!
+    min: Redeemer_min_fields!
+    sum: Redeemer_sum_fields!
 }
 
 type Redeemer_max_fields {
-  fee: String
-  unitMem: String
-  unitSteps: String
+    fee: String
+    unitMem: String
+    unitSteps: String
 }
 
 type Redeemer_min_fields {
-  fee: String
-  unitMem: String
-  unitSteps: String
+    fee: String
+    unitMem: String
+    unitSteps: String
 }
 
 type Redeemer_sum_fields {
-  fee: String
-  unitMem: String
-  unitSteps: String
+    fee: String
+    unitMem: String
+    unitSteps: String
 }
 
 input Redeemer_bool_exp {
-  _and: [Redeemer_bool_exp]
-  _not: Redeemer_bool_exp
-  _or: [Redeemer_bool_exp]
-  datum: Datum_bool_exp
-  fee: text_comparison_exp
-  index: Int_comparison_exp
-  purpose: text_comparison_exp
-  scriptHash: text_comparison_exp
-  transaction: Transaction_bool_exp
-  unitMem: text_comparison_exp
-  unitSteps: text_comparison_exp
+    _and: [Redeemer_bool_exp]
+    _not: Redeemer_bool_exp
+    _or: [Redeemer_bool_exp]
+    datum: Datum_bool_exp
+    fee: text_comparison_exp
+    index: Int_comparison_exp
+    purpose: text_comparison_exp
+    scriptHash: text_comparison_exp
+    transaction: Transaction_bool_exp
+    unitMem: text_comparison_exp
+    unitSteps: text_comparison_exp
 }
 
 input Redeemer_order_by {
-  purpose: order_by
-  scriptHash: order_by
-  transaction: Transaction_order_by
-  unitMem: order_by
-  unitSteps: order_by
+    purpose: order_by
+    scriptHash: order_by
+    transaction: Transaction_order_by
+    unitMem: order_by
+    unitSteps: order_by
 }
 
 type Relay {
-  ipv4: IPv4
-  ipv6: IPv6
-  dnsName: String
-  dnsSrvName: String
-  port: Int
+    ipv4: IPv4
+    ipv6: IPv6
+    dnsName: String
+    dnsSrvName: String
+    port: Int
 }
 
 input Relay_bool_exp {
-  _and: [Relay_bool_exp]
-  _not: Relay_bool_exp
-  _or: [Relay_bool_exp]
-  ipv4: text_comparison_exp
-  ipv6: text_comparison_exp
-  dnsName: text_comparison_exp
-  dnsSrvName: text_comparison_exp
-  port: Int_comparison_exp
+    _and: [Relay_bool_exp]
+    _not: Relay_bool_exp
+    _or: [Relay_bool_exp]
+    ipv4: text_comparison_exp
+    ipv6: text_comparison_exp
+    dnsName: text_comparison_exp
+    dnsSrvName: text_comparison_exp
+    port: Int_comparison_exp
 }
 
 type Reward {
-  address: StakeAddress!
-  amount: Lovelace!
-  earnedIn: Epoch!
-  receivedIn: Epoch
-  stakePool: StakePool
-  type: String!
+    address: StakeAddress!
+    amount: Lovelace!
+    earnedIn: Epoch!
+    receivedIn: Epoch
+    stakePool: StakePool
+    type: String!
 }
 
 type Reward_aggregate {
-  aggregate: Reward_aggregate_fields
+    aggregate: Reward_aggregate_fields
 }
 
 type Reward_aggregate_fields {
-  count: String!
-  max: Reward_max_fields!
-  min: Reward_min_fields!
-  sum: Reward_sum_fields!
+    count: String!
+    max: Reward_max_fields!
+    min: Reward_min_fields!
+    sum: Reward_sum_fields!
 }
 
 type Reward_max_fields {
-  amount: Lovelace
+    amount: Lovelace
 }
 
 type Reward_min_fields {
-  amount: Lovelace
+    amount: Lovelace
 }
 
 type Reward_sum_fields {
-  amount: Lovelace
+    amount: Lovelace
 }
 
 input Reward_bool_exp {
-  _and: [Reward_bool_exp]
-  _not: Reward_bool_exp
-  _or: [Reward_bool_exp]
-  address: StakeAddress_comparison_exp
-  amount: text_comparison_exp
-  earnedIn: Epoch_bool_exp
-  receivedIn: Epoch_bool_exp
-  stakePool: StakePool_bool_exp
-  type: text_comparison_exp
+    _and: [Reward_bool_exp]
+    _not: Reward_bool_exp
+    _or: [Reward_bool_exp]
+    address: StakeAddress_comparison_exp
+    amount: text_comparison_exp
+    earnedIn: Epoch_bool_exp
+    receivedIn: Epoch_bool_exp
+    stakePool: StakePool_bool_exp
+    type: text_comparison_exp
 }
 
 input Reward_order_by {
-  address: order_by
-  amount: order_by
-  earnedIn: Epoch_order_by
-  receivedIn: Epoch_order_by
-  stakePool: StakePool_order_by
-  type: order_by
+    address: order_by
+    amount: order_by
+    earnedIn: Epoch_order_by
+    receivedIn: Epoch_order_by
+    stakePool: StakePool_order_by
+    type: order_by
 }
 
 type Script {
-  hash: Hash28Hex!
-  serialisedSize: Int
-  transaction: Transaction!
-  type: String! # Todo: Make scalar
+    hash: Hash28Hex!
+    serialisedSize: Int
+    transaction: Transaction!
+    type: String! # Todo: Make scalar
 }
 
 type Script_aggregate {
-  aggregate: Script_aggregate_fields
+    aggregate: Script_aggregate_fields
 }
 
 type Script_aggregate_fields {
-  count: String!
-  max: Script_max_fields!
-  min: Script_min_fields!
-  sum: Script_sum_fields!
+    count: String!
+    max: Script_max_fields!
+    min: Script_min_fields!
+    sum: Script_sum_fields!
 }
 
 type Script_max_fields {
-  serialisedSize: Int
+    serialisedSize: Int
 }
 
 type Script_min_fields {
-  serialisedSize: Int
+    serialisedSize: Int
 }
 
 type Script_sum_fields {
-  serialisedSize: BigInt
+    serialisedSize: BigInt
 }
 
 input Script_bool_exp {
-  _and: [Script_bool_exp]
-  _not: Script_bool_exp
-  _or: [Script_bool_exp]
-  serialisedSize: Int_comparison_exp
-  transaction: Transaction_bool_exp
-  type: text_comparison_exp
+    _and: [Script_bool_exp]
+    _not: Script_bool_exp
+    _or: [Script_bool_exp]
+    serialisedSize: Int_comparison_exp
+    transaction: Transaction_bool_exp
+    type: text_comparison_exp
 }
 
 input Script_order_by {
-  serialisedSize: order_by
-  transaction: Transaction_order_by
-  type: order_by
+    serialisedSize: order_by
+    transaction: Transaction_order_by
+    type: order_by
 }
 
 type ShelleyGenesis {
-  activeSlotsCoeff: Float!
-  epochLength: Int!
-  genDelegs: JSONObject
-  initialFunds: JSONObject!
-  maxKESEvolutions: Int!
-  maxLovelaceSupply: Lovelace!
-  networkId: String!
-  networkMagic: Int!
-  protocolParams: ShelleyProtocolParams!
-  securityParam: Int!
-  slotLength: Int!
-  slotsPerKESPeriod: Int!
-  staking: ShelleyGenesisStaking
-  systemStart: String!
-  updateQuorum: Int!
+    activeSlotsCoeff: Float!
+    epochLength: Int!
+    genDelegs: JSONObject
+    initialFunds: JSONObject!
+    maxKESEvolutions: Int!
+    maxLovelaceSupply: Lovelace!
+    networkId: String!
+    networkMagic: Int!
+    protocolParams: ShelleyProtocolParams!
+    securityParam: Int!
+    slotLength: Int!
+    slotsPerKESPeriod: Int!
+    staking: ShelleyGenesisStaking
+    systemStart: String!
+    updateQuorum: Int!
 }
 
 type ShelleyGenesisStaking {
-  pools: JSONObject!
-  stake: JSONObject!
+    pools: JSONObject!
+    stake: JSONObject!
 }
 
 type ProtocolParams {
-  a0: Float!
-  coinsPerUtxoByte: Lovelace
-  collateralPercent: Int
-  costModels: JSONObject
-  decentralisationParam: Float!
-  eMax: Int!
-  extraEntropy: JSONObject
-  keyDeposit: Lovelace!
-  maxBlockBodySize: Int!
-  maxBlockExMem: String
-  maxBlockExSteps: String
-  maxBlockHeaderSize: Int!
-  maxCollateralInputs: Int
-  maxTxExMem: String
-  maxTxExSteps: String
-  maxTxSize: Int!
-  maxValSize: String
-  minFeeA: Int!
-  minFeeB: Int!
-  minPoolCost: Lovelace!
-  minUTxOValue: Lovelace!
-  nOpt: Int!
-  poolDeposit: Lovelace!
-  priceMem: Float
-  priceStep: Float
-  protocolVersion: JSONObject!
-  rho: Float!
-  tau: Float!
+    a0: Float!
+    coinsPerUtxoByte: Lovelace
+    collateralPercent: Int
+    costModels: JSONObject
+    decentralisationParam: Float!
+    eMax: Int!
+    extraEntropy: JSONObject
+    keyDeposit: Lovelace!
+    maxBlockBodySize: Int!
+    maxBlockExMem: String
+    maxBlockExSteps: String
+    maxBlockHeaderSize: Int!
+    maxCollateralInputs: Int
+    maxTxExMem: String
+    maxTxExSteps: String
+    maxTxSize: Int!
+    maxValSize: String
+    minFeeA: Int!
+    minFeeB: Int!
+    minPoolCost: Lovelace!
+    minUTxOValue: Lovelace!
+    nOpt: Int!
+    poolDeposit: Lovelace!
+    priceMem: Float
+    priceStep: Float
+    protocolVersion: JSONObject!
+    rho: Float!
+    tau: Float!
 }
 
 type ShelleyProtocolParams {
-  a0: Float!
-  decentralisationParam: Float!
-  eMax: Int!
-  extraEntropy: JSONObject
-  keyDeposit: Lovelace!
-  maxBlockBodySize: Int!
-  maxBlockHeaderSize: Int!
-  maxTxSize: Int!
-  minFeeA: Int!
-  minFeeB: Int!
-  minPoolCost: Lovelace!
-  minUTxOValue: Lovelace!
-  nOpt: Int!
-  poolDeposit: Lovelace!
-  protocolVersion: JSONObject!
-  rho: Float!
-  tau: Float!
+    a0: Float!
+    decentralisationParam: Float!
+    eMax: Int!
+    extraEntropy: JSONObject
+    keyDeposit: Lovelace!
+    maxBlockBodySize: Int!
+    maxBlockHeaderSize: Int!
+    maxTxSize: Int!
+    minFeeA: Int!
+    minFeeB: Int!
+    minPoolCost: Lovelace!
+    minUTxOValue: Lovelace!
+    nOpt: Int!
+    poolDeposit: Lovelace!
+    protocolVersion: JSONObject!
+    rho: Float!
+    tau: Float!
 }
 
 input StakeAddress_comparison_exp {
-  _eq: StakeAddress
-  _in: [StakeAddress]
-  _neq: StakeAddress
-  _nin: [StakeAddress]
+    _eq: StakeAddress
+    _in: [StakeAddress]
+    _neq: StakeAddress
+    _nin: [StakeAddress]
 }
 
 type StakeDeregistration {
-  address: StakeAddress!
-  redeemer: Redeemer
-  transaction: Transaction!
+    address: StakeAddress!
+    redeemer: Redeemer
+    transaction: Transaction!
 }
 
 type StakeDeregistration_aggregate {
-  aggregate: StakeDeregistration_aggregate_fields
+    aggregate: StakeDeregistration_aggregate_fields
 }
 
 type StakeDeregistration_aggregate_fields {
-  count: String
+    count: String
 }
 
 input StakeDeregistration_order_by {
-  address: order_by
-  transaction: Transaction_order_by
+    address: order_by
+    transaction: Transaction_order_by
 }
 
 input StakeDeregistration_bool_exp {
-  _and: [StakeDeregistration_bool_exp]
-  _not: StakeDeregistration_bool_exp
-  _or: [StakeDeregistration_bool_exp]
-  address: StakeAddress_comparison_exp
-  transaction: Transaction_bool_exp
+    _and: [StakeDeregistration_bool_exp]
+    _not: StakeDeregistration_bool_exp
+    _or: [StakeDeregistration_bool_exp]
+    address: StakeAddress_comparison_exp
+    transaction: Transaction_bool_exp
 }
 
 type SlotLeader {
-  description: String!
-  hash: Hash28Hex!
-  stakePool: StakePool
+    description: String!
+    hash: Hash28Hex!
+    stakePool: StakePool
 }
 
 input SlotLeader_bool_exp {
-  _and: [SlotLeader_bool_exp]
-  _not: SlotLeader_bool_exp
-  _or: [SlotLeader_bool_exp]
-  description: text_comparison_exp
-  hash: Hash28Hex_comparison_exp
-  stakePool: StakePool_bool_exp
+    _and: [SlotLeader_bool_exp]
+    _not: SlotLeader_bool_exp
+    _or: [SlotLeader_bool_exp]
+    description: text_comparison_exp
+    hash: Hash28Hex_comparison_exp
+    stakePool: StakePool_bool_exp
 }
 
 input SlotLeader_order_by {
-  hash: order_by
-  stakePool: StakePool_order_by
+    hash: order_by
+    stakePool: StakePool_order_by
 }
 
 type StakePool {
-  activeStake (
-    limit: Int
-    order_by: [ActiveStake_order_by!]
-    offset: Int
-    where: ActiveStake_bool_exp
-  ): [ActiveStake]!
-  activeStake_aggregate (
-    limit: Int
-    order_by: [ActiveStake_order_by!]
-    offset: Int
-    where: ActiveStake_bool_exp
-  ): ActiveStake_aggregate!
-  blocks (
-    limit: Int
-    order_by: [Block_order_by!]
-    offset: Int
-    where: Block_bool_exp
-  ): [Block!]!
-  blocks_aggregate (
-    limit: Int
-    order_by: [Block_order_by!]
-    offset: Int
-    where: Block_bool_exp
-  ): Block_aggregate!
-  delegators (
-    limit: Int
-    order_by: [Delegation_order_by!]
-    offset: Int
-    where: Delegation_bool_exp
-  ): [Delegation]!
-  delegators_aggregate (
-    limit: Int
-    order_by: [Delegation_order_by!]
-    offset: Int
-    where: Delegation_bool_exp
-  ): Delegation_aggregate!
-  fixedCost: Lovelace!
-  hash: Hash28Hex!
-  id: StakePoolID!
-  margin: Float!
-  metadataHash: Hash32Hex
-  owners: [StakePoolOwner!]!
-  pledge: Lovelace!
-  relays: [Relay]
-  retirements: [StakePoolRetirement]
-  rewardAddress: StakeAddress!
-  rewards: [Reward]!
-  rewards_aggregate (
-    limit: Int
-    order_by: [Reward_order_by!]
-    offset: Int
-    where: Reward_bool_exp
-  ): Reward_aggregate!
-  updatedIn: Transaction!
-  url: String
+    activeStake (
+        limit: Int
+        order_by: [ActiveStake_order_by!]
+        offset: Int
+        where: ActiveStake_bool_exp
+    ): [ActiveStake]!
+    activeStake_aggregate (
+        limit: Int
+        order_by: [ActiveStake_order_by!]
+        offset: Int
+        where: ActiveStake_bool_exp
+    ): ActiveStake_aggregate!
+    blocks (
+        limit: Int
+        order_by: [Block_order_by!]
+        offset: Int
+        where: Block_bool_exp
+    ): [Block!]!
+    blocks_aggregate (
+        limit: Int
+        order_by: [Block_order_by!]
+        offset: Int
+        where: Block_bool_exp
+    ): Block_aggregate!
+    delegators (
+        limit: Int
+        order_by: [Delegation_order_by!]
+        offset: Int
+        where: Delegation_bool_exp
+    ): [Delegation]!
+    delegators_aggregate (
+        limit: Int
+        order_by: [Delegation_order_by!]
+        offset: Int
+        where: Delegation_bool_exp
+    ): Delegation_aggregate!
+    fixedCost: Lovelace!
+    hash: Hash28Hex!
+    id: StakePoolID!
+    margin: Float!
+    metadataHash: Hash32Hex
+    owners: [StakePoolOwner!]!
+    pledge: Lovelace!
+    relays: [Relay]
+    retirements: [StakePoolRetirement]
+    rewardAddress: StakeAddress!
+    rewards: [Reward]!
+    rewards_aggregate (
+        limit: Int
+        order_by: [Reward_order_by!]
+        offset: Int
+        where: Reward_bool_exp
+    ): Reward_aggregate!
+    updatedIn: Transaction!
+    url: String
 }
 
 
 input StakePool_order_by {
-  fixedCost: order_by
-  hash: order_by
-  id: order_by
-  margin: order_by
-  pledge: order_by
-  updatedIn: Transaction_order_by
-  url: order_by
+    fixedCost: order_by
+    hash: order_by
+    id: order_by
+    margin: order_by
+    pledge: order_by
+    updatedIn: Transaction_order_by
+    url: order_by
 }
 
 input StakePool_bool_exp {
-  _and: [StakePool_bool_exp]
-  _not: StakePool_bool_exp
-  _or: [StakePool_bool_exp]
-  hash: Hash28Hex_comparison_exp
-  id: StakePoolID_comparison_exp
-  margin: Float_comparison_exp
-  metadataHash: Hash32Hex_comparison_exp
-  owners: StakePoolOwner_bool_exp
-  pledge: text_comparison_exp
-  registrationTransaction: Transaction_bool_exp
-  relays: Relay_bool_exp
-  retirements: StakePoolRetirement_bool_exp
-  rewardAddress: text_comparison_exp
-  rewards: Reward_bool_exp
-  url: text_comparison_exp
+    _and: [StakePool_bool_exp]
+    _not: StakePool_bool_exp
+    _or: [StakePool_bool_exp]
+    hash: Hash28Hex_comparison_exp
+    id: StakePoolID_comparison_exp
+    margin: Float_comparison_exp
+    metadataHash: Hash32Hex_comparison_exp
+    owners: StakePoolOwner_bool_exp
+    pledge: text_comparison_exp
+    registrationTransaction: Transaction_bool_exp
+    relays: Relay_bool_exp
+    retirements: StakePoolRetirement_bool_exp
+    rewardAddress: text_comparison_exp
+    rewards: Reward_bool_exp
+    url: text_comparison_exp
 }
 
 type StakePool_aggregate {
-  aggregate: StakePool_aggregate_fields
+    aggregate: StakePool_aggregate_fields
 }
 
 type StakePool_aggregate_fields {
-  count: String!
-  max: StakePool_max_fields!
-  min: StakePool_min_fields!
-  sum: StakePool_sum_fields!
+    count: String!
+    max: StakePool_max_fields!
+    min: StakePool_min_fields!
+    sum: StakePool_sum_fields!
 }
 
 type StakePool_max_fields {
-  fixedCost: Lovelace
-  margin: Float
-  pledge: Lovelace
+    fixedCost: Lovelace
+    margin: Float
+    pledge: Lovelace
 }
 
 type StakePool_min_fields {
-  fixedCost: Lovelace
-  margin: Float
-  pledge: Lovelace
+    fixedCost: Lovelace
+    margin: Float
+    pledge: Lovelace
 }
 
 type StakePool_sum_fields {
-  fixedCost: Lovelace
-  margin: Float
-  pledge: Lovelace
+    fixedCost: Lovelace
+    margin: Float
+    pledge: Lovelace
 }
 
 input StakePoolID_comparison_exp {
-  _eq: StakePoolID
-  _in: [StakePoolID]
-  _neq: StakePoolID
-  _nin: [StakePoolID]
+    _eq: StakePoolID
+    _in: [StakePoolID]
+    _neq: StakePoolID
+    _nin: [StakePoolID]
 }
 
 input StakePoolOwner_bool_exp {
-  _and: [StakePoolOwner_bool_exp]
-  _not: StakePoolOwner_bool_exp
-  _or: [StakePoolOwner_bool_exp]
-  hash: Hash28Hex_comparison_exp
+    _and: [StakePoolOwner_bool_exp]
+    _not: StakePoolOwner_bool_exp
+    _or: [StakePoolOwner_bool_exp]
+    hash: Hash28Hex_comparison_exp
 }
 
 type StakePoolRetirement {
-  announcedIn: Transaction
-  inEffectFrom: Int!
-  retiredInEpoch: Epoch
+    announcedIn: Transaction
+    inEffectFrom: Int!
+    retiredInEpoch: Epoch
 }
 
 input StakePoolRetirement_bool_exp {
-  _and: [StakePoolRetirement_bool_exp]
-  _not: StakePoolRetirement_bool_exp
-  _or: [StakePoolRetirement_bool_exp]
-  announcedIn: Transaction_bool_exp
-  inEffectFrom: Int_comparison_exp
+    _and: [StakePoolRetirement_bool_exp]
+    _not: StakePoolRetirement_bool_exp
+    _or: [StakePoolRetirement_bool_exp]
+    announcedIn: Transaction_bool_exp
+    inEffectFrom: Int_comparison_exp
 }
 
 type StakePoolOwner {
-  hash: Hash28Hex!
+    hash: Hash28Hex!
 }
 
 
 type StakeRegistration {
-  address: StakeAddress!
-  transaction: Transaction!
+    address: StakeAddress!
+    transaction: Transaction!
 }
 
 input StakeRegistration_order_by {
-  address: order_by
-  transaction: Transaction_order_by
+    address: order_by
+    transaction: Transaction_order_by
 }
 
 input StakeRegistration_bool_exp {
-  _and: [StakeRegistration_bool_exp]
-  _not: StakeRegistration_bool_exp
-  _or: [StakeRegistration_bool_exp]
-  address: StakeAddress_comparison_exp
-  transaction: Transaction_bool_exp
+    _and: [StakeRegistration_bool_exp]
+    _not: StakeRegistration_bool_exp
+    _or: [StakeRegistration_bool_exp]
+    address: StakeAddress_comparison_exp
+    transaction: Transaction_bool_exp
 }
 
 type StakeRegistration_aggregate {
-  aggregate: StakeRegistration_aggregate_fields
+    aggregate: StakeRegistration_aggregate_fields
 }
 
 type StakeRegistration_aggregate_fields {
-  count: String
+    count: String
 }
 
 type Token {
-  asset: Asset!
-  quantity: String!
-  transactionOutput: TransactionOutput!
+    asset: Asset!
+    quantity: String!
+    transactionOutput: TransactionOutput!
 }
 
 input Token_order_by {
-  asset: Asset_order_by
-  quantity: order_by
+    asset: Asset_order_by
+    quantity: order_by
 }
 
 input Token_bool_exp {
-  _and: [Token_bool_exp]
-  _not: Token_bool_exp
-  _or: [Token_bool_exp]
-  asset: Asset_bool_exp
-  quantity: text_comparison_exp
-  transactionOutput: TransactionOutput_bool_exp
+    _and: [Token_bool_exp]
+    _not: Token_bool_exp
+    _or: [Token_bool_exp]
+    asset: Asset_bool_exp
+    quantity: text_comparison_exp
+    transactionOutput: TransactionOutput_bool_exp
 }
 
 type Token_aggregate {
-  aggregate: Token_aggregate_fields
-  nodes: [Token!]!
+    aggregate: Token_aggregate_fields
+    nodes: [Token!]!
 }
 
 type Token_aggregate_fields {
-  count: String!
-  max: Token_max_fields!
-  min: Token_min_fields!
-  sum: Token_sum_fields!
+    count: String!
+    max: Token_max_fields!
+    min: Token_min_fields!
+    sum: Token_sum_fields!
 }
 
 type Token_max_fields {
-  quantity: String
+    quantity: String
 }
 
 type Token_min_fields {
-  quantity: String
+    quantity: String
 }
 
 type Token_sum_fields {
-  quantity: String
+    quantity: String
 }
 
 type TokenMint {
-  asset: Asset!
-  quantity: String!
-  transaction: Transaction!
+    asset: Asset!
+    quantity: String!
+    transaction: Transaction!
 }
 
 input TokenMint_order_by {
-  asset: Asset_order_by
-  quantity: order_by
-  transaction: Transaction_order_by
+    asset: Asset_order_by
+    quantity: order_by
+    transaction: Transaction_order_by
 }
 
 input TokenMint_bool_exp {
-  _and: [TokenMint_bool_exp]
-  _not: TokenMint_bool_exp
-  _or: [TokenMint_bool_exp]
-  asset: Asset_bool_exp
-  quantity: text_comparison_exp
-  transaction: Transaction_bool_exp
+    _and: [TokenMint_bool_exp]
+    _not: TokenMint_bool_exp
+    _or: [TokenMint_bool_exp]
+    asset: Asset_bool_exp
+    quantity: text_comparison_exp
+    transaction: Transaction_bool_exp
 }
 
 type TokenMint_aggregate {
-  aggregate: TokenMint_aggregate_fields
-  nodes: [TokenMint!]!
+    aggregate: TokenMint_aggregate_fields
+    nodes: [TokenMint!]!
 }
 
 enum TokenMint_aggregate_distinct_on {
-  assetId
-  policyId
+    assetId
+    policyId
 }
 
 type TokenMint_aggregate_fields {
-  count: String!
-  max: TokenMint_max_fields!
-  min: TokenMint_min_fields!
-  sum: TokenMint_sum_fields!
+    count: String!
+    max: TokenMint_max_fields!
+    min: TokenMint_min_fields!
+    sum: TokenMint_sum_fields!
 }
 
 type TokenMint_max_fields {
-  quantity: String
+    quantity: String
 }
 
 type TokenMint_min_fields {
-  quantity: String
+    quantity: String
 }
 
 type TokenMint_sum_fields {
-  quantity: String
+    quantity: String
 }
 
 type Transaction {
-  block: Block
-  blockIndex: Int!
-  collateralInputs(
-    limit: Int
-    order_by: [CollateralInput_order_by]
-    offset: Int
-    where: CollateralInput_bool_exp
-  ): [CollateralInput]
-  collateralInputs_aggregate (
-    limit: Int
-    order_by: [CollateralInput_order_by]
-    offset: Int
-    where: CollateralInput_bool_exp
-  ): CollateralInput_aggregate!
-  collateralOutputs(
-    limit: Int
-    order_by: [CollateralOutput_order_by]
-    offset: Int
-    where: CollateralOutput_bool_exp
-  ): [CollateralOutput]
-  collateralOutputs_aggregate (
-    limit: Int
-    order_by: [CollateralOutput_order_by]
-    offset: Int
-    where: CollateralOutput_bool_exp
-  ): CollateralOutput_aggregate!
-  deposit: Lovelace!
-  fee: Lovelace!
-  hash: Hash32Hex!
-  inputs (
-    limit: Int
-    order_by: [TransactionInput_order_by]
-    offset: Int
-    where: TransactionInput_bool_exp
-  ): [TransactionInput!]!
-  inputs_aggregate (
-    limit: Int
-    order_by: [TransactionInput_order_by]
-    offset: Int
-    where: TransactionInput_bool_exp
-  ): TransactionInput_aggregate!
-  invalidBefore: String
-  invalidHereafter: String
-  metadata: [TransactionMetadata]
-  mint(
-    limit: Int
-    order_by: [Token_order_by]
-    offset: Int
-    where: Token_bool_exp
-  ): [Token!]!
-  mint_aggregate(
-    limit: Int
-    order_by: [Token_order_by]
-    offset: Int
-    where: Token_bool_exp
-  ): Token_aggregate!
-  outputs (
-    limit: Int
-    order_by: [TransactionOutput_order_by]
-    offset: Int
-    where: TransactionOutput_bool_exp
-  ): [TransactionOutput]!
-  outputs_aggregate(
-    limit: Int
-    order_by: [TransactionOutput_order_by]
-    offset: Int
-    where: TransactionOutput_bool_exp
-  ): TransactionOutput_aggregate!
-  redeemers: [Redeemer]
-  referenceInputs (
-    limit: Int
-    order_by: [TransactionInput_order_by]
-    offset: Int
-    where: TransactionInput_bool_exp
-  ): [TransactionInput!]!
-  referenceInputs_aggregate (
-    limit: Int
-    order_by: [TransactionInput_order_by]
-    offset: Int
-    where: TransactionInput_bool_exp
-  ): TransactionInput_aggregate!
-  scripts: [Script]
-  scriptSize: Int!
-  size: Int!
-  totalOutput: Lovelace!
-  includedAt: DateTime!
-  # True unless a contract is invalid
-  validContract: Boolean!
-  withdrawals: [Withdrawal]!
-  withdrawals_aggregate(
-    limit: Int
-    order_by: [Withdrawal_order_by]
-    offset: Int
-    where: Withdrawal_bool_exp
-  ): Withdrawal_aggregate!
+    block: Block
+    blockIndex: Int!
+    collateralInputs(
+        limit: Int
+        order_by: [CollateralInput_order_by]
+        offset: Int
+        where: CollateralInput_bool_exp
+    ): [CollateralInput]
+    collateralInputs_aggregate (
+        limit: Int
+        order_by: [CollateralInput_order_by]
+        offset: Int
+        where: CollateralInput_bool_exp
+    ): CollateralInput_aggregate!
+    collateralOutputs(
+        limit: Int
+        order_by: [CollateralOutput_order_by]
+        offset: Int
+        where: CollateralOutput_bool_exp
+    ): [CollateralOutput]
+    collateralOutputs_aggregate (
+        limit: Int
+        order_by: [CollateralOutput_order_by]
+        offset: Int
+        where: CollateralOutput_bool_exp
+    ): CollateralOutput_aggregate!
+    deposit: Lovelace!
+    fee: Lovelace!
+    hash: Hash32Hex!
+    inputs (
+        limit: Int
+        order_by: [TransactionInput_order_by]
+        offset: Int
+        where: TransactionInput_bool_exp
+    ): [TransactionInput!]!
+    inputs_aggregate (
+        limit: Int
+        order_by: [TransactionInput_order_by]
+        offset: Int
+        where: TransactionInput_bool_exp
+    ): TransactionInput_aggregate!
+    invalidBefore: String
+    invalidHereafter: String
+    metadata: [TransactionMetadata]
+    mint(
+        limit: Int
+        order_by: [Token_order_by]
+        offset: Int
+        where: Token_bool_exp
+    ): [Token!]!
+    mint_aggregate(
+        limit: Int
+        order_by: [Token_order_by]
+        offset: Int
+        where: Token_bool_exp
+    ): Token_aggregate!
+    outputs (
+        limit: Int
+        order_by: [TransactionOutput_order_by]
+        offset: Int
+        where: TransactionOutput_bool_exp
+    ): [TransactionOutput]!
+    outputs_aggregate(
+        limit: Int
+        order_by: [TransactionOutput_order_by]
+        offset: Int
+        where: TransactionOutput_bool_exp
+    ): TransactionOutput_aggregate!
+    redeemers: [Redeemer]
+    referenceInputs (
+        limit: Int
+        order_by: [TransactionInput_order_by]
+        offset: Int
+        where: TransactionInput_bool_exp
+    ): [TransactionInput!]!
+    referenceInputs_aggregate (
+        limit: Int
+        order_by: [TransactionInput_order_by]
+        offset: Int
+        where: TransactionInput_bool_exp
+    ): TransactionInput_aggregate!
+    scripts: [Script]
+    scriptSize: Int!
+    size: Int!
+    totalOutput: Lovelace!
+    includedAt: DateTime!
+    # True unless a contract is invalid
+    validContract: Boolean!
+    withdrawals: [Withdrawal]!
+    withdrawals_aggregate(
+        limit: Int
+        order_by: [Withdrawal_order_by]
+        offset: Int
+        where: Withdrawal_bool_exp
+    ): Withdrawal_aggregate!
 }
 
 input Transaction_order_by {
-  block: Block_order_by
-  blockIndex: order_by
-  deposit: order_by
-  fee: order_by
-  hash: order_by
-  includedAt: order_by
-  invalidBefore: order_by_with_nulls
-  invalidHereafter: order_by_with_nulls
-  scriptSize: order_by_with_nulls
-  size: order_by
-  totalOutput: order_by
-  validContract: order_by
-  withdrawals: order_by
+    block: Block_order_by
+    blockIndex: order_by
+    deposit: order_by
+    fee: order_by
+    hash: order_by
+    includedAt: order_by
+    invalidBefore: order_by_with_nulls
+    invalidHereafter: order_by_with_nulls
+    scriptSize: order_by_with_nulls
+    size: order_by
+    totalOutput: order_by
+    validContract: order_by
+    withdrawals: order_by
 }
 
 input Transaction_bool_exp {
-  _and: [Transaction_bool_exp]
-  _not: Transaction_bool_exp
-  _or: [Transaction_bool_exp]
-  block: Block_bool_exp
-  blockIndex: Int_comparison_exp
-  collateral: TransactionInput_bool_exp
-  deposit: text_comparison_exp
-  fee: text_comparison_exp
-  hash: Hash32Hex_comparison_exp
-  includedAt: Date_comparison_exp
-  inputs: TransactionInput_bool_exp
-  invalidBefore: text_comparison_exp
-  invalidHereafter: text_comparison_exp
-  metadata: TransactionMetadata_bool_exp
-  mint: Token_bool_exp
-  outputs: TransactionOutput_bool_exp
-  scriptSize: Int_comparison_exp
-  size: Int_comparison_exp
-  totalOutput: text_comparison_exp
-  validContract: Boolean_comparison_exp
-  withdrawals: Withdrawal_bool_exp
+    _and: [Transaction_bool_exp]
+    _not: Transaction_bool_exp
+    _or: [Transaction_bool_exp]
+    block: Block_bool_exp
+    blockIndex: Int_comparison_exp
+    collateral: TransactionInput_bool_exp
+    deposit: text_comparison_exp
+    fee: text_comparison_exp
+    hash: Hash32Hex_comparison_exp
+    includedAt: Date_comparison_exp
+    inputs: TransactionInput_bool_exp
+    invalidBefore: text_comparison_exp
+    invalidHereafter: text_comparison_exp
+    metadata: TransactionMetadata_bool_exp
+    mint: Token_bool_exp
+    outputs: TransactionOutput_bool_exp
+    scriptSize: Int_comparison_exp
+    size: Int_comparison_exp
+    totalOutput: text_comparison_exp
+    validContract: Boolean_comparison_exp
+    withdrawals: Withdrawal_bool_exp
 }
 
 type Transaction_aggregate {
-  aggregate: Transaction_aggregate_fields
+    aggregate: Transaction_aggregate_fields
 }
 
 type Transaction_aggregate_fields {
-  count: String!
-  max: Transaction_max_fields!
-  min: Transaction_min_fields!
-  sum: Transaction_sum_fields!
+    count: String!
+    max: Transaction_max_fields!
+    min: Transaction_min_fields!
+    sum: Transaction_sum_fields!
 }
 
 type Transaction_max_fields {
-  deposit: Lovelace
-  fee: Lovelace
-  invalidBefore: String
-  invalidHereafter: String
-  mint: Token_max_fields
-  scriptSize: Int
-  size: Int
-  totalOutput: Lovelace
-  withdrawals: Withdrawal_max_fields
+    deposit: Lovelace
+    fee: Lovelace
+    invalidBefore: String
+    invalidHereafter: String
+    mint: Token_max_fields
+    scriptSize: Int
+    size: Int
+    totalOutput: Lovelace
+    withdrawals: Withdrawal_max_fields
 }
 
 type Transaction_min_fields {
-  deposit: Lovelace
-  fee: Lovelace
-  invalidBefore: String
-  invalidHereafter: String
-  mint: Token_min_fields
-  scriptSize: Int
-  size: Int
-  totalOutput: Lovelace
-  withdrawals: Withdrawal_min_fields
+    deposit: Lovelace
+    fee: Lovelace
+    invalidBefore: String
+    invalidHereafter: String
+    mint: Token_min_fields
+    scriptSize: Int
+    size: Int
+    totalOutput: Lovelace
+    withdrawals: Withdrawal_min_fields
 }
 
 type Transaction_sum_fields {
-  deposit: Lovelace
-  fee: Lovelace
-  mint: Token_sum_fields
-  scriptSize: BigInt
-  size: BigInt
-  totalOutput: Lovelace
-  withdrawals: Withdrawal_sum_fields
+    deposit: Lovelace
+    fee: Lovelace
+    mint: Token_sum_fields
+    scriptSize: BigInt
+    size: BigInt
+    totalOutput: Lovelace
+    withdrawals: Withdrawal_sum_fields
 }
 
 type TransactionInput {
-  address: String!
-  redeemer: Redeemer
-  sourceTransaction: Transaction!
-  sourceTxHash: Hash32Hex!
-  sourceTxIndex: Int!
-  tokens: [Token]!
-  tokens_aggregate: Token_aggregate!
-  transaction: Transaction!
-  txHash: Hash32Hex!
-  value: Lovelace!
+    address: String!
+    redeemer: Redeemer
+    sourceTransaction: Transaction!
+    sourceTxHash: Hash32Hex!
+    sourceTxIndex: Int!
+    tokens: [Token]!
+    tokens_aggregate: Token_aggregate!
+    transaction: Transaction!
+    txHash: Hash32Hex!
+    value: Lovelace!
 }
 
 input TransactionInput_order_by {
-  address: order_by
-  sourceTxHash: order_by
-  transaction: Transaction_order_by
-  txHash: order_by
-  value: order_by
+    address: order_by
+    sourceTxHash: order_by
+    transaction: Transaction_order_by
+    txHash: order_by
+    value: order_by
 }
 
 input TransactionInput_bool_exp {
-  _and: [TransactionInput_bool_exp]
-  _not: TransactionInput_bool_exp
-  _or: [TransactionInput_bool_exp]
-  address: text_comparison_exp
-  sourceTransaction: Transaction_bool_exp
-  tokens: Token_bool_exp
-  transaction: Transaction_bool_exp
-  value: text_comparison_exp
+    _and: [TransactionInput_bool_exp]
+    _not: TransactionInput_bool_exp
+    _or: [TransactionInput_bool_exp]
+    address: text_comparison_exp
+    sourceTransaction: Transaction_bool_exp
+    tokens: Token_bool_exp
+    transaction: Transaction_bool_exp
+    value: text_comparison_exp
 }
 
 type TransactionInput_aggregate {
-  aggregate: TransactionInput_aggregate_fields
+    aggregate: TransactionInput_aggregate_fields
 }
 
 type TransactionInput_aggregate_fields {
-  count: String!
-  max: TransactionInput_max_fields!
-  min: TransactionInput_min_fields!
-  sum: TransactionInput_sum_fields!
+    count: String!
+    max: TransactionInput_max_fields!
+    min: TransactionInput_min_fields!
+    sum: TransactionInput_sum_fields!
 }
 
 type TransactionInput_max_fields {
-  tokens: Token_max_fields
-  value: Lovelace
+    tokens: Token_max_fields
+    value: Lovelace
 }
 
 type TransactionInput_min_fields {
-  tokens: Token_min_fields
-  value: Lovelace
+    tokens: Token_min_fields
+    value: Lovelace
 }
 
 type TransactionInput_sum_fields {
-  tokens: Token_sum_fields
-  value: Lovelace
+    tokens: Token_sum_fields
+    value: Lovelace
 }
 
 type TransactionMetadata {
-  key: String!
-  value: JSON!
+    key: String!
+    value: JSON!
 }
 
 input TransactionMetadata_bool_exp {
-  key: text_comparison_exp
+    key: text_comparison_exp
 }
 
 type TransactionOutput {
-  address: String!
-  addressHasScript: Boolean!
-  datum: Datum
-  index: Int!
-  paymentCredential: Hash28Hex
-  script: Script
-  transaction: Transaction!
-  txHash: Hash32Hex!
-  tokens: [Token!]!
-  tokens_aggregate: Token_aggregate!
-  value: Lovelace!
+    address: String!
+    addressHasScript: Boolean!
+    datum: Datum
+    index: Int!
+    paymentCredential: Hash28Hex
+    script: Script
+    transaction: Transaction!
+    txHash: Hash32Hex!
+    tokens: [Token!]!
+    tokens_aggregate: Token_aggregate!
+    value: Lovelace!
 }
 
 enum TransactionOutput_distinct_on {
-  address
+    address
 }
 
 input TransactionOutput_order_by {
-  address: order_by
-  addressHasScript: order_by
-  datum: Transaction_order_by
-  index: order_by
-  txHash: order_by
-  value: order_by
+    address: order_by
+    addressHasScript: order_by
+    datum: Transaction_order_by
+    index: order_by
+    txHash: order_by
+    value: order_by
 }
 
 input TransactionOutput_bool_exp {
-  _and: [TransactionOutput_bool_exp]
-  _not: TransactionOutput_bool_exp
-  _or: [TransactionOutput_bool_exp]
-  address: text_comparison_exp
-  addressHasScript: Boolean_comparison_exp
-  datum: Datum_bool_exp
-  index: Int_comparison_exp
-  script: Script_bool_exp
-  tokens: Token_bool_exp
-  transaction: Transaction_bool_exp
-  value: text_comparison_exp
+    _and: [TransactionOutput_bool_exp]
+    _not: TransactionOutput_bool_exp
+    _or: [TransactionOutput_bool_exp]
+    address: text_comparison_exp
+    addressHasScript: Boolean_comparison_exp
+    datum: Datum_bool_exp
+    index: Int_comparison_exp
+    script: Script_bool_exp
+    tokens: Token_bool_exp
+    transaction: Transaction_bool_exp
+    value: text_comparison_exp
 }
 
 type TransactionOutput_aggregate {
-  aggregate: TransactionOutput_aggregate_fields
+    aggregate: TransactionOutput_aggregate_fields
 }
 
 type TransactionOutput_aggregate_fields {
-  count: String!
-  max: TransactionOutput_max_fields!
-  min: TransactionOutput_min_fields!
-  sum: TransactionOutput_sum_fields!
+    count: String!
+    max: TransactionOutput_max_fields!
+    min: TransactionOutput_min_fields!
+    sum: TransactionOutput_sum_fields!
 }
 
 type TransactionOutput_max_fields {
-  tokens: Token_max_fields
-  value: Lovelace
+    tokens: Token_max_fields
+    value: Lovelace
 }
 
 type TransactionOutput_min_fields {
-  tokens: Token_min_fields
-  value: Lovelace
+    tokens: Token_min_fields
+    value: Lovelace
 }
 
 type TransactionOutput_sum_fields {
-  tokens: Token_sum_fields
-  value: Lovelace
+    tokens: Token_sum_fields
+    value: Lovelace
 }
 
 type TransactionSubmitResponse {
-  hash: String!
+    hash: String!
 }
 
 type Block {
-  # Genesis block does not belong to the 0th epoch, therefore it could be null
-  epoch: Epoch
-  epochNo: Int
-  fees: Lovelace!
-  forgedAt: DateTime!
-  slotLeader: SlotLeader!
-  hash: Hash32Hex!
-  number: Int
-  opCert: Hash32Hex
-  slotInEpoch: String
-  # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
-  slotNo: String
-  # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
-  previousBlock: Block
-  protocolVersion: JSONObject
-  nextBlock: Block
-  size: Int!
-  transactions(
-    limit: Int
-    order_by: [Transaction_order_by!]
-    offset: Int
-    where: Transaction_bool_exp
-  ): [Transaction]!
-  transactions_aggregate (
-    limit: Int
-    order_by: [Transaction_order_by!]
-    offset: Int
-    where: Transaction_bool_exp
-  ): Transaction_aggregate!
-  transactionsCount: String!
-  vrfKey: VRFVerificationKey
+    # Genesis block does not belong to the 0th epoch, therefore it could be null
+    epoch: Epoch
+    epochNo: Int
+    fees: Lovelace!
+    forgedAt: DateTime!
+    slotLeader: SlotLeader!
+    hash: Hash32Hex!
+    number: Int
+    opCert: Hash32Hex
+    slotInEpoch: String
+    # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
+    slotNo: String
+    # Ouroboros Classic Epoch Boundary blocks (EBB) do not have a slot number
+    previousBlock: Block
+    protocolVersion: JSONObject
+    nextBlock: Block
+    size: Int!
+    transactions(
+        limit: Int
+        order_by: [Transaction_order_by!]
+        offset: Int
+        where: Transaction_bool_exp
+    ): [Transaction]!
+    transactions_aggregate (
+        limit: Int
+        order_by: [Transaction_order_by!]
+        offset: Int
+        where: Transaction_bool_exp
+    ): Transaction_aggregate!
+    transactionsCount: String!
+    vrfKey: VRFVerificationKey
 }
 
 input Block_bool_exp {
-  _and: [Block_bool_exp]
-  _not: Block_bool_exp
-  _or: [Block_bool_exp]
-  forgedAt: Date_comparison_exp
-  slotLeader: SlotLeader_bool_exp
-  epoch: Epoch_bool_exp
-  fees: text_comparison_exp
-  hash: Hash32Hex_comparison_exp
-  number: Int_comparison_exp
-  previousBlock: Block_bool_exp
-  nextBlock: Block_bool_exp
-  size: Int_comparison_exp
-  slotInEpoch: Int_comparison_exp
-  slotNo: text_comparison_exp
-  transactions: Transaction_bool_exp
-  transactionsCount: text_comparison_exp
-  vrfKey: VRFVerificationKey_comparison_exp
+    _and: [Block_bool_exp]
+    _not: Block_bool_exp
+    _or: [Block_bool_exp]
+    forgedAt: Date_comparison_exp
+    slotLeader: SlotLeader_bool_exp
+    epoch: Epoch_bool_exp
+    fees: text_comparison_exp
+    hash: Hash32Hex_comparison_exp
+    number: Int_comparison_exp
+    previousBlock: Block_bool_exp
+    nextBlock: Block_bool_exp
+    size: Int_comparison_exp
+    slotInEpoch: Int_comparison_exp
+    slotNo: text_comparison_exp
+    transactions: Transaction_bool_exp
+    transactionsCount: text_comparison_exp
+    vrfKey: VRFVerificationKey_comparison_exp
 }
 
 input Block_order_by {
-  forgedAt: order_by
-  slotLeader: SlotLeader_order_by
-  epoch: Epoch_order_by
-  fees: order_by
-  hash: order_by
-  number: order_by_with_nulls
-  size: order_by
-  slotNo: order_by_with_nulls
-  transactionsCount: order_by
-  vrfKey: order_by_with_nulls
+    forgedAt: order_by
+    slotLeader: SlotLeader_order_by
+    epoch: Epoch_order_by
+    fees: order_by
+    hash: order_by
+    number: order_by_with_nulls
+    size: order_by
+    slotNo: order_by_with_nulls
+    transactionsCount: order_by
+    vrfKey: order_by_with_nulls
 }
 
 type Block_aggregate {
-  aggregate: Block_aggregate_fields
+    aggregate: Block_aggregate_fields
 }
 
 type Block_aggregate_fields {
-  count: String!
-  max: Block_max_fields!
-  min: Block_min_fields!
-  sum: Block_sum_fields!
+    count: String!
+    max: Block_max_fields!
+    min: Block_min_fields!
+    sum: Block_sum_fields!
 }
 
 type Block_max_fields {
-  fees: Lovelace
-  size: Int
+    fees: Lovelace
+    size: Int
 }
 
 type Block_min_fields {
-  fees: Lovelace
-  size: Int
+    fees: Lovelace
+    size: Int
 }
 
 type Block_sum_fields {
-  fees: Lovelace
-  size: BigInt
+    fees: Lovelace
+    size: BigInt
 }
 
 type Epoch {
-  activeStake: [ActiveStake]
-  activeStake_aggregate: ActiveStake_aggregate
-  adaPots: AdaPots
-  blocks (
-    limit: Int
-    order_by: [Block_order_by!]
-    offset: Int
-    where: Block_bool_exp
-  ): [Block!]!
-  blocks_aggregate (
-    limit: Int
-    order_by: [Block_order_by!]
-    offset: Int
-    where: Block_bool_exp
-  ): Block_aggregate!
-  blocksCount: String!
-  fees: Lovelace!
-  output: Lovelace!
-  nonce: Hash32Hex
-  number: Int!
-  protocolParams: ProtocolParams
-  transactionsCount: String!
-  startedAt: DateTime!
-  lastBlockTime: DateTime!
+    activeStake: [ActiveStake]
+    activeStake_aggregate: ActiveStake_aggregate
+    adaPots: AdaPots
+    blocks (
+        limit: Int
+        order_by: [Block_order_by!]
+        offset: Int
+        where: Block_bool_exp
+    ): [Block!]!
+    blocks_aggregate (
+        limit: Int
+        order_by: [Block_order_by!]
+        offset: Int
+        where: Block_bool_exp
+    ): Block_aggregate!
+    blocksCount: String!
+    fees: Lovelace!
+    output: Lovelace!
+    nonce: Hash32Hex
+    number: Int!
+    protocolParams: ProtocolParams
+    transactionsCount: String!
+    startedAt: DateTime!
+    lastBlockTime: DateTime!
 }
 
 input Epoch_bool_exp {
-  _and: [Epoch_bool_exp]
-  _not: Epoch_bool_exp
-  _or: [Epoch_bool_exp]
-  blocks: Block_bool_exp
-  blocksCount: text_comparison_exp
-  fees: text_comparison_exp
-  number: Int_comparison_exp
-  output: text_comparison_exp
-  startedAt: Date_comparison_exp
-  transactionsCount: text_comparison_exp
+    _and: [Epoch_bool_exp]
+    _not: Epoch_bool_exp
+    _or: [Epoch_bool_exp]
+    blocks: Block_bool_exp
+    blocksCount: text_comparison_exp
+    fees: text_comparison_exp
+    number: Int_comparison_exp
+    output: text_comparison_exp
+    startedAt: Date_comparison_exp
+    transactionsCount: text_comparison_exp
 }
 
 input Epoch_order_by {
-  blocksCount: order_by
-  fees: order_by
-  number: order_by
-  output: order_by
-  transactionsCount: order_by
+    blocksCount: order_by
+    fees: order_by
+    number: order_by
+    output: order_by
+    transactionsCount: order_by
 }
 
 type Epoch_aggregate {
-  aggregate: Epoch_aggregate_fields!
+    aggregate: Epoch_aggregate_fields!
 }
 
 type Epoch_aggregate_fields {
-  count: String!
-  max: Epoch_max_fields!
-  min: Epoch_min_fields!
-  sum: Epoch_sum_fields!
+    count: String!
+    max: Epoch_max_fields!
+    min: Epoch_min_fields!
+    sum: Epoch_sum_fields!
 }
 
 type Epoch_max_fields {
-  blocksCount: Int!
-  fees: Lovelace!
-  number: Int!
-  output: Lovelace!
-  transactionsCount: String!
+    blocksCount: Int!
+    fees: Lovelace!
+    number: Int!
+    output: Lovelace!
+    transactionsCount: String!
 }
 
 type Epoch_min_fields {
-  blocksCount: String!
-  fees: Lovelace!
-  output: Lovelace!
-  transactionsCount: String!
+    blocksCount: String!
+    fees: Lovelace!
+    output: Lovelace!
+    transactionsCount: String!
 }
 
 type Epoch_sum_fields {
-  blocksCount: String!
-  fees: Lovelace!
-  output: Lovelace!
-  transactionsCount: String!
+    blocksCount: String!
+    fees: Lovelace!
+    output: Lovelace!
+    transactionsCount: String!
 }
 
 type Withdrawal {
-  address: StakeAddress!
-  amount: Lovelace!
-  redeemer: Redeemer
-  transaction: Transaction!
+    address: StakeAddress!
+    amount: Lovelace!
+    redeemer: Redeemer
+    transaction: Transaction!
 }
 
 input Withdrawal_bool_exp {
-  _and: [Withdrawal_bool_exp]
-  _not: Withdrawal_bool_exp
-  _or: [Withdrawal_bool_exp]
-  address: StakeAddress_comparison_exp
-  amount: text_comparison_exp
-  transaction: Transaction_bool_exp
+    _and: [Withdrawal_bool_exp]
+    _not: Withdrawal_bool_exp
+    _or: [Withdrawal_bool_exp]
+    address: StakeAddress_comparison_exp
+    amount: text_comparison_exp
+    transaction: Transaction_bool_exp
 }
 
 input Withdrawal_order_by {
-  address: order_by
-  amount: order_by
-  transaction: Transaction_order_by
+    address: order_by
+    amount: order_by
+    transaction: Transaction_order_by
 }
 
 type Withdrawal_aggregate {
-  aggregate: Withdrawal_aggregate_fields!
+    aggregate: Withdrawal_aggregate_fields!
 }
 
 type Withdrawal_aggregate_fields {
-  count: String!
-  max: Withdrawal_max_fields!
-  min: Withdrawal_min_fields!
-  sum: Withdrawal_sum_fields!
+    count: String!
+    max: Withdrawal_max_fields!
+    min: Withdrawal_min_fields!
+    sum: Withdrawal_sum_fields!
 }
 
 type Withdrawal_max_fields {
-  amount: Lovelace
+    amount: Lovelace
 }
 
 type Withdrawal_min_fields {
-  amount: Lovelace
+    amount: Lovelace
 }
 
 type Withdrawal_sum_fields {
-  amount: Lovelace
+    amount: Lovelace
 }
 
 input Boolean_comparison_exp {
-  _eq: Boolean
-  _gt: Boolean
-  _gte: Boolean
-  _in: [Boolean!]
-  _is_null: Boolean
-  _lt: Boolean
-  _lte: Boolean
-  _neq: Boolean
-  _nin: [Boolean!]
+    _eq: Boolean
+    _gt: Boolean
+    _gte: Boolean
+    _in: [Boolean!]
+    _is_null: Boolean
+    _lt: Boolean
+    _lte: Boolean
+    _neq: Boolean
+    _nin: [Boolean!]
 }
 
 # expression to compare data of type date. All fields are combined with logical 'AND'.
 input Date_comparison_exp {
-  _eq: DateTime
-  _gt: DateTime
-  _gte: DateTime
-  _in: [DateTime]
-  _lt: DateTime
-  _lte: DateTime
-  _neq: DateTime
-  _nin: [DateTime]
+    _eq: DateTime
+    _gt: DateTime
+    _gte: DateTime
+    _in: [DateTime]
+    _lt: DateTime
+    _lte: DateTime
+    _neq: DateTime
+    _nin: [DateTime]
 }
 
 # expression to compare data of type Float. All fields are combined with logical 'AND'.
 input Float_comparison_exp {
-  _eq: Float
-  _gt: Float
-  _gte: Float
-  _in: [Float!]
-  _is_null: Boolean
-  _lt: Float
-  _lte: Float
-  _neq: Float
-  _nin: [Float!]
+    _eq: Float
+    _gt: Float
+    _gte: Float
+    _in: [Float!]
+    _is_null: Boolean
+    _lt: Float
+    _lte: Float
+    _neq: Float
+    _nin: [Float!]
 }
 
 # expression to compare data of type Int. All fields are combined with logical 'AND'.
 input Int_comparison_exp {
-  _eq: Int
-  _gt: Int
-  _gte: Int
-  _in: [Int!]
-  _is_null: Boolean
-  _lt: Int
-  _lte: Int
-  _neq: Int
-  _nin: [Int!]
+    _eq: Int
+    _gt: Int
+    _gte: Int
+    _in: [Int!]
+    _is_null: Boolean
+    _lt: Int
+    _lte: Int
+    _neq: Int
+    _nin: [Int!]
 }
 
 # All fields are combined with logical 'AND'.
 input Hex_comparison_exp {
-  _eq: Hex
-  _in: [Hex]
-  _neq: Hex
-  _nin: [Hex]
+    _eq: Hex
+    _in: [Hex]
+    _neq: Hex
+    _nin: [Hex]
 }
 
 # expression to compare data of type Percentage. All fields are combined with logical 'AND'.
 input Percentage_comparison_exp {
-  _eq: Percentage
-  _gt: Percentage
-  _gte: Percentage
-  _lt: Percentage
-  _lte: Percentage
-  _neq: Percentage
+    _eq: Percentage
+    _gt: Percentage
+    _gte: Percentage
+    _lt: Percentage
+    _lte: Percentage
+    _neq: Percentage
 }
 
 # All fields are combined with logical 'AND'.
 input Hash28Hex_comparison_exp {
-  _eq: Hash28Hex
-  _in: [Hash28Hex]
-  _neq: Hash28Hex
-  _nin: [Hash28Hex]
+    _eq: Hash28Hex
+    _in: [Hash28Hex]
+    _neq: Hash28Hex
+    _nin: [Hash28Hex]
 }
 
 input Hash32Hex_comparison_exp {
-  _eq: Hash32Hex
-  _in: [Hash32Hex]
-  _neq: Hash32Hex
-  _nin: [Hash32Hex]
+    _eq: Hash32Hex
+    _in: [Hash32Hex]
+    _neq: Hash32Hex
+    _nin: [Hash32Hex]
 }
 
 input text_comparison_exp {
-  _eq: String
-  _gt: String
-  _gte: String
-  _ilike: String
-  _in: [String]
-  _is_null: Boolean
-  _like: String
-  _lt: String
-  _lte: String
-  _neq: String
-  _nilike: String
-  _nin: [String]
-  _nlike: String
-  _nsimilar: String
-  _similar: String
+    _eq: String
+    _gt: String
+    _gte: String
+    _ilike: String
+    _in: [String]
+    _is_null: Boolean
+    _like: String
+    _lt: String
+    _lte: String
+    _neq: String
+    _nilike: String
+    _nin: [String]
+    _nlike: String
+    _nsimilar: String
+    _similar: String
 }
 
 input AssetFingerprint_comparison_exp {
-  _eq: String
-  _in: [String]
-  _neq: String
-  _nin: [String]
+    _eq: String
+    _in: [String]
+    _neq: String
+    _nin: [String]
 }
 
 # ordering options
 enum order_by {
-  # in the ascending order, nulls last
-  asc
-  # in the ascending order, nulls first
-  desc
+    # in the ascending order, nulls last
+    asc
+    # in the ascending order, nulls first
+    desc
 }
 
 # ordering options
 enum order_by_with_nulls {
-  # in the ascending order, nulls last
-  asc
-  # in the ascending order, nulls first
-  asc_nulls_first
-  # in the ascending order, nulls last
-  asc_nulls_last
-  # in the descending order, nulls first
-  desc
-  # in the descending order, nulls first
-  desc_nulls_first
-  # in the descending order, nulls last
-  desc_nulls_last
+    # in the ascending order, nulls last
+    asc
+    # in the ascending order, nulls first
+    asc_nulls_first
+    # in the ascending order, nulls last
+    asc_nulls_last
+    # in the descending order, nulls first
+    desc
+    # in the descending order, nulls first
+    desc_nulls_first
+    # in the descending order, nulls last
+    desc_nulls_last
 }
 
 input VRFVerificationKey_comparison_exp {
-  _eq: VRFVerificationKey
-  _in: [VRFVerificationKey]
-  _is_null: Boolean
-  _neq: VRFVerificationKey
-  _nin: [VRFVerificationKey]
+    _eq: VRFVerificationKey
+    _in: [VRFVerificationKey]
+    _is_null: Boolean
+    _neq: VRFVerificationKey
+    _nin: [VRFVerificationKey]
 }

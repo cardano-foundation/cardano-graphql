@@ -2,21 +2,22 @@ version: "3.8"
 
 services:
   postgres:
-    image: postgres:${POSTGRES_VERSION:-11.5-alpine}
+    image: postgres:${POSTGRES_VERSION}
     environment:
       - POSTGRES_LOGGING=true
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
     ports:
-      - ${POSTGRES_PORT:-5432}:5432
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    command: -p ${POSTGRES_PORT}
     secrets:
       - postgres_db
       - postgres_password
       - postgres_user
     shm_size: '2gb'
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - ${DB_PATH}:/var/lib/postgresql/data
     restart: on-failure
     logging:
       driver: "json-file"
@@ -24,50 +25,77 @@ services:
         max-size: "200k"
         max-file: "10"
 
-  cardano-node-ogmios:
+  mithril:
+    image: cardanofoundation/cardano-graph-ql-mithril:${MITHRIL_VERSION}
     build:
-      args:
-        - CARDANO_CONFIG_REV=${CARDANO_CONFIG_REV:-303f3a3035c52eb753b533d53ef439c6b4cde9c9}
-        - CARDANO_NODE_VERSION=${CARDANO_NODE_VERSION:-1.35.5}
-        - NETWORK=${NETWORK:-mainnet}
-      cache_from: [ cardanosolutions/cardano-node-ogmios:latest ]
-      context: ./ogmios
-    image: cardanosolutions/cardano-node-ogmios:${OGMIOS_VERSION:-v5.5.8}_${CARDANO_NODE_VERSION:-1.35.5}-${NETWORK:-mainnet}
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "400k"
-        max-file: "20"
-    ports:
-      - ${OGMIOS_PORT:-1337}:1337
-    restart: on-failure
+      context: ./
+      dockerfile: ./dockerfiles/mithril/Dockerfile
+      args: 
+        MITHRIL_VERSION: ${MITHRIL_VERSION}
+    environment:
+      - NETWORK=${NETWORK}
+      - MITHRIL_SYNC=${MITHRIL_SYNC}
+      - SNAPSHOT_DIGEST=${SNAPSHOT_DIGEST}
+      - AGGREGATOR_ENDPOINT=${AGGREGATOR_ENDPOINT}
+      - GENESIS_VERIFICATION_KEY=${GENESIS_VERIFICATION_KEY}
+      - ANCILLARY_VERIFICATION_KEY=${ANCILLARY_VERIFICATION_KEY}
     volumes:
-      - node-db:/db
-      - node-ipc:/ipc
-      - ./config/network/${NETWORK:-mainnet}:/config
+      - ${CARDANO_NODE_DIR}:/node
+
+  cardano-node:
+    image: ghcr.io/intersectmbo/cardano-node:${CARDANO_NODE_VERSION}
+    environment:
+      - NETWORK=${NETWORK}
+    volumes:
+      - ${CARDANO_NODE_DIR}:/ipc
+      - ${CARDANO_NODE_DB}:/node/db
+      - ./config/network/${NETWORK}:/config
+    entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
+    depends_on:
+      mithril:
+        condition: service_completed_successfully
+
+  ogmios:
+    image: cardanosolutions/ogmios:${OGMIOS_VERSION}
+    command:
+      - --host
+      - 0.0.0.0
+      - --node-socket
+      - /ipc/node.socket
+      - --node-config
+      - /config/cardano-node/config.json
+      - --log-level-websocket
+      - error
+    volumes:
+      - ${CARDANO_NODE_DIR}:/ipc
+      - ./config/network/${NETWORK}:/config
+    ports:
+      - ${OGMIOS_PORT}:1337
+    restart: on-failure
 
   cardano-db-sync:
-    image: inputoutput/cardano-db-sync:${CARDANO_DB_SYNC_VERSION:-13.0.5}
-    command: [
-      "--config", "/config/cardano-db-sync/config.json",
-      "--socket-path", "/node-ipc/node.socket"
-    ]
+    platform: linux/x86_64
+    image: ghcr.io/intersectmbo/cardano-db-sync:${CARDANO_DB_SYNC_VERSION}
+    command: [ "--config", "/config/cardano-db-sync/config.json", "--socket-path", "/node-ipc/node.socket" ]
     environment:
       - POSTGRES_HOST=postgres
-      - POSTGRES_PORT=5432
-      - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT:-}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - RESTORE_SNAPSHOT=${RESTORE_SNAPSHOT}
       - RESTORE_RECREATE_DB=N
     depends_on:
-      - cardano-node-ogmios
-      - postgres
+      # Depend on both services to be started before starting.
+      cardano-node:
+        condition: service_started
+      postgres:
+        condition: service_started
     secrets:
       - postgres_password
       - postgres_user
       - postgres_db
     volumes:
-      - ./config/network/${NETWORK:-mainnet}:/config
-      - db-sync-data:/var/lib/cexplorer
-      - node-ipc:/node-ipc
+      - ./config/network/${NETWORK}:/config
+      - ${CARDANO_DB_SYNC_DIR}:/var/lib/cexplorer
+      - ${CARDANO_NODE_DIR}:/node-ipc
     restart: on-failure
     stop_signal: SIGINT
     logging:
@@ -79,15 +107,16 @@ services:
   hasura:
     build:
       context: ./packages/api-cardano-db-hasura/hasura
-    image: inputoutput/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION:-8.0.0}
+    image: cardanofoundation/cardano-graphql-hasura:${CARDANO_GRAPHQL_VERSION}
     ports:
-      - ${HASURA_PORT:-8090}:8080
+      - ${HASURA_PORT}:8080
     depends_on:
       - "postgres"
     restart: on-failure
     environment:
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
       - HASURA_GRAPHQL_CORS_DOMAIN=http://localhost:9695
+      - POSTGRES_PORT=${POSTGRES_PORT}
     secrets:
       - postgres_db
       - postgres_password
@@ -100,16 +129,19 @@ services:
 
   background:
     build:
-      cache_from: [ inputoutput/cardano-graphql-background:latest ]
       context: .
       target: background
-    image: inputoutput/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION:-8.0.0}-${NETWORK:-mainnet}
+    image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION}-${NETWORK}
     depends_on:
       - "hasura"
       - "postgres"
     environment:
-      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
-      - METADATA_SERVER_URI=${METADATA_SERVER_URI:-https://tokens.cardano.org}
+      - COMPOSE_PROFILES=${COMPOSE_PROFILES}
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY}
+      - METADATA_SERVER_URI=${METADATA_SERVER_URI}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - CHAIN_FOLLOWER_START_SLOT=${CHAIN_FOLLOWER_START_SLOT}
+      - CHAIN_FOLLOWER_START_ID=${CHAIN_FOLLOWER_START_ID}
     restart: on-failure
     secrets:
       - postgres_db
@@ -122,27 +154,50 @@ services:
         max-file: "10"
 
   server:
+    platform: linux/x86_64
     build:
       args:
-        - NETWORK=${NETWORK:-mainnet}
-      cache_from: [ inputoutput/cardano-graphql-server:latest ]
+        - NETWORK=${NETWORK}
       context: .
       target: server
-    image: inputoutput/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION:-8.0.0}-${NETWORK:-mainnet}
+    image: cardanofoundation/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION}-${NETWORK}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
-      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY:-info}
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY}
+      - POSTGRES_PORT=${POSTGRES_PORT}
     expose:
-      - ${API_PORT:-3100}
+      - ${API_PORT}
     ports:
-      - ${API_PORT:-3100}:3100
+      - ${API_PORT}:3100
     restart: on-failure
     logging:
       driver: "json-file"
       options:
         max-size: "200k"
         max-file: "10"
+
+  token-metadata-registry:
+    image: cardanofoundation/cf-token-metadata-registry-api:${TOKEN_REGISTRY_VERSION}
+    profiles: ["token-registry"]
+    volumes: 
+      - ./scripts/:/app/scripts/:ro
+    entrypoint: ["sh", "/app/scripts/token-registry-init.sh"]
+    ports:
+      - ${TOKEN_REGISTRY_PORT}:8080
+    environment:
+      - TOKEN_METADATA_SYNC_JOB=true
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_HOST=postgres
+      - DB_SCHEMA=tokenregistry
+      - NETWORK=${NETWORK}
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    restart: on-failure
+    depends_on:
+      - postgres
 
 secrets:
   postgres_db:
@@ -155,4 +210,4 @@ volumes:
   db-sync-data:
   node-db:
   node-ipc:
-  postgres-data:
+  postgres14-data:

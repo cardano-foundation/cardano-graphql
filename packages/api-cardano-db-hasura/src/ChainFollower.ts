@@ -1,9 +1,5 @@
 import {
-  ChainSync,
-  createChainSyncClient,
-  isAlonzoBlock,
-  isBabbageBlock,
-  isMaryBlock,
+  createChainSynchronizationClient,
   Schema
 } from '@cardano-ogmios/client'
 import pRetry from 'p-retry'
@@ -12,16 +8,19 @@ import util, { assetFingerprint, errors, RunnableModuleState } from '@cardano-gr
 import PgBoss from 'pg-boss'
 import { dummyLogger, Logger } from 'ts-log'
 import { createInteractionContextWithLogger } from './util'
-import { PointOrOrigin } from '@cardano-ogmios/schema'
+import { PointOrOrigin, BlockPraos, BlockBFT, Tip, Origin } from '@cardano-ogmios/schema'
 import { HasuraBackgroundClient } from './HasuraBackgroundClient'
 import { DbConfig } from './typeAliases'
+import { ChainSynchronizationClient } from '@cardano-ogmios/client/dist/ChainSynchronization'
 
 const MODULE_NAME = 'ChainFollower'
 
 export class ChainFollower {
-  private chainSyncClient: ChainSync.ChainSyncClient
+  private chainSyncClient: ChainSynchronizationClient
   private queue: PgBoss
   private state: RunnableModuleState
+  private cacheAssets : { assetId: string; assetName: string; firstAppearedInSlot: number; fingerprint: string; policyId: string; }[]
+  private cacheTimer : number
 
   constructor (
     readonly hasuraClient: HasuraBackgroundClient,
@@ -29,6 +28,8 @@ export class ChainFollower {
     private queueConfig: DbConfig
   ) {
     this.state = null
+    this.cacheAssets = []
+    this.cacheTimer = Date.now()
   }
 
   public async initialize (ogmiosConfig: Config['ogmios'], getMostRecentPoint: () => Promise<PointOrOrigin[]>) {
@@ -39,13 +40,14 @@ export class ChainFollower {
       application_name: 'cardano-graphql',
       ...this.queueConfig
     })
+    this.logger.info({ module: MODULE_NAME }, 'Connecting to queue')
     await pRetry(async () => {
       const context = await createInteractionContextWithLogger(ogmiosConfig, this.logger, MODULE_NAME, async () => {
         await this.shutdown()
         await this.initialize(ogmiosConfig, getMostRecentPoint)
         await this.start(await getMostRecentPoint())
       })
-      this.chainSyncClient = await createChainSyncClient(
+      this.chainSyncClient = await createChainSynchronizationClient(
         context,
         {
           rollBackward: async ({ point, tip }, requestNext) => {
@@ -62,40 +64,37 @@ export class ChainFollower {
             }
             requestNext()
           },
-          rollForward: async ({ block }, requestNext) => {
-            let b: Schema.BlockBabbage | Schema.BlockAlonzo | Schema.BlockMary
-            if (isBabbageBlock(block)) {
-              b = block.babbage as Schema.BlockBabbage
-            } else if (isAlonzoBlock(block)) {
-              b = block.alonzo as Schema.BlockAlonzo
-            } else if (isMaryBlock(block)) {
-              b = block.mary as Schema.BlockMary
-            }
-            if (b !== undefined) {
-              for (const tx of b.body) {
-                for (const entry of Object.entries(tx.body.mint.assets)) {
-                  const [policyId, assetName] = entry[0].split('.')
-                  const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
-                  if (!(await this.hasuraClient.hasAsset(assetId))) {
-                    const asset = {
-                      assetId,
-                      assetName,
-                      firstAppearedInSlot: b.header.slot,
-                      fingerprint: assetFingerprint(policyId, assetName),
-                      policyId
+          rollForward: async ({ block, tip }, requestNext) => {
+            try {
+              let b
+              switch (block.type) {
+                case 'praos':
+                  b = block as BlockPraos
+                  break
+                case 'bft':
+                  b = block as BlockBFT
+                  break
+                case 'ebb': // No transaction in there
+                  return
+              }
+              if (b !== undefined && b.transactions !== undefined) {
+                for (const tx of b.transactions) {
+                  if (tx.mint !== undefined) {
+                    for (const entry of Object.entries(tx.mint)) {
+                      const policyId = entry[0]
+                      const assetNames = Object.keys(entry[1])
+                      for (const assetName of assetNames) {
+                        await this.saveAsset(policyId, assetName, b, tip)
+                      }
                     }
-                    await this.hasuraClient.insertAssets([asset])
-                    const SIX_HOURS = 21600
-                    const THREE_MONTHS = 365
-                    await this.queue.publish('asset-metadata-fetch-initial', { assetId }, {
-                      retryDelay: SIX_HOURS,
-                      retryLimit: THREE_MONTHS
-                    })
                   }
                 }
               }
+            } catch (e) {
+              console.log(e)
+            } finally {
+              requestNext()
             }
-            requestNext()
           }
         }
       )
@@ -111,13 +110,46 @@ export class ChainFollower {
     this.logger.info({ module: MODULE_NAME }, 'Initialized')
   }
 
+  async saveAsset (policyId: string, assetName: string | undefined, b: BlockPraos | BlockBFT, tip: Tip | Origin) {
+    const assetId = `${policyId}${assetName !== undefined ? assetName : ''}`
+    const asset = {
+      assetId,
+      assetName,
+      firstAppearedInSlot: b.slot,
+      fingerprint: assetFingerprint(policyId, assetName),
+      policyId
+    }
+    // introducing a caching to speed things up. The GraphQL insertAssets takes a lot of time.
+    // Saving when > 1000 assets in the cache or every minute
+    this.cacheAssets.push(asset)
+    let isTip = false
+    try {
+      isTip = (tip as Tip).slot === b.slot
+    } catch (e) {
+      this.logger.debug({ module: MODULE_NAME }, 'Sync is not at tip. Using a cache to save Assets every minute to increase catching up speed.')
+    }
+    if (isTip || this.cacheAssets.length > 1000 || (Date.now() - this.cacheTimer) / 1000 > 60) {
+      this.cacheTimer = Date.now() // resetting the timer
+      const response = await this.hasuraClient.insertAssets(this.cacheAssets)
+      this.cacheAssets = []
+      response.insert_assets.returning.forEach((asset: { assetId: string }) => {
+        const SIX_HOURS = 21600
+        const THREE_MONTHS = 365
+        this.queue.publish('asset-metadata-fetch-initial', { assetId: asset.assetId.replace('\\x', '') }, {
+          retryDelay: SIX_HOURS,
+          retryLimit: THREE_MONTHS
+        })
+      })
+    }
+  }
+
   public async start (points: Schema.PointOrOrigin[]) {
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'start')
     }
-    this.logger.info({ module: MODULE_NAME }, 'Starting')
+    this.logger.info({ module: MODULE_NAME }, 'Starting from ' + JSON.stringify(points))
     await this.queue.start()
-    await this.chainSyncClient.startSync(points)
+    await this.chainSyncClient.resume(points)
     this.state = 'running'
     this.logger.info({ module: MODULE_NAME }, 'Started')
   }
