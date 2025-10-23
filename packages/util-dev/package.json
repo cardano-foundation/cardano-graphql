@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/cardano-foundation/cardano-graphql/blob/master/packages/util-dev/README.md",
   "devDependencies": {
-    "@cardano-graphql/util": "8.0.0",
+    "@cardano-graphql/util": "8.4.1",
     "shx": "^0.3.2"
   },
   "directories": {

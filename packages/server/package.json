@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/cardano-foundation/cardano-graphql/blob/master/packages/server/README.md",
   "dependencies": {
-    "@cardano-graphql/api-cardano-db-hasura": "8.0.0",
+    "@cardano-graphql/api-cardano-db-hasura": "8.4.1",
     "@cardano-ogmios/schema": "6.1.0",
     "@graphql-tools/merge": "^6.2.17",
     "apollo-metrics": "^1.0.1",
@@ -46,7 +46,7 @@
     "ts-log": "^2.2.3"
   },
   "devDependencies": {
-    "@cardano-graphql/util-dev": "8.0.0",
+    "@cardano-graphql/util-dev": "8.4.1",
     "@graphql-codegen/cli": "^1.21.8",
     "@types/death": "^1.1.1",
     "@types/fs-extra": "^9.0.1",
