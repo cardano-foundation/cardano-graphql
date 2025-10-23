@@ -95,7 +95,7 @@ CMD ["node", "background.js"]
 FROM ubuntu-nodejs AS server
 ARG NETWORK=mainnet
 ENV \
-  CARDANO_NODE_CONFIG_PATH=/config/cardano-node/config.json \
+  CARDANO_NODE_CONFIG_PATH=/config/network/${NETWORK}/cardano-node/config.json \
   HASURA_GRAPHQL_ENABLE_TELEMETRY=false \
   HASURA_URI="http://hasura:8080" \
   LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
@@ -112,7 +112,7 @@ COPY --from=cardano-graphql-builder /app/packages/util/dist /app/packages/util/d
 COPY --from=cardano-graphql-builder /app/packages/util/package.json /app/packages/util/package.json
 COPY --from=cardano-graphql-production-deps /app/node_modules /app/node_modules
 COPY --from=cardano-graphql-production-deps /app/packages/api-cardano-db-hasura/node_modules /app/packages/api-cardano-db-hasura/node_modules
-COPY config/network/${NETWORK}/cardano-node /config/cardano-node/
+COPY config /config/
 WORKDIR /app/packages/server/dist
 EXPOSE 3100
 CMD ["node", "index.js"]
