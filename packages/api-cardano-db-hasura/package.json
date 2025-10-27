@@ -1,6 +1,6 @@
 {
   "name": "@cardano-graphql/api-cardano-db-hasura",
-  "version": "8.0.0",
+  "version": "8.4.1",
   "description": "Module for interfacing with the Cardano DB, populated by cardano-db-sync that utilises Hasura for a powerful query interface",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -34,7 +34,7 @@
     "schema.graphql"
   ],
   "dependencies": {
-    "@cardano-graphql/util": "8.0.0",
+    "@cardano-graphql/util": "8.4.1",
     "@cardano-ogmios/client": "^6.0.0",
     "@cardanosolutions/json-bigint": "^1.0.0",
     "@emurgo/cip14-js": "^2.0.0",
