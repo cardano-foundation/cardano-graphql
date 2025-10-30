@@ -1896,7 +1896,7 @@ type TransactionInput_sum_fields {
 
 type TransactionMetadata {
     key: String!
-    value: JSON!
+    value: JSON
 }
 
 input TransactionMetadata_bool_exp {
