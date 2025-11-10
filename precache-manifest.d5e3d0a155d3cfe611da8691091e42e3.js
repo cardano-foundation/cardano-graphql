@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a558701abe1e777b472f4632c9410455",
+    "revision": "12f8bb3421cfca8a73eb823d662cb352",
     "url": "/cardano-graphql/index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/cardano-graphql/static/js/2.c74e0076.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "736fd97cc976a31236e8",
-    "url": "/cardano-graphql/static/js/main.3a964a97.chunk.js"
+    "revision": "c1fb5a3503bffd9d19e0",
+    "url": "/cardano-graphql/static/js/main.9766847c.chunk.js"
   },
   {
     "revision": "a0e86cb552466aeb096d",

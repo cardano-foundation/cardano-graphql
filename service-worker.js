@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/cardano-graphql/precache-manifest.9d50ac28a21cd16d0e2e2e226497bdc8.js"
+  "/cardano-graphql/precache-manifest.d5e3d0a155d3cfe611da8691091e42e3.js"
 );
 
 self.addEventListener('message', (event) => {
