@@ -1560,7 +1560,7 @@ type StakeRegistration_aggregate_fields {
 }
 
 type Token {
-    asset: Asset!
+    asset: Asset
     quantity: String!
     transactionOutput: TransactionOutput!
 }
