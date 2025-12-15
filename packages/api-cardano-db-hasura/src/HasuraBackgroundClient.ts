@@ -231,10 +231,10 @@ export class HasuraBackgroundClient {
   }
 
   public async addAssetMetadata(asset: AssetMetadataAndHash) {
-    // this.logger.info(
-    //   { module: 'HasuraClient', assetId: asset.assetId },
-    //   'Adding metadata to asset'
-    // )
+    this.logger.info(
+      { module: 'HasuraClient', assetId: asset.assetId },
+      'Adding metadata to asset'
+    )
     const result = await this.client.request(
       gql`
         mutation AddAssetMetadata(
@@ -277,10 +277,10 @@ export class HasuraBackgroundClient {
   }
 
   public async insertAssets(assets: AssetWithoutTokens[]) {
-    // this.logger.debug(
-    //   { module: 'HasuraClient', qty: assets.length },
-    //   'inserting assets found in tokens'
-    // )
+    this.logger.debug(
+      { module: 'HasuraClient', qty: assets.length },
+      'inserting assets found in tokens'
+    )
     const result = await this.client.request(
       gql`
         mutation InsertAssets($assets: [Asset_insert_input!]!) {
