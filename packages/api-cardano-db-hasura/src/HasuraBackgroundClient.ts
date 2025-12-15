@@ -6,12 +6,18 @@ import pRetry from 'p-retry'
 import path from 'path'
 import { dummyLogger, Logger } from 'ts-log'
 import { Asset, Block } from './graphql_types'
-import { AssetMetadataAndHash, AssetMetadataHashAndId, AssetWithoutTokens } from './typeAliases'
+import {
+  AssetMetadataAndHash,
+  AssetMetadataHashAndId,
+  AssetWithoutTokens
+} from './typeAliases'
 import { Schema } from '@cardano-ogmios/client'
 
-const epochInformationNotYetAvailable = 'Epoch information not yet available. This is expected during the initial chain-sync.'
+const epochInformationNotYetAvailable =
+  'Epoch information not yet available. This is expected during the initial chain-sync.'
 
-const withHexPrefix = (value: string) => `\\x${value !== undefined ? value : ''}`
+const withHexPrefix = (value: string) =>
+  `\\x${value !== undefined ? value : ''}`
 
 export class HasuraBackgroundClient {
   private client: GraphQLClient
@@ -27,14 +33,11 @@ export class HasuraBackgroundClient {
   ) {
     this.state = null
     this.applyingSchemaAndMetadata = false
-    this.client = new GraphQLClient(
-      `${this.hasuraUri}/v1/graphql`,
-      {
-        headers: {
-          'X-Hasura-Role': 'cardano-graphql'
-        }
+    this.client = new GraphQLClient(`${this.hasuraUri}/v1/graphql`, {
+      headers: {
+        'X-Hasura-Role': 'cardano-graphql'
       }
-    )
+    })
   }
 
   private async hasuraCli (command: string) {
@@ -45,7 +48,7 @@ export class HasuraBackgroundClient {
           if (error) {
             reject(error)
           }
-          if (stdout !== '') this.logger.debug({ module: 'HasuraBackgroundClient' }, stdout)
+          if (stdout !== '') { this.logger.debug({ module: 'HasuraBackgroundClient' }, stdout) }
           resolve({ module: 'HasuraBackgroundClient' })
         }
       )
@@ -57,28 +60,40 @@ export class HasuraBackgroundClient {
     this.state = 'initializing'
     this.logger.info({ module: 'HasuraBackgroundClient' }, 'Initializing')
     await this.applySchemaAndMetadata()
-    this.logger.debug({ module: 'HasuraBackgroundClient' }, 'graphql-engine setup')
-    await pRetry(async () => {
-      const result = await this.client.request(
-        gql`query {
-            epochs (limit: 1, order_by: { number: desc }) {
-                number
+    this.logger.debug(
+      { module: 'HasuraBackgroundClient' },
+      'graphql-engine setup'
+    )
+    await pRetry(
+      async () => {
+        const result = await this.client.request(gql`
+          query {
+            epochs(limit: 1, order_by: { number: desc }) {
+              number
             }
-        }`
-      )
-      if (result.epochs.length === 0) {
-        this.logger.debug({ module: 'HasuraBackgroundClient' }, epochInformationNotYetAvailable)
-        throw new Error(epochInformationNotYetAvailable)
+          }
+        `)
+        if (result.epochs.length === 0) {
+          this.logger.debug(
+            { module: 'HasuraBackgroundClient' },
+            epochInformationNotYetAvailable
+          )
+          throw new Error(epochInformationNotYetAvailable)
+        }
+      },
+      {
+        factor: 1.05,
+        retries: 10,
+        onFailedAttempt: util.onFailedAttemptFor(
+          'Detecting DB sync state has reached minimum progress',
+          this.logger
+        )
       }
-    }, {
-      factor: 1.05,
-      retries: 10,
-      onFailedAttempt: util.onFailedAttemptFor(
-        'Detecting DB sync state has reached minimum progress',
-        this.logger
-      )
-    })
-    this.logger.debug({ module: 'HasuraBackgroundClient' }, 'DB sync state has reached minimum progress')
+    )
+    this.logger.debug(
+      { module: 'HasuraBackgroundClient' },
+      'DB sync state has reached minimum progress'
+    )
     this.state = 'initialized'
     this.logger.info({ module: 'HasuraBackgroundClient' }, 'Initialized')
   }
@@ -90,25 +105,34 @@ export class HasuraBackgroundClient {
   public async applySchemaAndMetadata (): Promise<void> {
     if (this.applyingSchemaAndMetadata) return
     this.applyingSchemaAndMetadata = true
-    await pRetry(async () => {
-      await this.hasuraCli('migrate --database-name default apply --down all')
-      await this.hasuraCli('migrate --database-name default apply --up all')
-    }, {
-      factor: 1.75,
-      retries: 9,
-      onFailedAttempt: util.onFailedAttemptFor(
-        'Applying PostgreSQL schema migrations',
-        this.logger
-      )
-    })
-    await pRetry(async () => {
-      await this.hasuraCli('metadata clear')
-      await this.hasuraCli('metadata apply')
-    }, {
-      factor: 1.75,
-      retries: 9,
-      onFailedAttempt: util.onFailedAttemptFor('Applying Hasura metadata', this.logger)
-    })
+    await pRetry(
+      async () => {
+        await this.hasuraCli('migrate --database-name default apply --down all')
+        await this.hasuraCli('migrate --database-name default apply --up all')
+      },
+      {
+        factor: 1.75,
+        retries: 9,
+        onFailedAttempt: util.onFailedAttemptFor(
+          'Applying PostgreSQL schema migrations',
+          this.logger
+        )
+      }
+    )
+    await pRetry(
+      async () => {
+        await this.hasuraCli('metadata clear')
+        await this.hasuraCli('metadata apply')
+      },
+      {
+        factor: 1.75,
+        retries: 9,
+        onFailedAttempt: util.onFailedAttemptFor(
+          'Applying Hasura metadata',
+          this.logger
+        )
+      }
+    )
     this.applyingSchemaAndMetadata = false
   }
 
@@ -119,17 +143,13 @@ export class HasuraBackgroundClient {
     )
 
     const result = await this.client.request(
-      gql`mutation DeleteAssetsAfterSlot($slotNo: Int!) {
-          delete_assets(
-              where: {
-                  firstAppearedInSlot: {
-                      _gt: $slotNo
-                  }
-              }
-          ) {
-              affected_rows
+      gql`
+        mutation DeleteAssetsAfterSlot($slotNo: Int!) {
+          delete_assets(where: { firstAppearedInSlot: { _gt: $slotNo } }) {
+            affected_rows
           }
-      }`,
+        }
+      `,
       {
         slotNo
       }
@@ -139,15 +159,14 @@ export class HasuraBackgroundClient {
 
   public async hasAsset (assetId: Asset['assetId']): Promise<boolean> {
     const result = await this.client.request(
-      gql`query HasAsset (
-          $assetId: bytea!
-      ) {
-          assets (
-              where: { assetId: { _eq: $assetId }}
-          ) {
-              assetId
+      gql`
+        query HasAsset($assetId: bytea!) {
+          assets(where: { assetId: { _eq: $assetId } }) {
+            assetId
           }
-      }`, {
+        }
+      `,
+      {
         assetId: withHexPrefix(assetId)
       }
     )
@@ -163,45 +182,50 @@ export class HasuraBackgroundClient {
     let point: Schema.Point | null
     // Handles possible race condition between the internal chain-follower, which manages the Asset table,
     // and cardano-db-sync's which managed the block table.
-    await pRetry(async () => {
-      // An offset of 1 is applied to ensure a partial block extraction is not skipped
-      const result = await this.client.request(
-        gql`query {
-            assets (
-                limit: 1
-                offset: 1
-                order_by: { firstAppearedInBlock: { slotNo: desc }}
+    await pRetry(
+      async () => {
+        // An offset of 1 is applied to ensure a partial block extraction is not skipped
+        const result = await this.client.request(gql`
+          query {
+            assets(
+              limit: 1
+              offset: 1
+              order_by: { firstAppearedInBlock: { slotNo: desc } }
             ) {
-                firstAppearedInBlock {
-                    hash
-                    slotNo
-                }
+              firstAppearedInBlock {
+                hash
+                slotNo
+              }
             }
-        }`
-      )
-      if (result.errors !== undefined) {
-        throw new Error(result.errors)
-      }
-      if (result.assets.length !== 0) {
-        if (result.assets[0].firstAppearedInBlock === null) {
-          throw new Error('cardano-db-sync is lagging behind the asset sync operation.')
+          }
+        `)
+        if (result.errors !== undefined) {
+          throw new Error(result.errors)
         }
-        const { hash, slotNo } = result.assets[0].firstAppearedInBlock
-        point = {
-          slot: Number(slotNo),
-          id: hash.substring(2)
+        if (result.assets.length !== 0) {
+          if (result.assets[0].firstAppearedInBlock === null) {
+            throw new Error(
+              'cardano-db-sync is lagging behind the asset sync operation.'
+            )
+          }
+          const { hash, slotNo } = result.assets[0].firstAppearedInBlock
+          point = {
+            slot: Number(slotNo),
+            id: hash.substring(2)
+          }
+        } else {
+          point = null
         }
-      } else {
-        point = null
+      },
+      {
+        factor: 1.5,
+        retries: 1000,
+        onFailedAttempt: util.onFailedAttemptFor(
+          'Getting the most recent point with a new asset',
+          this.logger
+        )
       }
-    }, {
-      factor: 1.5,
-      retries: 1000,
-      onFailedAttempt: util.onFailedAttemptFor(
-        'Getting the most recent point with a new asset',
-        this.logger
-      )
-    })
+    )
     return point
   }
 
@@ -211,7 +235,8 @@ export class HasuraBackgroundClient {
       'Adding metadata to asset'
     )
     const result = await this.client.request(
-      gql`mutation AddAssetMetadata(
+      gql`
+        mutation AddAssetMetadata(
           $assetId: bytea!
           $decimals: Int
           $description: String
@@ -220,27 +245,26 @@ export class HasuraBackgroundClient {
           $name: String
           $ticker: String
           $url: String
-      ) {
+        ) {
           update_assets(
-              where: {
-                  assetId: { _eq: $assetId }
-              },
-              _set: {
-                  decimals: $decimals
-                  description: $description
-                  logo: $logo
-                  metadataHash: $metadataHash
-                  name: $name
-                  ticker: $ticker
-                  url: $url
-              }
+            where: { assetId: { _eq: $assetId } }
+            _set: {
+              decimals: $decimals
+              description: $description
+              logo: $logo
+              metadataHash: $metadataHash
+              name: $name
+              ticker: $ticker
+              url: $url
+            }
           ) {
-              affected_rows
-              returning {
-                  assetId
-              }
+            affected_rows
+            returning {
+              assetId
+            }
           }
-      }`,
+        }
+      `,
       {
         ...asset,
         ...{ assetId: withHexPrefix(asset.assetId) }
@@ -257,26 +281,25 @@ export class HasuraBackgroundClient {
       'inserting assets found in tokens'
     )
     const result = await this.client.request(
-      gql`mutation InsertAssets($assets: [Asset_insert_input!]!) {
+      gql`
+        mutation InsertAssets($assets: [Asset_insert_input!]!) {
           insert_assets(
-              objects: $assets,
-              on_conflict: {
-                  constraint: Asset_pkey,
-                  update_columns: []
-              }
+            objects: $assets
+            on_conflict: { constraint: Asset_pkey, update_columns: [] }
           ) {
-              returning {
-                  name
-                  policyId
-                  description
-                  assetName
-                  assetId
-              }
-              affected_rows
+            returning {
+              name
+              policyId
+              description
+              assetName
+              assetId
+            }
+            affected_rows
           }
-      }`,
+        }
+      `,
       {
-        assets: assets.map(asset => ({
+        assets: assets.map((asset) => ({
           ...asset,
           ...{
             assetId: withHexPrefix(asset.assetId),
@@ -289,21 +312,20 @@ export class HasuraBackgroundClient {
     return result
   }
 
-  public async getAssetMetadataHashesById (assetIds: Asset['assetId'][]): Promise<AssetMetadataHashAndId[]> {
+  public async getAssetMetadataHashesById (
+    assetIds: Asset['assetId'][]
+  ): Promise<AssetMetadataHashAndId[]> {
     const result = await this.client.request(
-      gql`query AssetMetadataHashes (
-          $assetIds: [bytea!]!
-      ){
-          assets (
-              where: {
-                  assetId: { _in: $assetIds }
-              }) {
-              assetId
-              metadataHash
+      gql`
+        query AssetMetadataHashes($assetIds: [bytea!]!) {
+          assets(where: { assetId: { _in: $assetIds } }) {
+            assetId
+            metadataHash
           }
-      }`,
+        }
+      `,
       {
-        assetIds: assetIds.map(id => withHexPrefix(id))
+        assetIds: assetIds.map((id) => withHexPrefix(id))
       }
     )
     return result.assets

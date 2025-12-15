@@ -194,6 +194,7 @@ services:
       - NETWORK=${NETWORK}
       - CARDANO_NODE_HOST=${CARDANO_NODE_HOST}
       - CARDANO_NODE_PORT=${CARDANO_NODE_PORT}
+      - CIP_QUERY_PRYORITY=${CARDANO_NODE_PORT}
     secrets:
       - postgres_db
       - postgres_password

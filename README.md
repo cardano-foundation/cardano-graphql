@@ -40,7 +40,7 @@ Check the [releases] for the latest version.
 ``` console
 git clone \
   --single-branch \
-  --branch 8.4.3 \
+  --branch 8.5.0 \
   --recurse-submodules \
   https://github.com/cardano-foundation/cardano-graphql.git \
   && cd cardano-graphql
@@ -122,6 +122,11 @@ docker compose --env-file .env.docker-compose-preprod down
 ```
 
 </details>
+
+### Token Registry V2 API & CIP-68 Support
+> **Important:** Cardano GraphQL now uses the **Token Registry V2 API**, providing **CIP-68** support alongside existing CIP-26 metadata.
+>
+> **Query Priority:** By default, metadata is queried with priority **CIP-68 → CIP-26**. This priority can be configured via environment variables.
 
 ### Disable Token Metadata Registry
 The local Token Metadata Registry synchronization process can be disabled by removing the `COMPOSE_PROFILES` variable from the `.env.docker-compose` file.

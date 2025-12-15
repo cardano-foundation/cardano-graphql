@@ -4,7 +4,7 @@
   "engines": {
     "node": ">=14.15.0"
   },
-  "version": "8.4.3",
+  "version": "8.5.0",
   "private": true,
   "workspaces": [
     "packages/*"

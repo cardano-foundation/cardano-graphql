@@ -1,4 +1,4 @@
-FROM hasura/graphql-engine:v2.17.1.cli-migrations-v2
+FROM hasura/graphql-engine:v2.48.6.cli-migrations-v2
 COPY docker-entrypoint.sh /bin/
 ENV \
   POSTGRES_HOST=postgres \

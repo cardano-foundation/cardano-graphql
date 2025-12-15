@@ -13,6 +13,21 @@ const SIX_HOURS = 21600
 type AssetJobPayload = { assetId: string }
 const MODULE_NAME = 'Worker'
 
+// Convert hex-encoded logo (CIP-26) to base64 for backward compatibility
+// CIP-68 logos are URLs and should be returned as-is
+const processLogoValue = (logoValue: string): string => {
+  // If it's a URL (CIP-68), return as-is
+  if (
+    logoValue.startsWith('http://') ||
+    logoValue.startsWith('https://') ||
+    logoValue.startsWith('ipfs://')
+  ) {
+    return logoValue
+  }
+  // Otherwise, it's hex-encoded (CIP-26), convert to base64
+  return Buffer.from(logoValue, 'hex').toString('base64')
+}
+
 export class Worker {
   private queue: PgBoss
   private state: RunnableModuleState
@@ -40,26 +55,40 @@ export class Worker {
       application_name: 'cardano-graphql',
       ...this.queueConfig
     })
-    const subscriptionHandler: PgBoss.SubscribeHandler<AssetJobPayload, void> = async (data: object) => {
+    const subscriptionHandler: PgBoss.SubscribeHandler<
+      AssetJobPayload,
+      void
+    > = async (data: object) => {
       // The TypeDef doesn't cover the valid batch data, so a user-defined guard is used.
       if ('length' in data) {
         const jobs = data as JobWithDoneCallback<AssetJobPayload, void>[]
-        this.logger.debug({ module: MODULE_NAME, qty: jobs.length }, 'Processing jobs')
+        this.logger.debug(
+          { module: MODULE_NAME, qty: jobs.length },
+          'Processing jobs'
+        )
         const assetIds = jobs.map((job) => job.data.assetId)
         const fetchedMetadata = await this.metadataFetchClient.fetch(assetIds)
-        const existingAssetMetadataHashes = await this.hasuraClient.getAssetMetadataHashesById(assetIds)
+        const existingAssetMetadataHashes =
+          await this.hasuraClient.getAssetMetadataHashesById(assetIds)
         for (const job of jobs) {
           const assetId = job.data.assetId
-          const metadata = fetchedMetadata.find(item => item.subject === assetId)
-          if (metadata === undefined) {
+          const subject = fetchedMetadata.find(
+            (item: any) => item.subject === assetId
+          )
+          if (subject === undefined) {
             this.logger.trace(
               { module: MODULE_NAME, assetId },
               'Metadata not found in registry. Will retry'
             )
-            job.done(new Error(`Metadata for asset ${assetId} not found in registry`))
+            job.done(
+              new Error(`Metadata for asset ${assetId} not found in registry`)
+            )
           } else {
-            const existingAssetMetadataHashObj = existingAssetMetadataHashes.find(
-              item => item.assetId === assetId)
+            const metadata = subject.metadata
+            const existingAssetMetadataHashObj =
+              existingAssetMetadataHashes.find(
+                (item) => item.assetId === assetId
+              )
             const metadataHash = hash(metadata)
             if (existingAssetMetadataHashObj?.metadataHash === metadataHash) {
               this.logger.trace(
@@ -67,38 +96,53 @@ export class Worker {
                 'Metadata from registry matches local'
               )
             } else {
-              this.logger.trace({ module: MODULE_NAME, assetId }, 'Found metadata in registry')
+              this.logger.trace(
+                { module: MODULE_NAME, assetId },
+                'Found metadata in registry'
+              )
               await this.hasuraClient.addAssetMetadata({
                 assetId,
                 decimals: metadata.decimals?.value,
                 description: metadata.description?.value,
-                logo: metadata.logo?.value,
+                logo: metadata.logo?.value
+                  ? processLogoValue(metadata.logo.value)
+                  : undefined,
                 name: metadata.name?.value,
                 ticker: metadata.ticker?.value,
                 url: metadata.url?.value,
                 metadataHash
               })
-              await this.queue.publishAfter(ASSET_METADATA_FETCH_UPDATE, { assetId }, {
-                retryDelay: this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
-              }, this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS)
+              await this.queue.publishAfter(
+                ASSET_METADATA_FETCH_UPDATE,
+                { assetId },
+                {
+                  retryDelay:
+                    this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
+                },
+                this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
+              )
             }
           }
         }
       }
     }
     await this.queue.start()
-    await this.queue.subscribe<AssetJobPayload, void>(ASSET_METADATA_FETCH_INITIAL,
+    await this.queue.subscribe<AssetJobPayload, void>(
+      ASSET_METADATA_FETCH_INITIAL,
       {
         batchSize: 10000,
         newJobCheckIntervalSeconds: 5
       },
-      subscriptionHandler)
-    await this.queue.subscribe<AssetJobPayload, void>(ASSET_METADATA_FETCH_UPDATE,
+      subscriptionHandler
+    )
+    await this.queue.subscribe<AssetJobPayload, void>(
+      ASSET_METADATA_FETCH_UPDATE,
       {
         batchSize: 10000,
         newJobCheckIntervalSeconds: 5
       },
-      subscriptionHandler)
+      subscriptionHandler
+    )
     this.logger.info({ module: MODULE_NAME }, 'Started')
   }
 

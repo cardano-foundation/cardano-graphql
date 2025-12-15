@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 import { errors, RunnableModuleState } from '@cardano-graphql/util'
 import { dummyLogger, Logger } from 'ts-log'
-import { AssetMetadata } from './AssetMetadata'
+import { AssetV2 } from './AssetMetadata'
 import { Asset } from './graphql_types'
 import pRetry from 'p-retry'
 
@@ -25,7 +25,10 @@ export class MetadataClient {
         baseURL: this.metadataServerUri
       })
     } else {
-      this.logger.info({ module: MODULE_NAME }, 'MetadataClient disabled — skipping registry sync.')
+      this.logger.info(
+        { module: MODULE_NAME },
+        'MetadataClient disabled — skipping registry sync.'
+      )
     }
   }
 
@@ -39,14 +42,16 @@ export class MetadataClient {
           if (error.code === 'ENOTFOUND') {
             this.logger.info('Waiting for TokenRegistry to be available')
             throw new errors.HostDoesNotExist('metadata server')
-          } else if (error.response?.status === 400) { // Needed until TokenRegistry is updated
+          } else if (error.response?.status === 400) {
+            // Needed until TokenRegistry is updated
             this.logger.info('Token Registry is up')
           } else if (error.response?.status !== 404) {
             this.logger.info('Metadata Server unreachable.')
             throw error
           }
         }
-      }, {
+      },
+      {
         factor: 1.5,
         retries: 10
       }
@@ -60,7 +65,9 @@ export class MetadataClient {
         try {
           const result = await this.axiosClient.get('/health')
           if (!result.data.synced) {
-            this.logger.info('Metadata registry is still syncing. This can take up to 90 min...')
+            this.logger.info(
+              'Metadata registry is still syncing. This can take up to 90 min...'
+            )
             throw new Error('')
           }
         } catch (error) {
@@ -70,7 +77,8 @@ export class MetadataClient {
             throw new Error('')
           }
         }
-      }, {
+      },
+      {
         factor: 1.5,
         retries: 1000,
         minTimeout: 60000 // first try after one minute
@@ -78,25 +86,21 @@ export class MetadataClient {
     )
   }
 
-  public async fetch (assetIds: Asset['assetId'][]): Promise<AssetMetadata[]> {
+  public async fetch (assetIds: Asset['assetId'][]): Promise<AssetV2[]> {
     if (!this.enabled) {
-      this.logger.debug({ module: MODULE_NAME }, 'Skipping metadata fetch — client disabled.')
+      this.logger.debug(
+        { module: MODULE_NAME },
+        'Skipping metadata fetch — client disabled.'
+      )
       return []
     }
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'fetch')
     }
     try {
-      const response = await this.axiosClient.post('metadata/query', {
+      const response = await this.axiosClient.post('/api/v2/subjects/query', {
         subjects: assetIds,
-        properties: [
-          'decimals',
-          'description',
-          'logo',
-          'name',
-          'ticker',
-          'url'
-        ]
+        properties: ['decimals', 'description', 'logo', 'name', 'ticker', 'url']
       })
       return response.data.subjects
     } catch (error) {
@@ -110,7 +114,10 @@ export class MetadataClient {
 
   public async initialize () {
     if (!this.enabled) {
-      this.logger.info({ module: MODULE_NAME }, 'Skipping initialization — MetadataClient disabled.')
+      this.logger.info(
+        { module: MODULE_NAME },
+        'Skipping initialization — MetadataClient disabled.'
+      )
       this.state = 'initialized'
       return
     }
@@ -118,7 +125,10 @@ export class MetadataClient {
     this.state = 'initializing'
     this.logger.info({ module: MODULE_NAME }, 'Initializing')
     await this.ensureLocalMetadataServerIsAvailable()
-    this.logger.info({ module: MODULE_NAME }, 'Metadata Server is up and running. Checking Sync Status.')
+    this.logger.info(
+      { module: MODULE_NAME },
+      'Metadata Server is up and running. Checking Sync Status.'
+    )
     await this.waitForLocalMetadataServerSynced()
     this.state = 'initialized'
     this.logger.info({ module: MODULE_NAME }, 'Initialized')
