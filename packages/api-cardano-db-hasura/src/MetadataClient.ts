@@ -12,7 +12,7 @@ export class MetadataClient {
   private axiosClient: AxiosInstance
   public state: RunnableModuleState
 
-  constructor(
+  constructor (
     enabled = false,
     private metadataServerUri: string,
     private logger: Logger = dummyLogger
@@ -32,7 +32,7 @@ export class MetadataClient {
     }
   }
 
-  private async ensureLocalMetadataServerIsAvailable(): Promise<void> {
+  private async ensureLocalMetadataServerIsAvailable (): Promise<void> {
     if (!this.enabled) return
     await pRetry(
       async () => {
@@ -58,7 +58,7 @@ export class MetadataClient {
     )
   }
 
-  private async waitForLocalMetadataServerSynced(): Promise<void> {
+  private async waitForLocalMetadataServerSynced (): Promise<void> {
     if (!this.enabled) return
     await pRetry(
       async () => {
@@ -86,7 +86,7 @@ export class MetadataClient {
     )
   }
 
-  public async fetch(assetIds: Asset['assetId'][]): Promise<AssetV2[]> {
+  public async fetch (assetIds: Asset['assetId'][]): Promise<AssetV2[]> {
     if (!this.enabled) {
       this.logger.debug(
         { module: MODULE_NAME },
@@ -112,7 +112,7 @@ export class MetadataClient {
     }
   }
 
-  public async initialize() {
+  public async initialize () {
     if (!this.enabled) {
       this.logger.info(
         { module: MODULE_NAME },

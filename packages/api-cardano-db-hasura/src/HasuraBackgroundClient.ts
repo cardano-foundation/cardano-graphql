@@ -25,7 +25,7 @@ export class HasuraBackgroundClient {
   private state: ModuleState
   public schema: GraphQLSchema
 
-  constructor(
+  constructor (
     readonly hasuraCliPath: string,
     readonly hasuraCliExtPath: string,
     readonly hasuraUri: string,
@@ -40,7 +40,7 @@ export class HasuraBackgroundClient {
     })
   }
 
-  private async hasuraCli(command: string) {
+  private async hasuraCli (command: string) {
     return new Promise((resolve, reject) => {
       exec(
         `${this.hasuraCliPath} --cli-ext-path ${this.hasuraCliExtPath} --skip-update-check --project ${path.resolve(__dirname, '..', 'hasura', 'project')} --endpoint ${this.hasuraUri} ${command}`,
@@ -48,15 +48,14 @@ export class HasuraBackgroundClient {
           if (error) {
             reject(error)
           }
-          if (stdout !== '')
-            this.logger.debug({ module: 'HasuraBackgroundClient' }, stdout)
+          if (stdout !== '') { this.logger.debug({ module: 'HasuraBackgroundClient' }, stdout) }
           resolve({ module: 'HasuraBackgroundClient' })
         }
       )
     })
   }
 
-  public async initialize() {
+  public async initialize () {
     if (this.state !== null) return
     this.state = 'initializing'
     this.logger.info({ module: 'HasuraBackgroundClient' }, 'Initializing')
@@ -99,11 +98,11 @@ export class HasuraBackgroundClient {
     this.logger.info({ module: 'HasuraBackgroundClient' }, 'Initialized')
   }
 
-  public async shutdown() {
+  public async shutdown () {
     this.state = null
   }
 
-  public async applySchemaAndMetadata(): Promise<void> {
+  public async applySchemaAndMetadata (): Promise<void> {
     if (this.applyingSchemaAndMetadata) return
     this.applyingSchemaAndMetadata = true
     await pRetry(
@@ -137,7 +136,7 @@ export class HasuraBackgroundClient {
     this.applyingSchemaAndMetadata = false
   }
 
-  public async deleteAssetsAfterSlot(slotNo: Block['slotNo']): Promise<number> {
+  public async deleteAssetsAfterSlot (slotNo: Block['slotNo']): Promise<number> {
     this.logger.debug(
       { module: 'HasuraClient', slotNo },
       'deleting assets found in tokens after slot'
@@ -158,7 +157,7 @@ export class HasuraBackgroundClient {
     return result.delete_assets.affected_rows
   }
 
-  public async hasAsset(assetId: Asset['assetId']): Promise<boolean> {
+  public async hasAsset (assetId: Asset['assetId']): Promise<boolean> {
     const result = await this.client.request(
       gql`
         query HasAsset($assetId: bytea!) {
@@ -179,7 +178,7 @@ export class HasuraBackgroundClient {
     return response
   }
 
-  public async getMostRecentPointWithNewAsset(): Promise<Schema.Point | null> {
+  public async getMostRecentPointWithNewAsset (): Promise<Schema.Point | null> {
     let point: Schema.Point | null
     // Handles possible race condition between the internal chain-follower, which manages the Asset table,
     // and cardano-db-sync's which managed the block table.
@@ -230,7 +229,7 @@ export class HasuraBackgroundClient {
     return point
   }
 
-  public async addAssetMetadata(asset: AssetMetadataAndHash) {
+  public async addAssetMetadata (asset: AssetMetadataAndHash) {
     this.logger.info(
       { module: 'HasuraClient', assetId: asset.assetId },
       'Adding metadata to asset'
@@ -276,7 +275,7 @@ export class HasuraBackgroundClient {
     }
   }
 
-  public async insertAssets(assets: AssetWithoutTokens[]) {
+  public async insertAssets (assets: AssetWithoutTokens[]) {
     this.logger.debug(
       { module: 'HasuraClient', qty: assets.length },
       'inserting assets found in tokens'
@@ -313,7 +312,7 @@ export class HasuraBackgroundClient {
     return result
   }
 
-  public async getAssetMetadataHashesById(
+  public async getAssetMetadataHashesById (
     assetIds: Asset['assetId'][]
   ): Promise<AssetMetadataHashAndId[]> {
     const result = await this.client.request(

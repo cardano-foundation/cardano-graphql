@@ -32,7 +32,7 @@ export class Worker {
   private queue: PgBoss
   private state: RunnableModuleState
 
-  constructor(
+  constructor (
     readonly hasuraClient: HasuraBackgroundClient,
     private logger: Logger = dummyLogger,
     private metadataFetchClient: MetadataClient,
@@ -46,7 +46,7 @@ export class Worker {
     this.state = 'initialized'
   }
 
-  public async start() {
+  public async start () {
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'start')
     }
@@ -146,7 +146,7 @@ export class Worker {
     this.logger.info({ module: MODULE_NAME }, 'Started')
   }
 
-  public async shutdown() {
+  public async shutdown () {
     if (this.state !== 'running') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'shutdown')
     }
