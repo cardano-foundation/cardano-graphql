@@ -97,19 +97,34 @@ export class MetadataClient {
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'fetch')
     }
-    try {
-      const response = await this.axiosClient.post('/api/v2/subjects/query', {
-        subjects: assetIds,
-        properties: ['decimals', 'description', 'logo', 'name', 'ticker', 'url']
-      })
-      return response.data.subjects
-    } catch (error) {
-      if (error.code === 'ENOTFOUND') {
-        this.logger.error({ err: error })
-      } else {
-        throw error
+    const CHUNK_SIZE = 500
+    const CONCURRENCY = 5
+    const chunks: Asset['assetId'][][] = []
+    for (let i = 0; i < assetIds.length; i += CHUNK_SIZE) {
+      chunks.push(assetIds.slice(i, i + CHUNK_SIZE))
+    }
+    const results: AssetV2[] = []
+    for (let i = 0; i < chunks.length; i += CONCURRENCY) {
+      const batch = chunks.slice(i, i + CONCURRENCY)
+      try {
+        const responses = await Promise.all(
+          batch.map(chunk =>
+            this.axiosClient.post('/api/v2/subjects/query', {
+              subjects: chunk,
+              properties: ['decimals', 'description', 'logo', 'name', 'ticker', 'url']
+            })
+          )
+        )
+        responses.forEach(r => results.push(...r.data.subjects))
+      } catch (error) {
+        if (error.code === 'ENOTFOUND') {
+          this.logger.error({ err: error })
+        } else {
+          throw error
+        }
       }
     }
+    return results
   }
 
   public async initialize () {
