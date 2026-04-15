@@ -146,6 +146,21 @@ export class Worker {
     this.logger.info({ module: MODULE_NAME }, 'Started')
   }
 
+  public async publishInitialMetadataFetch (assetIds: string[]): Promise<void> {
+    if (assetIds.length === 0) return
+    this.logger.info(
+      { module: MODULE_NAME, qty: assetIds.length },
+      'Scheduling metadata fetch for backfilled assets'
+    )
+    const THREE_MONTHS = 365
+    for (const assetId of assetIds) {
+      await this.queue.publish(ASSET_METADATA_FETCH_INITIAL, { assetId }, {
+        retryDelay: SIX_HOURS,
+        retryLimit: THREE_MONTHS
+      })
+    }
+  }
+
   public async shutdown () {
     if (this.state !== 'running') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'shutdown')

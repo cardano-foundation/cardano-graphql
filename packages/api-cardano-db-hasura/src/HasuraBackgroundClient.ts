@@ -2,6 +2,7 @@ import { exec } from 'child_process'
 import util, { ModuleState } from '@cardano-graphql/util'
 import { GraphQLSchema } from 'graphql'
 import { GraphQLClient, gql } from 'graphql-request'
+import { Client } from 'pg'
 import pRetry from 'p-retry'
 import path from 'path'
 import { dummyLogger, Logger } from 'ts-log'
@@ -9,7 +10,8 @@ import { Asset, Block } from './graphql_types'
 import {
   AssetMetadataAndHash,
   AssetMetadataHashAndId,
-  AssetWithoutTokens
+  AssetWithoutTokens,
+  DbConfig
 } from './typeAliases'
 import { Schema } from '@cardano-ogmios/client'
 
@@ -329,5 +331,37 @@ export class HasuraBackgroundClient {
       }
     )
     return result.assets
+  }
+
+  public async backfillMissingAssets (dbConfig: DbConfig): Promise<string[]> {
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const result = await client.query(`
+        INSERT INTO "Asset" ("assetId", "assetName", "policyId", "firstAppearedInSlot")
+        SELECT
+          CAST(CONCAT(ma.policy, RIGHT(CONCAT(E'\\\\', ma.name), -3)) AS BYTEA),
+          ma.name,
+          ma.policy,
+          MIN(b.slot_no)
+        FROM multi_asset ma
+        JOIN ma_tx_mint mtm ON mtm.ident = ma.id
+        JOIN tx             ON tx.id     = mtm.tx_id
+        JOIN block b        ON b.id      = tx.block_id
+        LEFT JOIN "Asset" a
+          ON a."assetId" = CAST(CONCAT(ma.policy, RIGHT(CONCAT(E'\\\\', ma.name), -3)) AS BYTEA)
+        WHERE a."assetId" IS NULL
+        GROUP BY ma.id, ma.policy, ma.name
+        ON CONFLICT ("assetId") DO NOTHING
+        RETURNING encode("assetId", 'hex') AS "assetId"
+      `)
+      this.logger.info(
+        { module: 'HasuraBackgroundClient', inserted: result.rowCount },
+        'Backfilled missing assets from multi_asset'
+      )
+      return result.rows.map((row: { assetId: string }) => row.assetId)
+    } finally {
+      await client.end()
+    }
   }
 }
