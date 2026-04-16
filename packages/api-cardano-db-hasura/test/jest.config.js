@@ -7,5 +7,6 @@ module.exports = {
   transform: {
     "^.+\\.test.ts?$": "ts-jest"
   },
-  testTimeout: 180000
+  testTimeout: 180000,
+  testPathIgnorePatterns: ['/node_modules/', '/\\._']
 }

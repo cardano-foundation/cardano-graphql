@@ -5,10 +5,10 @@ import util from '@cardano-graphql/util'
 
 export const testClient = {
   mainnet: buildClient.bind(this,
-    'http://localhost:3100'
+    process.env.GRAPHQL_URL || 'http://localhost:3100'
   ),
   preprod: buildClient.bind(this,
-    'http://localhost:3102'
+    process.env.GRAPHQL_URL || 'http://localhost:3102'
   )
 }
 
@@ -17,12 +17,17 @@ export async function buildClient (
 ) {
   const client = await utilDev.createE2EClient(apiUri)
   await pRetry(async () => {
-    const result = await client.query({
-      query: gql`query {
-            cardanoDbMeta {
-                initialized
-            }}`
-    })
+    let result
+    try {
+      result = await client.query({
+        query: gql`query {
+              cardanoDbMeta {
+                  initialized
+              }}`
+      })
+    } catch (e) {
+      throw new Error(`Cardano GraphQL Server not ready: ${e}`)
+    }
     if (result.data?.cardanoDbMeta.initialized === false) {
       throw new Error(`Cardano DB is not initialized: ${JSON.stringify(result.data)}`)
     }
