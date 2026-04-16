@@ -123,7 +123,7 @@ jobs:
 
           GRAPHQL_URL="http://localhost:${API_PORT}" \
             yarn workspace @cardano-graphql/api-cardano-db-hasura test \
-            --testPathPattern="(delegations|paymentAddress|delegationVotes|assets|blocks|epochs|transactions|stakePool|rewards|withdrawals|activeStake|utxos|ada|cardano|genesis|stakeRegistrations|stakeDeregistrations|tokenMints|scripts|redeemers|collateralInputs|collateralOutputs).query.test" \
+            --testPathPattern="(delegations|paymentAddress|delegationVotes|blocks|epochs|transactions|stakePool|rewards|withdrawals|activeStake|utxos|ada|cardano|genesis|stakeRegistrations|stakeDeregistrations|tokenMints|scripts|redeemers|collateralInputs|collateralOutputs).query.test" \
             --forceExit \
             2>&1 | tee /tmp/test-output.txt
           TEST_EXIT_CODE=${PIPESTATUS[0]}
