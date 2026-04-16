@@ -401,7 +401,7 @@ type AdaPots {
     fees: Lovelace!
     reserves: Lovelace!
     rewards: Lovelace!
-    slotNo: String!
+    slotNo: String
     treasury: Lovelace!
     utxo: Lovelace!
 }
