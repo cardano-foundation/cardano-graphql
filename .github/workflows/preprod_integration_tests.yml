@@ -46,22 +46,21 @@ jobs:
           cd ${{ env.REPO_PATH }}
           yarn install --frozen-lockfile --non-interactive
 
-      - name: Stop application services
+      - name: Build packages
         run: |
           cd ${{ env.REPO_PATH }}
+          yarn workspace @cardano-graphql/util build
+          yarn workspace @cardano-graphql/util-dev build
 
-          # Only stop the application layer — data services (node, db-sync, postgres) keep running
-          docker compose \
-            --env-file .env.docker-compose-preprod \
-            stop server background hasura || true
-
-      - name: Build and start application services
+      - name: Stop all services
         run: |
           cd ${{ env.REPO_PATH }}
+          docker compose --env-file .env.docker-compose-preprod down || true
 
-          docker compose \
-            --env-file .env.docker-compose-preprod \
-            up -d --build server background hasura
+      - name: Build and start all services
+        run: |
+          cd ${{ env.REPO_PATH }}
+          docker compose --env-file .env.docker-compose-preprod up -d --build
 
       - name: Wait for GraphQL API to be ready
         timeout-minutes: 15
@@ -156,7 +155,7 @@ jobs:
 
           docker compose \
             --env-file .env.docker-compose-preprod \
-            up -d --build server background hasura
+            up -d --build
 
           echo "✅ Rolled back to ${LAST_TAG}"
 
