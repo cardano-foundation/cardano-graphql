@@ -8,8 +8,8 @@ import { Genesis } from '@src/graphql_types'
 import BigNumber from 'bignumber.js'
 
 const genesis = {
-  byron: require('../../../config/network/testnet/genesis/byron.json'),
-  shelley: require('../../../config/network/testnet/genesis/shelley.json')
+  byron: require('../../../config/network/preprod/cardano-node/byron-genesis.json'),
+  shelley: require('../../../config/network/preprod/cardano-node/shelley-genesis.json')
 } as Genesis
 
 function loadQueryNode (name: string): Promise<DocumentNode> {
