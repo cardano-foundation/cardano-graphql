@@ -1,0 +1,167 @@
+name: Preprod Integration Tests
+
+on:
+  pull_request:
+    branches: [master, 'prepare-*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  pull-requests: write
+
+env:
+  # Path to the cardano-graphql repo on the self-hosted runner VM
+  REPO_PATH: /home/integration/git/cardano-graphql
+
+jobs:
+  integration-tests:
+    runs-on: [self-hosted]
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update local repository
+        run: |
+          cd ${{ env.REPO_PATH }}
+
+          git fetch origin
+
+          git checkout master
+          git pull origin master
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git branch -D pr-${{ github.event.pull_request.number }} 2>/dev/null || true
+            git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-${{ github.event.pull_request.number }}
+            git checkout pr-${{ github.event.pull_request.number }}
+          else
+            git checkout ${{ github.ref_name }}
+            git reset --hard origin/${{ github.ref_name }}
+          fi
+
+      - name: Install dependencies
+        run: |
+          cd ${{ env.REPO_PATH }}
+          yarn install --frozen-lockfile --non-interactive
+
+      - name: Stop application services
+        run: |
+          cd ${{ env.REPO_PATH }}
+
+          # Only stop the application layer — data services (node, db-sync, postgres) keep running
+          docker compose \
+            --env-file .env.docker-compose-preprod \
+            stop server background hasura || true
+
+      - name: Build and start application services
+        run: |
+          cd ${{ env.REPO_PATH }}
+
+          docker compose \
+            --env-file .env.docker-compose-preprod \
+            up -d --build server background hasura
+
+      - name: Wait for GraphQL API to be ready
+        timeout-minutes: 15
+        run: |
+          echo "Waiting for GraphQL API to start..."
+
+          API_PORT=$(grep '^API_PORT=' ${{ env.REPO_PATH }}/.env.docker-compose-preprod | cut -d= -f2)
+          API_URL="http://localhost:${API_PORT}/graphql"
+          echo "API URL: ${API_URL}"
+
+          API_STARTED=false
+          for i in {1..90}; do
+            RESPONSE=$(curl -sf -X POST "${API_URL}" \
+              -H 'Content-Type: application/json' \
+              -d '{"query": "{ cardanoDbMeta { initialized syncPercentage }}"}' 2>/dev/null) || true
+
+            INITIALIZED=$(echo "$RESPONSE" | jq -r '.data.cardanoDbMeta.initialized' 2>/dev/null || echo "false")
+            SYNC=$(echo "$RESPONSE" | jq -r '.data.cardanoDbMeta.syncPercentage' 2>/dev/null || echo "0")
+
+            if [ "$INITIALIZED" = "true" ]; then
+              echo "✓ API is initialized and ready (sync: ${SYNC}%)"
+              API_STARTED=true
+              break
+            fi
+
+            echo "Waiting... initialized=${INITIALIZED}, sync=${SYNC}% ($i/90)"
+            sleep 10
+          done
+
+          if [ "$API_STARTED" != "true" ]; then
+            echo "❌ API failed to initialize after 15 minutes"
+            docker compose --env-file ${{ env.REPO_PATH }}/.env.docker-compose-preprod logs server
+            exit 1
+          fi
+
+      - name: Run integration tests
+        id: tests
+        run: |
+          cd ${{ env.REPO_PATH }}
+
+          API_PORT=$(grep '^API_PORT=' .env.docker-compose-preprod | cut -d= -f2)
+
+          GRAPHQL_URL="http://localhost:${API_PORT}" \
+            yarn workspace @cardano-graphql/api-cardano-db-hasura test \
+            --testPathPattern="(delegations|paymentAddress|delegationVotes|assets|blocks|epochs|transactions|stakePool|rewards|withdrawals|activeStake|utxos|ada|cardano|genesis|stakeRegistrations|stakeDeregistrations|tokenMints|scripts|redeemers|collateralInputs|collateralOutputs).query.test" \
+            --forceExit \
+            2>&1 | tee /tmp/test-output.txt
+          TEST_EXIT_CODE=${PIPESTATUS[0]}
+
+          echo "test_exit_code=${TEST_EXIT_CODE}" >> $GITHUB_OUTPUT
+          exit ${TEST_EXIT_CODE}
+
+      - name: Comment PR with results
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            const testExitCode = '${{ steps.tests.outputs.test_exit_code }}';
+            const testsSkipped = '${{ steps.tests.outcome }}' === 'skipped';
+
+            let emoji, status;
+            if (testsSkipped) {
+              emoji = '💥';
+              status = 'DEPLOYMENT FAILED';
+            } else {
+              const passed = testExitCode === '0';
+              emoji = passed ? '✅' : '❌';
+              status = passed ? 'PASSED' : 'FAILED';
+            }
+
+            let comment = `## ${emoji} Preprod Integration Tests: ${status}\n\n`;
+            comment += `🔗 [Action Run #${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\n`;
+            comment += `_GraphQL integration tests run against live preprod blockchain data_`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: comment
+            });
+
+      - name: Restore stable version on failure
+        if: failure() && steps.tests.outcome == 'failure'
+        run: |
+          cd ${{ env.REPO_PATH }}
+
+          LAST_TAG=$(git tag --sort=-version:refname | head -1)
+          echo "⚠️ Tests failed — rolling back to ${LAST_TAG}"
+
+          git checkout -f "${LAST_TAG}"
+
+          docker compose \
+            --env-file .env.docker-compose-preprod \
+            up -d --build server background hasura
+
+          echo "✅ Rolled back to ${LAST_TAG}"
+
+      - name: Restore env file
+        if: always()
+        run: |
+          cd ${{ env.REPO_PATH }}
+          git restore .env.docker-compose-preprod 2>/dev/null || true
