@@ -199,6 +199,39 @@ curl \
 
 For more information, have a look at the [Wiki :book:].
 
+## Upgrading
+
+### Token Metadata Registry
+
+When upgrading to `cf-token-metadata-registry-api` >= 1.5.0, a full resync from genesis is recommended. If resyncing
+is not an option, existing deployments with a persistent database may encounter a Flyway migration checksum mismatch
+error, causing the `token-metadata-registry` container to crash-loop on startup:
+
+```
+Migration checksum mismatch for migration version X.Y.Z
+```
+
+This happens because the migration SQL file was modified in the new image version, but the old checksum is recorded in
+the database. Fix it by repairing the Flyway schema history:
+
+```console
+docker exec cardano-graphql-postgres-1 sh -c '
+  PGPASSWORD=$(cat /run/secrets/postgres_password) \
+  psql -h $(hostname) -p 5433 \
+       -U $(cat /run/secrets/postgres_user) \
+       -d $(cat /run/secrets/postgres_db) \
+       -c "UPDATE tokenregistry.flyway_schema_history SET checksum = <resolved_checksum> WHERE version = '"'"'<version>'"'"';"
+'
+```
+
+The `<resolved_checksum>` and `<version>` values are printed in the container logs. Then restart the service:
+
+```console
+docker compose --env-file .env.docker-compose restart token-metadata-registry
+```
+
+Fresh deployments (no existing database) are not affected.
+
 ## How to install (Linux / Docker)
 
 ### Docker
