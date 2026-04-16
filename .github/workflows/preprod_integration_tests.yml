@@ -2,7 +2,7 @@ name: Preprod Integration Tests
 
 on:
   pull_request:
-    branches: [master, 'prepare-*']
+    branches: [master, 'prepare-*', 'chore/prepare-*']
   workflow_dispatch:
 
 permissions:
