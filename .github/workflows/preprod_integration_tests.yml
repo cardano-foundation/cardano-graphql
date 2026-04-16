@@ -62,8 +62,28 @@ jobs:
           cd ${{ env.REPO_PATH }}
           docker compose --env-file .env.docker-compose-preprod up -d --build
 
-      - name: Wait for GraphQL API to be ready
+      - name: Wait for Ogmios (cardano-node chunk validation)
         timeout-minutes: 15
+        run: |
+          OGMIOS_PORT=$(grep '^OGMIOS_PORT=' ${{ env.REPO_PATH }}/.env.docker-compose-preprod | cut -d= -f2)
+          echo "Waiting for Ogmios on port ${OGMIOS_PORT}..."
+
+          for i in {1..90}; do
+            if curl -sf "http://localhost:${OGMIOS_PORT}/health" | jq -e '.connectionStatus == "connected"' > /dev/null 2>&1; then
+              echo "✓ Ogmios connected to node"
+              break
+            fi
+            if [ "$i" -eq 90 ]; then
+              echo "❌ Ogmios failed to connect after 15 minutes"
+              docker compose --env-file ${{ env.REPO_PATH }}/.env.docker-compose-preprod logs ogmios
+              exit 1
+            fi
+            echo "Waiting for node... ($i/90)"
+            sleep 10
+          done
+
+      - name: Wait for GraphQL API to be ready
+        timeout-minutes: 5
         run: |
           echo "Waiting for GraphQL API to start..."
 
@@ -71,8 +91,7 @@ jobs:
           API_URL="http://localhost:${API_PORT}/graphql"
           echo "API URL: ${API_URL}"
 
-          API_STARTED=false
-          for i in {1..90}; do
+          for i in {1..30}; do
             RESPONSE=$(curl -sf -X POST "${API_URL}" \
               -H 'Content-Type: application/json' \
               -d '{"query": "{ cardanoDbMeta { initialized syncPercentage }}"}' 2>/dev/null) || true
@@ -82,19 +101,18 @@ jobs:
 
             if [ "$INITIALIZED" = "true" ]; then
               echo "✓ API is initialized and ready (sync: ${SYNC}%)"
-              API_STARTED=true
               break
             fi
 
-            echo "Waiting... initialized=${INITIALIZED}, sync=${SYNC}% ($i/90)"
+            if [ "$i" -eq 30 ]; then
+              echo "❌ API failed to initialize after 5 minutes"
+              docker compose --env-file ${{ env.REPO_PATH }}/.env.docker-compose-preprod logs server
+              exit 1
+            fi
+
+            echo "Waiting... initialized=${INITIALIZED}, sync=${SYNC}% ($i/30)"
             sleep 10
           done
-
-          if [ "$API_STARTED" != "true" ]; then
-            echo "❌ API failed to initialize after 15 minutes"
-            docker compose --env-file ${{ env.REPO_PATH }}/.env.docker-compose-preprod logs server
-            exit 1
-          fi
 
       - name: Run integration tests
         id: tests
