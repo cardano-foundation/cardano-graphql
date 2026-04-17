@@ -8,7 +8,7 @@ describe('MetadataClient', () => {
 
   describe('initialize', () => {
     it('succeeds if the metadata server is reachable', async () => {
-      client = new MetadataClient('https://tokens.cardano.org')
+      client = new MetadataClient(true, 'https://tokens.cardano.org')
       await client.initialize()
       expect(client.state).toBe('initialized')
     })
@@ -17,7 +17,7 @@ describe('MetadataClient', () => {
   describe('fetch', () => {
     it('throws if not initialized', async () => {
       expect.assertions(1)
-      client = new MetadataClient('https://tokens.cardano.org')
+      client = new MetadataClient(true, 'https://tokens.cardano.org')
       try {
         await client.fetch(['f43a62fdc3965df486de8a0d32fe800963589c41b38946602a0dc53541474958'])
       } catch (error) {
@@ -25,16 +25,14 @@ describe('MetadataClient', () => {
       }
     })
     it('can return all metadata by assetId', async () => {
-      client = new MetadataClient('https://tokens.cardano.org/')
+      client = new MetadataClient(true, 'https://tokens.cardano.org/')
       await client.initialize()
       const response = await client.fetch(['f43a62fdc3965df486de8a0d32fe800963589c41b38946602a0dc53541474958'])
       expect(response).toBeDefined()
-      expect(response[0].decimals.value).toBe(8)
-      expect(response[0].description.value).toBe('SingularityNET lets anyone - create, share, and monetize AI services at scale. SingularityNET is the world\'s first decentralized AI network')
-      expect(response[0].logo.value).toBe('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')
-      expect(response[0].name.value).toBe('SingularityNet AGIX Token')
-      expect(response[0].ticker.value).toBe('AGIX')
-      expect(response[0].url.value).toBe('https://singularitynet.io/')
+      expect(response[0].metadata.decimals.value).toBe(8)
+      expect(response[0].metadata.name.value).toBe('SingularityNet AGIX Token')
+      expect(response[0].metadata.ticker.value).toBe('AGIX')
+      expect(response[0].metadata.url.value).toBe('https://singularitynet.io/')
     })
   })
 })

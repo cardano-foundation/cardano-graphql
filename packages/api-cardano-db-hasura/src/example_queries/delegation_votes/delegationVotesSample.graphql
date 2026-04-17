@@ -1,0 +1,17 @@
+query delegationVotesSample (
+    $limit: Int!
+    $where: DelegationVote_bool_exp
+) {
+    delegationVotes (limit: $limit, where: $where) {
+        address
+        drep {
+            view
+            has_script
+        }
+        transaction {
+            block {
+                number
+            }
+        }
+    }
+}

@@ -3,11 +3,12 @@ query epochDetailsInRange (
 ) {
     epochs( where: { number: { _in: $numbers }}) {
         adaPots {
-            deposits,
+            deposits_stake,
+            deposits_drep,
+            deposits_proposal,
             fees,
             reserves,
             rewards,
-            slotNo,
             treasury,
             utxo
         }

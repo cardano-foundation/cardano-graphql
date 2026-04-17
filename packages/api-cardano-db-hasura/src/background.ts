@@ -213,9 +213,11 @@ function filterAndTypecastEnvs (env: any) {
       onDbSetup: async () => {
         try {
           await hasuraBackgroundClient.initialize()
+          const backfilledAssetIds = await hasuraBackgroundClient.backfillMissingAssets(config.db)
           await metadataClient.initialize()
           await chainFollower.initialize(config.ogmios, getChainSyncPoints)
           await worker.start()
+          await worker.publishInitialMetadataFetch(backfilledAssetIds)
           await chainFollower.start(await getChainSyncPoints())
         } catch (error) {
           logger.error(error.message)
