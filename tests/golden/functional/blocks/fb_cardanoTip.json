@@ -1,0 +1,20 @@
+{
+  "anchor_block": null,
+  "description": "Fireblocks: chain tip (number+hash). Tip advances every ~20s; both are masked.",
+  "expected": {
+    "data": {
+      "cardano": {
+        "tip": {}
+      }
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.cardano.tip.number",
+    "data.cardano.tip.hash"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/fireblocks/cardanoTip.graphql",
+  "test_name": "fb_cardanoTip",
+  "variables": {}
+}

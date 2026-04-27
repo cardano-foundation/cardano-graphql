@@ -1,0 +1,18 @@
+query issue_979_backfill_missing_assets(
+  $assetIds: [Hex!]!
+) {
+  assets(
+    where: { assetId: { _in: $assetIds } }
+  ) {
+    assetId
+    policyId
+    assetName
+    fingerprint
+    tokenMints(limit: 1) {
+      quantity
+      transaction {
+        hash
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "anchor_block": 13228000,
+  "description": "Block lookup by number for anchor and two historical blocks.",
+  "expected": {
+    "data": {
+      "blocks": [
+        {
+          "hash": "a52cca923a67326ea9c409e958a17a77990be72f3607625ec5b3d456202e223e",
+          "vrfKey": null
+        },
+        {
+          "hash": "33a28456a44277cbfb3457082467e56f16554932eb2a9eb7ceca97740bd4f4db",
+          "vrfKey": "vrf_vk1dkfsejw3h2k7tnguwrauqfwnxa7wj3nkp3yw2yw3400c4nlkluwqzwvka6"
+        },
+        {
+          "hash": "7927dcf80137e86529ddd22dba3fd6ee4e0bc52de5b07bb2b75c922f7d226105",
+          "vrfKey": "vrf_vk1rcfm9gytpvvysfvj76uumxdjnz265zlxnsk8t426dpxa5p7j5x4secprwv"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/example/blocks/blockByNumbers.graphql",
+  "test_name": "blockByNumbers_anchor",
+  "variables": {
+    "numbers": [
+      100,
+      4555184,
+      13228000
+    ]
+  }
+}

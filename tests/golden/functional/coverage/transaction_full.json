@@ -1,0 +1,503 @@
+{
+  "anchor_block": 13228000,
+  "description": "Comprehensive Transaction/Input/Output/Redeemer/Block/Epoch field coverage on the anchor txs. Selects every previously-untouched field via TypeInfo paths; arrays may be empty (no redeemer on these simple txs) but the field is still exercised.",
+  "expected": {
+    "data": {
+      "blocks": [
+        {
+          "epoch": {},
+          "opCert": "c8f4f1e8a45751f3e4c205cd3398da693c9e8e24b3c64bafbec7743c743926d2",
+          "protocolVersion": {
+            "major": 10,
+            "minor": 7
+          },
+          "slotInEpoch": "5833",
+          "slotLeader": {
+            "description": "Pool-b46764f69c475830",
+            "hash": "b46764f69c475830b4b373630d1086ad2a034c1c33b7c354624f27ff",
+            "stakePool": {
+              "id": "pool1k3nkfa5ugavrpd9nwd3s6yyx454qxnquxwmux4rzfunl7q0z38t"
+            }
+          }
+        }
+      ],
+      "transactions": [
+        {
+          "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee",
+          "inputs": [
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "11239585800"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "38231801462"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1q9h4f2vhh5vnqgnsejan3psw6mj3a504fxlqm2eh3262qufesdvfs83ulr22vprsv9mwnt0vgkfwxlflxkns32twqzdqjpq2na",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "10027643189"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "10187800000"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "15631520582"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "10527477200"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "9889616869"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "10701646000"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1q9h4f2vhh5vnqgnsejan3psw6mj3a504fxlqm2eh3262qufesdvfs83ulr22vprsv9mwnt0vgkfwxlflxkns32twqzdqjpq2na",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "10005000000"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "10339801405"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "10218800000"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "10888408334"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "redeemer": null,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "10580168700"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+              },
+              "txHash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+            }
+          ],
+          "invalidBefore": null,
+          "invalidHereafter": "183353788",
+          "mint_aggregate": {
+            "aggregate": {
+              "count": "0"
+            }
+          },
+          "outputs": [
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              }
+            },
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              }
+            },
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              }
+            }
+          ],
+          "redeemers": []
+        },
+        {
+          "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+          "inputs": [
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "redeemer": null,
+              "tokens": [],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              },
+              "transaction": {
+                "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+              },
+              "txHash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+            },
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "redeemer": null,
+              "tokens": [],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              },
+              "transaction": {
+                "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+              },
+              "txHash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+            },
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "redeemer": null,
+              "tokens": [],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              },
+              "transaction": {
+                "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+              },
+              "txHash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+            },
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "redeemer": null,
+              "tokens": [],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              },
+              "transaction": {
+                "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+              },
+              "txHash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+            },
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "redeemer": null,
+              "tokens": [],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              },
+              "transaction": {
+                "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+              },
+              "txHash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+            }
+          ],
+          "invalidBefore": null,
+          "invalidHereafter": null,
+          "mint_aggregate": {
+            "aggregate": {
+              "count": "0"
+            }
+          },
+          "outputs": [
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              }
+            },
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              }
+            },
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              }
+            },
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              }
+            },
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              }
+            },
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              }
+            }
+          ],
+          "redeemers": []
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.transactions[*].withdrawals",
+    "data.blocks[*].transactions",
+    "data.blocks[*].epoch.nonce"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/transaction_full.graphql",
+  "test_name": "transaction_full",
+  "variables": {
+    "blockNum": 13228000,
+    "hashes": [
+      "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+      "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+    ]
+  }
+}

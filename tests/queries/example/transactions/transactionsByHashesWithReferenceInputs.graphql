@@ -1,0 +1,32 @@
+query transactionsByHashesWithReferenceInputs(
+    $hashes: [Hash32Hex]!
+) {
+    transactions(
+        where: { hash: { _in: $hashes }},
+        order_by: { hash: desc }
+    ) {
+        hash
+        referenceInputs(order_by: { sourceTxHash: asc }) {
+            address
+            sourceTransaction {
+                hash
+            }
+            sourceTxHash
+            sourceTxIndex
+        }
+        referenceInputs_aggregate(order_by: { sourceTxHash: asc }) {
+            aggregate {
+                count
+                max {
+                    value
+                }
+                min {
+                    value
+                }
+                sum {
+                    value
+                }
+            }
+        }
+    }
+}

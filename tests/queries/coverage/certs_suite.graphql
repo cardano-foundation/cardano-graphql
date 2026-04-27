@@ -1,0 +1,18 @@
+query certsSuite(
+  $limit: Int!
+  $lte: Int!
+) {
+  stakeDeregistrations(
+    limit: $limit
+    where: { transaction: { block: { number: { _lte: $lte } } } }
+  ) {
+    address
+  }
+  redeemers(
+    limit: $limit
+    where: { transaction: { block: { number: { _lte: $lte } } } }
+  ) {
+    scriptHash
+    purpose
+  }
+}

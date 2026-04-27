@@ -1,0 +1,40 @@
+{
+  "anchor_block": null,
+  "description": "Full Byron genesis substructure \u2014 covers ByronSoftForkRule, ByronTxFeePolicy, and the remaining ByronBlockVersionData / ByronGenesis fields. Genesis is immutable, so this is strict-match.",
+  "expected": {
+    "data": {
+      "genesis": {
+        "byron": {
+          "blockVersionData": {
+            "heavyDelThd": "300000000000",
+            "mpcThd": "20000000000000",
+            "softforkRule": {
+              "initThd": "900000000000000",
+              "minThd": "600000000000000",
+              "thdDecrement": "50000000000000"
+            },
+            "txFeePolicy": {
+              "multiplier": "43946000000",
+              "summand": "155381000000000"
+            },
+            "unlockStakeEpoch": "18446744073709551615",
+            "updateImplicit": "10000",
+            "updateProposalThd": "100000000000000",
+            "updateVoteThd": "1000000000000"
+          }
+        }
+      }
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.genesis.byron.avvmDistr",
+    "data.genesis.byron.bootStakeholders",
+    "data.genesis.byron.heavyDelegation",
+    "data.genesis.byron.nonAvvmBalances"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/genesis_full.graphql",
+  "test_name": "genesis_full",
+  "variables": {}
+}

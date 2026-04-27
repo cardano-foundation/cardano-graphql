@@ -1,0 +1,281 @@
+{
+  "anchor_block": 13228000,
+  "description": "Historical txs with inputs/outputs/tokens at the anchor block.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "block": {
+            "number": 13228000
+          },
+          "blockIndex": 20,
+          "deposit": "0",
+          "fee": "200437",
+          "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee",
+          "inputs": [
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "1c34a323e32f5774117d86f0910c0ea5b91b02b6a062f225f4ea147908423a1b",
+              "sourceTxIndex": 1,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "23657c289bf5ff4829714a9a653b4cc6503753976d181d14a9f4796ec50a8314",
+              "sourceTxIndex": 1,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1q9h4f2vhh5vnqgnsejan3psw6mj3a504fxlqm2eh3262qufesdvfs83ulr22vprsv9mwnt0vgkfwxlflxkns32twqzdqjpq2na",
+              "sourceTxHash": "237a7fff4163326d5d991244d6d6b2c4a75dee849dc5a8f2d4cb9a957d45d5ca",
+              "sourceTxIndex": 0,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "362012eb324f0a8e0f421bcaf42fa9f9e8fff6607d1ac8a89b5527f6fdea4cef",
+              "sourceTxIndex": 1,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "478da603e1f1deb1d5bc049840a1b236102e991cf9c01fef5e62b89b1501db09",
+              "sourceTxIndex": 1,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "52663e2bb6c4a81f623028469e857038d6406b159fe8a2ceb4c9dcfb89ef6a43",
+              "sourceTxIndex": 1,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "572ba76d033788e745776ef78c289f23efedb38c4455d08c9442296dda0b65ac",
+              "sourceTxIndex": 2,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "60b41b01840ae874cfba69f30139167a051032ccfc0632d84605402d305111b0",
+              "sourceTxIndex": 1,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "61866277522bfd242a859ee0a9b112f999d85bd5ef78a4e3bcfd335ea9a38cc3",
+              "sourceTxIndex": 2,
+              "value": "32429154417"
+            },
+            {
+              "address": "addr1q9h4f2vhh5vnqgnsejan3psw6mj3a504fxlqm2eh3262qufesdvfs83ulr22vprsv9mwnt0vgkfwxlflxkns32twqzdqjpq2na",
+              "sourceTxHash": "82704ab1794b4e18a3a26bcf1d03ca9b084c66f41b00079d308b8646d5a0c022",
+              "sourceTxIndex": 0,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "8beba4cf6c8862f8263ea0b620b225d4fe90c756804b5a0eaf76f94dd184173a",
+              "sourceTxIndex": 1,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "e8b68609aadc04456f7b8b032b9da476a27d3694c46c28ec19461d6bf2ac0396",
+              "sourceTxIndex": 1,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "f441e6fe8315213bc253f0ed02c47c043954ea904bb3767aea8d8b05242099aa",
+              "sourceTxIndex": 1,
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "sourceTxHash": "fd40c460a3f5fda81eeb53ce87112c327e712d56feeff27b959a7d5dd03ef123",
+              "sourceTxIndex": 1,
+              "value": "1500000"
+            }
+          ],
+          "inputs_aggregate": {
+            "aggregate": {
+              "sum": {
+                "value": "32448654417"
+              }
+            }
+          },
+          "mint": [],
+          "outputs": [
+            {
+              "address": "addr1qy2jwtle4le7efsjcuc97u8l2223x68gpnfryhumgaj68ewdrfjy73njpyjkng0yv5tqxse9a5qyu5dh87xffcujy83s9saxvg",
+              "index": 0,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854",
+                    "assetName": "4e49474854",
+                    "policyId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa"
+                  },
+                  "quantity": "166108000000"
+                }
+              ],
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "index": 1,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854",
+                    "assetName": "4e49474854",
+                    "policyId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa"
+                  },
+                  "quantity": "2361269541"
+                }
+              ],
+              "value": "1500000"
+            },
+            {
+              "address": "addr1qywgh46dqu7lq6mp5c6tzldpmzj6uwx335ydrpq8k7rru4q6yhkfqn5pc9f3z76e4cr64e5mf98aaeht6zwf8xl2nc9qr66sqg",
+              "index": 2,
+              "tokens": [],
+              "value": "32445453980"
+            }
+          ],
+          "outputs_aggregate": {
+            "aggregate": {
+              "sum": {
+                "value": "32448453980"
+              }
+            }
+          },
+          "size": 1019,
+          "totalOutput": "32448453980",
+          "withdrawals_aggregate": {
+            "aggregate": {
+              "sum": {
+                "amount": null
+              }
+            }
+          }
+        },
+        {
+          "block": {
+            "number": 13228000
+          },
+          "blockIndex": 4,
+          "deposit": "0",
+          "fee": "368632",
+          "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+          "inputs": [
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "sourceTxHash": "088b731f43977f3334f646d30a50cea2b697d6a550fadb8e0a9940a2401bf668",
+              "sourceTxIndex": 0,
+              "value": "2546416536"
+            },
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "sourceTxHash": "362992042dca989b491e3ce9652ad2ed0f1138c5765f9ca6dff8cfc5cccae079",
+              "sourceTxIndex": 0,
+              "value": "2554420167"
+            },
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "sourceTxHash": "628a61a78daa6acf19d337d6a9b10a91d77241caeae61dcdb7dee298023e8b42",
+              "sourceTxIndex": 0,
+              "value": "2522810897"
+            },
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "sourceTxHash": "d06717f4e1871a6ae74986b41306ada096d85bf1b461a4e718ac2ffcdad3dda9",
+              "sourceTxIndex": 0,
+              "value": "2530582778"
+            },
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "sourceTxHash": "fd71014a28644bef8a1541a1eb62996c9bc3c932f28fe9f0beaed6a01b6acde6",
+              "sourceTxIndex": 0,
+              "value": "2538541668"
+            }
+          ],
+          "inputs_aggregate": {
+            "aggregate": {
+              "sum": {
+                "value": "12692772046"
+              }
+            }
+          },
+          "mint": [],
+          "outputs": [
+            {
+              "address": "addr1z8p79rpkcdz8x9d6tft0x0dx5mwuzac2sa4gm8cvkw5hcny40nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0r9jz8",
+              "index": 0,
+              "tokens": [],
+              "value": "2503800000"
+            },
+            {
+              "address": "addr1z8p79rpkcdz8x9d6tft0x0dx5mwuzac2sa4gm8cvkw5hcny40nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0r9jz8",
+              "index": 1,
+              "tokens": [],
+              "value": "2503800000"
+            },
+            {
+              "address": "addr1z8p79rpkcdz8x9d6tft0x0dx5mwuzac2sa4gm8cvkw5hcny40nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0r9jz8",
+              "index": 2,
+              "tokens": [],
+              "value": "2503800000"
+            },
+            {
+              "address": "addr1z8p79rpkcdz8x9d6tft0x0dx5mwuzac2sa4gm8cvkw5hcny40nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0r9jz8",
+              "index": 3,
+              "tokens": [],
+              "value": "2503800000"
+            },
+            {
+              "address": "addr1z8p79rpkcdz8x9d6tft0x0dx5mwuzac2sa4gm8cvkw5hcny40nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0r9jz8",
+              "index": 4,
+              "tokens": [],
+              "value": "2503800000"
+            },
+            {
+              "address": "addr1q8q6sguskd5tzmrqgha5d2n24r3p2mv8agufnmhg3hjjmf540nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0vdt2k",
+              "index": 5,
+              "tokens": [],
+              "value": "173403414"
+            }
+          ],
+          "outputs_aggregate": {
+            "aggregate": {
+              "sum": {
+                "value": "12692403414"
+              }
+            }
+          },
+          "size": 3373,
+          "totalOutput": "12692403414",
+          "withdrawals_aggregate": {
+            "aggregate": {
+              "sum": {
+                "amount": null
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/example/transactions/transactionsByHashesWithTokens.graphql",
+  "test_name": "transactionsByHashesWithTokens",
+  "variables": {
+    "hashes": [
+      "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+      "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+    ]
+  }
+}

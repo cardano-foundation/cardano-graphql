@@ -1,0 +1,26 @@
+{
+  "anchor_block": null,
+  "description": "Paginated mint events for a specific policy (first pinned test asset). Mints are historical and immutable; token-registry fields and aggregate drift so they are masked.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.tokenMints",
+    "data.tokenMints_aggregate"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/token_mints/tokenMints.graphql",
+  "test_name": "tokenMints",
+  "variables": {
+    "limit": 5,
+    "offset": 0,
+    "where": {
+      "asset": {
+        "policyId": {
+          "_eq": "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb02"
+        }
+      }
+    }
+  }
+}

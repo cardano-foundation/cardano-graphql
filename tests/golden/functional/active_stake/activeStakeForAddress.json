@@ -1,0 +1,16 @@
+{
+  "test_name": "activeStakeForAddress",
+  "description": "Active stake history for the primary preprod stake address. Skeleton — `expected` populated by --update-golden when a preprod endpoint is wired.",
+  "network": "preprod",
+  "query_file": "queries/example/active_stake/activeStakeForAddress.graphql",
+  "variables": {
+    "limit": 5,
+    "where": {
+      "address": { "_eq": "stake_test1uq7jxnqdcs2lxgu2tl2s3zna4hlsm8p0ud82pdr0cszsepqgprukn" }
+    }
+  },
+  "anchor_block": 4500000,
+  "ignore_paths": [],
+  "graphql_errors_allowed": false,
+  "expected": null
+}

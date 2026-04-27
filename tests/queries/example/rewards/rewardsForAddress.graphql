@@ -1,0 +1,20 @@
+query rewardsForAddress (
+    $limit: Int!
+    $offset: Int!
+    $where: Reward_bool_exp
+) {
+    rewards (limit: $limit, offset: $offset, where: $where) {
+        address
+        amount
+        stakePool {
+            hash
+        }
+        earnedIn {
+            number
+        }
+        receivedIn {
+            number
+        }
+        type
+    }
+}

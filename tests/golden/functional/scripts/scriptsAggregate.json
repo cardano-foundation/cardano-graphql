@@ -1,0 +1,15 @@
+{
+  "anchor_block": null,
+  "description": "Global scripts aggregate. Values drift as new scripts are registered; masked to shape-only.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.scripts_aggregate"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/scripts/scriptsAggregate.graphql",
+  "test_name": "scriptsAggregate",
+  "variables": {}
+}

@@ -1,0 +1,24 @@
+{
+  "anchor_block": null,
+  "description": "StakePool relays (incl. port) and retirements (incl. retiredInEpoch). Pin to one stable pool. Relays/retirements drift with pool updates so the inner lists are masked; reference paths are still touched for coverage.",
+  "expected": {
+    "data": {
+      "stakePools": [
+        {
+          "id": "pool100wj94uzf54vup2hdzk0afng4dhjaqggt7j434mtgm8v2gfvfgp"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.stakePools[*].relays",
+    "data.stakePools[*].retirements"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/stake_pool_full.graphql",
+  "test_name": "stake_pool_full",
+  "variables": {
+    "id": "pool100wj94uzf54vup2hdzk0afng4dhjaqggt7j434mtgm8v2gfvfgp"
+  }
+}

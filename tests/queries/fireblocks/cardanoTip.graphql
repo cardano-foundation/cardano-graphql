@@ -1,0 +1,8 @@
+query cardanoTip {
+  cardano {
+    tip {
+      number
+      hash
+    }
+  }
+}

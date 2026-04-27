@@ -1,0 +1,19 @@
+{
+  "anchor_block": 13228000,
+  "description": "Core aggregate coverage (blocks, transactions, stakePools). Values drift; masked to shape-only.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.blocks_aggregate",
+    "data.transactions_aggregate",
+    "data.stakePools_aggregate"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/aggregates_suite.graphql",
+  "test_name": "aggregates_suite",
+  "variables": {
+    "lte": 13228000
+  }
+}

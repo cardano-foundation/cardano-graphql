@@ -1,0 +1,20 @@
+{
+  "anchor_block": null,
+  "description": "CIP-100 off-chain voting metadata root-field smoke test. Masked since registry state drifts.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.offChainVoteData",
+    "data.offChainVoteAuthor",
+    "data.offChainVoteReference",
+    "data.offChainVoteGovActionData"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/off_chain_votes_suite.graphql",
+  "test_name": "off_chain_votes_suite",
+  "variables": {
+    "limit": 2
+  }
+}

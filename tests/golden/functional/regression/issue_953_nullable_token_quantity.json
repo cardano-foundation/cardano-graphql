@@ -1,0 +1,84 @@
+{
+  "anchor_block": 13228000,
+  "description": "Regression for cardano-foundation/cardano-graphql#953 \u2014 nullable token quantity must serialize without error.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+          "mint": [],
+          "outputs": [
+            {
+              "index": 0,
+              "tokens": []
+            },
+            {
+              "index": 1,
+              "tokens": []
+            },
+            {
+              "index": 2,
+              "tokens": []
+            },
+            {
+              "index": 3,
+              "tokens": []
+            },
+            {
+              "index": 4,
+              "tokens": []
+            },
+            {
+              "index": 5,
+              "tokens": []
+            }
+          ]
+        },
+        {
+          "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee",
+          "mint": [],
+          "outputs": [
+            {
+              "index": 0,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "166108000000"
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "0691b2fecca1ac4f53cb6dfb00b7013e561d1f34403b957cbb5af1fa4e49474854"
+                  },
+                  "quantity": "2361269541"
+                }
+              ]
+            },
+            {
+              "index": 2,
+              "tokens": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/regression/issue_953_nullable_token_quantity.graphql",
+  "regression_issue": 953,
+  "test_name": "issue_953_nullable_token_quantity",
+  "variables": {
+    "hashes": [
+      "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+      "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "anchor_block": null,
+  "description": "First 5 Plutus V1 scripts. Query has no deterministic ordering clause, so inner list is masked.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.scripts"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/scripts/plutusScripts.graphql",
+  "test_name": "plutusScripts",
+  "variables": {
+    "limit": 5
+  }
+}

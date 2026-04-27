@@ -1,0 +1,36 @@
+{
+  "anchor_block": 13228000,
+  "bucket": "light",
+  "description": "Light-bucket address (retail wallet, seen in a single anchor-block output) \u2014 summary at anchor. Strict value match; stable because at-block history is immutable.",
+  "expected": {
+    "data": {
+      "paymentAddresses": [
+        {
+          "summary": {
+            "assetBalances": [
+              {
+                "asset": {
+                  "assetId": "ada",
+                  "description": null,
+                  "name": "ada"
+                },
+                "quantity": "52001589"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/example/paymentAddress/summary.graphql",
+  "test_name": "paymentAddressSummary_light",
+  "variables": {
+    "addresses": [
+      "addr1qy2jwtle4le7efsjcuc97u8l2223x68gpnfryhumgaj68ewdrfjy73njpyjkng0yv5tqxse9a5qyu5dh87xffcujy83s9saxvg"
+    ],
+    "atBlock": 13228000
+  }
+}

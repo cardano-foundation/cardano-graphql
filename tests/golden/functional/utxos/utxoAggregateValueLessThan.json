@@ -1,0 +1,17 @@
+{
+  "anchor_block": null,
+  "description": "Count/sum of UTxOs with value < 1 ADA (1,000,000 lovelace). Aggregate drifts with chain; masked to shape-only assertion.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.utxos_aggregate"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/utxos/utxoAggregateValueLessThan.graphql",
+  "test_name": "utxoAggregateValueLessThan",
+  "variables": {
+    "boundary": "1000000"
+  }
+}

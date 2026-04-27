@@ -1,0 +1,15 @@
+{
+  "test_name": "averageActiveStakeForAddress",
+  "description": "Count aggregate of active stake rows for the primary preprod stake address. Aggregate drifts as new epochs land; mask the aggregate, assert shape.",
+  "network": "preprod",
+  "query_file": "queries/example/active_stake/averageActiveStakeForAddress.graphql",
+  "variables": {
+    "address": "stake_test1uq7jxnqdcs2lxgu2tl2s3zna4hlsm8p0ud82pdr0cszsepqgprukn"
+  },
+  "anchor_block": 4500000,
+  "ignore_paths": [
+    "data.activeStake_aggregate"
+  ],
+  "graphql_errors_allowed": false,
+  "expected": null
+}

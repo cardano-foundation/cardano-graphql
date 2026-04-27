@@ -1,0 +1,37 @@
+{
+  "anchor_block": null,
+  "description": "Regression for cardano-foundation/cardano-graphql#979 \u2014 assets backfilled by the indexer must be queryable with tokenMints.",
+  "expected": {
+    "data": {
+      "assets": [
+        {
+          "assetId": "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb024d49444153",
+          "assetName": "4d49444153",
+          "fingerprint": "asset17nkk7q20qefetcu4er9l0pt4jlmnarfz2ccwa4",
+          "policyId": "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb02",
+          "tokenMints": [
+            {
+              "quantity": "1000000000",
+              "transaction": {
+                "hash": "7190f387f2a34c5d7377ef6544b86d8f105f829d006ef2e38def62a47d966929"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.assets[*].tokenMints"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/regression/issue_979_backfill_missing_assets.graphql",
+  "regression_issue": 979,
+  "test_name": "issue_979_backfill_missing_assets",
+  "variables": {
+    "assetIds": [
+      "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb024d49444153"
+    ]
+  }
+}

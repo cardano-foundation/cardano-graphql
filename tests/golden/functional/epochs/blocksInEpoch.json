@@ -1,0 +1,22 @@
+{
+  "anchor_block": null,
+  "description": "Blocks within finalized epoch 620. Query has no order_by on inner blocks list so composition is implementation-defined \u2014 mask the inner array and assert the wrapper shape.",
+  "expected": {
+    "data": {
+      "epochs": [
+        {}
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.epochs[*].blocks"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/epochs/blocksInEpoch.graphql",
+  "test_name": "blocksInEpoch",
+  "variables": {
+    "blockLimit": 3,
+    "number": 620
+  }
+}

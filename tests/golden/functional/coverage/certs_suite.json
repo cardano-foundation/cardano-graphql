@@ -1,0 +1,19 @@
+{
+  "anchor_block": 13228000,
+  "description": "stakeDeregistrations + redeemers root-field coverage. Both bounded by block <= anchor; inner lists masked (no order_by).",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.stakeDeregistrations",
+    "data.redeemers"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/certs_suite.graphql",
+  "test_name": "certs_suite",
+  "variables": {
+    "limit": 3,
+    "lte": 13228000
+  }
+}
