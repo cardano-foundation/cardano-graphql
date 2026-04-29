@@ -1,0 +1,4717 @@
+{
+  "mutationType": "Mutation",
+  "queryType": "Query",
+  "subscriptionType": null,
+  "types": {
+    "ActiveStake": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "StakeAddress!"
+        },
+        "amount": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "epoch": {
+          "args": {},
+          "type": "Epoch"
+        },
+        "epochNo": {
+          "args": {},
+          "type": "Int!"
+        },
+        "registeredWith": {
+          "args": {},
+          "type": "StakePool!"
+        },
+        "stakePoolHash": {
+          "args": {},
+          "type": "Hash28Hex!"
+        },
+        "stakePoolId": {
+          "args": {},
+          "type": "StakePoolID!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ActiveStake_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "ActiveStake_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ActiveStake_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "ActiveStake_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "ActiveStake_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "ActiveStake_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ActiveStake_bool_exp": {
+      "inputFields": {
+        "_and": "[ActiveStake_bool_exp]",
+        "_not": "ActiveStake_bool_exp",
+        "_or": "[ActiveStake_bool_exp]",
+        "address": "StakeAddress_comparison_exp",
+        "amount": "text_comparison_exp",
+        "epoch": "Epoch_bool_exp",
+        "epochNo": "Int_comparison_exp",
+        "registeredWith": "StakePool_bool_exp",
+        "stakePoolHash": "Hash28Hex_comparison_exp",
+        "stakePoolId": "StakePoolID_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "ActiveStake_max_fields": {
+      "fields": {
+        "amount": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ActiveStake_min_fields": {
+      "fields": {
+        "amount": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ActiveStake_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "amount": "order_by",
+        "epoch": "Epoch_order_by",
+        "epochNo": "order_by",
+        "registeredWith": "StakePool_order_by",
+        "stakePoolHash": "order_by",
+        "stakePoolId": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "ActiveStake_sum_fields": {
+      "fields": {
+        "amount": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Ada": {
+      "fields": {
+        "supply": {
+          "args": {},
+          "type": "AssetSupply!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "AdaPots": {
+      "fields": {
+        "deposits_drep": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "deposits_proposal": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "deposits_stake": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "fees": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "reserves": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "rewards": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "slotNo": {
+          "args": {},
+          "type": "String"
+        },
+        "treasury": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "utxo": {
+          "args": {},
+          "type": "Lovelace!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "AlonzoGenesis": {
+      "fields": {
+        "collateralPercentage": {
+          "args": {},
+          "type": "Int!"
+        },
+        "executionPrices": {
+          "args": {},
+          "type": "ExecutionPrices!"
+        },
+        "lovelacePerUTxOWord": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "maxBlockExUnits": {
+          "args": {},
+          "type": "ExecutionUnits!"
+        },
+        "maxCollateralInputs": {
+          "args": {},
+          "type": "Int!"
+        },
+        "maxTxExUnits": {
+          "args": {},
+          "type": "ExecutionUnits!"
+        },
+        "maxValueSize": {
+          "args": {},
+          "type": "Lovelace!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Asset": {
+      "fields": {
+        "assetId": {
+          "args": {},
+          "type": "Hex!"
+        },
+        "assetName": {
+          "args": {},
+          "type": "Hex"
+        },
+        "decimals": {
+          "args": {},
+          "type": "Int"
+        },
+        "description": {
+          "args": {},
+          "type": "String"
+        },
+        "fingerprint": {
+          "args": {},
+          "type": "AssetFingerprint"
+        },
+        "logo": {
+          "args": {},
+          "type": "String"
+        },
+        "metadataHash": {
+          "args": {},
+          "type": "String"
+        },
+        "name": {
+          "args": {},
+          "type": "String"
+        },
+        "policyId": {
+          "args": {},
+          "type": "Hash28Hex!"
+        },
+        "ticker": {
+          "args": {},
+          "type": "String"
+        },
+        "tokenMints": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TokenMint_order_by!]",
+            "where": "TokenMint_bool_exp"
+          },
+          "type": "[TokenMint]!"
+        },
+        "tokenMints_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TokenMint_order_by!]",
+            "where": "TokenMint_bool_exp"
+          },
+          "type": "TokenMint_aggregate!"
+        },
+        "url": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "AssetBalance": {
+      "fields": {
+        "asset": {
+          "args": {},
+          "type": "Asset!"
+        },
+        "quantity": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "AssetFingerprint": {
+      "kind": "SCALAR"
+    },
+    "AssetFingerprint_comparison_exp": {
+      "inputFields": {
+        "_eq": "String",
+        "_in": "[String]",
+        "_neq": "String",
+        "_nin": "[String]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "AssetSupply": {
+      "fields": {
+        "circulating": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "String!"
+        },
+        "total": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "AssetSupply_bool_exp": {
+      "inputFields": {
+        "_and": "[AssetSupply_bool_exp]",
+        "_not": "AssetSupply_bool_exp",
+        "_or": "[AssetSupply_bool_exp]",
+        "circulating": "text_comparison_exp",
+        "max": "text_comparison_exp",
+        "total": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "AssetSupply_order_by": {
+      "inputFields": {
+        "circulating": "order_by",
+        "max": "order_by",
+        "total": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Asset_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "Asset_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Asset_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Asset_bool_exp": {
+      "inputFields": {
+        "_and": "[Asset_bool_exp]",
+        "_not": "Asset_bool_exp",
+        "_or": "[Asset_bool_exp]",
+        "assetId": "Hex_comparison_exp",
+        "assetName": "Hex_comparison_exp",
+        "decimals": "Int_comparison_exp",
+        "description": "text_comparison_exp",
+        "fingerprint": "AssetFingerprint_comparison_exp",
+        "logo": "text_comparison_exp",
+        "name": "text_comparison_exp",
+        "policyId": "Hash28Hex_comparison_exp",
+        "ticker": "text_comparison_exp",
+        "tokenMints": "TokenMint_bool_exp",
+        "url": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Asset_order_by": {
+      "inputFields": {
+        "assetId": "order_by",
+        "decimals": "order_by",
+        "fingerprint": "order_by",
+        "name": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "BigInt": {
+      "kind": "SCALAR"
+    },
+    "Block": {
+      "fields": {
+        "epoch": {
+          "args": {},
+          "type": "Epoch"
+        },
+        "epochNo": {
+          "args": {},
+          "type": "Int"
+        },
+        "fees": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "forgedAt": {
+          "args": {},
+          "type": "DateTime!"
+        },
+        "hash": {
+          "args": {},
+          "type": "Hash32Hex!"
+        },
+        "nextBlock": {
+          "args": {},
+          "type": "Block"
+        },
+        "number": {
+          "args": {},
+          "type": "Int"
+        },
+        "opCert": {
+          "args": {},
+          "type": "Hash32Hex"
+        },
+        "previousBlock": {
+          "args": {},
+          "type": "Block"
+        },
+        "protocolVersion": {
+          "args": {},
+          "type": "JSONObject"
+        },
+        "size": {
+          "args": {},
+          "type": "Int!"
+        },
+        "slotInEpoch": {
+          "args": {},
+          "type": "String"
+        },
+        "slotLeader": {
+          "args": {},
+          "type": "SlotLeader!"
+        },
+        "slotNo": {
+          "args": {},
+          "type": "String"
+        },
+        "transactions": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Transaction_order_by!]",
+            "where": "Transaction_bool_exp"
+          },
+          "type": "[Transaction]!"
+        },
+        "transactionsCount": {
+          "args": {},
+          "type": "String!"
+        },
+        "transactions_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Transaction_order_by!]",
+            "where": "Transaction_bool_exp"
+          },
+          "type": "Transaction_aggregate!"
+        },
+        "vrfKey": {
+          "args": {},
+          "type": "VRFVerificationKey"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Block_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "Block_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Block_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "Block_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "Block_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "Block_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Block_bool_exp": {
+      "inputFields": {
+        "_and": "[Block_bool_exp]",
+        "_not": "Block_bool_exp",
+        "_or": "[Block_bool_exp]",
+        "epoch": "Epoch_bool_exp",
+        "fees": "text_comparison_exp",
+        "forgedAt": "Date_comparison_exp",
+        "hash": "Hash32Hex_comparison_exp",
+        "nextBlock": "Block_bool_exp",
+        "number": "Int_comparison_exp",
+        "previousBlock": "Block_bool_exp",
+        "size": "Int_comparison_exp",
+        "slotInEpoch": "Int_comparison_exp",
+        "slotLeader": "SlotLeader_bool_exp",
+        "slotNo": "text_comparison_exp",
+        "transactions": "Transaction_bool_exp",
+        "transactionsCount": "text_comparison_exp",
+        "vrfKey": "VRFVerificationKey_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Block_max_fields": {
+      "fields": {
+        "fees": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "size": {
+          "args": {},
+          "type": "Int"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Block_min_fields": {
+      "fields": {
+        "fees": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "size": {
+          "args": {},
+          "type": "Int"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Block_order_by": {
+      "inputFields": {
+        "epoch": "Epoch_order_by",
+        "fees": "order_by",
+        "forgedAt": "order_by",
+        "hash": "order_by",
+        "number": "order_by_with_nulls",
+        "size": "order_by",
+        "slotLeader": "SlotLeader_order_by",
+        "slotNo": "order_by_with_nulls",
+        "transactionsCount": "order_by",
+        "vrfKey": "order_by_with_nulls"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Block_sum_fields": {
+      "fields": {
+        "fees": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "size": {
+          "args": {},
+          "type": "BigInt"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Boolean": {
+      "kind": "SCALAR"
+    },
+    "Boolean_comparison_exp": {
+      "inputFields": {
+        "_eq": "Boolean",
+        "_gt": "Boolean",
+        "_gte": "Boolean",
+        "_in": "[Boolean!]",
+        "_is_null": "Boolean",
+        "_lt": "Boolean",
+        "_lte": "Boolean",
+        "_neq": "Boolean",
+        "_nin": "[Boolean!]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "ByronBlockVersionData": {
+      "fields": {
+        "heavyDelThd": {
+          "args": {},
+          "type": "String!"
+        },
+        "maxBlockSize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "maxHeaderSize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "maxProposalSize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "maxTxSize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "mpcThd": {
+          "args": {},
+          "type": "String!"
+        },
+        "scriptVersion": {
+          "args": {},
+          "type": "Int!"
+        },
+        "slotDuration": {
+          "args": {},
+          "type": "Int!"
+        },
+        "softforkRule": {
+          "args": {},
+          "type": "ByronSoftForkRule!"
+        },
+        "txFeePolicy": {
+          "args": {},
+          "type": "ByronTxFeePolicy!"
+        },
+        "unlockStakeEpoch": {
+          "args": {},
+          "type": "String!"
+        },
+        "updateImplicit": {
+          "args": {},
+          "type": "String!"
+        },
+        "updateProposalThd": {
+          "args": {},
+          "type": "String!"
+        },
+        "updateVoteThd": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ByronGenesis": {
+      "fields": {
+        "avvmDistr": {
+          "args": {},
+          "type": "JSONObject!"
+        },
+        "blockVersionData": {
+          "args": {},
+          "type": "ByronBlockVersionData!"
+        },
+        "bootStakeholders": {
+          "args": {},
+          "type": "JSONObject!"
+        },
+        "heavyDelegation": {
+          "args": {},
+          "type": "JSONObject!"
+        },
+        "nonAvvmBalances": {
+          "args": {},
+          "type": "JSONObject!"
+        },
+        "protocolConsts": {
+          "args": {},
+          "type": "ByronProtocolConsts!"
+        },
+        "startTime": {
+          "args": {},
+          "type": "Timestamp!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ByronProtocolConsts": {
+      "fields": {
+        "k": {
+          "args": {},
+          "type": "Int!"
+        },
+        "protocolMagic": {
+          "args": {},
+          "type": "Int"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ByronSoftForkRule": {
+      "fields": {
+        "initThd": {
+          "args": {},
+          "type": "String!"
+        },
+        "minThd": {
+          "args": {},
+          "type": "String!"
+        },
+        "thdDecrement": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ByronTxFeePolicy": {
+      "fields": {
+        "multiplier": {
+          "args": {},
+          "type": "String!"
+        },
+        "summand": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Cardano": {
+      "fields": {
+        "currentEpoch": {
+          "args": {},
+          "type": "Epoch!"
+        },
+        "tip": {
+          "args": {},
+          "type": "Block!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CardanoDbMeta": {
+      "fields": {
+        "initialized": {
+          "args": {},
+          "type": "Boolean!"
+        },
+        "syncPercentage": {
+          "args": {},
+          "type": "Percentage!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralInput": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "String!"
+        },
+        "sourceTransaction": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "sourceTxHash": {
+          "args": {},
+          "type": "Hash32Hex!"
+        },
+        "sourceTxIndex": {
+          "args": {},
+          "type": "Int!"
+        },
+        "tokens": {
+          "args": {},
+          "type": "[Token]!"
+        },
+        "tokens_aggregate": {
+          "args": {},
+          "type": "Token_aggregate!"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "txHash": {
+          "args": {},
+          "type": "Hash32Hex!"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralInput_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "TransactionInput_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralInput_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "CollateralInput_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "CollateralInput_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "CollateralInput_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralInput_bool_exp": {
+      "inputFields": {
+        "_and": "[CollateralInput_bool_exp]",
+        "_not": "CollateralInput_bool_exp",
+        "_or": "[CollateralInput_bool_exp]",
+        "address": "text_comparison_exp",
+        "sourceTransaction": "Transaction_bool_exp",
+        "tokens": "Token_bool_exp",
+        "transaction": "Transaction_bool_exp",
+        "value": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CollateralInput_max_fields": {
+      "fields": {
+        "tokens": {
+          "args": {},
+          "type": "Token_max_fields"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralInput_min_fields": {
+      "fields": {
+        "tokens": {
+          "args": {},
+          "type": "Token_min_fields"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralInput_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "sourceTxHash": "order_by",
+        "transaction": "Transaction_order_by",
+        "txHash": "order_by",
+        "value": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CollateralInput_sum_fields": {
+      "fields": {
+        "tokens": {
+          "args": {},
+          "type": "Token_sum_fields"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralOutput": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "String!"
+        },
+        "addressHasScript": {
+          "args": {},
+          "type": "Boolean!"
+        },
+        "datum": {
+          "args": {},
+          "type": "Datum"
+        },
+        "index": {
+          "args": {},
+          "type": "Int!"
+        },
+        "paymentCredential": {
+          "args": {},
+          "type": "Hash28Hex"
+        },
+        "script": {
+          "args": {},
+          "type": "Script"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "txHash": {
+          "args": {},
+          "type": "Hash32Hex!"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralOutput_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "CollateralOutput_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralOutput_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "CollateralOutput_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "CollateralOutput_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "CollateralOutput_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralOutput_bool_exp": {
+      "inputFields": {
+        "_and": "[CollateralOutput_bool_exp]",
+        "_not": "CollateralOutput_bool_exp",
+        "_or": "[CollateralOutput_bool_exp]",
+        "address": "text_comparison_exp",
+        "addressHasScript": "Boolean_comparison_exp",
+        "datum": "Datum_bool_exp",
+        "index": "Int_comparison_exp",
+        "script": "Script_bool_exp",
+        "transaction": "Transaction_bool_exp",
+        "value": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CollateralOutput_distinct_on": {
+      "enumValues": [
+        "address"
+      ],
+      "kind": "ENUM"
+    },
+    "CollateralOutput_max_fields": {
+      "fields": {
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralOutput_min_fields": {
+      "fields": {
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CollateralOutput_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "addressHasScript": "order_by",
+        "datum": "Transaction_order_by",
+        "index": "order_by",
+        "txHash": "order_by",
+        "value": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CollateralOutput_sum_fields": {
+      "fields": {
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Committee": {
+      "fields": {
+        "committeeMembers": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CommitteeMember_order_by!]",
+            "where": "CommitteeMember_bool_exp"
+          },
+          "type": "[CommitteeMember]!"
+        },
+        "quorum_denominator": {
+          "args": {},
+          "type": "String!"
+        },
+        "quorum_numerator": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CommitteeDeRegistration": {
+      "fields": {
+        "cert_index": {
+          "args": {},
+          "type": "Int"
+        },
+        "cold_key_id": {
+          "args": {},
+          "type": "String"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "votingAnchor": {
+          "args": {},
+          "type": "VotingAnchor"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CommitteeDeRegistration_bool_exp": {
+      "inputFields": {
+        "_and": "[CommitteeDeRegistration_bool_exp]",
+        "_not": "CommitteeDeRegistration_bool_exp",
+        "_or": "[CommitteeDeRegistration_bool_exp]",
+        "cert_index": "Int_comparison_exp",
+        "cold_key_id": "text_comparison_exp",
+        "transaction": "Transaction_bool_exp",
+        "votingAnchor": "VotingAnchor_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CommitteeDeRegistration_order_by": {
+      "inputFields": {
+        "cert_index": "order_by",
+        "cold_key_id": "order_by",
+        "transaction": "Transaction_order_by",
+        "votingAnchor": "VotingAnchor_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CommitteeHash": {
+      "fields": {
+        "has_script": {
+          "args": {},
+          "type": "Boolean"
+        },
+        "raw": {
+          "args": {},
+          "type": "Hex"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CommitteeHash_bool_exp": {
+      "inputFields": {
+        "_and": "[CommitteeHash_bool_exp]",
+        "_not": "CommitteeHash_bool_exp",
+        "_or": "[CommitteeHash_bool_exp]",
+        "hasScript": "Boolean_comparison_exp",
+        "raw": "Hex_comparison_exp",
+        "view": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CommitteeHash_order_by": {
+      "inputFields": {
+        "hasScript": "order_by",
+        "raw": "order_by",
+        "view": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CommitteeMember": {
+      "fields": {
+        "committee": {
+          "args": {},
+          "type": "Committee"
+        },
+        "committeeHash": {
+          "args": {},
+          "type": "CommitteeHash"
+        },
+        "expiration_epoch": {
+          "args": {},
+          "type": "Int"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CommitteeMember_bool_exp": {
+      "inputFields": {
+        "_and": "[CommitteeMember_bool_exp]",
+        "_not": "CommitteeMember_bool_exp",
+        "_or": "[CommitteeMember_bool_exp]",
+        "committee": "Committee_bool_exp",
+        "committeeHash": "CommitteeMember_bool_exp",
+        "expiration_epoch": "Int_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CommitteeMember_order_by": {
+      "inputFields": {
+        "commitee": "Committee_order_by",
+        "commiteeHash": "CommitteeHash_order_by",
+        "expiration_epoch": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CommitteeRegistration": {
+      "fields": {
+        "cert_index": {
+          "args": {},
+          "type": "Int"
+        },
+        "cold_key_id": {
+          "args": {},
+          "type": "String"
+        },
+        "hot_key_id": {
+          "args": {},
+          "type": "String"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "CommitteeRegistration_bool_exp": {
+      "inputFields": {
+        "_and": "[CommitteeRegistration_bool_exp]",
+        "_not": "CommitteeRegistration_bool_exp",
+        "_or": "[CommitteeRegistration_bool_exp]",
+        "cert_index": "Int_comparison_exp",
+        "cold_key_id": "text_comparison_exp",
+        "hot_key_id": "text_comparison_exp",
+        "transaction": "Transaction_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "CommitteeRegistration_order_by": {
+      "inputFields": {
+        "cert_index": "order_by",
+        "cold_key_id": "order_by",
+        "hot_key_id": "order_by",
+        "transaction": "Transaction_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Committee_bool_exp": {
+      "inputFields": {
+        "_and": "[Committee_bool_exp]",
+        "_not": "Committee_bool_exp",
+        "_or": "[Committee_bool_exp]",
+        "quorum_denominator": "text_comparison_exp",
+        "quorum_numerator": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Committee_order_by": {
+      "inputFields": {
+        "quorum_denominator": "order_by",
+        "quorum_numerator": "StakePool_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "DateTime": {
+      "kind": "SCALAR"
+    },
+    "Date_comparison_exp": {
+      "inputFields": {
+        "_eq": "DateTime",
+        "_gt": "DateTime",
+        "_gte": "DateTime",
+        "_in": "[DateTime]",
+        "_lt": "DateTime",
+        "_lte": "DateTime",
+        "_neq": "DateTime",
+        "_nin": "[DateTime]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Datum": {
+      "fields": {
+        "bytes": {
+          "args": {},
+          "type": "Hex!"
+        },
+        "firstIncludedIn": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "hash": {
+          "args": {},
+          "type": "Hash32Hex!"
+        },
+        "value": {
+          "args": {},
+          "type": "JSONObject!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Datum_bool_exp": {
+      "inputFields": {
+        "firstIncludedIn": "Transaction_bool_exp",
+        "hash": "Hex_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Delegation": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "StakeAddress!"
+        },
+        "redeemer": {
+          "args": {},
+          "type": "Redeemer"
+        },
+        "stakePool": {
+          "args": {},
+          "type": "StakePool!"
+        },
+        "stakePoolHash": {
+          "args": {},
+          "type": "Hash28Hex!"
+        },
+        "stakePoolId": {
+          "args": {},
+          "type": "StakePoolID!"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "DelegationVote": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "String!"
+        },
+        "drep": {
+          "args": {},
+          "type": "DrepHash"
+        },
+        "redeemer": {
+          "args": {},
+          "type": "Redeemer"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "DelegationVote_bool_exp": {
+      "inputFields": {
+        "_and": "[DelegationVote_bool_exp]",
+        "_not": "DelegationVote_bool_exp",
+        "_or": "[DelegationVote_bool_exp]",
+        "address": "text_comparison_exp",
+        "transaction": "Transaction_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "DelegationVote_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "transaction": "Transaction_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Delegation_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "Delegation_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Delegation_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Delegation_bool_exp": {
+      "inputFields": {
+        "_and": "[Delegation_bool_exp]",
+        "_not": "Delegation_bool_exp",
+        "_or": "[Delegation_bool_exp]",
+        "address": "StakeAddress_comparison_exp",
+        "stakePool": "StakePool_bool_exp",
+        "stakePoolHash": "Hash28Hex_comparison_exp",
+        "stakePoolId": "StakePoolID_comparison_exp",
+        "transaction": "Transaction_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Delegation_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "stakePool": "StakePool_order_by",
+        "stakePoolHash": "order_by",
+        "stakePoolId": "order_by",
+        "transaction": "Transaction_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "DrepHash": {
+      "fields": {
+        "has_script": {
+          "args": {},
+          "type": "Boolean"
+        },
+        "raw": {
+          "args": {},
+          "type": "Hex"
+        },
+        "view": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "DrepHash_bool_exp": {
+      "inputFields": {
+        "_and": "[DrepHash_bool_exp]",
+        "_not": "DrepHash_bool_exp",
+        "_or": "[DrepHash_bool_exp]",
+        "hasScript": "Boolean_comparison_exp",
+        "raw": "Hex_comparison_exp",
+        "view": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "DrepHash_order_by": {
+      "inputFields": {
+        "hasScript": "order_by",
+        "raw": "order_by",
+        "view": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Epoch": {
+      "fields": {
+        "activeStake": {
+          "args": {},
+          "type": "[ActiveStake]"
+        },
+        "activeStake_aggregate": {
+          "args": {},
+          "type": "ActiveStake_aggregate"
+        },
+        "adaPots": {
+          "args": {},
+          "type": "AdaPots"
+        },
+        "blocks": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Block_order_by!]",
+            "where": "Block_bool_exp"
+          },
+          "type": "[Block!]!"
+        },
+        "blocksCount": {
+          "args": {},
+          "type": "String!"
+        },
+        "blocks_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Block_order_by!]",
+            "where": "Block_bool_exp"
+          },
+          "type": "Block_aggregate!"
+        },
+        "fees": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "lastBlockTime": {
+          "args": {},
+          "type": "DateTime!"
+        },
+        "nonce": {
+          "args": {},
+          "type": "Hash32Hex"
+        },
+        "number": {
+          "args": {},
+          "type": "Int!"
+        },
+        "output": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "protocolParams": {
+          "args": {},
+          "type": "ProtocolParams"
+        },
+        "startedAt": {
+          "args": {},
+          "type": "DateTime!"
+        },
+        "transactionsCount": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Epoch_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "Epoch_aggregate_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Epoch_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "Epoch_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "Epoch_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "Epoch_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Epoch_bool_exp": {
+      "inputFields": {
+        "_and": "[Epoch_bool_exp]",
+        "_not": "Epoch_bool_exp",
+        "_or": "[Epoch_bool_exp]",
+        "blocks": "Block_bool_exp",
+        "blocksCount": "text_comparison_exp",
+        "fees": "text_comparison_exp",
+        "number": "Int_comparison_exp",
+        "output": "text_comparison_exp",
+        "startedAt": "Date_comparison_exp",
+        "transactionsCount": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Epoch_max_fields": {
+      "fields": {
+        "blocksCount": {
+          "args": {},
+          "type": "Int!"
+        },
+        "fees": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "number": {
+          "args": {},
+          "type": "Int!"
+        },
+        "output": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "transactionsCount": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Epoch_min_fields": {
+      "fields": {
+        "blocksCount": {
+          "args": {},
+          "type": "String!"
+        },
+        "fees": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "output": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "transactionsCount": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Epoch_order_by": {
+      "inputFields": {
+        "blocksCount": "order_by",
+        "fees": "order_by",
+        "number": "order_by",
+        "output": "order_by",
+        "transactionsCount": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Epoch_sum_fields": {
+      "fields": {
+        "blocksCount": {
+          "args": {},
+          "type": "String!"
+        },
+        "fees": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "output": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "transactionsCount": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ExecutionPrice": {
+      "fields": {
+        "denominator": {
+          "args": {},
+          "type": "Int!"
+        },
+        "numerator": {
+          "args": {},
+          "type": "Int!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ExecutionPrices": {
+      "fields": {
+        "prMem": {
+          "args": {},
+          "type": "ExecutionPrice!"
+        },
+        "prSteps": {
+          "args": {},
+          "type": "ExecutionPrice!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ExecutionUnits": {
+      "fields": {
+        "exUnitsMem": {
+          "args": {},
+          "type": "String!"
+        },
+        "exUnitsSteps": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Float": {
+      "kind": "SCALAR"
+    },
+    "Float_comparison_exp": {
+      "inputFields": {
+        "_eq": "Float",
+        "_gt": "Float",
+        "_gte": "Float",
+        "_in": "[Float!]",
+        "_is_null": "Boolean",
+        "_lt": "Float",
+        "_lte": "Float",
+        "_neq": "Float",
+        "_nin": "[Float!]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Genesis": {
+      "fields": {
+        "alonzo": {
+          "args": {},
+          "type": "AlonzoGenesis"
+        },
+        "byron": {
+          "args": {},
+          "type": "ByronGenesis"
+        },
+        "shelley": {
+          "args": {},
+          "type": "ShelleyGenesis"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Hash28Hex": {
+      "kind": "SCALAR"
+    },
+    "Hash28Hex_comparison_exp": {
+      "inputFields": {
+        "_eq": "Hash28Hex",
+        "_in": "[Hash28Hex]",
+        "_neq": "Hash28Hex",
+        "_nin": "[Hash28Hex]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Hash32Hex": {
+      "kind": "SCALAR"
+    },
+    "Hash32Hex_comparison_exp": {
+      "inputFields": {
+        "_eq": "Hash32Hex",
+        "_in": "[Hash32Hex]",
+        "_neq": "Hash32Hex",
+        "_nin": "[Hash32Hex]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Hex": {
+      "kind": "SCALAR"
+    },
+    "Hex_comparison_exp": {
+      "inputFields": {
+        "_eq": "Hex",
+        "_in": "[Hex]",
+        "_neq": "Hex",
+        "_nin": "[Hex]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "IPv4": {
+      "kind": "SCALAR"
+    },
+    "IPv6": {
+      "kind": "SCALAR"
+    },
+    "Int": {
+      "kind": "SCALAR"
+    },
+    "Int_comparison_exp": {
+      "inputFields": {
+        "_eq": "Int",
+        "_gt": "Int",
+        "_gte": "Int",
+        "_in": "[Int!]",
+        "_is_null": "Boolean",
+        "_lt": "Int",
+        "_lte": "Int",
+        "_neq": "Int",
+        "_nin": "[Int!]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "JSON": {
+      "kind": "SCALAR"
+    },
+    "JSONObject": {
+      "kind": "SCALAR"
+    },
+    "Lovelace": {
+      "kind": "SCALAR"
+    },
+    "Mutation": {
+      "fields": {
+        "submitTransaction": {
+          "args": {
+            "transaction": "String!"
+          },
+          "type": "TransactionSubmitResponse!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "OffChainVoteAuthor": {
+      "fields": {
+        "name": {
+          "args": {},
+          "type": "String"
+        },
+        "offChainVoteData": {
+          "args": {},
+          "type": "OffChainVoteData"
+        },
+        "public_key": {
+          "args": {},
+          "type": "String"
+        },
+        "signature": {
+          "args": {},
+          "type": "String"
+        },
+        "warning": {
+          "args": {},
+          "type": "String"
+        },
+        "witness_algorithm": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "OffChainVoteAuthor_bool_exp": {
+      "inputFields": {
+        "_and": "[OffChainVoteAuthor_bool_exp]",
+        "_not": "OffChainVoteAuthor_bool_exp",
+        "_or": "[OffChainVoteAuthor_bool_exp]",
+        "name": "text_comparison_exp",
+        "offChainVoteData": "OffChainVoteData_bool_exp",
+        "public_key": "text_comparison_exp",
+        "signature": "text_comparison_exp",
+        "warning": "text_comparison_exp",
+        "witness_algorithm": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteAuthor_order_by": {
+      "inputFields": {
+        "name": "order_by",
+        "offChainVoteData": "OffChainVoteData_order_by",
+        "public_key": "order_by",
+        "signature": "order_by",
+        "warning": "order_by",
+        "witness_algorithm": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteData": {
+      "fields": {
+        "bytes": {
+          "args": {},
+          "type": "Hex"
+        },
+        "comment": {
+          "args": {},
+          "type": "String"
+        },
+        "hash": {
+          "args": {},
+          "type": "Hex"
+        },
+        "is_valid": {
+          "args": {},
+          "type": "Boolean"
+        },
+        "json": {
+          "args": {},
+          "type": "JSON"
+        },
+        "language": {
+          "args": {},
+          "type": "String"
+        },
+        "offChainVoteAuthor": {
+          "args": {},
+          "type": "OffChainVoteAuthor"
+        },
+        "offChainVoteDrepData": {
+          "args": {},
+          "type": "OffChainVoteDrepData"
+        },
+        "offChainVoteGovActionData": {
+          "args": {},
+          "type": "OffChainVoteGovActionData"
+        },
+        "offChainVoteReference": {
+          "args": {},
+          "type": "OffChainVoteReference"
+        },
+        "warning": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "OffChainVoteData_bool_exp": {
+      "inputFields": {
+        "_and": "[OffChainVoteData_bool_exp]",
+        "_not": "OffChainVoteData_bool_exp",
+        "_or": "[OffChainVoteData_bool_exp]",
+        "bytes": "Hex_comparison_exp",
+        "comment": "text_comparison_exp",
+        "hash": "Hex_comparison_exp",
+        "is_valid": "Boolean_comparison_exp",
+        "offChainVoteAuthor": "OffChainVoteAuthor_bool_exp",
+        "offChainVoteDrepData": "OffChainVoteDrepData_bool_exp",
+        "offChainVoteGovActionData": "OffChainVoteGovActionData_bool_exp",
+        "offChainVoteReference": "OffChainVoteReference_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteData_order_by": {
+      "inputFields": {
+        "bytes": "order_by",
+        "comment": "order_by",
+        "hash": "order_by",
+        "is_valid": "order_by",
+        "json": "order_by",
+        "offChainVoteAuthor": "OffChainVoteAuthor_order_by",
+        "offChainVoteDrepData": "OffChainVoteDrepData_order_by",
+        "offChainVoteGovActionData": "OffChainVoteGovActionData_order_by",
+        "offChainVoteReference": "OffChainVoteReference_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteDrepData": {
+      "fields": {
+        "given_name": {
+          "args": {},
+          "type": "String"
+        },
+        "image_hash": {
+          "args": {},
+          "type": "Hex"
+        },
+        "image_url": {
+          "args": {},
+          "type": "String"
+        },
+        "motivations": {
+          "args": {},
+          "type": "String"
+        },
+        "objectives": {
+          "args": {},
+          "type": "String"
+        },
+        "offChainVoteData": {
+          "args": {},
+          "type": "OffChainVoteData"
+        },
+        "payment_address": {
+          "args": {},
+          "type": "String"
+        },
+        "qualifications": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "OffChainVoteDrepData_bool_exp": {
+      "inputFields": {
+        "_and": "[OffChainVoteDrepData_bool_exp]",
+        "_not": "OffChainVoteDrepData_bool_exp",
+        "_or": "[OffChainVoteDrepData_bool_exp]",
+        "given_name": "text_comparison_exp",
+        "image_hash": "Hex_comparison_exp",
+        "image_url": "text_comparison_exp",
+        "motivations": "text_comparison_exp",
+        "objectives": "text_comparison_exp",
+        "offChainVoteData": "OffChainVoteData_bool_exp",
+        "payment_address": "text_comparison_exp",
+        "qualifications": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteDrepData_order_by": {
+      "inputFields": {
+        "given_name": "order_by",
+        "image_hash": "order_by",
+        "image_url": "order_by",
+        "motivations": "order_by",
+        "objectives": "order_by",
+        "offChainVoteData": "OffChainVoteData_order_by",
+        "payment_address": "order_by",
+        "qualifications": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteGovActionData": {
+      "fields": {
+        "OffChainVoteData": {
+          "args": {},
+          "type": "OffChainVoteData"
+        },
+        "abstract": {
+          "args": {},
+          "type": "String"
+        },
+        "motivation": {
+          "args": {},
+          "type": "String"
+        },
+        "rationale": {
+          "args": {},
+          "type": "String"
+        },
+        "title": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "OffChainVoteGovActionData_bool_exp": {
+      "inputFields": {
+        "_and": "[OffChainVoteGovActionData_bool_exp]",
+        "_not": "OffChainVoteGovActionData_bool_exp",
+        "_or": "[OffChainVoteGovActionData_bool_exp]",
+        "abstract": "text_comparison_exp",
+        "motivation": "text_comparison_exp",
+        "offChainVoteData": "OffChainVoteData_bool_exp",
+        "rationale": "text_comparison_exp",
+        "title": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteGovActionData_order_by": {
+      "inputFields": {
+        "abstract": "order_by",
+        "motivation": "order_by",
+        "offChainVoteData": "OffChainVoteData_order_by",
+        "rationale": "order_by",
+        "title": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteReference": {
+      "fields": {
+        "hash_algorithm": {
+          "args": {},
+          "type": "String"
+        },
+        "hash_digest": {
+          "args": {},
+          "type": "String"
+        },
+        "label": {
+          "args": {},
+          "type": "String"
+        },
+        "offChainVoteData": {
+          "args": {},
+          "type": "OffChainVoteData"
+        },
+        "uri": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "OffChainVoteReference_bool_exp": {
+      "inputFields": {
+        "_and": "[OffChainVoteReference_bool_exp]",
+        "_not": "OffChainVoteReference_bool_exp",
+        "_or": "[OffChainVoteReference_bool_exp]",
+        "hash_algorithm": "text_comparison_exp",
+        "hash_digest": "text_comparison_exp",
+        "label": "text_comparison_exp",
+        "offChainVoteData": "OffChainVoteData_bool_exp",
+        "uri": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteReference_order_by": {
+      "inputFields": {
+        "hash_algorithm": "order_by",
+        "hash_digest": "order_by",
+        "label": "order_by",
+        "offChainVoteData": "OffChainVoteData_order_by",
+        "uri": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "PaymentAddress": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "String!"
+        },
+        "summary": {
+          "args": {
+            "atBlock": "Int"
+          },
+          "type": "PaymentAddressSummary"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "PaymentAddressSummary": {
+      "fields": {
+        "assetBalances": {
+          "args": {},
+          "type": "[AssetBalance]!"
+        },
+        "utxosCount": {
+          "args": {},
+          "type": "Int!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Percentage": {
+      "kind": "SCALAR"
+    },
+    "Percentage_comparison_exp": {
+      "inputFields": {
+        "_eq": "Percentage",
+        "_gt": "Percentage",
+        "_gte": "Percentage",
+        "_lt": "Percentage",
+        "_lte": "Percentage",
+        "_neq": "Percentage"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "ProtocolParams": {
+      "fields": {
+        "a0": {
+          "args": {},
+          "type": "Float!"
+        },
+        "coinsPerUtxoByte": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "collateralPercent": {
+          "args": {},
+          "type": "Int"
+        },
+        "costModels": {
+          "args": {},
+          "type": "JSONObject"
+        },
+        "decentralisationParam": {
+          "args": {},
+          "type": "Float!"
+        },
+        "eMax": {
+          "args": {},
+          "type": "Int!"
+        },
+        "extraEntropy": {
+          "args": {},
+          "type": "JSONObject"
+        },
+        "keyDeposit": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "maxBlockBodySize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "maxBlockExMem": {
+          "args": {},
+          "type": "String"
+        },
+        "maxBlockExSteps": {
+          "args": {},
+          "type": "String"
+        },
+        "maxBlockHeaderSize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "maxCollateralInputs": {
+          "args": {},
+          "type": "Int"
+        },
+        "maxTxExMem": {
+          "args": {},
+          "type": "String"
+        },
+        "maxTxExSteps": {
+          "args": {},
+          "type": "String"
+        },
+        "maxTxSize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "maxValSize": {
+          "args": {},
+          "type": "String"
+        },
+        "minFeeA": {
+          "args": {},
+          "type": "Int!"
+        },
+        "minFeeB": {
+          "args": {},
+          "type": "Int!"
+        },
+        "minPoolCost": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "minUTxOValue": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "nOpt": {
+          "args": {},
+          "type": "Int!"
+        },
+        "poolDeposit": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "priceMem": {
+          "args": {},
+          "type": "Float"
+        },
+        "priceStep": {
+          "args": {},
+          "type": "Float"
+        },
+        "protocolVersion": {
+          "args": {},
+          "type": "JSONObject!"
+        },
+        "rho": {
+          "args": {},
+          "type": "Float!"
+        },
+        "tau": {
+          "args": {},
+          "type": "Float!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Query": {
+      "fields": {
+        "activeStake": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[ActiveStake_order_by!]",
+            "where": "ActiveStake_bool_exp"
+          },
+          "type": "[ActiveStake]!"
+        },
+        "activeStake_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[ActiveStake_order_by!]",
+            "where": "ActiveStake_bool_exp"
+          },
+          "type": "ActiveStake_aggregate!"
+        },
+        "ada": {
+          "args": {},
+          "type": "Ada!"
+        },
+        "assets": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Asset_order_by!]",
+            "where": "Asset_bool_exp"
+          },
+          "type": "[Asset]!"
+        },
+        "assets_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Asset_order_by!]",
+            "where": "Asset_bool_exp"
+          },
+          "type": "Asset_aggregate!"
+        },
+        "blocks": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Block_order_by!]",
+            "where": "Block_bool_exp"
+          },
+          "type": "[Block]!"
+        },
+        "blocks_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Block_order_by!]",
+            "where": "Block_bool_exp"
+          },
+          "type": "Block_aggregate!"
+        },
+        "cardano": {
+          "args": {},
+          "type": "Cardano!"
+        },
+        "cardanoDbMeta": {
+          "args": {},
+          "type": "CardanoDbMeta!"
+        },
+        "collateralInputs": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CollateralInput_order_by!]",
+            "where": "CollateralInput_bool_exp"
+          },
+          "type": "[CollateralInput]!"
+        },
+        "collateralInputs_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CollateralInput_order_by!]",
+            "where": "CollateralInput_bool_exp"
+          },
+          "type": "CollateralInput_aggregate!"
+        },
+        "collateralOutputs": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CollateralOutput_order_by!]",
+            "where": "CollateralOutput_bool_exp"
+          },
+          "type": "[CollateralOutput]!"
+        },
+        "collateralOutputs_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CollateralOutput_order_by!]",
+            "where": "CollateralOutput_bool_exp"
+          },
+          "type": "CollateralOutput_aggregate!"
+        },
+        "committeeDeRegistration": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CommitteeDeRegistration_order_by!]",
+            "where": "CommitteeDeRegistration_bool_exp"
+          },
+          "type": "[CommitteeDeRegistration]!"
+        },
+        "committeeHashes": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CommitteeHash_order_by!]",
+            "where": "CommitteeHash_bool_exp"
+          },
+          "type": "[CommitteeHash]!"
+        },
+        "committeeMembers": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CommitteeMember_order_by!]",
+            "where": "CommitteeMember_bool_exp"
+          },
+          "type": "[CommitteeMember]!"
+        },
+        "committeeRegistration": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CommitteeRegistration_order_by!]",
+            "where": "CommitteeRegistration_bool_exp"
+          },
+          "type": "[CommitteeRegistration]!"
+        },
+        "committees": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Committee_order_by!]",
+            "where": "Committee_bool_exp"
+          },
+          "type": "[Committee]!"
+        },
+        "delegationVotes": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[DelegationVote_order_by!]",
+            "where": "DelegationVote_bool_exp"
+          },
+          "type": "[DelegationVote]!"
+        },
+        "delegations": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Delegation_order_by!]",
+            "where": "Delegation_bool_exp"
+          },
+          "type": "[Delegation]"
+        },
+        "delegations_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Delegation_order_by!]",
+            "where": "Delegation_bool_exp"
+          },
+          "type": "Delegation_aggregate"
+        },
+        "drepHashes": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[DrepHash_order_by!]",
+            "where": "DrepHash_bool_exp"
+          },
+          "type": "[DrepHash]!"
+        },
+        "epochs": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Epoch_order_by!]",
+            "where": "Epoch_bool_exp"
+          },
+          "type": "[Epoch]!"
+        },
+        "epochs_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Epoch_order_by!]",
+            "where": "Epoch_bool_exp"
+          },
+          "type": "Epoch_aggregate!"
+        },
+        "genesis": {
+          "args": {},
+          "type": "Genesis!"
+        },
+        "offChainVoteAuthor": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[OffChainVoteAuthor_order_by!]",
+            "where": "OffChainVoteAuthor_bool_exp"
+          },
+          "type": "[OffChainVoteAuthor]!"
+        },
+        "offChainVoteData": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[OffChainVoteData_order_by!]",
+            "where": "OffChainVoteData_bool_exp"
+          },
+          "type": "[OffChainVoteData]!"
+        },
+        "offChainVoteDrepData": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[OffChainVoteDrepData_order_by!]",
+            "where": "OffChainVoteDrepData_bool_exp"
+          },
+          "type": "[OffChainVoteDrepData]!"
+        },
+        "offChainVoteGovActionData": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[OffChainVoteGovActionData_order_by!]",
+            "where": "OffChainVoteGovActionData_bool_exp"
+          },
+          "type": "[OffChainVoteGovActionData]!"
+        },
+        "offChainVoteReference": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[OffChainVoteReference_order_by!]",
+            "where": "OffChainVoteReference_bool_exp"
+          },
+          "type": "[OffChainVoteReference]!"
+        },
+        "paymentAddresses": {
+          "args": {
+            "addresses": "[String]!"
+          },
+          "type": "[PaymentAddress]"
+        },
+        "redeemers": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Redeemer_order_by!]",
+            "where": "Redeemer_bool_exp"
+          },
+          "type": "[Redeemer]!"
+        },
+        "redeemers_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Redeemer_order_by!]",
+            "where": "Redeemer_bool_exp"
+          },
+          "type": "Redeemer_aggregate!"
+        },
+        "rewards": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Reward_order_by!]",
+            "where": "Reward_bool_exp"
+          },
+          "type": "[Reward]!"
+        },
+        "rewards_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Reward_order_by!]",
+            "where": "Reward_bool_exp"
+          },
+          "type": "Reward_aggregate!"
+        },
+        "scripts": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Script_order_by!]",
+            "where": "Script_bool_exp"
+          },
+          "type": "[Script]!"
+        },
+        "scripts_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Script_order_by!]",
+            "where": "Script_bool_exp"
+          },
+          "type": "Script_aggregate!"
+        },
+        "stakeDeregistrations": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[StakeDeregistration_order_by!]",
+            "where": "StakeDeregistration_bool_exp"
+          },
+          "type": "[StakeDeregistration]"
+        },
+        "stakeDeregistrations_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[StakeDeregistration_order_by!]",
+            "where": "StakeDeregistration_bool_exp"
+          },
+          "type": "StakeDeregistration_aggregate"
+        },
+        "stakePools": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[StakePool_order_by!]",
+            "where": "StakePool_bool_exp"
+          },
+          "type": "[StakePool]"
+        },
+        "stakePools_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[StakePool_order_by!]",
+            "where": "StakePool_bool_exp"
+          },
+          "type": "StakePool_aggregate"
+        },
+        "stakeRegistrations": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[StakeRegistration_order_by!]",
+            "where": "StakeRegistration_bool_exp"
+          },
+          "type": "[StakeRegistration]"
+        },
+        "stakeRegistrations_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[StakeRegistration_order_by!]",
+            "where": "StakeRegistration_bool_exp"
+          },
+          "type": "StakeRegistration_aggregate"
+        },
+        "tokenMints": {
+          "args": {
+            "distinct_on": "[TokenMint_aggregate_distinct_on!]",
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TokenMint_order_by!]",
+            "where": "TokenMint_bool_exp"
+          },
+          "type": "[TokenMint]!"
+        },
+        "tokenMints_aggregate": {
+          "args": {
+            "distinct_on": "[TokenMint_aggregate_distinct_on!]",
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TokenMint_order_by!]",
+            "where": "TokenMint_bool_exp"
+          },
+          "type": "TokenMint_aggregate!"
+        },
+        "transactions": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Transaction_order_by!]",
+            "where": "Transaction_bool_exp"
+          },
+          "type": "[Transaction]!"
+        },
+        "transactions_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Transaction_order_by!]",
+            "where": "Transaction_bool_exp"
+          },
+          "type": "Transaction_aggregate!"
+        },
+        "utxos": {
+          "args": {
+            "distinct_on": "[TransactionOutput_distinct_on!]",
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TransactionOutput_order_by!]",
+            "where": "TransactionOutput_bool_exp"
+          },
+          "type": "[TransactionOutput]!"
+        },
+        "utxos_aggregate": {
+          "args": {
+            "distinct_on": "[TransactionOutput_distinct_on!]",
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TransactionOutput_order_by!]",
+            "where": "TransactionOutput_bool_exp"
+          },
+          "type": "TransactionOutput_aggregate!"
+        },
+        "votingAnchor": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[VotingAnchor_order_by!]",
+            "where": "VotingAnchor_bool_exp"
+          },
+          "type": "[VotingAnchor]!"
+        },
+        "withdrawals": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Withdrawal_order_by!]",
+            "where": "Withdrawal_bool_exp"
+          },
+          "type": "[Withdrawal]!"
+        },
+        "withdrawals_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Withdrawal_order_by!]",
+            "where": "Withdrawal_bool_exp"
+          },
+          "type": "Withdrawal_aggregate"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Redeemer": {
+      "fields": {
+        "datum": {
+          "args": {},
+          "type": "Datum"
+        },
+        "fee": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "index": {
+          "args": {},
+          "type": "Int!"
+        },
+        "purpose": {
+          "args": {},
+          "type": "String!"
+        },
+        "scriptHash": {
+          "args": {},
+          "type": "Hash28Hex!"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "unitMem": {
+          "args": {},
+          "type": "String!"
+        },
+        "unitSteps": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Redeemer_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "Redeemer_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Redeemer_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "Redeemer_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "Redeemer_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "Redeemer_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Redeemer_bool_exp": {
+      "inputFields": {
+        "_and": "[Redeemer_bool_exp]",
+        "_not": "Redeemer_bool_exp",
+        "_or": "[Redeemer_bool_exp]",
+        "datum": "Datum_bool_exp",
+        "fee": "text_comparison_exp",
+        "index": "Int_comparison_exp",
+        "purpose": "text_comparison_exp",
+        "scriptHash": "text_comparison_exp",
+        "transaction": "Transaction_bool_exp",
+        "unitMem": "text_comparison_exp",
+        "unitSteps": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Redeemer_max_fields": {
+      "fields": {
+        "fee": {
+          "args": {},
+          "type": "String"
+        },
+        "unitMem": {
+          "args": {},
+          "type": "String"
+        },
+        "unitSteps": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Redeemer_min_fields": {
+      "fields": {
+        "fee": {
+          "args": {},
+          "type": "String"
+        },
+        "unitMem": {
+          "args": {},
+          "type": "String"
+        },
+        "unitSteps": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Redeemer_order_by": {
+      "inputFields": {
+        "purpose": "order_by",
+        "scriptHash": "order_by",
+        "transaction": "Transaction_order_by",
+        "unitMem": "order_by",
+        "unitSteps": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Redeemer_sum_fields": {
+      "fields": {
+        "fee": {
+          "args": {},
+          "type": "String"
+        },
+        "unitMem": {
+          "args": {},
+          "type": "String"
+        },
+        "unitSteps": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Relay": {
+      "fields": {
+        "dnsName": {
+          "args": {},
+          "type": "String"
+        },
+        "dnsSrvName": {
+          "args": {},
+          "type": "String"
+        },
+        "ipv4": {
+          "args": {},
+          "type": "IPv4"
+        },
+        "ipv6": {
+          "args": {},
+          "type": "IPv6"
+        },
+        "port": {
+          "args": {},
+          "type": "Int"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Relay_bool_exp": {
+      "inputFields": {
+        "_and": "[Relay_bool_exp]",
+        "_not": "Relay_bool_exp",
+        "_or": "[Relay_bool_exp]",
+        "dnsName": "text_comparison_exp",
+        "dnsSrvName": "text_comparison_exp",
+        "ipv4": "text_comparison_exp",
+        "ipv6": "text_comparison_exp",
+        "port": "Int_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Reward": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "StakeAddress!"
+        },
+        "amount": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "earnedIn": {
+          "args": {},
+          "type": "Epoch!"
+        },
+        "receivedIn": {
+          "args": {},
+          "type": "Epoch"
+        },
+        "stakePool": {
+          "args": {},
+          "type": "StakePool"
+        },
+        "type": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Reward_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "Reward_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Reward_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "Reward_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "Reward_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "Reward_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Reward_bool_exp": {
+      "inputFields": {
+        "_and": "[Reward_bool_exp]",
+        "_not": "Reward_bool_exp",
+        "_or": "[Reward_bool_exp]",
+        "address": "StakeAddress_comparison_exp",
+        "amount": "text_comparison_exp",
+        "earnedIn": "Epoch_bool_exp",
+        "receivedIn": "Epoch_bool_exp",
+        "stakePool": "StakePool_bool_exp",
+        "type": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Reward_max_fields": {
+      "fields": {
+        "amount": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Reward_min_fields": {
+      "fields": {
+        "amount": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Reward_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "amount": "order_by",
+        "earnedIn": "Epoch_order_by",
+        "receivedIn": "Epoch_order_by",
+        "stakePool": "StakePool_order_by",
+        "type": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Reward_sum_fields": {
+      "fields": {
+        "amount": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Script": {
+      "fields": {
+        "hash": {
+          "args": {},
+          "type": "Hash28Hex!"
+        },
+        "serialisedSize": {
+          "args": {},
+          "type": "Int"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "type": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Script_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "Script_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Script_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "Script_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "Script_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "Script_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Script_bool_exp": {
+      "inputFields": {
+        "_and": "[Script_bool_exp]",
+        "_not": "Script_bool_exp",
+        "_or": "[Script_bool_exp]",
+        "serialisedSize": "Int_comparison_exp",
+        "transaction": "Transaction_bool_exp",
+        "type": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Script_max_fields": {
+      "fields": {
+        "serialisedSize": {
+          "args": {},
+          "type": "Int"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Script_min_fields": {
+      "fields": {
+        "serialisedSize": {
+          "args": {},
+          "type": "Int"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Script_order_by": {
+      "inputFields": {
+        "serialisedSize": "order_by",
+        "transaction": "Transaction_order_by",
+        "type": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Script_sum_fields": {
+      "fields": {
+        "serialisedSize": {
+          "args": {},
+          "type": "BigInt"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ShelleyGenesis": {
+      "fields": {
+        "activeSlotsCoeff": {
+          "args": {},
+          "type": "Float!"
+        },
+        "epochLength": {
+          "args": {},
+          "type": "Int!"
+        },
+        "genDelegs": {
+          "args": {},
+          "type": "JSONObject"
+        },
+        "initialFunds": {
+          "args": {},
+          "type": "JSONObject!"
+        },
+        "maxKESEvolutions": {
+          "args": {},
+          "type": "Int!"
+        },
+        "maxLovelaceSupply": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "networkId": {
+          "args": {},
+          "type": "String!"
+        },
+        "networkMagic": {
+          "args": {},
+          "type": "Int!"
+        },
+        "protocolParams": {
+          "args": {},
+          "type": "ShelleyProtocolParams!"
+        },
+        "securityParam": {
+          "args": {},
+          "type": "Int!"
+        },
+        "slotLength": {
+          "args": {},
+          "type": "Int!"
+        },
+        "slotsPerKESPeriod": {
+          "args": {},
+          "type": "Int!"
+        },
+        "staking": {
+          "args": {},
+          "type": "ShelleyGenesisStaking"
+        },
+        "systemStart": {
+          "args": {},
+          "type": "String!"
+        },
+        "updateQuorum": {
+          "args": {},
+          "type": "Int!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ShelleyGenesisStaking": {
+      "fields": {
+        "pools": {
+          "args": {},
+          "type": "JSONObject!"
+        },
+        "stake": {
+          "args": {},
+          "type": "JSONObject!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "ShelleyProtocolParams": {
+      "fields": {
+        "a0": {
+          "args": {},
+          "type": "Float!"
+        },
+        "decentralisationParam": {
+          "args": {},
+          "type": "Float!"
+        },
+        "eMax": {
+          "args": {},
+          "type": "Int!"
+        },
+        "extraEntropy": {
+          "args": {},
+          "type": "JSONObject"
+        },
+        "keyDeposit": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "maxBlockBodySize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "maxBlockHeaderSize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "maxTxSize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "minFeeA": {
+          "args": {},
+          "type": "Int!"
+        },
+        "minFeeB": {
+          "args": {},
+          "type": "Int!"
+        },
+        "minPoolCost": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "minUTxOValue": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "nOpt": {
+          "args": {},
+          "type": "Int!"
+        },
+        "poolDeposit": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "protocolVersion": {
+          "args": {},
+          "type": "JSONObject!"
+        },
+        "rho": {
+          "args": {},
+          "type": "Float!"
+        },
+        "tau": {
+          "args": {},
+          "type": "Float!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "SlotLeader": {
+      "fields": {
+        "description": {
+          "args": {},
+          "type": "String!"
+        },
+        "hash": {
+          "args": {},
+          "type": "Hash28Hex!"
+        },
+        "stakePool": {
+          "args": {},
+          "type": "StakePool"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "SlotLeader_bool_exp": {
+      "inputFields": {
+        "_and": "[SlotLeader_bool_exp]",
+        "_not": "SlotLeader_bool_exp",
+        "_or": "[SlotLeader_bool_exp]",
+        "description": "text_comparison_exp",
+        "hash": "Hash28Hex_comparison_exp",
+        "stakePool": "StakePool_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "SlotLeader_order_by": {
+      "inputFields": {
+        "hash": "order_by",
+        "stakePool": "StakePool_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "StakeAddress": {
+      "kind": "SCALAR"
+    },
+    "StakeAddress_comparison_exp": {
+      "inputFields": {
+        "_eq": "StakeAddress",
+        "_in": "[StakeAddress]",
+        "_neq": "StakeAddress",
+        "_nin": "[StakeAddress]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "StakeDeregistration": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "StakeAddress!"
+        },
+        "redeemer": {
+          "args": {},
+          "type": "Redeemer"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakeDeregistration_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "StakeDeregistration_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakeDeregistration_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakeDeregistration_bool_exp": {
+      "inputFields": {
+        "_and": "[StakeDeregistration_bool_exp]",
+        "_not": "StakeDeregistration_bool_exp",
+        "_or": "[StakeDeregistration_bool_exp]",
+        "address": "StakeAddress_comparison_exp",
+        "transaction": "Transaction_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "StakeDeregistration_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "transaction": "Transaction_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "StakePool": {
+      "fields": {
+        "activeStake": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[ActiveStake_order_by!]",
+            "where": "ActiveStake_bool_exp"
+          },
+          "type": "[ActiveStake]!"
+        },
+        "activeStake_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[ActiveStake_order_by!]",
+            "where": "ActiveStake_bool_exp"
+          },
+          "type": "ActiveStake_aggregate!"
+        },
+        "blocks": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Block_order_by!]",
+            "where": "Block_bool_exp"
+          },
+          "type": "[Block!]!"
+        },
+        "blocks_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Block_order_by!]",
+            "where": "Block_bool_exp"
+          },
+          "type": "Block_aggregate!"
+        },
+        "delegators": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Delegation_order_by!]",
+            "where": "Delegation_bool_exp"
+          },
+          "type": "[Delegation]!"
+        },
+        "delegators_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Delegation_order_by!]",
+            "where": "Delegation_bool_exp"
+          },
+          "type": "Delegation_aggregate!"
+        },
+        "fixedCost": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "hash": {
+          "args": {},
+          "type": "Hash28Hex!"
+        },
+        "id": {
+          "args": {},
+          "type": "StakePoolID!"
+        },
+        "margin": {
+          "args": {},
+          "type": "Float!"
+        },
+        "metadataHash": {
+          "args": {},
+          "type": "Hash32Hex"
+        },
+        "owners": {
+          "args": {},
+          "type": "[StakePoolOwner!]!"
+        },
+        "pledge": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "relays": {
+          "args": {},
+          "type": "[Relay]"
+        },
+        "retirements": {
+          "args": {},
+          "type": "[StakePoolRetirement]"
+        },
+        "rewardAddress": {
+          "args": {},
+          "type": "StakeAddress!"
+        },
+        "rewards": {
+          "args": {},
+          "type": "[Reward]!"
+        },
+        "rewards_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Reward_order_by!]",
+            "where": "Reward_bool_exp"
+          },
+          "type": "Reward_aggregate!"
+        },
+        "updatedIn": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "url": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakePoolID": {
+      "kind": "SCALAR"
+    },
+    "StakePoolID_comparison_exp": {
+      "inputFields": {
+        "_eq": "StakePoolID",
+        "_in": "[StakePoolID]",
+        "_neq": "StakePoolID",
+        "_nin": "[StakePoolID]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "StakePoolOwner": {
+      "fields": {
+        "hash": {
+          "args": {},
+          "type": "Hash28Hex!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakePoolOwner_bool_exp": {
+      "inputFields": {
+        "_and": "[StakePoolOwner_bool_exp]",
+        "_not": "StakePoolOwner_bool_exp",
+        "_or": "[StakePoolOwner_bool_exp]",
+        "hash": "Hash28Hex_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "StakePoolRetirement": {
+      "fields": {
+        "announcedIn": {
+          "args": {},
+          "type": "Transaction"
+        },
+        "inEffectFrom": {
+          "args": {},
+          "type": "Int!"
+        },
+        "retiredInEpoch": {
+          "args": {},
+          "type": "Epoch"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakePoolRetirement_bool_exp": {
+      "inputFields": {
+        "_and": "[StakePoolRetirement_bool_exp]",
+        "_not": "StakePoolRetirement_bool_exp",
+        "_or": "[StakePoolRetirement_bool_exp]",
+        "announcedIn": "Transaction_bool_exp",
+        "inEffectFrom": "Int_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "StakePool_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "StakePool_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakePool_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "StakePool_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "StakePool_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "StakePool_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakePool_bool_exp": {
+      "inputFields": {
+        "_and": "[StakePool_bool_exp]",
+        "_not": "StakePool_bool_exp",
+        "_or": "[StakePool_bool_exp]",
+        "hash": "Hash28Hex_comparison_exp",
+        "id": "StakePoolID_comparison_exp",
+        "margin": "Float_comparison_exp",
+        "metadataHash": "Hash32Hex_comparison_exp",
+        "owners": "StakePoolOwner_bool_exp",
+        "pledge": "text_comparison_exp",
+        "registrationTransaction": "Transaction_bool_exp",
+        "relays": "Relay_bool_exp",
+        "retirements": "StakePoolRetirement_bool_exp",
+        "rewardAddress": "text_comparison_exp",
+        "rewards": "Reward_bool_exp",
+        "url": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "StakePool_max_fields": {
+      "fields": {
+        "fixedCost": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "margin": {
+          "args": {},
+          "type": "Float"
+        },
+        "pledge": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakePool_min_fields": {
+      "fields": {
+        "fixedCost": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "margin": {
+          "args": {},
+          "type": "Float"
+        },
+        "pledge": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakePool_order_by": {
+      "inputFields": {
+        "fixedCost": "order_by",
+        "hash": "order_by",
+        "id": "order_by",
+        "margin": "order_by",
+        "pledge": "order_by",
+        "updatedIn": "Transaction_order_by",
+        "url": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "StakePool_sum_fields": {
+      "fields": {
+        "fixedCost": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "margin": {
+          "args": {},
+          "type": "Float"
+        },
+        "pledge": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakeRegistration": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "StakeAddress!"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakeRegistration_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "StakeRegistration_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakeRegistration_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "StakeRegistration_bool_exp": {
+      "inputFields": {
+        "_and": "[StakeRegistration_bool_exp]",
+        "_not": "StakeRegistration_bool_exp",
+        "_or": "[StakeRegistration_bool_exp]",
+        "address": "StakeAddress_comparison_exp",
+        "transaction": "Transaction_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "StakeRegistration_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "transaction": "Transaction_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "String": {
+      "kind": "SCALAR"
+    },
+    "Timestamp": {
+      "kind": "SCALAR"
+    },
+    "Token": {
+      "fields": {
+        "asset": {
+          "args": {},
+          "type": "Asset"
+        },
+        "quantity": {
+          "args": {},
+          "type": "String!"
+        },
+        "transactionOutput": {
+          "args": {},
+          "type": "TransactionOutput!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TokenMint": {
+      "fields": {
+        "asset": {
+          "args": {},
+          "type": "Asset!"
+        },
+        "quantity": {
+          "args": {},
+          "type": "String!"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TokenMint_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "TokenMint_aggregate_fields"
+        },
+        "nodes": {
+          "args": {},
+          "type": "[TokenMint!]!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TokenMint_aggregate_distinct_on": {
+      "enumValues": [
+        "assetId",
+        "policyId"
+      ],
+      "kind": "ENUM"
+    },
+    "TokenMint_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "TokenMint_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "TokenMint_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "TokenMint_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TokenMint_bool_exp": {
+      "inputFields": {
+        "_and": "[TokenMint_bool_exp]",
+        "_not": "TokenMint_bool_exp",
+        "_or": "[TokenMint_bool_exp]",
+        "asset": "Asset_bool_exp",
+        "quantity": "text_comparison_exp",
+        "transaction": "Transaction_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "TokenMint_max_fields": {
+      "fields": {
+        "quantity": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TokenMint_min_fields": {
+      "fields": {
+        "quantity": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TokenMint_order_by": {
+      "inputFields": {
+        "asset": "Asset_order_by",
+        "quantity": "order_by",
+        "transaction": "Transaction_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "TokenMint_sum_fields": {
+      "fields": {
+        "quantity": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Token_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "Token_aggregate_fields"
+        },
+        "nodes": {
+          "args": {},
+          "type": "[Token!]!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Token_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "Token_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "Token_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "Token_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Token_bool_exp": {
+      "inputFields": {
+        "_and": "[Token_bool_exp]",
+        "_not": "Token_bool_exp",
+        "_or": "[Token_bool_exp]",
+        "asset": "Asset_bool_exp",
+        "quantity": "text_comparison_exp",
+        "transactionOutput": "TransactionOutput_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Token_max_fields": {
+      "fields": {
+        "quantity": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Token_min_fields": {
+      "fields": {
+        "quantity": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Token_order_by": {
+      "inputFields": {
+        "asset": "Asset_order_by",
+        "quantity": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Token_sum_fields": {
+      "fields": {
+        "quantity": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Transaction": {
+      "fields": {
+        "block": {
+          "args": {},
+          "type": "Block"
+        },
+        "blockIndex": {
+          "args": {},
+          "type": "Int!"
+        },
+        "collateralInputs": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CollateralInput_order_by]",
+            "where": "CollateralInput_bool_exp"
+          },
+          "type": "[CollateralInput]"
+        },
+        "collateralInputs_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CollateralInput_order_by]",
+            "where": "CollateralInput_bool_exp"
+          },
+          "type": "CollateralInput_aggregate!"
+        },
+        "collateralOutputs": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CollateralOutput_order_by]",
+            "where": "CollateralOutput_bool_exp"
+          },
+          "type": "[CollateralOutput]"
+        },
+        "collateralOutputs_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[CollateralOutput_order_by]",
+            "where": "CollateralOutput_bool_exp"
+          },
+          "type": "CollateralOutput_aggregate!"
+        },
+        "deposit": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "fee": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "hash": {
+          "args": {},
+          "type": "Hash32Hex!"
+        },
+        "includedAt": {
+          "args": {},
+          "type": "DateTime!"
+        },
+        "inputs": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TransactionInput_order_by]",
+            "where": "TransactionInput_bool_exp"
+          },
+          "type": "[TransactionInput!]!"
+        },
+        "inputs_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TransactionInput_order_by]",
+            "where": "TransactionInput_bool_exp"
+          },
+          "type": "TransactionInput_aggregate!"
+        },
+        "invalidBefore": {
+          "args": {},
+          "type": "String"
+        },
+        "invalidHereafter": {
+          "args": {},
+          "type": "String"
+        },
+        "metadata": {
+          "args": {},
+          "type": "[TransactionMetadata]"
+        },
+        "mint": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Token_order_by]",
+            "where": "Token_bool_exp"
+          },
+          "type": "[Token!]!"
+        },
+        "mint_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Token_order_by]",
+            "where": "Token_bool_exp"
+          },
+          "type": "Token_aggregate!"
+        },
+        "outputs": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TransactionOutput_order_by]",
+            "where": "TransactionOutput_bool_exp"
+          },
+          "type": "[TransactionOutput]!"
+        },
+        "outputs_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TransactionOutput_order_by]",
+            "where": "TransactionOutput_bool_exp"
+          },
+          "type": "TransactionOutput_aggregate!"
+        },
+        "redeemers": {
+          "args": {},
+          "type": "[Redeemer]"
+        },
+        "referenceInputs": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TransactionInput_order_by]",
+            "where": "TransactionInput_bool_exp"
+          },
+          "type": "[TransactionInput!]!"
+        },
+        "referenceInputs_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[TransactionInput_order_by]",
+            "where": "TransactionInput_bool_exp"
+          },
+          "type": "TransactionInput_aggregate!"
+        },
+        "scriptSize": {
+          "args": {},
+          "type": "Int!"
+        },
+        "scripts": {
+          "args": {},
+          "type": "[Script]"
+        },
+        "size": {
+          "args": {},
+          "type": "Int!"
+        },
+        "totalOutput": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "validContract": {
+          "args": {},
+          "type": "Boolean!"
+        },
+        "withdrawals": {
+          "args": {},
+          "type": "[Withdrawal]!"
+        },
+        "withdrawals_aggregate": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[Withdrawal_order_by]",
+            "where": "Withdrawal_bool_exp"
+          },
+          "type": "Withdrawal_aggregate!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionInput": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "String!"
+        },
+        "redeemer": {
+          "args": {},
+          "type": "Redeemer"
+        },
+        "sourceTransaction": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "sourceTxHash": {
+          "args": {},
+          "type": "Hash32Hex!"
+        },
+        "sourceTxIndex": {
+          "args": {},
+          "type": "Int!"
+        },
+        "tokens": {
+          "args": {},
+          "type": "[Token]!"
+        },
+        "tokens_aggregate": {
+          "args": {},
+          "type": "Token_aggregate!"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "txHash": {
+          "args": {},
+          "type": "Hash32Hex!"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionInput_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "TransactionInput_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionInput_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "TransactionInput_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "TransactionInput_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "TransactionInput_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionInput_bool_exp": {
+      "inputFields": {
+        "_and": "[TransactionInput_bool_exp]",
+        "_not": "TransactionInput_bool_exp",
+        "_or": "[TransactionInput_bool_exp]",
+        "address": "text_comparison_exp",
+        "sourceTransaction": "Transaction_bool_exp",
+        "tokens": "Token_bool_exp",
+        "transaction": "Transaction_bool_exp",
+        "value": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "TransactionInput_max_fields": {
+      "fields": {
+        "tokens": {
+          "args": {},
+          "type": "Token_max_fields"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionInput_min_fields": {
+      "fields": {
+        "tokens": {
+          "args": {},
+          "type": "Token_min_fields"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionInput_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "sourceTxHash": "order_by",
+        "transaction": "Transaction_order_by",
+        "txHash": "order_by",
+        "value": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "TransactionInput_sum_fields": {
+      "fields": {
+        "tokens": {
+          "args": {},
+          "type": "Token_sum_fields"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionMetadata": {
+      "fields": {
+        "key": {
+          "args": {},
+          "type": "String!"
+        },
+        "value": {
+          "args": {},
+          "type": "JSON"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionMetadata_bool_exp": {
+      "inputFields": {
+        "key": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "TransactionOutput": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "String!"
+        },
+        "addressHasScript": {
+          "args": {},
+          "type": "Boolean!"
+        },
+        "datum": {
+          "args": {},
+          "type": "Datum"
+        },
+        "index": {
+          "args": {},
+          "type": "Int!"
+        },
+        "paymentCredential": {
+          "args": {},
+          "type": "Hash28Hex"
+        },
+        "script": {
+          "args": {},
+          "type": "Script"
+        },
+        "tokens": {
+          "args": {},
+          "type": "[Token!]!"
+        },
+        "tokens_aggregate": {
+          "args": {},
+          "type": "Token_aggregate!"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        },
+        "txHash": {
+          "args": {},
+          "type": "Hash32Hex!"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionOutput_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "TransactionOutput_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionOutput_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "TransactionOutput_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "TransactionOutput_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "TransactionOutput_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionOutput_bool_exp": {
+      "inputFields": {
+        "_and": "[TransactionOutput_bool_exp]",
+        "_not": "TransactionOutput_bool_exp",
+        "_or": "[TransactionOutput_bool_exp]",
+        "address": "text_comparison_exp",
+        "addressHasScript": "Boolean_comparison_exp",
+        "datum": "Datum_bool_exp",
+        "index": "Int_comparison_exp",
+        "script": "Script_bool_exp",
+        "tokens": "Token_bool_exp",
+        "transaction": "Transaction_bool_exp",
+        "value": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "TransactionOutput_distinct_on": {
+      "enumValues": [
+        "address"
+      ],
+      "kind": "ENUM"
+    },
+    "TransactionOutput_max_fields": {
+      "fields": {
+        "tokens": {
+          "args": {},
+          "type": "Token_max_fields"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionOutput_min_fields": {
+      "fields": {
+        "tokens": {
+          "args": {},
+          "type": "Token_min_fields"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionOutput_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "addressHasScript": "order_by",
+        "datum": "Transaction_order_by",
+        "index": "order_by",
+        "txHash": "order_by",
+        "value": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "TransactionOutput_sum_fields": {
+      "fields": {
+        "tokens": {
+          "args": {},
+          "type": "Token_sum_fields"
+        },
+        "value": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "TransactionSubmitResponse": {
+      "fields": {
+        "hash": {
+          "args": {},
+          "type": "String!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Transaction_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "Transaction_aggregate_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Transaction_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "Transaction_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "Transaction_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "Transaction_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Transaction_bool_exp": {
+      "inputFields": {
+        "_and": "[Transaction_bool_exp]",
+        "_not": "Transaction_bool_exp",
+        "_or": "[Transaction_bool_exp]",
+        "block": "Block_bool_exp",
+        "blockIndex": "Int_comparison_exp",
+        "collateral": "TransactionInput_bool_exp",
+        "deposit": "text_comparison_exp",
+        "fee": "text_comparison_exp",
+        "hash": "Hash32Hex_comparison_exp",
+        "includedAt": "Date_comparison_exp",
+        "inputs": "TransactionInput_bool_exp",
+        "invalidBefore": "text_comparison_exp",
+        "invalidHereafter": "text_comparison_exp",
+        "metadata": "TransactionMetadata_bool_exp",
+        "mint": "Token_bool_exp",
+        "outputs": "TransactionOutput_bool_exp",
+        "scriptSize": "Int_comparison_exp",
+        "size": "Int_comparison_exp",
+        "totalOutput": "text_comparison_exp",
+        "validContract": "Boolean_comparison_exp",
+        "withdrawals": "Withdrawal_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Transaction_max_fields": {
+      "fields": {
+        "deposit": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "fee": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "invalidBefore": {
+          "args": {},
+          "type": "String"
+        },
+        "invalidHereafter": {
+          "args": {},
+          "type": "String"
+        },
+        "mint": {
+          "args": {},
+          "type": "Token_max_fields"
+        },
+        "scriptSize": {
+          "args": {},
+          "type": "Int"
+        },
+        "size": {
+          "args": {},
+          "type": "Int"
+        },
+        "totalOutput": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "withdrawals": {
+          "args": {},
+          "type": "Withdrawal_max_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Transaction_min_fields": {
+      "fields": {
+        "deposit": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "fee": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "invalidBefore": {
+          "args": {},
+          "type": "String"
+        },
+        "invalidHereafter": {
+          "args": {},
+          "type": "String"
+        },
+        "mint": {
+          "args": {},
+          "type": "Token_min_fields"
+        },
+        "scriptSize": {
+          "args": {},
+          "type": "Int"
+        },
+        "size": {
+          "args": {},
+          "type": "Int"
+        },
+        "totalOutput": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "withdrawals": {
+          "args": {},
+          "type": "Withdrawal_min_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Transaction_order_by": {
+      "inputFields": {
+        "block": "Block_order_by",
+        "blockIndex": "order_by",
+        "deposit": "order_by",
+        "fee": "order_by",
+        "hash": "order_by",
+        "includedAt": "order_by",
+        "invalidBefore": "order_by_with_nulls",
+        "invalidHereafter": "order_by_with_nulls",
+        "scriptSize": "order_by_with_nulls",
+        "size": "order_by",
+        "totalOutput": "order_by",
+        "validContract": "order_by",
+        "withdrawals": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Transaction_sum_fields": {
+      "fields": {
+        "deposit": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "fee": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "mint": {
+          "args": {},
+          "type": "Token_sum_fields"
+        },
+        "scriptSize": {
+          "args": {},
+          "type": "BigInt"
+        },
+        "size": {
+          "args": {},
+          "type": "BigInt"
+        },
+        "totalOutput": {
+          "args": {},
+          "type": "Lovelace"
+        },
+        "withdrawals": {
+          "args": {},
+          "type": "Withdrawal_sum_fields"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "VRFVerificationKey": {
+      "kind": "SCALAR"
+    },
+    "VRFVerificationKey_comparison_exp": {
+      "inputFields": {
+        "_eq": "VRFVerificationKey",
+        "_in": "[VRFVerificationKey]",
+        "_is_null": "Boolean",
+        "_neq": "VRFVerificationKey",
+        "_nin": "[VRFVerificationKey]"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "VotingAnchor": {
+      "fields": {
+        "data_hash": {
+          "args": {},
+          "type": "Hex"
+        },
+        "offChainData": {
+          "args": {},
+          "type": "OffChainVoteData"
+        },
+        "type": {
+          "args": {},
+          "type": "String"
+        },
+        "url": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "VotingAnchor_bool_exp": {
+      "inputFields": {
+        "_and": "[VotingAnchor_bool_exp]",
+        "_not": "VotingAnchor_bool_exp",
+        "_or": "[VotingAnchor_bool_exp]",
+        "data_hash": "Hex_comparison_exp",
+        "offChainData": "OffChainVoteData_bool_exp",
+        "type": "text_comparison_exp",
+        "url": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "VotingAnchor_order_by": {
+      "inputFields": {
+        "data_hash": "order_by",
+        "offChainData": "OffChainVoteData_order_by",
+        "type": "order_by",
+        "url": "order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Withdrawal": {
+      "fields": {
+        "address": {
+          "args": {},
+          "type": "StakeAddress!"
+        },
+        "amount": {
+          "args": {},
+          "type": "Lovelace!"
+        },
+        "redeemer": {
+          "args": {},
+          "type": "Redeemer"
+        },
+        "transaction": {
+          "args": {},
+          "type": "Transaction!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Withdrawal_aggregate": {
+      "fields": {
+        "aggregate": {
+          "args": {},
+          "type": "Withdrawal_aggregate_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Withdrawal_aggregate_fields": {
+      "fields": {
+        "count": {
+          "args": {},
+          "type": "String!"
+        },
+        "max": {
+          "args": {},
+          "type": "Withdrawal_max_fields!"
+        },
+        "min": {
+          "args": {},
+          "type": "Withdrawal_min_fields!"
+        },
+        "sum": {
+          "args": {},
+          "type": "Withdrawal_sum_fields!"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Withdrawal_bool_exp": {
+      "inputFields": {
+        "_and": "[Withdrawal_bool_exp]",
+        "_not": "Withdrawal_bool_exp",
+        "_or": "[Withdrawal_bool_exp]",
+        "address": "StakeAddress_comparison_exp",
+        "amount": "text_comparison_exp",
+        "transaction": "Transaction_bool_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Withdrawal_max_fields": {
+      "fields": {
+        "amount": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Withdrawal_min_fields": {
+      "fields": {
+        "amount": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "Withdrawal_order_by": {
+      "inputFields": {
+        "address": "order_by",
+        "amount": "order_by",
+        "transaction": "Transaction_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "Withdrawal_sum_fields": {
+      "fields": {
+        "amount": {
+          "args": {},
+          "type": "Lovelace"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "order_by": {
+      "enumValues": [
+        "asc",
+        "desc"
+      ],
+      "kind": "ENUM"
+    },
+    "order_by_with_nulls": {
+      "enumValues": [
+        "asc",
+        "asc_nulls_first",
+        "asc_nulls_last",
+        "desc",
+        "desc_nulls_first",
+        "desc_nulls_last"
+      ],
+      "kind": "ENUM"
+    },
+    "text_comparison_exp": {
+      "inputFields": {
+        "_eq": "String",
+        "_gt": "String",
+        "_gte": "String",
+        "_ilike": "String",
+        "_in": "[String]",
+        "_is_null": "Boolean",
+        "_like": "String",
+        "_lt": "String",
+        "_lte": "String",
+        "_neq": "String",
+        "_nilike": "String",
+        "_nin": "[String]",
+        "_nlike": "String",
+        "_nsimilar": "String",
+        "_similar": "String"
+      },
+      "kind": "INPUT_OBJECT"
+    }
+  }
+}

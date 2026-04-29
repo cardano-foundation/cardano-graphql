@@ -1,0 +1,17 @@
+{
+  "anchor_block": null,
+  "description": "First 5 timelock (native) scripts. Inner list masked for the same reason as plutusScripts.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.scripts"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/scripts/timelockScripts.graphql",
+  "test_name": "timelockScripts",
+  "variables": {
+    "limit": 5
+  }
+}

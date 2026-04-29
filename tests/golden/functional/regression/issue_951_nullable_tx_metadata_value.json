@@ -1,0 +1,218 @@
+{
+  "anchor_block": 13228000,
+  "description": "Regression for cardano-foundation/cardano-graphql#951 \u2014 tx metadata with nullable value must not crash/error. Queries txs in the anchor block and asserts shape.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+          "metadata": []
+        },
+        {
+          "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee",
+          "metadata": []
+        },
+        {
+          "hash": "2d13c4beab27886890e5ba646d11f973594d4759395e5a12a3e135f5c3c61cd4",
+          "metadata": []
+        },
+        {
+          "hash": "2d426fc8b9813b8b0e9753ca0747cbd64571ceefea30720ad22cf4b78adb31d0",
+          "metadata": []
+        },
+        {
+          "hash": "344396ceccf5f558954cbe042f47666832db59089e6b4e3f1b346512388f5e0b",
+          "metadata": [
+            {
+              "key": "674",
+              "value": {
+                "msg": [
+                  "Minswap: Order Executed"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "hash": "45848dc17b8c2fd228732c00c51dd014446942dd0a3d8179acc23b3ea537018e",
+          "metadata": []
+        },
+        {
+          "hash": "46fee54a6c35531df8b05d6ddd10b0ed8614ce1bba60d55df08a0cef93e96936",
+          "metadata": [
+            {
+              "key": "674",
+              "value": {
+                "msg": [
+                  "Minswap: Market Order"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "hash": "71e868461ddd18100a1a6c9c862bbea437d8254afe4f33044d810a0c9be2ade5",
+          "metadata": [
+            {
+              "key": "674",
+              "value": {
+                "msg": [
+                  "Minswap: Order Executed"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "hash": "79332b4a18189952b0bbe046c63ce7b421b252c556926f9baabd995deaaec945",
+          "metadata": []
+        },
+        {
+          "hash": "80a99be03514fb1ae067189d3887aef95ccd2d93c87ae93b41952b9ff1b94588",
+          "metadata": []
+        },
+        {
+          "hash": "810de9325233cafab54814a4e1076dc8207562009681f92911cdb066a7d788d8",
+          "metadata": []
+        },
+        {
+          "hash": "84aa76f700c58c258d2a4ef385a170c73f6a30486fae35fc96c5d6d7b464c4b8",
+          "metadata": [
+            {
+              "key": "674",
+              "value": {
+                "msg": [
+                  "Minswap: Order Executed"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "hash": "8592451b54ae048cfe7057166db202cbe4ae4d47956ec2dc311ce6ec1f5bf3a4",
+          "metadata": []
+        },
+        {
+          "hash": "86517d0d378cc33822182833351c41ff0a6e93630d403d97ad3fac28faa5f2e2",
+          "metadata": [
+            {
+              "key": "674",
+              "value": {
+                "msg": [
+                  "Minswap: Withdraw fee sharing"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "hash": "8c4f6a4e15ac0c4413e281195e5f693d47178a02faf478d2f65b85caee8acb7b",
+          "metadata": []
+        },
+        {
+          "hash": "9250cb6c0bd506ce892cd5dc72fe6ae4903b3d1a382413145f2af8d86a8c318e",
+          "metadata": [
+            {
+              "key": "2",
+              "value": {
+                "string": "EMISOR ORLANDO SANCHEZ ESCORZA"
+              }
+            },
+            {
+              "key": "1",
+              "value": {
+                "string": "18273132026-03-30 17:21"
+              }
+            },
+            {
+              "key": "0",
+              "value": {
+                "string": "ec11dba79a6d957984c59fba85f3e20735aa6070f7ed294ddba38fce9bf59da2"
+              }
+            },
+            {
+              "key": "3",
+              "value": {
+                "string": "BENEFICIARIO NR FINANCE MEXICO, S.A. DE C.V."
+              }
+            },
+            {
+              "key": "4",
+              "value": {}
+            }
+          ]
+        },
+        {
+          "hash": "9be8f564f9b8ea970112ac683c145e8cfc43f8f3d83000e7ca0c327fe6402fac",
+          "metadata": [
+            {
+              "key": "674",
+              "value": {
+                "msg": [
+                  "Minswap: Withdraw fee sharing"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "hash": "a9553f4a3c137d29768db35e99037d2dcdb184976572cebedd6064afb8163eda",
+          "metadata": [
+            {
+              "key": "674",
+              "value": {
+                "msg": "VyFi: LP Order Process"
+              }
+            }
+          ]
+        },
+        {
+          "hash": "b4bd48bd4b2042a2db86bfcdd10d481f7e0152df431acfab38e81a8c760e7b86",
+          "metadata": [
+            {
+              "key": "0",
+              "value": {
+                "string": "07f8672cc5ac5e3189aeef9b9d7e026e0a089dad1cccddeada25154239e0ea41"
+              }
+            },
+            {
+              "key": "1",
+              "value": {
+                "string": "18271982026-03-30 17:21"
+              }
+            },
+            {
+              "key": "2",
+              "value": {
+                "string": "EMISOR LOURDES BOLA\u00d1OS ALFARO"
+              }
+            },
+            {
+              "key": "3",
+              "value": {
+                "string": "BENEFICIARIO NR FINANCE MEXICO, S.A. DE C.V."
+              }
+            },
+            {
+              "key": "4",
+              "value": {}
+            }
+          ]
+        },
+        {
+          "hash": "c7e2977af4ce4782531562bdbde15dc49707182b6584d3769405e05968b5920d",
+          "metadata": []
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/regression/issue_951_nullable_tx_metadata_value.graphql",
+  "regression_issue": 951,
+  "test_name": "issue_951_nullable_tx_metadata_value",
+  "variables": {
+    "blockNum": 13228000
+  }
+}

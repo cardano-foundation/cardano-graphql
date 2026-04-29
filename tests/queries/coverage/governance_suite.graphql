@@ -1,0 +1,29 @@
+query governanceSuite(
+  $limit: Int!
+) {
+  drepHashes(limit: $limit) {
+    has_script
+    view
+  }
+  committees(limit: $limit) {
+    quorum_numerator
+    quorum_denominator
+  }
+  committeeMembers(limit: $limit) {
+    expiration_epoch
+  }
+  committeeHashes(limit: $limit) {
+    has_script
+    raw
+  }
+  committeeRegistration(limit: $limit) {
+    cert_index
+  }
+  committeeDeRegistration(limit: $limit) {
+    cert_index
+  }
+  votingAnchor(limit: $limit) {
+    type
+    url
+  }
+}

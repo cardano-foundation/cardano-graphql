@@ -1,0 +1,26 @@
+{
+  "anchor_block": 13228000,
+  "description": "Sample of 5 reward withdrawals included before the anchor block. Bounded by block, but no order_by \u2014 inner list masked.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.withdrawals"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/withdrawals/withdrawalsSample.graphql",
+  "test_name": "withdrawalsSample",
+  "variables": {
+    "limit": 5,
+    "where": {
+      "transaction": {
+        "block": {
+          "number": {
+            "_lte": 13228000
+          }
+        }
+      }
+    }
+  }
+}

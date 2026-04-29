@@ -1,0 +1,17 @@
+query aggregatesStakeSuite(
+  $lte: Int!
+  $epochLt: Int!
+) {
+  stakeDeregistrations_aggregate(where: { transaction: { block: { number: { _lte: $lte } } } }) {
+    aggregate { count }
+  }
+  stakeRegistrations_aggregate(where: { transaction: { block: { number: { _lte: $lte } } } }) {
+    aggregate { count }
+  }
+  withdrawals_aggregate(where: { transaction: { block: { number: { _lte: $lte } } } }) {
+    aggregate { count }
+  }
+  rewards_aggregate(where: { earnedIn: { number: { _lt: $epochLt } } }) {
+    aggregate { count }
+  }
+}

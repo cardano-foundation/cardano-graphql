@@ -1,0 +1,18 @@
+{
+  "anchor_block": null,
+  "bucket": "light",
+  "description": "Single-address UTxO lookup (uses the `light` bucket address). Composition drifts as chain moves; entire utxos array is masked.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.utxos"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/utxos/utxoSetForAddress.graphql",
+  "test_name": "utxoSetForAddress",
+  "variables": {
+    "address": "addr1qy2jwtle4le7efsjcuc97u8l2223x68gpnfryhumgaj68ewdrfjy73njpyjkng0yv5tqxse9a5qyu5dh87xffcujy83s9saxvg"
+  }
+}

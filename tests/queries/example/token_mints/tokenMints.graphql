@@ -1,0 +1,35 @@
+query tokenMints (
+    $limit: Int
+    $offset: Int
+    $where: TokenMint_bool_exp
+) {
+    tokenMints (
+        limit: $limit
+        offset: $offset
+        where: $where
+    ) {
+        asset {
+            assetId
+            assetName
+            description
+            fingerprint
+            logo
+            name
+            policyId
+            ticker
+            url
+        }
+        quantity
+        transaction {
+            hash
+        }
+    }
+    tokenMints_aggregate {
+        aggregate {
+            count
+            sum {
+                quantity
+            }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{
+  "anchor_block": null,
+  "description": "Sample of 3 collateral outputs. Inner list masked (see collateralInputs rationale).",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.collateralOutputs"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/collateral_outputs/collateralOutputs.graphql",
+  "test_name": "collateralOutputs",
+  "variables": {
+    "limit": 3
+  }
+}

@@ -1,0 +1,15 @@
+query collateralOutputs (
+    $limit: Int
+){
+    collateralOutputs(
+        limit: $limit
+    ) {
+        address
+        transaction {
+            block {
+                number
+            }
+        }
+        value
+    }
+}

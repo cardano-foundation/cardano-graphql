@@ -1,0 +1,23 @@
+{
+  "anchor_block": null,
+  "description": "CIP-1694 governance root-field smoke test (drepHashes, committees, committeeMembers, committeeHashes, committeeRegistration, committeeDeRegistration, votingAnchor). All lists masked \u2014 composition drifts, shape is the signal.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.drepHashes",
+    "data.committees",
+    "data.committeeMembers",
+    "data.committeeHashes",
+    "data.committeeRegistration",
+    "data.committeeDeRegistration",
+    "data.votingAnchor"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/governance_suite.graphql",
+  "test_name": "governance_suite",
+  "variables": {
+    "limit": 3
+  }
+}

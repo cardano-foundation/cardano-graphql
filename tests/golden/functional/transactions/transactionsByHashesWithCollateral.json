@@ -1,0 +1,87 @@
+{
+  "anchor_block": 13228000,
+  "description": "Collateral input/output selection on anchor-block txs. Simple Minswap txs typically have no collateral, so arrays are expected empty; regression-guard for nulls/zero-aggregate serialization.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "collateralInputs": [],
+          "collateralInputs_aggregate": {
+            "aggregate": {
+              "count": "0",
+              "max": {
+                "value": null
+              },
+              "min": {
+                "value": null
+              },
+              "sum": {
+                "value": null
+              }
+            }
+          },
+          "collateralOutputs": [],
+          "collateralOutputs_aggregate": {
+            "aggregate": {
+              "count": "0",
+              "max": {
+                "value": null
+              },
+              "min": {
+                "value": null
+              },
+              "sum": {
+                "value": null
+              }
+            }
+          },
+          "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+        },
+        {
+          "collateralInputs": [],
+          "collateralInputs_aggregate": {
+            "aggregate": {
+              "count": "0",
+              "max": {
+                "value": null
+              },
+              "min": {
+                "value": null
+              },
+              "sum": {
+                "value": null
+              }
+            }
+          },
+          "collateralOutputs": [],
+          "collateralOutputs_aggregate": {
+            "aggregate": {
+              "count": "0",
+              "max": {
+                "value": null
+              },
+              "min": {
+                "value": null
+              },
+              "sum": {
+                "value": null
+              }
+            }
+          },
+          "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/example/transactions/transactionsByHashesWithCollateral.graphql",
+  "test_name": "transactionsByHashesWithCollateral",
+  "variables": {
+    "hashes": [
+      "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+      "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+query scriptsAggregate {
+    scripts_aggregate {
+        aggregate {
+          max {
+              serialisedSize
+          }
+          min {
+              serialisedSize
+          }
+          sum {
+              serialisedSize
+          }
+        }
+    }
+}

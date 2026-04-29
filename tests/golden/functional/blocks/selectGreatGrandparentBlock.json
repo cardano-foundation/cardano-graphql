@@ -1,0 +1,30 @@
+{
+  "anchor_block": 13228000,
+  "description": "Chain traversal three blocks backward from anchor+3.",
+  "expected": {
+    "data": {
+      "blocks": [
+        {
+          "hash": "42966f2ded52aa950607f56ca52e1556deb21cf569d16ae9d8ee3f62c4f03afc",
+          "previousBlock": {
+            "number": 13228002,
+            "previousBlock": {
+              "number": 13228001,
+              "previousBlock": {
+                "number": 13228000
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/example/blocks/selectGreatGrandparentBlock.graphql",
+  "test_name": "selectGreatGrandparentBlock",
+  "variables": {
+    "number": 13228003
+  }
+}

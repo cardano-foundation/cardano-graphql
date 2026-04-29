@@ -1,0 +1,13 @@
+query aggregatesSuite1(
+  $lte: Int!
+) {
+  blocks_aggregate(where: { number: { _lte: $lte } }) {
+    aggregate { count }
+  }
+  transactions_aggregate(where: { block: { number: { _lte: $lte } } }) {
+    aggregate { count }
+  }
+  stakePools_aggregate {
+    aggregate { count }
+  }
+}

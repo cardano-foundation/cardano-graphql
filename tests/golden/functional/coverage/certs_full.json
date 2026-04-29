@@ -1,0 +1,20 @@
+{
+  "anchor_block": 13228000,
+  "description": "Coverage for StakeDeregistration / CommitteeRegistration / CommitteeDeRegistration sub-fields. Lists masked.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.stakeDeregistrations",
+    "data.committeeRegistration",
+    "data.committeeDeRegistration"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/certs_full.graphql",
+  "test_name": "certs_full",
+  "variables": {
+    "limit": 2,
+    "lte": 13228000
+  }
+}

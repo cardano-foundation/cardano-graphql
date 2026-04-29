@@ -1,0 +1,13 @@
+{
+  "test_name": "drepInfo",
+  "description": "Off-chain DRep metadata lookup by `given_name`. `drep_name` is a placeholder — update at capture time with a name known to exist on your preprod instance (CIP-100 off-chain voting data).",
+  "network": "preprod",
+  "query_file": "queries/example/delegation_votes/drepInfo.graphql",
+  "variables": {
+    "drep_name": "PLACEHOLDER_REPLACE_AT_CAPTURE"
+  },
+  "anchor_block": null,
+  "ignore_paths": [],
+  "graphql_errors_allowed": false,
+  "expected": null
+}

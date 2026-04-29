@@ -1,0 +1,12 @@
+query transactionByIdWithMetadataIfPresent (
+    $hash: Hash32Hex!
+) {
+    transactions(
+        where: { hash: { _eq: $hash } }
+    ) {
+        metadata {
+            key
+            value
+        }
+    }
+}

@@ -1,0 +1,57 @@
+mainnet:
+  url: http://localhost:3100
+  anchor_block: 13228000
+  network_magic: 764824073
+  timeout_s: 300
+  # Address buckets for bucket-aware tests (Phase 1 goldens + Phase 2 perf tasks).
+  # Classification reflects empirical query cost at the anchor block:
+  #   light   — seen in 1-3 anchor-block txs (typical retail wallet)
+  #   medium  — recurring input/output address at anchor (active wallet)
+  #   heavy   — script/contract address (DEX, marketplace, smart-contract pool)
+  # `script_at_anchor` kept as an alias of `heavy` for backwards compatibility
+  # with existing goldens.
+  test_addresses:
+    light:            "addr1qy2jwtle4le7efsjcuc97u8l2223x68gpnfryhumgaj68ewdrfjy73njpyjkng0yv5tqxse9a5qyu5dh87xffcujy83s9saxvg"
+    medium:           "addr1q9h4f2vhh5vnqgnsejan3psw6mj3a504fxlqm2eh3262qufesdvfs83ulr22vprsv9mwnt0vgkfwxlflxkns32twqzdqjpq2na"
+    heavy:            "addr1z8p79rpkcdz8x9d6tft0x0dx5mwuzac2sa4gm8cvkw5hcny40nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0r9jz8"
+    script_at_anchor: "addr1z8p79rpkcdz8x9d6tft0x0dx5mwuzac2sa4gm8cvkw5hcny40nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0r9jz8"
+  test_asset_ids:
+    - "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb024d49444153"
+    - "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae6e7574636f696e"
+    - "0000001c1f5134859ee40556e75834b9929d1b393ab94858a3d27ae0494e4359"
+  test_stake_pools:
+    - id: "pool100wj94uzf54vup2hdzk0afng4dhjaqggt7j434mtgm8v2gfvfgp"
+  test_transactions_at_anchor:
+    - "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c"
+    - "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+  test_epochs:
+    finalized: 620
+  test_blocks:
+    anchor: 13228000
+
+preprod:
+  url: http://localhost:3102
+  anchor_block: 4500000                # >= all Rosetta-pinned governance blocks (max 4,384,711)
+  network_magic: 1
+  timeout_s: 300
+  # Preprod test data seeded from
+  #   cardano-rosetta-java/tests/data-endpoints/network_test_data.yaml
+  # (which is Rosetta's authoritative preprod pin set). See the plan file
+  # addendum for provenance of each value.
+  test_addresses: {}
+  test_stake_addresses:
+    primary:    "stake_test1uq7jxnqdcs2lxgu2tl2s3zna4hlsm8p0ud82pdr0cszsepqgprukn"
+    drep_voter: "stake_test1uql3k2h9kskfma8y53vth7wmptmlw8zxx67cx7c3pwj8sqs6zl0wr"
+  test_assets: []
+  test_stake_pools:
+    - id: "pool1d3gckjrphwytzw2uavgkxskwe08msumzsfj4lxnpcnpks3zjml3"
+  test_dreps:
+    key_hash_id:     "f72050aa252ccc6bf75747184910c0b9386298167656f935d6b6c26a"
+    script_hash_id:  "2d4cb680b5f400d3521d272b4295d61150e0eff3950ef4285406a953"
+  test_governance_blocks:
+    drep_vote_key_hash: 4384711          # tx b50e36b2631ea570...
+    pool_gov_vote_yes:  3698490          # tx a8c75a21a888cdf7...
+    pool_gov_vote_no:   2741994          # tx e2eeaf57af3a400a...
+  test_epochs: {}
+  test_blocks:
+    anchor: 4500000

@@ -1,0 +1,16 @@
+query selectGreatGrandchildBlock (
+    $number: Int!
+) {
+    blocks (where: { number: { _eq: $number}}) {
+        hash
+        nextBlock {
+            number
+            nextBlock {
+                number
+                nextBlock {
+                    number
+                }
+            }
+        }
+    }
+}

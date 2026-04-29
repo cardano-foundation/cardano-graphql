@@ -1,0 +1,43 @@
+{
+  "anchor_block": 13228000,
+  "description": "Transaction aggregates within the anchor block \u2014 count, min/max/sum of fee/size/totalOutput.",
+  "expected": {
+    "data": {
+      "blocks": [
+        {
+          "number": 13228000,
+          "transactions_aggregate": {
+            "aggregate": {
+              "count": "23",
+              "max": {
+                "fee": "867604",
+                "size": 6665,
+                "totalOutput": "6919691717940"
+              },
+              "min": {
+                "fee": "179185",
+                "size": 430,
+                "totalOutput": "4340487"
+              },
+              "sum": {
+                "deposit": "0",
+                "fee": "8452874",
+                "size": 37202,
+                "totalOutput": "13720891235899"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/example/blocks/aggregateDataWithinBlock.graphql",
+  "test_name": "aggregateDataWithinBlock",
+  "variables": {
+    "epochLessThan": 10000,
+    "number": 13228000
+  }
+}

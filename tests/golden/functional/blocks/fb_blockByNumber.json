@@ -1,0 +1,21 @@
+{
+  "anchor_block": 13228000,
+  "description": "Fireblocks: block hash lookup by number \u2014 anchor block.",
+  "expected": {
+    "data": {
+      "blocks": [
+        {
+          "hash": "7927dcf80137e86529ddd22dba3fd6ee4e0bc52de5b07bb2b75c922f7d226105"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/fireblocks/blockByNumber.graphql",
+  "test_name": "fb_blockByNumber",
+  "variables": {
+    "number": 13228000
+  }
+}

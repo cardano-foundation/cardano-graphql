@@ -1,0 +1,19 @@
+query stakePoolFull(
+  $id: StakePoolID!
+) {
+  stakePools(where: { id: { _eq: $id } }, limit: 1) {
+    id
+    relays {
+      ipv4
+      ipv6
+      dnsName
+      dnsSrvName
+      port
+    }
+    retirements {
+      announcedIn { hash }
+      inEffectFrom
+      retiredInEpoch { number }
+    }
+  }
+}

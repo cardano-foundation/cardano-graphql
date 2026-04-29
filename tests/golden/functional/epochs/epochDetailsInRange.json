@@ -1,0 +1,76 @@
+{
+  "anchor_block": null,
+  "description": "Three finalized epochs \u2014 adaPots and counts are immutable once epoch closes.",
+  "expected": {
+    "data": {
+      "epochs": [
+        {
+          "adaPots": {
+            "deposits_drep": "508000000000",
+            "deposits_proposal": "500000000000",
+            "deposits_stake": "4416956000000",
+            "fees": "31661206813",
+            "reserves": "6505611847068713",
+            "rewards": "747323502597053",
+            "treasury": "1654111958490226",
+            "utxo": "36087496074637195"
+          },
+          "blocksCount": "21278",
+          "fees": "41534723039",
+          "number": 618,
+          "output": "43665837606522067",
+          "transactionsCount": "126117"
+        },
+        {
+          "adaPots": {
+            "deposits_drep": "506500000000",
+            "deposits_proposal": "500000000000",
+            "deposits_stake": "4417784000000",
+            "fees": "41534723039",
+            "reserves": "6495142906218314",
+            "rewards": "750744770293136",
+            "treasury": "1657910753868450",
+            "utxo": "36090735750897061"
+          },
+          "blocksCount": "21112",
+          "fees": "37112078113",
+          "number": 619,
+          "output": "42456904366283967",
+          "transactionsCount": "118539"
+        },
+        {
+          "adaPots": {
+            "deposits_drep": "505500000000",
+            "deposits_proposal": "600000000000",
+            "deposits_stake": "4417392000000",
+            "fees": "37112078113",
+            "reserves": "6484531378542127",
+            "rewards": "751688662182025",
+            "treasury": "1661779429619056",
+            "utxo": "36096440525578679"
+          },
+          "blocksCount": "21180",
+          "fees": "36043727992",
+          "number": 620,
+          "output": "38411449199792456",
+          "transactionsCount": "113057"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.epochs[*].startedAt",
+    "data.epochs[*].lastBlockTime"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/epochs/epochDetailsInRange.graphql",
+  "test_name": "epochDetailsInRange",
+  "variables": {
+    "numbers": [
+      618,
+      619,
+      620
+    ]
+  }
+}

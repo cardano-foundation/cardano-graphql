@@ -1,0 +1,15 @@
+query issue_951_nullable_tx_metadata_value(
+  $blockNum: Int!
+) {
+  transactions(
+    where: { block: { number: { _eq: $blockNum } } }
+    order_by: { hash: asc }
+    limit: 20
+  ) {
+    hash
+    metadata {
+      key
+      value
+    }
+  }
+}

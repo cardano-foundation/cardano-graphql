@@ -12,3 +12,16 @@ result*
 bin
 state
 packages-cache/**
+
+# Claude Code per-user state (skills/ is intentionally tracked).
+.claude/settings.local.json
+.claude/projects/
+.claude/memory/
+
+# Un-ignore the cardano-graphql test framework's `coverage/` directories.
+# The blanket `*coverage` rule above was meant for test-coverage outputs
+# (htmlcov, coverage.xml) — these are framework source/data, not outputs.
+!tests/queries/coverage/
+!tests/queries/coverage/**
+!tests/golden/functional/coverage/
+!tests/golden/functional/coverage/**

@@ -1,0 +1,11 @@
+query aggregatesScriptsSuite {
+  collateralInputs_aggregate {
+    aggregate { count }
+  }
+  collateralOutputs_aggregate {
+    aggregate { count }
+  }
+  redeemers_aggregate {
+    aggregate { count }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "anchor_block": 13228000,
+  "description": "Staking aggregate coverage (stakeDeregistrations, stakeRegistrations, withdrawals, rewards). Masked.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.stakeDeregistrations_aggregate",
+    "data.stakeRegistrations_aggregate",
+    "data.withdrawals_aggregate",
+    "data.rewards_aggregate"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/aggregates_stake_suite.graphql",
+  "test_name": "aggregates_stake_suite",
+  "variables": {
+    "epochLt": 620,
+    "lte": 13228000
+  }
+}

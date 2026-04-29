@@ -1,0 +1,11 @@
+query transactionByHash(
+  $hash: Hash32Hex!
+) {
+  transactions(
+    where: { hash: { _eq: $hash } }
+  ) {
+    block {
+      number
+    }
+  }
+}

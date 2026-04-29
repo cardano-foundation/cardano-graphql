@@ -1,0 +1,22 @@
+{
+  "anchor_block": null,
+  "description": "ADA supply (circulating/max/total). circulating and total drift as rewards are paid; masked to shape-only.",
+  "expected": {
+    "data": {
+      "ada": {
+        "supply": {
+          "max": "45000000000000000"
+        }
+      }
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.ada.supply.circulating",
+    "data.ada.supply.total"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/ada/adaSupply.graphql",
+  "test_name": "adaSupply",
+  "variables": {}
+}

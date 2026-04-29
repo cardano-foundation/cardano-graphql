@@ -1,0 +1,57 @@
+{
+  "anchor_block": 13228000,
+  "description": "Reference-input selection on anchor-block txs \u2014 exercises CIP-31 reference inputs handling.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee",
+          "referenceInputs": [],
+          "referenceInputs_aggregate": {
+            "aggregate": {
+              "count": "0",
+              "max": {
+                "value": null
+              },
+              "min": {
+                "value": null
+              },
+              "sum": {
+                "value": null
+              }
+            }
+          }
+        },
+        {
+          "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+          "referenceInputs": [],
+          "referenceInputs_aggregate": {
+            "aggregate": {
+              "count": "0",
+              "max": {
+                "value": null
+              },
+              "min": {
+                "value": null
+              },
+              "sum": {
+                "value": null
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/example/transactions/transactionsByHashesWithReferenceInputs.graphql",
+  "test_name": "transactionsByHashesWithReferenceInputs",
+  "variables": {
+    "hashes": [
+      "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+      "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee"
+    ]
+  }
+}

@@ -1,0 +1,15 @@
+query plutusScripts (
+    $limit: Int
+){
+    scripts(
+        limit: $limit
+        where: { type: { _eq: "plutusV1" }}
+    ) {
+        hash
+        serialisedSize
+        transaction {
+            hash
+        }
+        type
+    }
+}
