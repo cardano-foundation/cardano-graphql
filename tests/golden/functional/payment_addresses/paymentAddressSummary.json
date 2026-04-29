@@ -1,0 +1,35 @@
+{
+  "anchor_block": 13228000,
+  "description": "paymentAddresses(...).summary(atBlock: anchor) \u2014 snapshot balances at pinned block.",
+  "expected": {
+    "data": {
+      "paymentAddresses": [
+        {
+          "summary": {
+            "assetBalances": [
+              {
+                "asset": {
+                  "assetId": "ada",
+                  "description": null,
+                  "name": "ada"
+                },
+                "quantity": "88674800000"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/example/paymentAddress/summary.graphql",
+  "test_name": "paymentAddressSummary_at_anchor",
+  "variables": {
+    "addresses": [
+      "addr1z8p79rpkcdz8x9d6tft0x0dx5mwuzac2sa4gm8cvkw5hcny40nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0r9jz8"
+    ],
+    "atBlock": 13228000
+  }
+}

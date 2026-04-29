@@ -1,0 +1,23 @@
+query transactionsInBlock(
+  $blockNum: Int!
+) {
+  transactions(
+    where: { block: { number: { _eq: $blockNum } } }
+    order_by: { hash: asc }
+  ) {
+    hash
+    fee
+    includedAt
+    inputs(order_by: { sourceTxHash: asc }) {
+      address
+      sourceTxHash
+      sourceTxIndex
+      value
+    }
+    outputs(order_by: { index: asc }) {
+      address
+      value
+      index
+    }
+  }
+}

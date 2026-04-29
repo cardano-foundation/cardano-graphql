@@ -1,0 +1,11 @@
+query stakeRegistrationsSample (
+    $limit: Int!
+    $where: StakeRegistration_bool_exp
+) {
+    stakeRegistrations (limit: $limit, where: $where) {
+        address
+        transaction {
+            hash
+        }
+    }
+}

@@ -1,0 +1,16 @@
+query collateralInputs (
+    $limit: Int
+){
+    collateralInputs(
+        limit: $limit
+    ) {
+        address
+        sourceTransaction {
+            hash
+        }
+        value
+        transaction {
+            hash
+        }
+    }
+}

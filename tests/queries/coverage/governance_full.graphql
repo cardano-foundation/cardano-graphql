@@ -1,0 +1,60 @@
+query governanceFull(
+  $limit: Int!
+) {
+  drepHashes(limit: $limit) {
+    has_script
+    raw
+    view
+  }
+  votingAnchor(limit: $limit) {
+    type
+    url
+    data_hash
+    offChainData { hash }
+  }
+  committees(limit: $limit) {
+    quorum_numerator
+    quorum_denominator
+    committeeMembers(limit: 1) {
+      committee { quorum_numerator }
+      committeeHash { has_script raw }
+    }
+  }
+  delegationVotes(limit: $limit) {
+    address
+    drep { view }
+    redeemer { scriptHash }
+    transaction { hash }
+  }
+  offChainVoteData(limit: $limit) {
+    bytes
+    comment
+    hash
+    is_valid
+    json
+    language
+    offChainVoteAuthor { name signature public_key warning offChainVoteData { hash } }
+    offChainVoteDrepData {
+      given_name
+      image_hash
+      image_url
+      payment_address
+      offChainVoteData { hash }
+    }
+    offChainVoteGovActionData {
+      title
+      abstract
+      motivation
+      rationale
+      OffChainVoteData { hash }
+    }
+    offChainVoteReference {
+      label
+      uri
+      hash_algorithm
+      hash_digest
+      offChainVoteData { hash }
+    }
+    warning
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "anchor_block": null,
+  "description": "Fireblocks: live UTxO set for address. Set composition drifts as the address transacts; we mask the entire utxos array and only assert the shape + that the query executes.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.utxos"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/fireblocks/utxoSetForAddresses.graphql",
+  "test_name": "fb_utxoSetForAddresses",
+  "variables": {
+    "addresses": [
+      "addr1z8p79rpkcdz8x9d6tft0x0dx5mwuzac2sa4gm8cvkw5hcny40nl483ag9lqzzd6t7vttq08fswfhwu8mqyt8pjan8k9s0r9jz8"
+    ]
+  }
+}

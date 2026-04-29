@@ -1,0 +1,205 @@
+name: GraphQL test framework
+
+on:
+  pull_request:
+    paths:
+      - "tests/**"
+      - "packages/api-cardano-db-hasura/schema.graphql"
+      - "packages/api-cardano-db-hasura/src/example_queries/**"
+      - ".github/workflows/graphql_tests.yml"
+  schedule:
+    # Nightly at 02:15 UTC — full functional + negative + schema check.
+    - cron: "15 2 * * *"
+    # Weekly on Sunday at 03:30 UTC — adds a perf smoke + baseline gate.
+    - cron: "30 3 * * 0"
+  workflow_dispatch:
+    inputs:
+      graphql_url:
+        description: "Override GRAPHQL_URL (default: from secrets or nightly endpoint)"
+        required: false
+        default: ""
+      run_perf:
+        description: "Also run Phase 2 perf smoke"
+        required: false
+        default: "false"
+
+env:
+  PYTHON_VERSION: "3.12"
+  CARDANO_NETWORK: mainnet
+
+jobs:
+  # --------------------------------------------------------------------------
+  # PR gate — fast path. Marker: pr. Runs only sanity + negative tests that
+  # don't require a live cardano-graphql endpoint (they'll be skipped unless
+  # GRAPHQL_URL is wired through secrets).
+  # --------------------------------------------------------------------------
+  pr-gate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Install deps
+        working-directory: tests
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv sync
+      - name: Collect-only (fail if structure broken)
+        working-directory: tests
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv run pytest --collect-only -q
+      - name: Run PR-gate suite (requires GRAPHQL_URL)
+        if: ${{ secrets.GRAPHQL_URL != '' }}
+        working-directory: tests
+        env:
+          CI: "true"
+          GRAPHQL_URL: ${{ secrets.GRAPHQL_URL }}
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv run python generate_report.py -- -m pr
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pr-gate-html-report
+          path: tests/reports/report.html
+
+  # --------------------------------------------------------------------------
+  # Nightly — full functional + negative + schema-snapshot drift check.
+  # --------------------------------------------------------------------------
+  nightly:
+    if: ${{ github.event_name == 'schedule' && github.event.schedule == '15 2 * * *' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Install deps
+        working-directory: tests
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv sync
+      - name: Run full suite
+        working-directory: tests
+        env:
+          CI: "true"
+          GRAPHQL_URL: ${{ secrets.GRAPHQL_URL_NIGHTLY }}
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv run python generate_report.py -- functional/ negative/ schema/ --tb=short
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nightly-html-report
+          path: tests/reports/report.html
+
+  # --------------------------------------------------------------------------
+  # Weekly — full suite + Phase 2 perf smoke + baseline gate.
+  # --------------------------------------------------------------------------
+  weekly:
+    if: ${{ github.event_name == 'schedule' && github.event.schedule == '30 3 * * 0' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Install deps
+        working-directory: tests
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv sync
+      - name: Run full functional suite
+        working-directory: tests
+        env:
+          CI: "true"
+          GRAPHQL_URL: ${{ secrets.GRAPHQL_URL_NIGHTLY }}
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv run pytest functional/ negative/ schema/ --tb=short
+      - name: Perf smoke (5 users / 120s / light mix)
+        working-directory: tests
+        env:
+          CI: "true"
+          GRAPHQL_URL: ${{ secrets.GRAPHQL_URL_NIGHTLY }}
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv run python performance/run_load.py \
+            --profile=smoke \
+            --load-profile=light \
+            --run-time=120s \
+            --csv-prefix=reports/perf-weekly
+      - name: Enforce perf baselines
+        working-directory: tests
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv run python performance/check_baselines.py \
+            reports/perf-weekly_stats.csv \
+            --ignore-aggregated
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: weekly-reports
+          path: |
+            tests/reports/
+
+  # --------------------------------------------------------------------------
+  # Manual — honours workflow_dispatch inputs.
+  # --------------------------------------------------------------------------
+  manual:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: Install deps
+        working-directory: tests
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv sync
+      - name: Resolve GRAPHQL_URL
+        id: cfg
+        run: |
+          if [ -n "${{ github.event.inputs.graphql_url }}" ]; then
+            echo "url=${{ github.event.inputs.graphql_url }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "url=${{ secrets.GRAPHQL_URL_NIGHTLY }}" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Functional + negative + schema
+        working-directory: tests
+        env:
+          CI: "true"
+          GRAPHQL_URL: ${{ steps.cfg.outputs.url }}
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv run pytest functional/ negative/ schema/ --tb=short
+      - name: Perf smoke (optional)
+        if: ${{ github.event.inputs.run_perf == 'true' }}
+        working-directory: tests
+        env:
+          CI: "true"
+          GRAPHQL_URL: ${{ steps.cfg.outputs.url }}
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          uv run python performance/run_load.py \
+            --profile=smoke --load-profile=light --run-time=120s \
+            --csv-prefix=reports/perf-manual
+          uv run python performance/check_baselines.py \
+            reports/perf-manual_stats.csv --ignore-aggregated

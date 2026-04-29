@@ -1,0 +1,18 @@
+{
+  "test_name": "rewardsForAddress",
+  "description": "Rewards history (up to 10) for the primary preprod stake address, earned in epochs <= a pinned cutoff. Bounded so results are immutable.",
+  "network": "preprod",
+  "query_file": "queries/example/rewards/rewardsForAddress.graphql",
+  "variables": {
+    "limit": 10,
+    "offset": 0,
+    "where": {
+      "address": { "_eq": "stake_test1uq7jxnqdcs2lxgu2tl2s3zna4hlsm8p0ud82pdr0cszsepqgprukn" },
+      "earnedIn": { "number": { "_lte": 220 } }
+    }
+  },
+  "anchor_block": null,
+  "ignore_paths": [],
+  "graphql_errors_allowed": false,
+  "expected": null
+}

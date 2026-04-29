@@ -1,0 +1,202 @@
+{
+  "anchor_block": 13228000,
+  "description": "All transactions in the anchor block, ordered by blockIndex asc \u2014 deterministic.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "blockIndex": 0,
+          "deposit": "0",
+          "fee": "207873",
+          "hash": "45848dc17b8c2fd228732c00c51dd014446942dd0a3d8179acc23b3ea537018e",
+          "size": 1188,
+          "totalOutput": "13449793613"
+        },
+        {
+          "blockIndex": 1,
+          "deposit": "0",
+          "fee": "191769",
+          "hash": "810de9325233cafab54814a4e1076dc8207562009681f92911cdb066a7d788d8",
+          "size": 822,
+          "totalOutput": "7589096147"
+        },
+        {
+          "blockIndex": 2,
+          "deposit": "0",
+          "fee": "561184",
+          "hash": "2d426fc8b9813b8b0e9753ca0747cbd64571ceefea30720ad22cf4b78adb31d0",
+          "size": 1576,
+          "totalOutput": "2703045340"
+        },
+        {
+          "blockIndex": 3,
+          "deposit": "0",
+          "fee": "480603",
+          "hash": "e0974d3da836e87189a9ead1097b80541030d7caec3875cf1abb15081523688f",
+          "size": 1001,
+          "totalOutput": "2146724162561"
+        },
+        {
+          "blockIndex": 4,
+          "deposit": "0",
+          "fee": "368632",
+          "hash": "07d2389cb085f736274bff6d9e9a3edbe6a2c48dd275c3030bd43e364f9f4c9c",
+          "size": 3373,
+          "totalOutput": "12692403414"
+        },
+        {
+          "blockIndex": 5,
+          "deposit": "0",
+          "fee": "179185",
+          "hash": "9250cb6c0bd506ce892cd5dc72fe6ae4903b3d1a382413145f2af8d86a8c318e",
+          "size": 541,
+          "totalOutput": "37231806"
+        },
+        {
+          "blockIndex": 6,
+          "deposit": "0",
+          "fee": "306354",
+          "hash": "79332b4a18189952b0bbe046c63ce7b421b252c556926f9baabd995deaaec945",
+          "size": 1070,
+          "totalOutput": "220661460353"
+        },
+        {
+          "blockIndex": 7,
+          "deposit": "0",
+          "fee": "205145",
+          "hash": "d00eaa56ab47107924f1868389715c785d6698f177c9b969875ffe60d16b3136",
+          "size": 1126,
+          "totalOutput": "6699299205"
+        },
+        {
+          "blockIndex": 8,
+          "deposit": "0",
+          "fee": "191241",
+          "hash": "b4bd48bd4b2042a2db86bfcdd10d481f7e0152df431acfab38e81a8c760e7b86",
+          "size": 714,
+          "totalOutput": "4340487"
+        },
+        {
+          "blockIndex": 9,
+          "deposit": "0",
+          "fee": "708602",
+          "hash": "8c4f6a4e15ac0c4413e281195e5f693d47178a02faf478d2f65b85caee8acb7b",
+          "size": 1054,
+          "totalOutput": "24641724"
+        },
+        {
+          "blockIndex": 10,
+          "deposit": "0",
+          "fee": "185081",
+          "hash": "46fee54a6c35531df8b05d6ddd10b0ed8614ce1bba60d55df08a0cef93e96936",
+          "size": 673,
+          "totalOutput": "70264623"
+        },
+        {
+          "blockIndex": 11,
+          "deposit": "0",
+          "fee": "388105",
+          "hash": "c7e2977af4ce4782531562bdbde15dc49707182b6584d3769405e05968b5920d",
+          "size": 4534,
+          "totalOutput": "10108210205"
+        },
+        {
+          "blockIndex": 12,
+          "deposit": "0",
+          "fee": "321421",
+          "hash": "86517d0d378cc33822182833351c41ff0a6e93630d403d97ad3fac28faa5f2e2",
+          "size": 1341,
+          "totalOutput": "6919691717940"
+        },
+        {
+          "blockIndex": 13,
+          "deposit": "0",
+          "fee": "350874",
+          "hash": "9be8f564f9b8ea970112ac683c145e8cfc43f8f3d83000e7ca0c327fe6402fac",
+          "size": 1885,
+          "totalOutput": "4473258480"
+        },
+        {
+          "blockIndex": 14,
+          "deposit": "0",
+          "fee": "676458",
+          "hash": "344396ceccf5f558954cbe042f47666832db59089e6b4e3f1b346512388f5e0b",
+          "size": 1329,
+          "totalOutput": "276615652"
+        },
+        {
+          "blockIndex": 15,
+          "deposit": "0",
+          "fee": "867604",
+          "hash": "71e868461ddd18100a1a6c9c862bbea437d8254afe4f33044d810a0c9be2ade5",
+          "size": 2196,
+          "totalOutput": "4257545489192"
+        },
+        {
+          "blockIndex": 16,
+          "deposit": "0",
+          "fee": "676727",
+          "hash": "84aa76f700c58c258d2a4ef385a170c73f6a30486fae35fc96c5d6d7b464c4b8",
+          "size": 1335,
+          "totalOutput": "182569425"
+        },
+        {
+          "blockIndex": 17,
+          "deposit": "0",
+          "fee": "215584",
+          "hash": "2d13c4beab27886890e5ba646d11f973594d4759395e5a12a3e135f5c3c61cd4",
+          "size": 1327,
+          "totalOutput": "969945885"
+        },
+        {
+          "blockIndex": 18,
+          "deposit": "0",
+          "fee": "221645",
+          "hash": "cef56cc11300cc6eb218c059250809f6a87e32174875195c63e6510f562990b0",
+          "size": 1304,
+          "totalOutput": "24915433"
+        },
+        {
+          "blockIndex": 19,
+          "deposit": "0",
+          "fee": "516198",
+          "hash": "a9553f4a3c137d29768db35e99037d2dcdb184976572cebedd6064afb8163eda",
+          "size": 6665,
+          "totalOutput": "49176694318"
+        },
+        {
+          "blockIndex": 20,
+          "deposit": "0",
+          "fee": "200437",
+          "hash": "27b8fe8bdf0da8a341ce51a432e1ad80ab32e4ed34d57639d41069a20f99bcee",
+          "size": 1019,
+          "totalOutput": "32448453980"
+        },
+        {
+          "blockIndex": 21,
+          "deposit": "0",
+          "fee": "250976",
+          "hash": "80a99be03514fb1ae067189d3887aef95ccd2d93c87ae93b41952b9ff1b94588",
+          "size": 699,
+          "totalOutput": "24571180396"
+        },
+        {
+          "blockIndex": 22,
+          "deposit": "0",
+          "fee": "181176",
+          "hash": "8592451b54ae048cfe7057166db202cbe4ae4d47956ec2dc311ce6ec1f5bf3a4",
+          "size": 430,
+          "totalOutput": "10766445720"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/example/transactions/orderedTransactionsInBlock.graphql",
+  "test_name": "orderedTransactionsInBlock",
+  "variables": {
+    "blockNumber": 13228000
+  }
+}

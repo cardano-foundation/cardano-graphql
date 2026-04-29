@@ -1,0 +1,28 @@
+query utxoSetForAddresses(
+  $addresses: [String]!
+) {
+  utxos(
+    where: { address: { _in: $addresses } }
+    order_by: { txHash: asc }
+  ) {
+    address
+    transaction {
+      block {
+        number
+      }
+    }
+    tokens {
+      asset {
+        assetName
+        fingerprint
+        name
+        policyId
+        ticker
+      }
+      quantity
+    }
+    txHash
+    index
+    value
+  }
+}

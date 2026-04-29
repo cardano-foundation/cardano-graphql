@@ -1,0 +1,52 @@
+query transactionFull(
+  $hashes: [Hash32Hex]!
+  $blockNum: Int!
+) {
+  transactions(where: { hash: { _in: $hashes } }, order_by: { hash: desc }) {
+    hash
+    invalidBefore
+    invalidHereafter
+    mint_aggregate { aggregate { count } }
+    withdrawals {
+      address
+      amount
+      transaction { hash }
+    }
+    inputs(order_by: { sourceTxHash: asc }) {
+      address
+      txHash
+      transaction { hash }
+      redeemer { scriptHash purpose }
+      tokens { asset { assetId } quantity }
+      tokens_aggregate { aggregate { count } }
+    }
+    outputs(order_by: { index: asc }) {
+      script { hash }
+      tokens_aggregate { aggregate { count } }
+    }
+    redeemers {
+      datum { hash }
+      fee
+      index
+      purpose
+      scriptHash
+      transaction { hash }
+      unitMem
+      unitSteps
+    }
+  }
+  blocks(where: { number: { _eq: $blockNum } }) {
+    opCert
+    protocolVersion
+    slotInEpoch
+    transactions(limit: 1) { hash }
+    slotLeader {
+      hash
+      description
+      stakePool { id }
+    }
+    epoch {
+      nonce
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "test_name": "delegationVotes",
+  "description": "Vote delegations by the Rosetta-pinned DRep voter address at a specific preprod epoch. CIP-1694 governance exercise. `epoch` value is a placeholder — refine at --update-golden time based on preprod chain state.",
+  "network": "preprod",
+  "query_file": "queries/example/delegation_votes/delegationVotes.graphql",
+  "variables": {
+    "addr": "stake_test1uql3k2h9kskfma8y53vth7wmptmlw8zxx67cx7c3pwj8sqs6zl0wr",
+    "epoch": 230
+  },
+  "anchor_block": 4500000,
+  "ignore_paths": [],
+  "graphql_errors_allowed": false,
+  "expected": null
+}

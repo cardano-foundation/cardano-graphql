@@ -1,0 +1,25 @@
+query certsFull(
+  $limit: Int!
+  $lte: Int!
+) {
+  stakeDeregistrations(
+    limit: $limit
+    where: { transaction: { block: { number: { _lte: $lte } } } }
+  ) {
+    address
+    redeemer { scriptHash }
+    transaction { hash }
+  }
+  committeeRegistration(limit: $limit) {
+    cert_index
+    cold_key_id
+    hot_key_id
+    transaction { hash }
+  }
+  committeeDeRegistration(limit: $limit) {
+    cert_index
+    cold_key_id
+    transaction { hash }
+    votingAnchor { url }
+  }
+}

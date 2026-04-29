@@ -1,0 +1,96 @@
+{
+  "anchor_block": null,
+  "description": "First 20 blocks after offset 3, ordered by number asc (historical, fully stable).",
+  "expected": {
+    "data": {
+      "blocks": [
+        {
+          "hash": "be06c81f4ad34d98578b67840d8e65b2aeb148469b290f6b5235e41b75d38572",
+          "number": 4
+        },
+        {
+          "hash": "46debe49b4fe0bc8c07cfe650de89632ca1ab5d58f04f8c88d8102da7ef79b7f",
+          "number": 5
+        },
+        {
+          "hash": "365201e928da50760fce4bdad09a7338ba43a43aff1c0e8d3ec458388c932ec8",
+          "number": 6
+        },
+        {
+          "hash": "e39d988dd815fc2cb234c2abef0d7f57765eeffb67331814bdb01c590359325e",
+          "number": 7
+        },
+        {
+          "hash": "2d9136c363c69ad07e1a918de2ff5aeeba4361e33b9c2597511874f211ca26e9",
+          "number": 8
+        },
+        {
+          "hash": "f4b2213e2ed6dc8d4da0f4234ced91714c8cbaa0f3750abb90d10aff23ce4d67",
+          "number": 9
+        },
+        {
+          "hash": "9cf9488161d63c7c414008737e1fab2eb8b85bf55dfe3fd8a09d2bc0c4327fe3",
+          "number": 10
+        },
+        {
+          "hash": "4bcd56b2e530a9690a94fb12a03cfd2cb7f25cdb229fda545c8cfddb57e13e24",
+          "number": 11
+        },
+        {
+          "hash": "7054258f4310b7803419681db10cd4a47707c5d5182ec9317fae7e2e93a399af",
+          "number": 12
+        },
+        {
+          "hash": "8b72b27a29fbe95f925f97afa0ce81c2e9aface13a539c733733153dadb8c928",
+          "number": 13
+        },
+        {
+          "hash": "5701cdc2396dc3f3ee32a13ea538d9a24059c3d00e7b928da3172835504001a9",
+          "number": 14
+        },
+        {
+          "hash": "8ee800d2d2cb242a5fe96a13371118a3ceb1cd068d5daa91385c351954bece35",
+          "number": 15
+        },
+        {
+          "hash": "d7900f547f96465c55ea3d8e6a9f6aeb88be200ad2138540eee716e94c1d211c",
+          "number": 16
+        },
+        {
+          "hash": "d0d37e4c9eabfe893c9c2cdaab7e90d450e570462a4dd315b6e7a6dcb54bd29a",
+          "number": 17
+        },
+        {
+          "hash": "0be303663930359a7c2d2d039458cd537110863c24f475bffb09b19dc3f9d54a",
+          "number": 18
+        },
+        {
+          "hash": "29dd9773213662145e5e399e3bc5dd2e86ef1f563bfb5309c552dc4349632278",
+          "number": 19
+        },
+        {
+          "hash": "7c6901c6346781c2bc5cbc49577490e336c2545c320ce4a61605bc71a9c5bed0",
+          "number": 20
+        },
+        {
+          "hash": "336113931d88269b5b56e7988fb4f9469e69aaa67ff84c6eef0f3e5adf1af442",
+          "number": 21
+        },
+        {
+          "hash": "ae230b33767ee2f0492347f062a48976cfd4367987c1a96fa5de52eba3268f5f",
+          "number": 22
+        },
+        {
+          "hash": "a076c4b645ec23e7e6fa909821edb3e28106d0ffa6325cd2d32e0f3b53c1c09b",
+          "number": 23
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "mainnet",
+  "query_file": "queries/example/blocks/first20Blocks.graphql",
+  "test_name": "first20Blocks",
+  "variables": {}
+}

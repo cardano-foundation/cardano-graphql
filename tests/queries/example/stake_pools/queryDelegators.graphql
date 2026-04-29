@@ -1,0 +1,14 @@
+# This query is used to find all stake addresses that are delegating to a stake pool (PoolID) at a given EpochNo
+query active_delegators_to_SPO (
+  $poolID: StakePoolID
+  $epochNo: Int
+) {
+  activeStake (
+     where: {
+      stakePoolId: {_eq: $poolID},
+      epoch: {number: {_eq: $epochNo}  }
+    }
+  ) {
+    address
+  }
+}

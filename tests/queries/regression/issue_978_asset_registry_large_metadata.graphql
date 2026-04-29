@@ -1,0 +1,19 @@
+query issue_978_asset_registry_large_metadata(
+  $assetIds: [Hex!]!
+) {
+  assets(
+    where: { assetId: { _in: $assetIds } }
+  ) {
+    assetId
+    policyId
+    assetName
+    fingerprint
+    name
+    ticker
+    description
+    decimals
+    url
+    logo
+    metadataHash
+  }
+}

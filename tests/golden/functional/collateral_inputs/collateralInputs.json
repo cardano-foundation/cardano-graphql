@@ -1,0 +1,17 @@
+{
+  "anchor_block": null,
+  "description": "Sample of 3 collateral inputs. Query takes only `$limit` (no where/order_by), so inner list is masked.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.collateralInputs"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/collateral_inputs/collateralInputs.graphql",
+  "test_name": "collateralInputs",
+  "variables": {
+    "limit": 3
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "anchor_block": null,
+  "description": "Three historical blocks fetched by hash (blocks 4, 5, 6). Exercises full Block field selection including previousBlock/nextBlock traversal and slotLeader.",
+  "expected": {
+    "data": {
+      "blocks": [
+        {
+          "epoch": {
+            "number": 0
+          },
+          "epochNo": 0,
+          "fees": "0",
+          "hash": "be06c81f4ad34d98578b67840d8e65b2aeb148469b290f6b5235e41b75d38572",
+          "nextBlock": {
+            "hash": "46debe49b4fe0bc8c07cfe650de89632ca1ab5d58f04f8c88d8102da7ef79b7f",
+            "number": 5
+          },
+          "number": 4,
+          "previousBlock": {
+            "hash": "52b7912de176ab76c233d6e08ccdece53ac1863c08cc59d3c5dec8d924d9b536",
+            "number": 3
+          },
+          "size": 665,
+          "slotLeader": {
+            "description": "ByronGenesisKey-7b00350597671036"
+          },
+          "slotNo": "3",
+          "transactionsCount": "0"
+        },
+        {
+          "epoch": {
+            "number": 0
+          },
+          "epochNo": 0,
+          "fees": "0",
+          "hash": "46debe49b4fe0bc8c07cfe650de89632ca1ab5d58f04f8c88d8102da7ef79b7f",
+          "nextBlock": {
+            "hash": "365201e928da50760fce4bdad09a7338ba43a43aff1c0e8d3ec458388c932ec8",
+            "number": 6
+          },
+          "number": 5,
+          "previousBlock": {
+            "hash": "be06c81f4ad34d98578b67840d8e65b2aeb148469b290f6b5235e41b75d38572",
+            "number": 4
+          },
+          "size": 665,
+          "slotLeader": {
+            "description": "ByronGenesisKey-be09d88f50165c5c"
+          },
+          "slotNo": "4",
+          "transactionsCount": "0"
+        },
+        {
+          "epoch": {
+            "number": 0
+          },
+          "epochNo": 0,
+          "fees": "0",
+          "hash": "365201e928da50760fce4bdad09a7338ba43a43aff1c0e8d3ec458388c932ec8",
+          "nextBlock": {
+            "hash": "e39d988dd815fc2cb234c2abef0d7f57765eeffb67331814bdb01c590359325e",
+            "number": 7
+          },
+          "number": 6,
+          "previousBlock": {
+            "hash": "46debe49b4fe0bc8c07cfe650de89632ca1ab5d58f04f8c88d8102da7ef79b7f",
+            "number": 5
+          },
+          "size": 665,
+          "slotLeader": {
+            "description": "ByronGenesisKey-888c451ae09a16fe"
+          },
+          "slotNo": "5",
+          "transactionsCount": "0"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.blocks[*].forgedAt"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/blocks/blocksByHashes.graphql",
+  "test_name": "blocksByHashes",
+  "variables": {
+    "hashes": [
+      "be06c81f4ad34d98578b67840d8e65b2aeb148469b290f6b5235e41b75d38572",
+      "46debe49b4fe0bc8c07cfe650de89632ca1ab5d58f04f8c88d8102da7ef79b7f",
+      "365201e928da50760fce4bdad09a7338ba43a43aff1c0e8d3ec458388c932ec8"
+    ]
+  }
+}

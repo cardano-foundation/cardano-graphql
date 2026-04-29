@@ -1,0 +1,27 @@
+query genesisFull {
+  genesis {
+    byron {
+      blockVersionData {
+        heavyDelThd
+        mpcThd
+        softforkRule {
+          initThd
+          minThd
+          thdDecrement
+        }
+        txFeePolicy {
+          summand
+          multiplier
+        }
+        unlockStakeEpoch
+        updateImplicit
+        updateProposalThd
+        updateVoteThd
+      }
+      avvmDistr
+      bootStakeholders
+      heavyDelegation
+      nonAvvmBalances
+    }
+  }
+}

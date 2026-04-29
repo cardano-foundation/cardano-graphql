@@ -1,0 +1,49 @@
+{
+  "anchor_block": null,
+  "description": "Regression for cardano-foundation/cardano-graphql#978 (fixed in #980) \u2014 token registry metadata must fetch without ERR_STRING_TOO_LONG. Metadata fields ignored since registry state drifts; the shape and presence of the asset row is what this asserts.",
+  "expected": {
+    "data": {
+      "assets": [
+        {
+          "assetId": "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb024d49444153",
+          "assetName": "4d49444153",
+          "fingerprint": "asset17nkk7q20qefetcu4er9l0pt4jlmnarfz2ccwa4",
+          "policyId": "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb02"
+        },
+        {
+          "assetId": "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae6e7574636f696e",
+          "assetName": "6e7574636f696e",
+          "fingerprint": "asset12h3p5l3nd5y26lr22am7y7ga3vxghkhf57zkhd",
+          "policyId": "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae"
+        },
+        {
+          "assetId": "0000001c1f5134859ee40556e75834b9929d1b393ab94858a3d27ae0494e4359",
+          "assetName": "494e4359",
+          "fingerprint": "asset1mc79zmej5axlk8sd4lhsetxnjy0zkeyvfp3zmc",
+          "policyId": "0000001c1f5134859ee40556e75834b9929d1b393ab94858a3d27ae0"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.assets[*].name",
+    "data.assets[*].ticker",
+    "data.assets[*].description",
+    "data.assets[*].decimals",
+    "data.assets[*].url",
+    "data.assets[*].logo",
+    "data.assets[*].metadataHash"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/regression/issue_978_asset_registry_large_metadata.graphql",
+  "regression_issue": 978,
+  "test_name": "issue_978_asset_registry_large_metadata",
+  "variables": {
+    "assetIds": [
+      "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb024d49444153",
+      "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae6e7574636f696e",
+      "0000001c1f5134859ee40556e75834b9929d1b393ab94858a3d27ae0494e4359"
+    ]
+  }
+}

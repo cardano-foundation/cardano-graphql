@@ -1,0 +1,3032 @@
+{
+  "anchor_block": null,
+  "description": "First three assets by assetId asc with registry metadata (CIP-26). Token registry fields are ignored since they can drift independently of chain state.",
+  "expected": {
+    "data": {
+      "assets": [
+        {
+          "assetId": "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb024d49444153",
+          "assetName": "4d49444153",
+          "fingerprint": "asset17nkk7q20qefetcu4er9l0pt4jlmnarfz2ccwa4",
+          "policyId": "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb02",
+          "tokenMints": [
+            {
+              "quantity": "1000000000",
+              "transaction": {
+                "hash": "7190f387f2a34c5d7377ef6544b86d8f105f829d006ef2e38def62a47d966929"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "ae3bd84bb0c1f01223b298caa4140bd8871b9db2ee100d90f86139bedf395f6b"
+              }
+            },
+            {
+              "quantity": "-17297",
+              "transaction": {
+                "hash": "6bddc723775299460e9eb3dff11d66e4f9794c04dce492ca5ab5086e2e812d7e"
+              }
+            },
+            {
+              "quantity": "394349667",
+              "transaction": {
+                "hash": "2e141732691f9c9783ade41c9937d26146185f233fb49827c84b8a8065dab256"
+              }
+            },
+            {
+              "quantity": "-89659867",
+              "transaction": {
+                "hash": "f379acf24e73dac0ba8584b54d4b3a2de56244b2a251e2d35423e76d6c7ae8f5"
+              }
+            },
+            {
+              "quantity": "-16058",
+              "transaction": {
+                "hash": "7077b3e1db4c1a58236b29abb4addc355e3f498e66bdf2c4d8f3b87eff9e873c"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "b4fab48d86fcac65cd3a08b8fd0d8b4e7d9af530f6676414a6b02ec30dcef2b8"
+              }
+            },
+            {
+              "quantity": "10000000000",
+              "transaction": {
+                "hash": "e14826ceaefcb023607ca347d2f431a9e8518f22baeadae337873e05d6fdbe77"
+              }
+            },
+            {
+              "quantity": "10000000000",
+              "transaction": {
+                "hash": "108741dc29f88683ff98dc337554d2b9c290e91a5dd4e9a0adc4655aad92ff16"
+              }
+            },
+            {
+              "quantity": "10000000000",
+              "transaction": {
+                "hash": "30d54b66fd7439ad8c7a10cd417f3e0bc7ba766123342fedcb138a45131982ff"
+              }
+            },
+            {
+              "quantity": "300000000",
+              "transaction": {
+                "hash": "ba036fc5caf4f257c63a8e6845eb95fcfc5dd720e8e687c59114f2baf93bb4d9"
+              }
+            },
+            {
+              "quantity": "-2425",
+              "transaction": {
+                "hash": "051f1e05958f3b4e3cc573a80641f395fdc62e3c50f05db9e3cfe780f79651eb"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "7eb8ff6dc294a00399eccf2696810af82aa5174dc9757a32ffdb43d55323980b"
+              }
+            },
+            {
+              "quantity": "-264",
+              "transaction": {
+                "hash": "e507abedda31fc0508b3ce72d53062c288f56eefe1b2c2ec7a805d5d5f482852"
+              }
+            },
+            {
+              "quantity": "-161323",
+              "transaction": {
+                "hash": "f0277dd9d55193f819e47875d1da34c1fe01623dbbb49f8c41f9510be9bb5287"
+              }
+            },
+            {
+              "quantity": "-97145858",
+              "transaction": {
+                "hash": "0399c03fd327b7a05038522f2a2b5a1776997ceb3f6c7bb1b4374484e14e08d5"
+              }
+            },
+            {
+              "quantity": "135239311",
+              "transaction": {
+                "hash": "f007806c82c7d8775916055781711c1b22d3dd9db5d7f3de8b6f458e547f7e96"
+              }
+            },
+            {
+              "quantity": "10000000000",
+              "transaction": {
+                "hash": "c9f2b3a3c944ac818d645cebd0d98e321845d9a0cf49d09c798b1ec1812b27c0"
+              }
+            },
+            {
+              "quantity": "15000000000",
+              "transaction": {
+                "hash": "bdd903a839afb857ad4285a77264a674bacd2a92f5de419b495a14ae148e203f"
+              }
+            },
+            {
+              "quantity": "5620",
+              "transaction": {
+                "hash": "5504113fb63f2559033b8b8a5ba87c1e6774519ee338323a09f6c8a366952a80"
+              }
+            },
+            {
+              "quantity": "8465009",
+              "transaction": {
+                "hash": "0df32550ce16b8290e4a5a493282c2061f7f519e88360e015a8a0b4dbeb4de83"
+              }
+            },
+            {
+              "quantity": "3936",
+              "transaction": {
+                "hash": "29fa9f7c865ac1901b5e9980baca91b2f7b174d8b075e67e8e0c10810a05e36d"
+              }
+            },
+            {
+              "quantity": "19983545",
+              "transaction": {
+                "hash": "083d05c30c0fb725cc83fd09d4ab18f897cb69f125e834c4c731ee7dccfbc7fb"
+              }
+            },
+            {
+              "quantity": "1678",
+              "transaction": {
+                "hash": "e6f97a8c1c40a5cedffd54440d3a975ce0adbe29a140853eba33f3fcbd306090"
+              }
+            },
+            {
+              "quantity": "2695015",
+              "transaction": {
+                "hash": "9789143fcd45125fb005ae4f5c3b533bb6aa9ca9eb1fd91e6acacf0b39857872"
+              }
+            },
+            {
+              "quantity": "7500000000",
+              "transaction": {
+                "hash": "3ae6d0b48339e7eb465e0cf3b3665d25cf26db20c5af82f26d130e268f743f96"
+              }
+            },
+            {
+              "quantity": "44651519",
+              "transaction": {
+                "hash": "16b371f3dfce5e1750bdea2c07bc11d73f5672a240685259e30559f2fd011c9b"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "1b5f25485720f09a59c9d088dc8e81aa9e24098203da6b8bca49cbe50bdafdda"
+              }
+            },
+            {
+              "quantity": "299946342",
+              "transaction": {
+                "hash": "26e5a51f989f0bfafff7673f204e3034e7dae1ddc8049a6ffc066bf95523f8be"
+              }
+            },
+            {
+              "quantity": "100000000",
+              "transaction": {
+                "hash": "6fad47d8f437e48d7c91b81bd48aac82a35513248071a203962e24db3654a2f8"
+              }
+            },
+            {
+              "quantity": "1000000000",
+              "transaction": {
+                "hash": "ddddb0e4f07b3d07f4283085df3ad9b130c60a37ce7cabdc9e236bd2720ef4c8"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "1b38487b45bf8f422769ecd283fe00a3d255fe61e1c3422e16c01373ca46d231"
+              }
+            },
+            {
+              "quantity": "49285597",
+              "transaction": {
+                "hash": "81c6f418b8dd6bcaf90569ed753547711bb2abe2365a2ad5f60bbb5448ce7512"
+              }
+            },
+            {
+              "quantity": "273163058",
+              "transaction": {
+                "hash": "a4efce6c758ff02e4c3b7ec1575407e2ea67fc3b2829082c60cb4678adfac96a"
+              }
+            },
+            {
+              "quantity": "100000000",
+              "transaction": {
+                "hash": "dd0f341e217cb2a770356005e6bce4acb238bede7af210686cba7fcef767b6f9"
+              }
+            },
+            {
+              "quantity": "81973909",
+              "transaction": {
+                "hash": "fbba55a05d9c26a4e136196f783a4c8fa12ab3d30e3e4fb3e793e8f9d826d488"
+              }
+            },
+            {
+              "quantity": "103",
+              "transaction": {
+                "hash": "8bbcf2c8d960d396f5cc56a4adbf92d39d02318689d4e5ea9c929be48e3cc8da"
+              }
+            },
+            {
+              "quantity": "409074595",
+              "transaction": {
+                "hash": "5ddbcf6d7f8e434598efe8b56d4dd7159cfffcfba5d008bc8b27e868726fef32"
+              }
+            },
+            {
+              "quantity": "-49286727",
+              "transaction": {
+                "hash": "4427753232996fcb481e97e2683bc8cf8d17a0e3866eaec158b74a2a683a9d68"
+              }
+            },
+            {
+              "quantity": "90000000",
+              "transaction": {
+                "hash": "5fb89699ba8e3beccba03f342e516ed5e97509f593c757b33d56548a580dbcc7"
+              }
+            },
+            {
+              "quantity": "52622295",
+              "transaction": {
+                "hash": "9530934a8076209cc072431062c08a97765703cf945d398d5cfe1315b21b4622"
+              }
+            },
+            {
+              "quantity": "44962973",
+              "transaction": {
+                "hash": "801fc00745da1c7ccc7869db40aae97e311236e4cc90c6b2e1c845d0f2987d75"
+              }
+            },
+            {
+              "quantity": "70647597",
+              "transaction": {
+                "hash": "56157b47b988a05209b216a2017b02ff2975131b1f8c58fb532274d7e66e85b5"
+              }
+            },
+            {
+              "quantity": "48020962",
+              "transaction": {
+                "hash": "b35eff3729fe5cc358ebe6395f00e1e6ecf6c8a9aeda7b26f40a0a3abe50a4e5"
+              }
+            },
+            {
+              "quantity": "500000000",
+              "transaction": {
+                "hash": "a08da844c9073580f1ef8f654b9760a374d6dd5213c101d51443bbe4996776ff"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "559fec037c70b2825dd0ec25eb51af7da62a532a1ba53ae96890cd1604c5af4c"
+              }
+            },
+            {
+              "quantity": "50000000",
+              "transaction": {
+                "hash": "f683cb328800f5c1bbff1fb3cb28842c5a2968519a400f2cd0ab4173f74fc2a1"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "c43656c44b7886d76db6b4b148c023c3d11e48b5e00700121aac4718c167cdfd"
+              }
+            },
+            {
+              "quantity": "489",
+              "transaction": {
+                "hash": "da99972d84c62ff877b64d27524bb617721cda5d994ae4431e5d5483088ea776"
+              }
+            },
+            {
+              "quantity": "5842308",
+              "transaction": {
+                "hash": "2b38fd92288b8674a53b6467a9c56262dcdd01a9526a07ef016fa6aff18bad63"
+              }
+            },
+            {
+              "quantity": "-40005254",
+              "transaction": {
+                "hash": "58c394138cea4f01598dc2e9aaaafb1d8fbf633ca7b470951d5477d3ee119c66"
+              }
+            },
+            {
+              "quantity": "2999",
+              "transaction": {
+                "hash": "8edb097e35678f0b512b9bc345718eacad80178f362247c6b042acd86ed61b6b"
+              }
+            },
+            {
+              "quantity": "-48026956",
+              "transaction": {
+                "hash": "64ed59fd5849bc8accdcb0b6a87299f5caad8e591bc4f1ce53a632c2ae0ed694"
+              }
+            },
+            {
+              "quantity": "352690549",
+              "transaction": {
+                "hash": "4c13d6f73a66bcab1b86ac87d8758502d25fffdb3f3aff205e1427e390fdd3e9"
+              }
+            },
+            {
+              "quantity": "103809263",
+              "transaction": {
+                "hash": "767fd110031e39bf0e41dae058666f1d51cfe7e3bee61019759ffe79cc49f370"
+              }
+            },
+            {
+              "quantity": "10928",
+              "transaction": {
+                "hash": "9cdfbc88aadb3d54b5638901d9d023bee907643940537724cffdc37f73d09c7a"
+              }
+            },
+            {
+              "quantity": "8257",
+              "transaction": {
+                "hash": "10a1da881c5e07875e423551be89f09175a53e3bb537de0dc80145f9e6999a4a"
+              }
+            },
+            {
+              "quantity": "-409151882",
+              "transaction": {
+                "hash": "e72aba260f116b0129efa332b402cf55c7a099b5bf0692d5e2ef87fac720e956"
+              }
+            },
+            {
+              "quantity": "94973650",
+              "transaction": {
+                "hash": "8ffecde11b089cc67491ac1f412a589369751ad8ae363792da3ce5862006640d"
+              }
+            },
+            {
+              "quantity": "121835",
+              "transaction": {
+                "hash": "958f61ed9fed9857ef2704205952a4f319db14109be95f898babefd28f75d8c7"
+              }
+            },
+            {
+              "quantity": "3470185",
+              "transaction": {
+                "hash": "89aac8aa68c0e36b6416fbe7732d82eee04469dc3bbb549a238afdbfb67b21da"
+              }
+            },
+            {
+              "quantity": "300000000",
+              "transaction": {
+                "hash": "3f827f03e892a47cc9426fa97f33175617a9aa2b97180e3e5c6ac454d61b6f90"
+              }
+            },
+            {
+              "quantity": "-1331",
+              "transaction": {
+                "hash": "fd519ed493151f9f509b5976c88b59c124514e499e8018e6f94f9aa10fe07cfa"
+              }
+            },
+            {
+              "quantity": "-352729311",
+              "transaction": {
+                "hash": "ac868ece2e2f790346f60a1a27a133962d5791b640f764d24c32782caa09c4a1"
+              }
+            },
+            {
+              "quantity": "800000000",
+              "transaction": {
+                "hash": "67c55ab4cf4e5a21bb351df961bfa60d830583eddd4aeee5214cb5d13ddd5852"
+              }
+            },
+            {
+              "quantity": "997888961",
+              "transaction": {
+                "hash": "90d8b887c26f5d60ff3c170c4f165dbbf084b6fdabce8b081051728682d9d65c"
+              }
+            },
+            {
+              "quantity": "1100000000",
+              "transaction": {
+                "hash": "7df7cc1aa219a2804403bc53176d6100ea4cf44c74f782b4ece4d49730c6c13c"
+              }
+            },
+            {
+              "quantity": "80813832",
+              "transaction": {
+                "hash": "22653dcd982b0a61ab5c77ee230e72fd87432444dd99a776a777e7f0d7b5d9b9"
+              }
+            },
+            {
+              "quantity": "1003613637",
+              "transaction": {
+                "hash": "21be601233dad8516afc4215a782c513cb67b1e120323b4af15d0ae8d2bd9fda"
+              }
+            },
+            {
+              "quantity": "-1000010767",
+              "transaction": {
+                "hash": "7fc7a97aef106b32e05077a3297d2cfea606e25f8ae277c6a65616e0b6e68421"
+              }
+            },
+            {
+              "quantity": "-56447874",
+              "transaction": {
+                "hash": "0c64187e8adea5c326958361b5f5a2663e59589ae9df93064978bdbb4d3a0549"
+              }
+            },
+            {
+              "quantity": "1150000000",
+              "transaction": {
+                "hash": "79a1f3bd9fc3b6aa120fd399e0f48f1c58abfbb835ae903b851a82c1ebf87bb9"
+              }
+            },
+            {
+              "quantity": "125333797",
+              "transaction": {
+                "hash": "2503d3de8d56fc3708fae6634d6bf1a1cb67c845aa452885463c9f42b1908868"
+              }
+            },
+            {
+              "quantity": "155993258",
+              "transaction": {
+                "hash": "c2252e558c8551d0fa2db2e378ceb4f6de9638990e00fe592e2813c40d535ca0"
+              }
+            },
+            {
+              "quantity": "-306423514",
+              "transaction": {
+                "hash": "a474f63cef9115f71f36576c85425bcd192d82cec3846f5c6d4c174bc0a3611f"
+              }
+            },
+            {
+              "quantity": "4020751",
+              "transaction": {
+                "hash": "572d626c69a1a5ec489a7be0dd3893363a8e580b47f8e0cfebabb89b888ff99e"
+              }
+            },
+            {
+              "quantity": "750000000",
+              "transaction": {
+                "hash": "f67c6d37cd5ec5eab453b317975770d04a5886e6ede8d39f4190e1895dbc3359"
+              }
+            },
+            {
+              "quantity": "132309770",
+              "transaction": {
+                "hash": "e54aec5afb369110cb47b5f98eb2b858656f927e26621dc40ea38537846478da"
+              }
+            },
+            {
+              "quantity": "158477660",
+              "transaction": {
+                "hash": "4a5a866a94f87122c4f1866db8de39a1be7daf85ee610a1d3b8972997839f2dd"
+              }
+            },
+            {
+              "quantity": "1240658810",
+              "transaction": {
+                "hash": "a96c1d97e221f355d40ca9c97fd90778243fcf311e62cf0aba1a78e2bc6e1e8c"
+              }
+            },
+            {
+              "quantity": "41665814",
+              "transaction": {
+                "hash": "efd3e46e61d030d14fac785ddfdefdac0215e6b772346407660f3f6fedfb2594"
+              }
+            },
+            {
+              "quantity": "10911563",
+              "transaction": {
+                "hash": "a31c68ac0b01e5c41601d579687631944665d0f2455a4a68423665cdec4e799b"
+              }
+            },
+            {
+              "quantity": "158519429",
+              "transaction": {
+                "hash": "3dc4b9302c9f2f2dc3fa5931d7358c2b82af164d5da4f8e63808699872c30db7"
+              }
+            },
+            {
+              "quantity": "1242133311",
+              "transaction": {
+                "hash": "5d9307327f811855b77fa1b2ab4c3a0f732842ccea5f31448627c8171078f944"
+              }
+            },
+            {
+              "quantity": "-806",
+              "transaction": {
+                "hash": "8084207bc8d116e592a7d0e7a59784598709899c7e9965d593f27615ab4508ed"
+              }
+            },
+            {
+              "quantity": "16163",
+              "transaction": {
+                "hash": "da73582c473abb141fef780e1b043c7539055b6ea1ca268a83ab3f326c046a67"
+              }
+            },
+            {
+              "quantity": "46962208",
+              "transaction": {
+                "hash": "72dd8afb194b8390a9409d0c140954a3ae1008da80efb9c7f69064023b519424"
+              }
+            },
+            {
+              "quantity": "21043555",
+              "transaction": {
+                "hash": "6142b67f3893b1672316b5f46d8204983d7c072fda5559f3976d711c4ea3bfef"
+              }
+            },
+            {
+              "quantity": "2394176977",
+              "transaction": {
+                "hash": "c74f400eacec552297a0c2bf318dd0283fec5264416a6a506e4bb95d0f160cc2"
+              }
+            },
+            {
+              "quantity": "180158578",
+              "transaction": {
+                "hash": "e31bf9a2d517af5ac9d41793a7b83841e47bc82a34e762cab8e0341ad0f6c520"
+              }
+            },
+            {
+              "quantity": "350916508",
+              "transaction": {
+                "hash": "fc2173e74ac16a2c49d1dc332b0f154236ef02d2ba038297ba439b9e3694cc55"
+              }
+            },
+            {
+              "quantity": "3934320410",
+              "transaction": {
+                "hash": "4f739653fd2d9fa9682bd7e1818511af776d5370ba5e152606209409d89c94ae"
+              }
+            },
+            {
+              "quantity": "157558543",
+              "transaction": {
+                "hash": "6883c8100e1514c67aedadc5988e754356888d2107abb81ebf9fcf680217e150"
+              }
+            },
+            {
+              "quantity": "1119979061",
+              "transaction": {
+                "hash": "e1bc23e1823efbe83dd6110b6759c4a4f3d58e3824700051866d5e34032d6b8e"
+              }
+            },
+            {
+              "quantity": "22940537",
+              "transaction": {
+                "hash": "0201ba832f3084c13b29e3e174dec3b8b36fa87b91aa076317ea555df80554c0"
+              }
+            },
+            {
+              "quantity": "10358604",
+              "transaction": {
+                "hash": "08f03ae7db00418cf5d13b6900b4bc81d79d98080d7afc6c6bfc3a55e8debb4c"
+              }
+            },
+            {
+              "quantity": "1084453680",
+              "transaction": {
+                "hash": "fbe4897fadb28e60f60e329f46ad66a449c95d5997e9cee9c323cf050727d8af"
+              }
+            },
+            {
+              "quantity": "221060229",
+              "transaction": {
+                "hash": "fcb06dfe26fb23f1c007bff9097d2e44ea64eee3a357bafa9372595407794d6d"
+              }
+            },
+            {
+              "quantity": "-173215774",
+              "transaction": {
+                "hash": "6f497703417175eddb32ed39929644bbc7f8baf4aad1d4e58ed3769a7445c313"
+              }
+            },
+            {
+              "quantity": "215000000",
+              "transaction": {
+                "hash": "c4e215f925af915b8db6815a537fd8f7c3b2dab94312cca163fe6b4d5ddf86a0"
+              }
+            },
+            {
+              "quantity": "1035885478",
+              "transaction": {
+                "hash": "4ca8cdbf2f0f82a52f1870ccd57fda40418a87d75629d2a2f52cfff110ae904f"
+              }
+            },
+            {
+              "quantity": "27286566",
+              "transaction": {
+                "hash": "7269daf6e070ad8756fedd9e24a1c934251f6846cbe4aed0e99005b761f67c1f"
+              }
+            },
+            {
+              "quantity": "8458538",
+              "transaction": {
+                "hash": "661dde7550f56d4b6d3308ae35509fbd65b454a6a88499b53c0bd344e2f9e242"
+              }
+            },
+            {
+              "quantity": "2597583",
+              "transaction": {
+                "hash": "c46a3ee3a44db9495fe996218ff4a2df21ee274421b0cb8a76edca4b2a1ea685"
+              }
+            },
+            {
+              "quantity": "-1340758613",
+              "transaction": {
+                "hash": "c230a4c4023134cfc3daa35a43f05227745c067663252de71037f45dc0878440"
+              }
+            },
+            {
+              "quantity": "-2610049673",
+              "transaction": {
+                "hash": "4ef3bd3458232aeb496c3c68ce1fffc7aa6555dc009bf40a65030ef205059192"
+              }
+            },
+            {
+              "quantity": "-1234336265",
+              "transaction": {
+                "hash": "615d0feab04171c5d95dab80e954f6bc98fa428618563f9d08a83206eb779031"
+              }
+            },
+            {
+              "quantity": "1000000000",
+              "transaction": {
+                "hash": "2be305867dc046be373c894f16f6379e91b429e4561c78a93b96bc317cc818e3"
+              }
+            },
+            {
+              "quantity": "282161516",
+              "transaction": {
+                "hash": "ed1d19893f1d19f692b7fd4daa780da6963af5d5d300f19e557945a697ddf772"
+              }
+            },
+            {
+              "quantity": "-1287836466",
+              "transaction": {
+                "hash": "9a6133053a50f7238e98c5ac16496aa3139d3d75dfe74c5180e88da9ceed9aa3"
+              }
+            },
+            {
+              "quantity": "8331803555",
+              "transaction": {
+                "hash": "975d227ec9f9a37dbc6407f33c4d4580b681809924c9c719f93dcdc73aba1681"
+              }
+            },
+            {
+              "quantity": "-3434",
+              "transaction": {
+                "hash": "07baaf17dfd5d684e0c609986a0d5ca8d38097f43befd649770e5e220809388f"
+              }
+            },
+            {
+              "quantity": "-7129112977",
+              "transaction": {
+                "hash": "6328e04e53b2fa6eaefdb97a68a80bad851423afd1447cc877d80be5baac98c6"
+              }
+            },
+            {
+              "quantity": "399638262",
+              "transaction": {
+                "hash": "7ab08e36829e37ab1ec14698284fe6beb88292ccc78667e9a45584797dc2f36b"
+              }
+            },
+            {
+              "quantity": "1000000000",
+              "transaction": {
+                "hash": "6dc17e5771daeb875cbc5d1088eb4b826ea5e3d4446f516765af1807b6587b24"
+              }
+            },
+            {
+              "quantity": "295028299",
+              "transaction": {
+                "hash": "d9c970623b509a38924e6ab127d22f0dfa2745626d479fee3ceff19227c76ee0"
+              }
+            },
+            {
+              "quantity": "3402199780",
+              "transaction": {
+                "hash": "2ea6a147cad13eb6e93de4f10731b54989347767696f635e5867d5be8d890043"
+              }
+            },
+            {
+              "quantity": "-16026",
+              "transaction": {
+                "hash": "688828a4a756a4a48c5c7fcbe649dd96df127022f94b97f13b653ba6c03167ba"
+              }
+            },
+            {
+              "quantity": "-3694739177",
+              "transaction": {
+                "hash": "7a82c4475b784010442e4571faf1b37649c7f0bdd58cf246afe67b530ec23942"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "58ce9acd9df6b3d36a8606225220adcc60be2df613408c3d5473a7648c1ff010"
+              }
+            },
+            {
+              "quantity": "-40011873",
+              "transaction": {
+                "hash": "c86babf2b17bac54a016ae3fbfb245b7c65a43eb6dcbc7bf52e7ba34631ad3b5"
+              }
+            },
+            {
+              "quantity": "1014855621",
+              "transaction": {
+                "hash": "8a7a4cec52d1e51fc3c3a67714014f86a53df3c5540997e38dbaccfac703860f"
+              }
+            },
+            {
+              "quantity": "9167817",
+              "transaction": {
+                "hash": "29d567ac3dff98cfdca17dcf55e537a1f3de8365b748ab992147767bd2ac2ad8"
+              }
+            },
+            {
+              "quantity": "-400072100",
+              "transaction": {
+                "hash": "e981bb337a9d97dd5b8eac3f3c3cd28c1ccc349b5268fd4195b7d752930080b1"
+              }
+            },
+            {
+              "quantity": "-1024039859",
+              "transaction": {
+                "hash": "d7b84cbceb6f6d46147820b2047035a4d162235d968dd00b66252d5f25cf001c"
+              }
+            },
+            {
+              "quantity": "307788330",
+              "transaction": {
+                "hash": "0f6f00db46deeb7cbbc7234c28f38f1fab3f36d067733aed6bc97ceea3ad70ad"
+              }
+            },
+            {
+              "quantity": "314510175",
+              "transaction": {
+                "hash": "6006aec2af2b8498d37e90bb85aaa9c17e20ca17ccadfff44d491f9f1e2efc52"
+              }
+            },
+            {
+              "quantity": "4061593",
+              "transaction": {
+                "hash": "75b9d7a3e1723db4a9e38220ed0bc7dd443d0aa47bb3578105ff22d3fa9e2382"
+              }
+            },
+            {
+              "quantity": "325966908",
+              "transaction": {
+                "hash": "24c6bbb317283f1aa0a88d116aa7f27a2acd387b6aeb8cc72a71a44d03f5e60e"
+              }
+            },
+            {
+              "quantity": "4472434",
+              "transaction": {
+                "hash": "54d3aacd57edc7c1d39abc1f56a273cad12890ce4a107f2cd43bc919a081e1d5"
+              }
+            },
+            {
+              "quantity": "333517010",
+              "transaction": {
+                "hash": "039619d65651585b25e668b731fd422ed7d85b03f52b5eeaf69461b996aaf72f"
+              }
+            },
+            {
+              "quantity": "7977593",
+              "transaction": {
+                "hash": "584901c2b97db1bd83b4e3451fde8c71a210332c5a82afeded213f4dcf3601f4"
+              }
+            },
+            {
+              "quantity": "28626",
+              "transaction": {
+                "hash": "40bd28077bd11a943a0d3e72ad4dec59a22e6dbecf9627384e3880e13af68903"
+              }
+            },
+            {
+              "quantity": "-990510280",
+              "transaction": {
+                "hash": "df2108f1aa57ac601c701ae9bf14b8531672f6964cded93a093e44ae94769320"
+              }
+            },
+            {
+              "quantity": "5114871",
+              "transaction": {
+                "hash": "6727ecff0b4b5cc614dd14e8ef4c45ec93c38c2295055d66268a993c52b0caf8"
+              }
+            },
+            {
+              "quantity": "4995672",
+              "transaction": {
+                "hash": "1a5ea9358d1e0d5c893cb9ee68e5e0a5aa8b4142dec7610295216519779a331c"
+              }
+            },
+            {
+              "quantity": "1039723729",
+              "transaction": {
+                "hash": "9ad76019c203f28d571848ded8590925d01196ba391b00b6b6ad2ea0f56b9a9a"
+              }
+            },
+            {
+              "quantity": "400000000",
+              "transaction": {
+                "hash": "741d0f0d1fedb3be2655c17baacd4c86eb94417f9904643459bbcfb81cf85d43"
+              }
+            },
+            {
+              "quantity": "245651",
+              "transaction": {
+                "hash": "f0238d8d98107fd05dd05fade01e37a6090095c8e7ddb9571a9b31905bae2d23"
+              }
+            },
+            {
+              "quantity": "-1039781302",
+              "transaction": {
+                "hash": "b499a28bf74cd1584d417e095ed5cf64e643f5ef2d4bf8df7596ddbc7b979e52"
+              }
+            },
+            {
+              "quantity": "-317918507",
+              "transaction": {
+                "hash": "aef382c8b406d2d0cc737fb6e4031efab4172d099c64c64418a06073c0d294d3"
+              }
+            },
+            {
+              "quantity": "2293446",
+              "transaction": {
+                "hash": "1a3b1624ceb061cdaceb9158d4761a336aa8f30da401ea91d81a32ea135f803b"
+              }
+            },
+            {
+              "quantity": "-750094207",
+              "transaction": {
+                "hash": "dc7f3e586e71df9cc9a1b98947595f852ceaf78829d6ff6cb3bbe2f9103f23f1"
+              }
+            },
+            {
+              "quantity": "1000000000",
+              "transaction": {
+                "hash": "3e3fcd31862cb38ab1b670f8f1786d62804a96decf932397f9fffad522310d45"
+              }
+            },
+            {
+              "quantity": "1000000000",
+              "transaction": {
+                "hash": "992e449ab7eb598aedb3bf64672f547a7d233363176f3f467c158665f767a327"
+              }
+            },
+            {
+              "quantity": "500000000",
+              "transaction": {
+                "hash": "2c66a58ed6aca5d34004e70e4f600f51292396086e8e507953eec007fa2177a4"
+              }
+            },
+            {
+              "quantity": "500000000",
+              "transaction": {
+                "hash": "67ea2b6d15a20f98af4b296f9c858212ac6480a5c2a55ad2dc8091dbf992a765"
+              }
+            },
+            {
+              "quantity": "1000000000",
+              "transaction": {
+                "hash": "8368e9758b31678fcec5747c3898a2a7fbf96fcf4d47ad8835a0ebd5b5218e85"
+              }
+            },
+            {
+              "quantity": "-1000041815",
+              "transaction": {
+                "hash": "ace4238a1b0a67de8ab3ca44f45f9021fc3bffc2830e4aaf0474ad6ce5fe9d5a"
+              }
+            },
+            {
+              "quantity": "-8230",
+              "transaction": {
+                "hash": "68d4a0331686fb1b3f3e528536754b76f715da2b3e42d4e44e2b996a32cf1f8b"
+              }
+            },
+            {
+              "quantity": "-46540",
+              "transaction": {
+                "hash": "b128e328e7ee09d1d7f293c05a87acb4684f85e648d598aef94f062ab6226b66"
+              }
+            },
+            {
+              "quantity": "-519",
+              "transaction": {
+                "hash": "f91864c6c52fcb92f2bbc6e88d2b57b5fe8ce7e2608cdc7c2c3ee0cd49a701ca"
+              }
+            },
+            {
+              "quantity": "-22613",
+              "transaction": {
+                "hash": "331becc75c87383f8c4f03c8b14be0a3b3cd52d119ddae95f1b9cedf2eadddc8"
+              }
+            },
+            {
+              "quantity": "-1625242",
+              "transaction": {
+                "hash": "d92b4e38aec68ed97107655b2325e11ed48d28de426040fe08f9e5716fe56aab"
+              }
+            },
+            {
+              "quantity": "-50655",
+              "transaction": {
+                "hash": "e63dbff7fc7f9a89953cf10cc4d81db7e2890e88bf3bacedf75459e38051a855"
+              }
+            },
+            {
+              "quantity": "-71589",
+              "transaction": {
+                "hash": "108f4c75a40daf77214d5b171afa5d2192003ea766e570c65488ecbe359a7f9c"
+              }
+            },
+            {
+              "quantity": "-500330844",
+              "transaction": {
+                "hash": "4eee0f0c2d30d7af09dfa953cf8bdffdf1f664d5864d20a4b8a12c436a855f2a"
+              }
+            },
+            {
+              "quantity": "170622934",
+              "transaction": {
+                "hash": "5d3dc2916d2707a21b7d97ee38c9f855ce2a5cba0501e95ea9a98770edd78926"
+              }
+            },
+            {
+              "quantity": "-100006901",
+              "transaction": {
+                "hash": "f74931a96e6a12f37e383415027de5cca7843cfe78bdf8fa44dc19a3060ad9e1"
+              }
+            },
+            {
+              "quantity": "18734",
+              "transaction": {
+                "hash": "273fcdd25237432f0570bed9d563ec46c15aee1eef6fc73af96af9ca07b2ae28"
+              }
+            },
+            {
+              "quantity": "-7502220390",
+              "transaction": {
+                "hash": "09ecb0a5fddd19b7367f92bd767f3694b7f3c9a7a2e38557b3454b515f496ab2"
+              }
+            },
+            {
+              "quantity": "1394982360",
+              "transaction": {
+                "hash": "9b8db6fb505c692fa5bca8def115f80058b19ad39983df668b7146f325895ce8"
+              }
+            },
+            {
+              "quantity": "330778723",
+              "transaction": {
+                "hash": "3f10854b96cc449c8342c5403c4ae1abf758aed8472d2acf773a490e175fcc67"
+              }
+            },
+            {
+              "quantity": "-1395049125",
+              "transaction": {
+                "hash": "6ede4b64f7001a8e00f2faefda9d5829a4983e856505b45e6d4960e40e77988e"
+              }
+            },
+            {
+              "quantity": "801950142",
+              "transaction": {
+                "hash": "df25eacc8e3d38905e55675957c7756ec31aa07c756ee2485fb7bcb71a4a35f9"
+              }
+            },
+            {
+              "quantity": "-801956321",
+              "transaction": {
+                "hash": "91af7212b6b5ad59ee11589f584e60467faca5ce710056a08c635d3f81981e80"
+              }
+            },
+            {
+              "quantity": "199491580",
+              "transaction": {
+                "hash": "2fc8ddb4526c4b9a236e86953ca935a393434e3736b03f0dc816015349ab1755"
+              }
+            },
+            {
+              "quantity": "-1001241064",
+              "transaction": {
+                "hash": "821533b8d0cd320fb41e2082105d9c90c1a4b6570f2c84ff5eb169d1a829f3d6"
+              }
+            },
+            {
+              "quantity": "50000000",
+              "transaction": {
+                "hash": "7c611ff3c9be3508dac3207ec0e125b11c1bd0762c193ac4b058ba7d975e47c3"
+              }
+            },
+            {
+              "quantity": "-50000403",
+              "transaction": {
+                "hash": "998803876d979be0b989990204061225b80667f8feff717b28d677f06f19d585"
+              }
+            },
+            {
+              "quantity": "979321360",
+              "transaction": {
+                "hash": "cf103f5748d6684f646fcc0bdb12150864bd0758826dd5694d5cd22a901cd3dd"
+              }
+            },
+            {
+              "quantity": "199929033",
+              "transaction": {
+                "hash": "0bbe25f1cdb117200eed696eabd68988d4406fa602d2025dde08a6ad47a0cb80"
+              }
+            },
+            {
+              "quantity": "-330867917",
+              "transaction": {
+                "hash": "ada96f65c287720cb3652879725f743584aab40d573122fcee8cbd16baed7c56"
+              }
+            },
+            {
+              "quantity": "2835",
+              "transaction": {
+                "hash": "c470a26ed2ba8aa86fe0b7e191fde0884d8f216719b0cdc3fb76146622fec52f"
+              }
+            },
+            {
+              "quantity": "-400470627",
+              "transaction": {
+                "hash": "f333a9aba33f51f2e4994e4ec798442de3db01c5c621780596e240f836114070"
+              }
+            },
+            {
+              "quantity": "-1004794",
+              "transaction": {
+                "hash": "3c91c52b33957c436005766cb98acc896a17c04085b740ae66d7c6b8f43a5f0e"
+              }
+            },
+            {
+              "quantity": "-500516588",
+              "transaction": {
+                "hash": "416ecb5cef1f2eeaeaffdd22c680865f8c25404ab25c95cd58640b9481b037b0"
+              }
+            },
+            {
+              "quantity": "-500287279",
+              "transaction": {
+                "hash": "cc1a49d4f44266c2d84cb501758f460e3a6a77c8b50f12869cc59de36830c881"
+              }
+            },
+            {
+              "quantity": "-1000561853",
+              "transaction": {
+                "hash": "8598997044b08185773a4c96cde92d82da73e5df7d9f99f73e13f99822dd74d6"
+              }
+            },
+            {
+              "quantity": "-1000004724",
+              "transaction": {
+                "hash": "91afd00a29c9fb288770809bf83b298da4f194a425df1d8fd07165984f5d0b12"
+              }
+            },
+            {
+              "quantity": "14634162",
+              "transaction": {
+                "hash": "e30e8c934a3b18520d0edc4ae381b3da44fc7fc61d3a2b9ebbd2763ab911efc4"
+              }
+            },
+            {
+              "quantity": "555435",
+              "transaction": {
+                "hash": "7b277bcbbfae7901d8bfb2dd057e422e918fc551f31c404f456e35c990b4b57c"
+              }
+            },
+            {
+              "quantity": "90000000",
+              "transaction": {
+                "hash": "a913035331098909375eec9b1f77572294c7e2ba6fab9dd77f6af4aa369ad837"
+              }
+            },
+            {
+              "quantity": "144544",
+              "transaction": {
+                "hash": "c546d49bc6e29a8fceb43214d4bdc9bcb1356b63abbff3ff3f5ceaef2c0e8359"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "152056f235b665b01f5cc1c7d6e89198cfa39658a8d52281271050201b7dbfba"
+              }
+            },
+            {
+              "quantity": "-40002126",
+              "transaction": {
+                "hash": "8f03755a37f6e18eebf257442f5c6b5edd99e81d9d8290937b9199152e57054d"
+              }
+            },
+            {
+              "quantity": "-170861249",
+              "transaction": {
+                "hash": "386f94b2c253c0a7ade911cfd47d0c9da4eb19d6ce2e49dfac159db967831698"
+              }
+            },
+            {
+              "quantity": "139423",
+              "transaction": {
+                "hash": "e360076edc7c0d37edf2e629d49a7ac0d0828800e50b2a222574c23c3cd7b58d"
+              }
+            },
+            {
+              "quantity": "244966",
+              "transaction": {
+                "hash": "08ba1ab1c887b48004a15e4ad895418ec20c1bdfd36de2fcd8cab5b50db1517a"
+              }
+            },
+            {
+              "quantity": "-90023881",
+              "transaction": {
+                "hash": "8fc2e0d63dffd6e2d0d822230f184006038b402f611cda8b0d1b5736db340456"
+              }
+            },
+            {
+              "quantity": "1096106",
+              "transaction": {
+                "hash": "63df7dd436fea24154261a6103ae6d2fb40b4b4e0ec24ae6b761fc6bfcfcf18a"
+              }
+            },
+            {
+              "quantity": "-500786976",
+              "transaction": {
+                "hash": "6e4c738a8b56823aab166d6485aa5332d94c8d2bc94814cf86dc5477092aaab5"
+              }
+            },
+            {
+              "quantity": "-40042598",
+              "transaction": {
+                "hash": "7200983eb18b4d2b4d6a7f6520089892ce79c9a949a57b933571bdcea05a8aef"
+              }
+            },
+            {
+              "quantity": "-1417993327",
+              "transaction": {
+                "hash": "8e68fcb54053a69c27534194725e624d8327c7dce78ddbe2049ba282f80d1cb9"
+              }
+            },
+            {
+              "quantity": "-1340329466",
+              "transaction": {
+                "hash": "a04c322fc7db82513d2da027c12a57948f80ed404ee28808c7aa7f10a9aed3a1"
+              }
+            },
+            {
+              "quantity": "6165",
+              "transaction": {
+                "hash": "82488903c6d92ba309d278c349b7abeffa0b16b1fbb152b07f97527c3cb718b9"
+              }
+            },
+            {
+              "quantity": "39896563",
+              "transaction": {
+                "hash": "ba278236eb1763dd8ad6d03f9cbd90ef1d0e7f6fe03ffe8a8a582ec84682b0d7"
+              }
+            },
+            {
+              "quantity": "147",
+              "transaction": {
+                "hash": "818c7193be739e0a6cfe4c924c8d9b7aff0d682e8ae149210d728d312ce85de1"
+              }
+            },
+            {
+              "quantity": "40784",
+              "transaction": {
+                "hash": "a973835d12db61099980534be0c0f4805429dee40e199974ff10bdcc76eb2a75"
+              }
+            },
+            {
+              "quantity": "-701344387",
+              "transaction": {
+                "hash": "f720d3d64e9a449c5bf7b04feef638fac262b91b654670375045b46ac399cca8"
+              }
+            },
+            {
+              "quantity": "141103",
+              "transaction": {
+                "hash": "f97e08a80a8ab623473100b1ed96c257948bfda4ad92d55e90547fd4c3e6e4a5"
+              }
+            },
+            {
+              "quantity": "-94810",
+              "transaction": {
+                "hash": "1918f8f2957d5e726e71d96d9afd46e795c28d7205f41b75a6fed2c8fda78789"
+              }
+            },
+            {
+              "quantity": "858452",
+              "transaction": {
+                "hash": "07500ab8ba712d6901cb6e789132ca7646ec46712eb7f730934b62b65b787dbe"
+              }
+            },
+            {
+              "quantity": "-1989090",
+              "transaction": {
+                "hash": "9217939abf79e559653b8ca5b70ab72c48696362408001db9430b57f39f52312"
+              }
+            },
+            {
+              "quantity": "-157005938",
+              "transaction": {
+                "hash": "f20ab0e66b6bd380b96a0512955cced96d914ee5fefc7fd571f33413fed9756f"
+              }
+            },
+            {
+              "quantity": "92791",
+              "transaction": {
+                "hash": "0cf2239d30b97d4d9a5beaace020741e6a18ce9224b5bb34ebbd1d7df7595f33"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "e6263be4db782164759282efd64c3ad46eed4ce4b2f48106b96dcbd16e1ffce8"
+              }
+            },
+            {
+              "quantity": "-626198067",
+              "transaction": {
+                "hash": "c3134b81d4f53f027907f24297a452e0faca29bb53f8a2444a0526c82a4477cf"
+              }
+            },
+            {
+              "quantity": "-4983642",
+              "transaction": {
+                "hash": "a8521dc7126b1b510bb680d168f1a5aa4edfced5ddd7af56b93f18ba6784441e"
+              }
+            },
+            {
+              "quantity": "173721",
+              "transaction": {
+                "hash": "8e382edb9da5e7277f22b72c74c38240dad6a6353b23b381c9cdad49574e9251"
+              }
+            },
+            {
+              "quantity": "-28753625",
+              "transaction": {
+                "hash": "6c11c914919227737632e8a839182e3c522920e142a4d956f95e053548b4db48"
+              }
+            },
+            {
+              "quantity": "-2215739782",
+              "transaction": {
+                "hash": "6b242e85e8ce8e0264bd7e6cd263c86c94e6dd1be6956ff4d6b40e4b7afda902"
+              }
+            },
+            {
+              "quantity": "-370053286",
+              "transaction": {
+                "hash": "806d04204e5c81c193d65df1f7ee1b08ad360cb5a898ac4099f2ea50b2e64b92"
+              }
+            },
+            {
+              "quantity": "-3195623986",
+              "transaction": {
+                "hash": "4c0d76cbca601bed67e8c866198076a3518b557982d940a5c4d0f7be086f63ad"
+              }
+            },
+            {
+              "quantity": "-1203753632",
+              "transaction": {
+                "hash": "c1606e7be2e62ea91dc96c43eabe3dcb17b70f2693e2f0734522f3ae5e06b654"
+              }
+            },
+            {
+              "quantity": "-1027676587",
+              "transaction": {
+                "hash": "9f1e099b6c531d84a2f46f53e079e8ae4c84ea7c30bad31c5d25fbfcf8480a5e"
+              }
+            },
+            {
+              "quantity": "993217129",
+              "transaction": {
+                "hash": "ae380106162b9fa16c907206c34ae4e3fdc64db51a20173f41801a23ffacfa68"
+              }
+            },
+            {
+              "quantity": "998208066",
+              "transaction": {
+                "hash": "3c6ba2f84983c2c5aa8cf48499b17d34d62cdbe2af7682b552a8d8f953524cec"
+              }
+            },
+            {
+              "quantity": "499659090",
+              "transaction": {
+                "hash": "b91437136dd57b88a6e6182d9d1b949ea36ad4294e926f5c125794da2f0635e0"
+              }
+            },
+            {
+              "quantity": "497656941",
+              "transaction": {
+                "hash": "e1acdc9860bd423c73d38aae1df82b6d9926a970850d265fad743b1ef16f40f3"
+              }
+            },
+            {
+              "quantity": "-2608985001",
+              "transaction": {
+                "hash": "65a5b3f45ce5a430c8ead011946e3a47dc3f6d3c7e69596dea5a543946579c8d"
+              }
+            },
+            {
+              "quantity": "494946820",
+              "transaction": {
+                "hash": "53efdc542ee1564368e9dcfb8c0c21006f0b53c935b667cbceb6b720c5105d20"
+              }
+            },
+            {
+              "quantity": "371300",
+              "transaction": {
+                "hash": "56da9c32f5b6dd1b2f0691c86e8f49fd95b969ac87c5a9d3eb8dd9564e4acf74"
+              }
+            },
+            {
+              "quantity": "-82643971",
+              "transaction": {
+                "hash": "2ac9746c64a8afa0e5e4643814b406604bfb8ddf2b1e39a93d12257a3a1a328c"
+              }
+            },
+            {
+              "quantity": "-2285080892",
+              "transaction": {
+                "hash": "55c21890562e503fec14a14be7b7396b51db4a8bf1de6080355262b2bf87ae84"
+              }
+            },
+            {
+              "quantity": "492818684",
+              "transaction": {
+                "hash": "4e0d7519b2524bddb90062f9535c1797f9b9f80d9cfe3d4317a6e05cad0d1e71"
+              }
+            },
+            {
+              "quantity": "992867890",
+              "transaction": {
+                "hash": "41b59788593e71018fed3b057ab697be9b0bca11396344291f5ac51ce2356bba"
+              }
+            },
+            {
+              "quantity": "9904388",
+              "transaction": {
+                "hash": "ce4cbb4cff20d68e24c85a1295bf39dd55c3693159c674a199b27aea6b6dc8eb"
+              }
+            },
+            {
+              "quantity": "497908873",
+              "transaction": {
+                "hash": "97e162633e924c49c303e45b77f9a7670b2669a255cacc0867c3eb21d0af3f87"
+              }
+            },
+            {
+              "quantity": "549881815",
+              "transaction": {
+                "hash": "477c4f66cd2fad1fe098c22c438a533034cbf64766205f8e5e08cb6fccc757c3"
+              }
+            },
+            {
+              "quantity": "130831",
+              "transaction": {
+                "hash": "0b45d89828703e89d12ca497e527bd734d9b2f1cd3ac89358135df6cfb501cd3"
+              }
+            },
+            {
+              "quantity": "3844361",
+              "transaction": {
+                "hash": "e7d273628449759256d056aac00ad5ab5a507ce1c855eb26acb47a980e262657"
+              }
+            },
+            {
+              "quantity": "19679068",
+              "transaction": {
+                "hash": "937d9047cb15e178137fde6958aa6d1df39dcbf08e433562acd672200b5c860b"
+              }
+            },
+            {
+              "quantity": "114132147",
+              "transaction": {
+                "hash": "6fb3465d364818939debd2b96ce158c42d5a1581329a71376ba04afc77af2e82"
+              }
+            },
+            {
+              "quantity": "211931703",
+              "transaction": {
+                "hash": "5e005cb9a81da8ef80e67276fde7e7b5688dc7eff133e24e1f38fc5061eb1696"
+              }
+            },
+            {
+              "quantity": "-50252537",
+              "transaction": {
+                "hash": "47b6ba2a2bec45096e41f20764592a17302770c2ef83be880a2f372b5827e65a"
+              }
+            },
+            {
+              "quantity": "495282610",
+              "transaction": {
+                "hash": "03717181826e050aab15f9c7825a6413878dccf33d43219b77728532c71a6621"
+              }
+            },
+            {
+              "quantity": "998845207",
+              "transaction": {
+                "hash": "098168edf8e3036757132a4bbc3ead11f99f868d109a004b1e2c042208a3607c"
+              }
+            },
+            {
+              "quantity": "198020454",
+              "transaction": {
+                "hash": "465de435ac8ff1d8ea2f7a51642262851a1614579d26669c44452e06f7ce691e"
+              }
+            },
+            {
+              "quantity": "492217952",
+              "transaction": {
+                "hash": "e6ee0d71193af806e05e2b15b4ede2b6d7b12f8cc6b0cf3f2cad8e44b33bc99f"
+              }
+            },
+            {
+              "quantity": "2175982",
+              "transaction": {
+                "hash": "fe2a68fe49db62e50438542dd4e0fe1a1f7fd4d914629482cbf206a14f615778"
+              }
+            },
+            {
+              "quantity": "8520010",
+              "transaction": {
+                "hash": "4bb120cf3de6271504791ad1588bc1532ae0caa2bd2903619953c683c9274434"
+              }
+            },
+            {
+              "quantity": "-4213294851",
+              "transaction": {
+                "hash": "474e7fa9fd46708a8725dc73e2ea48edd49ae79058a435abfbe9b0ce94897710"
+              }
+            },
+            {
+              "quantity": "1044893",
+              "transaction": {
+                "hash": "0b653161498ae3285135f7f2ad20e2b4fb1a6e24f9064bbcba46e6e5558e17de"
+              }
+            },
+            {
+              "quantity": "336822",
+              "transaction": {
+                "hash": "84a32633d69de25e964ddb9db8ff8b6d6f34b3a2b7709420c33533e478f3d837"
+              }
+            },
+            {
+              "quantity": "235267",
+              "transaction": {
+                "hash": "acb4180f0666b11930b2f02ddbfd42ba37a6acbe00bcaf6b5283911c7dd0c459"
+              }
+            },
+            {
+              "quantity": "-40165122",
+              "transaction": {
+                "hash": "de30614a9c89117b4815892116ccc19cdb15bb7d9bab27d15e75ac8e30546f7b"
+              }
+            },
+            {
+              "quantity": "60000000",
+              "transaction": {
+                "hash": "f2e007c7c2d558f028315ea99f5c977375085b0531b068f94a5102a93a129ef7"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "b5dfd2e81e89685f5e3244922296f9927cd79f1a62835a35d4cfee70eac209bb"
+              }
+            },
+            {
+              "quantity": "985906242",
+              "transaction": {
+                "hash": "6d24c9b09fe6a6771b1881e6601530c6203daaa7cdd623ed5752bfda5cf86003"
+              }
+            },
+            {
+              "quantity": "-40002629",
+              "transaction": {
+                "hash": "3a6e9b44c75bb3285f596ae53b5894756d3959d0e412884ea2cea3b990fd86f9"
+              }
+            },
+            {
+              "quantity": "-60004080",
+              "transaction": {
+                "hash": "88d66ee3fa253ff066cdf04ed9325fb9de2a2df1522b90582e98d7e71df5257a"
+              }
+            },
+            {
+              "quantity": "78821",
+              "transaction": {
+                "hash": "86826927488b429caa4555f4903cf88df682d652a6f7e6eb68f909069693178f"
+              }
+            },
+            {
+              "quantity": "700000000",
+              "transaction": {
+                "hash": "1f4565fc2f7409482b6304eb330c7f6d843970505e2b84af5d777b7eac44feed"
+              }
+            },
+            {
+              "quantity": "982181514",
+              "transaction": {
+                "hash": "de5d081aa950696481505db331609ad0a474bfc5f23b36a6718bbc0b72590fa5"
+              }
+            },
+            {
+              "quantity": "187082",
+              "transaction": {
+                "hash": "5fcc78adb0d17f58b32623ecff975bc5e04c664c7c463d1899c8b3de9300144e"
+              }
+            },
+            {
+              "quantity": "-212975947",
+              "transaction": {
+                "hash": "0e0f184696af90f553968cd9e2660983b38910352f3bd420489c4adacf4b1a7b"
+              }
+            },
+            {
+              "quantity": "17718035",
+              "transaction": {
+                "hash": "f37148f2400ff85714453ccee8aa861952cca346ea3e80d510a5c1482dfbcf94"
+              }
+            },
+            {
+              "quantity": "-950954059",
+              "transaction": {
+                "hash": "a80a1c4b3e1767d513380d630bab8b78c2f8ec3f11087913859af32d611f80ea"
+              }
+            },
+            {
+              "quantity": "-288202",
+              "transaction": {
+                "hash": "71c8ce7bcfb6ef4b4f7afe26dba0f80a73fd7747bed3f39484145e34864e74dd"
+              }
+            },
+            {
+              "quantity": "-1010089445",
+              "transaction": {
+                "hash": "ef5c2d9383dc5ce04d37ef589b4ebe76853a29b5de0ca18dc3185354c1e23037"
+              }
+            },
+            {
+              "quantity": "565304",
+              "transaction": {
+                "hash": "eadbee11afc6c1cd64e2e9ab9cccc84d6546ec78c9447e8ec49afeaa0e9718e4"
+              }
+            },
+            {
+              "quantity": "-5690043",
+              "transaction": {
+                "hash": "4a4ccd129b20c423fd97c9c4f204980120b280a28e5e48979d4e4f78f63699dc"
+              }
+            },
+            {
+              "quantity": "525821422",
+              "transaction": {
+                "hash": "c03b36b02e9c22884b45dd75e333162098b741f75f4a866d2f75069e627fb3e6"
+              }
+            },
+            {
+              "quantity": "1004742375",
+              "transaction": {
+                "hash": "1fd9ce538dcaa66da0b92e45ec4496db090cbe838e78f2a84b24077aa9b3f869"
+              }
+            },
+            {
+              "quantity": "982452",
+              "transaction": {
+                "hash": "c4b7385221745c702bdb83911687cda32566ebb00e90897eef7e1befc246abf2"
+              }
+            },
+            {
+              "quantity": "598382171",
+              "transaction": {
+                "hash": "d6716092a6a5dd22880d54cc47c48e76eb860d3f043606a692e946d82a953616"
+              }
+            },
+            {
+              "quantity": "151726479",
+              "transaction": {
+                "hash": "5596b897c420616f6f7d4b57bdb1712bd651bbc1c48ccf19670a46ead7ef00a8"
+              }
+            },
+            {
+              "quantity": "498506853",
+              "transaction": {
+                "hash": "0c0528e24c803eabcf67f2884b2a8fc7a34739a6128a51b2c903ec4d6d3ab85d"
+              }
+            },
+            {
+              "quantity": "699819148",
+              "transaction": {
+                "hash": "edf27aa011a4285f07f5335f544ea81fdca9044760f0a8e3de9188bff47793b2"
+              }
+            },
+            {
+              "quantity": "999724632",
+              "transaction": {
+                "hash": "ee6b83185ad7aed94b3a591248ecede5645cd75f4ab1a69bf5d2703c93b735f6"
+              }
+            },
+            {
+              "quantity": "499949005",
+              "transaction": {
+                "hash": "fb27631e53f71ee9f0b82f1e118ee58dc8e158d03a2e0cd35efafce0cbd80cb1"
+              }
+            },
+            {
+              "quantity": "976381",
+              "transaction": {
+                "hash": "d5ebfca7fbb59a51d5553e1fe6e102d0fc312938c8a7b53d3e141e0b2b0eeac5"
+              }
+            },
+            {
+              "quantity": "-1042759683",
+              "transaction": {
+                "hash": "a51cca497c4f5fd19696bf40c27df6585fcefadb086c913c95e7e5e537b8e052"
+              }
+            },
+            {
+              "quantity": "503860520",
+              "transaction": {
+                "hash": "dad0159cd19b92933d6def92426ed1b74ef3c1c3fd83ca00d7081c24c363bf35"
+              }
+            },
+            {
+              "quantity": "50300419",
+              "transaction": {
+                "hash": "200b200f8e3635e012fc947477ec2682b7afa0d5ffa0cb6573ce61333c758a2b"
+              }
+            },
+            {
+              "quantity": "-10630200",
+              "transaction": {
+                "hash": "dda83c08f1f73f024f81d19a47a6fecae0d4c245faff1216993c3cf5bf0b01c6"
+              }
+            },
+            {
+              "quantity": "-47492",
+              "transaction": {
+                "hash": "911dfe7f9da0cbae861c5ae4cfb9b179069c7632f00da064de6edb0b7e00f7e8"
+              }
+            },
+            {
+              "quantity": "-3292027",
+              "transaction": {
+                "hash": "812b9ee640fd73a9aa082dc866cf8bee63a6248baee7e15ae4d155f17c76d8ce"
+              }
+            },
+            {
+              "quantity": "-1001335376",
+              "transaction": {
+                "hash": "062ec782d38000e87ae355ed959695c14ab4d6427a9e0664a9dc9ef3ac0b8f3a"
+              }
+            },
+            {
+              "quantity": "-6673360",
+              "transaction": {
+                "hash": "3b0c657e75ca14cfe12f7f246d4ff767876439b0b7480076297bab102960480d"
+              }
+            },
+            {
+              "quantity": "-769130",
+              "transaction": {
+                "hash": "05e96cccc70e9a7dcbaca1a0e755d0878335da9ee30a133c32f498605ae4d22e"
+              }
+            },
+            {
+              "quantity": "1910753",
+              "transaction": {
+                "hash": "e530740ae136767b9c9255c3f3d03306c8c3033483068c94815d990c69ef37a2"
+              }
+            },
+            {
+              "quantity": "-559704395",
+              "transaction": {
+                "hash": "75ebf1ddc312af520f4408a95a968c805ce62016c75fc2a7f99f9fc4d56155a2"
+              }
+            },
+            {
+              "quantity": "178591640",
+              "transaction": {
+                "hash": "d6e216a1709e62184008be46e2da1029ef48c71d8d0e54999b3b719486b9834a"
+              }
+            },
+            {
+              "quantity": "-81580164",
+              "transaction": {
+                "hash": "37ab5288e72cb906184e3a3d6b6fde6cea5607784df24d3fbf9d3cce8a4f3bdb"
+              }
+            },
+            {
+              "quantity": "487940807",
+              "transaction": {
+                "hash": "43b2b54a508c48510311391e799279c39e9e57b8fd19d793f14dd45adacf3409"
+              }
+            },
+            {
+              "quantity": "2999804915",
+              "transaction": {
+                "hash": "4ea570d5c1abdf4971badae2a94bea2ec310ab120b08a6140fdbe2f8e2f58cf7"
+              }
+            },
+            {
+              "quantity": "1998981450",
+              "transaction": {
+                "hash": "f3fe05e540f1fd1e61033564b8ebb575e55ea185469b13adbe43a86e241b3c9e"
+              }
+            },
+            {
+              "quantity": "2999041515",
+              "transaction": {
+                "hash": "534b287ba2da82fb36d8701e8fe9da751d12e551387c988c657b37b05edf73b4"
+              }
+            },
+            {
+              "quantity": "-74413952",
+              "transaction": {
+                "hash": "2cd9834f0ee5bf4c141047f6426c2fff18f9d83fbf7b942655d3e315d18145eb"
+              }
+            },
+            {
+              "quantity": "-3198266768",
+              "transaction": {
+                "hash": "8a3c58daaac554f96f8a7a7fca8dced58d6dae165f4398cf43555bd2612b3a54"
+              }
+            },
+            {
+              "quantity": "-45417",
+              "transaction": {
+                "hash": "a91a4e428114c184701494c28d22202f1113078ae4c8c0d14ef41e05fc7111e1"
+              }
+            },
+            {
+              "quantity": "-1064684313",
+              "transaction": {
+                "hash": "fa03c06cf2ba696816aa88af3a364d0b7561131143f7a4ab1aec18002b53e0b8"
+              }
+            },
+            {
+              "quantity": "-1811357",
+              "transaction": {
+                "hash": "85c7b9b2e362aeafae2ccdba4b278da2b33e0ecfdb2f87f6e9bfad45f3719207"
+              }
+            },
+            {
+              "quantity": "732803",
+              "transaction": {
+                "hash": "7ed0fdfc237b433b03a2a78b38caf1682ffae4e8c232ac0fc3d837476bc69e84"
+              }
+            },
+            {
+              "quantity": "-1452138432",
+              "transaction": {
+                "hash": "af19975060cb030a263a107c89f81e1b63b3961cbb6f36d1d337f489659fde5d"
+              }
+            },
+            {
+              "quantity": "-997934637",
+              "transaction": {
+                "hash": "1fb375ba6583b57e08ff5b4d38109e9a5d3f9af0deac2b48e5620899b68982ea"
+              }
+            },
+            {
+              "quantity": "-350449",
+              "transaction": {
+                "hash": "c8a903a0a116cf64d31ed4c19f7ad40198a602cff3f5017e3cb24d121487bb43"
+              }
+            },
+            {
+              "quantity": "992891219",
+              "transaction": {
+                "hash": "e5a5912dc879b51320f46e879b0660929a0780b99890d7efc0510288eb549584"
+              }
+            },
+            {
+              "quantity": "-479671",
+              "transaction": {
+                "hash": "1b581c3f0c8e6fb12626db7d52ee6c4b9978cf6608d1e97587e6f6835b5406de"
+              }
+            },
+            {
+              "quantity": "-1094542059",
+              "transaction": {
+                "hash": "046ed3148e1830937aa1c5b6265fa5170c69c09b1810f0edc833bccb24fdd407"
+              }
+            },
+            {
+              "quantity": "-1702301617",
+              "transaction": {
+                "hash": "b6c278380b233b48fd931fb14d79fb64ad968375214779a0cc94b79262a6b399"
+              }
+            },
+            {
+              "quantity": "128",
+              "transaction": {
+                "hash": "189c9892162bd1f048d2e3a4f483a1ef36452c8553d44b7471dc5e07a96636a4"
+              }
+            },
+            {
+              "quantity": "1090889144",
+              "transaction": {
+                "hash": "864d4da78cf8bbe5752d6e4b2431644d8ec9b3b3ef2cf6e4afff43d567f01fda"
+              }
+            },
+            {
+              "quantity": "8104463",
+              "transaction": {
+                "hash": "474cff256f525a74f171648cea1385cd40bff6a5e17811f47ecd102ce63b73e0"
+              }
+            },
+            {
+              "quantity": "20290024",
+              "transaction": {
+                "hash": "6f1e23b04da4744ff1bcad6293bc80ce27dbbde344d55bf181dafd73476aa6b5"
+              }
+            },
+            {
+              "quantity": "-3025289",
+              "transaction": {
+                "hash": "eb775f689c951dc0963281cebe14a155a4b67e0cec43c027b615a78f8e35b44d"
+              }
+            },
+            {
+              "quantity": "-4750995",
+              "transaction": {
+                "hash": "80ac2e268f64f9442d028ae1ddf5f5b54b8a01289b02cc1ad59c9f45ca53c590"
+              }
+            },
+            {
+              "quantity": "-5755732",
+              "transaction": {
+                "hash": "42773229c1d7ef8971da1f02ba6fc7b4804cf07e63731ea424c98d6ac5d44f2d"
+              }
+            },
+            {
+              "quantity": "8477041",
+              "transaction": {
+                "hash": "dc1d2dd8bf9957fdb8136769b49da050a8d51afa795b0c98bbd1c462f54bd5cf"
+              }
+            },
+            {
+              "quantity": "-3002932408",
+              "transaction": {
+                "hash": "86f2ff697dff9261b826a97ba008407738ae6092dd69fe540c8a27eafa71768f"
+              }
+            },
+            {
+              "quantity": "980881288",
+              "transaction": {
+                "hash": "56963f77311c2d894e392217c9260b79e32054175a406af1ea0233ed617592cb"
+              }
+            },
+            {
+              "quantity": "940672468",
+              "transaction": {
+                "hash": "991d96ca1bc50f490fcfe9cf19f0931f98293a0e3630b59d532e2037a89be835"
+              }
+            },
+            {
+              "quantity": "-71845497",
+              "transaction": {
+                "hash": "cf409673058f2f5d8e29e8e5992f1f8e64d3dfd304f59a43565795834fb0bc55"
+              }
+            },
+            {
+              "quantity": "1054660579",
+              "transaction": {
+                "hash": "a4a74993436244f5978f8a68bba937dec6c4850f1653e6ba94b4dfd1f2edbed3"
+              }
+            },
+            {
+              "quantity": "2000000000",
+              "transaction": {
+                "hash": "0b3c39aa1c9d8bd46e02ce1479d66196e46d30a187abb4887f8af8aa4b43228c"
+              }
+            },
+            {
+              "quantity": "-2000002432",
+              "transaction": {
+                "hash": "a06cbfd590e0bdbc375eced1c80b582e33dca1fba4fcfc94b0b2b0c63f4a114b"
+              }
+            },
+            {
+              "quantity": "1096418459",
+              "transaction": {
+                "hash": "7bdc31a093c7e3de263d9bbf6de76f827842e857d79bd1f078aef6916af53c43"
+              }
+            },
+            {
+              "quantity": "2000000000",
+              "transaction": {
+                "hash": "d719532f6f39023f7b9a59d5db59e2aa44525f8fbc8bcf92ed9dfddcad295bee"
+              }
+            },
+            {
+              "quantity": "1830738",
+              "transaction": {
+                "hash": "097931fc5aebfdba6d3f9321cb1844012db43ef463e4636d0cec8f2ad3977d09"
+              }
+            },
+            {
+              "quantity": "-103344028",
+              "transaction": {
+                "hash": "33560daa20a8928e53ea874ca7717de500bb1809a85fb16cd69b1b9f88ae2e5e"
+              }
+            },
+            {
+              "quantity": "1061456413",
+              "transaction": {
+                "hash": "e99efa5ad31721a53aa466c1d378d6a0984d8b0ee444f523c8ec43c7d1c39130"
+              }
+            },
+            {
+              "quantity": "1100000000",
+              "transaction": {
+                "hash": "a9ac2dabd78c892ead05ec7b6715bc2d928d98126faa4743240907ec75463c5e"
+              }
+            },
+            {
+              "quantity": "4172974",
+              "transaction": {
+                "hash": "1a42de6b433d0a481d4b14d3aca566d8b1e5723c28d9a2957099d217bdc4d4b3"
+              }
+            },
+            {
+              "quantity": "2095274397",
+              "transaction": {
+                "hash": "ad46eb105937901fdf19b2f9b9fff031602a6a507f0623d7c254d6ab456a6bf5"
+              }
+            },
+            {
+              "quantity": "1796921316",
+              "transaction": {
+                "hash": "1e869bac439e487f04f9690e98acbb0566af8409756ba972d44a86919513deff"
+              }
+            },
+            {
+              "quantity": "1996745480",
+              "transaction": {
+                "hash": "231d0b3932b2d64c72fd19ecbcd06037e53c081f4093652207313709a2702a1b"
+              }
+            },
+            {
+              "quantity": "-1029277432",
+              "transaction": {
+                "hash": "8447ed76c8d418204ccde35e5d3f5afbf9550c5adbb11353deeac0b35840dd10"
+              }
+            },
+            {
+              "quantity": "-1167187629",
+              "transaction": {
+                "hash": "e0f11ccdc00fc79cf53bc862ed34efc661e216dde6cfe355e009e508cbcf7645"
+              }
+            },
+            {
+              "quantity": "-974099656",
+              "transaction": {
+                "hash": "e2c1b0e63c82173d55667dc3606cbec02e817df9a754c3f4b34143016e521f64"
+              }
+            },
+            {
+              "quantity": "-3431397",
+              "transaction": {
+                "hash": "5ec3f2d9468161341a06c1025a165918d711da8d8011c7e48fbe557c0cffc11b"
+              }
+            },
+            {
+              "quantity": "-100262",
+              "transaction": {
+                "hash": "4e16b8526cda3be9de43db1425b09eeb0fe48a3864c78b487b347059bafe622a"
+              }
+            },
+            {
+              "quantity": "85000000",
+              "transaction": {
+                "hash": "f72b6addd08f8771238084daf1f19b256c5b5aff057e4e65a8e058072a495215"
+              }
+            },
+            {
+              "quantity": "-998631626",
+              "transaction": {
+                "hash": "6b800bfbbf7bf5c969284c970461c85a04877808a4e159a0f38bc779a95d6f16"
+              }
+            },
+            {
+              "quantity": "-1008958691",
+              "transaction": {
+                "hash": "6cf9c82ff551434039d5d2edec755fcffda56110f618edd68d7ec3f7a723f83d"
+              }
+            },
+            {
+              "quantity": "2086010969",
+              "transaction": {
+                "hash": "b7773b23d8348517ecd08d68c9cf20198b2a33bfacd3842eb0eb7500f13d388d"
+              }
+            },
+            {
+              "quantity": "2555543715",
+              "transaction": {
+                "hash": "d29af742386a3f09a6cdc041f76db1206f83f3d8016227f2b9920680ae63519a"
+              }
+            },
+            {
+              "quantity": "2999842932",
+              "transaction": {
+                "hash": "a771ced9f08554c7a6dee48d66edb482d9c84314184e9b0d007b57e76a265c52"
+              }
+            },
+            {
+              "quantity": "8298802",
+              "transaction": {
+                "hash": "5847d9a10421a26ad370aef273ab6ae781a8aad405efb165103ee60d9dd7980d"
+              }
+            },
+            {
+              "quantity": "95918584",
+              "transaction": {
+                "hash": "73560e7953d3b931c794ff697f883e83a9137d451225d4dbf0d7790786d36323"
+              }
+            },
+            {
+              "quantity": "999918126",
+              "transaction": {
+                "hash": "375112b210210892fbf7eb9268fdad70fca78995ca02ae8b227b322429a7da39"
+              }
+            },
+            {
+              "quantity": "-148103746",
+              "transaction": {
+                "hash": "444ef88156dbf402830516dfc2b9cc3232efbb95631ad48a25a15f40e86a2ec3"
+              }
+            },
+            {
+              "quantity": "999913053",
+              "transaction": {
+                "hash": "dadaa6bb36c69f27b2b665c2b54faccf3a97eb5b7a0ac6a01f65bdc2713367c1"
+              }
+            },
+            {
+              "quantity": "999205442",
+              "transaction": {
+                "hash": "3b97d1675a7164c8e9ef40ea5ceea69a9cadc3e1d95d9d27bfe4fede6783cb82"
+              }
+            },
+            {
+              "quantity": "-1028712566",
+              "transaction": {
+                "hash": "7dd90a7e05f9c95b2f796754508b4a5af6833b55e42336263485f83507a71787"
+              }
+            },
+            {
+              "quantity": "999700141",
+              "transaction": {
+                "hash": "575d78bda206bfa23f28884c53c614795bba4814c824998a80faff9a9d5c9adb"
+              }
+            },
+            {
+              "quantity": "499974658",
+              "transaction": {
+                "hash": "36305dc0ae9626bf874d5eb8cbeaf27838dc3e77fc07c42225bc62dc2e10987c"
+              }
+            },
+            {
+              "quantity": "499950068",
+              "transaction": {
+                "hash": "092c81279858b5917422ba1264d16e335fedd5013a271b51e5f49fce6316bb99"
+              }
+            },
+            {
+              "quantity": "-499945075",
+              "transaction": {
+                "hash": "7c5993e9099dad29d8faea16746aed846d883aa07c4c2ee630623f2bba86951d"
+              }
+            },
+            {
+              "quantity": "1117462799",
+              "transaction": {
+                "hash": "930ffffad450af28c44534c881b56cc0d95f523479823c6d1362fd4ee5b6f439"
+              }
+            },
+            {
+              "quantity": "1198166285",
+              "transaction": {
+                "hash": "16eb4585d4e23625ee81887fd03aa1d1e491fb40b20542f9a0c584b1ca782425"
+              }
+            },
+            {
+              "quantity": "999431965",
+              "transaction": {
+                "hash": "e07620eeee7f1f50d0eae55c488c8216757608d25ef481eb3f43b09193210984"
+              }
+            },
+            {
+              "quantity": "999958280",
+              "transaction": {
+                "hash": "63e62c5e6b19f1ffe9bb30b1fd2da3569f25809313f99ece740d098994782858"
+              }
+            },
+            {
+              "quantity": "2001119538",
+              "transaction": {
+                "hash": "769c4ffe1e810d8632e14313c7d5a521142c0275af10d825f70aba0cdea870a5"
+              }
+            },
+            {
+              "quantity": "-550685316",
+              "transaction": {
+                "hash": "f713b4a56ea89964982dcf59c30c77642609b0bb88d39fe35cb6193e0ba8284d"
+              }
+            },
+            {
+              "quantity": "-542725486",
+              "transaction": {
+                "hash": "050ee86952106fd3bc1d58f04f5612795f630f5dbe7e2409be9f9d593ea2b32e"
+              }
+            },
+            {
+              "quantity": "-1085322359",
+              "transaction": {
+                "hash": "1a2431b8ce8164f171e96e7e622846aec95e1bacb5d24d855854983dfb03dc1e"
+              }
+            },
+            {
+              "quantity": "-378072",
+              "transaction": {
+                "hash": "0d7d7541e37bfe195f60a9ad52ca921c168821ce22f3374d7af8519d4eb25230"
+              }
+            },
+            {
+              "quantity": "-96119538",
+              "transaction": {
+                "hash": "099ec3ff733bf3b70fad24bde9d94d8d0a7271328c2b4169267a4bac9ea21d11"
+              }
+            },
+            {
+              "quantity": "-513054505",
+              "transaction": {
+                "hash": "d78c0dcb3ee818369bc2be8eb1cc037786c08fe8cf2de7c5a5860e5964e60f36"
+              }
+            },
+            {
+              "quantity": "999674078",
+              "transaction": {
+                "hash": "c43613b6317196209a7fae9081d0e939571d0955f62222cc7ce9b440cd082de4"
+              }
+            },
+            {
+              "quantity": "999960340",
+              "transaction": {
+                "hash": "fc1d9c3c04e7de5fedd6de99b136c61c40a3ec2ff2fb36f1ef5c3fd82d137bff"
+              }
+            },
+            {
+              "quantity": "-1040919249",
+              "transaction": {
+                "hash": "8bca4bc5dd6141394e6657391487afb781f52e37e2b46c1867c80d8ba561387b"
+              }
+            },
+            {
+              "quantity": "-1038037835",
+              "transaction": {
+                "hash": "d1183b1ede480c08cebde77e3158cc376f9cb8333e315280305d549fb607a650"
+              }
+            },
+            {
+              "quantity": "499583636",
+              "transaction": {
+                "hash": "0debc022bf82c597bf02ed635c7ed03d0bfedf522acdabca96a54ecb6f64f16f"
+              }
+            },
+            {
+              "quantity": "-521077300",
+              "transaction": {
+                "hash": "16b0148356d88a64f45c109bd8f320842b8ad8f80c98ae9a7a2e4df670464606"
+              }
+            },
+            {
+              "quantity": "-1040020002",
+              "transaction": {
+                "hash": "cc543c33040154117445bbfffddae8d51ed0dd400cd7094a9b4a501740862721"
+              }
+            },
+            {
+              "quantity": "-1047730325",
+              "transaction": {
+                "hash": "8536206d9178c1723cd25dada0ec5b5256026560ceebfebbff8cab8bbad9eef4"
+              }
+            },
+            {
+              "quantity": "994595",
+              "transaction": {
+                "hash": "2fbc9c88e39331977a9c6bf5e1a7efb9405da2c308b466ffc1640e6d8190509e"
+              }
+            },
+            {
+              "quantity": "-100349",
+              "transaction": {
+                "hash": "ea0e9124f84f4674a624d29ba09212a9e1e30c4ca15d33b84631b16901fe6c76"
+              }
+            },
+            {
+              "quantity": "956285832",
+              "transaction": {
+                "hash": "d83ed87038a2349df6e36f41b3aaf8f67a4be58df6486615621a160170dc480f"
+              }
+            },
+            {
+              "quantity": "-531461722",
+              "transaction": {
+                "hash": "ab7f8d555390902f9d57d805541acf8a6e6abed1325b15b5e424c9af1df7dc84"
+              }
+            },
+            {
+              "quantity": "2000000000",
+              "transaction": {
+                "hash": "454a37fb78fa018236f9f0a2cdfcfa06cf8065aeff8a58b2083a620a88622bf6"
+              }
+            },
+            {
+              "quantity": "992622153",
+              "transaction": {
+                "hash": "9d9b7aeb04370a4ab0aeffe2949c645a39675ee435b37b3cafc5f90950efa22b"
+              }
+            },
+            {
+              "quantity": "-569013915",
+              "transaction": {
+                "hash": "f5f16347cfbe4ff6c3da29e37b5f2de88a1538b9c47dfd5796683c1d246d1b5e"
+              }
+            },
+            {
+              "quantity": "1155199655",
+              "transaction": {
+                "hash": "c94c57a45e864dd077e07a8a26077c86bba1b188a967fe7639753237bc104361"
+              }
+            },
+            {
+              "quantity": "-1431193940",
+              "transaction": {
+                "hash": "303cc1f04ec66ed4b98492b1a16b41b17fb2576aadcf4254d1a9027f5150b54e"
+              }
+            },
+            {
+              "quantity": "1000000000",
+              "transaction": {
+                "hash": "0e8966b1a9cea188224cbeee5efd0f27e96f88012ee2096442c5d1f86b3e2ebc"
+              }
+            },
+            {
+              "quantity": "-1000015046",
+              "transaction": {
+                "hash": "c27a0688a603800c8bb76f37cf0f125618cc48ba4591d9ac4b5e43b956b8c84f"
+              }
+            },
+            {
+              "quantity": "1260600000",
+              "transaction": {
+                "hash": "2bad76973d1c8d27ed93b55d8c67175b4df642dc08a18d2cb65cf5f71e4690f1"
+              }
+            },
+            {
+              "quantity": "8999165",
+              "transaction": {
+                "hash": "20d331f2a1d739536e3bdfb6f412c6b4713812ebf5b31955979baaa2fef1defc"
+              }
+            },
+            {
+              "quantity": "-1003005796",
+              "transaction": {
+                "hash": "9ffe3f956128eb86c376d00df2be62600cf18047c243f117f74cf102817dbce1"
+              }
+            },
+            {
+              "quantity": "-330711",
+              "transaction": {
+                "hash": "e9ffe54083b5e0fff5e1da906f9d3bd0c8e1e9fa10bf8c7e98d6d10b8afb6254"
+              }
+            },
+            {
+              "quantity": "-1006787430",
+              "transaction": {
+                "hash": "1b14905caf371d4dad1080a05fab6f6137ff2a45df422f0e44b275e4dec42e45"
+              }
+            },
+            {
+              "quantity": "-1020685919",
+              "transaction": {
+                "hash": "1b50f27e8d1af2f6d4bd98548f58d1121a58cf443241e9b81c3066327c6ba88f"
+              }
+            },
+            {
+              "quantity": "938511606",
+              "transaction": {
+                "hash": "754b5237be74bb3da32fc4888efd9a811cd13006dfbb7d344cae00295d9f30b6"
+              }
+            },
+            {
+              "quantity": "999726647",
+              "transaction": {
+                "hash": "47adb6821e30212855a93bf8aee815ba4ea86070920b8c6a81668a68dda7c352"
+              }
+            },
+            {
+              "quantity": "999867247",
+              "transaction": {
+                "hash": "f30a573529581ad166f606f5fc8d0ad5f4f1dffd0ae830d000a0758acdd4d902"
+              }
+            },
+            {
+              "quantity": "-1000904121",
+              "transaction": {
+                "hash": "fe710c6784dce3d20f192e6eb60c380a03ecdd9f940e1c7d89248531d32ee7b8"
+              }
+            },
+            {
+              "quantity": "352775",
+              "transaction": {
+                "hash": "8bb3480e76615a036bd21042fe71bedb27fdc54dda5a7d939d192205331335ed"
+              }
+            },
+            {
+              "quantity": "999556703",
+              "transaction": {
+                "hash": "1a9fe70ea21da5bb7a47d3215c45ed176ae8e93de26bdcac18538c5fa949ab52"
+              }
+            },
+            {
+              "quantity": "999640603",
+              "transaction": {
+                "hash": "1f0ef493b4f9cff42e9e180f252cfd7a1e00375a573dc34cf02f89eacb52b6b3"
+              }
+            },
+            {
+              "quantity": "928192794",
+              "transaction": {
+                "hash": "41a230330f721979dda1a39968bde2f5603374da184fc77b201318c6fe609804"
+              }
+            },
+            {
+              "quantity": "-1014485766",
+              "transaction": {
+                "hash": "f28858c7995283a4ca162d9c04e18f0a1001107bc785d9a3a9c2f37a0acd93bb"
+              }
+            },
+            {
+              "quantity": "-1002550241",
+              "transaction": {
+                "hash": "59807fec661fb13871cc7a8921b3a79773519bb2a6edb98fb3352504ae700e9e"
+              }
+            },
+            {
+              "quantity": "-1000534589",
+              "transaction": {
+                "hash": "a86524672bf566db4b6aa4e72f90a92c099085e3f36f5658d99867d4ab79dc71"
+              }
+            },
+            {
+              "quantity": "999868280",
+              "transaction": {
+                "hash": "45bb27bb75d55f2540fca2a70fde38827965a9fe0763d7d037f6eb5b066368f4"
+              }
+            },
+            {
+              "quantity": "1090925",
+              "transaction": {
+                "hash": "459722fa083bdbe5a839422bfd53871a5aa8d53dcb4dbca66e8f1c7d2eb65472"
+              }
+            },
+            {
+              "quantity": "-1031161887",
+              "transaction": {
+                "hash": "92283dada37e7e83c07afa01817b810331b2dcec190e67a18c2b4b82c6fad12b"
+              }
+            },
+            {
+              "quantity": "-1038387933",
+              "transaction": {
+                "hash": "390da40ddc1619f62197694f780a010ef0ce5b62c3b38b5f31e9941c2e35846a"
+              }
+            },
+            {
+              "quantity": "-1140325929",
+              "transaction": {
+                "hash": "2a7b2d286a8003adae9295c3a88e131d3d60f7618e9bf8c6d1c808313abe3d08"
+              }
+            },
+            {
+              "quantity": "-717339",
+              "transaction": {
+                "hash": "fabf9928a09f2dd30717524ca4357ce5f517b54af5f4de7120a3e1fc5b0ad7e5"
+              }
+            },
+            {
+              "quantity": "-105902",
+              "transaction": {
+                "hash": "c7d5a33b4c3ba39cddc897aeaffc823409f75a032f477dbcd2664cb719daf30b"
+              }
+            },
+            {
+              "quantity": "3937796",
+              "transaction": {
+                "hash": "bfa6e085c8c23d7425d0f116b7a78328b215c6202e50a0fee05d2d4d39fe737e"
+              }
+            },
+            {
+              "quantity": "-201512040",
+              "transaction": {
+                "hash": "cabde5f1987c78a15dfb60b35dc683f2a6a56757c2d0182969c1b077fcb17e07"
+              }
+            },
+            {
+              "quantity": "40304005",
+              "transaction": {
+                "hash": "c8bad7010c16d69d561b57025dc18110f85dd517b7506c1ba23838becd857bf3"
+              }
+            },
+            {
+              "quantity": "-398015774",
+              "transaction": {
+                "hash": "39e802fae7d087c11c1121450ec067003557666c28f81297fdacb12423178928"
+              }
+            },
+            {
+              "quantity": "-94969613",
+              "transaction": {
+                "hash": "3967159373494034c776097d1c2a038c373e82789a26f8faf05cd12358e74213"
+              }
+            },
+            {
+              "quantity": "-1118828909",
+              "transaction": {
+                "hash": "bd2f89fb0500839484100e696ca7f21d1959ec46355e714802777e16d89f47d8"
+              }
+            },
+            {
+              "quantity": "-4944338302",
+              "transaction": {
+                "hash": "d6e3cd48027bd9c01b6775cc70527751ce59c93220ccfd0861a710271d3d3fe9"
+              }
+            },
+            {
+              "quantity": "11863584",
+              "transaction": {
+                "hash": "939e3e90baa51505447ddb4188749dea1b8fa7ea7846f24d0c4b03efefc0a9e5"
+              }
+            },
+            {
+              "quantity": "-446827951",
+              "transaction": {
+                "hash": "ae7deddbbcfc4cf57f78fbbcf9d1fd6552e172be1ddc76b153fafa40d664da6f"
+              }
+            },
+            {
+              "quantity": "-18606121",
+              "transaction": {
+                "hash": "0e5068422e213152e5b31f69ae5833bfe57efa99e78e4190af26a6d3403ba0c9"
+              }
+            },
+            {
+              "quantity": "-1002522777",
+              "transaction": {
+                "hash": "77443e922d58c804222cf6acec68ce82bcca0b658d4e1895ec70604544200278"
+              }
+            },
+            {
+              "quantity": "1000000000",
+              "transaction": {
+                "hash": "e2df29a49800009aa6aeddb7161cf25c7fd35bc40960d52d1bd80d979f6162cc"
+              }
+            },
+            {
+              "quantity": "981132521",
+              "transaction": {
+                "hash": "36cbd711a6cb449b5039224d080643d8ef72ff0a386f322c108aa1c6c291ea4e"
+              }
+            },
+            {
+              "quantity": "-1003255509",
+              "transaction": {
+                "hash": "9a63facf85c8576b6835abf40d8f5c1d1e7d5277cecedb63f9ab9fbdbb9f117b"
+              }
+            },
+            {
+              "quantity": "998954187",
+              "transaction": {
+                "hash": "a660ef7aab1ad090b61fcb47aeb6e64c238e840d871a9e8448b6315e450a22c2"
+              }
+            },
+            {
+              "quantity": "-42362612",
+              "transaction": {
+                "hash": "c4f36ce60131d1c68354e8b8e94bfa95574bf693cd0a9103b35c4da5a30e6b8e"
+              }
+            },
+            {
+              "quantity": "198121559",
+              "transaction": {
+                "hash": "9b45e33c7d7fbc67876ce534510868cecc68f4b742f60b0b56512eeba145d4c7"
+              }
+            },
+            {
+              "quantity": "-451503047",
+              "transaction": {
+                "hash": "8af3c71e3dacb540532c85913e4b5d9c8ee7235e40a54bc9ee43ed84185a035f"
+              }
+            },
+            {
+              "quantity": "-972851658",
+              "transaction": {
+                "hash": "d2110b10a4326437ea58ec54e378e674a27ab84946ab9d55d06810860eede425"
+              }
+            },
+            {
+              "quantity": "11773017",
+              "transaction": {
+                "hash": "41077b4afd1ff953ffeadd0a4050213bfaf6d7d5a663b10865951390020c3cdc"
+              }
+            },
+            {
+              "quantity": "-481451005",
+              "transaction": {
+                "hash": "d68aaab9e27fe174265a11a74dff18a1a798b840e71221d3143098e0083ee794"
+              }
+            },
+            {
+              "quantity": "-17259503",
+              "transaction": {
+                "hash": "0685b6d244605ed7d39a63299c11aa8ad54488ed60b94ccb92a1ebb4e89b54ef"
+              }
+            },
+            {
+              "quantity": "-929037966",
+              "transaction": {
+                "hash": "60aa53dafb5d583d300ff2ede8055b2dc17c5143e8931abc66191a7a6c56a2ed"
+              }
+            },
+            {
+              "quantity": "-9996206857",
+              "transaction": {
+                "hash": "47e55d7b59b8560ff001c9354c6f1f1489ed6bbab4f3b7a4c81c4f0f864bacb6"
+              }
+            },
+            {
+              "quantity": "-10000098785",
+              "transaction": {
+                "hash": "d9a580173b07fc1ff3234931c55c0c2f1ea2cadb9ab86cc9284aa1ea1724f387"
+              }
+            },
+            {
+              "quantity": "-5000056191",
+              "transaction": {
+                "hash": "7adec89541937263e4de93b4f9db84022e0af3180646b223dc5378160d09e2d7"
+              }
+            },
+            {
+              "quantity": "1141956",
+              "transaction": {
+                "hash": "d74753e75e04ff089e89ca7c263cd2a4f4e8422bed017d5ca8d2a367b9311fb4"
+              }
+            },
+            {
+              "quantity": "128",
+              "transaction": {
+                "hash": "c3757461b58c0695012ec43e0a3d992a2aaa6ab0c61b1eb7ab400a8d74d0da6d"
+              }
+            },
+            {
+              "quantity": "248801",
+              "transaction": {
+                "hash": "aac019589f07be066c0255961d70a8e1a4c3ade30ed98a5584e1cb4dd004414d"
+              }
+            },
+            {
+              "quantity": "527035277",
+              "transaction": {
+                "hash": "d81b43b1f20cbd866e9bbb43da0efdd46069a7283e5e3b0b565acfde889e1cfb"
+              }
+            },
+            {
+              "quantity": "-28323298",
+              "transaction": {
+                "hash": "61f496dcf29e11a061b8eb6ea54b87c75ad28ecba3ee766592e2c653482c917c"
+              }
+            },
+            {
+              "quantity": "2997434",
+              "transaction": {
+                "hash": "9032a480c0b1aedb26a1322962120c19b7499b5dbd4d140596e8c8944d517d38"
+              }
+            },
+            {
+              "quantity": "-355002690",
+              "transaction": {
+                "hash": "423166bd44bf7cbec23e65e3dd870613febd59ce1846f3e2b898459673d3b60b"
+              }
+            },
+            {
+              "quantity": "-573234393",
+              "transaction": {
+                "hash": "bdbed995601aeab699a63f1ca178c7a7a67e29ad5b4bacd7571f8947086c85ad"
+              }
+            },
+            {
+              "quantity": "-120379129",
+              "transaction": {
+                "hash": "7e79b55712d8e26f212e7067c2615951f7698fb0ebff189264a888b5afc53dda"
+              }
+            },
+            {
+              "quantity": "149322025",
+              "transaction": {
+                "hash": "2670d236fe23b9db06de3d1bf682dee750ceadf8d98a25090500682d2962757e"
+              }
+            },
+            {
+              "quantity": "-103574039",
+              "transaction": {
+                "hash": "cf89e256bf2431002266aca3d57e7392d20ef1055e51b46e704a5ff46035d571"
+              }
+            },
+            {
+              "quantity": "-41441740",
+              "transaction": {
+                "hash": "89f863c08a5f57a7787e1b1248cb3b865490e8c55582348808795e1a04e3f8f6"
+              }
+            },
+            {
+              "quantity": "-166736164",
+              "transaction": {
+                "hash": "20768a66d2116876ea669b61d89fbf7a82155dd3e88801cfd47085a066c80c26"
+              }
+            },
+            {
+              "quantity": "-531350356",
+              "transaction": {
+                "hash": "fbe9f9211cd017f3d4b2bfbd87d34fedffb5b5522bddfef76f144500ddd5a345"
+              }
+            },
+            {
+              "quantity": "-517172757",
+              "transaction": {
+                "hash": "d09c59d07c8d21040274a0e7d38be3e6dcac662e3ca31cf5a3639ac3a5f047db"
+              }
+            },
+            {
+              "quantity": "-585187300",
+              "transaction": {
+                "hash": "23d80ec12542d53a10f3b9d3cb3673b75866dd4f8c897c3eb3e1129b10a447ab"
+              }
+            },
+            {
+              "quantity": "-36945361",
+              "transaction": {
+                "hash": "deaa4a06d26ecee9908bb191152db8652421dea75390eb3b77b0d206574537a8"
+              }
+            },
+            {
+              "quantity": "40000000",
+              "transaction": {
+                "hash": "95ef4f517302122e9aba69b9a3c06b60711774e83eace4eb6c8a6663fd52b6e0"
+              }
+            },
+            {
+              "quantity": "-40004566",
+              "transaction": {
+                "hash": "270036fa209906c98e1feeb808c149f6381ab8980b2efc6fea49eb0f04f99c61"
+              }
+            },
+            {
+              "quantity": "64940149",
+              "transaction": {
+                "hash": "4f7e914f1292025002fdc599b84052858d18c2f9413883e8c4df6a548b7d1f09"
+              }
+            },
+            {
+              "quantity": "-1117737505",
+              "transaction": {
+                "hash": "891a28a3e81a68ffb18d028a8d862230b6eb9df6ebdaac40f474cc6de53affdd"
+              }
+            },
+            {
+              "quantity": "-33664",
+              "transaction": {
+                "hash": "e8bec98d33e9533d4fdf5e19e9b68c01c3dea517855ce944174d8d9ee027db51"
+              }
+            },
+            {
+              "quantity": "-1010087503",
+              "transaction": {
+                "hash": "a29a6ddbb4e6fe4e2930f6607b53d04a1cd3c96eb00b1e139a563ef16e60790b"
+              }
+            },
+            {
+              "quantity": "-1655029568",
+              "transaction": {
+                "hash": "ffe49f4611a245b995da45c2e91573cf43f7b205391c9922ba602f65126060eb"
+              }
+            },
+            {
+              "quantity": "496171279",
+              "transaction": {
+                "hash": "afd445120fbd8ec5f13a3a96c579b03c0f1ef3f69a5ad0599ddae86fa42e54d7"
+              }
+            },
+            {
+              "quantity": "716935",
+              "transaction": {
+                "hash": "3d69147f0b60623ea897d5a4c2ccb5744d20633a8409c9ca38459ee4d20d00c3"
+              }
+            },
+            {
+              "quantity": "-5000708950",
+              "transaction": {
+                "hash": "96bcc9190d6e429cc975e86e56b7986f759884da27599317f6979b07bab0241d"
+              }
+            },
+            {
+              "quantity": "30908082",
+              "transaction": {
+                "hash": "fdb5c63f04f328392bc5fd70d6cd44ae2adeea2199305be86221d5ef91ebd11f"
+              }
+            },
+            {
+              "quantity": "-1338585",
+              "transaction": {
+                "hash": "4e7e53f145f2d43d10eacb5cbacbb40ee1af092030e58b607b0b7f7a5ec336f8"
+              }
+            },
+            {
+              "quantity": "-1784897",
+              "transaction": {
+                "hash": "62dc91177f3c55c8651491bea488821aa2c447e6a8b49dce3713fa18ce5de7d5"
+              }
+            },
+            {
+              "quantity": "-371285259",
+              "transaction": {
+                "hash": "4dbe130eebdf16fb382b50f99a64222d9237718f3a6df74096cb91d601f6cbd9"
+              }
+            },
+            {
+              "quantity": "-14256238",
+              "transaction": {
+                "hash": "a26b02a1637a965371b4c3766270552d16430f3d50c8eb4bb7b57128e6f82ec3"
+              }
+            },
+            {
+              "quantity": "-500020190",
+              "transaction": {
+                "hash": "04746f5ce5dc77a968aaec44b5275ed88340e1d0e6b7fd04be4697e36f7ba141"
+              }
+            },
+            {
+              "quantity": "-320924",
+              "transaction": {
+                "hash": "c611ded6b5a629e804ae8d73c15c03697bfa7ff7556a03afd088ccbdddef7406"
+              }
+            },
+            {
+              "quantity": "-620027636",
+              "transaction": {
+                "hash": "688b415a3db04bf8595b8e64e5799d41d889cd4cfb1e4e11863ad2d4f97b3f91"
+              }
+            },
+            {
+              "quantity": "-108080",
+              "transaction": {
+                "hash": "29445db0895431aff849068c789b793202f284abb9ed668695bb03f549c00041"
+              }
+            },
+            {
+              "quantity": "-21805",
+              "transaction": {
+                "hash": "b81506d1e1b7192cc0e5dd6598b289ed78af2c7c1c8438fc6f13257f01eda5e5"
+              }
+            },
+            {
+              "quantity": "-2863076",
+              "transaction": {
+                "hash": "80ef1b982d060f47d6cdc00e03c4579e18a3fe4d29133d4fbff9e83c4cab00b8"
+              }
+            },
+            {
+              "quantity": "-311909474",
+              "transaction": {
+                "hash": "f3ebca4912835f7b00b2d23201af83bdff06585fd06319f124ac7e2737dc7a12"
+              }
+            },
+            {
+              "quantity": "-2720099",
+              "transaction": {
+                "hash": "d78f71e0b1bbc09e9bfa2525700bae5e78663ce93369587532c4dede786cdad1"
+              }
+            },
+            {
+              "quantity": "15000000000",
+              "transaction": {
+                "hash": "9d59d81b8dd2dec2ba7fda609d7c23566937418d7e00b5bed0b50072dc708f01"
+              }
+            },
+            {
+              "quantity": "-5000096193",
+              "transaction": {
+                "hash": "095eb86a602ce39782eebdff9c60c71488563e10d685330325e25b6e8bd5416e"
+              }
+            },
+            {
+              "quantity": "-14315147",
+              "transaction": {
+                "hash": "4f72d6f2a8d9a23ce127928194f594b9527cc9588ede035375120dce2975436e"
+              }
+            },
+            {
+              "quantity": "-5000023657",
+              "transaction": {
+                "hash": "2931c04cf771a7bd2d8894eb57a738bd9c9d442620b68ab43943da2931b85c69"
+              }
+            },
+            {
+              "quantity": "-5000014797",
+              "transaction": {
+                "hash": "1c72032f19326f9c37b58531e6cbdf92fba36d2354ebbdb81930beb72b8d99dd"
+              }
+            },
+            {
+              "quantity": "1128671",
+              "transaction": {
+                "hash": "ba50ea3f060879425d105015b3401428f6668d4c7981caf7d2e331ace501527c"
+              }
+            },
+            {
+              "quantity": "-2267080",
+              "transaction": {
+                "hash": "515a2efb873fbc9a8511d23ab7849e184abf6ff0463500b60e5fe0203d3cd476"
+              }
+            },
+            {
+              "quantity": "-4575567",
+              "transaction": {
+                "hash": "e894b3d4ef1f19d4d394c229c81f424a234aabb961d14ee1354db2621938a183"
+              }
+            },
+            {
+              "quantity": "-5489124",
+              "transaction": {
+                "hash": "8f795ee98fd9640c80184323cece6b127649307c448e6d6d4601658c789f6e09"
+              }
+            },
+            {
+              "quantity": "9157976",
+              "transaction": {
+                "hash": "246b048510a038178f3e2f3da38b80a3d7d653d99a05c423d297fc0f45487e90"
+              }
+            },
+            {
+              "quantity": "-1004551625",
+              "transaction": {
+                "hash": "33ba63486348c752d557f68731a28ca8b7b1264b4226c0cf5dc4c7105df54880"
+              }
+            },
+            {
+              "quantity": "1080318",
+              "transaction": {
+                "hash": "43efcb04b5fe642dafa544925a03faf3ee8bc2a0886887ff9cffd1e1a2c09b87"
+              }
+            },
+            {
+              "quantity": "-1329214204",
+              "transaction": {
+                "hash": "89fe03b8fc7cc9e4fae4de3fc7ee3b3be7326d0092b51d1b43902cf8ea479a5e"
+              }
+            },
+            {
+              "quantity": "1819956",
+              "transaction": {
+                "hash": "38623f0ab4d538cd2e1f76dd0b36b2ff27db337968bcdc9ec9237c4052a459fa"
+              }
+            },
+            {
+              "quantity": "-1004463290",
+              "transaction": {
+                "hash": "77a0f11401ade361835de3d1825437e786821f9f965f7579151e5f7275b666bd"
+              }
+            },
+            {
+              "quantity": "-504723283",
+              "transaction": {
+                "hash": "ae2dd57a3728a61313df3f52cd7ca4a8f8dbd73f56c55e51e97443995f1ccca8"
+              }
+            },
+            {
+              "quantity": "200000000",
+              "transaction": {
+                "hash": "13ef2bb508ac79d1bba999139a895db6ed094b906658c82ad16e4cfe1394dffb"
+              }
+            },
+            {
+              "quantity": "483345321",
+              "transaction": {
+                "hash": "6ede5f500bda569f4d2442a881fd2147fea91e3f1f09fc0fc470ebedc4a0f0dc"
+              }
+            },
+            {
+              "quantity": "200000000",
+              "transaction": {
+                "hash": "4c38b9d0c8172719beee2678a05aaae2d600a6a90c88318265beb7f5577e1284"
+              }
+            }
+          ],
+          "tokenMints_aggregate": {
+            "aggregate": {
+              "count": "489",
+              "sum": {
+                "quantity": "35164009867"
+              }
+            }
+          }
+        },
+        {
+          "assetId": "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae6e7574636f696e",
+          "assetName": "6e7574636f696e",
+          "fingerprint": "asset12h3p5l3nd5y26lr22am7y7ga3vxghkhf57zkhd",
+          "policyId": "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae",
+          "tokenMints": [
+            {
+              "quantity": "1",
+              "transaction": {
+                "hash": "e252be4c7e40d35919f741c9649ff207c3e49d53bb819e5c1cb458055fd363ed"
+              }
+            }
+          ],
+          "tokenMints_aggregate": {
+            "aggregate": {
+              "count": "1",
+              "sum": {
+                "quantity": "1"
+              }
+            }
+          }
+        },
+        {
+          "assetId": "0000001c1f5134859ee40556e75834b9929d1b393ab94858a3d27ae0494e4359",
+          "assetName": "494e4359",
+          "fingerprint": "asset1mc79zmej5axlk8sd4lhsetxnjy0zkeyvfp3zmc",
+          "policyId": "0000001c1f5134859ee40556e75834b9929d1b393ab94858a3d27ae0",
+          "tokenMints": [
+            {
+              "quantity": "100000000000000",
+              "transaction": {
+                "hash": "7fc5538da029c96d27db0cd0b2dea0567782b9f59fade5f341c43a474c6e533f"
+              }
+            }
+          ],
+          "tokenMints_aggregate": {
+            "aggregate": {
+              "count": "1",
+              "sum": {
+                "quantity": "100000000000000"
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.assets[*].description",
+    "data.assets[*].logo",
+    "data.assets[*].name",
+    "data.assets[*].ticker",
+    "data.assets[*].url",
+    "data.assets[*].decimals",
+    "data.assets[*].tokenMints",
+    "data.assets[*].tokenMints_aggregate",
+    "data.assets_aggregate"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/assets/assets.graphql",
+  "test_name": "assets_first3",
+  "variables": {
+    "limit": 3,
+    "offset": 0,
+    "where": {
+      "assetId": {
+        "_in": [
+          "00000000000410c2d9e01e8ec78ab1dc6bbc383fae76cbe2689beb024d49444153",
+          "00000002df633853f6a47465c9496721d2d5b1291b8398016c0e87ae6e7574636f696e",
+          "0000001c1f5134859ee40556e75834b9929d1b393ab94858a3d27ae0494e4359"
+        ]
+      }
+    }
+  }
+}

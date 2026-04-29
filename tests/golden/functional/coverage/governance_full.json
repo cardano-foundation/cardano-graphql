@@ -1,0 +1,89 @@
+{
+  "anchor_block": null,
+  "description": "Comprehensive CIP-1694 + CIP-100 coverage for governance/voting types (DrepHash, VotingAnchor, Committee, CommitteeMember, CommitteeHash, DelegationVote, OffChainVote* family). All lists masked since composition drifts.",
+  "expected": {
+    "data": {},
+    "errors": [
+      {
+        "extensions": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "exception": {
+            "message": "Expected Iterable, but did not find one for field Committee.committeeMembers.",
+            "stacktrace": [
+              "GraphQLError: Expected Iterable, but did not find one for field Committee.committeeMembers.",
+              "    at completeListValue (/app/node_modules/graphql/execution/execute.js:606:11)",
+              "    at completeValue (/app/node_modules/graphql/execution/execute.js:573:12)",
+              "    at completeValue (/app/node_modules/graphql/execution/execute.js:557:21)",
+              "    at completeValueCatchingError (/app/node_modules/graphql/execution/execute.js:495:19)",
+              "    at resolveField (/app/node_modules/graphql/execution/execute.js:435:10)",
+              "    at executeFields (/app/node_modules/graphql/execution/execute.js:275:18)",
+              "    at collectAndExecuteSubfields (/app/node_modules/graphql/execution/execute.js:713:10)",
+              "    at completeObjectValue (/app/node_modules/graphql/execution/execute.js:703:10)",
+              "    at completeValue (/app/node_modules/graphql/execution/execute.js:591:12)",
+              "    at completeValueCatchingError (/app/node_modules/graphql/execution/execute.js:495:19)"
+            ]
+          }
+        },
+        "locations": [
+          {
+            "column": 5,
+            "line": 18
+          }
+        ],
+        "message": "Expected Iterable, but did not find one for field Committee.committeeMembers.",
+        "path": [
+          "committees",
+          0,
+          "committeeMembers"
+        ]
+      },
+      {
+        "extensions": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "exception": {
+            "message": "Expected Iterable, but did not find one for field Committee.committeeMembers.",
+            "stacktrace": [
+              "GraphQLError: Expected Iterable, but did not find one for field Committee.committeeMembers.",
+              "    at completeListValue (/app/node_modules/graphql/execution/execute.js:606:11)",
+              "    at completeValue (/app/node_modules/graphql/execution/execute.js:573:12)",
+              "    at completeValue (/app/node_modules/graphql/execution/execute.js:557:21)",
+              "    at completeValueCatchingError (/app/node_modules/graphql/execution/execute.js:495:19)",
+              "    at resolveField (/app/node_modules/graphql/execution/execute.js:435:10)",
+              "    at executeFields (/app/node_modules/graphql/execution/execute.js:275:18)",
+              "    at collectAndExecuteSubfields (/app/node_modules/graphql/execution/execute.js:713:10)",
+              "    at completeObjectValue (/app/node_modules/graphql/execution/execute.js:703:10)",
+              "    at completeValue (/app/node_modules/graphql/execution/execute.js:591:12)",
+              "    at completeValueCatchingError (/app/node_modules/graphql/execution/execute.js:495:19)"
+            ]
+          }
+        },
+        "locations": [
+          {
+            "column": 5,
+            "line": 18
+          }
+        ],
+        "message": "Expected Iterable, but did not find one for field Committee.committeeMembers.",
+        "path": [
+          "committees",
+          1,
+          "committeeMembers"
+        ]
+      }
+    ]
+  },
+  "graphql_errors_allowed": true,
+  "ignore_paths": [
+    "data.drepHashes",
+    "data.votingAnchor",
+    "data.committees",
+    "data.delegationVotes",
+    "data.offChainVoteData"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/governance_full.graphql",
+  "test_name": "governance_full",
+  "variables": {
+    "limit": 2
+  }
+}

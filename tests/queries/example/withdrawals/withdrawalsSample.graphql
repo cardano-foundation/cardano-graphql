@@ -1,0 +1,12 @@
+query withdrawalsSample (
+    $limit: Int!
+    $where: Withdrawal_bool_exp
+) {
+    withdrawals (limit: $limit, where: $where) {
+        address
+        amount
+        transaction {
+            hash
+        }
+    }
+}

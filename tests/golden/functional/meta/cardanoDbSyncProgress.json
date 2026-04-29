@@ -1,0 +1,19 @@
+{
+  "anchor_block": null,
+  "description": "Sync health \u2014 syncPercentage is volatile, so it is masked; the shape must match.",
+  "expected": {
+    "data": {
+      "cardanoDbMeta": {
+        "initialized": true
+      }
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.cardanoDbMeta.syncPercentage"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/meta/cardanoDbSyncProgress.graphql",
+  "test_name": "cardanoDbSyncProgress",
+  "variables": {}
+}

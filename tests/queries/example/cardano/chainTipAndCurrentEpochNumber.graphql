@@ -1,0 +1,10 @@
+query chainTipAndCurrentEpochNumber {
+  cardano {
+    tip {
+      number
+    }
+    currentEpoch {
+      number
+    }
+  }
+}

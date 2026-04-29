@@ -1,0 +1,21 @@
+{
+  "anchor_block": null,
+  "description": "Chain tip + current epoch number. Both advance in real time; masked to shape-only.",
+  "expected": {
+    "data": {
+      "cardano": {
+        "currentEpoch": {},
+        "tip": {}
+      }
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.cardano.tip.number",
+    "data.cardano.currentEpoch.number"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/example/cardano/chainTipAndCurrentEpochNumber.graphql",
+  "test_name": "chainTipAndCurrentEpochNumber",
+  "variables": {}
+}

@@ -1,0 +1,38 @@
+query blocksByHashes(
+    $hashes: [Hash32Hex]!
+)  {
+    blocks (
+        where: {
+            hash: {
+                _in: $hashes
+            }
+        },
+        order_by: {
+            number: asc
+        }
+    ) {
+        epoch {
+            number
+        }
+        epochNo
+        fees
+        hash
+        number
+        forgedAt
+        slotLeader {
+            description
+        }
+        previousBlock {
+            hash
+            number
+        }
+
+        nextBlock {
+            hash
+            number
+        }
+        size
+        slotNo
+        transactionsCount
+    }
+}

@@ -1,0 +1,20 @@
+query offChainVotesSuite(
+  $limit: Int!
+) {
+  offChainVoteData(limit: $limit) {
+    hash
+    is_valid
+    language
+  }
+  offChainVoteAuthor(limit: $limit) {
+    name
+    witness_algorithm
+  }
+  offChainVoteReference(limit: $limit) {
+    label
+    uri
+  }
+  offChainVoteGovActionData(limit: $limit) {
+    title
+  }
+}

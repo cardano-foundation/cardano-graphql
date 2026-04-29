@@ -1,0 +1,9 @@
+query blockByNumber(
+  $number: Int!
+) {
+  blocks(
+    where: { number: { _eq: $number } }
+  ) {
+    hash
+  }
+}
