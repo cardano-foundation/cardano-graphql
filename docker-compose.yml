@@ -49,6 +49,7 @@ services:
       - ${CARDANO_NODE_DIR}:/ipc
       - ${CARDANO_NODE_DB}:/node/db
       - ./config/network/${NETWORK}:/config
+    restart: unless-stopped
     entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --port "$CARDANO_NODE_PORT" --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
     ports:
       - ${CARDANO_NODE_PORT}:${CARDANO_NODE_PORT}

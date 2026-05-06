@@ -337,12 +337,20 @@ export class HasuraBackgroundClient {
     const client = new Client(dbConfig)
     await client.connect()
     try {
+      await client.query(`
+        UPDATE "Asset" a
+        SET fingerprint = ma.fingerprint
+        FROM multi_asset ma
+        WHERE a."assetId" = CAST(CONCAT(ma.policy, RIGHT(CONCAT(E'\\\\', ma.name), -3)) AS BYTEA)
+          AND a.fingerprint IS NULL
+      `)
       const result = await client.query(`
-        INSERT INTO "Asset" ("assetId", "assetName", "policyId", "firstAppearedInSlot")
+        INSERT INTO "Asset" ("assetId", "assetName", "policyId", "fingerprint", "firstAppearedInSlot")
         SELECT
           CAST(CONCAT(ma.policy, RIGHT(CONCAT(E'\\\\', ma.name), -3)) AS BYTEA),
           ma.name,
           ma.policy,
+          ma.fingerprint,
           MIN(b.slot_no)
         FROM multi_asset ma
         JOIN ma_tx_mint mtm ON mtm.ident = ma.id
@@ -351,7 +359,7 @@ export class HasuraBackgroundClient {
         LEFT JOIN "Asset" a
           ON a."assetId" = CAST(CONCAT(ma.policy, RIGHT(CONCAT(E'\\\\', ma.name), -3)) AS BYTEA)
         WHERE a."assetId" IS NULL
-        GROUP BY ma.id, ma.policy, ma.name
+        GROUP BY ma.id, ma.policy, ma.name, ma.fingerprint
         ON CONFLICT ("assetId") DO NOTHING
         RETURNING encode("assetId", 'hex') AS "assetId"
       `)
