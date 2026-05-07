@@ -158,15 +158,15 @@ services:
   server:
     platform: linux/x86_64
     build:
-      args:
-        - NETWORK=${NETWORK}
       context: .
       target: server
     image: cardanofoundation/cardano-graphql-server:${CARDANO_GRAPHQL_VERSION}
     environment:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
+      - CARDANO_NODE_CONFIG_PATH=/config/network/${NETWORK}/cardano-node/config.json
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY}
+      - NETWORK=${NETWORK}
       - POSTGRES_PORT=${POSTGRES_PORT}
     expose:
       - ${API_PORT}

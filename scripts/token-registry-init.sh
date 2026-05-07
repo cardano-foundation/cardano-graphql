@@ -22,13 +22,19 @@ case "$NETWORK" in
       export STORE_CARDANO_SYNC_START_SLOT='65836843'
       export STORE_CARDANO_SYNC_START_BLOCKHASH='cb09cae9c54026afebfe6124189600fc0f76c2299bc9f9c32305944979a12fed'
       ;;
-    preprod|preview|testnet)
+    preprod|testnet)
       export GITHUB_ORGANIZATION=input-output-hk
       export GITHUB_PROJECT_NAME=metadata-registry-testnet
       export GITHUB_MAPPINGS_FOLDER=registry
-      # Cardano Node Configuration - Preprod Network
       export STORE_CARDANO_PROTOCOL_MAGIC='1'
-      # we don't know exactly when CIP-68 was introduced so we start from genesis for now on
+      export STORE_CARDANO_SYNC_START_SLOT=0
+      export STORE_CARDANO_SYNC_START_BLOCKHASH=
+      ;;
+    preview)
+      export GITHUB_ORGANIZATION=input-output-hk
+      export GITHUB_PROJECT_NAME=metadata-registry-testnet
+      export GITHUB_MAPPINGS_FOLDER=registry
+      export STORE_CARDANO_PROTOCOL_MAGIC='2'
       export STORE_CARDANO_SYNC_START_SLOT=0
       export STORE_CARDANO_SYNC_START_BLOCKHASH=
       ;;
