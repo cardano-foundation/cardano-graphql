@@ -93,13 +93,10 @@ CMD ["node", "background.js"]
 
 # SERVER
 FROM ubuntu-nodejs AS server
-ARG NETWORK=mainnet
 ENV \
-  CARDANO_NODE_CONFIG_PATH=/config/network/${NETWORK}/cardano-node/config.json \
   HASURA_GRAPHQL_ENABLE_TELEMETRY=false \
   HASURA_URI="http://hasura:8080" \
   LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
-  NETWORK=${NETWORK} \
   OGMIOS_HOST="ogmios" \
   OGMIOS_PORT=1337
 COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/dist /app/packages/api-cardano-db-hasura/dist
