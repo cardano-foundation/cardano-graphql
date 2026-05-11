@@ -192,9 +192,12 @@ function startAssetPolling (
       }
     )
     const db = new Db(config.db, logger)
+    let setupStarted = false
     await db.init({
       onDbInit: () => hasuraBackgroundClient.shutdown(),
       onDbSetup: async () => {
+        if (setupStarted) return
+        setupStarted = true
         try {
           await hasuraBackgroundClient.initialize()
           const backfilledAssetIds = await hasuraBackgroundClient.backfillMissingAssets(config.db)
