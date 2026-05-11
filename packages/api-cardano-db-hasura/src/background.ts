@@ -1,6 +1,5 @@
 import { createLogger, LogLevelString } from 'bunyan'
 import {
-  ChainFollower,
   Db,
   HasuraBackgroundClient,
   MetadataClient,
@@ -11,7 +10,6 @@ import { Logger } from 'ts-log'
 import { CustomError } from 'ts-custom-error'
 import fs from 'fs-extra'
 import { DbConfig } from './typeAliases'
-import { PointOrOrigin } from '@cardano-ogmios/schema'
 // Todo: Hoist to util package next major version
 export class MissingConfig extends CustomError {
   public constructor (message: string) {
@@ -26,18 +24,10 @@ export interface BackgroundConfig {
   hasuraCliPath: string;
   hasuraCliExtPath: string;
   hasuraUri: string;
-  chainfollower?: {
-    id: string;
-    slot: number;
-  };
   loggerMinSeverity: LogLevelString;
   metadataServerUri: string;
   metadataUpdateInterval?: {
     assets: number;
-  };
-  ogmios?: {
-    host?: string;
-    port?: number;
   };
 }
 
@@ -92,18 +82,10 @@ async function getConfig (): Promise<BackgroundConfig> {
   } catch (error) {
     throw new MissingConfig('Database configuration cannot be read')
   }
-  let chainfollower
-  if (env.chainfollower) {
-    chainfollower = {
-      id: env.chainfollower.id,
-      slot: env.chainfollower.slot
-    }
-  }
   const { postgres, ...selectedEnv } = env
   return {
     ...selectedEnv,
     db,
-    chainfollower,
     loggerMinSeverity: env.loggerMinSeverity || ('info' as LogLevelString)
   }
 }
@@ -117,8 +99,6 @@ function filterAndTypecastEnvs (env: any) {
     HASURA_URI,
     LOGGER_MIN_SEVERITY,
     METADATA_SERVER_URI,
-    OGMIOS_HOST,
-    OGMIOS_PORT,
     POSTGRES_DB,
     POSTGRES_DB_FILE,
     POSTGRES_HOST,
@@ -126,9 +106,7 @@ function filterAndTypecastEnvs (env: any) {
     POSTGRES_PASSWORD_FILE,
     POSTGRES_PORT,
     POSTGRES_USER,
-    POSTGRES_USER_FILE,
-    CHAIN_FOLLOWER_START_ID,
-    CHAIN_FOLLOWER_START_SLOT
+    POSTGRES_USER_FILE
   } = env as NodeJS.ProcessEnv
   return {
     composeProfiles: COMPOSE_PROFILES,
@@ -142,10 +120,6 @@ function filterAndTypecastEnvs (env: any) {
         ? Number(ASSET_METADATA_UPDATE_INTERVAL)
         : undefined
     },
-    ogmios: {
-      host: OGMIOS_HOST,
-      port: OGMIOS_PORT ? Number(OGMIOS_PORT) : undefined
-    },
     postgres: {
       db: POSTGRES_DB,
       dbFile: POSTGRES_DB_FILE,
@@ -155,17 +129,39 @@ function filterAndTypecastEnvs (env: any) {
       port: POSTGRES_PORT ? Number(POSTGRES_PORT) : undefined,
       user: POSTGRES_USER,
       userFile: POSTGRES_USER_FILE
-    },
-    chainfollower: {
-      id: CHAIN_FOLLOWER_START_ID,
-      slot: CHAIN_FOLLOWER_START_SLOT
-        ? Number(CHAIN_FOLLOWER_START_SLOT)
-        : undefined
     }
   }
 }
 
-(async function () {
+const ASSET_POLL_INTERVAL_MS = 30_000
+
+function startAssetPolling (
+  hasuraBackgroundClient: HasuraBackgroundClient,
+  worker: Worker,
+  dbConfig: DbConfig,
+  initialLastSeenId: number,
+  logger: Logger
+): void {
+  let lastSeenId = initialLastSeenId
+
+  const poll = async () => {
+    try {
+      const { assetIds, nextLastSeenId } = await hasuraBackgroundClient.pollNewAssets(dbConfig, lastSeenId)
+      lastSeenId = nextLastSeenId
+      if (assetIds.length > 0) {
+        await worker.publishInitialMetadataFetch(assetIds)
+      }
+    } catch (error) {
+      logger.error({ module: 'AssetPoller' }, `Asset poll failed: ${error.message}`)
+    } finally {
+      setTimeout(poll, ASSET_POLL_INTERVAL_MS)
+    }
+  }
+
+  setTimeout(poll, ASSET_POLL_INTERVAL_MS)
+}
+
+;(async function () {
   const config = await getConfig()
   const logger: Logger = createLogger({
     name: 'background',
@@ -177,11 +173,6 @@ function filterAndTypecastEnvs (env: any) {
       config.hasuraCliExtPath,
       config.hasuraUri,
       logger
-    )
-    const chainFollower = new ChainFollower(
-      hasuraBackgroundClient,
-      logger,
-      config.db
     )
 
     const isTokenRegistryEnabled =
@@ -201,13 +192,6 @@ function filterAndTypecastEnvs (env: any) {
       }
     )
     const db = new Db(config.db, logger)
-    const getChainSyncPoints = async (): Promise<PointOrOrigin[]> => {
-      const mostRecentPoint =
-        await hasuraBackgroundClient.getMostRecentPointWithNewAsset()
-      return mostRecentPoint !== null
-        ? [mostRecentPoint, 'origin']
-        : ['origin']
-    }
     await db.init({
       onDbInit: () => hasuraBackgroundClient.shutdown(),
       onDbSetup: async () => {
@@ -215,10 +199,10 @@ function filterAndTypecastEnvs (env: any) {
           await hasuraBackgroundClient.initialize()
           const backfilledAssetIds = await hasuraBackgroundClient.backfillMissingAssets(config.db)
           await metadataClient.initialize()
-          await chainFollower.initialize(config.ogmios, getChainSyncPoints)
           await worker.start()
           await worker.publishInitialMetadataFetch(backfilledAssetIds)
-          await chainFollower.start(await getChainSyncPoints())
+          const lastSeenId = await hasuraBackgroundClient.getMaxMultiAssetId(config.db)
+          startAssetPolling(hasuraBackgroundClient, worker, config.db, lastSeenId, logger)
         } catch (error) {
           logger.error(error.message)
           process.exit(1)
@@ -229,7 +213,6 @@ function filterAndTypecastEnvs (env: any) {
       await Promise.all([
         hasuraBackgroundClient.shutdown,
         worker.shutdown,
-        chainFollower.shutdown,
         db.shutdown
       ])
       process.exit(1)
