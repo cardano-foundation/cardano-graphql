@@ -61,10 +61,6 @@ Get the most recent weekly snapshot link from https://update-cardano-mainnet.ioh
 
 Example - RESTORE_SNAPSHOT=https://update-cardano-mainnet.iohk.io/cardano-db-sync/13.6/db-sync-snapshot-schema-13.6-block-11822103-x86_64.tgz
 
-> **Disclaimer:** The Chainfollower environment variables are currently mandatory.
-> Otherwise the Token registry will get stuck. 
-> We will provide a fix as soon as possible.
-
 ``` console
 docker compose --env-file .env.docker-compose up -d --build
 ```
@@ -168,17 +164,17 @@ docker compose logs -f index-service
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:
 > **_Note_** This Query is not available in early Era's of Cardano. Check Points of Interest here: [Link](https://ogmios.dev/mini-protocols/local-chain-sync/#points-of-interest) 
 ``` graphql 
-{ cardanoDbMeta { initialized syncPercentage }}
+{ cardanoDbMeta { initialized syncPercentage assetSyncPercentage }}
 ```
 or via command line:
 ``` console
 curl \
   -X POST \
   -H "Content-Type: application/json" \
-  -d '{"query": "{ cardanoDbMeta { initialized syncPercentage }}"}' \
+  -d '{"query": "{ cardanoDbMeta { initialized syncPercentage assetSyncPercentage }}"}' \
   http://localhost:3100/graphql
 ```
-:information_source: _Wait for `initialized` to be `true` to ensure the epoch dataset is complete. After the first sync
+:information_source: _Wait for `initialized` to be `true` and `assetSyncPercentage` to reach `100` to ensure the full dataset including token metadata is complete. After the first sync
 you may need to restart the services using `docker compose restart cardano-graphql` if the GraphQL server isn't
 running._
 
