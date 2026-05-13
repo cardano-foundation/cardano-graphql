@@ -143,8 +143,8 @@ For Preprod `.env.docker-compose-preprod` (other networks):
 METADATA_SERVER_URI="https://metadata.world.dev.cardano.org"
 ```
 
-### Enable Performance Indexes (Optional)
-The index service creates optional database indexes to significantly improve query performance for high-volume deployments. Index creation runs concurrently with db-sync and does not block synchronization.
+### Enable Performance Indexes (Recommended)
+The index service creates database indexes to improve query performance. It is **recommended for production** — in particular, the `idx_ma_tx_mint_ident` index is required for efficient new asset polling. Without it, asset polling still works but can take several seconds per cycle on mainnet instead of under 1ms. Index creation runs concurrently with db-sync and does not block synchronization.
 
 To enable, add `indexes` to `COMPOSE_PROFILES` in your `.env` file:
 ```bash
