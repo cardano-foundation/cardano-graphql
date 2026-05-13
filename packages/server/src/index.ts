@@ -42,6 +42,8 @@ export * from './config'
     }
 
     const cardanoNodeClient = new CardanoNodeClient(
+      config.cardanoNodePrometheus.host,
+      config.cardanoNodePrometheus.port,
       logger
     )
     const hasuraClient = new HasuraClient(

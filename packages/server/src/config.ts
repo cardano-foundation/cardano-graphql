@@ -42,6 +42,8 @@ function filterAndTypecastEnvs (env: any) {
     API_PORT,
     CACHE_ENABLED,
     CARDANO_NODE_CONFIG_PATH,
+    CARDANO_NODE_PROMETHEUS_HOST,
+    CARDANO_NODE_PROMETHEUS_PORT,
     HASURA_URI,
     LISTEN_ADDRESS,
     LOGGER_MIN_SEVERITY,
@@ -60,6 +62,10 @@ function filterAndTypecastEnvs (env: any) {
     apiPort: Number(API_PORT),
     cacheEnabled: CACHE_ENABLED === 'true',
     cardanoNodeConfigPath: CARDANO_NODE_CONFIG_PATH,
+    cardanoNodePrometheus: {
+      host: CARDANO_NODE_PROMETHEUS_HOST || 'localhost',
+      port: CARDANO_NODE_PROMETHEUS_PORT ? Number(CARDANO_NODE_PROMETHEUS_PORT) : 12798
+    },
     hasuraUri: HASURA_URI,
     listenAddress: LISTEN_ADDRESS,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,

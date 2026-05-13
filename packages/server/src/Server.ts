@@ -18,7 +18,7 @@ import {
 import { allowListMiddleware } from './express_middleware'
 import { dummyLogger, Logger } from 'ts-log'
 import { clearIntervalAsync, setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic'
-import { clamp, RunnableModuleState } from '@cardano-graphql/util'
+import { RunnableModuleState } from '@cardano-graphql/util'
 
 export type Config = {
   allowIntrospection: boolean
@@ -124,18 +124,9 @@ export class Server {
           query: `
             query getSyncStatus {
               cardanoDbMeta {
+                  assetSyncPercentage
                   initialized
                   syncPercentage
-              }
-              assets_aggregate {
-                aggregate {
-                  count
-                }
-              }
-              tokenMints_aggregate(distinct_on: assetId) {
-                aggregate {
-                  count
-                }
               }
           }`
         }
@@ -144,16 +135,14 @@ export class Server {
         this.logger.debug({ module: 'Server' }, JSON.stringify(result.errors))
         return
       }
-      const assetSyncPercentage = Number(result.data.tokenMints_aggregate.aggregate.count) === 0
-        ? 0
-        : clamp(Math.max(Math.round(Number(result.data.assets_aggregate.aggregate.count) / Number(result.data.tokenMints_aggregate.aggregate.count) * 100)), 0, 100)
-      if (result.data.cardanoDbMeta.initialized && assetSyncPercentage > 99) {
+      const { assetSyncPercentage, initialized, syncPercentage } = result.data.cardanoDbMeta
+      if (initialized && assetSyncPercentage > 99) {
         this.logger.info({ module: 'Server' }, 'DB ready')
         // Promise not awaited purposely
         // https://github.com/cardano-foundation/cardano-graphql/issues/459
         clearIntervalAsync(this.syncProgress)
       } else {
-        this.logger.info({ module: 'Server' }, `Sync Progress: cardano-db-sync: ${result.data.cardanoDbMeta.syncPercentage}% | Asset: ${assetSyncPercentage}%`)
+        this.logger.info({ module: 'Server' }, `Sync Progress: cardano-db-sync: ${syncPercentage}% | Asset: ${assetSyncPercentage}%`)
       }
     }, 5000)
   }
