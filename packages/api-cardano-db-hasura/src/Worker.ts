@@ -46,15 +46,21 @@ export class Worker {
     this.state = 'initialized'
   }
 
+  public async initQueue (): Promise<void> {
+    if (this.queue) return
+    this.queue = new PgBoss({
+      application_name: 'cardano-graphql',
+      ...this.queueConfig
+    })
+    await this.queue.start()
+  }
+
   public async start () {
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'start')
     }
     this.logger.info({ module: MODULE_NAME }, 'Starting')
-    this.queue = new PgBoss({
-      application_name: 'cardano-graphql',
-      ...this.queueConfig
-    })
+    await this.initQueue()
     const subscriptionHandler: PgBoss.SubscribeHandler<
       AssetJobPayload,
       void

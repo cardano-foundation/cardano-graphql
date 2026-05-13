@@ -201,11 +201,12 @@ function startAssetPolling (
         try {
           await hasuraBackgroundClient.initialize()
           const backfilledAssetIds = await hasuraBackgroundClient.backfillMissingAssets(config.db)
+          await worker.initQueue()
+          const lastSeenId = await hasuraBackgroundClient.getMaxMultiAssetId(config.db)
+          startAssetPolling(hasuraBackgroundClient, worker, config.db, lastSeenId, logger)
           await metadataClient.initialize()
           await worker.start()
           await worker.publishInitialMetadataFetch(backfilledAssetIds)
-          const lastSeenId = await hasuraBackgroundClient.getMaxMultiAssetId(config.db)
-          startAssetPolling(hasuraBackgroundClient, worker, config.db, lastSeenId, logger)
         } catch (error) {
           logger.error(error.message)
           process.exit(1)
