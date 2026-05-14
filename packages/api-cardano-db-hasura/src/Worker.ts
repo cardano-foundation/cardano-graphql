@@ -164,42 +164,52 @@ export class Worker {
 
   public async syncMissingMetadata (assetIds: string[]): Promise<void> {
     if (assetIds.length === 0) return
+    const total = assetIds.length
     this.logger.info(
-      { module: MODULE_NAME, qty: assetIds.length },
+      { module: MODULE_NAME, qty: total },
       'Syncing metadata for assets without metadata'
     )
-    const fetchedMetadata = await this.metadataFetchClient.fetch(assetIds)
-    if (fetchedMetadata.length === 0) {
-      this.logger.info({ module: MODULE_NAME }, 'No registry metadata found for existing assets')
-      return
-    }
+    const FETCH_BATCH_SIZE = 1000
+    const LOG_EVERY_N_BATCHES = 100
     let written = 0
-    for (const item of fetchedMetadata) {
-      const metadata = item.metadata
-      const metadataHash = hash(metadata)
-      try {
-        await this.hasuraClient.addAssetMetadata({
-          assetId: item.subject,
-          decimals: metadata.decimals?.value,
-          description: metadata.description?.value,
-          logo: metadata.logo?.value
-            ? processLogoValue(metadata.logo.value)
-            : undefined,
-          name: metadata.name?.value,
-          ticker: metadata.ticker?.value,
-          url: metadata.url?.value,
-          metadataHash
-        })
-        written++
-      } catch (error) {
-        this.logger.warn(
-          { module: MODULE_NAME, assetId: item.subject },
-          `Failed to write metadata for asset: ${error.message}`
+    let batchIndex = 0
+    for (let i = 0; i < total; i += FETCH_BATCH_SIZE) {
+      const chunk = assetIds.slice(i, i + FETCH_BATCH_SIZE)
+      const fetchedMetadata = await this.metadataFetchClient.fetch(chunk)
+      for (const item of fetchedMetadata) {
+        const metadata = item.metadata
+        const metadataHash = hash(metadata)
+        try {
+          await this.hasuraClient.addAssetMetadata({
+            assetId: item.subject,
+            decimals: metadata.decimals?.value,
+            description: metadata.description?.value,
+            logo: metadata.logo?.value
+              ? processLogoValue(metadata.logo.value)
+              : undefined,
+            name: metadata.name?.value,
+            ticker: metadata.ticker?.value,
+            url: metadata.url?.value,
+            metadataHash
+          })
+          written++
+        } catch (error) {
+          this.logger.warn(
+            { module: MODULE_NAME, assetId: item.subject },
+            `Failed to write metadata for asset: ${error.message}`
+          )
+        }
+      }
+      batchIndex++
+      if (batchIndex % LOG_EVERY_N_BATCHES === 0) {
+        this.logger.info(
+          { module: MODULE_NAME, processed: i + chunk.length, total, written },
+          'Metadata sync progress'
         )
       }
     }
     this.logger.info(
-      { module: MODULE_NAME, written, total: fetchedMetadata.length },
+      { module: MODULE_NAME, written, total },
       'Metadata sync for existing assets complete'
     )
   }
