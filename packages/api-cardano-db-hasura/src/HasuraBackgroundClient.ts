@@ -402,6 +402,25 @@ export class HasuraBackgroundClient {
     }
   }
 
+  public async getAssetIdsWithoutMetadata (dbConfig: DbConfig): Promise<string[]> {
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const result = await client.query<{ assetId: string }>(`
+        SELECT encode("assetId", 'hex') AS "assetId"
+        FROM "Asset"
+        WHERE "metadataHash" IS NULL
+      `)
+      this.logger.info(
+        { module: 'HasuraBackgroundClient', qty: result.rowCount },
+        'Found assets without metadata'
+      )
+      return result.rows.map(row => row.assetId)
+    } finally {
+      await client.end()
+    }
+  }
+
   public async backfillMissingAssets (dbConfig: DbConfig): Promise<string[]> {
     const client = new Client(dbConfig)
     await client.connect()

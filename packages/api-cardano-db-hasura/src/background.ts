@@ -207,6 +207,9 @@ function startAssetPolling (
           await metadataClient.initialize()
           await worker.start()
           await worker.publishInitialMetadataFetch(backfilledAssetIds)
+          hasuraBackgroundClient.getAssetIdsWithoutMetadata(config.db)
+            .then(assetIds => worker.syncMissingMetadata(assetIds))
+            .catch(err => logger.error({ module: 'MetadataSync' }, `Metadata sync for existing assets failed: ${err.message}`))
         } catch (error) {
           logger.error(error.message)
           process.exit(1)

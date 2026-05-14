@@ -93,9 +93,10 @@ export class Worker {
             const metadata = subject.metadata
             const existingAssetMetadataHashObj =
               existingAssetMetadataHashes.find(
-                (item) => item.assetId === assetId
+                (item) => item.assetId.replace(/^\\x/, '') === assetId
               )
             const metadataHash = hash(metadata)
+            const updateInterval = this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
             if (existingAssetMetadataHashObj?.metadataHash === metadataHash) {
               this.logger.trace(
                 { module: MODULE_NAME, assetId },
@@ -118,16 +119,17 @@ export class Worker {
                 url: metadata.url?.value,
                 metadataHash
               })
-              await this.queue.publishAfter(
-                ASSET_METADATA_FETCH_UPDATE,
-                { assetId },
-                {
-                  retryDelay:
-                    this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
-                },
-                this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
-              )
             }
+            await this.queue.publishAfter(
+              ASSET_METADATA_FETCH_UPDATE,
+              { assetId },
+              {
+                retryDelay: updateInterval,
+                singletonKey: assetId
+              },
+              updateInterval
+            )
+            job.done()
           }
         }
       }
@@ -150,6 +152,39 @@ export class Worker {
       subscriptionHandler
     )
     this.logger.info({ module: MODULE_NAME }, 'Started')
+  }
+
+  public async syncMissingMetadata (assetIds: string[]): Promise<void> {
+    if (assetIds.length === 0) return
+    this.logger.info(
+      { module: MODULE_NAME, qty: assetIds.length },
+      'Syncing metadata for assets without metadata'
+    )
+    const fetchedMetadata = await this.metadataFetchClient.fetch(assetIds)
+    if (fetchedMetadata.length === 0) {
+      this.logger.info({ module: MODULE_NAME }, 'No registry metadata found for existing assets')
+      return
+    }
+    for (const item of fetchedMetadata) {
+      const metadata = item.metadata
+      const metadataHash = hash(metadata)
+      await this.hasuraClient.addAssetMetadata({
+        assetId: item.subject,
+        decimals: metadata.decimals?.value,
+        description: metadata.description?.value,
+        logo: metadata.logo?.value
+          ? processLogoValue(metadata.logo.value)
+          : undefined,
+        name: metadata.name?.value,
+        ticker: metadata.ticker?.value,
+        url: metadata.url?.value,
+        metadataHash
+      })
+    }
+    this.logger.info(
+      { module: MODULE_NAME, qty: fetchedMetadata.length },
+      'Metadata sync for existing assets complete'
+    )
   }
 
   public async publishInitialMetadataFetch (assetIds: string[]): Promise<void> {
