@@ -78,58 +78,66 @@ export class Worker {
           await this.hasuraClient.getAssetMetadataHashesById(assetIds)
         for (const job of jobs) {
           const assetId = job.data.assetId
-          const subject = fetchedMetadata.find(
-            (item: any) => item.subject === assetId
-          )
-          if (subject === undefined) {
-            this.logger.trace(
-              { module: MODULE_NAME, assetId },
-              'Metadata not found in registry. Will retry'
+          try {
+            const subject = fetchedMetadata.find(
+              (item: any) => item.subject === assetId
             )
-            job.done(
-              new Error(`Metadata for asset ${assetId} not found in registry`)
-            )
-          } else {
-            const metadata = subject.metadata
-            const existingAssetMetadataHashObj =
-              existingAssetMetadataHashes.find(
-                (item) => item.assetId.replace(/^\\x/, '') === assetId
-              )
-            const metadataHash = hash(metadata)
-            const updateInterval = this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
-            if (existingAssetMetadataHashObj?.metadataHash === metadataHash) {
+            if (subject === undefined) {
               this.logger.trace(
                 { module: MODULE_NAME, assetId },
-                'Metadata from registry matches local'
+                'Metadata not found in registry. Will retry'
+              )
+              job.done(
+                new Error(`Metadata for asset ${assetId} not found in registry`)
               )
             } else {
-              this.logger.trace(
-                { module: MODULE_NAME, assetId },
-                'Found metadata in registry'
+              const metadata = subject.metadata
+              const existingAssetMetadataHashObj =
+                existingAssetMetadataHashes.find(
+                  (item) => item.assetId.replace(/^\\x/, '') === assetId
+                )
+              const metadataHash = hash(metadata)
+              const updateInterval = this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
+              if (existingAssetMetadataHashObj?.metadataHash === metadataHash) {
+                this.logger.trace(
+                  { module: MODULE_NAME, assetId },
+                  'Metadata from registry matches local'
+                )
+              } else {
+                this.logger.trace(
+                  { module: MODULE_NAME, assetId },
+                  'Found metadata in registry'
+                )
+                await this.hasuraClient.addAssetMetadata({
+                  assetId,
+                  decimals: metadata.decimals?.value,
+                  description: metadata.description?.value,
+                  logo: metadata.logo?.value
+                    ? processLogoValue(metadata.logo.value)
+                    : undefined,
+                  name: metadata.name?.value,
+                  ticker: metadata.ticker?.value,
+                  url: metadata.url?.value,
+                  metadataHash
+                })
+              }
+              await this.queue.publishAfter(
+                ASSET_METADATA_FETCH_UPDATE,
+                { assetId },
+                {
+                  retryDelay: updateInterval,
+                  singletonKey: assetId
+                },
+                updateInterval
               )
-              await this.hasuraClient.addAssetMetadata({
-                assetId,
-                decimals: metadata.decimals?.value,
-                description: metadata.description?.value,
-                logo: metadata.logo?.value
-                  ? processLogoValue(metadata.logo.value)
-                  : undefined,
-                name: metadata.name?.value,
-                ticker: metadata.ticker?.value,
-                url: metadata.url?.value,
-                metadataHash
-              })
+              job.done()
             }
-            await this.queue.publishAfter(
-              ASSET_METADATA_FETCH_UPDATE,
-              { assetId },
-              {
-                retryDelay: updateInterval,
-                singletonKey: assetId
-              },
-              updateInterval
+          } catch (error) {
+            this.logger.warn(
+              { module: MODULE_NAME, assetId },
+              `Failed to process metadata job: ${error.message}`
             )
-            job.done()
+            job.done(error)
           }
         }
       }
@@ -165,24 +173,33 @@ export class Worker {
       this.logger.info({ module: MODULE_NAME }, 'No registry metadata found for existing assets')
       return
     }
+    let written = 0
     for (const item of fetchedMetadata) {
       const metadata = item.metadata
       const metadataHash = hash(metadata)
-      await this.hasuraClient.addAssetMetadata({
-        assetId: item.subject,
-        decimals: metadata.decimals?.value,
-        description: metadata.description?.value,
-        logo: metadata.logo?.value
-          ? processLogoValue(metadata.logo.value)
-          : undefined,
-        name: metadata.name?.value,
-        ticker: metadata.ticker?.value,
-        url: metadata.url?.value,
-        metadataHash
-      })
+      try {
+        await this.hasuraClient.addAssetMetadata({
+          assetId: item.subject,
+          decimals: metadata.decimals?.value,
+          description: metadata.description?.value,
+          logo: metadata.logo?.value
+            ? processLogoValue(metadata.logo.value)
+            : undefined,
+          name: metadata.name?.value,
+          ticker: metadata.ticker?.value,
+          url: metadata.url?.value,
+          metadataHash
+        })
+        written++
+      } catch (error) {
+        this.logger.warn(
+          { module: MODULE_NAME, assetId: item.subject },
+          `Failed to write metadata for asset: ${error.message}`
+        )
+      }
     }
     this.logger.info(
-      { module: MODULE_NAME, qty: fetchedMetadata.length },
+      { module: MODULE_NAME, written, total: fetchedMetadata.length },
       'Metadata sync for existing assets complete'
     )
   }
