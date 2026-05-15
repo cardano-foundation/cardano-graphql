@@ -218,13 +218,14 @@ export class Worker {
     if (assetIds.length === 0) return
     this.logger.info(
       { module: MODULE_NAME, qty: assetIds.length },
-      'Scheduling metadata fetch for backfilled assets'
+      'Scheduling initial metadata fetch'
     )
     const THREE_MONTHS = 365
     for (const assetId of assetIds) {
       await this.queue.publish(ASSET_METADATA_FETCH_INITIAL, { assetId }, {
         retryDelay: SIX_HOURS,
-        retryLimit: THREE_MONTHS
+        retryLimit: THREE_MONTHS,
+        singletonKey: assetId
       })
     }
   }
