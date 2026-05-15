@@ -402,6 +402,46 @@ export class HasuraBackgroundClient {
     }
   }
 
+  public async getAssetIdsWithoutMetadata (dbConfig: DbConfig): Promise<string[]> {
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const result = await client.query<{ assetId: string }>(`
+        SELECT encode("assetId", 'hex') AS "assetId"
+        FROM "Asset"
+        WHERE "metadataHash" IS NULL
+      `)
+      this.logger.info(
+        { module: 'HasuraBackgroundClient', qty: result.rowCount },
+        'Found assets without metadata'
+      )
+      return result.rows.map(row => row.assetId)
+    } finally {
+      await client.end()
+    }
+  }
+
+  public async getRecentAssetIdsWithoutMetadata (dbConfig: DbConfig): Promise<string[]> {
+    const NINETY_DAYS_IN_SLOTS = 7_776_000
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const result = await client.query<{ assetId: string }>(`
+        SELECT encode("assetId", 'hex') AS "assetId"
+        FROM "Asset"
+        WHERE "metadataHash" IS NULL
+        AND "firstAppearedInSlot" > (SELECT MAX("firstAppearedInSlot") FROM "Asset") - $1
+      `, [NINETY_DAYS_IN_SLOTS])
+      this.logger.info(
+        { module: 'HasuraBackgroundClient', qty: result.rowCount },
+        'Found recent assets without metadata'
+      )
+      return result.rows.map(row => row.assetId)
+    } finally {
+      await client.end()
+    }
+  }
+
   public async backfillMissingAssets (dbConfig: DbConfig): Promise<string[]> {
     const client = new Client(dbConfig)
     await client.connect()
