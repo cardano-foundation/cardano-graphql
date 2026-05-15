@@ -98,6 +98,18 @@ export async function buildSchema (
           extensions: getComplexityExtension('Mutation', 'submitTransaction')
         }
       },
+      CardanoDbMeta: {
+        assetSyncPercentage: {
+          resolve: async () => {
+            try {
+              return await hasuraClient.getAssetSyncPercentage()
+            } catch (error) {
+              throw new ApolloError(error)
+            }
+          },
+          selectionSet: null
+        }
+      },
       PaymentAddress: {
         summary: {
           resolve: async (parent: { address: string }, args: { atBlock: number }) => {

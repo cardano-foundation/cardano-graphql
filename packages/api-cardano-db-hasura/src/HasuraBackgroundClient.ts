@@ -333,6 +333,115 @@ export class HasuraBackgroundClient {
     return result.assets
   }
 
+  public async getMaxMultiAssetId (dbConfig: DbConfig): Promise<number> {
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const result = await client.query<{ max_id: string }>('SELECT COALESCE(MAX(id), 0) AS max_id FROM multi_asset')
+      return Number(result.rows[0].max_id)
+    } finally {
+      await client.end()
+    }
+  }
+
+  public async pollNewAssets (dbConfig: DbConfig, lastSeenId: number): Promise<{ assetIds: string[], nextLastSeenId: number }> {
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const boundaryResult = await client.query<{ max_confirmed_id: string }>(`
+        SELECT COALESCE(MAX(ma.id), $1) AS max_confirmed_id
+        FROM multi_asset ma
+        JOIN ma_tx_mint mtm ON mtm.ident = ma.id
+        JOIN tx             ON tx.id     = mtm.tx_id
+        JOIN block b        ON b.id      = tx.block_id
+        WHERE ma.id > $1
+          AND b.slot_no < (SELECT slot_no FROM block ORDER BY id DESC LIMIT 1) - 120
+      `, [lastSeenId])
+
+      const nextLastSeenId = Number(boundaryResult.rows[0].max_confirmed_id)
+
+      if (nextLastSeenId === lastSeenId) {
+        return { assetIds: [], nextLastSeenId }
+      }
+
+      const result = await client.query<{ assetId: string }>(`
+        INSERT INTO "Asset" ("assetId", "assetName", "policyId", "fingerprint", "firstAppearedInSlot")
+        SELECT
+          CAST(CONCAT(ma.policy, RIGHT(CONCAT(E'\\\\', ma.name), -3)) AS BYTEA),
+          ma.name,
+          ma.policy,
+          ma.fingerprint,
+          MIN(b.slot_no)
+        FROM multi_asset ma
+        JOIN ma_tx_mint mtm ON mtm.ident = ma.id
+        JOIN tx             ON tx.id     = mtm.tx_id
+        JOIN block b        ON b.id      = tx.block_id
+        LEFT JOIN "Asset" a
+          ON a."assetId" = CAST(CONCAT(ma.policy, RIGHT(CONCAT(E'\\\\', ma.name), -3)) AS BYTEA)
+        WHERE a."assetId" IS NULL
+          AND ma.id > $1
+          AND ma.id <= $2
+        GROUP BY ma.id, ma.policy, ma.name, ma.fingerprint
+        ON CONFLICT ("assetId") DO NOTHING
+        RETURNING encode("assetId", 'hex') AS "assetId"
+      `, [lastSeenId, nextLastSeenId])
+
+      if (result.rowCount > 0) {
+        this.logger.info(
+          { module: 'HasuraBackgroundClient', inserted: result.rowCount },
+          'Polled and inserted new assets from multi_asset'
+        )
+      }
+
+      return {
+        assetIds: result.rows.map((row) => row.assetId),
+        nextLastSeenId
+      }
+    } finally {
+      await client.end()
+    }
+  }
+
+  public async getAssetIdsWithoutMetadata (dbConfig: DbConfig): Promise<string[]> {
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const result = await client.query<{ assetId: string }>(`
+        SELECT encode("assetId", 'hex') AS "assetId"
+        FROM "Asset"
+        WHERE "metadataHash" IS NULL
+      `)
+      this.logger.info(
+        { module: 'HasuraBackgroundClient', qty: result.rowCount },
+        'Found assets without metadata'
+      )
+      return result.rows.map(row => row.assetId)
+    } finally {
+      await client.end()
+    }
+  }
+
+  public async getRecentAssetIdsWithoutMetadata (dbConfig: DbConfig): Promise<string[]> {
+    const NINETY_DAYS_IN_SLOTS = 7_776_000
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const result = await client.query<{ assetId: string }>(`
+        SELECT encode("assetId", 'hex') AS "assetId"
+        FROM "Asset"
+        WHERE "metadataHash" IS NULL
+        AND "firstAppearedInSlot" > (SELECT MAX("firstAppearedInSlot") FROM "Asset") - $1
+      `, [NINETY_DAYS_IN_SLOTS])
+      this.logger.info(
+        { module: 'HasuraBackgroundClient', qty: result.rowCount },
+        'Found recent assets without metadata'
+      )
+      return result.rows.map(row => row.assetId)
+    } finally {
+      await client.end()
+    }
+  }
+
   public async backfillMissingAssets (dbConfig: DbConfig): Promise<string[]> {
     const client = new Client(dbConfig)
     await client.connect()

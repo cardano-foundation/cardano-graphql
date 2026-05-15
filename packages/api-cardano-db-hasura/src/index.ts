@@ -1,6 +1,5 @@
 export * from './AssetMetadata'
 export * from './CardanoNodeClient'
-export * from './ChainFollower'
 export * from './Config'
 export * from './Db'
 export * from './executableSchema'

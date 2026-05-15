@@ -46,15 +46,21 @@ export class Worker {
     this.state = 'initialized'
   }
 
+  public async initQueue (): Promise<void> {
+    if (this.queue) return
+    this.queue = new PgBoss({
+      application_name: 'cardano-graphql',
+      ...this.queueConfig
+    })
+    await this.queue.start()
+  }
+
   public async start () {
     if (this.state !== 'initialized') {
       throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'start')
     }
     this.logger.info({ module: MODULE_NAME }, 'Starting')
-    this.queue = new PgBoss({
-      application_name: 'cardano-graphql',
-      ...this.queueConfig
-    })
+    await this.initQueue()
     const subscriptionHandler: PgBoss.SubscribeHandler<
       AssetJobPayload,
       void
@@ -72,56 +78,66 @@ export class Worker {
           await this.hasuraClient.getAssetMetadataHashesById(assetIds)
         for (const job of jobs) {
           const assetId = job.data.assetId
-          const subject = fetchedMetadata.find(
-            (item: any) => item.subject === assetId
-          )
-          if (subject === undefined) {
-            this.logger.trace(
-              { module: MODULE_NAME, assetId },
-              'Metadata not found in registry. Will retry'
+          try {
+            const subject = fetchedMetadata.find(
+              (item: any) => item.subject === assetId
             )
-            job.done(
-              new Error(`Metadata for asset ${assetId} not found in registry`)
-            )
-          } else {
-            const metadata = subject.metadata
-            const existingAssetMetadataHashObj =
-              existingAssetMetadataHashes.find(
-                (item) => item.assetId === assetId
-              )
-            const metadataHash = hash(metadata)
-            if (existingAssetMetadataHashObj?.metadataHash === metadataHash) {
+            if (subject === undefined) {
               this.logger.trace(
                 { module: MODULE_NAME, assetId },
-                'Metadata from registry matches local'
+                'Metadata not found in registry. Will retry'
+              )
+              job.done(
+                new Error(`Metadata for asset ${assetId} not found in registry`)
               )
             } else {
-              this.logger.trace(
-                { module: MODULE_NAME, assetId },
-                'Found metadata in registry'
-              )
-              await this.hasuraClient.addAssetMetadata({
-                assetId,
-                decimals: metadata.decimals?.value,
-                description: metadata.description?.value,
-                logo: metadata.logo?.value
-                  ? processLogoValue(metadata.logo.value)
-                  : undefined,
-                name: metadata.name?.value,
-                ticker: metadata.ticker?.value,
-                url: metadata.url?.value,
-                metadataHash
-              })
+              const metadata = subject.metadata
+              const existingAssetMetadataHashObj =
+                existingAssetMetadataHashes.find(
+                  (item) => item.assetId.replace(/^\\x/, '') === assetId
+                )
+              const metadataHash = hash(metadata)
+              const updateInterval = this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
+              if (existingAssetMetadataHashObj?.metadataHash === metadataHash) {
+                this.logger.trace(
+                  { module: MODULE_NAME, assetId },
+                  'Metadata from registry matches local'
+                )
+              } else {
+                this.logger.trace(
+                  { module: MODULE_NAME, assetId },
+                  'Found metadata in registry'
+                )
+                await this.hasuraClient.addAssetMetadata({
+                  assetId,
+                  decimals: metadata.decimals?.value,
+                  description: metadata.description?.value,
+                  logo: metadata.logo?.value
+                    ? processLogoValue(metadata.logo.value)
+                    : undefined,
+                  name: metadata.name?.value,
+                  ticker: metadata.ticker?.value,
+                  url: metadata.url?.value,
+                  metadataHash
+                })
+              }
               await this.queue.publishAfter(
                 ASSET_METADATA_FETCH_UPDATE,
                 { assetId },
                 {
-                  retryDelay:
-                    this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
+                  retryDelay: updateInterval,
+                  singletonKey: assetId
                 },
-                this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
+                updateInterval
               )
+              job.done()
             }
+          } catch (error) {
+            this.logger.warn(
+              { module: MODULE_NAME, assetId },
+              `Failed to process metadata job: ${error.message}`
+            )
+            job.done(error)
           }
         }
       }
@@ -146,17 +162,70 @@ export class Worker {
     this.logger.info({ module: MODULE_NAME }, 'Started')
   }
 
+  public async syncMissingMetadata (assetIds: string[]): Promise<void> {
+    if (assetIds.length === 0) return
+    const total = assetIds.length
+    this.logger.info(
+      { module: MODULE_NAME, qty: total },
+      'Syncing metadata for assets without metadata'
+    )
+    const FETCH_BATCH_SIZE = 1000
+    const LOG_EVERY_N_BATCHES = 100
+    let written = 0
+    let batchIndex = 0
+    for (let i = 0; i < total; i += FETCH_BATCH_SIZE) {
+      const chunk = assetIds.slice(i, i + FETCH_BATCH_SIZE)
+      const fetchedMetadata = await this.metadataFetchClient.fetch(chunk)
+      for (const item of fetchedMetadata) {
+        const metadata = item.metadata
+        const metadataHash = hash(metadata)
+        try {
+          await this.hasuraClient.addAssetMetadata({
+            assetId: item.subject,
+            decimals: metadata.decimals?.value,
+            description: metadata.description?.value,
+            logo: metadata.logo?.value
+              ? processLogoValue(metadata.logo.value)
+              : undefined,
+            name: metadata.name?.value,
+            ticker: metadata.ticker?.value,
+            url: metadata.url?.value,
+            metadataHash
+          })
+          written++
+        } catch (error) {
+          this.logger.warn(
+            { module: MODULE_NAME, assetId: item.subject },
+            `Failed to write metadata for asset: ${error.message}`
+          )
+        }
+      }
+      batchIndex++
+      if (batchIndex % LOG_EVERY_N_BATCHES === 0) {
+        this.logger.info(
+          { module: MODULE_NAME, processed: i + chunk.length, total, written },
+          'Metadata sync progress'
+        )
+      }
+    }
+    this.logger.info(
+      { module: MODULE_NAME, written, total },
+      'Metadata sync for existing assets complete'
+    )
+  }
+
   public async publishInitialMetadataFetch (assetIds: string[]): Promise<void> {
     if (assetIds.length === 0) return
     this.logger.info(
       { module: MODULE_NAME, qty: assetIds.length },
-      'Scheduling metadata fetch for backfilled assets'
+      'Scheduling initial metadata fetch'
     )
     const THREE_MONTHS = 365
     for (const assetId of assetIds) {
       await this.queue.publish(ASSET_METADATA_FETCH_INITIAL, { assetId }, {
         retryDelay: SIX_HOURS,
-        retryLimit: THREE_MONTHS
+        retryLimit: THREE_MONTHS,
+        singletonKey: assetId
       })
     }
   }

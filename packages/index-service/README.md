@@ -4,11 +4,17 @@ A Docker service for creating performance indexes on the cardano-db-sync Postgre
 
 ## Overview
 
-The index service creates additional database indexes to improve query performance for common GraphQL operations. These indexes are **optional** and not created by default because:
+The index service creates additional database indexes to improve query performance. These indexes are **optional** but **recommended for production** because:
 
+- `idx_ma_tx_mint_ident` is required for efficient asset polling (without it polls degrade from <1ms to 500ms+)
+- `idx_tx_out_address` significantly speeds up payment address queries
+- `idx_asset_fingerprint` speeds up asset fingerprint lookups
+
+Index creation is not enabled by default because:
 - Index creation can take several hours on mainnet (up to 6 hours total)
 - Indexes consume additional disk space (typically 10-20% of database size)
-- They are primarily beneficial for high-query-volume deployments
+
+> **Note:** Without `idx_ma_tx_mint_ident`, new asset polling still works correctly but is significantly slower. On mainnet this can reach several seconds per poll cycle.
 
 ## Quick Start
 
@@ -59,13 +65,11 @@ docker compose ps index-service
 
 ## Created Indexes
 
-The service creates the following indexes:
-
-- **`idx_tx_out_address`** - Hash index on `tx_out.address`
-  - Speeds up: Queries for transactions by address
-
-- **`idx_asset_fingerprint`** - B-tree index on `asset.fingerprint`
-  - Speeds up: Queries for assets by fingerprint
+| Index | Table | Speeds up |
+|-------|-------|-----------|
+| `idx_ma_tx_mint_ident` | `ma_tx_mint.ident` | New asset polling (critical for background service) |
+| `idx_tx_out_address` | `tx_out.address` | Payment address queries |
+| `idx_asset_fingerprint` | `Asset.fingerprint` | Asset fingerprint lookups |
 
 ## Operations
 
@@ -112,6 +116,7 @@ docker compose exec postgres psql -U $(cat placeholder-secrets/postgres_user) \
   -d $(cat placeholder-secrets/postgres_db)
 
 # Drop all custom indexes
+DROP INDEX CONCURRENTLY IF EXISTS idx_ma_tx_mint_ident;
 DROP INDEX CONCURRENTLY IF EXISTS idx_tx_out_address;
 DROP INDEX CONCURRENTLY IF EXISTS idx_asset_fingerprint;
 ```

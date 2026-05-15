@@ -564,6 +564,7 @@ type Cardano {
 }
 
 type CardanoDbMeta {
+    assetSyncPercentage: Percentage
     initialized: Boolean!
     syncPercentage: Percentage!
 }

@@ -1,59 +1,47 @@
-import { AssetSupply, Transaction } from './graphql_types'
+import { Transaction } from './graphql_types'
+import fetch from 'cross-fetch'
 import pRetry from 'p-retry'
 import util, { DataFetcher, errors, ModuleState } from '@cardano-graphql/util'
 import {
   ConnectionConfig,
-  createConnectionObject, createLedgerStateQueryClient, createTransactionSubmissionClient,
+  createConnectionObject,
+  createTransactionSubmissionClient,
   getServerHealth,
   ServerHealth
 } from '@cardano-ogmios/client'
 import { dummyLogger, Logger } from 'ts-log'
-import { LedgerStateQueryClient } from '@cardano-ogmios/client/dist/LedgerStateQuery'
 import { TransactionSubmissionClient } from '@cardano-ogmios/client/dist/TransactionSubmission'
 import { createInteractionContextWithLogger } from './util'
 
 const MODULE_NAME = 'CardanoNodeClient'
 
 export class CardanoNodeClient {
-  readonly networkParams: string[]
-  public adaCirculatingSupply: AssetSupply['circulating']
-  private stateQueryClient: LedgerStateQueryClient
   private txSubmissionClient: TransactionSubmissionClient
   private state: ModuleState
   private serverHealthFetcher: DataFetcher<ServerHealth>
 
   constructor (
+    private prometheusHost: string,
+    private prometheusPort: number,
     private logger: Logger = dummyLogger
   ) {
     this.state = null
   }
 
-  public async getTipSlotNo () {
-    this.logger.info({ module: MODULE_NAME }, this.state)
-    if (this.state !== 'initialized') {
-      throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getTipSlotNo')
+  public async getTipSlotNo (): Promise<number> {
+    const response = await fetch(`http://${this.prometheusHost}:${this.prometheusPort}/metrics`)
+    const text = await response.text()
+    const match = text.match(/^cardano_node_metrics_slotNum_int\s+(\d+)/m)
+    if (!match) {
+      throw new Error('cardano_node_metrics_slotNum_int not found in Prometheus metrics')
     }
-    const tip = await this.stateQueryClient.networkTip()
-    this.logger.info({ module: MODULE_NAME, tip }, tip)
-    const slotNo = tip === 'origin' ? 0 : tip.slot
-    this.logger.debug({ module: MODULE_NAME, slotNo }, 'getTipSlotNo')
-    return slotNo
+    return Number(match[1])
   }
-
-  // Todo: Include in Graph
-  // public async getProtocolParams (): Promise<Schema.ProtocolParametersShelley> {
-  //   if (this.state !== 'initialized') {
-  //     throw new errors.ModuleIsNotInitialized(MODULE_NAME, 'getProtocolParams')
-  //   }
-  //   const protocolParams = await this.stateQueryClient.currentProtocolParameters()
-  //   this.logger.debug({ module: MODULE_NAME, protocolParams }, 'getProtocolParams')
-  //   return protocolParams
-  // }
 
   public async initialize (ogmiosConnectionConfig?: ConnectionConfig) {
     if (this.state !== null) return
     this.state = 'initializing'
-    this.logger.info({ module: MODULE_NAME }, 'Initializing. This can take a few minutes...')
+    this.logger.info({ module: MODULE_NAME }, 'Initializing')
     this.serverHealthFetcher = this.serverHealthFetcher || new DataFetcher(
       'ServerHealth',
       () => getServerHealth({ connection: createConnectionObject(ogmiosConnectionConfig) }),
@@ -79,16 +67,6 @@ export class CardanoNodeClient {
         await this.shutdown()
         await this.initialize(ogmiosConnectionConfig)
       })
-      this.stateQueryClient = await createLedgerStateQueryClient(interactionContext)
-      let tip
-      try {
-        tip = await this.stateQueryClient.ledgerTip()
-      } catch (e) {
-        this.logger.error({ module: MODULE_NAME }, 'Querying ledger tip not yet available. Wait for later epoch. Ogmios Error Message: ' + e.message)
-        throw e
-      }
-
-      this.logger.info({ module: MODULE_NAME }, tip)
       this.txSubmissionClient = await createTransactionSubmissionClient(interactionContext)
     }, {
       factor: 1.2,
@@ -106,9 +84,6 @@ export class CardanoNodeClient {
     if (this.state !== 'initialized') return
     this.logger.info({ module: MODULE_NAME }, 'Shutting down')
     await this.serverHealthFetcher.shutdown()
-    if (this.stateQueryClient.context.socket.readyState === this.stateQueryClient.context.socket.OPEN) {
-      await this.stateQueryClient.shutdown()
-    }
     if (this.txSubmissionClient.context.socket.readyState === this.txSubmissionClient.context.socket.OPEN) {
       await this.txSubmissionClient.shutdown()
     }
