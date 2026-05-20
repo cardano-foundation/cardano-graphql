@@ -42,15 +42,20 @@ services:
       - ${CARDANO_NODE_DB}:/node/db
 
   cardano-node:
-    image: ghcr.io/intersectmbo/cardano-node:${CARDANO_NODE_VERSION}
+    image: cardanofoundation/cardano-graphql-cardano-node:${CARDANO_NODE_VERSION}
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/cardano-node/Dockerfile
+      args:
+        CARDANO_NODE_VERSION: ${CARDANO_NODE_VERSION}
     environment:
       - NETWORK=${NETWORK}
+      - CARDANO_NODE_PORT=${CARDANO_NODE_PORT}
     volumes:
       - ${CARDANO_NODE_DIR}:/ipc
       - ${CARDANO_NODE_DB}:/node/db
-      - ./config/network/${NETWORK}:/config
     restart: unless-stopped
-    entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --port "$CARDANO_NODE_PORT" --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
+    entrypoint: ["/sbin/entrypoint.sh", "cardano-node"]
     ports:
       - ${CARDANO_NODE_PORT}:${CARDANO_NODE_PORT}
     depends_on:
