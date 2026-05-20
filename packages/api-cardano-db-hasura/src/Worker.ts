@@ -2,6 +2,7 @@ import { errors, RunnableModuleState } from '@cardano-graphql/util'
 import hash from 'object-hash'
 import { dummyLogger, Logger } from 'ts-log'
 import PgBoss, { JobWithDoneCallback } from 'pg-boss'
+import { AssetV2 } from './AssetMetadata'
 import { MetadataClient } from './MetadataClient'
 import { DbConfig } from './typeAliases'
 import { HasuraBackgroundClient } from './HasuraBackgroundClient'
@@ -73,31 +74,62 @@ export class Worker {
           'Processing jobs'
         )
         const assetIds = jobs.map((job) => job.data.assetId)
-        const fetchedMetadata = await this.metadataFetchClient.fetch(assetIds)
-        const existingAssetMetadataHashes =
-          await this.hasuraClient.getAssetMetadataHashesById(assetIds)
+        let fetchedMetadata: AssetV2[]
+        let existingAssetMetadataHashes: Awaited<ReturnType<typeof this.hasuraClient.getAssetMetadataHashesById>>
+        try {
+          fetchedMetadata = await this.metadataFetchClient.fetch(assetIds)
+          existingAssetMetadataHashes =
+            await this.hasuraClient.getAssetMetadataHashesById(assetIds)
+        } catch (error) {
+          this.logger.warn(
+            { module: MODULE_NAME },
+            `Batch fetch failed, rescheduling all jobs: ${error.message}`
+          )
+          const updateInterval = this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
+          for (const job of jobs) {
+            job.done(error)
+            await this.queue.publishAfter(
+              ASSET_METADATA_FETCH_UPDATE,
+              { assetId: job.data.assetId },
+              { retryDelay: updateInterval },
+              updateInterval
+            )
+          }
+          return
+        }
         for (const job of jobs) {
           const assetId = job.data.assetId
-          try {
-            const subject = fetchedMetadata.find(
-              (item: any) => item.subject === assetId
+          const subject = fetchedMetadata.find(
+            (item: any) => item.subject === assetId
+          )
+          if (subject === undefined) {
+            this.logger.trace(
+              { module: MODULE_NAME, assetId },
+              'Metadata not found in registry. Will retry'
             )
-            if (subject === undefined) {
-              this.logger.trace(
-                { module: MODULE_NAME, assetId },
-                'Metadata not found in registry. Will retry'
-              )
-              job.done(
-                new Error(`Metadata for asset ${assetId} not found in registry`)
-              )
-            } else {
-              const metadata = subject.metadata
-              const existingAssetMetadataHashObj =
-                existingAssetMetadataHashes.find(
-                  (item) => item.assetId.replace(/^\\x/, '') === assetId
-                )
-              const metadataHash = hash(metadata)
+            job.done(
+              new Error(`Metadata for asset ${assetId} not found in registry`)
+            )
+            // INITIAL jobs are retried by pgboss via retryLimit/retryDelay.
+            // UPDATE jobs have no retryLimit, so reschedule manually to keep the cycle alive.
+            if (job.name === ASSET_METADATA_FETCH_UPDATE) {
               const updateInterval = this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
+              await this.queue.publishAfter(
+                ASSET_METADATA_FETCH_UPDATE,
+                { assetId },
+                { retryDelay: updateInterval },
+                updateInterval
+              )
+            }
+          } else {
+            const metadata = subject.metadata
+            const existingAssetMetadataHashObj =
+              existingAssetMetadataHashes.find(
+                (item) => item.assetId.replace(/^\\x/, '') === assetId
+              )
+            const metadataHash = hash(metadata)
+            const updateInterval = this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
+            try {
               if (existingAssetMetadataHashObj?.metadataHash === metadataHash) {
                 this.logger.trace(
                   { module: MODULE_NAME, assetId },
@@ -121,23 +153,24 @@ export class Worker {
                   metadataHash
                 })
               }
+              job.done()
+            } catch (error) {
+              this.logger.warn(
+                { module: MODULE_NAME, assetId },
+                `Failed to process metadata job: ${error.message}`
+              )
+              job.done(error)
+            } finally {
               await this.queue.publishAfter(
                 ASSET_METADATA_FETCH_UPDATE,
                 { assetId },
                 {
                   retryDelay: updateInterval,
-                  singletonKey: assetId
+                  ...(job.name === ASSET_METADATA_FETCH_INITIAL ? { singletonKey: assetId } : {})
                 },
                 updateInterval
               )
-              job.done()
             }
-          } catch (error) {
-            this.logger.warn(
-              { module: MODULE_NAME, assetId },
-              `Failed to process metadata job: ${error.message}`
-            )
-            job.done(error)
           }
         }
       }
