@@ -1,0 +1,12 @@
+# Tx Submission Server Configuration (trace-dispatcher format, required since cardano-node 10.7.x)
+
+EnableLogMetrics: False
+EnableLogging: True
+
+TraceOptions:
+  "":
+    backends:
+      - EKGBackend
+      - "Stdout HumanFormatColoured"
+    detail: DNormal
+    severity: Info

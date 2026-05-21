@@ -62,6 +62,19 @@ services:
       mithril:
         condition: service_completed_successfully
 
+  cardano-submit-api:
+    image: cardanofoundation/cardano-graphql-cardano-node:${CARDANO_NODE_VERSION}
+    environment:
+      - NETWORK=${NETWORK}
+    volumes:
+      - ${CARDANO_NODE_DIR}:/ipc
+    restart: unless-stopped
+    entrypoint: ["/sbin/entrypoint.sh", "cardano-submit-api"]
+    ports:
+      - ${CARDANO_SUBMIT_API_PORT}:8090
+    depends_on:
+      - cardano-node
+
   ogmios:
     image: cardanosolutions/ogmios:${OGMIOS_VERSION}
     command:
@@ -170,9 +183,13 @@ services:
       - CARDANO_NODE_CONFIG_PATH=/config/network/${NETWORK}/cardano-node/config.json
       - CARDANO_NODE_PROMETHEUS_HOST=cardano-node
       - CARDANO_NODE_PROMETHEUS_PORT=12798
+      - CARDANO_SUBMIT_API_HOST=cardano-submit-api
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY}
       - NETWORK=${NETWORK}
       - POSTGRES_PORT=${POSTGRES_PORT}
+    depends_on:
+      - cardano-submit-api
+      - hasura
     expose:
       - ${API_PORT}
     ports:
