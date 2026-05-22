@@ -85,15 +85,8 @@ export class Worker {
             { module: MODULE_NAME },
             `Batch fetch failed, rescheduling all jobs: ${error.message}`
           )
-          const updateInterval = this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
           for (const job of jobs) {
             job.done(error)
-            await this.queue.publishAfter(
-              ASSET_METADATA_FETCH_UPDATE,
-              { assetId: job.data.assetId },
-              { retryDelay: updateInterval },
-              updateInterval
-            )
           }
           return
         }
@@ -110,17 +103,6 @@ export class Worker {
             job.done(
               new Error(`Metadata for asset ${assetId} not found in registry`)
             )
-            // INITIAL jobs are retried by pgboss via retryLimit/retryDelay.
-            // UPDATE jobs have no retryLimit, so reschedule manually to keep the cycle alive.
-            if (job.name === ASSET_METADATA_FETCH_UPDATE) {
-              const updateInterval = this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
-              await this.queue.publishAfter(
-                ASSET_METADATA_FETCH_UPDATE,
-                { assetId },
-                { retryDelay: updateInterval },
-                updateInterval
-              )
-            }
           } else {
             const metadata = subject.metadata
             const existingAssetMetadataHashObj =
@@ -161,15 +143,14 @@ export class Worker {
               )
               job.done(error)
             } finally {
-              await this.queue.publishAfter(
-                ASSET_METADATA_FETCH_UPDATE,
-                { assetId },
-                {
-                  retryDelay: updateInterval,
-                  ...(job.name === ASSET_METADATA_FETCH_INITIAL ? { singletonKey: assetId } : {})
-                },
-                updateInterval
-              )
+              if (job.name === ASSET_METADATA_FETCH_INITIAL) {
+                await this.queue.publishAfter(
+                  ASSET_METADATA_FETCH_UPDATE,
+                  { assetId },
+                  { singletonKey: assetId, onComplete: true },
+                  updateInterval
+                )
+              }
             }
           }
         }
@@ -192,6 +173,16 @@ export class Worker {
       },
       subscriptionHandler
     )
+    await this.queue.onComplete(ASSET_METADATA_FETCH_UPDATE, async (job: any) => {
+      const assetId: string = job.data.request.data.assetId
+      const updateInterval = this.options?.metadataUpdateInterval?.assets ?? SIX_HOURS
+      await this.queue.publishAfter(
+        ASSET_METADATA_FETCH_UPDATE,
+        { assetId },
+        { singletonKey: assetId, onComplete: true },
+        updateInterval
+      )
+    })
     this.logger.info({ module: MODULE_NAME }, 'Started')
   }
 
@@ -270,7 +261,8 @@ export class Worker {
     this.logger.info({ module: MODULE_NAME }, 'Shutting down')
     await Promise.all([
       this.queue.unsubscribe(ASSET_METADATA_FETCH_INITIAL),
-      this.queue.unsubscribe(ASSET_METADATA_FETCH_UPDATE)
+      this.queue.unsubscribe(ASSET_METADATA_FETCH_UPDATE),
+      this.queue.offComplete(ASSET_METADATA_FETCH_UPDATE)
     ])
     this.state = 'initialized'
     this.logger.info({ module: MODULE_NAME }, 'Shutdown complete')
