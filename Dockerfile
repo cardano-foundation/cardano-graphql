@@ -94,9 +94,7 @@ FROM ubuntu-nodejs AS server
 ENV \
   HASURA_GRAPHQL_ENABLE_TELEMETRY=false \
   HASURA_URI="http://hasura:8080" \
-  LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH" \
-  OGMIOS_HOST="ogmios" \
-  OGMIOS_PORT=1337
+  LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/dist /app/packages/api-cardano-db-hasura/dist
 COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/hasura/project /app/packages/api-cardano-db-hasura/hasura/project
 COPY --from=cardano-graphql-builder /app/packages/api-cardano-db-hasura/package.json /app/packages/api-cardano-db-hasura/package.json

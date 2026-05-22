@@ -13,8 +13,6 @@ import {
   AssetWithoutTokens,
   DbConfig
 } from './typeAliases'
-import { Schema } from '@cardano-ogmios/client'
-
 const epochInformationNotYetAvailable =
   'Epoch information not yet available. This is expected during the initial chain-sync.'
 
@@ -178,57 +176,6 @@ export class HasuraBackgroundClient {
       'Has asset?'
     )
     return response
-  }
-
-  public async getMostRecentPointWithNewAsset (): Promise<Schema.Point | null> {
-    let point: Schema.Point | null
-    // Handles possible race condition between the internal chain-follower, which manages the Asset table,
-    // and cardano-db-sync's which managed the block table.
-    await pRetry(
-      async () => {
-        // An offset of 1 is applied to ensure a partial block extraction is not skipped
-        const result = await this.client.request(gql`
-          query {
-            assets(
-              limit: 1
-              offset: 1
-              order_by: { firstAppearedInBlock: { slotNo: desc } }
-            ) {
-              firstAppearedInBlock {
-                hash
-                slotNo
-              }
-            }
-          }
-        `)
-        if (result.errors !== undefined) {
-          throw new Error(result.errors)
-        }
-        if (result.assets.length !== 0) {
-          if (result.assets[0].firstAppearedInBlock === null) {
-            throw new Error(
-              'cardano-db-sync is lagging behind the asset sync operation.'
-            )
-          }
-          const { hash, slotNo } = result.assets[0].firstAppearedInBlock
-          point = {
-            slot: Number(slotNo),
-            id: hash.substring(2)
-          }
-        } else {
-          point = null
-        }
-      },
-      {
-        factor: 1.5,
-        retries: 1000,
-        onFailedAttempt: util.onFailedAttemptFor(
-          'Getting the most recent point with a new asset',
-          this.logger
-        )
-      }
-    )
-    return point
   }
 
   public async addAssetMetadata (asset: AssetMetadataAndHash) {
