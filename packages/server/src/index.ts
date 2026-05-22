@@ -44,6 +44,8 @@ export * from './config'
     const cardanoNodeClient = new CardanoNodeClient(
       config.cardanoNodePrometheus.host,
       config.cardanoNodePrometheus.port,
+      config.cardanoSubmitApi.host,
+      config.cardanoSubmitApi.port,
       logger
     )
     const hasuraClient = new HasuraClient(
@@ -53,7 +55,6 @@ export * from './config'
     )
     const server = new Server(schemas, config, logger)
     schemas.push(await buildCardanoDbHasuraSchema(hasuraClient, genesis, cardanoNodeClient))
-    await cardanoNodeClient.initialize(config.ogmios)
     try {
       await server.init()
       await hasuraClient.initialize()
@@ -65,10 +66,7 @@ export * from './config'
       }
     }
     onDeath(async () => {
-      await Promise.all([
-        hasuraClient.shutdown,
-        cardanoNodeClient.shutdown
-      ])
+      await hasuraClient.shutdown()
       await server.shutdown()
       process.exit(1)
     })

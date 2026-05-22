@@ -121,7 +121,7 @@ RUN apt-get update && apt-get install -y jq bc socat liburing2 libsnappy1v5 && a
 
 COPY --from=cardano-builder /usr/local/lib /usr/local/lib
 COPY --from=cardano-builder /root/.local/bin/cardano-* /usr/local/bin/
-COPY --from=cardano-builder /usr/local/src/cardano-node/cardano-submit-api/config/tx-submit-mainnet-config.yaml /config/submit-api/config.yaml
+COPY ./config/submit-api/config.yaml /config/submit-api/config.yaml
 
 COPY --from=cardano-builder --chown=root:root /usr/local/lib/libsodium.so /usr/local/lib
 RUN ln -snf /usr/local/lib/libsodium.so /usr/local/lib/libsodium.so.23 \

@@ -4,11 +4,11 @@ export interface Config {
     host: string
     port: number
   },
-  hasuraUri: string,
-  ogmios?: {
-    host?: string
-    port?: number
+  cardanoSubmitApi: {
+    host: string
+    port: number
   },
+  hasuraUri: string,
   pollingInterval: {
     adaSupply: number
   }
