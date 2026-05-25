@@ -1,4 +1,5 @@
 FROM hasura/graphql-engine:v2.48.6.cli-migrations-v2
+RUN apt-get update -qq && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 COPY docker-entrypoint.sh /bin/
 ENV \
   POSTGRES_HOST=postgres \

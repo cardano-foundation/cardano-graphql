@@ -147,6 +147,10 @@ export class HasuraClient {
   public async buildHasuraSchema () {
     const executor = async ({ document, variables }: { document: DocumentNode, variables?: Object }) => {
       const query = print(document)
+      const isIntrospection = query.includes('__schema') || query.includes('__type')
+      if (!isIntrospection) {
+        this.logger.debug({ module: 'HasuraClient', query, variables: JSON.stringify(variables) }, 'Delegating to Hasura')
+      }
       try {
         const fetchResult = await fetch(`${this.hasuraUri}/v1/graphql`, {
           method: 'POST',
@@ -156,7 +160,11 @@ export class HasuraClient {
           },
           body: JSON.stringify({ query, variables })
         })
-        return fetchResult.json()
+        const result = await fetchResult.json()
+        if (!isIntrospection && result.errors) {
+          this.logger.error({ module: 'HasuraClient', errors: JSON.stringify(result.errors), query, variables: JSON.stringify(variables) }, 'Hasura returned errors')
+        }
+        return result
       } catch (error) {
         this.logger.error({ err: error })
         throw error

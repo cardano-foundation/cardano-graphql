@@ -14,10 +14,7 @@ const SIX_HOURS = 21600
 type AssetJobPayload = { assetId: string }
 const MODULE_NAME = 'Worker'
 
-// Convert hex-encoded logo (CIP-26) to base64 for backward compatibility
-// CIP-68 logos are URLs and should be returned as-is
 const processLogoValue = (logoValue: string): string => {
-  // If it's a URL (CIP-68), return as-is
   if (
     logoValue.startsWith('http://') ||
     logoValue.startsWith('https://') ||
@@ -25,7 +22,6 @@ const processLogoValue = (logoValue: string): string => {
   ) {
     return logoValue
   }
-  // Otherwise, it's hex-encoded (CIP-26), convert to base64
   return Buffer.from(logoValue, 'hex').toString('base64')
 }
 

@@ -18,7 +18,7 @@ services:
     shm_size: '2gb'
     volumes:
       - ${DB_PATH}:/var/lib/postgresql/data
-    restart: on-failure
+    restart: unless-stopped
     logging:
       driver: "json-file"
       options:
@@ -114,7 +114,7 @@ services:
       - ${HASURA_PORT}:8080
     depends_on:
       - "postgres"
-    restart: on-failure
+    restart: unless-stopped
     environment:
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
       - HASURA_GRAPHQL_CORS_DOMAIN=http://localhost:9695
@@ -123,6 +123,12 @@ services:
       - postgres_db
       - postgres_password
       - postgres_user
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     logging:
       driver: "json-file"
       options:
@@ -135,8 +141,10 @@ services:
       target: background
     image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION}
     depends_on:
-      - "hasura"
-      - "postgres"
+      hasura:
+        condition: service_healthy
+      postgres:
+        condition: service_started
     environment:
       - COMPOSE_PROFILES=${COMPOSE_PROFILES}
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY}
@@ -170,8 +178,10 @@ services:
       - NETWORK=${NETWORK}
       - POSTGRES_PORT=${POSTGRES_PORT}
     depends_on:
-      - cardano-submit-api
-      - hasura
+      cardano-submit-api:
+        condition: service_started
+      hasura:
+        condition: service_healthy
     expose:
       - ${API_PORT}
     ports:

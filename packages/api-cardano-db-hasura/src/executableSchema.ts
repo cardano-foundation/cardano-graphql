@@ -177,15 +177,25 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'ada')
         },
         assets: {
-          resolve: (_root: any, args: any, context: any, info: any) => {
-            return delegateToSchema({
-              args,
-              context,
-              fieldName: 'assets',
-              info,
-              operation: 'query',
-              schema: hasuraClient.schema
-            })
+          resolve: async (_root: any, args: any, context: any, info: any) => {
+            try {
+              const result = await delegateToSchema({
+                args,
+                context,
+                fieldName: 'assets',
+                info,
+                operation: 'query',
+                schema: hasuraClient.schema
+              })
+              if (result === null || result === undefined) {
+                console.error('assets delegation returned null/undefined', { args: JSON.stringify(args) })
+              }
+              return result
+            } catch (error) {
+              const msg = `assets delegation error: ${error.message}`
+              console.error(msg, { args: JSON.stringify(args) })
+              throw new ApolloError(msg)
+            }
           },
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'assets')
