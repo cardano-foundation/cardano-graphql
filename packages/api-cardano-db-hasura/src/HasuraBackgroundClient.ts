@@ -216,7 +216,8 @@ export class HasuraBackgroundClient {
       `,
       {
         ...asset,
-        ...{ assetId: withHexPrefix(asset.assetId) }
+        assetId: withHexPrefix(asset.assetId),
+        ticker: asset.ticker && asset.ticker.length > 9 ? undefined : asset.ticker
       }
     )
     if (result.errors !== undefined) {
