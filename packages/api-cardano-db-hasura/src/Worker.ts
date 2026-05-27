@@ -154,7 +154,6 @@ export class Worker {
         }
       }
     }
-    await this.queue.start()
     await this.queue.subscribe<AssetJobPayload, void>(
       ASSET_METADATA_FETCH_INITIAL,
       {
