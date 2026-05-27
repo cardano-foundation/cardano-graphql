@@ -58,6 +58,8 @@ export class Worker {
     }
     this.logger.info({ module: MODULE_NAME }, 'Starting')
     await this.initQueue()
+    await this.queue.deleteQueue(ASSET_METADATA_FETCH_UPDATE)
+    this.logger.info({ module: MODULE_NAME }, 'Cleared stale UPDATE jobs')
     const subscriptionHandler: PgBoss.SubscribeHandler<
       AssetJobPayload,
       void
