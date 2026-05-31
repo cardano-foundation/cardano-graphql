@@ -12,6 +12,7 @@
     "data.rewards_aggregate"
   ],
   "network": "mainnet",
+  "timeout_s": 900,
   "query_file": "queries/coverage/aggregates_stake_suite.graphql",
   "test_name": "aggregates_stake_suite",
   "variables": {

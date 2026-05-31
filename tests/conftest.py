@@ -331,8 +331,8 @@ def client(graphql_url, network_config, sync_readiness, request):
         request.node._recorded_attachments = []
         original = c.execute
 
-        def recording_execute(query, variables=None, operation_name=None):
-            resp = original(query, variables=variables, operation_name=operation_name)
+        def recording_execute(query, variables=None, operation_name=None, timeout_s=None):
+            resp = original(query, variables=variables, operation_name=operation_name, timeout_s=timeout_s)
             body = {"query": query, "variables": variables or {}}
             if operation_name:
                 body["operationName"] = operation_name

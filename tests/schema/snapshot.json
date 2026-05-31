@@ -742,6 +742,10 @@
     },
     "CardanoDbMeta": {
       "fields": {
+        "assetSyncPercentage": {
+          "args": {},
+          "type": "Percentage"
+        },
         "initialized": {
           "args": {},
           "type": "Boolean!"
