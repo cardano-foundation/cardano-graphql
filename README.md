@@ -33,6 +33,15 @@ GraphQL and web ecosystem in general. TypeScript definitions for the schema, gen
 
 **[cardano-submit-api]** is a lightweight HTTP service for submitting signed transactions to cardano-node.
 
+## System Requirements
+
+Recommended system requirements for running the full stack:
+
+| Network | CPU | RAM | Storage |
+|---------|-----|-----|---------|
+| Mainnet | 8 cores | 48 GB | 750 GB |
+| Preprod | 4 cores | 16 GB | 140 GB |
+
 ## Getting Started
 Check the [releases] for the latest version.
 ``` console
