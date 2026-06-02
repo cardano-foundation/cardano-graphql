@@ -1,0 +1,13 @@
+query VoteProceduresByConstitutionalCommittee($gov_action_proposal_id: Int_comparison_exp) {
+  voteProcedure(where: {
+    voter_role: { _eq: "ConstitutionalCommittee" }
+    gov_action_proposal_id: $gov_action_proposal_id
+  }) {
+    vote
+    committee_voter
+    voting_anchor_id
+    transaction {
+      hash
+    }
+  }
+}

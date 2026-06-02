@@ -98,6 +98,18 @@ export async function buildSchema (
           extensions: getComplexityExtension('Mutation', 'submitTransaction')
         }
       },
+      CardanoDbMeta: {
+        assetSyncPercentage: {
+          resolve: async () => {
+            try {
+              return await hasuraClient.getAssetSyncPercentage()
+            } catch (error) {
+              throw new ApolloError(error)
+            }
+          },
+          selectionSet: null
+        }
+      },
       PaymentAddress: {
         summary: {
           resolve: async (parent: { address: string }, args: { atBlock: number }) => {
@@ -165,15 +177,25 @@ export async function buildSchema (
           extensions: getComplexityExtension('Query', 'ada')
         },
         assets: {
-          resolve: (_root: any, args: any, context: any, info: any) => {
-            return delegateToSchema({
-              args,
-              context,
-              fieldName: 'assets',
-              info,
-              operation: 'query',
-              schema: hasuraClient.schema
-            })
+          resolve: async (_root: any, args: any, context: any, info: any) => {
+            try {
+              const result = await delegateToSchema({
+                args,
+                context,
+                fieldName: 'assets',
+                info,
+                operation: 'query',
+                schema: hasuraClient.schema
+              })
+              if (result === null || result === undefined) {
+                console.error('assets delegation returned null/undefined', { args: JSON.stringify(args) })
+              }
+              return result
+            } catch (error) {
+              const msg = `assets delegation error: ${error.message}`
+              console.error(msg, { args: JSON.stringify(args) })
+              throw new ApolloError(msg)
+            }
           },
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'assets')
@@ -413,6 +435,34 @@ export async function buildSchema (
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'delegationVotes')
         },
+        drepRegistrations: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'drepRegistrations',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'drepRegistrations')
+        },
+        drepRegistrations_aggregate: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'drepRegistrations_aggregate',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'drepRegistrations_aggregate')
+        },
         delegations_aggregate: {
           resolve: (_root: any, args: any, context: any, info: any) => {
             return delegateToSchema({
@@ -440,6 +490,48 @@ export async function buildSchema (
           },
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'drepHashes')
+        },
+        govActionProposal: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'govActionProposal',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'govActionProposal')
+        },
+        govActionProposal_aggregate: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'govActionProposal_aggregate',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'govActionProposal_aggregate')
+        },
+        epochParams: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'epochParams',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'epochParams')
         },
         epochs: {
           resolve: (_root: any, args: any, context: any, info: any) => {
@@ -529,20 +621,6 @@ export async function buildSchema (
           },
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'offChainVoteGovActionData')
-        },
-        offChainVoteDrepData: {
-          resolve: (_root: any, args: any, context: any, info: any) => {
-            return delegateToSchema({
-              args,
-              context,
-              fieldName: 'offChainVoteDrepData',
-              info,
-              operation: 'query',
-              schema: hasuraClient.schema
-            })
-          },
-          selectionSet: null,
-          extensions: getComplexityExtension('Query', 'offChainVoteDrepData')
         },
         paymentAddresses: {
           resolve: async (_root: any, args: { addresses: any[] }) => {
@@ -810,6 +888,34 @@ export async function buildSchema (
           },
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'utxos_aggregate')
+        },
+        voteProcedure: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'voteProcedure',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'voteProcedure')
+        },
+        voteProcedure_aggregate: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'voteProcedure_aggregate',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'voteProcedure_aggregate')
         },
         votingAnchor: {
           resolve: (_root: any, args: any, context: any, info: any) => {

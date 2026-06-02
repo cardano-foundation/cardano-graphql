@@ -21,6 +21,7 @@ select_permissions:
   - role: cardano-graphql
     permission:
       columns:
+        - id
         - block_id
         - data_hash
         - type

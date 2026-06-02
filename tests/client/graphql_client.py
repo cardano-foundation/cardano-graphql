@@ -65,6 +65,7 @@ class GraphQLClient:
         query: str,
         variables: dict[str, Any] | None = None,
         operation_name: str | None = None,
+        timeout_s: float | None = None,
     ) -> Response:
         body: dict[str, Any] = {"query": query, "variables": variables or {}}
         if operation_name:
@@ -73,6 +74,7 @@ class GraphQLClient:
             f"{self.base_url}/graphql",
             json=body,
             headers={"Content-Type": "application/json"},
+            timeout=timeout_s,
         )
         try:
             payload = resp.json()

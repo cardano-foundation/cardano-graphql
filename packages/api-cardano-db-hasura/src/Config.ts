@@ -1,10 +1,14 @@
 export interface Config {
   cardanoNodeConfigPath: string,
-  hasuraUri: string,
-  ogmios?: {
-    host?: string
-    port?: number
+  cardanoNodePrometheus: {
+    host: string
+    port: number
   },
+  cardanoSubmitApi: {
+    host: string
+    port: number
+  },
+  hasuraUri: string,
   pollingInterval: {
     adaSupply: number
   }

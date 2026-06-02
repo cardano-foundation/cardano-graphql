@@ -7,57 +7,78 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout repository
-        uses: actions/checkout@v2.3.1
+        uses: actions/checkout@v3
         with:
           submodules: true
 
-      - name: 🧰 Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+      - name: 🧹 Free disk space
+        uses: ./.github/actions/free_disk_space
 
-      - name: 🧰 Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14
+      - name: 🧰 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: 🐳 Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-          
-      - name: 📝 Base Variables
-        id: base-variables
+
+      - name: 📝 Read versions from .env.docker-compose
+        id: versions
+        shell: bash
         run: |
-          echo ::set-output name=cardano-graphql-image::cardanofoundation/cardano-graphql
-          echo ::set-output name=cardano-graphql-hasura-image::cardanofoundation/cardano-graphql-hasura
-          echo ::set-output name=cardano-graphql-background-image::cardanofoundation/cardano-graphql-background
-          echo ::set-output name=cardano-graphql-server-image::cardanofoundation/cardano-graphql-server
-          
+          get_val() {
+            grep -E "^${1}=" .env.docker-compose | head -1 | cut -d= -f2- | tr -d '\r'
+          }
+
+          NODE_VERSION="$(get_val CARDANO_NODE_VERSION)"
+          if [[ -z "$NODE_VERSION" ]]; then
+            echo "ERROR: CARDANO_NODE_VERSION not found in .env.docker-compose"
+            exit 1
+          fi
+          echo "node_version=$NODE_VERSION" >> "$GITHUB_OUTPUT"
+          echo "Found CARDANO_NODE_VERSION=$NODE_VERSION"
+
+      - name: Cardano Node - Build and push Docker ${{ steps.versions.outputs.node_version }} image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./
+          file: ./dockerfiles/cardano-node/Dockerfile
+          push: true
+          tags: cardanofoundation/cardano-graphql-cardano-node:${{ steps.versions.outputs.node_version }}
+          build-args: |
+            CARDANO_NODE_VERSION=${{ steps.versions.outputs.node_version }}
+
       - name: Server - Build and push Docker ${{ github.event.release.tag_name }} image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           push: true
           tags: cardanofoundation/cardano-graphql-server:${{ github.event.release.tag_name }}
           target: server
-      
+
       - name: Background - Build and push Docker ${{ github.event.release.tag_name }} image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           push: true
           tags: cardanofoundation/cardano-graphql-background:${{ github.event.release.tag_name }}
           target: background
-          
+
       - name: Hasura - Build and push Docker ${{ github.event.release.tag_name }} image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: ./packages/api-cardano-db-hasura/hasura
           file: ./packages/api-cardano-db-hasura/hasura/Dockerfile
           push: true
           tags: cardanofoundation/cardano-graphql-hasura:${{ github.event.release.tag_name }}
-        
+
+      - name: 🧰 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
       - name: 🔨 Build docs
         run: |
           yarn --cwd ./docs install --frozen-lockfile
@@ -65,7 +86,7 @@ jobs:
         env:
           SKIP_PREFLIGHT_CHECK: true
 
-      - name: 📤 Deploy
+      - name: 📤 Deploy docs
         uses: JamesIves/github-pages-deploy-action@4.0.0
         with:
           branch: gh-pages

@@ -30,7 +30,7 @@ mainnet:
     anchor: 13228000
 
 preprod:
-  url: http://localhost:3102
+  url: http://localhost:3101
   anchor_block: 4500000                # >= all Rosetta-pinned governance blocks (max 4,384,711)
   network_magic: 1
   timeout_s: 300

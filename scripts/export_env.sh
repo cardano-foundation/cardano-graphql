@@ -12,7 +12,6 @@ case "$NETWORK" in
             API_PORT=3100
             HASURA_PORT=8090
             METADATA_SERVER_URI="http://localhost:8080"
-            OGMIOS_PORT=1337
             PG_ADMIN_PORT=8442
             POSTGRES_PORT=5432
             TOKEN_REGISTRY_PORT=8080
@@ -23,7 +22,6 @@ case "$NETWORK" in
             API_PORT=3101
             HASURA_PORT=8091
             METADATA_SERVER_URI="http://localhost:8081"
-            OGMIOS_PORT=1338
             PG_ADMIN_PORT=8443
             POSTGRES_PORT=5443
             TOKEN_REGISTRY_PORT=8081
@@ -32,7 +30,6 @@ case "$NETWORK" in
             API_PORT=3102
             HASURA_PORT=8092
             METADATA_SERVER_URI="http://localhost:8082"
-            OGMIOS_PORT=1339
             PG_ADMIN_PORT=8444
             POSTGRES_PORT=5444
             TOKEN_REGISTRY_PORT=8082
@@ -41,7 +38,6 @@ case "$NETWORK" in
             API_PORT=3103
             HASURA_PORT=8093
             METADATA_SERVER_URI="http://localhost:8083"
-            OGMIOS_PORT=1340
             PG_ADMIN_PORT=8445
             POSTGRES_PORT=5445
             TOKEN_REGISTRY_PORT=8083
@@ -50,7 +46,6 @@ case "$NETWORK" in
             API_PORT=3104
             HASURA_PORT=8094
             METADATA_SERVER_URI="http://localhost:8084"
-            OGMIOS_PORT=1341
             PG_ADMIN_PORT=8446
             POSTGRES_PORT=5446
             TOKEN_REGISTRY_PORT=8084
@@ -68,8 +63,8 @@ export HASURA_PORT
 export HASURA_URI=http://localhost:${HASURA_PORT}
 export METADATA_SERVER_URI
 export NETWORK
-export OGMIOS_PORT
-export OGMIOS_HOST=localhost
+export CARDANO_NODE_PROMETHEUS_HOST=localhost
+export CARDANO_NODE_PROMETHEUS_PORT=12798
 export POSTGRES_DB_FILE=${SECRETS_DIR}/postgres_db
 export POSTGRES_PASSWORD_FILE=${SECRETS_DIR}/postgres_password
 export PG_ADMIN_PORT

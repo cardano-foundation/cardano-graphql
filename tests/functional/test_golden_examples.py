@@ -58,8 +58,9 @@ def test_golden(client, golden_path, update_golden, network_name):
 
     query_text = load_query_text(golden["query_file"])
     variables = golden.get("variables") or {}
+    timeout_s = golden.get("timeout_s")
 
-    resp = client.execute(query_text, variables=variables)
+    resp = client.execute(query_text, variables=variables, timeout_s=timeout_s)
 
     if resp.errors and not golden.get("graphql_errors_allowed", False):
         pytest.fail(

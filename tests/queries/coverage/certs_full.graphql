@@ -11,9 +11,6 @@ query certsFull(
     transaction { hash }
   }
   committeeRegistration(limit: $limit) {
-    cert_index
-    cold_key_id
-    hot_key_id
     transaction { hash }
   }
   committeeDeRegistration(limit: $limit) {

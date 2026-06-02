@@ -13,8 +13,6 @@ import {
   AssetWithoutTokens,
   DbConfig
 } from './typeAliases'
-import { Schema } from '@cardano-ogmios/client'
-
 const epochInformationNotYetAvailable =
   'Epoch information not yet available. This is expected during the initial chain-sync.'
 
@@ -61,11 +59,6 @@ export class HasuraBackgroundClient {
     if (this.state !== null) return
     this.state = 'initializing'
     this.logger.info({ module: 'HasuraBackgroundClient' }, 'Initializing')
-    await this.applySchemaAndMetadata()
-    this.logger.debug(
-      { module: 'HasuraBackgroundClient' },
-      'graphql-engine setup'
-    )
     await pRetry(
       async () => {
         const result = await this.client.request(gql`
@@ -107,6 +100,7 @@ export class HasuraBackgroundClient {
   public async applySchemaAndMetadata (): Promise<void> {
     if (this.applyingSchemaAndMetadata) return
     this.applyingSchemaAndMetadata = true
+    this.logger.info({ module: 'HasuraBackgroundClient' }, 'Applying PostgreSQL schema migrations')
     await pRetry(
       async () => {
         await this.hasuraCli('migrate --database-name default apply --down all')
@@ -121,6 +115,7 @@ export class HasuraBackgroundClient {
         )
       }
     )
+    this.logger.info({ module: 'HasuraBackgroundClient' }, 'Applying Hasura metadata')
     await pRetry(
       async () => {
         await this.hasuraCli('metadata clear')
@@ -135,6 +130,7 @@ export class HasuraBackgroundClient {
         )
       }
     )
+    this.logger.info({ module: 'HasuraBackgroundClient' }, 'Hasura setup complete')
     this.applyingSchemaAndMetadata = false
   }
 
@@ -180,57 +176,6 @@ export class HasuraBackgroundClient {
     return response
   }
 
-  public async getMostRecentPointWithNewAsset (): Promise<Schema.Point | null> {
-    let point: Schema.Point | null
-    // Handles possible race condition between the internal chain-follower, which manages the Asset table,
-    // and cardano-db-sync's which managed the block table.
-    await pRetry(
-      async () => {
-        // An offset of 1 is applied to ensure a partial block extraction is not skipped
-        const result = await this.client.request(gql`
-          query {
-            assets(
-              limit: 1
-              offset: 1
-              order_by: { firstAppearedInBlock: { slotNo: desc } }
-            ) {
-              firstAppearedInBlock {
-                hash
-                slotNo
-              }
-            }
-          }
-        `)
-        if (result.errors !== undefined) {
-          throw new Error(result.errors)
-        }
-        if (result.assets.length !== 0) {
-          if (result.assets[0].firstAppearedInBlock === null) {
-            throw new Error(
-              'cardano-db-sync is lagging behind the asset sync operation.'
-            )
-          }
-          const { hash, slotNo } = result.assets[0].firstAppearedInBlock
-          point = {
-            slot: Number(slotNo),
-            id: hash.substring(2)
-          }
-        } else {
-          point = null
-        }
-      },
-      {
-        factor: 1.5,
-        retries: 1000,
-        onFailedAttempt: util.onFailedAttemptFor(
-          'Getting the most recent point with a new asset',
-          this.logger
-        )
-      }
-    )
-    return point
-  }
-
   public async addAssetMetadata (asset: AssetMetadataAndHash) {
     this.logger.info(
       { module: 'HasuraClient', assetId: asset.assetId },
@@ -269,7 +214,8 @@ export class HasuraBackgroundClient {
       `,
       {
         ...asset,
-        ...{ assetId: withHexPrefix(asset.assetId) }
+        assetId: withHexPrefix(asset.assetId),
+        ticker: asset.ticker && asset.ticker.length > 9 ? undefined : asset.ticker
       }
     )
     if (result.errors !== undefined) {
@@ -331,6 +277,115 @@ export class HasuraBackgroundClient {
       }
     )
     return result.assets
+  }
+
+  public async getMaxMultiAssetId (dbConfig: DbConfig): Promise<number> {
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const result = await client.query<{ maxId: string }>('SELECT COALESCE(MAX(id), 0) AS "maxId" FROM multi_asset')
+      return Number(result.rows[0].maxId)
+    } finally {
+      await client.end()
+    }
+  }
+
+  public async pollNewAssets (dbConfig: DbConfig, lastSeenId: number): Promise<{ assetIds: string[], nextLastSeenId: number }> {
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const boundaryResult = await client.query<{ maxConfirmedId: string }>(`
+        SELECT COALESCE(MAX(ma.id), $1) AS "maxConfirmedId"
+        FROM multi_asset ma
+        JOIN ma_tx_mint mtm ON mtm.ident = ma.id
+        JOIN tx             ON tx.id     = mtm.tx_id
+        JOIN block b        ON b.id      = tx.block_id
+        WHERE ma.id > $1
+          AND b.slot_no < (SELECT slot_no FROM block ORDER BY id DESC LIMIT 1) - 120
+      `, [lastSeenId])
+
+      const nextLastSeenId = Number(boundaryResult.rows[0].maxConfirmedId)
+
+      if (nextLastSeenId === lastSeenId) {
+        return { assetIds: [], nextLastSeenId }
+      }
+
+      const result = await client.query<{ assetId: string }>(`
+        INSERT INTO "Asset" ("assetId", "assetName", "policyId", "fingerprint", "firstAppearedInSlot")
+        SELECT
+          CAST(CONCAT(ma.policy, RIGHT(CONCAT(E'\\\\', ma.name), -3)) AS BYTEA),
+          ma.name,
+          ma.policy,
+          ma.fingerprint,
+          MIN(b.slot_no)
+        FROM multi_asset ma
+        JOIN ma_tx_mint mtm ON mtm.ident = ma.id
+        JOIN tx             ON tx.id     = mtm.tx_id
+        JOIN block b        ON b.id      = tx.block_id
+        LEFT JOIN "Asset" a
+          ON a."assetId" = CAST(CONCAT(ma.policy, RIGHT(CONCAT(E'\\\\', ma.name), -3)) AS BYTEA)
+        WHERE a."assetId" IS NULL
+          AND ma.id > $1
+          AND ma.id <= $2
+        GROUP BY ma.id, ma.policy, ma.name, ma.fingerprint
+        ON CONFLICT ("assetId") DO NOTHING
+        RETURNING encode("assetId", 'hex') AS "assetId"
+      `, [lastSeenId, nextLastSeenId])
+
+      if (result.rowCount > 0) {
+        this.logger.info(
+          { module: 'HasuraBackgroundClient', inserted: result.rowCount },
+          'Polled and inserted new assets from multi_asset'
+        )
+      }
+
+      return {
+        assetIds: result.rows.map((row) => row.assetId),
+        nextLastSeenId
+      }
+    } finally {
+      await client.end()
+    }
+  }
+
+  public async getAssetIdsWithoutMetadata (dbConfig: DbConfig): Promise<string[]> {
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const result = await client.query<{ assetId: string }>(`
+        SELECT encode("assetId", 'hex') AS "assetId"
+        FROM "Asset"
+        WHERE "metadataHash" IS NULL
+      `)
+      this.logger.info(
+        { module: 'HasuraBackgroundClient', qty: result.rowCount },
+        'Found assets without metadata'
+      )
+      return result.rows.map(row => row.assetId)
+    } finally {
+      await client.end()
+    }
+  }
+
+  public async getRecentAssetIdsWithoutMetadata (dbConfig: DbConfig): Promise<string[]> {
+    const NINETY_DAYS_IN_SLOTS = 7_776_000
+    const client = new Client(dbConfig)
+    await client.connect()
+    try {
+      const result = await client.query<{ assetId: string }>(`
+        SELECT encode("assetId", 'hex') AS "assetId"
+        FROM "Asset"
+        WHERE "metadataHash" IS NULL
+        AND "firstAppearedInSlot" > (SELECT MAX("firstAppearedInSlot") FROM "Asset") - $1
+      `, [NINETY_DAYS_IN_SLOTS])
+      this.logger.info(
+        { module: 'HasuraBackgroundClient', qty: result.rowCount },
+        'Found recent assets without metadata'
+      )
+      return result.rows.map(row => row.assetId)
+    } finally {
+      await client.end()
+    }
   }
 
   public async backfillMissingAssets (dbConfig: DbConfig): Promise<string[]> {

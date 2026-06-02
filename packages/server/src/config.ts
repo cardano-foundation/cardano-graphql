@@ -42,12 +42,14 @@ function filterAndTypecastEnvs (env: any) {
     API_PORT,
     CACHE_ENABLED,
     CARDANO_NODE_CONFIG_PATH,
+    CARDANO_NODE_PROMETHEUS_HOST,
+    CARDANO_NODE_PROMETHEUS_PORT,
+    CARDANO_SUBMIT_API_HOST,
+    CARDANO_SUBMIT_API_PORT,
     HASURA_URI,
     LISTEN_ADDRESS,
     LOGGER_MIN_SEVERITY,
     MAX_QUERY_COMPLEXITY,
-    OGMIOS_HOST,
-    OGMIOS_PORT,
     POLLING_INTERVAL_ADA_SUPPLY,
     PROMETHEUS_METRICS,
     QUERY_DEPTH_LIMIT,
@@ -60,14 +62,18 @@ function filterAndTypecastEnvs (env: any) {
     apiPort: Number(API_PORT),
     cacheEnabled: CACHE_ENABLED === 'true',
     cardanoNodeConfigPath: CARDANO_NODE_CONFIG_PATH,
+    cardanoNodePrometheus: {
+      host: CARDANO_NODE_PROMETHEUS_HOST || 'localhost',
+      port: CARDANO_NODE_PROMETHEUS_PORT ? Number(CARDANO_NODE_PROMETHEUS_PORT) : 12798
+    },
+    cardanoSubmitApi: {
+      host: CARDANO_SUBMIT_API_HOST || 'cardano-submit-api',
+      port: CARDANO_SUBMIT_API_PORT ? Number(CARDANO_SUBMIT_API_PORT) : 8090
+    },
     hasuraUri: HASURA_URI,
     listenAddress: LISTEN_ADDRESS,
     loggerMinSeverity: LOGGER_MIN_SEVERITY as LogLevelString,
     maxQueryComplexity: Number(MAX_QUERY_COMPLEXITY),
-    ogmios: {
-      host: OGMIOS_HOST,
-      port: OGMIOS_PORT ? Number(OGMIOS_PORT) : undefined
-    },
     pollingInterval: {
       adaSupply: Number(POLLING_INTERVAL_ADA_SUPPLY)
     },

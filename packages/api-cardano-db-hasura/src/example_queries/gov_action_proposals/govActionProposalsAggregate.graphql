@@ -1,0 +1,7 @@
+query GovActionProposalsAggregate($type: text_comparison_exp) {
+  govActionProposal_aggregate(where: { type: $type }) {
+    aggregate {
+      count
+    }
+  }
+}

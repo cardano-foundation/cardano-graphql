@@ -18,7 +18,7 @@ services:
     shm_size: '2gb'
     volumes:
       - ${DB_PATH}:/var/lib/postgresql/data
-    restart: on-failure
+    restart: unless-stopped
     logging:
       driver: "json-file"
       options:
@@ -42,38 +42,38 @@ services:
       - ${CARDANO_NODE_DB}:/node/db
 
   cardano-node:
-    image: ghcr.io/intersectmbo/cardano-node:${CARDANO_NODE_VERSION}
+    image: cardanofoundation/cardano-graphql-cardano-node:${CARDANO_NODE_VERSION}
+    build:
+      context: ./
+      dockerfile: ./dockerfiles/cardano-node/Dockerfile
+      args:
+        CARDANO_NODE_VERSION: ${CARDANO_NODE_VERSION}
     environment:
       - NETWORK=${NETWORK}
+      - CARDANO_NODE_PORT=${CARDANO_NODE_PORT}
     volumes:
       - ${CARDANO_NODE_DIR}:/ipc
       - ${CARDANO_NODE_DB}:/node/db
-      - ./config/network/${NETWORK}:/config
     restart: unless-stopped
-    entrypoint: cardano-node run --database-path /node/db --socket-path /ipc/node.socket --port "$CARDANO_NODE_PORT" --topology /config/cardano-node/topology.json --config /config/cardano-node/config.json
+    entrypoint: ["/sbin/entrypoint.sh", "cardano-node"]
     ports:
       - ${CARDANO_NODE_PORT}:${CARDANO_NODE_PORT}
     depends_on:
       mithril:
         condition: service_completed_successfully
 
-  ogmios:
-    image: cardanosolutions/ogmios:${OGMIOS_VERSION}
-    command:
-      - --host
-      - 0.0.0.0
-      - --node-socket
-      - /ipc/node.socket
-      - --node-config
-      - /config/cardano-node/config.json
-      - --log-level-websocket
-      - error
+  cardano-submit-api:
+    image: cardanofoundation/cardano-graphql-cardano-node:${CARDANO_NODE_VERSION}
+    environment:
+      - NETWORK=${NETWORK}
     volumes:
       - ${CARDANO_NODE_DIR}:/ipc
-      - ./config/network/${NETWORK}:/config
+    restart: unless-stopped
+    entrypoint: ["/sbin/entrypoint.sh", "cardano-submit-api"]
     ports:
-      - ${OGMIOS_PORT}:1337
-    restart: on-failure
+      - ${CARDANO_SUBMIT_API_PORT}:8090
+    depends_on:
+      - cardano-node
 
   cardano-db-sync:
     platform: linux/x86_64
@@ -114,7 +114,7 @@ services:
       - ${HASURA_PORT}:8080
     depends_on:
       - "postgres"
-    restart: on-failure
+    restart: unless-stopped
     environment:
       - HASURA_GRAPHQL_ENABLE_CONSOLE=true
       - HASURA_GRAPHQL_CORS_DOMAIN=http://localhost:9695
@@ -123,6 +123,34 @@ services:
       - postgres_db
       - postgres_password
       - postgres_user
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/healthz"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  hasura-setup:
+    build:
+      context: .
+      target: background
+    image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION}
+    command: ["node", "setup.js"]
+    depends_on:
+      hasura:
+        condition: service_healthy
+    restart: "no"
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    environment:
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY}
     logging:
       driver: "json-file"
       options:
@@ -135,15 +163,15 @@ services:
       target: background
     image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION}
     depends_on:
-      - "hasura"
-      - "postgres"
+      hasura-setup:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_started
     environment:
       - COMPOSE_PROFILES=${COMPOSE_PROFILES}
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY}
       - METADATA_SERVER_URI=${METADATA_SERVER_URI}
       - POSTGRES_PORT=${POSTGRES_PORT}
-      - CHAIN_FOLLOWER_START_SLOT=${CHAIN_FOLLOWER_START_SLOT}
-      - CHAIN_FOLLOWER_START_ID=${CHAIN_FOLLOWER_START_ID}
     restart: on-failure
     secrets:
       - postgres_db
@@ -165,9 +193,19 @@ services:
       - ALLOW_INTROSPECTION=true
       - CACHE_ENABLED=true
       - CARDANO_NODE_CONFIG_PATH=/config/network/${NETWORK}/cardano-node/config.json
+      - CARDANO_NODE_PROMETHEUS_HOST=cardano-node
+      - CARDANO_NODE_PROMETHEUS_PORT=12798
+      - CARDANO_SUBMIT_API_HOST=cardano-submit-api
       - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY}
       - NETWORK=${NETWORK}
       - POSTGRES_PORT=${POSTGRES_PORT}
+    depends_on:
+      cardano-submit-api:
+        condition: service_started
+      hasura:
+        condition: service_healthy
+      hasura-setup:
+        condition: service_completed_successfully
     expose:
       - ${API_PORT}
     ports:
