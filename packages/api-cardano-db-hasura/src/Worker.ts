@@ -4,7 +4,7 @@ import { dummyLogger, Logger } from 'ts-log'
 import PgBoss, { JobWithDoneCallback } from 'pg-boss'
 import { AssetV2 } from './AssetMetadata'
 import { MetadataClient } from './MetadataClient'
-import { DbConfig } from './typeAliases'
+import { AssetMetadataHashAndId, DbConfig } from './typeAliases'
 import { HasuraBackgroundClient } from './HasuraBackgroundClient'
 
 const ASSET_METADATA_FETCH_INITIAL = 'asset-metadata-fetch-initial'
@@ -73,7 +73,7 @@ export class Worker {
         )
         const assetIds = jobs.map((job) => job.data.assetId)
         let fetchedMetadata: AssetV2[]
-        let existingAssetMetadataHashes: Awaited<ReturnType<typeof this.hasuraClient.getAssetMetadataHashesById>>
+        let existingAssetMetadataHashes: AssetMetadataHashAndId[]
         try {
           fetchedMetadata = await this.metadataFetchClient.fetch(assetIds)
           existingAssetMetadataHashes =

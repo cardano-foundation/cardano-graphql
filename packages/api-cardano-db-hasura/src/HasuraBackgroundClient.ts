@@ -283,8 +283,8 @@ export class HasuraBackgroundClient {
     const client = new Client(dbConfig)
     await client.connect()
     try {
-      const result = await client.query<{ max_id: string }>('SELECT COALESCE(MAX(id), 0) AS max_id FROM multi_asset')
-      return Number(result.rows[0].max_id)
+      const result = await client.query<{ maxId: string }>('SELECT COALESCE(MAX(id), 0) AS "maxId" FROM multi_asset')
+      return Number(result.rows[0].maxId)
     } finally {
       await client.end()
     }
@@ -294,8 +294,8 @@ export class HasuraBackgroundClient {
     const client = new Client(dbConfig)
     await client.connect()
     try {
-      const boundaryResult = await client.query<{ max_confirmed_id: string }>(`
-        SELECT COALESCE(MAX(ma.id), $1) AS max_confirmed_id
+      const boundaryResult = await client.query<{ maxConfirmedId: string }>(`
+        SELECT COALESCE(MAX(ma.id), $1) AS "maxConfirmedId"
         FROM multi_asset ma
         JOIN ma_tx_mint mtm ON mtm.ident = ma.id
         JOIN tx             ON tx.id     = mtm.tx_id
@@ -304,7 +304,7 @@ export class HasuraBackgroundClient {
           AND b.slot_no < (SELECT slot_no FROM block ORDER BY id DESC LIMIT 1) - 120
       `, [lastSeenId])
 
-      const nextLastSeenId = Number(boundaryResult.rows[0].max_confirmed_id)
+      const nextLastSeenId = Number(boundaryResult.rows[0].maxConfirmedId)
 
       if (nextLastSeenId === lastSeenId) {
         return { assetIds: [], nextLastSeenId }
