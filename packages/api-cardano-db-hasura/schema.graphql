@@ -143,6 +143,24 @@ type Query {
         offset: Int
         where: DrepHash_bool_exp
     ): [DrepHash]!
+    drepRegistrations (
+        limit: Int
+        order_by: [DrepRegistration_order_by!]
+        offset: Int
+        where: DrepRegistration_bool_exp
+    ): [DrepRegistration]!
+    drepRegistrations_aggregate (
+        limit: Int
+        order_by: [DrepRegistration_order_by!]
+        offset: Int
+        where: DrepRegistration_bool_exp
+    ): DrepRegistration_aggregate!
+    epochParams (
+        limit: Int
+        order_by: [EpochParam_order_by!]
+        offset: Int
+        where: EpochParam_bool_exp
+    ): [EpochParam]!
     epochs (
         limit: Int
         order_by: [Epoch_order_by!]
@@ -156,6 +174,18 @@ type Query {
         where: Epoch_bool_exp
     ): Epoch_aggregate!
     genesis: Genesis!
+    govActionProposal (
+        limit: Int
+        order_by: [GovActionProposal_order_by!]
+        offset: Int
+        where: GovActionProposal_bool_exp
+    ): [GovActionProposal]!
+    govActionProposal_aggregate (
+        limit: Int
+        order_by: [GovActionProposal_order_by!]
+        offset: Int
+        where: GovActionProposal_bool_exp
+    ): GovActionProposal_aggregate!
     offChainVoteData (
         limit: Int
         order_by: [OffChainVoteData_order_by!]
@@ -180,12 +210,6 @@ type Query {
         offset: Int
         where: OffChainVoteGovActionData_bool_exp
     ): [OffChainVoteGovActionData]!
-    offChainVoteDrepData (
-        limit: Int
-        order_by: [OffChainVoteDrepData_order_by!]
-        offset: Int
-        where: OffChainVoteDrepData_bool_exp
-    ): [OffChainVoteDrepData]!
     paymentAddresses (
         addresses: [String]!
     ): [PaymentAddress]
@@ -301,6 +325,18 @@ type Query {
         offset: Int
         where: TransactionOutput_bool_exp
     ): TransactionOutput_aggregate!
+    voteProcedure (
+        limit: Int
+        order_by: [VotingProcedure_order_by!]
+        offset: Int
+        where: VotingProcedure_bool_exp
+    ): [VotingProcedure]!
+    voteProcedure_aggregate (
+        limit: Int
+        order_by: [VotingProcedure_order_by!]
+        offset: Int
+        where: VotingProcedure_bool_exp
+    ): VotingProcedure_aggregate!
     votingAnchor (
         limit: Int
         order_by: [VotingAnchor_order_by!]
@@ -389,6 +425,7 @@ type DelegationVote {
 }
 
 type DrepHash {
+    id: Int
     view: String
     has_script: Boolean
     raw: Hex
@@ -688,16 +725,10 @@ type CollateralOutput_sum_fields {
 }
 
 type CommitteeRegistration {
-    cert_index: Int
-    cold_key_id: String
-    hot_key_id: String
     transaction: Transaction!
 }
 
 input CommitteeRegistration_order_by {
-    cert_index: order_by
-    cold_key_id: order_by
-    hot_key_id: order_by
     transaction: Transaction_order_by
 }
 
@@ -705,9 +736,6 @@ input CommitteeRegistration_bool_exp {
     _and: [CommitteeRegistration_bool_exp]
     _not: CommitteeRegistration_bool_exp
     _or: [CommitteeRegistration_bool_exp]
-    cert_index: Int_comparison_exp
-    cold_key_id: text_comparison_exp
-    hot_key_id: text_comparison_exp
     transaction: Transaction_bool_exp
 }
 
@@ -736,6 +764,7 @@ input CommitteeDeRegistration_bool_exp {
 }
 
 type VotingAnchor {
+    id: Int
     data_hash: Hex
     type: String
     url: String
@@ -760,6 +789,7 @@ input VotingAnchor_bool_exp {
 }
 
 type OffChainVoteData {
+    id: Int
     bytes: Hex
     comment: String
     hash: Hex
@@ -769,11 +799,11 @@ type OffChainVoteData {
     warning: String
     offChainVoteReference: OffChainVoteReference
     offChainVoteAuthor: OffChainVoteAuthor
-    offChainVoteDrepData: OffChainVoteDrepData
     offChainVoteGovActionData: OffChainVoteGovActionData
 }
 
 input OffChainVoteData_order_by {
+    id: order_by
     bytes: order_by
     comment: order_by
     hash: order_by
@@ -781,7 +811,6 @@ input OffChainVoteData_order_by {
     json: order_by
     offChainVoteReference: OffChainVoteReference_order_by
     offChainVoteAuthor: OffChainVoteAuthor_order_by
-    offChainVoteDrepData: OffChainVoteDrepData_order_by
     offChainVoteGovActionData: OffChainVoteGovActionData_order_by
 }
 
@@ -789,17 +818,18 @@ input OffChainVoteData_bool_exp {
     _and: [OffChainVoteData_bool_exp]
     _not: OffChainVoteData_bool_exp
     _or: [OffChainVoteData_bool_exp]
+    id: Int_comparison_exp
     bytes: Hex_comparison_exp
     comment: text_comparison_exp
     hash: Hex_comparison_exp
     is_valid: Boolean_comparison_exp
     offChainVoteReference: OffChainVoteReference_bool_exp
     offChainVoteAuthor: OffChainVoteAuthor_bool_exp
-    offChainVoteDrepData: OffChainVoteDrepData_bool_exp
     offChainVoteGovActionData: OffChainVoteGovActionData_bool_exp
 }
 
 type OffChainVoteGovActionData {
+    id: Int
     abstract: String
     motivation: String
     OffChainVoteData: OffChainVoteData
@@ -819,47 +849,13 @@ input OffChainVoteGovActionData_bool_exp {
     _and: [OffChainVoteGovActionData_bool_exp]
     _not: OffChainVoteGovActionData_bool_exp
     _or: [OffChainVoteGovActionData_bool_exp]
+    id: Int_comparison_exp
     abstract: text_comparison_exp
     motivation: text_comparison_exp
     rationale: text_comparison_exp
     title: text_comparison_exp
     offChainVoteData: OffChainVoteData_bool_exp
-}
-
-type OffChainVoteDrepData {
-    given_name: String
-    image_hash: Hex
-    image_url: String
-    motivations: String
-    objectives: String
-    offChainVoteData: OffChainVoteData
-    payment_address: String
-    qualifications: String
-}
-
-input OffChainVoteDrepData_order_by {
-    given_name: order_by
-    image_hash: order_by
-    image_url: order_by
-    motivations: order_by
-    objectives: order_by
-    payment_address: order_by
-    qualifications: order_by
-    offChainVoteData: OffChainVoteData_order_by
-}
-
-input OffChainVoteDrepData_bool_exp {
-    _and: [OffChainVoteDrepData_bool_exp]
-    _not: OffChainVoteDrepData_bool_exp
-    _or: [OffChainVoteDrepData_bool_exp]
-    given_name: text_comparison_exp
-    image_hash: Hex_comparison_exp
-    image_url: text_comparison_exp
-    motivations: text_comparison_exp
-    objectives: text_comparison_exp
-    payment_address: text_comparison_exp
-    qualifications: text_comparison_exp
-    offChainVoteData: OffChainVoteData_bool_exp
+    OffChainVoteData: OffChainVoteData_bool_exp
 }
 
 type OffChainVoteAuthor {
@@ -1028,6 +1024,7 @@ input DrepHash_bool_exp {
     _and: [DrepHash_bool_exp]
     _not: DrepHash_bool_exp
     _or: [DrepHash_bool_exp]
+    id: Int_comparison_exp
     view: text_comparison_exp
     hasScript: Boolean_comparison_exp
     raw: Hex_comparison_exp
@@ -2232,6 +2229,174 @@ input Float_comparison_exp {
 }
 
 # expression to compare data of type Int. All fields are combined with logical 'AND'.
+type EpochParam {
+    epoch_no: Int!
+    committee_min_size: Int
+    committee_max_term_length: Int
+    gov_action_lifetime: Int
+    gov_action_deposit: Lovelace
+    drep_deposit: Lovelace
+    drep_activity: Int
+    dvt_motion_no_confidence: Float
+    dvt_committee_normal: Float
+    dvt_committee_no_confidence: Float
+    dvt_update_to_constitution: Float
+    dvt_hard_fork_initiation: Float
+    dvt_p_p_network_group: Float
+    dvt_p_p_economic_group: Float
+    dvt_p_p_technical_group: Float
+    dvt_p_p_gov_group: Float
+    dvt_treasury_withdrawal: Float
+    pvt_motion_no_confidence: Float
+    pvt_committee_normal: Float
+    pvt_committee_no_confidence: Float
+    pvt_hard_fork_initiation: Float
+    pvtpp_security_group: Float
+}
+
+input EpochParam_order_by {
+    epoch_no: order_by
+    committee_min_size: order_by
+    gov_action_lifetime: order_by
+    drep_activity: order_by
+}
+
+input EpochParam_bool_exp {
+    _and: [EpochParam_bool_exp]
+    _not: EpochParam_bool_exp
+    _or: [EpochParam_bool_exp]
+    epoch_no: Int_comparison_exp
+    committee_min_size: Int_comparison_exp
+    gov_action_lifetime: Int_comparison_exp
+    drep_activity: Int_comparison_exp
+}
+
+type GovActionProposal {
+    tx_id: Int
+    index: Int!
+    voting_anchor_id: Int
+    deposit: Lovelace
+    return_address: String
+    expiration: Int
+    type: String
+    description: JSON
+    transaction: Transaction
+    PreviousGovAction: GovActionProposal
+    VotingAnchor: VotingAnchor
+}
+
+input GovActionProposal_order_by {
+    index: order_by
+    deposit: order_by
+    expiration: order_by
+    type: order_by
+    return_address: order_by
+    transaction: Transaction_order_by
+}
+
+input GovActionProposal_bool_exp {
+    _and: [GovActionProposal_bool_exp]
+    _not: GovActionProposal_bool_exp
+    _or: [GovActionProposal_bool_exp]
+    index: Int_comparison_exp
+    expiration: Int_comparison_exp
+    type: text_comparison_exp
+    return_address: text_comparison_exp
+    transaction: Transaction_bool_exp
+}
+
+type GovActionProposal_aggregate {
+    aggregate: GovActionProposal_aggregate_fields
+}
+
+type GovActionProposal_aggregate_fields {
+    count: String
+}
+
+type VotingProcedure {
+    vote: String!
+    voter_role: String!
+    committee_voter: Int
+    drep_voter: Int
+    pool_voter: Int
+    gov_action_proposal_id: Int!
+    index: Int!
+    invalid: Boolean
+    voting_anchor_id: Int
+    transaction: Transaction
+    govActionProposal: GovActionProposal
+    drepVoter: DrepHash
+    votingAnchor: VotingAnchor
+}
+
+input VotingProcedure_order_by {
+    vote: order_by
+    voter_role: order_by
+    gov_action_proposal_id: order_by
+    index: order_by
+    transaction: Transaction_order_by
+    govActionProposal: GovActionProposal_order_by
+}
+
+input VotingProcedure_bool_exp {
+    _and: [VotingProcedure_bool_exp]
+    _not: VotingProcedure_bool_exp
+    _or: [VotingProcedure_bool_exp]
+    vote: text_comparison_exp
+    voter_role: text_comparison_exp
+    committee_voter: Int_comparison_exp
+    drep_voter: Int_comparison_exp
+    pool_voter: Int_comparison_exp
+    gov_action_proposal_id: Int_comparison_exp
+    index: Int_comparison_exp
+    invalid: Boolean_comparison_exp
+    transaction: Transaction_bool_exp
+    govActionProposal: GovActionProposal_bool_exp
+    drepVoter: DrepHash_bool_exp
+    votingAnchor: VotingAnchor_bool_exp
+}
+
+type VotingProcedure_aggregate {
+    aggregate: VotingProcedure_aggregate_fields
+}
+
+type VotingProcedure_aggregate_fields {
+    count: String
+}
+
+type DrepRegistration {
+    DRepId: String
+    deposit: Lovelace
+    voting_anchor_id: Int
+    transaction: Transaction
+    votingAnchor: VotingAnchor
+}
+
+input DrepRegistration_order_by {
+    DRepId: order_by
+    deposit: order_by
+    transaction: Transaction_order_by
+    votingAnchor: VotingAnchor_order_by
+}
+
+input DrepRegistration_bool_exp {
+    _and: [DrepRegistration_bool_exp]
+    _not: DrepRegistration_bool_exp
+    _or: [DrepRegistration_bool_exp]
+    DRepId: text_comparison_exp
+    deposit: text_comparison_exp
+    transaction: Transaction_bool_exp
+    votingAnchor: VotingAnchor_bool_exp
+}
+
+type DrepRegistration_aggregate {
+    aggregate: DrepRegistration_aggregate_fields
+}
+
+type DrepRegistration_aggregate_fields {
+    count: String
+}
+
 input Int_comparison_exp {
     _eq: Int
     _gt: Int

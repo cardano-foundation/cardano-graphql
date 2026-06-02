@@ -11,6 +11,7 @@ select_permissions:
   - role: cardano-graphql
     permission:
       columns:
+        - id
         - view
         - has_script
         - raw

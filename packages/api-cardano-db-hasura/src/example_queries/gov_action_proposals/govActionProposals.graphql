@@ -1,0 +1,13 @@
+query GovActionProposals {
+  govActionProposal {
+    tx_id
+    type
+    voting_anchor_id
+    VotingAnchor {
+      id
+      offChainData {
+        id
+      }
+    }
+  }
+}

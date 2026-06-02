@@ -21,9 +21,6 @@ select_permissions:
   - role: cardano-graphql
     permission:
       columns:
-        - cert_index
-        - cold_key_id
-        - hot_key_id
         - tx_id
       filter: {}
       limit: 2500
