@@ -34,13 +34,6 @@ query governanceFull(
     json
     language
     offChainVoteAuthor { name signature public_key warning offChainVoteData { hash } }
-    offChainVoteDrepData {
-      given_name
-      image_hash
-      image_url
-      payment_address
-      offChainVoteData { hash }
-    }
     offChainVoteGovActionData {
       title
       abstract

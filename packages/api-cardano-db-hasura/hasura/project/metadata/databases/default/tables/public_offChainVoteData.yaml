@@ -42,6 +42,7 @@ select_permissions:
         - hash
         - is_valid
         - json
+        - language
         - voting_anchor_id
         - warning
       filter: {}

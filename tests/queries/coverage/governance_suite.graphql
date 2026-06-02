@@ -17,7 +17,7 @@ query governanceSuite(
     raw
   }
   committeeRegistration(limit: $limit) {
-    cert_index
+    transaction { hash }
   }
   committeeDeRegistration(limit: $limit) {
     cert_index

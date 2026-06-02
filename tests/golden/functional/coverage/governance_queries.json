@@ -1,0 +1,22 @@
+{
+  "anchor_block": null,
+  "description": "Conway governance root-field smoke test (govActionProposal, voteProcedure, drepRegistrations, epochParams). All lists masked — composition drifts, shape is the signal.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.govActionProposal",
+    "data.govActionProposal_aggregate",
+    "data.voteProcedure",
+    "data.voteProcedure_aggregate",
+    "data.drepRegistrations",
+    "data.epochParams"
+  ],
+  "network": "mainnet",
+  "query_file": "queries/coverage/governance_queries.graphql",
+  "test_name": "governance_queries",
+  "variables": {
+    "limit": 3
+  }
+}
