@@ -1,0 +1,13 @@
+query OffChainVoteGovActionData($offChainVoteDataId: Int_comparison_exp) {
+  offChainVoteGovActionData(where: {
+    OffChainVoteData: { id: $offChainVoteDataId }
+  }) {
+    id
+    title
+    rationale
+    motivation
+    OffChainVoteData {
+      id
+    }
+  }
+}

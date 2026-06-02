@@ -20,6 +20,7 @@ select_permissions:
   - role: cardano-graphql
     permission:
       columns:
+        - id
         - abstract
         - motivation
         - off_chain_vote_data_id

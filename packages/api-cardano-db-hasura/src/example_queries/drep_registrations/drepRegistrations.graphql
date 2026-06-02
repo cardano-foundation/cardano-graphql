@@ -1,0 +1,13 @@
+query DrepRegistrations($DRepId: text_comparison_exp, $limit: Int) {
+  drepRegistrations(where: { DRepId: $DRepId }, limit: $limit) {
+    DRepId
+    deposit
+    transaction {
+      hash
+    }
+    votingAnchor {
+      url
+      data_hash
+    }
+  }
+}

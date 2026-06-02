@@ -1,0 +1,17 @@
+query VoteProceduresByDRep(
+  $gov_action_proposal_id: Int_comparison_exp
+  $drep_id: Int_comparison_exp
+) {
+  voteProcedure(where: {
+    voter_role: { _eq: "DRep" }
+    gov_action_proposal_id: $gov_action_proposal_id
+    drepVoter: { id: $drep_id }
+  }) {
+    vote
+    drep_voter
+    voting_anchor_id
+    transaction {
+      hash
+    }
+  }
+}

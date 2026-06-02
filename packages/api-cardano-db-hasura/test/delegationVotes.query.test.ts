@@ -65,22 +65,21 @@ describe('delegationVotes', () => {
     expect(drepHashes[0].view).toBeDefined()
   })
 
-  it('can return off-chain drep data', async () => {
+  it('can return off-chain vote data', async () => {
     const result = await client.query({
       query: gql`
         query {
-          offChainVoteDrepData(limit: 5) {
-            given_name
-            motivations
-            objectives
-            qualifications
-            payment_address
+          offChainVoteData(limit: 5) {
+            hash
+            is_valid
+            offChainVoteGovActionData {
+              title
+              abstract
+            }
           }
         }
       `
     })
-    expect(result.data.offChainVoteDrepData).toBeDefined()
-    // preprod has registered DREPs with off-chain metadata
-    expect(result.data.offChainVoteDrepData.length).toBeGreaterThan(0)
+    expect(result.data.offChainVoteData).toBeDefined()
   })
 })

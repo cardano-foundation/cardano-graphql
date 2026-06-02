@@ -59,11 +59,6 @@ export class HasuraBackgroundClient {
     if (this.state !== null) return
     this.state = 'initializing'
     this.logger.info({ module: 'HasuraBackgroundClient' }, 'Initializing')
-    await this.applySchemaAndMetadata()
-    this.logger.debug(
-      { module: 'HasuraBackgroundClient' },
-      'graphql-engine setup'
-    )
     await pRetry(
       async () => {
         const result = await this.client.request(gql`
@@ -105,6 +100,7 @@ export class HasuraBackgroundClient {
   public async applySchemaAndMetadata (): Promise<void> {
     if (this.applyingSchemaAndMetadata) return
     this.applyingSchemaAndMetadata = true
+    this.logger.info({ module: 'HasuraBackgroundClient' }, 'Applying PostgreSQL schema migrations')
     await pRetry(
       async () => {
         await this.hasuraCli('migrate --database-name default apply --down all')
@@ -119,6 +115,7 @@ export class HasuraBackgroundClient {
         )
       }
     )
+    this.logger.info({ module: 'HasuraBackgroundClient' }, 'Applying Hasura metadata')
     await pRetry(
       async () => {
         await this.hasuraCli('metadata clear')
@@ -133,6 +130,7 @@ export class HasuraBackgroundClient {
         )
       }
     )
+    this.logger.info({ module: 'HasuraBackgroundClient' }, 'Hasura setup complete')
     this.applyingSchemaAndMetadata = false
   }
 

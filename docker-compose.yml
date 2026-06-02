@@ -135,14 +135,36 @@ services:
         max-size: "200k"
         max-file: "10"
 
+  hasura-setup:
+    build:
+      context: .
+      target: background
+    image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION}
+    command: ["node", "setup.js"]
+    depends_on:
+      hasura:
+        condition: service_healthy
+    restart: "no"
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    environment:
+      - LOGGER_MIN_SEVERITY=${LOGGER_MIN_SEVERITY}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
   background:
     build:
       context: .
       target: background
     image: cardanofoundation/cardano-graphql-background:${CARDANO_GRAPHQL_VERSION}
     depends_on:
-      hasura:
-        condition: service_healthy
+      hasura-setup:
+        condition: service_completed_successfully
       postgres:
         condition: service_started
     environment:
@@ -182,6 +204,8 @@ services:
         condition: service_started
       hasura:
         condition: service_healthy
+      hasura-setup:
+        condition: service_completed_successfully
     expose:
       - ${API_PORT}
     ports:

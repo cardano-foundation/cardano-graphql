@@ -48,7 +48,6 @@
 - "!include public_committeeRegistration.yaml"
 - "!include public_drep_distr.yaml"
 - "!include public_offChainVoteAuthor.yaml"
-- "!include public_offChainVoteDrepData.yaml"
 - "!include public_offChainVoteGovActionData.yaml"
 - "!include public_offChainVoteReference.yaml"
 - "!include public_stake_address.yaml"
