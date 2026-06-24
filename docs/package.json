@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "http://cardano-foundation.github.io/cardano-graphql",
   "dependencies": {
-    "@babel/core": "7.9.0",
+    "@babel/core": "7.29.6",
     "@svgr/webpack": "4.3.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
