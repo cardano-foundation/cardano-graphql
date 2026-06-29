@@ -200,9 +200,9 @@ function startAssetPolling (
         setupStarted = true
         try {
           await hasuraBackgroundClient.initialize()
+          const lastSeenId = await hasuraBackgroundClient.getMaxMultiAssetId(config.db)
           const backfilledAssetIds = await hasuraBackgroundClient.backfillMissingAssets(config.db)
           await worker.initQueue()
-          const lastSeenId = await hasuraBackgroundClient.getMaxMultiAssetId(config.db)
           startAssetPolling(hasuraBackgroundClient, worker, config.db, lastSeenId, logger)
           await metadataClient.initialize()
           await worker.start()
