@@ -47,7 +47,7 @@ Check the [releases] for the latest version.
 ``` console
 git clone \
   --single-branch \
-  --branch 9.0.0 \
+  --branch 9.0.1 \
   --recurse-submodules \
   https://github.com/cardano-foundation/cardano-graphql.git \
   && cd cardano-graphql
@@ -166,6 +166,24 @@ docker compose logs -f index-service
 ```
 
 :information_source: _Index creation can take several hours but significantly speeds up queries for transactions by address and asset lookups. See [Index Service Documentation](./packages/index-service/README.md) for details on created indexes, customization, and best practices._
+
+### PostgreSQL 17 Configuration (Custom Deployments)
+
+If you are running a custom PostgreSQL 17 deployment (not using our docker-compose), add the following to your `postgresql.conf` to prevent query backlog under concurrent load:
+
+```
+max_parallel_workers_per_gather = 0
+```
+
+Or apply it at runtime:
+```sql
+ALTER SYSTEM SET max_parallel_workers_per_gather = 0;
+```
+```sql
+SELECT pg_reload_conf();
+```
+
+This is applied automatically when using our docker-compose stack.
 
 ### Check Cardano DB sync progress
 Use the GraphQL Playground in the browser at http://localhost:3100/graphql:

@@ -10,7 +10,7 @@ services:
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
-    command: -p ${POSTGRES_PORT}
+    command: -p ${POSTGRES_PORT} -c max_parallel_workers_per_gather=0
     secrets:
       - postgres_db
       - postgres_password
