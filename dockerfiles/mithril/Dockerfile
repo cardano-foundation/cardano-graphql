@@ -19,7 +19,7 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y \
        build-essential m4 libssl-dev docker.io jq git pkg-config \
     && apt-get clean
 
-RUN git clone https://github.com/input-output-hk/mithril.git \
+RUN git clone https://github.com/IntersectMBO/mithril.git \
     && export PATH="$HOME/.cargo/bin:$PATH" \
     && cd mithril \
     && git checkout $MITHRIL_VERSION \
