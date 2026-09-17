@@ -47,7 +47,7 @@ Check the [releases] for the latest version.
 ``` console
 git clone \
   --single-branch \
-  --branch 9.0.2 \
+  --branch 9.0.3 \
   --recurse-submodules \
   https://github.com/cardano-foundation/cardano-graphql.git \
   && cd cardano-graphql
