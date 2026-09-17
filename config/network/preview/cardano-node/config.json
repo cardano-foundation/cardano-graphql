@@ -15,11 +15,14 @@
   "LastKnownBlockVersion-Minor": 1,
   "LedgerDB": {
     "Backend": "V2InMemory",
-    "NumOfDiskSnapshots": 2,
     "QueryBatchSize": 100000,
-    "SnapshotInterval": 864
+    "Snapshots": {
+      "NumOfDiskSnapshots": 2,
+      "SlotOffset": 0,
+      "SnapshotInterval": 17280
+    }
   },
-  "MinNodeVersion": "10.7.0",
+  "MinNodeVersion": "11.1.0",
   "Protocol": "Cardano",
   "RequiresNetworkMagic": "RequiresMagic",
   "ShelleyGenesisFile": "shelley-genesis.json",
@@ -112,14 +115,5 @@
     "Startup.DiffusionInit": {
       "severity": "Info"
     }
-  },
-  "TurnOnLogMetrics": true,
-  "TurnOnLogging": true,
-  "UseTraceDispatcher": true,
-  "defaultBackends": [],
-  "defaultScribes": [],
-  "minSeverity": "Critical",
-  "options": {},
-  "setupBackends": [],
-  "setupScribes": []
+  }
 }

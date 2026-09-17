@@ -5,7 +5,7 @@
   "ByronGenesisHash": "5f20df933584822601f9e3f8c024eb5eb252fe8cefb24d1317dc3d432e940ebb",
   "CheckpointsFile": "checkpoints.json",
   "CheckpointsFileHash": "3e6dee5bae7acc6d870187e72674b37c929be8c66e62a552cf6a876b1af31ade",
-  "ConsensusMode": "PraosMode",
+  "ConsensusMode": "GenesisMode",
   "ConwayGenesisFile": "conway-genesis.json",
   "ConwayGenesisHash": "15a199f895e461ec0ffc6dd4e4028af28a492ab4e806d39cb674c88f7643ef62",
   "LastKnownBlockVersion-Alt": 0,
@@ -13,12 +13,15 @@
   "LastKnownBlockVersion-Minor": 0,
   "LedgerDB": {
     "Backend": "V2InMemory",
-    "NumOfDiskSnapshots": 2,
     "QueryBatchSize": 100000,
-    "SnapshotInterval": 4320
+    "Snapshots": {
+      "NumOfDiskSnapshots": 2,
+      "SlotOffset": 0,
+      "SnapshotInterval": 86400
+    }
   },
   "MaxKnownMajorProtocolVersion": 2,
-  "MinNodeVersion": "10.7.0",
+  "MinNodeVersion": "11.1.0",
   "Protocol": "Cardano",
   "RequiresNetworkMagic": "RequiresNoMagic",
   "ShelleyGenesisFile": "shelley-genesis.json",
@@ -107,14 +110,5 @@
     "Startup.DiffusionInit": {
       "severity": "Info"
     }
-  },
-  "TurnOnLogMetrics": true,
-  "TurnOnLogging": true,
-  "UseTraceDispatcher": true,
-  "defaultBackends": [],
-  "defaultScribes": [],
-  "minSeverity": "Critical",
-  "options": {},
-  "setupBackends": [],
-  "setupScribes": []
+  }
 }
