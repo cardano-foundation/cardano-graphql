@@ -9,7 +9,7 @@ RUN apt update --fix-missing \
     && apt-get clean
 
 # Mithril setup
-ARG MITHRIL_VERSION=2543.1-hotfix
+ARG MITHRIL_VERSION=2630.0
 
 # Install dependencies
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y \
