@@ -400,10 +400,13 @@ SELECT
   index,
   tx_out.inline_datum_id AS "inline_datum_id",
   tx_out.reference_script_id AS "reference_script_id",
-  tx_out.payment_cred AS "paymentCredential"
+  tx_out.payment_cred AS "paymentCredential",
+  stake_address.view AS "stakeAddress"
 FROM tx
 JOIN tx_out
-  ON tx.id = tx_out.tx_id;
+  ON tx.id = tx_out.tx_id
+LEFT OUTER JOIN stake_address
+  ON tx_out.stake_address_id = stake_address.id;
 
 CREATE OR REPLACE VIEW "Utxo" AS SELECT
   address,
@@ -413,13 +416,17 @@ CREATE OR REPLACE VIEW "Utxo" AS SELECT
   tx_out.id,
   index,
   tx_out.inline_datum_id AS "inline_datum_id",
-  tx_out.reference_script_id AS "reference_script_id"
+  tx_out.reference_script_id AS "reference_script_id",
+  tx_out.payment_cred AS "paymentCredential",
+  stake_address.view AS "stakeAddress"
 FROM tx
 JOIN tx_out
   ON tx.id = tx_out.tx_id
 LEFT OUTER JOIN tx_in
   ON tx_out.tx_id = tx_in.tx_out_id
   AND tx_out.index = tx_in.tx_out_index
+LEFT OUTER JOIN stake_address
+  ON tx_out.stake_address_id = stake_address.id
 WHERE tx_in.tx_in_id IS NULL;
 
 CREATE OR REPLACE VIEW "Withdrawal" AS

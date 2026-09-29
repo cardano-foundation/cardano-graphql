@@ -1908,6 +1908,7 @@ type TransactionOutput {
     index: Int!
     paymentCredential: Hash28Hex
     script: Script
+    stakeAddress: StakeAddress
     transaction: Transaction!
     txHash: Hash32Hex!
     tokens: [Token!]!
@@ -1917,6 +1918,8 @@ type TransactionOutput {
 
 enum TransactionOutput_distinct_on {
     address
+    paymentCredential
+    stakeAddress
 }
 
 input TransactionOutput_order_by {
@@ -1924,6 +1927,8 @@ input TransactionOutput_order_by {
     addressHasScript: order_by
     datum: Transaction_order_by
     index: order_by
+    paymentCredential: order_by
+    stakeAddress: order_by
     txHash: order_by
     value: order_by
 }
@@ -1936,7 +1941,9 @@ input TransactionOutput_bool_exp {
     addressHasScript: Boolean_comparison_exp
     datum: Datum_bool_exp
     index: Int_comparison_exp
+    paymentCredential: Hash28Hex_comparison_exp
     script: Script_bool_exp
+    stakeAddress: StakeAddress_comparison_exp
     tokens: Token_bool_exp
     transaction: Transaction_bool_exp
     value: text_comparison_exp
