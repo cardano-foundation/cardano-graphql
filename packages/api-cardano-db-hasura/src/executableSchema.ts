@@ -6,6 +6,7 @@ import path from 'path'
 import util from '@cardano-graphql/util'
 import { Resolvers, Genesis } from './graphql_types'
 import { HasuraClient } from './HasuraClient'
+import { NestedArgumentsTransform } from './NestedArgumentsTransform'
 import {
   IPv4Resolver,
   IPv6Resolver,
@@ -22,6 +23,8 @@ import {
   getDefaultQueryComplexity
 } from './queryComplexity'
 const GraphQLBigInt = require('graphql-bigint')
+
+const nestedArgumentsTransform = new NestedArgumentsTransform()
 
 export const scalarResolvers = {
   AssetFingerprint: util.scalars.AssetFingerprint,
@@ -135,7 +138,8 @@ export async function buildSchema (
               fieldName: 'activeStake',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -149,7 +153,8 @@ export async function buildSchema (
               fieldName: 'activeStake_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -185,7 +190,8 @@ export async function buildSchema (
                 fieldName: 'assets',
                 info,
                 operation: 'query',
-                schema: hasuraClient.schema
+                schema: hasuraClient.schema,
+                transforms: [nestedArgumentsTransform]
               })
               if (result === null || result === undefined) {
                 console.error('assets delegation returned null/undefined', { args: JSON.stringify(args) })
@@ -208,7 +214,8 @@ export async function buildSchema (
               fieldName: 'assets_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -222,7 +229,8 @@ export async function buildSchema (
               fieldName: 'blocks',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -236,7 +244,8 @@ export async function buildSchema (
               fieldName: 'blocks_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -250,7 +259,8 @@ export async function buildSchema (
                 fieldName: 'cardano',
                 info,
                 operation: 'query',
-                schema: hasuraClient.schema
+                schema: hasuraClient.schema,
+                transforms: [nestedArgumentsTransform]
               })
               if (result[0]?.currentEpoch === null) {
                 return new ApolloError(
@@ -289,7 +299,8 @@ export async function buildSchema (
               fieldName: 'collateralInputs',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -303,7 +314,8 @@ export async function buildSchema (
               fieldName: 'collateralInputs_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -317,7 +329,8 @@ export async function buildSchema (
               fieldName: 'collateralOutputs',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -331,7 +344,8 @@ export async function buildSchema (
               fieldName: 'collateralOutputs_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -345,7 +359,8 @@ export async function buildSchema (
               fieldName: 'committee',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -359,7 +374,8 @@ export async function buildSchema (
               fieldName: 'committeeMember',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -373,7 +389,8 @@ export async function buildSchema (
               fieldName: 'committeeHash',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -387,7 +404,8 @@ export async function buildSchema (
               fieldName: 'committeeRegistration',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -401,7 +419,8 @@ export async function buildSchema (
               fieldName: 'committeeDeRegistration',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -415,7 +434,8 @@ export async function buildSchema (
               fieldName: 'delegations',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -429,7 +449,8 @@ export async function buildSchema (
               fieldName: 'delegationVotes',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -443,7 +464,8 @@ export async function buildSchema (
               fieldName: 'drepRegistrations',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -457,7 +479,8 @@ export async function buildSchema (
               fieldName: 'drepRegistrations_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -471,7 +494,8 @@ export async function buildSchema (
               fieldName: 'delegations_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -485,7 +509,8 @@ export async function buildSchema (
               fieldName: 'drepHash',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -499,7 +524,8 @@ export async function buildSchema (
               fieldName: 'govActionProposal',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -513,7 +539,8 @@ export async function buildSchema (
               fieldName: 'govActionProposal_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -527,7 +554,8 @@ export async function buildSchema (
               fieldName: 'epochParams',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -541,7 +569,8 @@ export async function buildSchema (
               fieldName: 'epochs',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -555,7 +584,8 @@ export async function buildSchema (
               fieldName: 'epochs_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -574,7 +604,8 @@ export async function buildSchema (
               fieldName: 'offChainVoteData',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -588,7 +619,8 @@ export async function buildSchema (
               fieldName: 'offChainVoteAuthor',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -602,7 +634,8 @@ export async function buildSchema (
               fieldName: 'offChainVoteReference',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -616,7 +649,8 @@ export async function buildSchema (
               fieldName: 'offChainVoteGovActionData',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -639,7 +673,8 @@ export async function buildSchema (
               fieldName: 'redeemers',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -653,7 +688,8 @@ export async function buildSchema (
               fieldName: 'redeemers_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -667,7 +703,8 @@ export async function buildSchema (
               fieldName: 'rewards',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -681,7 +718,8 @@ export async function buildSchema (
               fieldName: 'rewards_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -695,7 +733,8 @@ export async function buildSchema (
               fieldName: 'scripts',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -709,7 +748,8 @@ export async function buildSchema (
               fieldName: 'scripts_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -723,7 +763,8 @@ export async function buildSchema (
               fieldName: 'stakeDeregistrations',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -737,7 +778,8 @@ export async function buildSchema (
               fieldName: 'stakeDeregistrations_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -754,7 +796,8 @@ export async function buildSchema (
               fieldName: 'stakePools',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -768,7 +811,8 @@ export async function buildSchema (
               fieldName: 'stakePools_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -782,7 +826,8 @@ export async function buildSchema (
               fieldName: 'stakeRegistrations',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -796,7 +841,8 @@ export async function buildSchema (
               fieldName: 'stakeRegistrations_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -813,7 +859,8 @@ export async function buildSchema (
               fieldName: 'transactions',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -827,7 +874,8 @@ export async function buildSchema (
               fieldName: 'transactions_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -841,7 +889,8 @@ export async function buildSchema (
               fieldName: 'tokenMints',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -855,7 +904,8 @@ export async function buildSchema (
               fieldName: 'tokenMints_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -869,7 +919,8 @@ export async function buildSchema (
               fieldName: 'utxos',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -883,7 +934,8 @@ export async function buildSchema (
               fieldName: 'utxos_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -897,7 +949,8 @@ export async function buildSchema (
               fieldName: 'voteProcedure',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -911,7 +964,8 @@ export async function buildSchema (
               fieldName: 'voteProcedure_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -925,7 +979,8 @@ export async function buildSchema (
               fieldName: 'votingAnchor',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -939,7 +994,8 @@ export async function buildSchema (
               fieldName: 'withdrawals',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,
@@ -953,7 +1009,8 @@ export async function buildSchema (
               fieldName: 'withdrawals_aggregate',
               info,
               operation: 'query',
-              schema: hasuraClient.schema
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
             })
           },
           selectionSet: null,

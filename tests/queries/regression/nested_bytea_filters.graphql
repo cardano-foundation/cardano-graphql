@@ -1,0 +1,50 @@
+query nestedByteaFilters(
+  $hash: Hash32Hex!
+  $paymentCredential: Hash28Hex!
+  $paymentCredentials: [Hash28Hex!]!
+  $stakeAddress: StakeAddress!
+) {
+  byPaymentCredential: transactions(
+    where: { hash: { _eq: $hash } }
+  ) {
+    outputs(
+      order_by: { index: asc }
+      where: { paymentCredential: { _eq: $paymentCredential } }
+    ) {
+      index
+    }
+  }
+  byPaymentCredentials: transactions(
+    where: { hash: { _eq: $hash } }
+  ) {
+    outputs(
+      order_by: { index: asc }
+      where: { paymentCredential: { _in: $paymentCredentials } }
+    ) {
+      index
+    }
+  }
+  byOwner: transactions(
+    where: { hash: { _eq: $hash } }
+  ) {
+    outputs(
+      order_by: { index: asc }
+      where: {
+        paymentCredential: { _eq: $paymentCredential }
+        stakeAddress: { _eq: $stakeAddress }
+      }
+    ) {
+      index
+    }
+  }
+  byTransactionHash: transactions(
+    where: { hash: { _eq: $hash } }
+  ) {
+    outputs(
+      order_by: { index: asc }
+      where: { transaction: { hash: { _eq: $hash } } }
+    ) {
+      index
+    }
+  }
+}
