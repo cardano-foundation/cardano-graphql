@@ -64,6 +64,7 @@ services:
 
   cardano-submit-api:
     image: cardanofoundation/cardano-graphql-cardano-node:${CARDANO_NODE_VERSION}
+    pull_policy: never
     environment:
       - NETWORK=${NETWORK}
     volumes:
