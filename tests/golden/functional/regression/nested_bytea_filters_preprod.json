@@ -1,0 +1,73 @@
+{
+  "anchor_block": 4673622,
+  "description": "Regression for nested filters on hash (bytea) fields: nested literals used to silently return [] and nested Hash28Hex/StakeAddress variables failed with Unknown type, because nested arguments bypassed scalar parsing on delegation to Hasura. Uses a CIP-113 transfer with two outputs at the shared programmable_logic_base credential and one change output.",
+  "expected": {
+    "data": {
+      "byOwner": [
+        {
+          "outputs": [
+            {
+              "index": 1
+            }
+          ]
+        }
+      ],
+      "byPaymentCredential": [
+        {
+          "outputs": [
+            {
+              "index": 0
+            },
+            {
+              "index": 1
+            }
+          ]
+        }
+      ],
+      "byPaymentCredentials": [
+        {
+          "outputs": [
+            {
+              "index": 0
+            },
+            {
+              "index": 1
+            },
+            {
+              "index": 2
+            }
+          ]
+        }
+      ],
+      "byTransactionHash": [
+        {
+          "outputs": [
+            {
+              "index": 0
+            },
+            {
+              "index": 1
+            },
+            {
+              "index": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/regression/nested_bytea_filters.graphql",
+  "test_name": "nested_bytea_filters_preprod",
+  "variables": {
+    "hash": "120a499184a74e3e39e7db32b30a9651969744333b0e0945d1c24e2bcf1ee701",
+    "paymentCredential": "a48744c1584c58c2995cba1fa26b37f3999ee8cedac0ef241662f53d",
+    "paymentCredentials": [
+      "a48744c1584c58c2995cba1fa26b37f3999ee8cedac0ef241662f53d",
+      "c6a298e23903a5eee0ca94c79f54db4b644c5487202e6e9b1cb5aff0"
+    ],
+    "stakeAddress": "stake_test1urr29x8z8yp6tmhqe22v0865md9kgnz5suszum5mrj66luq23w8d7"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "anchor_block": 4500000,
+  "description": "Regression for cardano-foundation/cardano-graphql#953 \u2014 nullable token quantity must serialize without error.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "hash": "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e",
+          "mint": [],
+          "outputs": [
+            {
+              "index": 0,
+              "tokens": []
+            },
+            {
+              "index": 1,
+              "tokens": []
+            }
+          ]
+        },
+        {
+          "hash": "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa",
+          "mint": [],
+          "outputs": [
+            {
+              "index": 0,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "3d8eea1e9105ee95e2db186dee480db575712064f731e2e97a87200a4d4d4d"
+                  },
+                  "quantity": "1"
+                }
+              ]
+            },
+            {
+              "index": 1,
+              "tokens": []
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/regression/issue_953_nullable_token_quantity.graphql",
+  "regression_issue": 953,
+  "test_name": "issue_953_nullable_token_quantity_preprod",
+  "variables": {
+    "hashes": [
+      "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e",
+      "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa"
+    ]
+  }
+}

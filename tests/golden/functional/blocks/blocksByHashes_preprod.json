@@ -1,0 +1,93 @@
+{
+  "anchor_block": null,
+  "description": "Three historical blocks fetched by hash (blocks 4, 5, 6). Exercises full Block field selection including previousBlock/nextBlock traversal and slotLeader.",
+  "expected": {
+    "data": {
+      "blocks": [
+        {
+          "epoch": {
+            "number": 275
+          },
+          "epochNo": 275,
+          "fees": "0",
+          "hash": "bb0b63a8d741c9894037b1b2258361cf37eb7ea2e0eb1eba7208e16b3bd4db64",
+          "nextBlock": {
+            "hash": "94f1fa8ca391362d1db8ece0629a2b67bb72234ac127e116f7d56ee0e72ef8fb",
+            "number": 4500001
+          },
+          "number": 4500000,
+          "previousBlock": {
+            "hash": "e72b6b33a63e95b508816c586c31d7d715e4be09fcda3ce911153523ad6223bf",
+            "number": 4499999
+          },
+          "size": 4,
+          "slotLeader": {
+            "description": "Pool-8aa469088eaf5c38"
+          },
+          "slotNo": "117589209",
+          "transactionsCount": "0"
+        },
+        {
+          "epoch": {
+            "number": 275
+          },
+          "epochNo": 275,
+          "fees": "0",
+          "hash": "94f1fa8ca391362d1db8ece0629a2b67bb72234ac127e116f7d56ee0e72ef8fb",
+          "nextBlock": {
+            "hash": "7e8db7c6b4e8fcb89ea0fc42c2921c9895acd962e43b7f9de1d4a133d51505a6",
+            "number": 4500002
+          },
+          "number": 4500001,
+          "previousBlock": {
+            "hash": "bb0b63a8d741c9894037b1b2258361cf37eb7ea2e0eb1eba7208e16b3bd4db64",
+            "number": 4500000
+          },
+          "size": 4,
+          "slotLeader": {
+            "description": "Pool-8ffb4c8e648c0662"
+          },
+          "slotNo": "117589227",
+          "transactionsCount": "0"
+        },
+        {
+          "epoch": {
+            "number": 275
+          },
+          "epochNo": 275,
+          "fees": "668922",
+          "hash": "7e8db7c6b4e8fcb89ea0fc42c2921c9895acd962e43b7f9de1d4a133d51505a6",
+          "nextBlock": {
+            "hash": "0a7c5606335e273ca2091acf09e08073715c2939e38b5583acc6a00a43db7923",
+            "number": 4500003
+          },
+          "number": 4500002,
+          "previousBlock": {
+            "hash": "94f1fa8ca391362d1db8ece0629a2b67bb72234ac127e116f7d56ee0e72ef8fb",
+            "number": 4500001
+          },
+          "size": 1095,
+          "slotLeader": {
+            "description": "Pool-8ed5ab11e76094fa"
+          },
+          "slotNo": "117589313",
+          "transactionsCount": "2"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.blocks[*].forgedAt"
+  ],
+  "network": "preprod",
+  "query_file": "queries/example/blocks/blocksByHashes.graphql",
+  "test_name": "blocksByHashes_preprod",
+  "variables": {
+    "hashes": [
+      "bb0b63a8d741c9894037b1b2258361cf37eb7ea2e0eb1eba7208e16b3bd4db64",
+      "94f1fa8ca391362d1db8ece0629a2b67bb72234ac127e116f7d56ee0e72ef8fb",
+      "7e8db7c6b4e8fcb89ea0fc42c2921c9895acd962e43b7f9de1d4a133d51505a6"
+    ]
+  }
+}

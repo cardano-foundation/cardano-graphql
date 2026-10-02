@@ -8,6 +8,14 @@ configuration:
     select: offChainVoteData
     select_aggregate: offChainVoteData_aggregate
 object_relationships:
+  - name: offChainVoteDrepData
+    using:
+      manual_configuration:
+        column_mapping:
+          id: off_chain_vote_data_id
+        remote_table:
+          name: off_chain_vote_drep_data
+          schema: public
   - name: offChainVoteGovActionData
     using:
       manual_configuration:

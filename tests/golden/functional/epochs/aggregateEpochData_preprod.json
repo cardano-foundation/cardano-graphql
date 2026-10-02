@@ -1,0 +1,34 @@
+{
+  "anchor_block": null,
+  "description": "Aggregates over epochs strictly before a pinned finalized epoch. Bounded, stable.",
+  "expected": {
+    "data": {
+      "epochs_aggregate": {
+        "aggregate": {
+          "count": "300",
+          "max": {
+            "number": 299,
+            "output": "17847453521738724661",
+            "transactionsCount": "174326"
+          },
+          "min": {
+            "output": "0",
+            "transactionsCount": "0"
+          },
+          "sum": {
+            "output": "50398869466643539564",
+            "transactionsCount": "6100365"
+          }
+        }
+      }
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/epochs/aggregateEpochData.graphql",
+  "test_name": "aggregateEpochData_preprod",
+  "variables": {
+    "epochNumberLessThan": 300
+  }
+}

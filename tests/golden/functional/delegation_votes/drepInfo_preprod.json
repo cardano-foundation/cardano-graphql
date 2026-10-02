@@ -1,0 +1,24 @@
+{
+  "anchor_block": null,
+  "description": "Off-chain DRep profile (CIP-119 metadata) looked up by givenName. Medusa DRep is the only profile with that name on preprod.",
+  "expected": {
+    "data": {
+      "offChainVoteDrepData": [
+        {
+          "givenName": "Medusa DRep",
+          "motivations": "As part of the Cardano ecosystem, we rely on its stability and are committed to ensuring it maintains an impeccable reputation and a promising future, free from absurd manipulations and brand expropriation.",
+          "objectives": "Safeguard Cardano from harmful initiatives.",
+          "qualifications": "Developer in the Cardano ecosystem since 2018. A highly qualified Stake Pool Operator. Cardano Ambassador. Digital security specialist. Immune to manipulative behavior."
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/delegation_votes/drepInfo.graphql",
+  "test_name": "drepInfo_preprod",
+  "variables": {
+    "drep_name": "Medusa DRep"
+  }
+}

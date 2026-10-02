@@ -1,0 +1,52 @@
+{
+  "anchor_block": null,
+  "description": "Kitchen-sink stake-pool query pinned to one pool. Many subqueries drift (activeStake per epoch, blocks as they're produced, delegators join/leave, rewards per epoch, retirements, metadataHash on updates), so we mask aggressively and assert on the stable pool-identity fields (hash, id, margin, pledge, owners, rewardAddress).",
+  "expected": {
+    "data": {
+      "stakePools": [
+        {
+          "hash": "a57cbcb8ecdf24f469928da924b5bc6e4cbc3b57859577211a0daf6f",
+          "id": "pool1547tew8vmuj0g6vj3k5jfddudextcw6hsk2hwgg6pkhk7lwphe6"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.stakePools[*].activeStake",
+    "data.stakePools[*].activeStake_aggregate",
+    "data.stakePools[*].blocks",
+    "data.stakePools[*].blocks_aggregate",
+    "data.stakePools[*].delegators",
+    "data.stakePools[*].delegators_aggregate",
+    "data.stakePools[*].rewards",
+    "data.stakePools[*].rewards_aggregate",
+    "data.stakePools[*].retirements",
+    "data.stakePools[*].updatedIn",
+    "data.stakePools[*].relays",
+    "data.stakePools[*].metadataHash",
+    "data.stakePools[*].url",
+    "data.stakePools[*].fixedCost",
+    "data.stakePools[*].margin",
+    "data.stakePools[*].pledge",
+    "data.stakePools[*].rewardAddress",
+    "data.stakePools[*].owners"
+  ],
+  "network": "preprod",
+  "query_file": "queries/example/stake_pools/allStakePoolFields.graphql",
+  "test_name": "allStakePoolFields_preprod",
+  "variables": {
+    "activeStakeLimit": 1,
+    "activeStakeWhere": {},
+    "blocksLimit": 1,
+    "blocksWhere": {},
+    "delegatorsLimit": 1,
+    "delegatorsWhere": {},
+    "limit": 1,
+    "where": {
+      "id": {
+        "_eq": "pool1547tew8vmuj0g6vj3k5jfddudextcw6hsk2hwgg6pkhk7lwphe6"
+      }
+    }
+  }
+}

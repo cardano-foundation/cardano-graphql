@@ -210,6 +210,12 @@ type Query {
         offset: Int
         where: OffChainVoteGovActionData_bool_exp
     ): [OffChainVoteGovActionData]!
+    offChainVoteDrepData (
+        limit: Int
+        order_by: [OffChainVoteDrepData_order_by!]
+        offset: Int
+        where: OffChainVoteDrepData_bool_exp
+    ): [OffChainVoteDrepData]!
     paymentAddresses (
         addresses: [String]!
     ): [PaymentAddress]
@@ -800,6 +806,7 @@ type OffChainVoteData {
     offChainVoteReference: OffChainVoteReference
     offChainVoteAuthor: OffChainVoteAuthor
     offChainVoteGovActionData: OffChainVoteGovActionData
+    offChainVoteDrepData: OffChainVoteDrepData
 }
 
 input OffChainVoteData_order_by {
@@ -812,6 +819,7 @@ input OffChainVoteData_order_by {
     offChainVoteReference: OffChainVoteReference_order_by
     offChainVoteAuthor: OffChainVoteAuthor_order_by
     offChainVoteGovActionData: OffChainVoteGovActionData_order_by
+    offChainVoteDrepData: OffChainVoteDrepData_order_by
 }
 
 input OffChainVoteData_bool_exp {
@@ -826,6 +834,46 @@ input OffChainVoteData_bool_exp {
     offChainVoteReference: OffChainVoteReference_bool_exp
     offChainVoteAuthor: OffChainVoteAuthor_bool_exp
     offChainVoteGovActionData: OffChainVoteGovActionData_bool_exp
+    offChainVoteDrepData: OffChainVoteDrepData_bool_exp
+}
+
+type OffChainVoteDrepData {
+    id: Int
+    givenName: String
+    imageHash: String
+    imageUrl: String
+    motivations: String
+    objectives: String
+    paymentAddress: String
+    qualifications: String
+    offChainVoteData: OffChainVoteData
+}
+
+input OffChainVoteDrepData_order_by {
+    id: order_by
+    givenName: order_by
+    imageHash: order_by
+    imageUrl: order_by
+    motivations: order_by
+    objectives: order_by
+    paymentAddress: order_by
+    qualifications: order_by
+    offChainVoteData: OffChainVoteData_order_by
+}
+
+input OffChainVoteDrepData_bool_exp {
+    _and: [OffChainVoteDrepData_bool_exp]
+    _not: OffChainVoteDrepData_bool_exp
+    _or: [OffChainVoteDrepData_bool_exp]
+    id: Int_comparison_exp
+    givenName: text_comparison_exp
+    imageHash: text_comparison_exp
+    imageUrl: text_comparison_exp
+    motivations: text_comparison_exp
+    objectives: text_comparison_exp
+    paymentAddress: text_comparison_exp
+    qualifications: text_comparison_exp
+    offChainVoteData: OffChainVoteData_bool_exp
 }
 
 type OffChainVoteGovActionData {
@@ -1908,6 +1956,7 @@ type TransactionOutput {
     index: Int!
     paymentCredential: Hash28Hex
     script: Script
+    stakeAddress: StakeAddress
     transaction: Transaction!
     txHash: Hash32Hex!
     tokens: [Token!]!
@@ -1917,6 +1966,8 @@ type TransactionOutput {
 
 enum TransactionOutput_distinct_on {
     address
+    paymentCredential
+    stakeAddress
 }
 
 input TransactionOutput_order_by {
@@ -1924,6 +1975,8 @@ input TransactionOutput_order_by {
     addressHasScript: order_by
     datum: Transaction_order_by
     index: order_by
+    paymentCredential: order_by
+    stakeAddress: order_by
     txHash: order_by
     value: order_by
 }
@@ -1936,7 +1989,9 @@ input TransactionOutput_bool_exp {
     addressHasScript: Boolean_comparison_exp
     datum: Datum_bool_exp
     index: Int_comparison_exp
+    paymentCredential: Hash28Hex_comparison_exp
     script: Script_bool_exp
+    stakeAddress: StakeAddress_comparison_exp
     tokens: Token_bool_exp
     transaction: Transaction_bool_exp
     value: text_comparison_exp

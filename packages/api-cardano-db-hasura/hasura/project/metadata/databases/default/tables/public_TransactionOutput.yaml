@@ -47,6 +47,7 @@ select_permissions:
         - addressHasScript
         - index
         - paymentCredential
+        - stakeAddress
         - txHash
         - value
       filter: {}

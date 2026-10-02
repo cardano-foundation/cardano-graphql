@@ -1,0 +1,21 @@
+{
+  "anchor_block": 4500000,
+  "description": "Historical tx metadata lookup.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "metadata": []
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/transactions/transactionByIdWithMetadataIfPresent.graphql",
+  "test_name": "transactionByIdWithMetadataIfPresent_preprod",
+  "variables": {
+    "hash": "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e"
+  }
+}

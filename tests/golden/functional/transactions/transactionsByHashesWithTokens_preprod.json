@@ -1,0 +1,146 @@
+{
+  "anchor_block": 4500000,
+  "description": "Historical txs with inputs/outputs/tokens at the anchor block.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "block": {
+            "number": 4499994
+          },
+          "blockIndex": 1,
+          "deposit": "0",
+          "fee": "661393",
+          "hash": "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa",
+          "inputs": [
+            {
+              "address": "addr_test1wq7ca6s7jyz7a90zmvvxmmjgpk6h2ufqvnmnrchf02rjqzseyjm67",
+              "sourceTxHash": "3d30e71f0866b9fd3badddaa4c5f2f944db18fc360055edff8348d2b1e2109b6",
+              "sourceTxIndex": 0,
+              "value": "2754090"
+            },
+            {
+              "address": "addr_test1qp809uam6e739309x3smccftezshqhmc5uukcrg03x9ef495kz9m6a4ev0deta3gw7a7kw2dl3z72r9g5nfzxdf65c6q6a62qw",
+              "sourceTxHash": "c4f6c3123c5c564690a17b22dc8932bf26733b200208df475fa085807728a116",
+              "sourceTxIndex": 1,
+              "value": "23722939"
+            }
+          ],
+          "inputs_aggregate": {
+            "aggregate": {
+              "sum": {
+                "value": "26477029"
+              }
+            }
+          },
+          "mint": [],
+          "outputs": [
+            {
+              "address": "addr_test1wq7ca6s7jyz7a90zmvvxmmjgpk6h2ufqvnmnrchf02rjqzseyjm67",
+              "index": 0,
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "3d8eea1e9105ee95e2db186dee480db575712064f731e2e97a87200a4d4d4d",
+                    "assetName": "4d4d4d",
+                    "policyId": "3d8eea1e9105ee95e2db186dee480db575712064f731e2e97a87200a"
+                  },
+                  "quantity": "1"
+                }
+              ],
+              "value": "2754090"
+            },
+            {
+              "address": "addr_test1qp809uam6e739309x3smccftezshqhmc5uukcrg03x9ef495kz9m6a4ev0deta3gw7a7kw2dl3z72r9g5nfzxdf65c6q6a62qw",
+              "index": 1,
+              "tokens": [],
+              "value": "23061546"
+            }
+          ],
+          "outputs_aggregate": {
+            "aggregate": {
+              "sum": {
+                "value": "25815636"
+              }
+            }
+          },
+          "size": 10838,
+          "totalOutput": "25815636",
+          "withdrawals_aggregate": {
+            "aggregate": {
+              "sum": {
+                "amount": null
+              }
+            }
+          }
+        },
+        {
+          "block": {
+            "number": 4499994
+          },
+          "blockIndex": 0,
+          "deposit": "0",
+          "fee": "182661",
+          "hash": "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e",
+          "inputs": [
+            {
+              "address": "addr_test1vqaa479xjtyemfq80mecxnc3arzuc0rjw0xh02lvsc30fsqfrq2ry",
+              "sourceTxHash": "8a6a561141bb68738b47150f7d70518d84e4f715dc5efde213088c6c0133fdc5",
+              "sourceTxIndex": 1,
+              "value": "9932335045"
+            }
+          ],
+          "inputs_aggregate": {
+            "aggregate": {
+              "sum": {
+                "value": "9932335045"
+              }
+            }
+          },
+          "mint": [],
+          "outputs": [
+            {
+              "address": "addr_test1wqdjlu008nl7nejpnj7da43gltrm2hm3zc6wk5mzfg4rukcysd4ej",
+              "index": 0,
+              "tokens": [],
+              "value": "2000000"
+            },
+            {
+              "address": "addr_test1vqaa479xjtyemfq80mecxnc3arzuc0rjw0xh02lvsc30fsqfrq2ry",
+              "index": 1,
+              "tokens": [],
+              "value": "9930152384"
+            }
+          ],
+          "outputs_aggregate": {
+            "aggregate": {
+              "sum": {
+                "value": "9932152384"
+              }
+            }
+          },
+          "size": 418,
+          "totalOutput": "9932152384",
+          "withdrawals_aggregate": {
+            "aggregate": {
+              "sum": {
+                "amount": null
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/transactions/transactionsByHashesWithTokens.graphql",
+  "test_name": "transactionsByHashesWithTokens_preprod",
+  "variables": {
+    "hashes": [
+      "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e",
+      "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa"
+    ]
+  }
+}
