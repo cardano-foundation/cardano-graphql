@@ -2088,6 +2088,10 @@
           "args": {},
           "type": "OffChainVoteAuthor"
         },
+        "offChainVoteDrepData": {
+          "args": {},
+          "type": "OffChainVoteDrepData"
+        },
         "offChainVoteGovActionData": {
           "args": {},
           "type": "OffChainVoteGovActionData"
@@ -2114,6 +2118,7 @@
         "id": "Int_comparison_exp",
         "is_valid": "Boolean_comparison_exp",
         "offChainVoteAuthor": "OffChainVoteAuthor_bool_exp",
+        "offChainVoteDrepData": "OffChainVoteDrepData_bool_exp",
         "offChainVoteGovActionData": "OffChainVoteGovActionData_bool_exp",
         "offChainVoteReference": "OffChainVoteReference_bool_exp"
       },
@@ -2128,8 +2133,81 @@
         "is_valid": "order_by",
         "json": "order_by",
         "offChainVoteAuthor": "OffChainVoteAuthor_order_by",
+        "offChainVoteDrepData": "OffChainVoteDrepData_order_by",
         "offChainVoteGovActionData": "OffChainVoteGovActionData_order_by",
         "offChainVoteReference": "OffChainVoteReference_order_by"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteDrepData": {
+      "fields": {
+        "givenName": {
+          "args": {},
+          "type": "String"
+        },
+        "id": {
+          "args": {},
+          "type": "Int"
+        },
+        "imageHash": {
+          "args": {},
+          "type": "String"
+        },
+        "imageUrl": {
+          "args": {},
+          "type": "String"
+        },
+        "motivations": {
+          "args": {},
+          "type": "String"
+        },
+        "objectives": {
+          "args": {},
+          "type": "String"
+        },
+        "offChainVoteData": {
+          "args": {},
+          "type": "OffChainVoteData"
+        },
+        "paymentAddress": {
+          "args": {},
+          "type": "String"
+        },
+        "qualifications": {
+          "args": {},
+          "type": "String"
+        }
+      },
+      "kind": "OBJECT"
+    },
+    "OffChainVoteDrepData_bool_exp": {
+      "inputFields": {
+        "_and": "[OffChainVoteDrepData_bool_exp]",
+        "_not": "OffChainVoteDrepData_bool_exp",
+        "_or": "[OffChainVoteDrepData_bool_exp]",
+        "givenName": "text_comparison_exp",
+        "id": "Int_comparison_exp",
+        "imageHash": "text_comparison_exp",
+        "imageUrl": "text_comparison_exp",
+        "motivations": "text_comparison_exp",
+        "objectives": "text_comparison_exp",
+        "offChainVoteData": "OffChainVoteData_bool_exp",
+        "paymentAddress": "text_comparison_exp",
+        "qualifications": "text_comparison_exp"
+      },
+      "kind": "INPUT_OBJECT"
+    },
+    "OffChainVoteDrepData_order_by": {
+      "inputFields": {
+        "givenName": "order_by",
+        "id": "order_by",
+        "imageHash": "order_by",
+        "imageUrl": "order_by",
+        "motivations": "order_by",
+        "objectives": "order_by",
+        "offChainVoteData": "OffChainVoteData_order_by",
+        "paymentAddress": "order_by",
+        "qualifications": "order_by"
       },
       "kind": "INPUT_OBJECT"
     },
@@ -2663,6 +2741,15 @@
             "where": "OffChainVoteData_bool_exp"
           },
           "type": "[OffChainVoteData]!"
+        },
+        "offChainVoteDrepData": {
+          "args": {
+            "limit": "Int",
+            "offset": "Int",
+            "order_by": "[OffChainVoteDrepData_order_by!]",
+            "where": "OffChainVoteDrepData_bool_exp"
+          },
+          "type": "[OffChainVoteDrepData]!"
         },
         "offChainVoteGovActionData": {
           "args": {

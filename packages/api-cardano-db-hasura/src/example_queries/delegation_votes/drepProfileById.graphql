@@ -1,0 +1,29 @@
+query drepProfileById(
+  $drepId: String!
+  $atBlock: Int!
+) {
+  drepRegistrations(
+    limit: 1
+    order_by: { transaction: { block: { number: desc } } }
+    where: {
+      DRepId: { _eq: $drepId }
+      transaction: { block: { number: { _lte: $atBlock } } }
+      votingAnchor: { offChainData: { offChainVoteDrepData: { id: { _is_null: false } } } }
+    }
+  ) {
+    DRepId
+    votingAnchor {
+      url
+      offChainData {
+        offChainVoteDrepData {
+          givenName
+          motivations
+          objectives
+          qualifications
+          imageUrl
+          paymentAddress
+        }
+      }
+    }
+  }
+}

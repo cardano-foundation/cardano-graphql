@@ -656,6 +656,21 @@ export async function buildSchema (
           selectionSet: null,
           extensions: getComplexityExtension('Query', 'offChainVoteGovActionData')
         },
+        offChainVoteDrepData: {
+          resolve: (_root: any, args: any, context: any, info: any) => {
+            return delegateToSchema({
+              args,
+              context,
+              fieldName: 'offChainVoteDrepData',
+              info,
+              operation: 'query',
+              schema: hasuraClient.schema,
+              transforms: [nestedArgumentsTransform]
+            })
+          },
+          selectionSet: null,
+          extensions: getComplexityExtension('Query', 'offChainVoteDrepData')
+        },
         paymentAddresses: {
           resolve: async (_root: any, args: { addresses: any[] }) => {
             return args.addresses.map(async (address) => {

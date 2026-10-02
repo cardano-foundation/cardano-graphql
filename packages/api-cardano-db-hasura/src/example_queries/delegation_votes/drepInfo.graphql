@@ -2,11 +2,10 @@
 query dRep_Offchain(
   $drep_name: String
 ){
-    offChainVoteDrepData ( limit: 1, where:{given_name:{_eq:$drep_name}}){
-      motivations
-    	objectives
-    	qualifications 	 
-    
-    }
-    }
-    
+  offChainVoteDrepData(limit: 1, where: { givenName: { _eq: $drep_name } }) {
+    givenName
+    motivations
+    objectives
+    qualifications
+  }
+}

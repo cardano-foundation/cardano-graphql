@@ -1,0 +1,35 @@
+{
+  "anchor_block": 4500000,
+  "description": "DRep ID to off-chain profile via drepRegistrations -> votingAnchor -> offChainData -> offChainVoteDrepData: the latest registration with a profile at or before block 4500000.",
+  "expected": {
+    "data": {
+      "drepRegistrations": [
+        {
+          "DRepId": "drep1r8k88asruc86yxjz7ase8rsv0c9fd4qalxk83z56sv8p6v8a3dg",
+          "votingAnchor": {
+            "offChainData": {
+              "offChainVoteDrepData": {
+                "givenName": "Logical Mechanism dRep",
+                "imageUrl": "https://www.logicalmechanism.io/img/fullLogo.png",
+                "motivations": "We are a technical consulting company specializing in open-sourced decentralized applications for the everyday user. We know Cardano inwards and out.",
+                "objectives": "We want to provide expert consulting, comprehensive knowledge, and in-depth research into the future of Cardano.",
+                "paymentAddress": "addr_test1qrvnxkaylr4upwxfxctpxpcumj0fl6fdujdc72j8sgpraa9l4gu9er4t0w7udjvt2pqngddn6q4h8h3uv38p8p9cq82qav4lmp",
+                "qualifications": "We are Plutus pioneers, dApp developers, stake pool operators, and open-source contributors. We know Cardano."
+              }
+            },
+            "url": "https://www.logicalmechanism.io/drepTestnet"
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/delegation_votes/drepProfileById.graphql",
+  "test_name": "drepProfileById_preprod",
+  "variables": {
+    "atBlock": 4500000,
+    "drepId": "drep1r8k88asruc86yxjz7ase8rsv0c9fd4qalxk83z56sv8p6v8a3dg"
+  }
+}
