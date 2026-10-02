@@ -2,8 +2,20 @@ table:
   name: off_chain_vote_drep_data
   schema: public
 configuration:
-  column_config: {}
-  custom_column_names: {}
+  column_config:
+    given_name:
+      custom_name: givenName
+    image_hash:
+      custom_name: imageHash
+    image_url:
+      custom_name: imageUrl
+    payment_address:
+      custom_name: paymentAddress
+  custom_column_names:
+    given_name: givenName
+    image_hash: imageHash
+    image_url: imageUrl
+    payment_address: paymentAddress
   custom_root_fields:
     select: offChainVoteDrepData
     select_aggregate: offChainVoteDrepData_aggregate
@@ -20,6 +32,7 @@ select_permissions:
   - role: cardano-graphql
     permission:
       columns:
+        - id
         - given_name
         - image_hash
         - image_url
