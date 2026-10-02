@@ -1,0 +1,35 @@
+{
+  "anchor_block": 4500000,
+  "description": "Fireblocks: address balance summary at anchor block.",
+  "expected": {
+    "data": {
+      "paymentAddresses": [
+        {
+          "summary": {
+            "assetBalances": [
+              {
+                "asset": {
+                  "assetId": "ada",
+                  "description": null,
+                  "name": "ada"
+                },
+                "quantity": "14803182"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/fireblocks/paymentAddressSummary.graphql",
+  "test_name": "fb_paymentAddressSummary_preprod",
+  "variables": {
+    "addresses": [
+      "addr_test1qzpsl72czczqlecm2n7kea2k0mknn9pagqtmdpc8fd2w638456mq7rvnr9gheuzg2kqnap6czeuz33g3z6ma2vg7v5eqvr0z6y"
+    ],
+    "atBlock": 4500000
+  }
+}

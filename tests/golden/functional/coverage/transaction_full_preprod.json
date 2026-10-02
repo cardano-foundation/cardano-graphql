@@ -1,0 +1,173 @@
+{
+  "anchor_block": 4500000,
+  "description": "Comprehensive Transaction/Input/Output/Redeemer/Block/Epoch field coverage on the anchor txs. Selects every previously-untouched field via TypeInfo paths; arrays may be empty (no redeemer on these simple txs) but the field is still exercised.",
+  "expected": {
+    "data": {
+      "blocks": [
+        {
+          "epoch": {},
+          "opCert": "27b0b45312519ac722a4489ed473df740d7899e197794423b8ec60fbe048c21b",
+          "protocolVersion": {
+            "major": 10,
+            "minor": 6
+          },
+          "slotInEpoch": "430809",
+          "slotLeader": {
+            "description": "Pool-8aa469088eaf5c38",
+            "hash": "8aa469088eaf5c38c3d4faf0d3516ca670cd6df5545fafea2f70258b",
+            "stakePool": {
+              "id": "pool132jxjzyw4awr3s75ltcdx5tv5ecv6m042306l630wqjckhfm32r"
+            }
+          }
+        }
+      ],
+      "transactions": [
+        {
+          "hash": "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa",
+          "inputs": [
+            {
+              "address": "addr_test1wq7ca6s7jyz7a90zmvvxmmjgpk6h2ufqvnmnrchf02rjqzseyjm67",
+              "redeemer": {
+                "purpose": "spend",
+                "scriptHash": "3d8eea1e9105ee95e2db186dee480db575712064f731e2e97a87200a"
+              },
+              "tokens": [
+                {
+                  "asset": {
+                    "assetId": "3d8eea1e9105ee95e2db186dee480db575712064f731e2e97a87200a4d4d4d"
+                  },
+                  "quantity": "1"
+                }
+              ],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              },
+              "transaction": {
+                "hash": "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa"
+              },
+              "txHash": "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa"
+            },
+            {
+              "address": "addr_test1qp809uam6e739309x3smccftezshqhmc5uukcrg03x9ef495kz9m6a4ev0deta3gw7a7kw2dl3z72r9g5nfzxdf65c6q6a62qw",
+              "redeemer": null,
+              "tokens": [],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              },
+              "transaction": {
+                "hash": "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa"
+              },
+              "txHash": "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa"
+            }
+          ],
+          "invalidBefore": null,
+          "invalidHereafter": null,
+          "mint_aggregate": {
+            "aggregate": {
+              "count": "0"
+            }
+          },
+          "outputs": [
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "1"
+                }
+              }
+            },
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              }
+            }
+          ],
+          "redeemers": [
+            {
+              "datum": {
+                "hash": "c16ccbcddd74afda11c6644e69c523aa825e28613a311ce7db6bb99aea2a7131"
+              },
+              "fee": "28920",
+              "index": 0,
+              "purpose": "spend",
+              "scriptHash": "3d8eea1e9105ee95e2db186dee480db575712064f731e2e97a87200a",
+              "transaction": {
+                "hash": "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa"
+              },
+              "unitMem": "354686",
+              "unitSteps": "117250852"
+            }
+          ]
+        },
+        {
+          "hash": "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e",
+          "inputs": [
+            {
+              "address": "addr_test1vqaa479xjtyemfq80mecxnc3arzuc0rjw0xh02lvsc30fsqfrq2ry",
+              "redeemer": null,
+              "tokens": [],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              },
+              "transaction": {
+                "hash": "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e"
+              },
+              "txHash": "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e"
+            }
+          ],
+          "invalidBefore": null,
+          "invalidHereafter": null,
+          "mint_aggregate": {
+            "aggregate": {
+              "count": "0"
+            }
+          },
+          "outputs": [
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              }
+            },
+            {
+              "script": null,
+              "tokens_aggregate": {
+                "aggregate": {
+                  "count": "0"
+                }
+              }
+            }
+          ],
+          "redeemers": []
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.transactions[*].withdrawals",
+    "data.blocks[*].transactions",
+    "data.blocks[*].epoch.nonce"
+  ],
+  "network": "preprod",
+  "query_file": "queries/coverage/transaction_full.graphql",
+  "test_name": "transaction_full_preprod",
+  "variables": {
+    "blockNum": 4500000,
+    "hashes": [
+      "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e",
+      "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa"
+    ]
+  }
+}

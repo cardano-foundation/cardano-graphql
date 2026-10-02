@@ -1,0 +1,99 @@
+{
+  "anchor_block": 4500000,
+  "description": "Regression for cardano-foundation/cardano-graphql#951 \u2014 tx metadata with nullable value must not crash/error. Queries txs in the anchor block and asserts shape.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "hash": "0818fe13ce91b0c223c0c232fab45f1135f7c3bfa50c46a9784640aa59f7f9c8",
+          "metadata": []
+        },
+        {
+          "hash": "0a46bb5d696799ab988dab3b8a1cf7267683d8b6c236938ba86bd1daf7ce2b37",
+          "metadata": []
+        },
+        {
+          "hash": "0a6b5b95ae10ac91c665e042db2be421129f2c0067e6480d59fe37b04e7297fc",
+          "metadata": []
+        },
+        {
+          "hash": "0a9252c8d6e7a4de3cb6c04472eee89631ef080e626653a53282406283f0da56",
+          "metadata": []
+        },
+        {
+          "hash": "0dabd4c521f918e26964763ec6adb66ffe4363f44904e500a32cd46cd4d5a6a2",
+          "metadata": []
+        },
+        {
+          "hash": "0ea020f368f17ff837cc646b0031f3c7699684119f69b44e4983da5314b07df0",
+          "metadata": []
+        },
+        {
+          "hash": "1258347e1aedd270ba6ac1a77d406d52b297baee29f79854fb8fca5d3678e16d",
+          "metadata": []
+        },
+        {
+          "hash": "12dbb1026b5c1726ceb2398b0e23efb783b42acfb88d677c3c3a7c1b818bd23c",
+          "metadata": []
+        },
+        {
+          "hash": "160c7653d36036ac463f2d14539b9fdc372f4dd3e482330a3473c5a33e21578c",
+          "metadata": []
+        },
+        {
+          "hash": "16ab4d307028121a56ed9b6a1b9f00ffe614ba1046caf9ae0e34344e04a316ad",
+          "metadata": []
+        },
+        {
+          "hash": "1c58bbf5de111f06a1a49226dc6654c379127516b98cbc8457535e432c4a086f",
+          "metadata": []
+        },
+        {
+          "hash": "1cda02dbf3bab03046c3924b3743d855b16d51eb3935716ad47d07dc45c9f71c",
+          "metadata": []
+        },
+        {
+          "hash": "1d382dcec8312438640ad899a7cca00c0f30f355fbfd0b998ea3a82a8611dc32",
+          "metadata": []
+        },
+        {
+          "hash": "23184ec037dbbbeb161651ac6e09509de9c655d6d6a832388973f35c77c2f316",
+          "metadata": []
+        },
+        {
+          "hash": "2b699ea79311addd14932150f2791a3ce3924d3522aa047dd279f6c3f854f9db",
+          "metadata": []
+        },
+        {
+          "hash": "32e3a59a7175e0d756fae0e5da29114841823f2e0a2e530643a25c55181223c7",
+          "metadata": []
+        },
+        {
+          "hash": "34aa9338cd362cb0e3cae3c438d19ce6f47bed239fe4084c2a6d3a536547d2bd",
+          "metadata": []
+        },
+        {
+          "hash": "362c480bb753a547b63d17147f0ffad38a44c8dfe0fe14c2b14c52f97d15d2a8",
+          "metadata": []
+        },
+        {
+          "hash": "36420efc0cdb6578c3a491d5b46b04bad0941ad67f8d46186c18fb71ff69e3a1",
+          "metadata": []
+        },
+        {
+          "hash": "3838c868c38513764a34d800b32332ee2416c1038efee09f69b24a6ae9eb092a",
+          "metadata": []
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/regression/issue_951_nullable_tx_metadata_value.graphql",
+  "regression_issue": 951,
+  "test_name": "issue_951_nullable_tx_metadata_value_preprod",
+  "variables": {
+    "blockNum": 4409318
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "anchor_block": 4500000,
+  "description": "Fireblocks: block hash lookup by number \u2014 anchor block.",
+  "expected": {
+    "data": {
+      "blocks": [
+        {
+          "hash": "bb0b63a8d741c9894037b1b2258361cf37eb7ea2e0eb1eba7208e16b3bd4db64"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/fireblocks/blockByNumber.graphql",
+  "test_name": "fb_blockByNumber_preprod",
+  "variables": {
+    "number": 4500000
+  }
+}

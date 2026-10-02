@@ -1,22 +1,26 @@
 {
-  "test_name": "delegationSample",
+  "anchor_block": 4500000,
   "description": "Five delegations included before the preprod anchor block. Query has no order_by so the inner list is masked.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.delegations"
+  ],
   "network": "preprod",
   "query_file": "queries/example/delegations/delegationSample.graphql",
+  "test_name": "delegationSample_preprod",
   "variables": {
     "limit": 5,
     "where": {
       "transaction": {
         "block": {
-          "number": { "_lte": 4500000 }
+          "number": {
+            "_lte": 4500000
+          }
         }
       }
     }
-  },
-  "anchor_block": 4500000,
-  "ignore_paths": [
-    "data.delegations"
-  ],
-  "graphql_errors_allowed": false,
-  "expected": null
+  }
 }

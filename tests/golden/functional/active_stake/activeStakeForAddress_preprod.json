@@ -1,0 +1,88 @@
+{
+  "anchor_block": 4500000,
+  "description": "Active stake history for the primary preprod stake address. Skeleton \u2014 `expected` populated by --update-golden when a preprod endpoint is wired.",
+  "expected": {
+    "data": {
+      "activeStake": [
+        {
+          "address": "stake_test1uq7jxnqdcs2lxgu2tl2s3zna4hlsm8p0ud82pdr0cszsepqgprukn",
+          "amount": "9497624030",
+          "epoch": {
+            "number": 212
+          },
+          "epochNo": 212,
+          "registeredWith": {
+            "hash": "db811c60f3ead73a5f9ef01ebba0e98c076a962bcd4701ede8b25c49"
+          },
+          "stakePoolHash": "db811c60f3ead73a5f9ef01ebba0e98c076a962bcd4701ede8b25c49",
+          "stakePoolId": "pool1mwq3cc8nattn5hu77q0thg8f3srk493te4rsrm0gkfwyjcn2y23"
+        },
+        {
+          "address": "stake_test1uq7jxnqdcs2lxgu2tl2s3zna4hlsm8p0ud82pdr0cszsepqgprukn",
+          "amount": "9497423021",
+          "epoch": {
+            "number": 213
+          },
+          "epochNo": 213,
+          "registeredWith": {
+            "hash": "db811c60f3ead73a5f9ef01ebba0e98c076a962bcd4701ede8b25c49"
+          },
+          "stakePoolHash": "db811c60f3ead73a5f9ef01ebba0e98c076a962bcd4701ede8b25c49",
+          "stakePoolId": "pool1mwq3cc8nattn5hu77q0thg8f3srk493te4rsrm0gkfwyjcn2y23"
+        },
+        {
+          "address": "stake_test1uq7jxnqdcs2lxgu2tl2s3zna4hlsm8p0ud82pdr0cszsepqgprukn",
+          "amount": "9497423021",
+          "epoch": {
+            "number": 214
+          },
+          "epochNo": 214,
+          "registeredWith": {
+            "hash": "db811c60f3ead73a5f9ef01ebba0e98c076a962bcd4701ede8b25c49"
+          },
+          "stakePoolHash": "db811c60f3ead73a5f9ef01ebba0e98c076a962bcd4701ede8b25c49",
+          "stakePoolId": "pool1mwq3cc8nattn5hu77q0thg8f3srk493te4rsrm0gkfwyjcn2y23"
+        },
+        {
+          "address": "stake_test1uq7jxnqdcs2lxgu2tl2s3zna4hlsm8p0ud82pdr0cszsepqgprukn",
+          "amount": "9497423021",
+          "epoch": {
+            "number": 215
+          },
+          "epochNo": 215,
+          "registeredWith": {
+            "hash": "db811c60f3ead73a5f9ef01ebba0e98c076a962bcd4701ede8b25c49"
+          },
+          "stakePoolHash": "db811c60f3ead73a5f9ef01ebba0e98c076a962bcd4701ede8b25c49",
+          "stakePoolId": "pool1mwq3cc8nattn5hu77q0thg8f3srk493te4rsrm0gkfwyjcn2y23"
+        },
+        {
+          "address": "stake_test1uq7jxnqdcs2lxgu2tl2s3zna4hlsm8p0ud82pdr0cszsepqgprukn",
+          "amount": "9497423021",
+          "epoch": {
+            "number": 216
+          },
+          "epochNo": 216,
+          "registeredWith": {
+            "hash": "db811c60f3ead73a5f9ef01ebba0e98c076a962bcd4701ede8b25c49"
+          },
+          "stakePoolHash": "db811c60f3ead73a5f9ef01ebba0e98c076a962bcd4701ede8b25c49",
+          "stakePoolId": "pool1mwq3cc8nattn5hu77q0thg8f3srk493te4rsrm0gkfwyjcn2y23"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/active_stake/activeStakeForAddress.graphql",
+  "test_name": "activeStakeForAddress_preprod",
+  "variables": {
+    "limit": 5,
+    "where": {
+      "address": {
+        "_eq": "stake_test1uq7jxnqdcs2lxgu2tl2s3zna4hlsm8p0ud82pdr0cszsepqgprukn"
+      }
+    }
+  }
+}

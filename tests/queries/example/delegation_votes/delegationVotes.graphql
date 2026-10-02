@@ -5,7 +5,7 @@ query Delegation_Vote (
 ) {
   delegationVotes (where: {address:{_eq:$addr}
    , transaction:{block:{epoch:{number:{_eq:$epoch}}}}
-  }  ) {
+  }, order_by: {transaction: {block: {number: asc}}}) {
       address
       drep  {
         view
