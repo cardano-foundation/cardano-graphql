@@ -1,0 +1,57 @@
+{
+  "anchor_block": null,
+  "description": "First 5 stake registrations historically \u2014 stable ordering by default table ordering not guaranteed; we pin with a where clause on transaction block.",
+  "expected": {
+    "data": {
+      "stakeRegistrations": [
+        {
+          "address": "stake_test1uztg6yppa0t30rslkrneva5c9qju40rhndjnuy356kxw83s6n95nu",
+          "transaction": {
+            "hash": "a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758"
+          }
+        },
+        {
+          "address": "stake_test1urcnqgzt2x8hpsvej4zfudehahknm8lux894pmqwg5qshgcrn346q",
+          "transaction": {
+            "hash": "a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758"
+          }
+        },
+        {
+          "address": "stake_test1uquj460qdrj4az6uy7kvtzct4w8226xq4t30dlzfhc360tgegny4m",
+          "transaction": {
+            "hash": "a3d6f2627a56fe7921eeda546abfe164321881d41549b7f2fbf09ea0b718d758"
+          }
+        },
+        {
+          "address": "stake_test1upxue2rk4tp0e3tp7l0nmfmj6ar7y9yvngzu0vn7fxs9ags2apttt",
+          "transaction": {
+            "hash": "21fe6efb3b877051577feed395bbce496b9d5c85406a902f480c0b76fe374d87"
+          }
+        },
+        {
+          "address": "stake_test1urkaxwavpp37j083cvafwymnpmqm5wl6hre4ev99pcyt3tcvq0gns",
+          "transaction": {
+            "hash": "d264840a282955d457c783233619b75ed1e57603c31ca14c5fcd023c05a38ac0"
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/stakeRegistrations/stakeRegistrationsSample.graphql",
+  "test_name": "stakeRegistrationsSample_preprod",
+  "variables": {
+    "limit": 5,
+    "where": {
+      "transaction": {
+        "block": {
+          "number": {
+            "_lte": 3000000
+          }
+        }
+      }
+    }
+  }
+}

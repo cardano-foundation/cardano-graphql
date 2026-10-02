@@ -1,0 +1,38 @@
+{
+  "anchor_block": null,
+  "description": "Finalized epoch 620 \u2014 adaPots and block/tx counts are stable.",
+  "expected": {
+    "data": {
+      "epochs": [
+        {
+          "adaPots": {
+            "deposits_drep": "133000000000",
+            "deposits_proposal": "701000000000",
+            "deposits_stake": "332946000000",
+            "fees": "12126291022",
+            "reserves": "13022783156067110",
+            "rewards": "38544092817002",
+            "treasury": "1917705948179310",
+            "utxo": "30019787730645556"
+          },
+          "blocksCount": "18957",
+          "fees": "30394412481",
+          "number": 300,
+          "output": "2540084209102499294",
+          "transactionsCount": "85103"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.epochs[*].startedAt",
+    "data.epochs[*].lastBlockTime"
+  ],
+  "network": "preprod",
+  "query_file": "queries/example/epochs/epochDetailsByNumber.graphql",
+  "test_name": "epochDetailsByNumber_preprod",
+  "variables": {
+    "number": 300
+  }
+}

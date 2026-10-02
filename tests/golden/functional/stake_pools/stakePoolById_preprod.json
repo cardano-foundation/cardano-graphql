@@ -1,0 +1,22 @@
+{
+  "anchor_block": null,
+  "description": "Stable historical stake pool by id.",
+  "expected": {
+    "data": {
+      "stakePools": [
+        {
+          "hash": "a57cbcb8ecdf24f469928da924b5bc6e4cbc3b57859577211a0daf6f",
+          "id": "pool1547tew8vmuj0g6vj3k5jfddudextcw6hsk2hwgg6pkhk7lwphe6"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/stake_pools/stakePoolById.graphql",
+  "test_name": "stakePoolById_preprod",
+  "variables": {
+    "id": "pool1547tew8vmuj0g6vj3k5jfddudextcw6hsk2hwgg6pkhk7lwphe6"
+  }
+}

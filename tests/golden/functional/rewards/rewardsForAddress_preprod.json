@@ -1,0 +1,169 @@
+{
+  "anchor_block": null,
+  "description": "Rewards history (up to 10) for the primary preprod stake address, earned in epochs <= a pinned cutoff. Bounded so results are immutable.",
+  "expected": {
+    "data": {
+      "rewards": [
+        {
+          "address": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m",
+          "amount": "755",
+          "earnedIn": {
+            "number": 153
+          },
+          "receivedIn": {
+            "number": 155
+          },
+          "stakePool": {
+            "hash": "209c6caf1fdabf53984cdcdce4e8d53f680165f33557a47c54b1dd6a"
+          },
+          "type": "member"
+        },
+        {
+          "address": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m",
+          "amount": "1234",
+          "earnedIn": {
+            "number": 154
+          },
+          "receivedIn": {
+            "number": 156
+          },
+          "stakePool": {
+            "hash": "209c6caf1fdabf53984cdcdce4e8d53f680165f33557a47c54b1dd6a"
+          },
+          "type": "member"
+        },
+        {
+          "address": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m",
+          "amount": "1091",
+          "earnedIn": {
+            "number": 155
+          },
+          "receivedIn": {
+            "number": 157
+          },
+          "stakePool": {
+            "hash": "209c6caf1fdabf53984cdcdce4e8d53f680165f33557a47c54b1dd6a"
+          },
+          "type": "member"
+        },
+        {
+          "address": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m",
+          "amount": "1043",
+          "earnedIn": {
+            "number": 156
+          },
+          "receivedIn": {
+            "number": 158
+          },
+          "stakePool": {
+            "hash": "209c6caf1fdabf53984cdcdce4e8d53f680165f33557a47c54b1dd6a"
+          },
+          "type": "member"
+        },
+        {
+          "address": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m",
+          "amount": "988",
+          "earnedIn": {
+            "number": 157
+          },
+          "receivedIn": {
+            "number": 159
+          },
+          "stakePool": {
+            "hash": "209c6caf1fdabf53984cdcdce4e8d53f680165f33557a47c54b1dd6a"
+          },
+          "type": "member"
+        },
+        {
+          "address": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m",
+          "amount": "1211",
+          "earnedIn": {
+            "number": 158
+          },
+          "receivedIn": {
+            "number": 160
+          },
+          "stakePool": {
+            "hash": "209c6caf1fdabf53984cdcdce4e8d53f680165f33557a47c54b1dd6a"
+          },
+          "type": "member"
+        },
+        {
+          "address": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m",
+          "amount": "287",
+          "earnedIn": {
+            "number": 161
+          },
+          "receivedIn": {
+            "number": 163
+          },
+          "stakePool": {
+            "hash": "209c6caf1fdabf53984cdcdce4e8d53f680165f33557a47c54b1dd6a"
+          },
+          "type": "member"
+        },
+        {
+          "address": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m",
+          "amount": "1309",
+          "earnedIn": {
+            "number": 162
+          },
+          "receivedIn": {
+            "number": 164
+          },
+          "stakePool": {
+            "hash": "209c6caf1fdabf53984cdcdce4e8d53f680165f33557a47c54b1dd6a"
+          },
+          "type": "member"
+        },
+        {
+          "address": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m",
+          "amount": "787",
+          "earnedIn": {
+            "number": 163
+          },
+          "receivedIn": {
+            "number": 165
+          },
+          "stakePool": {
+            "hash": "209c6caf1fdabf53984cdcdce4e8d53f680165f33557a47c54b1dd6a"
+          },
+          "type": "member"
+        },
+        {
+          "address": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m",
+          "amount": "871",
+          "earnedIn": {
+            "number": 164
+          },
+          "receivedIn": {
+            "number": 166
+          },
+          "stakePool": {
+            "hash": "209c6caf1fdabf53984cdcdce4e8d53f680165f33557a47c54b1dd6a"
+          },
+          "type": "member"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/rewards/rewardsForAddress.graphql",
+  "test_name": "rewardsForAddress_preprod",
+  "variables": {
+    "limit": 10,
+    "offset": 0,
+    "where": {
+      "address": {
+        "_eq": "stake_test1uzzznduv6zl3j67k9n0nx8xqlqd9qt0emssach2vgekvfmg8quy2m"
+      },
+      "earnedIn": {
+        "number": {
+          "_lte": 220
+        }
+      }
+    }
+  }
+}

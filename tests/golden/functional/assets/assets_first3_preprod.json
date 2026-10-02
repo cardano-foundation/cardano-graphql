@@ -1,0 +1,56 @@
+{
+  "anchor_block": null,
+  "description": "First three assets by assetId asc with registry metadata (CIP-26). Token registry fields are ignored since they can drift independently of chain state.",
+  "expected": {
+    "data": {
+      "assets": [
+        {
+          "assetId": "e2bab64ca481afc5a695b7db22fd0a7df4bf930158dfa652fb337999436f696e41",
+          "assetName": "436f696e41",
+          "fingerprint": "asset1u22slc95y2x5g7r38v3eaw705healz6x2skvr8",
+          "policyId": "e2bab64ca481afc5a695b7db22fd0a7df4bf930158dfa652fb337999"
+        },
+        {
+          "assetId": "e2bab64ca481afc5a695b7db22fd0a7df4bf930158dfa652fb337999436f696e42",
+          "assetName": "436f696e42",
+          "fingerprint": "asset1r9yr0lupygm3hzdfgekh74g8ev5tggt0n7krvg",
+          "policyId": "e2bab64ca481afc5a695b7db22fd0a7df4bf930158dfa652fb337999"
+        },
+        {
+          "assetId": "e2bab64ca481afc5a695b7db22fd0a7df4bf930158dfa652fb33799953554d4d495441574152445344656669",
+          "assetName": "53554d4d495441574152445344656669",
+          "fingerprint": "asset132r28qxkhg0wddjjpt2qffzd9m7g37arndlxsv",
+          "policyId": "e2bab64ca481afc5a695b7db22fd0a7df4bf930158dfa652fb337999"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.assets[*].description",
+    "data.assets[*].logo",
+    "data.assets[*].name",
+    "data.assets[*].ticker",
+    "data.assets[*].url",
+    "data.assets[*].decimals",
+    "data.assets[*].tokenMints",
+    "data.assets[*].tokenMints_aggregate",
+    "data.assets_aggregate"
+  ],
+  "network": "preprod",
+  "query_file": "queries/example/assets/assets.graphql",
+  "test_name": "assets_first3_preprod",
+  "variables": {
+    "limit": 3,
+    "offset": 0,
+    "where": {
+      "assetId": {
+        "_in": [
+          "e2bab64ca481afc5a695b7db22fd0a7df4bf930158dfa652fb33799953554d4d495441574152445344656669",
+          "e2bab64ca481afc5a695b7db22fd0a7df4bf930158dfa652fb337999436f696e41",
+          "e2bab64ca481afc5a695b7db22fd0a7df4bf930158dfa652fb337999436f696e42"
+        ]
+      }
+    }
+  }
+}

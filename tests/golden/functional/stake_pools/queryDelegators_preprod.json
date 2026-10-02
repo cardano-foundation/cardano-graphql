@@ -1,0 +1,22 @@
+{
+  "anchor_block": null,
+  "description": "Active delegators to the Rosetta-pinned preprod stake pool at a specific finalized epoch. `epochNo` is a placeholder (a past finalized preprod epoch); refine at capture time.",
+  "expected": {
+    "data": {
+      "activeStake": [
+        {
+          "address": "stake_test1uqtm0z4p2t0kms2x9l75r63cqlcuwa9neg8vuqkq78728ts3x8uxy"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/stake_pools/queryDelegators.graphql",
+  "test_name": "queryDelegators_preprod",
+  "variables": {
+    "epochNo": 220,
+    "poolID": "pool1zz659sxchcppe72xmxw3elfk5j0j7jxmgq3jktn3u0yuqyz7z5u"
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "anchor_block": 4500000,
+  "description": "Collateral input/output selection on anchor-block txs. Simple Minswap txs typically have no collateral, so arrays are expected empty; regression-guard for nulls/zero-aggregate serialization.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "collateralInputs": [
+            {
+              "address": "addr_test1qp809uam6e739309x3smccftezshqhmc5uukcrg03x9ef495kz9m6a4ev0deta3gw7a7kw2dl3z72r9g5nfzxdf65c6q6a62qw",
+              "sourceTransaction": {
+                "hash": "574f604593c547e1eed9a5e750661123db11a26ff611171600644a7916415f3c"
+              },
+              "sourceTxHash": "574f604593c547e1eed9a5e750661123db11a26ff611171600644a7916415f3c",
+              "sourceTxIndex": 1,
+              "tokens": [],
+              "tokens_aggregate": {
+                "aggregate": {
+                  "sum": {
+                    "quantity": null
+                  }
+                }
+              },
+              "value": "34871592"
+            }
+          ],
+          "collateralInputs_aggregate": {
+            "aggregate": {
+              "count": "1",
+              "max": {
+                "value": "34871592"
+              },
+              "min": {
+                "value": "34871592"
+              },
+              "sum": {
+                "value": "34871592"
+              }
+            }
+          },
+          "collateralOutputs": [
+            {
+              "address": "addr_test1qp809uam6e739309x3smccftezshqhmc5uukcrg03x9ef495kz9m6a4ev0deta3gw7a7kw2dl3z72r9g5nfzxdf65c6q6a62qw",
+              "addressHasScript": false,
+              "datum": null,
+              "index": 2,
+              "paymentCredential": "4ef2f3bbd67d12c5e53461bc612bc8a1705f78a7396c0d0f898b94d4",
+              "script": null,
+              "value": "29871592"
+            }
+          ],
+          "collateralOutputs_aggregate": {
+            "aggregate": {
+              "count": "1",
+              "max": {
+                "value": "29871592"
+              },
+              "min": {
+                "value": "29871592"
+              },
+              "sum": {
+                "value": "29871592"
+              }
+            }
+          },
+          "hash": "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa"
+        },
+        {
+          "collateralInputs": [],
+          "collateralInputs_aggregate": {
+            "aggregate": {
+              "count": "0",
+              "max": {
+                "value": null
+              },
+              "min": {
+                "value": null
+              },
+              "sum": {
+                "value": null
+              }
+            }
+          },
+          "collateralOutputs": [],
+          "collateralOutputs_aggregate": {
+            "aggregate": {
+              "count": "0",
+              "max": {
+                "value": null
+              },
+              "min": {
+                "value": null
+              },
+              "sum": {
+                "value": null
+              }
+            }
+          },
+          "hash": "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e"
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/transactions/transactionsByHashesWithCollateral.graphql",
+  "test_name": "transactionsByHashesWithCollateral_preprod",
+  "variables": {
+    "hashes": [
+      "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e",
+      "b1619f5adc94087fd00562975e90035edc69085ed6b14e8bd5d7925319f877fa"
+    ]
+  }
+}

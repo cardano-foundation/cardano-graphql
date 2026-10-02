@@ -1,0 +1,15 @@
+{
+  "anchor_block": null,
+  "description": "Global delegation count. Drifts with chain; masked.",
+  "expected": {
+    "data": {}
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [
+    "data.delegations_aggregate"
+  ],
+  "network": "preprod",
+  "query_file": "queries/example/delegations/aggregateDelegation.graphql",
+  "test_name": "aggregateDelegation_preprod",
+  "variables": {}
+}

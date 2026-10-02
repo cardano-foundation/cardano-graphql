@@ -1,0 +1,23 @@
+{
+  "anchor_block": 4500000,
+  "description": "Fireblocks: block number lookup by transaction hash.",
+  "expected": {
+    "data": {
+      "transactions": [
+        {
+          "block": {
+            "number": 4499994
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/fireblocks/transactionByHash.graphql",
+  "test_name": "fb_transactionByHash_preprod",
+  "variables": {
+    "hash": "65aebafc1f58283ceb3a4bb228f17b921dc9a176743d8fd2f35670676a9af03e"
+  }
+}

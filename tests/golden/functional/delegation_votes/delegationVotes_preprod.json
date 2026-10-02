@@ -1,0 +1,63 @@
+{
+  "anchor_block": 4500000,
+  "description": "Vote delegations by the Rosetta-pinned DRep voter address in preprod epoch 232: always-abstain, no-confidence and two named DReps, ordered by block.",
+  "expected": {
+    "data": {
+      "delegationVotes": [
+        {
+          "address": "stake_test1uql3k2h9kskfma8y53vth7wmptmlw8zxx67cx7c3pwj8sqs6zl0wr",
+          "drep": {
+            "view": "drep_always_abstain"
+          },
+          "transaction": {
+            "block": {
+              "epochNo": 232
+            }
+          }
+        },
+        {
+          "address": "stake_test1uql3k2h9kskfma8y53vth7wmptmlw8zxx67cx7c3pwj8sqs6zl0wr",
+          "drep": {
+            "view": "drep_always_no_confidence"
+          },
+          "transaction": {
+            "block": {
+              "epochNo": 232
+            }
+          }
+        },
+        {
+          "address": "stake_test1uql3k2h9kskfma8y53vth7wmptmlw8zxx67cx7c3pwj8sqs6zl0wr",
+          "drep": {
+            "view": "drep17us9p2399nxxha6hguvyjyxqhyux9xqkwet0jdwkkmpx53knv4c"
+          },
+          "transaction": {
+            "block": {
+              "epochNo": 232
+            }
+          }
+        },
+        {
+          "address": "stake_test1uql3k2h9kskfma8y53vth7wmptmlw8zxx67cx7c3pwj8sqs6zl0wr",
+          "drep": {
+            "view": "drep194xtdq947sqdx5sayu4599wkz9gwpmlnj580g2z5q654x4hzycr"
+          },
+          "transaction": {
+            "block": {
+              "epochNo": 232
+            }
+          }
+        }
+      ]
+    }
+  },
+  "graphql_errors_allowed": false,
+  "ignore_paths": [],
+  "network": "preprod",
+  "query_file": "queries/example/delegation_votes/delegationVotes.graphql",
+  "test_name": "delegationVotes_preprod",
+  "variables": {
+    "addr": "stake_test1uql3k2h9kskfma8y53vth7wmptmlw8zxx67cx7c3pwj8sqs6zl0wr",
+    "epoch": 232
+  }
+}
