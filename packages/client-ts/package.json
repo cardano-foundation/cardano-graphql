@@ -41,7 +41,7 @@
     "@graphql-tools/load-files": "^6.2.5",
     "@graphql-tools/merge": "^6.2.17",
     "@graphql-tools/schema": "^6.2.4",
-    "@graphql-tools/utils": "^6.2.4",
+    "@graphql-tools/utils": "^12.0.1",
     "shx": "^0.3.2"
   }
 }
